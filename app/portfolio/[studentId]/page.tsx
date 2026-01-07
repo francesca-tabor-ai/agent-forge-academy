@@ -43,7 +43,7 @@ export default async function PublicPortfolioPage({ params }: PublicPortfolioPag
         <h2>Projects</h2>
         {projects && projects.length > 0 ? (
           <div className="projects-grid">
-            {projects.map((project) => (
+            {projects.map((project: typeof projects[0]) => (
               <div key={project.id} className="project-card">
                 <h3>{project.title}</h3>
                 {project.description && <p>{project.description}</p>}
