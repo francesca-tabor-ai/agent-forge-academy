@@ -165,20 +165,41 @@ export async function middleware(request: NextRequest) {
 
       // Role-based route protection (only if we have a role)
       if (role) {
-        if (pathname.startsWith('/student') && role !== 'student') {
-          return NextResponse.redirect(new URL('/', request.url));
-        }
+        // Check onboarding status - incomplete onboarding blocks access
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('onboarding_completed')
+          .eq('user_id', user.id)
+          .single();
 
-        if (pathname.startsWith('/tutor') && role !== 'tutor') {
-          return NextResponse.redirect(new URL('/', request.url));
-        }
+        if (!profile?.onboarding_completed) {
+          // Redirect to onboarding if not completed
+          if (pathname !== '/auth/onboarding') {
+            return NextResponse.redirect(new URL('/auth/onboarding', request.url));
+          }
+        } else {
+          // If onboarding is complete, enforce role-based routing
+          if (pathname.startsWith('/student') && role !== 'student') {
+            return NextResponse.redirect(new URL('/', request.url));
+          }
 
-        if (pathname.startsWith('/recruiter') && role !== 'recruiter') {
-          return NextResponse.redirect(new URL('/', request.url));
-        }
+          // Handle both 'tutor' and 'instructor' roles for instructor routes
+          if (pathname.startsWith('/tutor') && role !== 'instructor' && role !== 'tutor') {
+            return NextResponse.redirect(new URL('/', request.url));
+          }
 
-        if (pathname.startsWith('/admin') && role !== 'admin') {
-          return NextResponse.redirect(new URL('/', request.url));
+          if (pathname.startsWith('/recruiter') && role !== 'recruiter') {
+            return NextResponse.redirect(new URL('/', request.url));
+          }
+
+          if (pathname.startsWith('/admin') && role !== 'admin') {
+            return NextResponse.redirect(new URL('/', request.url));
+          }
+        }
+      } else {
+        // No role but authenticated - must complete onboarding
+        if (pathname !== '/auth/onboarding' && !pathname.startsWith('/auth/')) {
+          return NextResponse.redirect(new URL('/auth/onboarding', request.url));
         }
       }
     }
