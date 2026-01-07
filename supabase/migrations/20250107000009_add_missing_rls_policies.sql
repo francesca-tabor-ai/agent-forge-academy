@@ -4,7 +4,8 @@
 -- RLS Policies for recruiter_profiles
 -- ============================================
 
--- Recruiters can read their own profile
+-- Recruiters can read their own profile (idempotent)
+DROP POLICY IF EXISTS "Recruiters can read own profile" ON recruiter_profiles;
 CREATE POLICY "Recruiters can read own profile"
   ON recruiter_profiles
   FOR SELECT
@@ -16,7 +17,8 @@ CREATE POLICY "Recruiters can read own profile"
     )
   );
 
--- Recruiters can update their own profile
+-- Recruiters can update their own profile (idempotent)
+DROP POLICY IF EXISTS "Recruiters can update own profile" ON recruiter_profiles;
 CREATE POLICY "Recruiters can update own profile"
   ON recruiter_profiles
   FOR UPDATE
@@ -28,7 +30,8 @@ CREATE POLICY "Recruiters can update own profile"
     )
   );
 
--- Recruiters can insert their own profile
+-- Recruiters can insert their own profile (idempotent)
+DROP POLICY IF EXISTS "Recruiters can insert own profile" ON recruiter_profiles;
 CREATE POLICY "Recruiters can insert own profile"
   ON recruiter_profiles
   FOR INSERT
@@ -41,7 +44,8 @@ CREATE POLICY "Recruiters can insert own profile"
     )
   );
 
--- Admins can read all recruiter profiles
+-- Admins can read all recruiter profiles (idempotent)
+DROP POLICY IF EXISTS "Admins can read all recruiter profiles" ON recruiter_profiles;
 CREATE POLICY "Admins can read all recruiter profiles"
   ON recruiter_profiles
   FOR SELECT
@@ -51,7 +55,8 @@ CREATE POLICY "Admins can read all recruiter profiles"
 -- RLS Policies for contact_requests
 -- ============================================
 
--- Recruiters can create contact requests
+-- Recruiters can create contact requests (idempotent)
+DROP POLICY IF EXISTS "Recruiters can create contact requests" ON contact_requests;
 CREATE POLICY "Recruiters can create contact requests"
   ON contact_requests
   FOR INSERT
@@ -64,7 +69,8 @@ CREATE POLICY "Recruiters can create contact requests"
     )
   );
 
--- Recruiters can read their own contact requests
+-- Recruiters can read their own contact requests (idempotent)
+DROP POLICY IF EXISTS "Recruiters can read own contact requests" ON contact_requests;
 CREATE POLICY "Recruiters can read own contact requests"
   ON contact_requests
   FOR SELECT
@@ -77,7 +83,8 @@ CREATE POLICY "Recruiters can read own contact requests"
     )
   );
 
--- Students can read contact requests for their profile
+-- Students can read contact requests for their profile (idempotent)
+DROP POLICY IF EXISTS "Students can read contact requests for their profile" ON contact_requests;
 CREATE POLICY "Students can read contact requests for their profile"
   ON contact_requests
   FOR SELECT
@@ -90,7 +97,8 @@ CREATE POLICY "Students can read contact requests for their profile"
     )
   );
 
--- Students can update contact requests for their profile (to approve/reject)
+-- Students can update contact requests for their profile (to approve/reject) (idempotent)
+DROP POLICY IF EXISTS "Students can update contact requests for their profile" ON contact_requests;
 CREATE POLICY "Students can update contact requests for their profile"
   ON contact_requests
   FOR UPDATE
@@ -103,7 +111,8 @@ CREATE POLICY "Students can update contact requests for their profile"
     )
   );
 
--- Recruiters can withdraw their own pending requests
+-- Recruiters can withdraw their own pending requests (idempotent)
+DROP POLICY IF EXISTS "Recruiters can withdraw own pending requests" ON contact_requests;
 CREATE POLICY "Recruiters can withdraw own pending requests"
   ON contact_requests
   FOR UPDATE
@@ -117,7 +126,8 @@ CREATE POLICY "Recruiters can withdraw own pending requests"
     )
   );
 
--- Admins can read all contact requests
+-- Admins can read all contact requests (idempotent)
+DROP POLICY IF EXISTS "Admins can read all contact requests" ON contact_requests;
 CREATE POLICY "Admins can read all contact requests"
   ON contact_requests
   FOR SELECT
@@ -127,13 +137,15 @@ CREATE POLICY "Admins can read all contact requests"
 -- RLS Policies for events
 -- ============================================
 
--- Everyone can read public events
+-- Everyone can read public events (idempotent)
+DROP POLICY IF EXISTS "Anyone can read events" ON events;
 CREATE POLICY "Anyone can read events"
   ON events
   FOR SELECT
   USING (true);
 
--- Only admins can create/update/delete events
+-- Only admins can create/update/delete events (idempotent)
+DROP POLICY IF EXISTS "Admins can manage events" ON events;
 CREATE POLICY "Admins can manage events"
   ON events
   FOR ALL
@@ -144,13 +156,15 @@ CREATE POLICY "Admins can manage events"
 -- RLS Policies for event_presentations
 -- ============================================
 
--- Everyone can read event presentations
+-- Everyone can read event presentations (idempotent)
+DROP POLICY IF EXISTS "Anyone can read event presentations" ON event_presentations;
 CREATE POLICY "Anyone can read event presentations"
   ON event_presentations
   FOR SELECT
   USING (true);
 
--- Students can create presentations for their own profile
+-- Students can create presentations for their own profile (idempotent)
+DROP POLICY IF EXISTS "Students can create own presentations" ON event_presentations;
 CREATE POLICY "Students can create own presentations"
   ON event_presentations
   FOR INSERT
@@ -163,7 +177,8 @@ CREATE POLICY "Students can create own presentations"
     )
   );
 
--- Students can update their own presentations
+-- Students can update their own presentations (idempotent)
+DROP POLICY IF EXISTS "Students can update own presentations" ON event_presentations;
 CREATE POLICY "Students can update own presentations"
   ON event_presentations
   FOR UPDATE
@@ -176,7 +191,8 @@ CREATE POLICY "Students can update own presentations"
     )
   );
 
--- Admins can manage all presentations
+-- Admins can manage all presentations (idempotent)
+DROP POLICY IF EXISTS "Admins can manage all presentations" ON event_presentations;
 CREATE POLICY "Admins can manage all presentations"
   ON event_presentations
   FOR ALL
@@ -187,7 +203,8 @@ CREATE POLICY "Admins can manage all presentations"
 -- RLS Policies for event_attendance
 -- ============================================
 
--- Users can read attendance for events they're attending
+-- Users can read attendance for events they're attending (idempotent)
+DROP POLICY IF EXISTS "Users can read own attendance" ON event_attendance;
 CREATE POLICY "Users can read own attendance"
   ON event_attendance
   FOR SELECT
@@ -199,7 +216,8 @@ CREATE POLICY "Users can read own attendance"
     )
   );
 
--- Users can create their own attendance records
+-- Users can create their own attendance records (idempotent)
+DROP POLICY IF EXISTS "Users can create own attendance" ON event_attendance;
 CREATE POLICY "Users can create own attendance"
   ON event_attendance
   FOR INSERT
@@ -211,7 +229,8 @@ CREATE POLICY "Users can create own attendance"
     )
   );
 
--- Users can update their own attendance
+-- Users can update their own attendance (idempotent)
+DROP POLICY IF EXISTS "Users can update own attendance" ON event_attendance;
 CREATE POLICY "Users can update own attendance"
   ON event_attendance
   FOR UPDATE
@@ -223,7 +242,8 @@ CREATE POLICY "Users can update own attendance"
     )
   );
 
--- Admins can read all attendance
+-- Admins can read all attendance (idempotent)
+DROP POLICY IF EXISTS "Admins can read all attendance" ON event_attendance;
 CREATE POLICY "Admins can read all attendance"
   ON event_attendance
   FOR SELECT

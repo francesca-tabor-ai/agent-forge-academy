@@ -5,7 +5,8 @@
 -- - Unauthenticated users cannot access portfolios
 -- - Do not allow implicit access
 
--- Policy: Students can read their own portfolio projects
+-- Policy: Students can read their own portfolio projects (idempotent)
+DROP POLICY IF EXISTS "Students can read own portfolio projects" ON portfolio_projects;
 CREATE POLICY "Students can read own portfolio projects"
   ON portfolio_projects
   FOR SELECT
@@ -18,7 +19,8 @@ CREATE POLICY "Students can read own portfolio projects"
     )
   );
 
--- Policy: Students can insert their own portfolio projects
+-- Policy: Students can insert their own portfolio projects (idempotent)
+DROP POLICY IF EXISTS "Students can insert own portfolio projects" ON portfolio_projects;
 CREATE POLICY "Students can insert own portfolio projects"
   ON portfolio_projects
   FOR INSERT
@@ -31,7 +33,8 @@ CREATE POLICY "Students can insert own portfolio projects"
     )
   );
 
--- Policy: Students can update their own portfolio projects
+-- Policy: Students can update their own portfolio projects (idempotent)
+DROP POLICY IF EXISTS "Students can update own portfolio projects" ON portfolio_projects;
 CREATE POLICY "Students can update own portfolio projects"
   ON portfolio_projects
   FOR UPDATE
@@ -44,7 +47,8 @@ CREATE POLICY "Students can update own portfolio projects"
     )
   );
 
--- Policy: Students can delete their own portfolio projects
+-- Policy: Students can delete their own portfolio projects (idempotent)
+DROP POLICY IF EXISTS "Students can delete own portfolio projects" ON portfolio_projects;
 CREATE POLICY "Students can delete own portfolio projects"
   ON portfolio_projects
   FOR DELETE
@@ -57,8 +61,9 @@ CREATE POLICY "Students can delete own portfolio projects"
     )
   );
 
--- Policy: Recruiters can read projects if student visibility allows
+-- Policy: Recruiters can read projects if student visibility allows (idempotent)
 -- Checks both project visibility and student profile visibility
+DROP POLICY IF EXISTS "Recruiters can read visible portfolio projects" ON portfolio_projects;
 CREATE POLICY "Recruiters can read visible portfolio projects"
   ON portfolio_projects
   FOR SELECT
@@ -84,7 +89,8 @@ CREATE POLICY "Recruiters can read visible portfolio projects"
     )
   );
 
--- Policy: Tutors can read portfolio projects (for educational purposes)
+-- Policy: Tutors can read portfolio projects (for educational purposes) (idempotent)
+DROP POLICY IF EXISTS "Tutors can read portfolio projects" ON portfolio_projects;
 CREATE POLICY "Tutors can read portfolio projects"
   ON portfolio_projects
   FOR SELECT
@@ -96,7 +102,8 @@ CREATE POLICY "Tutors can read portfolio projects"
     )
   );
 
--- Policy: Admins can read all portfolio projects
+-- Policy: Admins can read all portfolio projects (idempotent)
+DROP POLICY IF EXISTS "Admins can read all portfolio projects" ON portfolio_projects;
 CREATE POLICY "Admins can read all portfolio projects"
   ON portfolio_projects
   FOR SELECT

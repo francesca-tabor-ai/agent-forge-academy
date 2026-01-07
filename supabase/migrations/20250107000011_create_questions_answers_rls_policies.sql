@@ -11,13 +11,15 @@
 -- RLS Policies for questions
 -- ============================================
 
--- Students can read all questions
+-- Students can read all questions (idempotent)
+DROP POLICY IF EXISTS "Students can read all questions" ON questions;
 CREATE POLICY "Students can read all questions"
   ON questions
   FOR SELECT
   USING (true);
 
--- Students can create questions
+-- Students can create questions (idempotent)
+DROP POLICY IF EXISTS "Students can create questions" ON questions;
 CREATE POLICY "Students can create questions"
   ON questions
   FOR INSERT
@@ -30,7 +32,8 @@ CREATE POLICY "Students can create questions"
     )
   );
 
--- Students can update their own questions
+-- Students can update their own questions (idempotent)
+DROP POLICY IF EXISTS "Students can update own questions" ON questions;
 CREATE POLICY "Students can update own questions"
   ON questions
   FOR UPDATE
@@ -43,7 +46,8 @@ CREATE POLICY "Students can update own questions"
     )
   );
 
--- Students can delete their own questions
+-- Students can delete their own questions (idempotent)
+DROP POLICY IF EXISTS "Students can delete own questions" ON questions;
 CREATE POLICY "Students can delete own questions"
   ON questions
   FOR DELETE
@@ -56,7 +60,8 @@ CREATE POLICY "Students can delete own questions"
     )
   );
 
--- Tutors can read all questions
+-- Tutors can read all questions (idempotent)
+DROP POLICY IF EXISTS "Tutors can read all questions" ON questions;
 CREATE POLICY "Tutors can read all questions"
   ON questions
   FOR SELECT
@@ -68,7 +73,8 @@ CREATE POLICY "Tutors can read all questions"
     )
   );
 
--- Admins can manage all questions
+-- Admins can manage all questions (idempotent)
+DROP POLICY IF EXISTS "Admins can manage all questions" ON questions;
 CREATE POLICY "Admins can manage all questions"
   ON questions
   FOR ALL
@@ -79,13 +85,15 @@ CREATE POLICY "Admins can manage all questions"
 -- RLS Policies for answers
 -- ============================================
 
--- Anyone authenticated can read answers
+-- Anyone authenticated can read answers (idempotent)
+DROP POLICY IF EXISTS "Authenticated users can read answers" ON answers;
 CREATE POLICY "Authenticated users can read answers"
   ON answers
   FOR SELECT
   USING (auth.uid() IS NOT NULL);
 
--- Students and tutors can create answers
+-- Students and tutors can create answers (idempotent)
+DROP POLICY IF EXISTS "Students and tutors can create answers" ON answers;
 CREATE POLICY "Students and tutors can create answers"
   ON answers
   FOR INSERT
@@ -98,7 +106,8 @@ CREATE POLICY "Students and tutors can create answers"
     )
   );
 
--- Users can update their own answers
+-- Users can update their own answers (idempotent)
+DROP POLICY IF EXISTS "Users can update own answers" ON answers;
 CREATE POLICY "Users can update own answers"
   ON answers
   FOR UPDATE
@@ -110,7 +119,8 @@ CREATE POLICY "Users can update own answers"
     )
   );
 
--- Users can delete their own answers
+-- Users can delete their own answers (idempotent)
+DROP POLICY IF EXISTS "Users can delete own answers" ON answers;
 CREATE POLICY "Users can delete own answers"
   ON answers
   FOR DELETE
@@ -122,7 +132,8 @@ CREATE POLICY "Users can delete own answers"
     )
   );
 
--- Tutors can mark answers as accepted (update is_accepted field)
+-- Tutors can mark answers as accepted (update is_accepted field) (idempotent)
+DROP POLICY IF EXISTS "Tutors can mark answers as accepted" ON answers;
 CREATE POLICY "Tutors can mark answers as accepted"
   ON answers
   FOR UPDATE
@@ -144,7 +155,8 @@ CREATE POLICY "Tutors can mark answers as accepted"
     )
   );
 
--- Admins can manage all answers
+-- Admins can manage all answers (idempotent)
+DROP POLICY IF EXISTS "Admins can manage all answers" ON answers;
 CREATE POLICY "Admins can manage all answers"
   ON answers
   FOR ALL

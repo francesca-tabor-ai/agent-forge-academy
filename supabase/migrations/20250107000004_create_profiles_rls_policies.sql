@@ -24,31 +24,36 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- Policy: Users can always read their own profile
+-- Policy: Users can always read their own profile (idempotent)
+DROP POLICY IF EXISTS "Users can read own profile" ON profiles;
 CREATE POLICY "Users can read own profile"
   ON profiles
   FOR SELECT
   USING (auth.uid() = user_id);
 
--- Policy: Users can always update their own profile
+-- Policy: Users can always update their own profile (idempotent)
+DROP POLICY IF EXISTS "Users can update own profile" ON profiles;
 CREATE POLICY "Users can update own profile"
   ON profiles
   FOR UPDATE
   USING (auth.uid() = user_id);
 
--- Policy: Users can insert their own profile (typically done via trigger)
+-- Policy: Users can insert their own profile (typically done via trigger) (idempotent)
+DROP POLICY IF EXISTS "Users can insert own profile" ON profiles;
 CREATE POLICY "Users can insert own profile"
   ON profiles
   FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
--- Policy: Admins can read everything
+-- Policy: Admins can read everything (idempotent)
+DROP POLICY IF EXISTS "Admins can read all profiles" ON profiles;
 CREATE POLICY "Admins can read all profiles"
   ON profiles
   FOR SELECT
   USING (is_admin(auth.uid()));
 
--- Policy: Admins can update everything
+-- Policy: Admins can update everything (idempotent)
+DROP POLICY IF EXISTS "Admins can update all profiles" ON profiles;
 CREATE POLICY "Admins can update all profiles"
   ON profiles
   FOR UPDATE

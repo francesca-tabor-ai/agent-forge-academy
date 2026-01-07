@@ -1,25 +1,58 @@
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Nunito:wght@300;400;500;600;700&display=swap');
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply font-sans antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-playfair;
+  }
 }
 
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
+@layer components {
+  /* Primary Button */
+  .btn-primary {
+    @apply bg-brand-light text-white px-8 py-3 rounded-lg font-semibold;
+    @apply transition-all duration-200;
+    @apply hover:scale-105 hover:shadow-lg hover:bg-brand-light/90;
+    @apply active:scale-100;
+  }
+
+  /* Secondary Button */
+  .btn-secondary {
+    @apply bg-white text-brand-light border-2 border-brand-light px-8 py-3 rounded-lg font-semibold;
+    @apply transition-all duration-200;
+    @apply hover:scale-105 hover:bg-brand-light/10 hover:shadow-md;
+    @apply active:scale-100;
+  }
+
+  /* Navigation Links */
+  .nav-link {
+    @apply text-gray-400 px-3 py-2 transition-colors duration-200;
+    @apply hover:text-brand-yellow;
+  }
+
+  .nav-link-active {
+    @apply text-white;
+    @apply hover:text-brand-yellow;
+  }
+
+  /* Default Links */
+  a:not(.btn-primary):not(.btn-secondary):not(.nav-link) {
+    @apply transition-colors duration-200;
+    @apply hover:text-brand-yellow;
+  }
 }
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@layer utilities {
+  /* Custom animations are defined in tailwind.config.js */
 }
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-

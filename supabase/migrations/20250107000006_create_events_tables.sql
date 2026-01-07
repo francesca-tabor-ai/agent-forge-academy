@@ -1,11 +1,15 @@
 -- Create events, event_presentations, and event_attendance tables
 -- Keep schema simple and extensible
 
--- Create event type enum
-CREATE TYPE event_type AS ENUM ('demo_day', 'workshop', 'networking', 'other');
+-- Create event type enum (idempotent)
+DO $$ BEGIN
+    CREATE TYPE event_type AS ENUM ('demo_day', 'workshop', 'networking', 'other');
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 -- Create events table
-CREATE TABLE events (
+CREATE TABLE IF NOT EXISTS events (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   title VARCHAR(255) NOT NULL,
   description TEXT,
@@ -20,7 +24,7 @@ CREATE TABLE events (
 
 -- Create event_presentations table
 -- Links students to projects they're presenting
-CREATE TABLE event_presentations (
+CREATE TABLE IF NOT EXISTS event_presentations (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   event_id UUID NOT NULL REFERENCES events(id) ON DELETE CASCADE,
   student_profile_id UUID NOT NULL REFERENCES student_profiles(id) ON DELETE CASCADE,
@@ -33,7 +37,7 @@ CREATE TABLE event_presentations (
 
 -- Create event_attendance table
 -- Tracks attendance for recruiters, students, tutors
-CREATE TABLE event_attendance (
+CREATE TABLE IF NOT EXISTS event_attendance (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   event_id UUID NOT NULL REFERENCES events(id) ON DELETE CASCADE,
   profile_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
@@ -45,25 +49,28 @@ CREATE TABLE event_attendance (
 );
 
 -- Create indexes for common queries
-CREATE INDEX idx_events_start_time ON events(start_time DESC);
-CREATE INDEX idx_events_event_type ON events(event_type);
-CREATE INDEX idx_event_presentations_event_id ON event_presentations(event_id);
-CREATE INDEX idx_event_presentations_student_profile_id ON event_presentations(student_profile_id);
-CREATE INDEX idx_event_attendance_event_id ON event_attendance(event_id);
-CREATE INDEX idx_event_attendance_profile_id ON event_attendance(profile_id);
-CREATE INDEX idx_event_attendance_rsvp_status ON event_attendance(rsvp_status);
+CREATE INDEX IF NOT EXISTS idx_events_start_time ON events(start_time DESC);
+CREATE INDEX IF NOT EXISTS idx_events_event_type ON events(event_type);
+CREATE INDEX IF NOT EXISTS idx_event_presentations_event_id ON event_presentations(event_id);
+CREATE INDEX IF NOT EXISTS idx_event_presentations_student_profile_id ON event_presentations(student_profile_id);
+CREATE INDEX IF NOT EXISTS idx_event_attendance_event_id ON event_attendance(event_id);
+CREATE INDEX IF NOT EXISTS idx_event_attendance_profile_id ON event_attendance(profile_id);
+CREATE INDEX IF NOT EXISTS idx_event_attendance_rsvp_status ON event_attendance(rsvp_status);
 
--- Create triggers to update updated_at
+-- Create triggers to update updated_at (idempotent)
+DROP TRIGGER IF EXISTS update_events_updated_at ON events;
 CREATE TRIGGER update_events_updated_at
   BEFORE UPDATE ON events
   FOR EACH ROW
   EXECUTE FUNCTION update_updated_at_column();
 
+DROP TRIGGER IF EXISTS update_event_presentations_updated_at ON event_presentations;
 CREATE TRIGGER update_event_presentations_updated_at
   BEFORE UPDATE ON event_presentations
   FOR EACH ROW
   EXECUTE FUNCTION update_updated_at_column();
 
+DROP TRIGGER IF EXISTS update_event_attendance_updated_at ON event_attendance;
 CREATE TRIGGER update_event_attendance_updated_at
   BEFORE UPDATE ON event_attendance
   FOR EACH ROW
