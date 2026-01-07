@@ -55,12 +55,12 @@ CREATE TRIGGER validate_recruiter_profile_role_trigger
   EXECUTE FUNCTION validate_recruiter_profile_role();
 
 -- Fix is_admin function to check for admin role
-CREATE OR REPLACE FUNCTION is_admin(user_id UUID)
+CREATE OR REPLACE FUNCTION is_admin(check_user_id UUID)
 RETURNS BOOLEAN AS $$
 BEGIN
   RETURN EXISTS (
     SELECT 1 FROM profiles
-    WHERE profiles.user_id = is_admin.user_id
+    WHERE profiles.user_id = check_user_id
     AND profiles.role = 'admin'
   );
 END;
