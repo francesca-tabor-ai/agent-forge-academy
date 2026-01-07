@@ -91,8 +91,10 @@ export default async function DemoDayPage({ params }: DemoDayPageProps) {
         {presentations && presentations.length > 0 ? (
           <div className="presentations-list">
             {presentations.map((presentation) => {
-              const studentProfileId = presentation.student_profiles?.id;
-              const project = presentation.portfolio_projects;
+              const studentProfileId = presentation.student_profiles?.[0]?.id;
+              const project = Array.isArray(presentation.portfolio_projects) 
+                ? presentation.portfolio_projects[0] 
+                : presentation.portfolio_projects;
               
               return (
                 <div key={presentation.id} className="presentation-card">
