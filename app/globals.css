@@ -19,40 +19,83 @@
 }
 
 @layer components {
-  /* Primary Button */
+  /* Primary Button - Improved sizing, subtle hover states */
   .btn-primary {
-    @apply bg-brand-light text-white px-8 py-3 rounded-lg font-semibold;
-    @apply transition-all duration-200;
-    @apply hover:scale-105 hover:shadow-lg hover:bg-brand-light/90;
-    @apply active:scale-100;
+    @apply bg-brand-light text-white px-10 py-3.5 rounded-md font-medium text-base;
+    @apply transition-colors duration-150 ease-in-out;
+    @apply hover:bg-brand-light/90;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-brand-dark;
+    @apply active:bg-brand-light/95;
+    min-height: 44px; /* WCAG tap target size */
   }
 
   /* Secondary Button */
   .btn-secondary {
-    @apply bg-white text-brand-light border-2 border-brand-light px-8 py-3 rounded-lg font-semibold;
-    @apply transition-all duration-200;
-    @apply hover:scale-105 hover:bg-brand-light/10 hover:shadow-md;
-    @apply active:scale-100;
+    @apply bg-white text-brand-light border-2 border-brand-light px-10 py-3.5 rounded-md font-medium text-base;
+    @apply transition-colors duration-150 ease-in-out;
+    @apply hover:bg-gray-50;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-light focus-visible:ring-offset-2;
+    @apply active:bg-gray-100;
+    min-height: 44px;
   }
 
   /* Navigation Links */
   .nav-link {
-    @apply text-gray-400 px-3 py-2 transition-colors duration-200;
-    @apply hover:text-brand-yellow;
+    @apply text-gray-400 px-3 py-2 transition-colors duration-150;
+    @apply hover:text-gray-200;
   }
 
   .nav-link-active {
     @apply text-white;
-    @apply hover:text-brand-yellow;
+    @apply hover:text-gray-200;
   }
 
   /* Default Links */
   a:not(.btn-primary):not(.btn-secondary):not(.nav-link) {
-    @apply transition-colors duration-200;
-    @apply hover:text-brand-yellow;
+    @apply transition-colors duration-150;
+    @apply hover:text-brand-light;
   }
 }
 
 @layer utilities {
   /* Custom animations are defined in tailwind.config.js */
+  
+  /* Hide scrollbar */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Authenticated app typography - slightly denser than marketing page */
+@layer base {
+  /* Authenticated app uses tighter spacing for productivity */
+  .authenticated-app {
+    @apply text-sm;
+  }
+  
+  .authenticated-app h1 {
+    @apply text-2xl font-semibold text-gray-900 mb-6;
+  }
+  
+  .authenticated-app h2 {
+    @apply text-xl font-semibold text-gray-900 mb-4;
+  }
+  
+  .authenticated-app h3 {
+    @apply text-lg font-medium text-gray-900 mb-3;
+  }
+  
+  .authenticated-app p {
+    @apply text-gray-700 leading-relaxed;
+  }
+  
+  /* Focus states for accessibility */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-brand-light ring-offset-2;
+  }
 }

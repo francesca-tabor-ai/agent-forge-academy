@@ -65,8 +65,9 @@ export async function createUserSupabaseClient() {
 /**
  * Gets the current user's role from Supabase
  * Returns null if not authenticated
+ * Maps 'instructor' to 'tutor' for compatibility
  */
-export async function getUserRole(): Promise<'student' | 'tutor' | 'recruiter' | 'admin' | null> {
+export async function getUserRole(): Promise<'student' | 'instructor' | 'recruiter' | 'admin' | null> {
   const supabase = await createUserSupabaseClient();
   const {
     data: { user },
@@ -82,16 +83,27 @@ export async function getUserRole(): Promise<'student' | 'tutor' | 'recruiter' |
     .eq('user_id', user.id)
     .single();
 
-  return (profile?.role as 'student' | 'tutor' | 'recruiter' | 'admin') || null;
+  const role = profile?.role as string;
+  
+  // Map 'tutor' to 'instructor' for UI consistency
+  if (role === 'tutor' || role === 'instructor') {
+    return 'instructor';
+  }
+  
+  return (role as 'student' | 'instructor' | 'recruiter' | 'admin') || null;
 }
 
 /**
  * Checks if user has the required role
  */
 export async function hasRole(
-  requiredRole: 'student' | 'tutor' | 'recruiter' | 'admin'
+  requiredRole: 'student' | 'tutor' | 'instructor' | 'recruiter' | 'admin'
 ): Promise<boolean> {
   const role = await getUserRole();
+  // Handle both 'tutor' and 'instructor' for backward compatibility
+  if (requiredRole === 'tutor' || requiredRole === 'instructor') {
+    return role === 'instructor';
+  }
   return role === requiredRole;
 }
 

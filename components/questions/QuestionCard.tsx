@@ -44,59 +44,58 @@ export function QuestionCard({ question, showAnswerForm = false }: QuestionCardP
   const otherAnswers = question.answers.filter((a) => !a.is_accepted);
 
   return (
-    <div className="question-card">
-      <div className="question-header">
-        <h3>{question.title}</h3>
-        <div className="question-meta">
-          <span className="context-badge">
-            {question.context_type}: {question.context_id}
-          </span>
-          <span className="question-date">
-            {new Date(question.created_at).toLocaleDateString()}
-          </span>
+    <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
+      <div className="mb-4">
+        <div className="flex items-start justify-between mb-2">
+          <h3 className="text-lg font-medium text-gray-900">{question.title}</h3>
+          <div className="flex items-center gap-3 text-xs text-gray-500">
+            <span className="capitalize">{question.context_type}</span>
+            <span>{new Date(question.created_at).toLocaleDateString()}</span>
+          </div>
         </div>
+        <p className="text-sm text-gray-700 leading-relaxed">{question.body}</p>
       </div>
 
-      <div className="question-body">
-        <p>{question.body}</p>
-      </div>
-
-      <div className="question-answers">
-        <div className="answers-header">
-          <h4>
+      <div className="border-t border-gray-200 pt-4">
+        <div className="flex items-center justify-between mb-4">
+          <h4 className="text-sm font-medium text-gray-900">
             {question.answers.length} answer{question.answers.length !== 1 ? 's' : ''}
           </h4>
           {acceptedAnswer && (
-            <span className="accepted-badge">✓ Accepted Answer</span>
+            <span className="text-xs text-green-700 bg-green-50 px-2 py-1 rounded">
+              Accepted
+            </span>
           )}
         </div>
 
-        {acceptedAnswer && (
-          <AnswerCard answer={acceptedAnswer} isAccepted={true} />
-        )}
+        <div className="space-y-4">
+          {acceptedAnswer && (
+            <AnswerCard answer={acceptedAnswer} isAccepted={true} />
+          )}
 
-        {otherAnswers.map((answer) => (
-          <AnswerCard key={answer.id} answer={answer} isAccepted={false} />
-        ))}
+          {otherAnswers.map((answer) => (
+            <AnswerCard key={answer.id} answer={answer} isAccepted={false} />
+          ))}
 
-        {showAnswerForm && (
-          <div className="answer-form-section">
-            {!showAnswerFormState ? (
-              <button
-                onClick={() => setShowAnswerFormState(true)}
-                className="btn-primary"
-              >
-                Add Answer
-              </button>
-            ) : (
-              <AnswerForm
-                questionId={question.id}
-                onSuccess={() => setShowAnswerFormState(false)}
-                onCancel={() => setShowAnswerFormState(false)}
-              />
-            )}
-          </div>
-        )}
+          {showAnswerForm && (
+            <div className="pt-4 border-t border-gray-100">
+              {!showAnswerFormState ? (
+                <button
+                  onClick={() => setShowAnswerFormState(true)}
+                  className="px-4 py-2 text-sm font-medium text-white bg-brand-light rounded-md hover:bg-brand-light/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-light"
+                >
+                  Add Answer
+                </button>
+              ) : (
+                <AnswerForm
+                  questionId={question.id}
+                  onSuccess={() => setShowAnswerFormState(false)}
+                  onCancel={() => setShowAnswerFormState(false)}
+                />
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

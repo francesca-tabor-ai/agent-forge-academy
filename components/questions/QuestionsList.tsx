@@ -56,16 +56,17 @@ export function QuestionsList({
         );
 
   return (
-    <div className="questions-list">
-      <div className="questions-filters">
+    <div>
+      <div className="mb-6 flex items-center gap-4">
         <div>
-          <label htmlFor="context_type">Context Type:</label>
+          <label htmlFor="context_type" className="sr-only">Context Type</label>
           <select
             id="context_type"
             value={contextType}
             onChange={(e) => setContextType(e.target.value)}
+            className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent"
           >
-            <option value="all">All</option>
+            <option value="all">All Contexts</option>
             <option value="lesson">Lesson</option>
             <option value="lab">Lab</option>
             <option value="project">Project</option>
@@ -74,23 +75,24 @@ export function QuestionsList({
 
         {contextType !== 'all' && (
           <div>
-            <label htmlFor="context_id">Context ID:</label>
+            <label htmlFor="context_id" className="sr-only">Context ID</label>
             <input
               id="context_id"
               type="text"
               value={contextId}
               onChange={(e) => setContextId(e.target.value)}
               placeholder="e.g., lesson-01"
+              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent"
             />
           </div>
         )}
       </div>
 
-      <div className="questions-count">
+      <div className="mb-4 text-sm text-gray-600">
         {filteredQuestions.length} question{filteredQuestions.length !== 1 ? 's' : ''}
       </div>
 
-      <div className="questions-grid">
+      <div>
         {filteredQuestions.length > 0 ? (
           filteredQuestions.map((question) => (
             <QuestionCard
@@ -100,7 +102,9 @@ export function QuestionsList({
             />
           ))
         ) : (
-          <p>No questions found.</p>
+          <div className="bg-white border border-gray-200 rounded-lg p-12 text-center">
+            <p className="text-gray-600">No questions found.</p>
+          </div>
         )}
       </div>
     </div>

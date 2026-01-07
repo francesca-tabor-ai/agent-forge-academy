@@ -62,25 +62,23 @@ export function StudentDirectory({
   };
 
   return (
-    <div className="student-directory">
-      <div className="directory-filters">
-        <div className="search-box">
+    <div>
+      <div className="mb-6 space-y-4">
+        <div className="flex items-center gap-4">
           <input
             type="text"
             placeholder="Search by bio, skills..."
             value={search}
             onChange={(e) => handleSearch(e.target.value)}
             disabled={isPending}
+            className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent"
           />
-        </div>
-
-        <div className="visibility-filter">
-          <label htmlFor="visibility">Visibility:</label>
           <select
             id="visibility"
             value={visibility}
             onChange={(e) => handleVisibilityChange(e.target.value)}
             disabled={isPending}
+            className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent"
           >
             <option value="all">All Visible</option>
             <option value="recruiters_only">Recruiters Only</option>
@@ -89,27 +87,40 @@ export function StudentDirectory({
         </div>
       </div>
 
-      {isPending && <p>Loading...</p>}
+      {isPending && (
+        <div className="text-sm text-gray-500 mb-4">Loading...</div>
+      )}
 
-      <div className="students-grid">
+      <div className="space-y-4">
         {students.length > 0 ? (
           students.map((student) => (
-            <div key={student.id} className="student-card">
-              <div className="student-header">
-                <h3>Student Profile</h3>
-                <span className="visibility-badge">{student.visibility}</span>
+            <div
+              key={student.id}
+              className="bg-white border border-gray-200 rounded-lg p-6"
+            >
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex-1">
+                  <div className="flex items-center gap-3 mb-2">
+                    <h3 className="text-base font-medium text-gray-900">Student Profile</h3>
+                    <span className="text-xs text-gray-500 capitalize">
+                      {student.visibility.replace('_', ' ')}
+                    </span>
+                  </div>
+                  {student.bio && (
+                    <p className="text-sm text-gray-700 leading-relaxed">{student.bio}</p>
+                  )}
+                </div>
               </div>
-              {student.bio && <p className="student-bio">{student.bio}</p>}
-              <div className="student-actions">
+              <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
                 <Link
                   href={`/portfolio/${student.id}`}
-                  className="btn-primary"
+                  className="text-sm font-medium text-brand-light hover:text-brand-light/90"
                 >
-                  View Portfolio
+                  View Portfolio →
                 </Link>
                 <Link
                   href={`/recruiter/contact/${student.id}`}
-                  className="btn-secondary"
+                  className="px-4 py-2 text-sm font-medium text-white bg-brand-light rounded-md hover:bg-brand-light/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-light"
                 >
                   Request Contact
                 </Link>
@@ -117,7 +128,9 @@ export function StudentDirectory({
             </div>
           ))
         ) : (
-          <p>No students found matching your criteria.</p>
+          <div className="bg-white border border-gray-200 rounded-lg p-12 text-center">
+            <p className="text-gray-600">No students found matching your criteria.</p>
+          </div>
         )}
       </div>
     </div>

@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import { hasRole } from '@/lib/supabase/server';
+import AuthenticatedLayout from '@/components/layout/AuthenticatedLayout';
 
 export default async function StudentLayout({
   children,
@@ -12,18 +13,6 @@ export default async function StudentLayout({
     redirect('/');
   }
 
-  return (
-    <div className="student-layout">
-      <nav className="student-nav">
-        <h1>AgentForge Academy - Student Portal</h1>
-        <div className="nav-links">
-          <a href="/student/dashboard">Dashboard</a>
-          <a href="/student/portfolio">Portfolio</a>
-          <a href="/student/questions">Questions</a>
-        </div>
-      </nav>
-      <main>{children}</main>
-    </div>
-  );
+  return <AuthenticatedLayout>{children}</AuthenticatedLayout>;
 }
 

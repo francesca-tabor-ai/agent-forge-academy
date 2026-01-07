@@ -18,18 +18,19 @@ interface AnswerCardProps {
 
 export function AnswerCard({ answer, isAccepted }: AnswerCardProps) {
   return (
-    <div className={`answer-card ${isAccepted ? 'accepted' : ''}`}>
-      {isAccepted && <div className="accepted-indicator">✓ Accepted</div>}
-      <div className="answer-body">
+    <div className={`${isAccepted ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200'} border rounded-lg p-4`}>
+      {isAccepted && (
+        <div className="text-xs text-green-700 font-medium mb-2">Accepted Answer</div>
+      )}
+      <div className="text-sm text-gray-700 leading-relaxed mb-3">
         <p>{answer.body}</p>
       </div>
-      <div className="answer-meta">
-        <span className="answer-author">
-          {answer.profiles[0]?.role === 'tutor' ? 'Tutor' : 'Student'}
+      <div className="flex items-center gap-3 text-xs text-gray-500">
+        <span className="capitalize">
+          {answer.profiles[0]?.role === 'tutor' || answer.profiles[0]?.role === 'instructor' ? 'Instructor' : 'Student'}
         </span>
-        <span className="answer-date">
-          {new Date(answer.created_at).toLocaleDateString()}
-        </span>
+        <span>•</span>
+        <span>{new Date(answer.created_at).toLocaleDateString()}</span>
       </div>
     </div>
   );

@@ -64,10 +64,22 @@ export default async function TutorQuestionsPage({
     console.error('Error fetching questions:', error);
   }
 
+  // Filter unanswered questions
+  const unansweredQuestions = questions?.filter(
+    (q) => !q.answers || q.answers.length === 0
+  ) || [];
+
   return (
-    <div className="tutor-questions-page">
-      <h1>Student Questions</h1>
-      <p>Answer questions and help students learn.</p>
+    <div>
+      <div className="mb-8">
+        <h1 className="text-2xl font-semibold text-gray-900 mb-2">Student Questions</h1>
+        <p className="text-sm text-gray-600">
+          {unansweredQuestions.length > 0
+            ? `${unansweredQuestions.length} unanswered question${unansweredQuestions.length !== 1 ? 's' : ''}`
+            : 'All questions have been answered'}
+        </p>
+      </div>
+
       <QuestionsList
         questions={questions || []}
         initialContextType={contextType}
