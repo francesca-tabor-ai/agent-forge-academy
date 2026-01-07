@@ -13,7 +13,7 @@ export async function POST(request: Request) {
     }
 
     const payload = await request.json();
-    const { title, body: question_body, context_type, context_id } = payload;
+    const { title, body, context_type, context_id } = payload;
 
     // Get user's profile
     const { data: profile } = await supabase
@@ -43,7 +43,7 @@ export async function POST(request: Request) {
       .insert({
         student_profile_id: studentProfile.id,
         title,
-        body: question_body,
+        body,
         context_type,
         context_id,
       })
