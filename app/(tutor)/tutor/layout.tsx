@@ -7,7 +7,7 @@ export default async function TutorLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const isTutor = await hasRole('tutor') || await hasRole('instructor');
+  const isTutor = await hasRole('instructor');
 
   if (!isTutor) {
     redirect('/');

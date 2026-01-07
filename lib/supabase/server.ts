@@ -1,6 +1,7 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { createClient } from '@supabase/supabase-js';
+import type { UserRole } from '@/lib/types/roles';
 
 /**
  * Creates a Supabase client for server-side operations
@@ -65,9 +66,9 @@ export async function createUserSupabaseClient() {
 /**
  * Gets the current user's role from Supabase
  * Returns null if not authenticated
- * Maps 'instructor' to 'tutor' for compatibility
+ * Maps 'tutor' to 'instructor' for consistency (database supports both for backward compatibility)
  */
-export async function getUserRole(): Promise<'student' | 'instructor' | 'recruiter' | 'admin' | null> {
+export async function getUserRole(): Promise<UserRole | null> {
   const supabase = await createUserSupabaseClient();
   const {
     data: { user },
@@ -85,22 +86,23 @@ export async function getUserRole(): Promise<'student' | 'instructor' | 'recruit
 
   const role = profile?.role as string;
   
-  // Map 'tutor' to 'instructor' for UI consistency
+  // Map 'tutor' to 'instructor' for consistency (database may have 'tutor' for backward compatibility)
   if (role === 'tutor' || role === 'instructor') {
     return 'instructor';
   }
   
-  return (role as 'student' | 'instructor' | 'recruiter' | 'admin') || null;
+  return (role as UserRole) || null;
 }
 
 /**
  * Checks if user has the required role
+ * Accepts 'tutor' for backward compatibility (maps to 'instructor')
  */
 export async function hasRole(
-  requiredRole: 'student' | 'tutor' | 'instructor' | 'recruiter' | 'admin'
+  requiredRole: UserRole | 'tutor'
 ): Promise<boolean> {
   const role = await getUserRole();
-  // Handle both 'tutor' and 'instructor' for backward compatibility
+  // Handle 'tutor' for backward compatibility (maps to 'instructor')
   if (requiredRole === 'tutor' || requiredRole === 'instructor') {
     return role === 'instructor';
   }
@@ -109,11 +111,17 @@ export async function hasRole(
 
 /**
  * Checks if user has any of the required roles
+ * Accepts 'tutor' in the array for backward compatibility (maps to 'instructor')
  */
 export async function hasAnyRole(
-  requiredRoles: Array<'student' | 'tutor' | 'recruiter' | 'admin'>
+  requiredRoles: Array<UserRole | 'tutor'>
 ): Promise<boolean> {
   const role = await getUserRole();
-  return role !== null && requiredRoles.includes(role);
+  if (role === null) {
+    return false;
+  }
+  // Map 'tutor' to 'instructor' in the required roles array for comparison
+  const normalizedRoles = requiredRoles.map(r => r === 'tutor' ? 'instructor' : r) as UserRole[];
+  return normalizedRoles.includes(role);
 }
 

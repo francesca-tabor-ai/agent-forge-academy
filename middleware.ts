@@ -153,7 +153,13 @@ export async function middleware(request: NextRequest) {
           });
           // Continue without role if profile fetch fails
         } else {
-          role = profile?.role || null;
+          const rawRole = profile?.role || null;
+          // Normalize 'tutor' to 'instructor' for consistency
+          if (rawRole === 'tutor' || rawRole === 'instructor') {
+            role = 'instructor';
+          } else {
+            role = rawRole;
+          }
         }
       } catch (error) {
         console.error('[Middleware] Error fetching profile:', {
@@ -183,8 +189,8 @@ export async function middleware(request: NextRequest) {
             return NextResponse.redirect(new URL('/', request.url));
           }
 
-          // Handle both 'tutor' and 'instructor' roles for instructor routes
-          if (pathname.startsWith('/tutor') && role !== 'instructor' && role !== 'tutor') {
+          // Instructor routes (role is normalized to 'instructor' above)
+          if (pathname.startsWith('/tutor') && role !== 'instructor') {
             return NextResponse.redirect(new URL('/', request.url));
           }
 
