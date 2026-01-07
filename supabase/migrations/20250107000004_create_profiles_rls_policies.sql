@@ -6,13 +6,12 @@
 -- - Admins can read everything
 
 -- Helper function to check if user is admin
--- Note: This assumes you have an admin role or flag in your system
--- Adjust based on your admin implementation
-CREATE OR REPLACE FUNCTION is_admin(user_id UUID)
+-- Note: This will be properly implemented in a later migration
+-- For now, returning false - proper implementation in 20250107000008_fix_issues.sql
+CREATE OR REPLACE FUNCTION is_admin(check_user_id UUID)
 RETURNS BOOLEAN AS $$
 BEGIN
-  -- TODO: Implement admin check based on your admin system
-  -- For now, returning false - you'll need to implement this
+  -- This is a placeholder - will be replaced in migration 20250107000008
   RETURN false;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
