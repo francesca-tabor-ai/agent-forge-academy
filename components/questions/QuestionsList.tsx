@@ -8,10 +8,10 @@ interface Answer {
   body: string;
   is_accepted: boolean;
   created_at: string;
-  profiles: {
+  profiles: Array<{
     id: string;
     role: string;
-  };
+  }>;
 }
 
 interface Question {
@@ -22,13 +22,13 @@ interface Question {
   context_id: string;
   created_at: string;
   updated_at: string;
-  student_profiles: {
+  student_profiles: Array<{
     id: string;
-    profiles: {
+    profiles: Array<{
       id: string;
       user_id: string;
-    };
-  };
+    }>;
+  }>;
   answers: Answer[];
 }
 

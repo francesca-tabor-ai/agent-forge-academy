@@ -5,10 +5,10 @@ interface Answer {
   body: string;
   is_accepted: boolean;
   created_at: string;
-  profiles: {
+  profiles: Array<{
     id: string;
     role: string;
-  };
+  }>;
 }
 
 interface AnswerCardProps {
@@ -25,7 +25,7 @@ export function AnswerCard({ answer, isAccepted }: AnswerCardProps) {
       </div>
       <div className="answer-meta">
         <span className="answer-author">
-          {answer.profiles.role === 'tutor' ? 'Tutor' : 'Student'}
+          {answer.profiles[0]?.role === 'tutor' ? 'Tutor' : 'Student'}
         </span>
         <span className="answer-date">
           {new Date(answer.created_at).toLocaleDateString()}
