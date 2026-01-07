@@ -8,10 +8,10 @@ interface StudentProfile {
   id: string;
   visibility: 'private' | 'recruiters_only' | 'public';
   bio: string | null;
-  profiles: {
+  profiles: Array<{
     id: string;
     user_id: string;
-  };
+  }>;
 }
 
 interface StudentDirectoryProps {
