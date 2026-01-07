@@ -12,8 +12,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const body = await request.json();
-    const { title, body, context_type, context_id } = body;
+    const payload = await request.json();
+    const { title, body: question_body, context_type, context_id } = payload;
 
     // Get user's profile
     const { data: profile } = await supabase
@@ -43,7 +43,7 @@ export async function POST(request: Request) {
       .insert({
         student_profile_id: studentProfile.id,
         title,
-        body,
+        body: question_body,
         context_type,
         context_id,
       })
