@@ -1,6 +1,19 @@
+import { redirect } from 'next/navigation';
+import { createUserSupabaseClient } from '@/lib/supabase/server';
 import Link from 'next/link';
 
-export default function Home() {
+export default async function Home() {
+  const supabase = await createUserSupabaseClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  // If logged in, redirect to /app
+  if (user) {
+    redirect('/app');
+  }
+
+  // If not logged in, show homepage with login/signup links
   return (
     <main style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto' }}>
       <h1>AgentForge Academy</h1>
@@ -21,7 +34,7 @@ export default function Home() {
 
       <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
         <Link 
-          href="/login" 
+          href="/auth/login" 
           style={{
             padding: '0.75rem 1.5rem',
             backgroundColor: '#0070f3',
@@ -34,7 +47,7 @@ export default function Home() {
           Sign In
         </Link>
         <Link 
-          href="/signup" 
+          href="/auth/signup" 
           style={{
             padding: '0.75rem 1.5rem',
             backgroundColor: 'transparent',
@@ -51,4 +64,3 @@ export default function Home() {
     </main>
   );
 }
-

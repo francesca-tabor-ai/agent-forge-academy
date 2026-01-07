@@ -94,15 +94,20 @@ export async function middleware(request: NextRequest) {
     }
 
     // Public routes that don't require authentication
-    const publicRoutes = ['/', '/login', '/signup'];
-    const isPublicRoute = publicRoutes.some((route) => pathname === route);
+    const publicRoutes = ['/', '/auth/login', '/auth/signup', '/auth/reset-password'];
+    const isPublicRoute = publicRoutes.some((route) => pathname === route) || pathname.startsWith('/auth/');
+
+    // If logged in and visiting /, redirect to /app
+    if (user && pathname === '/') {
+      return NextResponse.redirect(new URL('/app', request.url));
+    }
 
     // If not authenticated and trying to access protected route, redirect to login
     if (!user && !isPublicRoute) {
-      // Prevent redirect loops - don't redirect if already going to login
-      if (pathname !== '/login') {
+      // Protect /app* routes
+      if (pathname.startsWith('/app')) {
         try {
-          const redirectUrl = new URL('/login', request.url);
+          const redirectUrl = new URL('/auth/login', request.url);
           redirectUrl.searchParams.set('redirect', pathname);
           return NextResponse.redirect(redirectUrl);
         } catch (redirectError) {
@@ -110,7 +115,21 @@ export async function middleware(request: NextRequest) {
             error: redirectError instanceof Error ? redirectError.message : 'Unknown error',
             pathname,
           });
-          // If redirect fails, just allow the request
+          return NextResponse.next();
+        }
+      }
+      
+      // For other protected routes (not /app*), redirect to login
+      if (pathname !== '/auth/login') {
+        try {
+          const redirectUrl = new URL('/auth/login', request.url);
+          redirectUrl.searchParams.set('redirect', pathname);
+          return NextResponse.redirect(redirectUrl);
+        } catch (redirectError) {
+          console.error('[Middleware] Redirect error:', {
+            error: redirectError instanceof Error ? redirectError.message : 'Unknown error',
+            pathname,
+          });
           return NextResponse.next();
         }
       }
