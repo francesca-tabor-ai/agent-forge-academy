@@ -2,8 +2,7 @@ import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { redirect, notFound } from 'next/navigation';
 import Link from 'next/link';
 import { loadLessonBySlug, getAllLessonSlugs } from '@/lib/lessons';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+import LessonContent from '@/components/lessons/LessonContent';
 
 interface LessonPageProps {
   params: Promise<{ slug: string }>;
@@ -27,33 +26,44 @@ export default async function LessonPage({ params }: LessonPageProps) {
   }
 
   return (
-    <div>
-      <div className="mb-6">
-        <Link
-          href="/student/lessons"
-          className="text-sm text-brand-light hover:text-brand-light/90 mb-4 inline-block"
-        >
-          ← Back to Lessons
-        </Link>
-        <h1 className="text-3xl font-semibold text-gray-900 mt-4">
-          {lesson.frontmatter.title || lesson.slug}
-        </h1>
-        {lesson.frontmatter.description && (
-          <p className="text-gray-600 mt-2">{lesson.frontmatter.description}</p>
-        )}
-        <div className="flex items-center gap-4 text-sm text-gray-500 mt-4">
-          {lesson.frontmatter.module && (
-            <span>Module: {lesson.frontmatter.module}</span>
+    <div className="min-h-screen bg-gray-50">
+      {/* Constrained width container */}
+      <div className="max-w-[900px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Header section - above the fold */}
+        <div className="mb-8">
+          <Link
+            href="/student/lessons"
+            className="text-sm text-brand-light hover:text-brand-light/90 mb-6 inline-block"
+          >
+            ← Back to Lessons
+          </Link>
+          
+          {/* Module title (H1) */}
+          <h1 className="text-3xl font-semibold text-gray-900 mb-4">
+            {lesson.frontmatter.title || lesson.slug}
+          </h1>
+          
+          {/* Description */}
+          {lesson.frontmatter.description && (
+            <p className="text-base text-gray-600 mb-6" style={{ lineHeight: '1.6' }}>
+              {lesson.frontmatter.description}
+            </p>
           )}
-          {lesson.frontmatter.week && <span>Week {lesson.frontmatter.week}</span>}
+          
+          {/* Meta information */}
+          <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 mb-6">
+            {lesson.frontmatter.module && (
+              <span>Module: {lesson.frontmatter.module}</span>
+            )}
+            {lesson.frontmatter.week && <span>Week {lesson.frontmatter.week}</span>}
+          </div>
         </div>
-      </div>
 
-      <div className="bg-white border border-gray-200 rounded-lg p-8">
-        <div className="prose prose-lg prose-headings:font-semibold prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:leading-relaxed prose-a:text-brand-light prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-code:text-brand-light prose-code:bg-gray-100 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-pre:bg-gray-900 prose-pre:text-gray-100 max-w-none">
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>
-            {lesson.content}
-          </ReactMarkdown>
+        {/* Lesson content */}
+        <div className="bg-white border border-gray-200 rounded-lg p-8">
+          <div className="text-base" style={{ fontSize: '17px', lineHeight: '1.6' }}>
+            <LessonContent content={lesson.content} />
+          </div>
         </div>
       </div>
     </div>
