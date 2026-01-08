@@ -2,6 +2,8 @@ import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { redirect, notFound } from 'next/navigation';
 import Link from 'next/link';
 import { loadLessonBySlug, getAllLessonSlugs } from '@/lib/lessons';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 interface LessonPageProps {
   params: Promise<{ slug: string }>;
@@ -48,10 +50,10 @@ export default async function LessonPage({ params }: LessonPageProps) {
       </div>
 
       <div className="bg-white border border-gray-200 rounded-lg p-8">
-        <div className="prose prose-lg max-w-none">
-          <pre className="whitespace-pre-wrap font-sans text-gray-900">
+        <div className="prose prose-lg prose-headings:font-semibold prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:leading-relaxed prose-a:text-brand-light prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-code:text-brand-light prose-code:bg-gray-100 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-pre:bg-gray-900 prose-pre:text-gray-100 max-w-none">
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>
             {lesson.content}
-          </pre>
+          </ReactMarkdown>
         </div>
       </div>
     </div>
@@ -65,4 +67,3 @@ export async function generateStaticParams() {
     slug,
   }));
 }
-
