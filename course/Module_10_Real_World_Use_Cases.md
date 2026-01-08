@@ -1,3 +1,10 @@
+---
+title: "Module 10: Real-World Use Cases & Projects"
+description: "Build production-ready multi-agent systems from case studies"
+module: "10"
+order: 10
+---
+
 # Module 10: Real-World Use Cases and Projects
 
 **Duration:** Weeks 11-12  

@@ -1,3 +1,10 @@
+---
+title: "Module 3: Architecture Patterns and Design"
+description: "Design scalable orchestration patterns for real-world agent systems"
+module: "3"
+order: 3
+---
+
 # Module 3: Architecture Patterns and Design
 
 **Duration:** Weeks 3-4  

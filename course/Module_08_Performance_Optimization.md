@@ -1,3 +1,10 @@
+---
+title: "Module 8: Performance Optimization"
+description: "Optimize agent performance and reduce costs through smart strategies"
+module: "8"
+order: 8
+---
+
 # Module 8: Performance Optimization
 
 **Duration:** Weeks 9-10  

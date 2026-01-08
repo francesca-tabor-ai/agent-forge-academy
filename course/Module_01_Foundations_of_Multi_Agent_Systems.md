@@ -1,3 +1,10 @@
+---
+title: "Module 1: Foundations of Multi-Agent Systems"
+description: "Understand how autonomous agents collaborate at scale"
+module: "1"
+order: 1
+---
+
 # Module 1: Foundations of Multi-Agent Systems
 
 **Duration:** Week 1  

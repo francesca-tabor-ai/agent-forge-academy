@@ -1,3 +1,10 @@
+---
+title: "Module 9: Advanced Topics"
+description: "Build advanced agent capabilities for production environments"
+module: "9"
+order: 9
+---
+
 # Module 9: Advanced Topics
 
 **Duration:** Weeks 10-11  

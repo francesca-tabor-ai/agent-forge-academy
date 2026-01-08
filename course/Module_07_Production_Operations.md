@@ -1,3 +1,10 @@
+---
+title: "Module 7: Production Operations"
+description: "Deploy and operate agent systems at scale with CI/CD and automation"
+module: "7"
+order: 7
+---
+
 # Module 7: Production Operations
 
 **Duration:** Weeks 8-9  

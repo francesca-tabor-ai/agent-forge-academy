@@ -1,3 +1,10 @@
+---
+title: "Module 2: Agent Frameworks Deep Dive"
+description: "Compare LangGraph, CrewAI, and AutoGen to choose the right framework"
+module: "2"
+order: 2
+---
+
 # Module 2: Agent Frameworks Deep Dive
 
 **Duration:** Weeks 2-3  

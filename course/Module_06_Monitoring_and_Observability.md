@@ -1,3 +1,10 @@
+---
+title: "Module 6: Monitoring & Observability"
+description: "Monitor and debug distributed agent systems effectively"
+module: "6"
+order: 6
+---
+
 # Module 6: Monitoring and Observability
 
 **Duration:** Weeks 7-8  

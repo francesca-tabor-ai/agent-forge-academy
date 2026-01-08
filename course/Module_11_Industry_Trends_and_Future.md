@@ -1,3 +1,10 @@
+---
+title: "Module 11: Industry Trends & Future"
+description: "Navigate the future of multi-agent systems and career opportunities"
+module: "11"
+order: 11
+---
+
 # Module 11: Industry Trends and Future
 
 **Duration:** Week 12  

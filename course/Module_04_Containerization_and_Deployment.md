@@ -1,3 +1,10 @@
+---
+title: "Module 4: Containerization & Deployment"
+description: "Ship agent systems to production reliably with Docker and Kubernetes"
+module: "4"
+order: 4
+---
+
 # Module 4: Containerization and Deployment
 
 **Duration:** Weeks 4-5  

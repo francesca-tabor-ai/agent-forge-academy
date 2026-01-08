@@ -1,3 +1,10 @@
+---
+title: "Module 5: Security & Governance"
+description: "Secure agent systems with enterprise-grade controls and compliance"
+module: "5"
+order: 5
+---
+
 # Module 5: Security and Governance
 
 **Duration:** Weeks 6-7  
