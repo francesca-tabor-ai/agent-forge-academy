@@ -1,7 +1,7 @@
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { loadAllLessons } from '@/lib/lessons';
+import { loadAllLessons, type Lesson } from '@/lib/lessons';
 
 export default async function LessonsPage() {
   const supabase = await createUserSupabaseClient();
@@ -14,7 +14,8 @@ export default async function LessonsPage() {
   }
 
   // Load all lessons from the course directory
-  let lessons;
+  let lessons: ReturnType<typeof loadAllLessons> = [];
+
   try {
     lessons = loadAllLessons();
   } catch (error) {
