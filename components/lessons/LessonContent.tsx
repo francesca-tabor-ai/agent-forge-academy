@@ -1,8 +1,9 @@
 'use client';
 
 import ReactMarkdown from 'react-markdown';
+import type { Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { ReactNode } from 'react';
+import type { ComponentPropsWithoutRef } from 'react';
 
 interface LessonContentProps {
   content: string;
@@ -127,68 +128,79 @@ function parseTopics(content: string): {
 }
 
 // Custom markdown components for non-topic content
-const markdownComponents = {
-  h1: ({ children }: { children: ReactNode }) => (
-    <h1 className="text-3xl font-semibold text-gray-900 mb-6 mt-8 first:mt-0">
+const markdownComponents: Components = {
+  h1: ({ children, ...props }: ComponentPropsWithoutRef<'h1'>) => (
+    <h1 {...props} className="text-3xl font-semibold text-gray-900 mb-6 mt-8 first:mt-0">
       {children}
     </h1>
   ),
-  h2: ({ children }: { children: ReactNode }) => (
-    <h2 className="text-2xl font-semibold text-gray-900 mb-5 mt-8">
+  h2: ({ children, ...props }: ComponentPropsWithoutRef<'h2'>) => (
+    <h2 {...props} className="text-2xl font-semibold text-gray-900 mb-5 mt-8">
       {children}
     </h2>
   ),
-  h3: ({ children }: { children: ReactNode }) => (
-    <h3 className="text-xl font-semibold text-gray-900 mb-4 mt-6">
+  h3: ({ children, ...props }: ComponentPropsWithoutRef<'h3'>) => (
+    <h3 {...props} className="text-xl font-semibold text-gray-900 mb-4 mt-6">
       {children}
     </h3>
   ),
-  h4: ({ children }: { children: ReactNode }) => (
-    <h4 className="text-lg font-semibold text-gray-900 mb-3 mt-5">
+  h4: ({ children, ...props }: ComponentPropsWithoutRef<'h4'>) => (
+    <h4 {...props} className="text-lg font-semibold text-gray-900 mb-3 mt-5">
       {children}
     </h4>
   ),
-  p: ({ children }: { children: ReactNode }) => (
-    <p className="text-base text-gray-700 mb-4 leading-relaxed" style={{ lineHeight: '1.6' }}>
+  p: ({ children, ...props }: ComponentPropsWithoutRef<'p'>) => (
+    <p {...props} className="text-base text-gray-700 mb-4 leading-relaxed" style={{ lineHeight: '1.6' }}>
       {children}
     </p>
   ),
-  ul: ({ children }: { children: ReactNode }) => (
-    <ul className="list-disc list-inside mb-4 space-y-2 text-gray-700 ml-4">
+  ul: ({ children, ...props }: ComponentPropsWithoutRef<'ul'>) => (
+    <ul {...props} className="list-disc list-inside mb-4 space-y-2 text-gray-700 ml-4">
       {children}
     </ul>
   ),
-  ol: ({ children }: { children: ReactNode }) => (
-    <ol className="list-decimal list-inside mb-4 space-y-2 text-gray-700 ml-4">
+  ol: ({ children, ...props }: ComponentPropsWithoutRef<'ol'>) => (
+    <ol {...props} className="list-decimal list-inside mb-4 space-y-2 text-gray-700 ml-4">
       {children}
     </ol>
   ),
-  li: ({ children }: { children: ReactNode }) => (
-    <li className="mb-1.5 text-gray-700">{children}</li>
+  li: ({ children, ...props }: ComponentPropsWithoutRef<'li'>) => (
+    <li {...props} className="mb-1.5 text-gray-700">
+      {children}
+    </li>
   ),
-  strong: ({ children }: { children: ReactNode }) => (
-    <strong className="font-semibold text-gray-900">{children}</strong>
+  strong: ({ children, ...props }: ComponentPropsWithoutRef<'strong'>) => (
+    <strong {...props} className="font-semibold text-gray-900">
+      {children}
+    </strong>
   ),
-  code: ({ children, className }: { children: ReactNode; className?: string }) => {
+  code: ({ children, className, ...props }: ComponentPropsWithoutRef<'code'>) => {
     const isInline = !className;
     if (isInline) {
       return (
-        <code className="bg-gray-100 text-brand-light px-1.5 py-0.5 rounded text-sm font-mono">
+        <code {...props} className="bg-gray-100 text-brand-light px-1.5 py-0.5 rounded text-sm font-mono">
           {children}
         </code>
       );
     }
-    return <code className={className}>{children}</code>;
+    return (
+      <code {...props} className={className}>
+        {children}
+      </code>
+    );
   },
-  pre: ({ children }: { children: ReactNode }) => (
-    <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto mb-4">
+  pre: ({ children, ...props }: ComponentPropsWithoutRef<'pre'>) => (
+    <pre {...props} className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto mb-4">
       {children}
     </pre>
   ),
-  a: ({ children, href }: { children: ReactNode; href?: string }) => (
-    <a 
-      href={href} 
+  a: ({ children, href, ...props }: ComponentPropsWithoutRef<'a'>) => (
+    <a
+      {...props}
+      href={href}
       className="text-brand-light hover:text-brand-light/90 hover:underline"
+      target={href?.startsWith('http') ? '_blank' : undefined}
+      rel={href?.startsWith('http') ? 'noopener noreferrer' : undefined}
     >
       {children}
     </a>
