@@ -1,3 +1,9 @@
+---
+title: "Course Overview & Quick Start Guide"
+description: "Get started with the multi-agent deployment course in minutes"
+order: 0
+---
+
 # 🎓 Multi-Agent Deployment Course - Quick Start Guide
 
 ## 📍 You Are Here

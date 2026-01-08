@@ -18,6 +18,18 @@ export default async function LessonsPage() {
 
   try {
     lessons = loadAllLessons();
+    // Sort by order if available, otherwise by title
+    lessons.sort((a, b) => {
+      const orderA = a.frontmatter.order ?? 999;
+      const orderB = b.frontmatter.order ?? 999;
+      if (orderA !== orderB) {
+        return orderA - orderB;
+      }
+      // If same order, sort by title
+      const titleA = a.frontmatter.title || a.slug;
+      const titleB = b.frontmatter.title || b.slug;
+      return titleA.localeCompare(titleB);
+    });
   } catch (error) {
     console.error('Error loading lessons:', error);
     lessons = [];
@@ -56,13 +68,10 @@ export default async function LessonsPage() {
                   )}
                   <div className="flex items-center gap-4 text-xs text-gray-500">
                     {lesson.frontmatter.module && (
-                      <span>Module: {lesson.frontmatter.module}</span>
+                      <span>Module {lesson.frontmatter.module}</span>
                     )}
                     {lesson.frontmatter.week && (
                       <span>Week {lesson.frontmatter.week}</span>
-                    )}
-                    {lesson.frontmatter.order && (
-                      <span>Order: {lesson.frontmatter.order}</span>
                     )}
                   </div>
                 </div>

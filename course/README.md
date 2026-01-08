@@ -1,3 +1,9 @@
+---
+title: "Course Overview & Getting Started"
+description: "Master multi-agent system deployment from foundations to production"
+order: 0
+---
+
 # Multi-Agent Deployment: Professional Course (2025)
 
 ## 📚 Course Overview

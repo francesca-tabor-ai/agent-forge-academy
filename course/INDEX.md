@@ -1,3 +1,9 @@
+---
+title: "Course Index & Reference Guide"
+description: "Navigate all course materials and find what you need quickly"
+order: 0
+---
+
 # Multi-Agent Deployment Course - Complete Index
 
 ## 📚 Course Materials Overview
@@ -10,8 +16,7 @@ This directory contains all course materials for the **Multi-Agent Deployment Pr
 
 ### Core Course Files
 1. **[README.md](README.md)** - Main course overview, start here
-2. **[00_Course_Structure.md](00_Course_Structure.md)** - 19-week timeline and assessment details
-3. **INDEX.md** (this file) - Complete navigation guide
+2. **INDEX.md** (this file) - Complete navigation guide
 
 ### Module Files (Weeks 1-12)
 
