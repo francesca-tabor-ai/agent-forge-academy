@@ -112,7 +112,7 @@ export async function OffersSection({ studentProfileId, enrolledCourseSlugs }: O
     <section className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-semibold text-gray-900">Tool Discounts</h2>
+          <h2 className="text-xl font-semibold text-gray-900">Offers</h2>
           <p className="text-xs text-gray-500 mt-1">Exclusive tools to help you build and ship faster</p>
         </div>
         <Link
