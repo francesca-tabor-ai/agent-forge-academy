@@ -1,4 +1,10 @@
-# Module 2: Technical SEO as the AI Bedrock
+---
+title: Technical SEO as the AI Bedrock
+module: 2
+description: How E-E-A-T, structured data, and crawl directives form the foundation for AI visibility
+---
+
+# Technical SEO as the AI Bedrock
 
 ## Overview
 

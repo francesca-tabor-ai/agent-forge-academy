@@ -1,4 +1,10 @@
-# Module 5: The Future: AIVO & Agentic Commerce
+---
+title: The Future of AI Visibility and Agentic Commerce
+module: 5
+description: Exploring the AIVO standard and building infrastructure for autonomous AI agents to discover and purchase
+---
+
+# The Future of AI Visibility and Agentic Commerce
 
 ## Overview
 

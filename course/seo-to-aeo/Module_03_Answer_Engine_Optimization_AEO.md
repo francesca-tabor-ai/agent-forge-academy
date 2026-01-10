@@ -1,4 +1,10 @@
-# Module 3: Answer Engine Optimization (AEO)
+---
+title: Answer Engine Optimization
+module: 3
+description: Formatting content to appear directly in AI Overviews, Perplexity answers, and voice search results
+---
+
+# Answer Engine Optimization
 
 ## Overview
 

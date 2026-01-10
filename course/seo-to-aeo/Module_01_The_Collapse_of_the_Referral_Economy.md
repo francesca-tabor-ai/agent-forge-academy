@@ -1,4 +1,10 @@
-# Module 1: The Collapse of the Referral Economy
+---
+title: The Collapse of the Referral Economy
+module: 1
+description: Understanding why zero-click outcomes dominate and how consumer behavior is shifting away from traditional search
+---
+
+# The Collapse of the Referral Economy
 
 ## Overview
 

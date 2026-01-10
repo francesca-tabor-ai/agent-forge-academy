@@ -1,4 +1,10 @@
-# Module 4: Generative Engine Optimization (GEO)
+---
+title: Generative Engine Optimization
+module: 4
+description: Increasing citation density and model inclusion in AI-generated responses through research-backed methods
+---
+
+# Generative Engine Optimization
 
 ## Overview
 

@@ -1,4 +1,10 @@
-# Module 6: Monitoring the New Scoreboard
+---
+title: Monitoring the New Scoreboard
+module: 6
+description: New KPIs for measuring AI visibility, tracking decay, and understanding attribution in fragmented journeys
+---
+
+# Monitoring the New Scoreboard
 
 ## Overview
 
