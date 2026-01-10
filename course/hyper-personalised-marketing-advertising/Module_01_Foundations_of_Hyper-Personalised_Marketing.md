@@ -1,4 +1,10 @@
-# Module 1: Foundations of Hyper-Personalised Marketing
+---
+title: Foundations of Hyper-Personalised Marketing
+module: 1
+description: Evolution from mass marketing to AI-powered personalization
+---
+
+# Foundations of Hyper-Personalised Marketing
 
 ## Learning Objectives
 

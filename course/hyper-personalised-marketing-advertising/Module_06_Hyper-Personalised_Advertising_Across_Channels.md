@@ -1,4 +1,10 @@
-# Module 6: Hyper-Personalised Advertising Across Channels
+---
+title: Hyper-Personalised Advertising Across Channels
+module: 6
+description: Search, social, display, video, CTV, and in-app personalization
+---
+
+# Hyper-Personalised Advertising Across Channels
 
 ## Learning Objectives
 

@@ -1,4 +1,10 @@
-# Module 10: AI in Pricing, Promotions & Loyalty
+---
+title: AI in Pricing, Promotions & Loyalty
+module: 10
+description: Personalized pricing, AI-driven offers, and loyalty program optimization
+---
+
+# AI in Pricing, Promotions & Loyalty
 
 ## Learning Objectives
 

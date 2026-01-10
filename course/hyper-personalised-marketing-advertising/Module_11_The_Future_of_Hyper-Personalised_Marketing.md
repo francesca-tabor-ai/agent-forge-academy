@@ -1,4 +1,10 @@
-# Module 11: The Future of Hyper-Personalised Marketing
+---
+title: The Future of Hyper-Personalised Marketing
+module: 11
+description: Cookieless advertising, predictive personalization, and autonomous marketing systems
+---
+
+# The Future of Hyper-Personalised Marketing
 
 ## Learning Objectives
 

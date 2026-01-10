@@ -1,4 +1,10 @@
-# Module 5: Personalised Creative & Content with AI
+---
+title: Personalised Creative & Content with AI
+module: 5
+description: DCO, AI-generated content, and brand governance
+---
+
+# Personalised Creative & Content with AI
 
 ## Learning Objectives
 

@@ -1,4 +1,10 @@
-# Module 2: Data Infrastructure for Personalisation
+---
+title: Data Infrastructure for Personalisation
+module: 2
+description: Data types, CDPs, and data governance for personalization
+---
+
+# Data Infrastructure for Personalisation
 
 ## Learning Objectives
 

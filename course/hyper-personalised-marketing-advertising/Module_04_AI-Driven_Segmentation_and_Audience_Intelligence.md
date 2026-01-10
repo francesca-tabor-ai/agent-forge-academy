@@ -1,4 +1,10 @@
-# Module 4: AI-Driven Segmentation & Audience Intelligence
+---
+title: AI-Driven Segmentation & Audience Intelligence
+module: 4
+description: Dynamic segmentation and lookalike modeling
+---
+
+# AI-Driven Segmentation & Audience Intelligence
 
 ## Learning Objectives
 

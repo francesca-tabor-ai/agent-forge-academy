@@ -1,4 +1,10 @@
-# Module 9: Ethics, Privacy & Responsible AI
+---
+title: Ethics, Privacy & Responsible AI
+module: 9
+description: Consumer trust, transparency, bias, and privacy regulations
+---
+
+# Ethics, Privacy & Responsible AI
 
 ## Learning Objectives
 

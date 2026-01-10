@@ -1,4 +1,10 @@
-# Module 3: AI & Machine Learning for Marketers
+---
+title: AI & Machine Learning for Marketers
+module: 3
+description: ML concepts, recommendation engines, and NLP for marketing
+---
+
+# AI & Machine Learning for Marketers
 
 ## Learning Objectives
 

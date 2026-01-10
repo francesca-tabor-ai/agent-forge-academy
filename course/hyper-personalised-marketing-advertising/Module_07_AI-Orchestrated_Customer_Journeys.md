@@ -1,4 +1,10 @@
-# Module 7: AI-Orchestrated Customer Journeys
+---
+title: AI-Orchestrated Customer Journeys
+module: 7
+description: Personalised customer journey design and real-time decision engines
+---
+
+# AI-Orchestrated Customer Journeys
 
 ## Learning Objectives
 

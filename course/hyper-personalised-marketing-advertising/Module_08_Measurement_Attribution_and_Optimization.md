@@ -1,4 +1,10 @@
-# Module 8: Measurement, Attribution & Optimization
+---
+title: Measuring, Attributing, and Optimising Performance
+module: 8
+description: KPIs, incrementality, multi-touch attribution, and AI-driven experimentation
+---
+
+# Measuring, Attributing, and Optimising Performance
 
 ## Learning Objectives
 
