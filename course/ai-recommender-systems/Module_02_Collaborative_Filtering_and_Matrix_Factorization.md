@@ -25,7 +25,7 @@ An **interaction matrix** is the fundamental data structure in recommendation sy
 
 #### Matrix Structure
 
-```
+```text
 Interaction Matrix R (Users × Items):
 
         Item1  Item2  Item3  Item4  Item5  ...

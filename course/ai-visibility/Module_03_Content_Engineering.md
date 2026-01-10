@@ -507,13 +507,13 @@ tools to identify bottlenecks in your code.
 #### 3. Use Active Voice
 
 **Before (Passive):**
-```
+```text
 Performance improvements can be achieved by developers through 
 the utilization of built-in functions.
 ```
 
 **After (Active):**
-```
+```text
 Developers can improve performance by using built-in functions.
 ```
 
@@ -526,7 +526,7 @@ Developers can improve performance by using built-in functions.
 #### 4. Structure for Scanning
 
 **Before (Dense Paragraph):**
-```
+```text
 Python performance optimization involves multiple techniques 
 including using built-in functions which are faster than loops, 
 leveraging NumPy for array operations which provides significant 
@@ -537,7 +537,7 @@ understand before implementation.
 ```
 
 **After (Structured):**
-```
+```text
 Python performance optimization involves multiple techniques:
 
 1. **Use built-in functions** - Faster than loops (40% improvement)
@@ -558,12 +558,12 @@ Each technique has specific use cases and trade-offs.
 #### 5. Be Explicit, Not Implicit
 
 **Before (Implicit):**
-```
+```text
 The approach yields favorable outcomes.
 ```
 
 **After (Explicit):**
-```
+```text
 This method increases performance by 40% and reduces memory 
 usage by 25%.
 ```

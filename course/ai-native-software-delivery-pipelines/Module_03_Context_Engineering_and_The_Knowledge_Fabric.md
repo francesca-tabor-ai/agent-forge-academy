@@ -38,12 +38,12 @@ In traditional software, the backend is where data lives. In AI-native systems, 
 ### Context vs. Traditional Backend
 
 **Traditional Backend:**
-```
+```text
 Application → Database → Data
 ```
 
 **Context Backend:**
-```
+```text
 AI Agent → Knowledge Fabric → Context → Accurate Response
 ```
 
@@ -65,7 +65,7 @@ A knowledge fabric is a distributed system that:
 - Scales across domains and use cases
 
 **Components:**
-```
+```text
 Knowledge Fabric
  Knowledge Sources
     Documentation
@@ -120,7 +120,7 @@ This is an e-commerce platform built with:
 - Authentication: JWT tokens
 
 ## Codebase Structure
-```
+```text
 /src
   /api          - REST API endpoints
   /services     - Business logic
@@ -305,7 +305,7 @@ knowledge_units:
 MCP servers provide a standardized way for AI agents to connect to knowledge sources and tools.
 
 **MCP Architecture:**
-```
+```text
 AI Agent (Client)
      (MCP Protocol)
 MCP Server
@@ -445,7 +445,7 @@ Retrieval-Augmented Generation combines:
 - **Generation:** AI generates response with accurate context
 
 **RAG Workflow:**
-```
+```text
 User Query
     ↓
 Semantic Search (Knowledge Base)

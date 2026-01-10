@@ -70,7 +70,7 @@ Start with the answer, then provide context:
 
 AI systems favor structured lists:
 
-```
+```text
 Key features:
 - Feature 1: Description
 - Feature 2: Description

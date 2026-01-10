@@ -38,7 +38,7 @@ Model Context Protocol (MCP) is a standardized protocol that acts as the "USB-C 
 ### MCP Architecture
 
 **Core Components:**
-```
+```text
 AI Agent (Client)
      MCP Protocol
 MCP Server
@@ -203,7 +203,7 @@ In AI-native development, we separate agents by their cognitive function:
 - **Reliability:** Multiple perspectives reduce errors
 
 **Traditional Approach:**
-```
+```text
 Single Agent
  Plans
  Implements
@@ -212,7 +212,7 @@ Single Agent
 ```
 
 **Separated Approach:**
-```
+```text
 Planning Agent → Plan
     ↓
 Implementation Agent → Code
@@ -580,19 +580,19 @@ const result = await developmentFlow.execute({
 **Swarm Patterns:**
 
 **1. Pipeline Pattern:**
-```
+```text
 Agent 1 → Agent 2 → Agent 3 → Result
 ```
 
 **2. Parallel Pattern:**
-```
+```text
         → Agent 1
 Input → → Agent 2 → Combine → Result
         → Agent 3
 ```
 
 **3. Hierarchical Pattern:**
-```
+```text
 Director Agent
     → Manager Agent 1 → Worker Agents
     → Manager Agent 2 → Worker Agents
@@ -600,7 +600,7 @@ Director Agent
 ```
 
 **4. Iterative Pattern:**
-```
+```text
 Agent 1 → Agent 2 → Review → (Iterate if needed) → Result
 ```
 

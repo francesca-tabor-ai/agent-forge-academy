@@ -23,7 +23,7 @@ order: 3
 
 Traditional matrix factorization uses the **inner product (dot product)** to model user-item interactions:
 
-```
+```text
 r_ui = p_u^T · q_i
 ```
 

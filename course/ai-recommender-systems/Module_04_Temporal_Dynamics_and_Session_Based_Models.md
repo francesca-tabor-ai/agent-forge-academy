@@ -40,7 +40,7 @@ User preferences **evolve over time**. What a user liked last month may not refl
 - Hidden state from previous time step
 
 **Architecture:**
-```
+```text
 Time Step t-1:  [Input] → [RNN] → [Hidden State]
                                     ↓
 Time Step t:    [Input] → [RNN] → [Hidden State]
