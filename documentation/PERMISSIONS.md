@@ -1,4 +1,4 @@
-# Canonical Permissions for AgentForge Academy
+# Canonical Permissions for AI Growth Hub
 
 This document defines the canonical permissions for each role in the system. All permissions are enforced via Supabase Row Level Security (RLS) at the database level. Frontend role checks are for UX only and never for security.
 

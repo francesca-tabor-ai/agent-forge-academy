@@ -1,4 +1,4 @@
-# AgentForge Academy Design System
+# AI Growth Hub Design System
 
 ## Color Palette
 

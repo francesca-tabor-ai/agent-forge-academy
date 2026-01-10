@@ -1,6 +1,6 @@
 # Multi-Course System Guide
 
-This guide explains how to add and manage multiple courses in AgentForge Academy.
+This guide explains how to add and manage multiple courses in AI Growth Hub.
 
 ## Overview
 

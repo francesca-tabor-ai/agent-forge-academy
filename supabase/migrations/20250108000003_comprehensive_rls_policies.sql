@@ -1,4 +1,4 @@
--- Comprehensive RLS policies for AgentForge Academy
+-- Comprehensive RLS policies for AI Growth Hub
 -- Enforces all canonical permissions defined in PERMISSIONS.md
 -- Default deny: All access is denied unless explicitly granted
 

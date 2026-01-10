@@ -17,7 +17,7 @@ export default async function EventsPage() {
   return (
     <div className="events-page">
       <h1>Events</h1>
-      <p>Upcoming and past events at AgentForge Academy</p>
+      <p>Upcoming and past events at AI Growth Hub</p>
 
       {events && events.length > 0 ? (
         <div className="events-list">

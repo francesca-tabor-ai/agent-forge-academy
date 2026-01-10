@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'AgentForge Academy',
+  title: 'AI Growth Hub',
   description: 'Multi-agent systems learning and talent platform',
 };
 

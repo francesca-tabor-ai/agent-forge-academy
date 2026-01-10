@@ -5,7 +5,7 @@ export default function SignUpPage() {
     <main style={{ padding: '2rem', maxWidth: '600px', margin: '0 auto' }}>
       <h1>Sign Up</h1>
       <p style={{ marginBottom: '2rem' }}>
-        Create an account to join AgentForge Academy
+        Create an account to join AI Growth Hub
       </p>
 
       <div style={{ 

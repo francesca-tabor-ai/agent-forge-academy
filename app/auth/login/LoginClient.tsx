@@ -45,7 +45,7 @@ export default function LoginClient() {
     <main style={{ padding: '2rem', maxWidth: '400px', margin: '0 auto' }}>
       <h1>Sign In</h1>
       <p style={{ marginBottom: '2rem', color: '#666' }}>
-        Sign in to your AgentForge Academy account
+        Sign in to your AI Growth Hub account
       </p>
 
       {error && (

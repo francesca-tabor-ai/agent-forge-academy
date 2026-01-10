@@ -55,7 +55,7 @@ export default function Sidebar({ role }: SidebarProps) {
   return (
     <aside className="w-64 bg-white border-r flex flex-col" style={{ borderColor: 'var(--ca-neutral-300)' }}>
       <div className="p-6 border-b" style={{ backgroundColor: 'var(--ca-navy)', borderColor: 'var(--ca-neutral-300)' }}>
-        <h1 className="text-lg font-semibold text-white">AgentForge Academy</h1>
+        <h1 className="text-lg font-semibold text-white">AI Growth Hub</h1>
       </div>
       
       <nav className="flex-1 p-4 space-y-1">

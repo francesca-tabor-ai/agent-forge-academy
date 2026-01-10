@@ -1,6 +1,6 @@
-# AgentForge Academy
+# AI Growth Hub
 
-AgentForge Academy is a Markdown-first, production-grade learning and talent platform focused on multi-agent systems, AI infrastructure, and agent operations.
+AI Growth Hub is a Markdown-first, production-grade learning and talent platform focused on multi-agent systems, AI infrastructure, and agent operations.
 
 It combines:
 
@@ -250,7 +250,7 @@ Cursor is the primary development tool.
 
 ## 16. Vision
 
-AgentForge Academy is not just a course platform.
+AI Growth Hub is not just a course platform.
 
 It is:
 

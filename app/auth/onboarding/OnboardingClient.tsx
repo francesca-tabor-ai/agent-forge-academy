@@ -153,7 +153,7 @@ export default function OnboardingClient() {
 
   return (
     <main style={{ padding: '2rem', maxWidth: '600px', margin: '0 auto' }}>
-      <h1 style={{ marginBottom: '0.5rem' }}>Welcome to AgentForge Academy</h1>
+      <h1 style={{ marginBottom: '0.5rem' }}>Welcome to AI Growth Hub</h1>
       <p style={{ marginBottom: '2rem', color: '#666' }}>
         Please select your role to complete onboarding. This cannot be changed later.
       </p>
