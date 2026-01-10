@@ -48,12 +48,12 @@ export const courseMetadata: Record<string, CourseMetadata> = {
   },
   'agentic-rag': {
     slug: 'agentic-rag',
-    title: 'Agentic RAG',
+    title: 'Mastering Agentic RAG for Enterprise AI',
     category: 'Agents & Retrieval',
-    outcome: 'Build retrieval that behaves like a system, not a demo.',
-    build: 'An agentic RAG pipeline (ingestion → chunking → embeddings → retrieval → tool use → citations → eval).',
-    bestFor: 'Teams building knowledge assistants and internal search.',
-    time: '~5–10 hours',
+    outcome: 'Build self-correcting, adaptive agentic RAG systems that achieve 94.8% accuracy and strategic enterprise impact.',
+    build: 'Complete agentic RAG system with CRAG, Adaptive RAG, Graph-based RAG, specialized frameworks, evaluation metrics, security, and production deployment.',
+    bestFor: 'AI engineers, ML engineers, and teams building enterprise knowledge assistants with autonomous reasoning capabilities.',
+    time: '~7 weeks',
   },
   'amazon-rufus-optimisation': {
     slug: 'amazon-rufus-optimisation',
