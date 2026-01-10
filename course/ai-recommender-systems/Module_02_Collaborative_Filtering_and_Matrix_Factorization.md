@@ -1,6 +1,6 @@
 ---
 title: "Module 2: Collaborative Filtering & Matrix Factorization"
-description: "Master the foundational algorithms of recommendation systems: collaborative filtering and matrix factorization"
+description: "Master user-based, item-based, and matrix factorization approaches"
 module: "2"
 order: 2
 ---
@@ -10,1067 +10,1097 @@ order: 2
 **Duration:** Week 2  
 **Startup Tool Focus:** NeuralMerch  
 **Learning Objectives:**
-- Understand how to structure user-item interaction data into matrices
-- Master user-based and item-based collaborative filtering algorithms
-- Implement matrix factorization techniques including SVD and SVD++
-- Learn to handle explicit and implicit feedback
-- Build production-ready recommendation systems using classical approaches
+- Understand interaction matrix structures
+- Master memory-based collaborative filtering
+- Implement matrix factorization algorithms
+- Learn SVD++ and bias incorporation
 
 ---
 
-## Introduction: The Foundation of Recommendation Systems
+## 2.1 The Mechanics of Interaction Matrices
 
-**Collaborative Filtering (CF)** is the cornerstone of modern recommendation systems. The core idea is simple yet powerful: **users who agreed in the past tend to agree in the future**. 
+### Understanding Interaction Matrices
 
-**Key Principle:**
-- If User A and User B have similar tastes (they liked similar items), then items that User A liked but User B hasn't seen yet are good recommendations for User B.
-
-**Why It Works:**
-- **Network effects:** Leverages the collective wisdom of all users
-- **No content analysis needed:** Works purely on interaction patterns
-- **Proven at scale:** Powers Netflix, Amazon, Spotify recommendations
-
-**Business Impact:**
-- **Netflix:** 75% of viewing comes from recommendations (mostly CF-based)
-- **Amazon:** 35% of revenue from recommendations (CF + content-based hybrid)
-- **Spotify:** 60% of music discovery through collaborative filtering
-
----
-
-## Lesson 2.1: The Mechanics of Interaction Matrices
-
-### Understanding User-Item Matrices
-
-At the heart of collaborative filtering is the **user-item interaction matrix**. This matrix captures all interactions between users and items.
+An **interaction matrix** is the fundamental data structure in recommendation systems. It represents the relationship between users and items through their interactions.
 
 #### Matrix Structure
 
-**Basic Format:**
 ```
-        Item 1  Item 2  Item 3  Item 4  Item 5
-User 1    5       ?       4       ?       3
-User 2    ?       4       5       2       ?
-User 3    3       ?       ?       4       5
-User 4    ?       5       3       ?       4
+Interaction Matrix R (Users × Items):
+
+        Item1  Item2  Item3  Item4  Item5  ...
+User1    5      ?      3      ?      ?     ...
+User2    ?      4      ?      5      ?     ...
+User3    2      ?      ?      ?      4     ...
+User4    ?      ?      5      4      ?     ...
+...
 ```
 
-**Key Characteristics:**
-- **Rows:** Users
-- **Columns:** Items
-- **Values:** Interactions (ratings, clicks, purchases, etc.)
-- **Sparsity:** Typically 95-99.9% empty (most users haven't interacted with most items)
+**Dimensions:**
+- **Rows:** Users (m users)
+- **Columns:** Items (n items)
+- **Values:** Interaction strength (ratings, clicks, purchases, etc.)
 
-#### Explicit vs. Implicit Feedback
+**Key Properties:**
+- **Sparsity:** Typically 95-99% empty (no interaction)
+- **Asymmetry:** Not all users interact with all items
+- **Heterogeneity:** Different interaction types and scales
 
-**Explicit Feedback:**
-- **Definition:** Direct user ratings or reviews
-- **Examples:** 1-5 star ratings, thumbs up/down, written reviews
-- **Advantages:** Clear signal of preference, high quality
-- **Disadvantages:** Sparse (users rate few items), requires user effort
+### Explicit vs Implicit Feedback
 
-**Example Explicit Matrix:**
+#### Explicit Feedback
+
+**Definition:** Direct user expressions of preference (ratings, reviews, likes).
+
+**Characteristics:**
+- **Intentional:** User explicitly provides feedback
+- **Scaled:** Usually on a scale (1-5 stars, 1-10, etc.)
+- **Sparse:** Users rate only a small fraction of items
+- **Reliable:** Direct expression of preference
+
+**Examples:**
+- Movie ratings (1-5 stars)
+- Product reviews (1-5 stars)
+- Restaurant ratings
+- App store ratings
+
+**Matrix Representation:**
 ```python
+# Explicit feedback matrix
 explicit_matrix = {
-    'User1': {'Item1': 5, 'Item3': 4, 'Item5': 3},
-    'User2': {'Item2': 4, 'Item3': 5, 'Item4': 2},
-    'User3': {'Item1': 3, 'Item4': 4, 'Item5': 5},
-    'User4': {'Item2': 5, 'Item3': 3, 'Item5': 4}
+    'user1': {'item1': 5, 'item3': 3},
+    'user2': {'item2': 4, 'item4': 5},
+    'user3': {'item1': 2, 'item5': 4},
+    'user4': {'item3': 5, 'item4': 4}
 }
-```
 
-**Implicit Feedback:**
-- **Definition:** Inferred from user behavior
-- **Examples:** Clicks, views, purchases, time spent, scroll depth
-- **Advantages:** Abundant data, no user effort required
-- **Disadvantages:** Ambiguous signal (click ≠ like), requires interpretation
-
-**Example Implicit Matrix:**
-```python
-implicit_matrix = {
-    'User1': {'Item1': 1, 'Item3': 1, 'Item5': 1},  # Purchased
-    'User2': {'Item2': 1, 'Item3': 1, 'Item4': 1},  # Purchased
-    'User3': {'Item1': 0.5, 'Item4': 0.8, 'Item5': 1},  # Time spent (normalized)
-    'User4': {'Item2': 1, 'Item3': 0.3, 'Item5': 1}  # Click + purchase
-}
-```
-
----
-
-### Building Interaction Matrices
-
-#### From Raw Data to Matrix
-
-**Step 1: Collect Raw Interaction Data**
-
-```python
-# Example raw data
-raw_interactions = [
-    {'user_id': 'U1', 'item_id': 'I1', 'rating': 5, 'timestamp': '2024-01-01'},
-    {'user_id': 'U1', 'item_id': 'I3', 'rating': 4, 'timestamp': '2024-01-02'},
-    {'user_id': 'U2', 'item_id': 'I2', 'rating': 4, 'timestamp': '2024-01-01'},
-    {'user_id': 'U2', 'item_id': 'I3', 'rating': 5, 'timestamp': '2024-01-03'},
-    # ... more interactions
-]
-```
-
-**Step 2: Convert to Matrix Format**
-
-```python
-import numpy as np
-import pandas as pd
-from scipy.sparse import csr_matrix
-
-class InteractionMatrixBuilder:
-    def __init__(self):
-        self.user_to_idx = {}
-        self.item_to_idx = {}
-        self.idx_to_user = {}
-        self.idx_to_item = {}
-    
-    def build_matrix(self, interactions, feedback_type='explicit'):
-        """Build user-item interaction matrix"""
-        # Create mappings
-        unique_users = sorted(set(i['user_id'] for i in interactions))
-        unique_items = sorted(set(i['item_id'] for i in interactions))
-        
-        self.user_to_idx = {user: idx for idx, user in enumerate(unique_users)}
-        self.item_to_idx = {item: idx for idx, item in enumerate(unique_items)}
-        self.idx_to_user = {idx: user for user, idx in self.user_to_idx.items()}
-        self.idx_to_item = {idx: item for item, idx in self.item_to_idx.items()}
-        
-        # Initialize matrix
-        n_users = len(unique_users)
-        n_items = len(unique_items)
-        matrix = np.zeros((n_users, n_items))
-        
-        # Fill matrix
-        for interaction in interactions:
-            user_idx = self.user_to_idx[interaction['user_id']]
-            item_idx = self.item_to_idx[interaction['item_id']]
-            
-            if feedback_type == 'explicit':
-                matrix[user_idx, item_idx] = interaction['rating']
-            else:  # implicit
-                matrix[user_idx, item_idx] = self._normalize_implicit(
-                    interaction
-                )
-        
-        # Convert to sparse matrix for efficiency
-        return csr_matrix(matrix)
-    
-    def _normalize_implicit(self, interaction):
-        """Normalize implicit feedback"""
-        # Example: Combine multiple signals
-        score = 0
-        
-        if interaction.get('clicked', False):
-            score += 1
-        if interaction.get('purchased', False):
-            score += 5
-        if interaction.get('time_spent', 0) > 60:  # seconds
-            score += 2
-        
-        # Normalize to 0-1 range
-        return min(score / 10.0, 1.0)
-```
-
-**Step 3: Handle Missing Values**
-
-```python
-def handle_missing_values(matrix, strategy='zero'):
-    """Handle missing values in interaction matrix"""
-    if strategy == 'zero':
-        # Keep zeros (no interaction)
-        return matrix
-    elif strategy == 'mean':
-        # Fill with user mean rating
-        user_means = matrix.mean(axis=1)
-        filled = matrix.copy()
-        for i in range(matrix.shape[0]):
-            filled[i, :] = np.where(
-                filled[i, :] == 0,
-                user_means[i],
-                filled[i, :]
-            )
-        return filled
-    elif strategy == 'median':
-        # Fill with user median rating
-        user_medians = np.median(matrix[matrix > 0], axis=1)
-        # Similar implementation
-        return matrix
-```
-
----
-
-### Understanding Matrix Sparsity
-
-#### Calculating Sparsity
-
-**Sparsity Definition:**
-```
-Sparsity = (1 - (Number of Interactions / Total Possible Interactions)) × 100%
-```
-
-**Example:**
-- Users: 100,000
-- Items: 50,000
-- Total possible interactions: 5,000,000,000
-- Actual interactions: 500,000
-- **Sparsity: 99.99%**
-
-**Real-World Sparsity Levels:**
-- **E-commerce:** 99.5-99.9% (users buy few items)
-- **Streaming:** 99.0-99.5% (users watch more content)
-- **Social media:** 99.9-99.99% (users interact with tiny fraction of content)
-
-#### Impact of Sparsity
-
-**Challenges:**
-1. **Similarity calculation:** Hard to find similar users/items with few overlapping interactions
-2. **Recommendation quality:** Limited data leads to poor recommendations
-3. **Computational efficiency:** Sparse matrices require special data structures
-
-**Solutions:**
-1. **Sparse matrix formats:** Use CSR (Compressed Sparse Row) or CSC formats
-2. **Dimensionality reduction:** Matrix factorization reduces dimensions
-3. **Hybrid approaches:** Combine with content-based filtering
-
----
-
-### Working with Sparse Matrices
-
-**Efficient Storage:**
-
-```python
-from scipy.sparse import csr_matrix, csc_matrix
+# Sparse matrix representation
+import scipy.sparse as sp
 
 # Create sparse matrix
-dense_matrix = np.array([
-    [5, 0, 4, 0, 3],
-    [0, 4, 5, 2, 0],
-    [3, 0, 0, 4, 5],
-    [0, 5, 3, 0, 4]
-])
+rows = [0, 0, 1, 1, 2, 2, 3, 3]  # User indices
+cols = [0, 2, 1, 3, 0, 4, 2, 3]   # Item indices
+values = [5, 3, 4, 5, 2, 4, 5, 4] # Ratings
 
-sparse_matrix = csr_matrix(dense_matrix)
-
-# Memory comparison
-print(f"Dense size: {dense_matrix.nbytes} bytes")
-print(f"Sparse size: {sparse_matrix.data.nbytes + sparse_matrix.indices.nbytes + sparse_matrix.indptr.nbytes} bytes")
-
-# Access elements
-print(sparse_matrix[0, 0])  # 5
-print(sparse_matrix[0, 1])  # 0 (stored efficiently)
+explicit_matrix_sparse = sp.csr_matrix(
+    (values, (rows, cols)),
+    shape=(4, 5)
+)
 ```
 
-**Efficient Operations:**
+**Advantages:**
+- Clear preference signal
+- Easy to interpret
+- Direct user intent
 
+**Disadvantages:**
+- Very sparse (users rate few items)
+- Requires user effort
+- May have selection bias (only rate items with strong opinions)
+
+#### Implicit Feedback
+
+**Definition:** Inferred preferences from user behavior (clicks, views, purchases, time spent).
+
+**Characteristics:**
+- **Unintentional:** User behavior, not explicit rating
+- **Binary or Continuous:** Clicks (0/1) or time spent (continuous)
+- **Dense:** More interactions than explicit ratings
+- **Noisy:** Behavior doesn't always indicate preference
+
+**Examples:**
+- Click-through events
+- Page views
+- Purchase history
+- Time spent watching/reading
+- Search queries
+- Add to cart
+- Scroll depth
+
+**Matrix Representation:**
 ```python
-# Matrix-vector multiplication (fast with sparse)
-user_vector = np.array([1, 2, 3, 4])
-result = sparse_matrix.dot(user_vector)
+# Implicit feedback matrix
+implicit_matrix = {
+    'user1': {'item1': 1, 'item2': 1, 'item3': 1},  # Clicked
+    'user2': {'item2': 1, 'item4': 1},              # Clicked
+    'user3': {'item1': 1, 'item5': 1, 'item2': 1},  # Clicked
+    'user4': {'item3': 1, 'item4': 1, 'item1': 1}   # Clicked
+}
 
-# Find non-zero elements
-nonzero_users, nonzero_items = sparse_matrix.nonzero()
+# Weighted implicit feedback (time spent)
+implicit_weighted = {
+    'user1': {'item1': 120, 'item2': 45, 'item3': 300},  # Seconds
+    'user2': {'item2': 60, 'item4': 180},
+    'user3': {'item1': 90, 'item5': 240, 'item2': 30},
+    'user4': {'item3': 150, 'item4': 210, 'item1': 75}
+}
+```
 
-# Get user's rated items
-user_id = 0
-user_items = sparse_matrix[user_id].nonzero()[1]  # Column indices
-user_ratings = sparse_matrix[user_id, user_items].toarray()[0]
+**Advantages:**
+- Much denser data
+- No user effort required
+- Captures actual behavior
+- Available for all users
+
+**Disadvantages:**
+- Ambiguous signal (click ≠ like)
+- No negative feedback (absence of click ≠ dislike)
+- Requires interpretation
+- May reflect system bias
+
+### Handling Sparse Matrices
+
+**The Sparsity Problem:**
+- Typical recommendation datasets: 95-99% empty
+- MovieLens 1M: ~4% density
+- Netflix Prize: ~1% density
+- Amazon: <1% density
+
+**Sparse Matrix Formats:**
+
+**1. Coordinate Format (COO)**
+```python
+# Store only non-zero entries
+coo_matrix = {
+    'rows': [0, 0, 1, 1, 2, 2, 3, 3],
+    'cols': [0, 2, 1, 3, 0, 4, 2, 3],
+    'data': [5, 3, 4, 5, 2, 4, 5, 4]
+}
+```
+
+**2. Compressed Sparse Row (CSR)**
+```python
+import scipy.sparse as sp
+
+# Efficient for row operations
+csr_matrix = sp.csr_matrix(
+    (values, (rows, cols)),
+    shape=(n_users, n_items)
+)
+
+# Fast row access
+user_ratings = csr_matrix[user_id].toarray()
+```
+
+**3. Compressed Sparse Column (CSC)**
+```python
+# Efficient for column operations
+csc_matrix = sp.csc_matrix(
+    (values, (rows, cols)),
+    shape=(n_users, n_items)
+)
+
+# Fast column access
+item_ratings = csc_matrix[:, item_id].toarray()
+```
+
+### Matrix Operations for Recommendations
+
+**Key Operations:**
+
+**1. User-Item Similarity**
+```python
+def user_item_similarity(matrix, user1, user2):
+    """
+    Calculate similarity between two users based on common items
+    """
+    # Get items rated by both users
+    user1_items = set(matrix[user1].keys())
+    user2_items = set(matrix[user2].keys())
+    common_items = user1_items & user2_items
+    
+    if not common_items:
+        return 0.0
+    
+    # Get ratings for common items
+    user1_ratings = [matrix[user1][item] for item in common_items]
+    user2_ratings = [matrix[user2][item] for item in common_items]
+    
+    # Calculate similarity (e.g., cosine similarity)
+    similarity = cosine_similarity(user1_ratings, user2_ratings)
+    
+    return similarity
+```
+
+**2. Item-Item Similarity**
+```python
+def item_item_similarity(matrix, item1, item2):
+    """
+    Calculate similarity between two items based on common users
+    """
+    # Get users who rated both items
+    item1_users = set()
+    item2_users = set()
+    
+    for user in matrix:
+        if item1 in matrix[user]:
+            item1_users.add(user)
+        if item2 in matrix[user]:
+            item2_users.add(user)
+    
+    common_users = item1_users & item2_users
+    
+    if not common_users:
+        return 0.0
+    
+    # Get ratings from common users
+    item1_ratings = [matrix[user][item1] for user in common_users]
+    item2_ratings = [matrix[user][item2] for user in common_users]
+    
+    # Calculate similarity
+    similarity = cosine_similarity(item1_ratings, item2_ratings)
+    
+    return similarity
+```
+
+**3. Matrix Normalization**
+
+**Centering (Mean Subtraction):**
+```python
+def center_matrix(matrix):
+    """
+    Subtract user mean from each rating
+    """
+    centered = {}
+    
+    for user in matrix:
+        user_ratings = list(matrix[user].values())
+        user_mean = np.mean(user_ratings)
+        
+        centered[user] = {
+            item: rating - user_mean
+            for item, rating in matrix[user].items()
+        }
+    
+    return centered
+```
+
+**Z-Score Normalization:**
+```python
+def normalize_matrix(matrix):
+    """
+    Z-score normalization (mean=0, std=1)
+    """
+    normalized = {}
+    
+    for user in matrix:
+        user_ratings = list(matrix[user].values())
+        user_mean = np.mean(user_ratings)
+        user_std = np.std(user_ratings)
+        
+        if user_std == 0:
+            normalized[user] = matrix[user]
+        else:
+            normalized[user] = {
+                item: (rating - user_mean) / user_std
+                for item, rating in matrix[user].items()
+            }
+    
+    return normalized
 ```
 
 ---
 
-## Lesson 2.2: Memory-Based Filtering
+## 2.2 Memory-Based Filtering
+
+Memory-based collaborative filtering uses the entire user-item interaction matrix to make recommendations. It's called "memory-based" because it stores all interactions in memory and computes similarities on-the-fly.
 
 ### User-Based Collaborative Filtering
 
-**The Algorithm:**
+**Core Idea:** Users who have similar preferences in the past will have similar preferences in the future.
+
+**Algorithm:**
 1. Find users similar to the target user
-2. Aggregate ratings from similar users
-3. Recommend items that similar users liked
+2. Identify items liked by similar users
+3. Recommend items the target user hasn't seen
 
-#### Step 1: Calculate User Similarity
+#### Similarity Metrics
 
-**Cosine Similarity:**
+**1. Cosine Similarity**
+
+Measures the angle between two vectors (ignores magnitude).
 
 ```python
+import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 
-def cosine_similarity_users(user1_vector, user2_vector):
-    """Calculate cosine similarity between two users"""
-    # Remove unrated items (zeros) for comparison
-    mask = (user1_vector > 0) & (user2_vector > 0)
+def cosine_similarity_users(matrix, user1, user2):
+    """
+    Calculate cosine similarity between two users
+    """
+    # Get common items
+    user1_items = set(matrix[user1].keys())
+    user2_items = set(matrix[user2].keys())
+    common_items = user1_items & user2_items
     
-    if mask.sum() == 0:
-        return 0  # No common items
+    if not common_items:
+        return 0.0
     
-    user1_rated = user1_vector[mask]
-    user2_rated = user2_vector[mask]
+    # Create rating vectors for common items
+    user1_vector = np.array([matrix[user1][item] for item in common_items])
+    user2_vector = np.array([matrix[user2][item] for item in common_items])
     
     # Cosine similarity
-    dot_product = np.dot(user1_rated, user2_rated)
-    norm1 = np.linalg.norm(user1_rated)
-    norm2 = np.linalg.norm(user2_rated)
+    similarity = np.dot(user1_vector, user2_vector) / (
+        np.linalg.norm(user1_vector) * np.linalg.norm(user2_vector)
+    )
     
-    if norm1 == 0 or norm2 == 0:
-        return 0
-    
-    return dot_product / (norm1 * norm2)
+    return similarity
 ```
 
-**Pearson Correlation:**
+**2. Pearson Correlation**
+
+Measures linear correlation, accounts for user rating bias.
 
 ```python
-from scipy.stats import pearsonr
-
-def pearson_correlation_users(user1_vector, user2_vector):
-    """Calculate Pearson correlation between two users"""
-    # Find common items
-    mask = (user1_vector > 0) & (user2_vector > 0)
+def pearson_correlation(matrix, user1, user2):
+    """
+    Calculate Pearson correlation between two users
+    """
+    # Get common items
+    user1_items = set(matrix[user1].keys())
+    user2_items = set(matrix[user2].keys())
+    common_items = user1_items & user2_items
     
-    if mask.sum() < 2:
-        return 0  # Need at least 2 common items
+    if len(common_items) < 2:
+        return 0.0
     
-    user1_rated = user1_vector[mask]
-    user2_rated = user2_vector[mask]
+    # Get ratings for common items
+    user1_ratings = np.array([matrix[user1][item] for item in common_items])
+    user2_ratings = np.array([matrix[user2][item] for item in common_items])
     
-    # Calculate correlation
-    correlation, p_value = pearsonr(user1_rated, user2_rated)
+    # Calculate means
+    user1_mean = np.mean(user1_ratings)
+    user2_mean = np.mean(user2_ratings)
     
-    return correlation if not np.isnan(correlation) else 0
+    # Center the ratings
+    user1_centered = user1_ratings - user1_mean
+    user2_centered = user2_ratings - user2_mean
+    
+    # Pearson correlation
+    numerator = np.sum(user1_centered * user2_centered)
+    denominator = np.sqrt(
+        np.sum(user1_centered ** 2) * np.sum(user2_centered ** 2)
+    )
+    
+    if denominator == 0:
+        return 0.0
+    
+    correlation = numerator / denominator
+    return correlation
 ```
 
-**Euclidean Distance (converted to similarity):**
+**3. Euclidean Distance**
+
+Measures straight-line distance between rating vectors.
 
 ```python
-def euclidean_similarity_users(user1_vector, user2_vector):
-    """Calculate similarity based on Euclidean distance"""
-    # Find common items
-    mask = (user1_vector > 0) & (user2_vector > 0)
+def euclidean_similarity(matrix, user1, user2):
+    """
+    Calculate similarity based on Euclidean distance
+    """
+    # Get common items
+    user1_items = set(matrix[user1].keys())
+    user2_items = set(matrix[user2].keys())
+    common_items = user1_items & user2_items
     
-    if mask.sum() == 0:
-        return 0
+    if not common_items:
+        return 0.0
     
-    user1_rated = user1_vector[mask]
-    user2_rated = user2_vector[mask]
+    # Get ratings
+    user1_ratings = np.array([matrix[user1][item] for item in common_items])
+    user2_ratings = np.array([matrix[user2][item] for item in common_items])
     
     # Euclidean distance
-    distance = np.sqrt(np.sum((user1_rated - user2_rated) ** 2))
+    distance = np.sqrt(np.sum((user1_ratings - user2_ratings) ** 2))
     
-    # Convert to similarity (inverse, normalized)
-    max_distance = np.sqrt(len(user1_rated) * (5 - 1) ** 2)  # Assuming 1-5 scale
+    # Convert to similarity (inverse relationship)
+    # Normalize by max possible distance
+    max_rating = 5.0  # Assuming 1-5 scale
+    max_distance = len(common_items) * max_rating
     similarity = 1 - (distance / max_distance)
     
     return max(0, similarity)  # Ensure non-negative
 ```
 
-#### Step 2: Find Similar Users
+#### User-Based Prediction
 
 ```python
-class UserBasedCF:
-    def __init__(self, similarity_metric='cosine'):
-        self.similarity_metric = similarity_metric
-        self.user_similarity_matrix = None
-        self.interaction_matrix = None
+def user_based_predict(matrix, target_user, target_item, k=10):
+    """
+    Predict rating for target_user on target_item using k nearest neighbors
+    """
+    # Calculate similarities with all other users
+    similarities = []
     
-    def fit(self, interaction_matrix):
-        """Build user similarity matrix"""
-        self.interaction_matrix = interaction_matrix
-        n_users = interaction_matrix.shape[0]
+    for user in matrix:
+        if user == target_user:
+            continue
+        if target_item not in matrix[user]:
+            continue
         
-        # Calculate pairwise similarities
-        similarity_matrix = np.zeros((n_users, n_users))
-        
-        for i in range(n_users):
-            for j in range(i + 1, n_users):
-                user_i = interaction_matrix[i].toarray()[0]
-                user_j = interaction_matrix[j].toarray()[0]
-                
-                if self.similarity_metric == 'cosine':
-                    similarity = cosine_similarity_users(user_i, user_j)
-                elif self.similarity_metric == 'pearson':
-                    similarity = pearson_correlation_users(user_i, user_j)
-                elif self.similarity_metric == 'euclidean':
-                    similarity = euclidean_similarity_users(user_i, user_j)
-                
-                similarity_matrix[i, j] = similarity
-                similarity_matrix[j, i] = similarity  # Symmetric
-        
-        self.user_similarity_matrix = similarity_matrix
-        return self
-```
-
-#### Step 3: Generate Recommendations
-
-```python
-    def predict_rating(self, user_idx, item_idx, k=50):
-        """Predict rating for user-item pair"""
-        user_ratings = self.interaction_matrix[user_idx].toarray()[0]
-        
-        # Get users who rated this item
-        item_ratings = self.interaction_matrix[:, item_idx].toarray().flatten()
-        rated_users = np.where(item_ratings > 0)[0]
-        
-        if len(rated_users) == 0:
-            return 0  # No one rated this item
-        
-        # Get similarities to these users
-        similarities = self.user_similarity_matrix[user_idx, rated_users]
-        
-        # Get top k similar users
-        top_k_indices = np.argsort(similarities)[::-1][:k]
-        top_k_users = rated_users[top_k_indices]
-        top_k_similarities = similarities[top_k_indices]
-        
-        # Weighted average
-        ratings = item_ratings[top_k_users]
-        weighted_sum = np.sum(top_k_similarities * ratings)
-        similarity_sum = np.sum(np.abs(top_k_similarities))
-        
-        if similarity_sum == 0:
-            return 0
-        
-        # Normalize by user's average rating
-        user_mean = np.mean(user_ratings[user_ratings > 0])
-        prediction = user_mean + (weighted_sum / similarity_sum)
-        
-        return prediction
+        similarity = pearson_correlation(matrix, target_user, user)
+        if similarity > 0:  # Only positive correlations
+            similarities.append((user, similarity))
     
-    def recommend(self, user_idx, n=10, k=50):
-        """Generate top n recommendations for user"""
-        user_ratings = self.interaction_matrix[user_idx].toarray()[0]
-        unrated_items = np.where(user_ratings == 0)[0]
-        
-        predictions = []
-        for item_idx in unrated_items:
-            pred_rating = self.predict_rating(user_idx, item_idx, k)
-            predictions.append((item_idx, pred_rating))
-        
-        # Sort by predicted rating
-        predictions.sort(key=lambda x: x[1], reverse=True)
-        
-        return [item_idx for item_idx, _ in predictions[:n]]
+    # Sort by similarity and take top k
+    similarities.sort(key=lambda x: x[1], reverse=True)
+    top_k_users = similarities[:k]
+    
+    if not top_k_users:
+        # No similar users found, return global mean
+        return global_mean_rating(matrix)
+    
+    # Weighted average of ratings from similar users
+    numerator = sum(
+        similarity * (matrix[user][target_item] - user_mean_rating(matrix, user))
+        for user, similarity in top_k_users
+    )
+    
+    denominator = sum(abs(similarity) for _, similarity in top_k_users)
+    
+    if denominator == 0:
+        return user_mean_rating(matrix, target_user)
+    
+    # Prediction
+    user_mean = user_mean_rating(matrix, target_user)
+    prediction = user_mean + (numerator / denominator)
+    
+    # Clip to valid rating range
+    return np.clip(prediction, 1, 5)
 ```
-
----
 
 ### Item-Based Collaborative Filtering
 
-**The Algorithm:**
-1. Find items similar to items the user liked
+**Core Idea:** Items that are similar (rated similarly by users) will be preferred by the same users.
+
+**Algorithm:**
+1. Find items similar to items the user has liked
 2. Recommend similar items
 
-**Why Item-Based?**
-- **More stable:** Items change less than user preferences
-- **Faster:** Fewer items than users (usually)
-- **Better for sparse data:** Items have more ratings than users have items
+**Advantages over User-Based:**
+- More stable (item similarities change less than user similarities)
+- Faster (fewer items than users typically)
+- Better for sparse datasets
 
-#### Implementation
+#### Item Similarity Calculation
+
+```python
+def item_item_similarity(matrix, item1, item2):
+    """
+    Calculate similarity between two items using Pearson correlation
+    """
+    # Find users who rated both items
+    item1_users = set()
+    item2_users = set()
+    
+    for user in matrix:
+        if item1 in matrix[user]:
+            item1_users.add(user)
+        if item2 in matrix[user]:
+            item2_users.add(user)
+    
+    common_users = item1_users & item2_users
+    
+    if len(common_users) < 2:
+        return 0.0
+    
+    # Get ratings from common users
+    item1_ratings = np.array([matrix[user][item1] for user in common_users])
+    item2_ratings = np.array([matrix[user][item2] for user in common_users])
+    
+    # Calculate means
+    item1_mean = np.mean(item1_ratings)
+    item2_mean = np.mean(item2_ratings)
+    
+    # Center the ratings
+    item1_centered = item1_ratings - item1_mean
+    item2_centered = item2_ratings - item2_mean
+    
+    # Pearson correlation
+    numerator = np.sum(item1_centered * item2_centered)
+    denominator = np.sqrt(
+        np.sum(item1_centered ** 2) * np.sum(item2_centered ** 2)
+    )
+    
+    if denominator == 0:
+        return 0.0
+    
+    correlation = numerator / denominator
+    return correlation
+```
+
+#### Item-Based Prediction
+
+```python
+def item_based_predict(matrix, target_user, target_item, k=10):
+    """
+    Predict rating for target_user on target_item using item-based CF
+    """
+    # Get items the user has rated
+    user_items = set(matrix[target_user].keys())
+    
+    if not user_items:
+        return global_mean_rating(matrix)
+    
+    # Calculate similarities with user's rated items
+    similarities = []
+    
+    for item in user_items:
+        similarity = item_item_similarity(matrix, item, target_item)
+        if similarity > 0:
+            similarities.append((item, similarity))
+    
+    # Sort by similarity and take top k
+    similarities.sort(key=lambda x: x[1], reverse=True)
+    top_k_items = similarities[:k]
+    
+    if not top_k_items:
+        return user_mean_rating(matrix, target_user)
+    
+    # Weighted average of user's ratings on similar items
+    numerator = sum(
+        similarity * matrix[target_user][item]
+        for item, similarity in top_k_items
+    )
+    
+    denominator = sum(abs(similarity) for _, similarity in top_k_items)
+    
+    if denominator == 0:
+        return user_mean_rating(matrix, target_user)
+    
+    prediction = numerator / denominator
+    
+    # Clip to valid rating range
+    return np.clip(prediction, 1, 5)
+```
+
+### Optimized Implementation with Precomputation
+
+**Precompute Item-Item Similarity Matrix:**
 
 ```python
 class ItemBasedCF:
-    def __init__(self, similarity_metric='cosine'):
-        self.similarity_metric = similarity_metric
+    def __init__(self, matrix):
+        self.matrix = matrix
         self.item_similarity_matrix = None
-        self.interaction_matrix = None
+        self.compute_similarity_matrix()
     
-    def fit(self, interaction_matrix):
-        """Build item similarity matrix"""
-        self.interaction_matrix = interaction_matrix
-        # Transpose: items are rows, users are columns
-        item_matrix = interaction_matrix.T
-        n_items = item_matrix.shape[0]
+    def compute_similarity_matrix(self):
+        """
+        Precompute all item-item similarities
+        """
+        items = set()
+        for user in self.matrix:
+            items.update(self.matrix[user].keys())
         
-        # Calculate pairwise similarities
+        items = list(items)
+        n_items = len(items)
+        
+        # Initialize similarity matrix
         similarity_matrix = np.zeros((n_items, n_items))
+        item_to_idx = {item: idx for idx, item in enumerate(items)}
         
-        for i in range(n_items):
-            for j in range(i + 1, n_items):
-                item_i = item_matrix[i].toarray()[0]
-                item_j = item_matrix[j].toarray()[0]
-                
-                if self.similarity_metric == 'cosine':
-                    similarity = cosine_similarity_users(item_i, item_j)
-                elif self.similarity_metric == 'pearson':
-                    similarity = pearson_correlation_users(item_i, item_j)
-                elif self.similarity_metric == 'euclidean':
-                    similarity = euclidean_similarity_users(item_i, item_j)
-                
-                similarity_matrix[i, j] = similarity
-                similarity_matrix[j, i] = similarity
+        # Compute similarities
+        for i, item1 in enumerate(items):
+            for j, item2 in enumerate(items):
+                if i != j:
+                    similarity = item_item_similarity(self.matrix, item1, item2)
+                    similarity_matrix[i][j] = similarity
         
         self.item_similarity_matrix = similarity_matrix
-        return self
+        self.items = items
+        self.item_to_idx = item_to_idx
     
-    def predict_rating(self, user_idx, item_idx, k=50):
-        """Predict rating for user-item pair"""
-        user_ratings = self.interaction_matrix[user_idx].toarray()[0]
+    def predict(self, target_user, target_item, k=10):
+        """
+        Fast prediction using precomputed similarities
+        """
+        if target_item not in self.item_to_idx:
+            return global_mean_rating(self.matrix)
         
-        # Get items user has rated
-        rated_items = np.where(user_ratings > 0)[0]
+        target_idx = self.item_to_idx[target_item]
         
-        if len(rated_items) == 0:
-            return 0
+        # Get user's rated items
+        user_items = list(self.matrix[target_user].keys())
         
-        # Get similarities to these items
-        similarities = self.item_similarity_matrix[item_idx, rated_items]
+        if not user_items:
+            return user_mean_rating(self.matrix, target_user)
         
-        # Get top k similar items
-        top_k_indices = np.argsort(similarities)[::-1][:k]
-        top_k_items = rated_items[top_k_indices]
-        top_k_similarities = similarities[top_k_indices]
+        # Get similarities
+        similarities = []
+        for item in user_items:
+            if item in self.item_to_idx:
+                item_idx = self.item_to_idx[item]
+                similarity = self.item_similarity_matrix[item_idx][target_idx]
+                if similarity > 0:
+                    similarities.append((item, similarity))
+        
+        # Top k
+        similarities.sort(key=lambda x: x[1], reverse=True)
+        top_k = similarities[:k]
+        
+        if not top_k:
+            return user_mean_rating(self.matrix, target_user)
         
         # Weighted average
-        ratings = user_ratings[top_k_items]
-        weighted_sum = np.sum(top_k_similarities * ratings)
-        similarity_sum = np.sum(np.abs(top_k_similarities))
+        numerator = sum(
+            sim * self.matrix[target_user][item]
+            for item, sim in top_k
+        )
+        denominator = sum(abs(sim) for _, sim in top_k)
         
-        if similarity_sum == 0:
-            return 0
+        if denominator == 0:
+            return user_mean_rating(self.matrix, target_user)
         
-        return weighted_sum / similarity_sum
-    
-    def recommend(self, user_idx, n=10, k=50):
-        """Generate top n recommendations for user"""
-        user_ratings = self.interaction_matrix[user_idx].toarray()[0]
-        unrated_items = np.where(user_ratings == 0)[0]
-        
-        predictions = []
-        for item_idx in unrated_items:
-            pred_rating = self.predict_rating(user_idx, item_idx, k)
-            predictions.append((item_idx, pred_rating))
-        
-        predictions.sort(key=lambda x: x[1], reverse=True)
-        return [item_idx for item_idx, _ in predictions[:n]]
+        prediction = numerator / denominator
+        return np.clip(prediction, 1, 5)
 ```
 
 ---
 
-### Comparing Similarity Metrics
-
-**Performance Comparison:**
-
-| Metric | Pros | Cons | Best For |
-|--------|------|------|----------|
-| **Cosine** | Fast, handles magnitude differences | Doesn't account for mean centering | Implicit feedback |
-| **Pearson** | Accounts for rating bias | Requires sufficient overlap | Explicit ratings |
-| **Euclidean** | Intuitive distance measure | Sensitive to scale | Normalized data |
-
-**When to Use Each:**
-
-- **Cosine Similarity:** Best for implicit feedback, when you care about direction not magnitude
-- **Pearson Correlation:** Best for explicit ratings, accounts for user/item bias
-- **Euclidean Distance:** Best when ratings are normalized and you want geometric distance
-
----
-
-## Lesson 2.3: Matrix Factorization (MF) & Latent Factors
+## 2.3 Matrix Factorization (MF) & Latent Factors
 
 ### Understanding Matrix Factorization
 
-**The Core Idea:**
-Decompose the user-item matrix into two lower-dimensional matrices that capture latent (hidden) factors.
+**Core Idea:** Decompose the user-item interaction matrix into lower-dimensional matrices that capture latent (hidden) factors.
 
-**Mathematical Representation:**
+**Mathematical Formulation:**
+
 ```
 R ≈ P × Q^T
 
 Where:
-- R: User-Item interaction matrix (m × n)
+- R: User-Item matrix (m × n)
 - P: User latent factors (m × k)
 - Q: Item latent factors (n × k)
-- k: Number of latent factors (typically 50-200)
+- k: Number of latent factors (typically 10-200)
 ```
 
-**Visual Representation:**
-```
-User-Item Matrix (R)        User Factors (P)    Item Factors (Q^T)
-[5  ?  4  ?  3]           [0.8 0.3]         [0.9 0.2]
-[?  4  5  2  ?]    ≈      [0.2 0.9]    ×    [0.1 0.8]
-[3  ?  ?  4  5]           [0.6 0.5]         [0.7 0.4]
-[?  5  3  ?  4]           [0.4 0.7]         [0.3 0.6]
-                                              [0.5 0.3]
-```
-
-**What Are Latent Factors?**
-- **Hidden dimensions** that explain user preferences
-- **Not directly observable** (unlike genres, categories)
-- **Learned from data** through optimization
-- **Examples:** "Action preference", "Romance preference", "Intellectual depth"
-
----
+**Interpretation:**
+- Each user is represented by k latent factors
+- Each item is represented by k latent factors
+- Rating prediction: dot product of user and item factors
 
 ### Basic Matrix Factorization
 
-#### The Objective Function
-
-**Goal:** Minimize the difference between actual and predicted ratings
-
-```
-minimize: Σ (r_ui - p_u^T q_i)^2 + λ(||p_u||^2 + ||q_i||^2)
-
-Where:
-- r_ui: Actual rating of user u for item i
-- p_u: User u's latent factor vector
-- q_i: Item i's latent factor vector
-- λ: Regularization parameter
-```
-
-#### Implementation: Stochastic Gradient Descent (SGD)
-
 ```python
 import numpy as np
-from tqdm import tqdm
+from scipy.optimize import minimize
 
 class MatrixFactorization:
-    def __init__(self, n_factors=50, learning_rate=0.01, 
-                 regularization=0.01, n_epochs=100):
+    def __init__(self, n_users, n_items, n_factors=50, learning_rate=0.01, 
+                 reg=0.01, epochs=100):
+        self.n_users = n_users
+        self.n_items = n_items
         self.n_factors = n_factors
         self.learning_rate = learning_rate
-        self.regularization = regularization
-        self.n_epochs = n_epochs
-        self.user_factors = None
-        self.item_factors = None
-    
-    def fit(self, interaction_matrix):
-        """Train the matrix factorization model"""
-        # Get dimensions
-        n_users, n_items = interaction_matrix.shape
+        self.reg = reg
+        self.epochs = epochs
         
-        # Initialize factors randomly
+        # Initialize user and item factors randomly
         self.user_factors = np.random.normal(
-            scale=0.1, size=(n_users, self.n_factors)
+            scale=0.1, size=(n_users, n_factors)
         )
         self.item_factors = np.random.normal(
-            scale=0.1, size=(n_items, self.n_factors)
+            scale=0.1, size=(n_items, n_factors)
         )
+    
+    def predict(self, user_id, item_id):
+        """
+        Predict rating for user-item pair
+        """
+        return np.dot(
+            self.user_factors[user_id],
+            self.item_factors[item_id]
+        )
+    
+    def fit(self, interactions):
+        """
+        Train the model using stochastic gradient descent
         
-        # Get non-zero interactions
-        interactions = []
-        for u in range(n_users):
-            for i in range(n_items):
-                rating = interaction_matrix[u, i]
-                if rating > 0:
-                    interactions.append((u, i, rating))
-        
-        # Training loop
-        for epoch in tqdm(range(self.n_epochs)):
+        Args:
+            interactions: List of (user_id, item_id, rating) tuples
+        """
+        for epoch in range(self.epochs):
             np.random.shuffle(interactions)
             
-            for u, i, rating in interactions:
-                # Predict rating
-                prediction = np.dot(
-                    self.user_factors[u],
-                    self.item_factors[i]
-                )
+            for user_id, item_id, rating in interactions:
+                # Predict current rating
+                prediction = self.predict(user_id, item_id)
                 
                 # Calculate error
                 error = rating - prediction
                 
-                # Update factors
-                user_factor_old = self.user_factors[u].copy()
+                # Get current factors
+                user_vec = self.user_factors[user_id]
+                item_vec = self.item_factors[item_id]
                 
-                self.user_factors[u] += self.learning_rate * (
-                    error * self.item_factors[i] - 
-                    self.regularization * self.user_factors[u]
+                # Update factors using gradient descent
+                user_update = self.learning_rate * (
+                    error * item_vec - self.reg * user_vec
+                )
+                item_update = self.learning_rate * (
+                    error * user_vec - self.reg * item_vec
                 )
                 
-                self.item_factors[i] += self.learning_rate * (
-                    error * user_factor_old - 
-                    self.regularization * self.item_factors[i]
-                )
-        
-        return self
-    
-    def predict(self, user_idx, item_idx):
-        """Predict rating for user-item pair"""
-        return np.dot(
-            self.user_factors[user_idx],
-            self.item_factors[item_idx]
-        )
-    
-    def recommend(self, user_idx, n=10, exclude_rated=True):
-        """Generate recommendations for user"""
-        user_ratings = self.user_factors[user_idx]
-        
-        # Calculate scores for all items
-        scores = np.dot(user_ratings, self.item_factors.T)
-        
-        if exclude_rated:
-            # Exclude already rated items (if you have interaction matrix)
-            pass  # Implementation depends on data structure
-        
-        # Get top n
-        top_indices = np.argsort(scores)[::-1][:n]
-        return top_indices
-```
-
----
-
-### Incorporating Bias
-
-**Why Bias Matters:**
-- Some users rate higher on average (optimistic users)
-- Some items are rated higher on average (popular items)
-- Global average rating affects all predictions
-
-**Bias-Enhanced Prediction:**
-```
-r_ui = μ + b_u + b_i + p_u^T q_i
-
-Where:
-- μ: Global average rating
-- b_u: User bias (deviation from global average)
-- b_i: Item bias (deviation from global average)
-```
-
-**Implementation:**
-
-```python
-class BiasedMatrixFactorization(MatrixFactorization):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.global_mean = None
-        self.user_biases = None
-        self.item_biases = None
-    
-    def fit(self, interaction_matrix):
-        """Train with bias terms"""
-        n_users, n_items = interaction_matrix.shape
-        
-        # Calculate global mean
-        ratings = []
-        for u in range(n_users):
-            for i in range(n_items):
-                if interaction_matrix[u, i] > 0:
-                    ratings.append(interaction_matrix[u, i])
-        self.global_mean = np.mean(ratings)
-        
-        # Initialize factors and biases
-        self.user_factors = np.random.normal(
-            scale=0.1, size=(n_users, self.n_factors)
-        )
-        self.item_factors = np.random.normal(
-            scale=0.1, size=(n_items, self.n_factors)
-        )
-        self.user_biases = np.zeros(n_users)
-        self.item_biases = np.zeros(n_items)
-        
-        # Get interactions
-        interactions = []
-        for u in range(n_users):
-            for i in range(n_items):
-                rating = interaction_matrix[u, i]
-                if rating > 0:
-                    interactions.append((u, i, rating))
-        
-        # Training with bias
-        for epoch in tqdm(range(self.n_epochs)):
-            np.random.shuffle(interactions)
+                self.user_factors[user_id] += user_update
+                self.item_factors[item_id] += item_update
             
-            for u, i, rating in interactions:
-                # Predict with bias
-                prediction = (
-                    self.global_mean +
-                    self.user_biases[u] +
-                    self.item_biases[i] +
-                    np.dot(self.user_factors[u], self.item_factors[i])
-                )
-                
-                error = rating - prediction
-                
-                # Update biases
-                self.user_biases[u] += self.learning_rate * (
-                    error - self.regularization * self.user_biases[u]
-                )
-                self.item_biases[i] += self.learning_rate * (
-                    error - self.regularization * self.item_biases[i]
-                )
-                
-                # Update factors (same as before)
-                user_factor_old = self.user_factors[u].copy()
-                self.user_factors[u] += self.learning_rate * (
-                    error * self.item_factors[i] - 
-                    self.regularization * self.user_factors[u]
-                )
-                self.item_factors[i] += self.learning_rate * (
-                    error * user_factor_old - 
-                    self.regularization * self.item_factors[i]
-                )
-        
-        return self
+            # Calculate loss for monitoring
+            if epoch % 10 == 0:
+                loss = self.calculate_loss(interactions)
+                print(f"Epoch {epoch}, Loss: {loss:.4f}")
     
-    def predict(self, user_idx, item_idx):
-        """Predict with bias"""
-        return (
-            self.global_mean +
-            self.user_biases[user_idx] +
-            self.item_biases[item_idx] +
-            np.dot(self.user_factors[user_idx], self.item_factors[item_idx])
-        )
+    def calculate_loss(self, interactions):
+        """
+        Calculate mean squared error
+        """
+        total_error = 0
+        for user_id, item_id, rating in interactions:
+            prediction = self.predict(user_id, item_id)
+            error = (rating - prediction) ** 2
+            total_error += error
+        
+        return total_error / len(interactions)
 ```
 
----
+### Matrix Factorization with Bias
 
-### SVD++: Incorporating Implicit Feedback
+**Bias Terms:**
+- **Global bias (μ):** Overall average rating
+- **User bias (b_u):** How much user deviates from average
+- **Item bias (b_i):** How much item deviates from average
 
-**The Problem:**
-Basic MF only uses explicit ratings. But we have lots of implicit data (clicks, views) that can improve predictions.
-
-**SVD++ Solution:**
-Incorporate implicit feedback by adding a term that captures items the user has interacted with (even without rating).
-
-**SVD++ Prediction:**
+**Prediction Formula:**
 ```
-r_ui = μ + b_u + b_i + q_i^T (p_u + |N(u)|^(-1/2) Σ_{j∈N(u)} y_j)
-
-Where:
-- N(u): Set of items user u has implicitly interacted with
-- y_j: Implicit feedback factor for item j
+r_ui = μ + b_u + b_i + p_u^T · q_i
 ```
 
 **Implementation:**
-
 ```python
-class SVDPlusPlus:
-    def __init__(self, n_factors=50, learning_rate=0.01, 
-                 regularization=0.01, n_epochs=100):
+class MatrixFactorizationWithBias:
+    def __init__(self, n_users, n_items, n_factors=50, learning_rate=0.01, 
+                 reg=0.01, epochs=100):
+        self.n_users = n_users
+        self.n_items = n_items
         self.n_factors = n_factors
         self.learning_rate = learning_rate
-        self.regularization = regularization
-        self.n_epochs = n_epochs
-        self.user_factors = None
-        self.item_factors = None
-        self.implicit_factors = None  # y_j factors
-        self.user_biases = None
-        self.item_biases = None
-        self.global_mean = None
-    
-    def fit(self, explicit_matrix, implicit_matrix):
-        """Train SVD++ with explicit and implicit feedback"""
-        n_users, n_items = explicit_matrix.shape
-        
-        # Calculate global mean from explicit ratings
-        ratings = []
-        for u in range(n_users):
-            for i in range(n_items):
-                if explicit_matrix[u, i] > 0:
-                    ratings.append(explicit_matrix[u, i])
-        self.global_mean = np.mean(ratings) if ratings else 0
+        self.reg = reg
+        self.epochs = epochs
         
         # Initialize factors
         self.user_factors = np.random.normal(
-            scale=0.1, size=(n_users, self.n_factors)
+            scale=0.1, size=(n_users, n_factors)
         )
         self.item_factors = np.random.normal(
-            scale=0.1, size=(n_items, self.n_factors)
+            scale=0.1, size=(n_items, n_factors)
         )
-        self.implicit_factors = np.random.normal(
-            scale=0.1, size=(n_items, self.n_factors)
+        
+        # Initialize biases
+        self.global_bias = 0.0
+        self.user_bias = np.zeros(n_users)
+        self.item_bias = np.zeros(n_items)
+    
+    def predict(self, user_id, item_id):
+        """
+        Predict rating with bias terms
+        """
+        prediction = (
+            self.global_bias +
+            self.user_bias[user_id] +
+            self.item_bias[item_id] +
+            np.dot(self.user_factors[user_id], self.item_factors[item_id])
         )
-        self.user_biases = np.zeros(n_users)
-        self.item_biases = np.zeros(n_items)
+        return prediction
+    
+    def fit(self, interactions):
+        """
+        Train with bias terms
+        """
+        # Initialize global bias
+        self.global_bias = np.mean([rating for _, _, rating in interactions])
         
-        # Build implicit interaction sets for each user
-        user_implicit_items = {}
-        for u in range(n_users):
-            implicit_items = np.where(implicit_matrix[u, :] > 0)[0]
-            user_implicit_items[u] = implicit_items
-        
-        # Get explicit interactions
-        interactions = []
-        for u in range(n_users):
-            for i in range(n_items):
-                if explicit_matrix[u, i] > 0:
-                    interactions.append((u, i, explicit_matrix[u, i]))
-        
-        # Training
-        for epoch in tqdm(range(self.n_epochs)):
+        for epoch in range(self.epochs):
             np.random.shuffle(interactions)
             
-            for u, i, rating in interactions:
-                # Calculate implicit feedback contribution
-                implicit_items = user_implicit_items.get(u, [])
-                if len(implicit_items) > 0:
-                    implicit_sum = np.sum(
-                        self.implicit_factors[implicit_items], axis=0
-                    )
-                    implicit_contribution = implicit_sum / np.sqrt(len(implicit_items))
-                else:
-                    implicit_contribution = np.zeros(self.n_factors)
-                
-                # Enhanced user representation
-                enhanced_user_factor = (
-                    self.user_factors[u] + implicit_contribution
-                )
-                
+            for user_id, item_id, rating in interactions:
                 # Predict
-                prediction = (
-                    self.global_mean +
-                    self.user_biases[u] +
-                    self.item_biases[i] +
-                    np.dot(enhanced_user_factor, self.item_factors[i])
-                )
-                
+                prediction = self.predict(user_id, item_id)
                 error = rating - prediction
                 
+                # Get factors
+                user_vec = self.user_factors[user_id]
+                item_vec = self.item_factors[item_id]
+                
                 # Update biases
-                self.user_biases[u] += self.learning_rate * (
-                    error - self.regularization * self.user_biases[u]
+                self.user_bias[user_id] += self.learning_rate * (
+                    error - self.reg * self.user_bias[user_id]
                 )
-                self.item_biases[i] += self.learning_rate * (
-                    error - self.regularization * self.item_biases[i]
+                self.item_bias[item_id] += self.learning_rate * (
+                    error - self.reg * self.item_bias[item_id]
+                )
+                
+                # Update factors
+                user_update = self.learning_rate * (
+                    error * item_vec - self.reg * user_vec
+                )
+                item_update = self.learning_rate * (
+                    error * user_vec - self.reg * item_vec
+                )
+                
+                self.user_factors[user_id] += user_update
+                self.item_factors[item_id] += item_update
+```
+
+### SVD++: Incorporating Implicit Feedback
+
+**SVD++** extends matrix factorization to incorporate implicit feedback (clicks, views, purchases) in addition to explicit ratings.
+
+**Key Innovation:** Model user preferences using both explicit ratings and implicit interactions.
+
+**Prediction Formula:**
+```
+r_ui = μ + b_u + b_i + q_i^T · (p_u + |N(u)|^(-1/2) · Σ(y_j))
+```
+
+Where:
+- `N(u)`: Set of items user u has implicitly interacted with
+- `y_j`: Latent factor for implicit feedback from item j
+
+**Implementation:**
+```python
+class SVDPlusPlus:
+    def __init__(self, n_users, n_items, n_factors=50, learning_rate=0.01, 
+                 reg=0.01, epochs=100):
+        self.n_users = n_users
+        self.n_items = n_items
+        self.n_factors = n_factors
+        self.learning_rate = learning_rate
+        self.reg = reg
+        self.epochs = epochs
+        
+        # Explicit factors
+        self.user_factors = np.random.normal(
+            scale=0.1, size=(n_users, n_factors)
+        )
+        self.item_factors = np.random.normal(
+            scale=0.1, size=(n_items, n_factors)
+        )
+        
+        # Implicit feedback factors
+        self.implicit_factors = np.random.normal(
+            scale=0.1, size=(n_items, n_factors)
+        )
+        
+        # Biases
+        self.global_bias = 0.0
+        self.user_bias = np.zeros(n_users)
+        self.item_bias = np.zeros(n_items)
+        
+        # Store implicit interactions
+        self.user_implicit_items = {}  # user_id -> set of item_ids
+    
+    def add_implicit_feedback(self, user_id, item_id):
+        """
+        Add implicit interaction (click, view, etc.)
+        """
+        if user_id not in self.user_implicit_items:
+            self.user_implicit_items[user_id] = set()
+        self.user_implicit_items[user_id].add(item_id)
+    
+    def predict(self, user_id, item_id):
+        """
+        Predict rating with implicit feedback
+        """
+        # Base prediction
+        prediction = (
+            self.global_bias +
+            self.user_bias[user_id] +
+            self.item_bias[item_id]
+        )
+        
+        # Explicit interaction term
+        explicit_term = np.dot(
+            self.user_factors[user_id],
+            self.item_factors[item_id]
+        )
+        
+        # Implicit feedback term
+        implicit_term = 0.0
+        if user_id in self.user_implicit_items:
+            implicit_items = self.user_implicit_items[user_id]
+            if implicit_items:
+                # Sum of implicit factors
+                implicit_sum = np.sum(
+                    [self.implicit_factors[item] for item in implicit_items],
+                    axis=0
+                )
+                # Normalize by sqrt of count
+                normalization = 1.0 / np.sqrt(len(implicit_items))
+                implicit_term = normalization * np.dot(
+                    implicit_sum,
+                    self.item_factors[item_id]
+                )
+        
+        prediction += explicit_term + implicit_term
+        return prediction
+    
+    def fit(self, explicit_interactions, implicit_interactions=None):
+        """
+        Train SVD++ model
+        
+        Args:
+            explicit_interactions: List of (user_id, item_id, rating)
+            implicit_interactions: List of (user_id, item_id) for implicit feedback
+        """
+        # Add implicit feedback
+        if implicit_interactions:
+            for user_id, item_id in implicit_interactions:
+                self.add_implicit_feedback(user_id, item_id)
+        
+        # Initialize global bias
+        if explicit_interactions:
+            self.global_bias = np.mean([
+                rating for _, _, rating in explicit_interactions
+            ])
+        
+        for epoch in range(self.epochs):
+            np.random.shuffle(explicit_interactions)
+            
+            for user_id, item_id, rating in explicit_interactions:
+                # Predict
+                prediction = self.predict(user_id, item_id)
+                error = rating - prediction
+                
+                # Get factors
+                user_vec = self.user_factors[user_id]
+                item_vec = self.item_factors[item_id]
+                
+                # Update biases
+                self.user_bias[user_id] += self.learning_rate * (
+                    error - self.reg * self.user_bias[user_id]
+                )
+                self.item_bias[item_id] += self.learning_rate * (
+                    error - self.reg * self.item_bias[item_id]
                 )
                 
                 # Update explicit factors
-                user_factor_old = self.user_factors[u].copy()
-                self.user_factors[u] += self.learning_rate * (
-                    error * self.item_factors[i] - 
-                    self.regularization * self.user_factors[u]
+                user_update = self.learning_rate * (
+                    error * item_vec - self.reg * user_vec
                 )
-                self.item_factors[i] += self.learning_rate * (
-                    error * user_factor_old - 
-                    self.regularization * self.item_factors[i]
+                item_update = self.learning_rate * (
+                    error * user_vec - self.reg * item_vec
                 )
                 
+                self.user_factors[user_id] += user_update
+                self.item_factors[item_id] += item_update
+                
                 # Update implicit factors
-                if len(implicit_items) > 0:
-                    for j in implicit_items:
-                        self.implicit_factors[j] += self.learning_rate * (
-                            error * self.item_factors[i] / np.sqrt(len(implicit_items)) -
-                            self.regularization * self.implicit_factors[j]
-                        )
-        
-        return self
-    
-    def predict(self, user_idx, item_idx, implicit_items=None):
-        """Predict with implicit feedback"""
-        if implicit_items is None:
-            implicit_items = []
-        
-        # Calculate implicit contribution
-        if len(implicit_items) > 0:
-            implicit_sum = np.sum(
-                self.implicit_factors[implicit_items], axis=0
-            )
-            implicit_contribution = implicit_sum / np.sqrt(len(implicit_items))
-        else:
-            implicit_contribution = np.zeros(self.n_factors)
-        
-        enhanced_user_factor = (
-            self.user_factors[user_idx] + implicit_contribution
-        )
-        
-        return (
-            self.global_mean +
-            self.user_biases[user_idx] +
-            self.item_biases[item_idx] +
-            np.dot(enhanced_user_factor, self.item_factors[item_idx])
-        )
+                if user_id in self.user_implicit_items:
+                    implicit_items = self.user_implicit_items[user_id]
+                    if implicit_items:
+                        normalization = 1.0 / np.sqrt(len(implicit_items))
+                        
+                        for implicit_item in implicit_items:
+                            implicit_update = self.learning_rate * (
+                                error * normalization * item_vec -
+                                self.reg * self.implicit_factors[implicit_item]
+                            )
+                            self.implicit_factors[implicit_item] += implicit_update
 ```
 
----
+### Real-World Implementation: NeuralMerch
 
-### NeuralMerch Integration
+**NeuralMerch** provides a production-ready matrix factorization system with:
 
-**NeuralMerch** is a production tool for collaborative filtering and matrix factorization. Here's how to use it:
+1. **Efficient Sparse Matrix Operations**
+   - Optimized for large-scale datasets
+   - GPU acceleration support
 
+2. **Multiple Factorization Algorithms**
+   - Basic MF
+   - MF with bias
+   - SVD++
+   - Non-negative matrix factorization (NMF)
+
+3. **Hyperparameter Tuning**
+   - Automatic grid search
+   - Cross-validation support
+
+**Usage Example:**
 ```python
-from neuralmerch import NeuralMerchClient
+from neuralmerch import MatrixFactorizationEngine
 
-# Initialize client
-client = NeuralMerchClient(api_key='your_api_key')
-
-# Upload interaction data
-client.upload_interactions(interactions)
-
-# Train model
-model = client.train_model(
-    algorithm='svd_plus_plus',
+# Initialize engine
+engine = MatrixFactorizationEngine(
     n_factors=100,
     learning_rate=0.01,
-    epochs=50
+    regularization=0.01
 )
+
+# Train on explicit ratings
+engine.fit(
+    explicit_ratings=ratings_data,
+    implicit_interactions=click_data  # Optional
+)
+
+# Make predictions
+predictions = engine.predict(user_ids, item_ids)
 
 # Get recommendations
-recommendations = client.get_recommendations(
-    user_id='U123',
-    n=20,
-    include_implicit=True
-)
-
-# Batch predictions
-predictions = client.batch_predict(
-    user_ids=['U1', 'U2', 'U3'],
-    item_ids=['I1', 'I2', 'I3']
-)
+recommendations = engine.recommend(user_id, n=10)
 ```
 
 ---
 
-## Module 2 Summary
+## Lab 2: Matrix Factorization Implementation
 
-### Key Takeaways
+### Objective
+Implement and compare different matrix factorization approaches.
 
-1. **Interaction Matrices are Fundamental:**
-   - Structure all user-item interactions
-   - Handle both explicit and implicit feedback
-   - Sparse matrices require efficient storage
+### Tasks
 
-2. **Memory-Based CF is Interpretable:**
-   - User-based: Find similar users
-   - Item-based: Find similar items
-   - Choose similarity metric based on data type
+1. **Implement Basic MF**
+   - Create matrix factorization from scratch
+   - Train on MovieLens dataset
+   - Evaluate with RMSE
 
-3. **Matrix Factorization is Powerful:**
-   - Captures latent factors automatically
-   - Scales better than memory-based methods
-   - SVD++ incorporates implicit feedback effectively
+2. **Add Bias Terms**
+   - Extend MF to include user and item biases
+   - Compare performance with basic MF
 
-### Production Checklist
+3. **Implement SVD++**
+   - Incorporate implicit feedback (views, clicks)
+   - Compare with explicit-only MF
 
-**Data Preparation:**
-- [ ] Structure interactions into user-item matrix
-- [ ] Handle explicit and implicit feedback separately
-- [ ] Use sparse matrix formats for efficiency
-- [ ] Normalize ratings if needed
+4. **Hyperparameter Tuning**
+   - Tune number of factors, learning rate, regularization
+   - Find optimal configuration
 
-**Model Selection:**
-- [ ] Start with item-based CF (more stable)
-- [ ] Use matrix factorization for scalability
-- [ ] Add bias terms for better accuracy
-- [ ] Use SVD++ if implicit data available
-
-**Evaluation:**
-- [ ] Measure RMSE on test set
-- [ ] Evaluate ranking metrics (NDCG, MAP)
-- [ ] Monitor recommendation diversity
-- [ ] Track computational performance
-
-### Next Steps
-
-**Lab 2: Matrix Factorization Implementation**
-- Build user-item interaction matrix
-- Implement user-based and item-based CF
-- Train matrix factorization model
-- Compare performance of different approaches
-
-**Reading:**
-- "Matrix Factorization Techniques for Recommender Systems" (Koren et al.)
-- NeuralMerch documentation
-- Case studies: Netflix Prize, Amazon recommendations
-
-**Practice:**
-- Implement SVD++ from scratch
-- Experiment with different numbers of latent factors
-- Compare explicit vs. implicit feedback
+### Deliverables
+- Code implementation
+- Performance comparison report
+- Analysis of bias terms and implicit feedback impact
 
 ---
 
-**Ready for Module 3?**  
-→ [Module 3: Neural Collaborative Filtering](Module_03_Neural_Collaborative_Filtering.md)
+## Summary
+
+**Key Takeaways:**
+
+1. **Interaction matrices are sparse:** 95-99% empty, requiring efficient storage
+2. **Explicit vs implicit feedback:** Different signals, different handling
+3. **Memory-based CF:** User-based and item-based approaches
+4. **Matrix factorization:** Decompose into latent factors
+5. **SVD++:** Incorporates implicit feedback for better performance
+
+**Next Steps:**
+- Module 3: Neural Collaborative Filtering
+- Learn how neural networks capture non-linear relationships
+- Master the NeuMF framework
 
 ---
 
-*Module 2 Complete | Next: Deep Learning for Recommendations*
+**Module 2 Complete** ✅  
+*Ready for Module 3: Neural Collaborative Filtering*

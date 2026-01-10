@@ -38,7 +38,7 @@ export function CourseFilter({ courses, courseSlugs, currentCourseSlug }: Course
         id="course-filter"
         value={currentCourseSlug || ''}
         onChange={handleChange}
-        className="text-sm border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-light"
+        className="text-sm border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ca-gold"
       >
         <option value="">All Courses</option>
         {courses?.map((course) => (
