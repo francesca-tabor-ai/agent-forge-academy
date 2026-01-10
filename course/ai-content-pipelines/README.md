@@ -6,7 +6,7 @@ order: 0
 
 # Designing and Scaling AI Content Pipelines
 
-## 📚 Course Overview
+##  Course Overview
 
 **Duration:** 7-9 weeks  
 **Level:** Intermediate to Advanced  
@@ -15,20 +15,20 @@ order: 0
 
 ---
 
-## 🎯 What You'll Master
+##  What You'll Master
 
 By completing this course, you will be able to:
 
-✅ Architect end-to-end AI-driven content systems that integrate data retrieval, generation, and verification  
-✅ Build and scale RAG (Retrieval-Augmented Generation) systems for proprietary data integration  
-✅ Design automated ideation and strategic planning workflows using multi-agent systems  
-✅ Create production-ready content pipelines for text, video, image, and voice generation  
-✅ Implement quality control systems with brand voice consistency and human-in-the-loop patterns  
-✅ Deploy specialized marketing pipelines for UGC and omnichannel social media publishing
+ Architect end-to-end AI-driven content systems that integrate data retrieval, generation, and verification  
+ Build and scale RAG (Retrieval-Augmented Generation) systems for proprietary data integration  
+ Design automated ideation and strategic planning workflows using multi-agent systems  
+ Create production-ready content pipelines for text, video, image, and voice generation  
+ Implement quality control systems with brand voice consistency and human-in-the-loop patterns  
+ Deploy specialized marketing pipelines for UGC and omnichannel social media publishing
 
 ---
 
-## 📋 Course Modules
+##  Course Modules
 
 ### [Module 1: Foundations of AI Content Orchestration](Module_01_Foundations_of_AI_Content_Orchestration.md)
 - Why AI-Driven Pipelines? The shift from "AI in Media" to "Media in AI"
@@ -74,7 +74,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 🛠️ Technology Stack
+##  Technology Stack
 
 ### Data & RAG
 - Docling (document parsing)
@@ -103,7 +103,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 📊 Course Statistics
+##  Course Statistics
 
 **Market Reality:**
 - 73% of marketers plan to increase AI content production in 2025
@@ -119,7 +119,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 🎓 Assessment Structure
+##  Assessment Structure
 
 - **Practical Exercises (40%):** 7 hands-on assignments
 - **Implementation Project (30%):** Real-world AI content pipeline
@@ -130,7 +130,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 💼 Career Outcomes
+##  Career Outcomes
 
 ### Roles & Salaries
 - AI Content Pipeline Architect: $130K-$220K
@@ -140,16 +140,16 @@ By completing this course, you will be able to:
 - Multi-Media AI Producer: $115K-$195K
 
 ### Skills Acquired
-✅ End-to-end pipeline architecture  
-✅ RAG system design and implementation  
-✅ Multi-agent orchestration  
-✅ Multimedia content generation  
-✅ Quality control and brand voice systems  
-✅ Automation and workflow design
+ End-to-end pipeline architecture  
+ RAG system design and implementation  
+ Multi-agent orchestration  
+ Multimedia content generation  
+ Quality control and brand voice systems  
+ Automation and workflow design
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites Checklist
 - [ ] Basic understanding of AI/ML concepts
@@ -168,7 +168,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 📚 Additional Resources
+##  Additional Resources
 
 ### Documentation
 - [LangChain Documentation](https://python.langchain.com/)
@@ -184,7 +184,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 📝 Course Materials
+##  Course Materials
 
 Each module includes:
 - Detailed lessons with real-world examples
@@ -195,7 +195,7 @@ Each module includes:
 
 ---
 
-## 🌟 Success Stories
+##  Success Stories
 
 > "Built a content pipeline that produces 50 blog posts per month with 2 team members. 10x output increase."  
 > **— Content Director, SaaS Company**
@@ -208,7 +208,7 @@ Each module includes:
 
 ---
 
-## 📞 Contact & Enrollment
+##  Contact & Enrollment
 
 **Email:** ai-content-pipelines@example.com  
 **Website:** [Course website]  
@@ -220,7 +220,7 @@ Each module includes:
 
 ---
 
-## 📄 License
+##  License
 
 This course material is proprietary. All rights reserved.
 
@@ -228,7 +228,7 @@ This course material is proprietary. All rights reserved.
 
 ---
 
-## 🗺️ Course Navigation
+##  Course Navigation
 
 - [Start with Module 1 →](Module_01_Foundations_of_AI_Content_Orchestration.md)
 - [View Index →](INDEX.md)
@@ -236,4 +236,4 @@ This course material is proprietary. All rights reserved.
 
 ---
 
-**Ready to architect and scale AI content pipelines? Let's begin! 🚀**
+**Ready to architect and scale AI content pipelines? Let's begin! **

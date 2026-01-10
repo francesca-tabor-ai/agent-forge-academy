@@ -67,26 +67,26 @@ A knowledge fabric is a distributed system that:
 **Components:**
 ```
 Knowledge Fabric
-├── Knowledge Sources
-│   ├── Documentation
-│   ├── Code repositories
-│   ├── Business rules
-│   └── Historical decisions
-│
-├── Processing Layer
-│   ├── Embedding generation
-│   ├── Vector storage
-│   └── Indexing
-│
-├── Retrieval Layer
-│   ├── Semantic search
-│   ├── Multi-vector retrieval
-│   └── Context ranking
-│
-└── Delivery Layer
-    ├── MCP servers
-    ├── API endpoints
-    └── Agent interfaces
+ Knowledge Sources
+    Documentation
+    Code repositories
+    Business rules
+    Historical decisions
+
+ Processing Layer
+    Embedding generation
+    Vector storage
+    Indexing
+
+ Retrieval Layer
+    Semantic search
+    Multi-vector retrieval
+    Context ranking
+
+ Delivery Layer
+     MCP servers
+     API endpoints
+     Agent interfaces
 ```
 
 ---
@@ -307,9 +307,9 @@ MCP servers provide a standardized way for AI agents to connect to knowledge sou
 **MCP Architecture:**
 ```
 AI Agent (Client)
-    ↕ (MCP Protocol)
+     (MCP Protocol)
 MCP Server
-    ↕
+    
 Knowledge Source / Tool
 ```
 
@@ -732,5 +732,5 @@ Module 4 will teach you how to orchestrate multi-agent systems using MCP and man
 
 ---
 
-**Module 3 Complete** ✓  
+**Module 3 Complete**   
 **Next:** Module 4 - Agent Orchestration & Protocol Layers

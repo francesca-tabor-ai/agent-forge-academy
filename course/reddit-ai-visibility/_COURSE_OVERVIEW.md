@@ -4,9 +4,9 @@ description: "Get started with the Reddit AI Visibility and AEO course in minute
 order: 0
 ---
 
-# 🎓 Mastering Reddit AI Visibility and Answer Engine Optimization (AEO) - Quick Start Guide
+#  Mastering Reddit AI Visibility and Answer Engine Optimization (AEO) - Quick Start Guide
 
-## 📍 You Are Here
+##  You Are Here
 
 This folder contains a **complete professional course** on transitioning from traditional search marketing to Answer Engine Optimization (AEO), leveraging Reddit as the primary source of authority for Large Language Models (LLMs).
 
@@ -16,7 +16,7 @@ This folder contains a **complete professional course** on transitioning from tr
 
 ---
 
-## 🚀 What's Inside
+##  What's Inside
 
 ### 9 Markdown Files
 
@@ -31,21 +31,21 @@ This folder contains a **complete professional course** on transitioning from tr
 
 ---
 
-## 🎯 Three Ways to Use This Course
+##  Three Ways to Use This Course
 
-### 1️⃣ Self-Paced Learning
+###  Self-Paced Learning
 - Follow modules in order
 - Complete practical exercises independently
 - Build your AEO strategy
 - **Time:** 4-6 hours/week for 6 weeks
 
-### 2️⃣ Team Training
+###  Team Training
 - Use as corporate marketing training curriculum
 - Adapt strategies to company use cases
 - Run cohorts with deadlines
 - **Time:** Customize to team needs
 
-### 3️⃣ Reference Material
+###  Reference Material
 - Jump to relevant modules
 - Use frameworks and templates
 - Implement strategies immediately
@@ -53,7 +53,7 @@ This folder contains a **complete professional course** on transitioning from tr
 
 ---
 
-## 📚 Module Overview (What You'll Learn)
+##  Module Overview (What You'll Learn)
 
 | Module | Topic | Core Skills |
 |--------|-------|-------------|
@@ -66,26 +66,26 @@ This folder contains a **complete professional course** on transitioning from tr
 
 ---
 
-## 💻 Technology You'll Master
+##  Technology You'll Master
 
 ### Tools & Platforms
-✅ Reddit Pro (mention tracking)  
-✅ Mastra framework (automation)  
-✅ GPT-5 (response generation)  
-✅ Slack (workflow integration)  
-✅ Schema.org (structured data)  
-✅ BERT-based models (sentiment analysis)
+ Reddit Pro (mention tracking)  
+ Mastra framework (automation)  
+ GPT-5 (response generation)  
+ Slack (workflow integration)  
+ Schema.org (structured data)  
+ BERT-based models (sentiment analysis)
 
 ### Concepts
-✅ Answer Engine Optimization (AEO)  
-✅ General Entity Optimization (GEO)  
-✅ AI Shopping Visibility Funnel  
-✅ Sentiment Volume Change (SVC)  
-✅ Share of Answer metrics
+ Answer Engine Optimization (AEO)  
+ General Entity Optimization (GEO)  
+ AI Shopping Visibility Funnel  
+ Sentiment Volume Change (SVC)  
+ Share of Answer metrics
 
 ---
 
-## 🎯 Learning Outcomes
+##  Learning Outcomes
 
 By completing this course, you will:
 
@@ -111,7 +111,7 @@ By completing this course, you will:
 
 ---
 
-## 💼 Career Impact
+##  Career Impact
 
 ### Market Opportunity
 - **58%** of consumers now use AI platforms instead of traditional search
@@ -128,13 +128,13 @@ Organizations implementing AEO achieve:
 
 ---
 
-## 📋 Prerequisites
+##  Prerequisites
 
 **Required:**
-- ✅ Basic understanding of SEO/marketing
-- ✅ Familiarity with Reddit platform
-- ✅ Understanding of AI/LLM basics
-- ✅ Access to Reddit account
+-  Basic understanding of SEO/marketing
+-  Familiarity with Reddit platform
+-  Understanding of AI/LLM basics
+-  Access to Reddit account
 
 **Helpful (Not Required):**
 - Reddit community management experience
@@ -151,7 +151,7 @@ Organizations implementing AEO achieve:
 
 ---
 
-## 🚦 Getting Started (3 Steps)
+##  Getting Started (3 Steps)
 
 ### Step 1: Review Materials (30 min)
 1. Read **README.md** (10 min)
@@ -173,7 +173,7 @@ Organizations implementing AEO achieve:
 
 ---
 
-## 📊 Assessment Structure
+##  Assessment Structure
 
 **Total:** 100 points
 
@@ -187,7 +187,7 @@ Organizations implementing AEO achieve:
 
 ---
 
-## 📅 Time Commitment
+##  Time Commitment
 
 ### Per Week (Weeks 1-6)
 - Reading: 1-2 hours
@@ -200,20 +200,20 @@ Organizations implementing AEO achieve:
 
 ---
 
-## 🎓 What You Get
+##  What You Get
 
 Upon completion:
 
-✅ **Skills:** Production-ready AEO strategy  
-✅ **Certificate:** Digital credential (LinkedIn-shareable)  
-✅ **Portfolio:** Complete AEO implementation plan  
-✅ **Network:** Alumni community access  
-✅ **Knowledge:** Comprehensive Reddit AEO framework  
-✅ **Career:** Competitive advantage in AI marketing
+ **Skills:** Production-ready AEO strategy  
+ **Certificate:** Digital credential (LinkedIn-shareable)  
+ **Portfolio:** Complete AEO implementation plan  
+ **Network:** Alumni community access  
+ **Knowledge:** Comprehensive Reddit AEO framework  
+ **Career:** Competitive advantage in AI marketing
 
 ---
 
-## 🔗 Navigation
+##  Navigation
 
 **Start Learning:**
 - [README.md](README.md) - Course home
@@ -227,27 +227,27 @@ Upon completion:
 
 ---
 
-## 💡 Success Tips
+##  Success Tips
 
 ### Do This:
-✅ Follow modules in order  
-✅ Complete ALL exercises  
-✅ Engage with Reddit communities authentically  
-✅ Start automation setup early  
-✅ Document your strategy  
-✅ Test and iterate
+ Follow modules in order  
+ Complete ALL exercises  
+ Engage with Reddit communities authentically  
+ Start automation setup early  
+ Document your strategy  
+ Test and iterate
 
 ### Avoid This:
-❌ Skipping community participation basics  
-❌ Rushing through ethical considerations  
-❌ Ignoring risk mitigation  
-❌ Automating without human oversight  
-❌ Violating Reddit's terms of service  
-❌ Creating promotional content without value
+ Skipping community participation basics  
+ Rushing through ethical considerations  
+ Ignoring risk mitigation  
+ Automating without human oversight  
+ Violating Reddit's terms of service  
+ Creating promotional content without value
 
 ---
 
-## 🌟 Success Stories
+##  Success Stories
 
 > **"Increased our brand mentions in ChatGPT responses by 400% in 3 months using the AEO framework."**  
 > — Marketing Director, E-commerce Brand
@@ -260,17 +260,17 @@ Upon completion:
 
 ---
 
-## 📞 Support
+##  Support
 
 **Have Questions?**
-- 📧 Email: reddit-aeo-course@example.com
-- 💬 Discord: Provided upon enrollment
-- 🕐 Office Hours: Wed 6-7 PM EST
-- 📚 Documentation: README.md and INDEX.md
+-  Email: reddit-aeo-course@example.com
+-  Discord: Provided upon enrollment
+-  Office Hours: Wed 6-7 PM EST
+-  Documentation: README.md and INDEX.md
 
 ---
 
-## 🎯 Your Next Action
+##  Your Next Action
 
 **Choose your path:**
 
@@ -295,19 +295,19 @@ Upon completion:
 
 ---
 
-## ⏰ Time to Start?
+##  Time to Start?
 
 **If you're ready:**  
-👉 **[Open README.md →](README.md)**
+ **[Open README.md →](README.md)**
 
 **Need more info?**  
-👉 **[View INDEX.md →](INDEX.md)**
+ **[View INDEX.md →](INDEX.md)**
 
 ---
 
 **The future of search is AI. The future of AI visibility is Reddit. The time to learn AEO is now.**
 
-**Let's build your AI visibility strategy! 🚀**
+**Let's build your AI visibility strategy! **
 
 ---
 

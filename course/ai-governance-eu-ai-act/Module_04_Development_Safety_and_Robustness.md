@@ -859,10 +859,10 @@ Develop copyright compliance framework:
 
 In this module, you've learned:
 
-✅ **Technical Documentation:** Creating comprehensive documentation and model cards  
-✅ **Robustness Engineering:** Building resilient and predictable systems  
-✅ **Security:** Protecting against cyberattacks and adversarial threats  
-✅ **Copyright Compliance:** Implementing IP and copyright compliance
+ **Technical Documentation:** Creating comprehensive documentation and model cards  
+ **Robustness Engineering:** Building resilient and predictable systems  
+ **Security:** Protecting against cyberattacks and adversarial threats  
+ **Copyright Compliance:** Implementing IP and copyright compliance
 
 **Next Steps:**
 - Complete Lab 4
@@ -872,4 +872,4 @@ In this module, you've learned:
 ---
 
 **Ready for Module 5?**  
-👉 **[Module 5: Transparency and Human Agency →](Module_05_Transparency_and_Human_Agency.md)**
+ **[Module 5: Transparency and Human Agency →](Module_05_Transparency_and_Human_Agency.md)**

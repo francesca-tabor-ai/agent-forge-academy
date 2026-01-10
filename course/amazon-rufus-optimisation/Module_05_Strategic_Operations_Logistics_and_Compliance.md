@@ -944,9 +944,9 @@ def train_deepmmate(
 - PyTorch for deep learning
 - scipy for optimization
 
-**Course Complete!** 🎉
+**Course Complete!** 
 
 ---
 
-**Module 5 Complete** ✓  
-**Course Complete!** 🎉
+**Module 5 Complete**   
+**Course Complete!** 

@@ -6,7 +6,7 @@ order: 0
 
 # Mastering the AI Factory: AI-Native Software Delivery
 
-## 📚 Course Overview
+##  Course Overview
 
 **Duration:** 7 weeks  
 **Level:** Intermediate to Advanced  
@@ -15,21 +15,21 @@ order: 0
 
 ---
 
-## 🎯 What You'll Master
+##  What You'll Master
 
 By completing this course, you will be able to:
 
-✅ Architect AI-native development systems that achieve 10x productivity gains  
-✅ Implement specification-first methodology (SDD) with algorithmic verification  
-✅ Design context engineering systems and knowledge fabrics for AI agents  
-✅ Orchestrate multi-agent systems using Model Context Protocol (MCP)  
-✅ Deploy agentic DevOps and operations automation  
-✅ Enforce governance, security, and high-assurance practices  
-✅ Transition from developer to AI System Architect
+ Architect AI-native development systems that achieve 10x productivity gains  
+ Implement specification-first methodology (SDD) with algorithmic verification  
+ Design context engineering systems and knowledge fabrics for AI agents  
+ Orchestrate multi-agent systems using Model Context Protocol (MCP)  
+ Deploy agentic DevOps and operations automation  
+ Enforce governance, security, and high-assurance practices  
+ Transition from developer to AI System Architect
 
 ---
 
-## 📋 Course Modules
+##  Course Modules
 
 ### [Module 1: Foundations of AI-Native Engineering](Module_01_Foundations_of_AI_Native_Engineering.md)
 - The AI Development Spectrum: Levels 1-5 from AI-Assisted to AI-Native
@@ -68,7 +68,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 🛠️ Technology Stack
+##  Technology Stack
 
 ### Core Frameworks
 - OpenSpec and Spec-Kit for specification-driven development
@@ -95,7 +95,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 📊 Course Statistics
+##  Course Statistics
 
 **Productivity Gains:**
 - 10x productivity through AI-native development
@@ -111,7 +111,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 🎓 Assessment Structure
+##  Assessment Structure
 
 - **Labs (40%):** 7 hands-on assignments (one per module)
 - **Midterm Project (25%):** Build an AI-native feature development system
@@ -122,7 +122,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 💼 Career Outcomes
+##  Career Outcomes
 
 ### Roles & Salaries
 - AI System Architect: $150K-$250K
@@ -132,17 +132,17 @@ By completing this course, you will be able to:
 - AI Governance Specialist: $140K-$230K
 
 ### Skills Acquired
-✅ AI-native system architecture  
-✅ Specification-driven development  
-✅ Context engineering and knowledge fabrics  
-✅ Multi-agent orchestration  
-✅ Agentic DevOps and operations  
-✅ AI governance and high-assurance practices  
-✅ Human-AI collaboration workflows
+ AI-native system architecture  
+ Specification-driven development  
+ Context engineering and knowledge fabrics  
+ Multi-agent orchestration  
+ Agentic DevOps and operations  
+ AI governance and high-assurance practices  
+ Human-AI collaboration workflows
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites Checklist
 - [ ] Software engineering experience (2+ years)
@@ -161,7 +161,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 📚 Additional Resources
+##  Additional Resources
 
 ### Documentation
 - [Model Context Protocol (MCP) Docs](https://modelcontextprotocol.io/)
@@ -177,7 +177,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 📝 Course Materials
+##  Course Materials
 
 Each module includes:
 - Detailed lessons with practical examples
@@ -188,7 +188,7 @@ Each module includes:
 
 ---
 
-## 🌟 Success Stories
+##  Success Stories
 
 > "Transformed our development process from weeks to days. The specification-first approach eliminated ambiguity and accelerated delivery."  
 > **— Maria Santos, Engineering Director**
@@ -201,7 +201,7 @@ Each module includes:
 
 ---
 
-## 📞 Contact & Enrollment
+##  Contact & Enrollment
 
 **Email:** ai-native-course@example.com  
 **Website:** [Course website]  
@@ -213,7 +213,7 @@ Each module includes:
 
 ---
 
-## 📄 License
+##  License
 
 This course material is proprietary. All rights reserved.
 
@@ -221,7 +221,7 @@ This course material is proprietary. All rights reserved.
 
 ---
 
-## 🗺️ Course Navigation
+##  Course Navigation
 
 - [Start with Module 1 →](Module_01_Foundations_of_AI_Native_Engineering.md)
 - [View Course Index →](INDEX.md)
@@ -229,4 +229,4 @@ This course material is proprietary. All rights reserved.
 
 ---
 
-**Ready to master AI-native software delivery? Let's begin! 🚀**
+**Ready to master AI-native software delivery? Let's begin! **

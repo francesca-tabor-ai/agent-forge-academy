@@ -799,5 +799,5 @@ Congratulations! You've completed the full course on AI-Native Software Delivery
 
 ---
 
-**Module 7 Complete** ✓  
-**Course Complete** 🎉
+**Module 7 Complete**   
+**Course Complete** 

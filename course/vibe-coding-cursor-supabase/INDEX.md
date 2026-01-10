@@ -113,9 +113,9 @@ Module 2 (Scaffolding)
     ↓
 Module 3 (Database)
     ↓
-Module 4 (Auth) ──→ Module 5 (Security)
+Module 4 (Auth) → Module 5 (Security)
     ↓                    ↓
-Module 6 (Logic) ←───────┘
+Module 6 (Logic) ←
     ↓
 Module 7 (AI Features)
     ↓
@@ -150,4 +150,4 @@ Module 8 (Deployment)
 
 ---
 
-**Happy Learning! 🚀**
+**Happy Learning! **

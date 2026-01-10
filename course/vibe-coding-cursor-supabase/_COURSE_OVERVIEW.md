@@ -4,9 +4,9 @@ description: "Get started with AI-Native App Delivery with Cursor & Supabase"
 order: 0
 ---
 
-# 🎓 AI-Native App Delivery with Cursor & Supabase - Quick Start Guide
+#  AI-Native App Delivery with Cursor & Supabase - Quick Start Guide
 
-## 📍 You Are Here
+##  You Are Here
 
 This folder contains a **complete 8-module professional course** on building AI-native applications using Cursor and Supabase.
 
@@ -15,7 +15,7 @@ This folder contains a **complete 8-module professional course** on building AI-
 
 ---
 
-## 🚀 What's Inside
+##  What's Inside
 
 ### 8 Core Modules
 
@@ -30,7 +30,7 @@ This folder contains a **complete 8-module professional course** on building AI-
 
 ---
 
-## 🎯 Course Philosophy
+##  Course Philosophy
 
 This course teaches a revolutionary approach to building applications:
 
@@ -45,26 +45,26 @@ This course teaches a revolutionary approach to building applications:
 
 ---
 
-## 💻 Technology Stack
+##  Technology Stack
 
 ### Core Tools
-✅ **Cursor** - AI-powered code editor  
-✅ **Supabase** - Open-source Firebase alternative  
-✅ **Next.js** - React framework  
-✅ **TypeScript** - Type-safe JavaScript  
-✅ **Tailwind CSS** - Utility-first CSS  
+ **Cursor** - AI-powered code editor  
+ **Supabase** - Open-source Firebase alternative  
+ **Next.js** - React framework  
+ **TypeScript** - Type-safe JavaScript  
+ **Tailwind CSS** - Utility-first CSS  
 
 ### Advanced Features
-✅ **Docker** - Local Supabase development  
-✅ **MCP (Model Context Protocol)** - Database introspection  
-✅ **Twilio Verify** - Passwordless authentication  
-✅ **Edge Functions** - Serverless Deno functions  
-✅ **pgvector** - Vector embeddings and similarity search  
-✅ **Postgres Replication** - Real-time updates  
+ **Docker** - Local Supabase development  
+ **MCP (Model Context Protocol)** - Database introspection  
+ **Twilio Verify** - Passwordless authentication  
+ **Edge Functions** - Serverless Deno functions  
+ **pgvector** - Vector embeddings and similarity search  
+ **Postgres Replication** - Real-time updates  
 
 ---
 
-## 🎯 Learning Outcomes
+##  Learning Outcomes
 
 By completing this course, you will:
 
@@ -94,13 +94,13 @@ By completing this course, you will:
 
 ---
 
-## 📋 Prerequisites
+##  Prerequisites
 
 **Required:**
-- ✅ Basic JavaScript/TypeScript knowledge
-- ✅ Understanding of React/Next.js basics
-- ✅ Familiarity with SQL
-- ✅ Git/GitHub experience
+-  Basic JavaScript/TypeScript knowledge
+-  Understanding of React/Next.js basics
+-  Familiarity with SQL
+-  Git/GitHub experience
 
 **Helpful (Not Required):**
 - Supabase experience
@@ -115,7 +115,7 @@ By completing this course, you will:
 
 ---
 
-## 🚦 Getting Started (3 Steps)
+##  Getting Started (3 Steps)
 
 ### Step 1: Review Materials (30 min)
 1. Read **README.md** (10 min)
@@ -137,7 +137,7 @@ By completing this course, you will:
 
 ---
 
-## 📊 Course Structure
+##  Course Structure
 
 **Total Duration:** 8-12 weeks (self-paced)
 
@@ -152,39 +152,39 @@ By completing this course, you will:
 
 ---
 
-## 🎓 What You Get
+##  What You Get
 
 Upon completion:
 
-✅ **Skills:** Production-ready AI-native development  
-✅ **Methodology:** Intent-Driven Development mastery  
-✅ **Portfolio:** Complete application projects  
-✅ **Knowledge:** Modern full-stack development with AI  
-✅ **Career:** In-demand skills for AI-native development  
+ **Skills:** Production-ready AI-native development  
+ **Methodology:** Intent-Driven Development mastery  
+ **Portfolio:** Complete application projects  
+ **Knowledge:** Modern full-stack development with AI  
+ **Career:** In-demand skills for AI-native development  
 
 ---
 
-## 💡 Success Tips
+##  Success Tips
 
 ### Do This:
-✅ Follow modules in order  
-✅ Complete ALL hands-on exercises  
-✅ Build real projects  
-✅ Use Cursor Agent Mode actively  
-✅ Experiment and iterate rapidly  
-✅ Document your learnings
+ Follow modules in order  
+ Complete ALL hands-on exercises  
+ Build real projects  
+ Use Cursor Agent Mode actively  
+ Experiment and iterate rapidly  
+ Document your learnings
 
 ### Avoid This:
-❌ Skipping the methodology module  
-❌ Rushing through database design  
-❌ Ignoring security (RLS)  
-❌ Not using local Supabase first  
-❌ Skipping migrations  
-❌ Not testing RLS policies
+ Skipping the methodology module  
+ Rushing through database design  
+ Ignoring security (RLS)  
+ Not using local Supabase first  
+ Skipping migrations  
+ Not testing RLS policies
 
 ---
 
-## 🔗 Navigation
+##  Navigation
 
 **Start Learning:**
 - [README.md](README.md) - Course home
@@ -193,19 +193,19 @@ Upon completion:
 
 ---
 
-## ⏰ Time to Start?
+##  Time to Start?
 
 **If you're ready:**  
-👉 **[Open README.md →](README.md)**
+ **[Open README.md →](README.md)**
 
 **Need more info?**  
-👉 **[View INDEX.md →](INDEX.md)**
+ **[View INDEX.md →](INDEX.md)**
 
 ---
 
 **The future of development is AI-native. The time to learn is now.**
 
-**Let's build something amazing! 🚀**
+**Let's build something amazing! **
 
 ---
 

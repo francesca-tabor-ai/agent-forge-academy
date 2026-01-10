@@ -525,5 +525,5 @@ Module 5 will teach you advanced sentiment and stance analysis techniques to pre
 
 ---
 
-**Module 4 Complete** ✓  
+**Module 4 Complete**   
 **Next:** Module 5 - Advanced Sentiment & Stance Analysis

@@ -34,4 +34,4 @@ Include these 5 bullets (copy/paste and replace):
 * **Recruiters Only:** recommended when applying
 * **Public:** shareable link on your profile
 
-✅ Tip: If you're unsure, submit now and improve later — you can edit this project anytime.
+ Tip: If you're unsure, submit now and improve later — you can edit this project anytime.

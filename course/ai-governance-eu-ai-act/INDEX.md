@@ -6,13 +6,13 @@ order: 0
 
 # Building and Governing AI Content Pipelines - Complete Index
 
-## 📚 Course Materials Overview
+##  Course Materials Overview
 
 This directory contains all course materials for the **Building and Governing AI Content Pipelines Professional Course (2025)**.
 
 ---
 
-## 🗂️ File Structure
+##  File Structure
 
 ### Core Course Files
 1. **[README.md](README.md)** - Main course overview, start here
@@ -53,7 +53,7 @@ This directory contains all course materials for the **Building and Governing AI
 
 ---
 
-## 🎯 Quick Navigation
+##  Quick Navigation
 
 ### By Learning Goal
 
@@ -77,35 +77,35 @@ This directory contains all course materials for the **Building and Governing AI
 
 ---
 
-## 📋 Learning Path by Role
+##  Learning Path by Role
 
 ### For Software Engineers
 1. Module 1 (Foundations)
-2. Module 3 (Data Governance) ⭐
-3. Module 4 (Development & Safety) ⭐
-4. Module 5 (Transparency) ⭐
+2. Module 3 (Data Governance) 
+3. Module 4 (Development & Safety) 
+4. Module 5 (Transparency) 
 
 ### For Compliance Officers
-1. Module 1 (Foundations) ⭐
-2. Module 2 (Scoping & Compliance) ⭐
-3. Module 6 (Deployment & Monitoring) ⭐
+1. Module 1 (Foundations) 
+2. Module 2 (Scoping & Compliance) 
+3. Module 6 (Deployment & Monitoring) 
 4. Module 5 (Transparency)
 
 ### For Data Scientists
 1. Module 1 (Foundations)
-2. Module 3 (Data Governance) ⭐
+2. Module 3 (Data Governance) 
 3. Module 4 (Development & Safety)
-4. Module 5 (Transparency) ⭐
+4. Module 5 (Transparency) 
 
 ### For Product Managers
-1. Module 1 (Foundations) ⭐
-2. Module 2 (Scoping & Compliance) ⭐
-3. Module 6 (Deployment & Monitoring) ⭐
+1. Module 1 (Foundations) 
+2. Module 2 (Scoping & Compliance) 
+3. Module 6 (Deployment & Monitoring) 
 4. Module 5 (Transparency)
 
 ---
 
-## 🔧 Regulatory Reference
+##  Regulatory Reference
 
 ### EU AI Act Framework
 - **Risk Classification** - Unacceptable, high-risk, limited risk, minimal risk (Module 1)
@@ -128,7 +128,7 @@ This directory contains all course materials for the **Building and Governing AI
 
 ---
 
-## 📊 Lab Overview
+##  Lab Overview
 
 | Lab | Module | Topic | Duration |
 |-----|--------|-------|----------|
@@ -143,7 +143,7 @@ This directory contains all course materials for the **Building and Governing AI
 
 ---
 
-## 🎓 Assessment Guide
+##  Assessment Guide
 
 ### Grade Breakdown
 - **Labs (40%):** 6 labs × 6-7% each
@@ -160,7 +160,7 @@ This directory contains all course materials for the **Building and Governing AI
 
 ---
 
-## 📚 Additional Resources
+##  Additional Resources
 
 ### Reference Documents
 - [EU AI Act Official Text](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689)
@@ -175,7 +175,7 @@ This directory contains all course materials for the **Building and Governing AI
 
 ---
 
-## 🎯 Success Checklist
+##  Success Checklist
 
 ### Before Starting
 - [ ] Read README.md
@@ -218,7 +218,7 @@ This directory contains all course materials for the **Building and Governing AI
 
 ---
 
-## 💡 Study Tips
+##  Study Tips
 
 ### Weekly Routine
 1. **Monday:** Watch lectures (2-3h)
@@ -243,7 +243,7 @@ This directory contains all course materials for the **Building and Governing AI
 
 ---
 
-## 🔗 Quick Links
+##  Quick Links
 
 - **[Start Course →](README.md)**
 - **[Module 1 →](Module_01_Foundations_of_the_AI_Life_Cycle.md)**
@@ -252,7 +252,7 @@ This directory contains all course materials for the **Building and Governing AI
 
 ---
 
-## 📞 Contact
+##  Contact
 
 **Questions?** Email: ai-governance-course@example.com  
 **Office Hours:** Tuesday/Thursday 6-7 PM CET  

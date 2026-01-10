@@ -780,10 +780,10 @@ Integrate all components:
 
 In this module, you've learned:
 
-✅ **Disclosure:** Ensuring users know they're interacting with AI  
-✅ **Human Oversight:** Designing effective oversight mechanisms  
-✅ **Explainability:** Addressing black box models with interpretability tools  
-✅ **Transparency:** Building transparent AI content pipelines
+ **Disclosure:** Ensuring users know they're interacting with AI  
+ **Human Oversight:** Designing effective oversight mechanisms  
+ **Explainability:** Addressing black box models with interpretability tools  
+ **Transparency:** Building transparent AI content pipelines
 
 **Next Steps:**
 - Complete Lab 5
@@ -793,4 +793,4 @@ In this module, you've learned:
 ---
 
 **Ready for Module 6?**  
-👉 **[Module 6: Deployment, Monitoring, and Life Cycle Management →](Module_06_Deployment_Monitoring_and_Life_Cycle_Management.md)**
+ **[Module 6: Deployment, Monitoring, and Life Cycle Management →](Module_06_Deployment_Monitoring_and_Life_Cycle_Management.md)**

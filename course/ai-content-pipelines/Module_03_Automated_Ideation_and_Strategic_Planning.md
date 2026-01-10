@@ -219,14 +219,14 @@ def competitive_gap_analysis(topic, competitors):
 
 ```
 Ideation Coordinator Agent
-    ├── Topic Generator Agent
-    │   └── Generates 50+ topic ideas
-    ├── Cluster Agent
-    │   └── Groups topics by similarity
-    ├── Research Agent
-    │   └── Analyzes search volume, competition
-    └── Gap Analysis Agent
-        └── Identifies opportunities
+     Topic Generator Agent
+        Generates 50+ topic ideas
+     Cluster Agent
+        Groups topics by similarity
+     Research Agent
+        Analyzes search volume, competition
+     Gap Analysis Agent
+         Identifies opportunities
 ```
 
 **Example Output:**
@@ -913,13 +913,13 @@ Timeline: 4 weeks before launch
 
 In this module, you've learned:
 
-✅ **AI-Powered Brainstorming** - Topic clustering, keyword research, gap analysis
+ **AI-Powered Brainstorming** - Topic clustering, keyword research, gap analysis
 
-✅ **Retrieval-Augmented Planning** - Multi-agent coordination for data-driven plans
+ **Retrieval-Augmented Planning** - Multi-agent coordination for data-driven plans
 
-✅ **R-C-F-E Prompt Model** - Role, Context, Format, Examples framework
+ **R-C-F-E Prompt Model** - Role, Context, Format, Examples framework
 
-✅ **Automated Ideation Workflows** - End-to-end idea generation and planning
+ **Automated Ideation Workflows** - End-to-end idea generation and planning
 
 **Next Module:** [Module 4: Textual Content and Scripting Workflows](Module_04_Textual_Content_and_Scripting_Workflows.md)
 

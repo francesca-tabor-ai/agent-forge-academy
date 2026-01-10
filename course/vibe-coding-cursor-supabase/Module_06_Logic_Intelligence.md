@@ -31,16 +31,16 @@ order: 6
 ### Why Use Edge Functions?
 
 **Use Edge Functions for:**
-- ✅ Business logic that shouldn't be in frontend
-- ✅ Secure API calls (API keys, secrets)
-- ✅ Webhook handlers
-- ✅ Background processing
-- ✅ Integration with external services
+-  Business logic that shouldn't be in frontend
+-  Secure API calls (API keys, secrets)
+-  Webhook handlers
+-  Background processing
+-  Integration with external services
 
 **Don't Use Edge Functions for:**
-- ❌ Simple database queries (use Supabase client)
-- ❌ Static content (use CDN)
-- ❌ Heavy computation (use dedicated services)
+-  Simple database queries (use Supabase client)
+-  Static content (use CDN)
+-  Heavy computation (use dedicated services)
 
 ### Creating Your First Edge Function
 
@@ -784,5 +784,5 @@ Module 7 will teach you AI-native features including vector search, RAG pipeline
 
 ---
 
-**Module 6 Complete** ✓  
+**Module 6 Complete**   
 **Next:** Module 7 - AI-Native Features (Vector & RAG)

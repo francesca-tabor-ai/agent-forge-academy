@@ -6,7 +6,7 @@ order: 0
 
 # Mastering the Agentic Economy
 
-## 📚 Course Overview
+##  Course Overview
 
 **Duration:** 7 weeks (8 total with capstone)  
 **Level:** Intermediate to Advanced  
@@ -15,21 +15,21 @@ order: 0
 
 ---
 
-## 🎯 What You'll Master
+##  What You'll Master
 
 By completing this course, you will be able to:
 
-✅ Understand the fundamental shift from human-led to agent-led commerce  
-✅ Build trust strategies for AI-mediated transactions  
-✅ Implement Agentic Commerce Protocol (ACP) and secure payment rails  
-✅ Optimize for Answer Engine Optimization (AEO) and measure RSOV  
-✅ Design AI-first organizational structures and measure Return on Integrity  
-✅ Navigate the legal landscape of autonomous agency  
-✅ Audit for algorithmic bias using the ACES framework
+ Understand the fundamental shift from human-led to agent-led commerce  
+ Build trust strategies for AI-mediated transactions  
+ Implement Agentic Commerce Protocol (ACP) and secure payment rails  
+ Optimize for Answer Engine Optimization (AEO) and measure RSOV  
+ Design AI-first organizational structures and measure Return on Integrity  
+ Navigate the legal landscape of autonomous agency  
+ Audit for algorithmic bias using the ACES framework
 
 ---
 
-## 📋 Course Modules
+##  Course Modules
 
 ### [Module 1: The Disruption of the Digital Funnel](Module_01_The_Disruption_of_the_Digital_Funnel.md)
 - **Lesson 1.1:** The Rise of the Invisible Marketplace. Analyze how commerce is shifting into a fluid loop where AI agents discover, evaluate, and purchase products on behalf of users.
@@ -75,7 +75,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 🛠️ Key Concepts & Technologies
+##  Key Concepts & Technologies
 
 ### Commerce Protocols
 - Agentic Commerce Protocol (ACP)
@@ -110,7 +110,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 📊 Course Statistics
+##  Course Statistics
 
 **Market Opportunity:**
 - $2.6T projected agent-mediated commerce by 2030
@@ -125,7 +125,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 🎓 Assessment Structure
+##  Assessment Structure
 
 - **Labs (40%):** 7 hands-on assignments
 - **Midterm Project (25%):** Agentic commerce strategy
@@ -136,7 +136,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 💼 Career Outcomes
+##  Career Outcomes
 
 ### Roles & Salaries
 - Agentic Commerce Strategist: $130K-$220K
@@ -145,17 +145,17 @@ By completing this course, you will be able to:
 - Chief AI Officer (CAO): $200K-$400K+
 
 ### Skills Acquired
-✅ Understanding of agentic commerce ecosystem  
-✅ Trust-building strategies for AI transactions  
-✅ Technical protocol implementation  
-✅ AEO and RSOV optimization  
-✅ AI-first organizational design  
-✅ Governance and compliance frameworks  
-✅ Bias auditing and mitigation
+ Understanding of agentic commerce ecosystem  
+ Trust-building strategies for AI transactions  
+ Technical protocol implementation  
+ AEO and RSOV optimization  
+ AI-first organizational design  
+ Governance and compliance frameworks  
+ Bias auditing and mitigation
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites Checklist
 - [ ] Understanding of e-commerce fundamentals
@@ -174,7 +174,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 📚 Additional Resources
+##  Additional Resources
 
 ### Documentation
 - [Agentic Commerce Protocol (ACP)](https://example.com/acp)
@@ -190,7 +190,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 📝 Course Materials
+##  Course Materials
 
 Each module includes:
 - Detailed lessons with case studies
@@ -201,7 +201,7 @@ Each module includes:
 
 ---
 
-## 🌟 Success Stories
+##  Success Stories
 
 > "From traditional e-commerce to agentic commerce strategist. My capstone became our company's 3-year roadmap."  
 > **— Sarah Chen, E-Commerce Director**
@@ -214,7 +214,7 @@ Each module includes:
 
 ---
 
-## 📞 Contact & Enrollment
+##  Contact & Enrollment
 
 **Email:** agentic-commerce-course@example.com  
 **Website:** [Course website]  
@@ -226,7 +226,7 @@ Each module includes:
 
 ---
 
-## 📄 License
+##  License
 
 This course material is proprietary. All rights reserved.
 
@@ -234,11 +234,11 @@ This course material is proprietary. All rights reserved.
 
 ---
 
-## 🗺️ Course Navigation
+##  Course Navigation
 
 - [Start with Module 1 →](Module_01_The_Disruption_of_the_Digital_Funnel.md)
 - [Course Overview →](_COURSE_OVERVIEW.md)
 
 ---
 
-**Ready to master the agentic economy? Let's begin! 🚀**
+**Ready to master the agentic economy? Let's begin! **

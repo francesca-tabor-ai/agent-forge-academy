@@ -4,9 +4,9 @@ description: "Get started with the Conversational Commerce Intelligence course i
 order: 0
 ---
 
-# 🎓 Mastering the NexusIQ Commerce Ecosystem - Quick Start Guide
+#  Mastering the NexusIQ Commerce Ecosystem - Quick Start Guide
 
-## 📍 You Are Here
+##  You Are Here
 
 This folder contains a **complete professional course** on building and deploying Conversational Commerce Intelligence Systems (CCIS) using the NexusIQ platform.
 
@@ -16,7 +16,7 @@ This folder contains a **complete professional course** on building and deployin
 
 ---
 
-## 🚀 What's Inside
+##  What's Inside
 
 ### 10 Markdown Files
 
@@ -31,21 +31,21 @@ This folder contains a **complete professional course** on building and deployin
 
 ---
 
-## 🎯 Three Ways to Use This Course
+##  Three Ways to Use This Course
 
-### 1️⃣ Self-Paced Learning
+###  Self-Paced Learning
 - Follow modules in order
 - Complete labs independently
 - Build portfolio projects
 - **Time:** 6-8 hours/week for 7 weeks
 
-### 2️⃣ Team Training
+###  Team Training
 - Use as corporate training curriculum
 - Adapt labs to company use cases
 - Run cohorts with deadlines
 - **Time:** Customize to team needs
 
-### 3️⃣ Reference Material
+###  Reference Material
 - Jump to relevant modules
 - Use code examples
 - Implement patterns
@@ -53,7 +53,7 @@ This folder contains a **complete professional course** on building and deployin
 
 ---
 
-## 📚 Module Overview (What You'll Learn)
+##  Module Overview (What You'll Learn)
 
 | Week | Module | Core Skills |
 |------|--------|-------------|
@@ -67,35 +67,35 @@ This folder contains a **complete professional course** on building and deployin
 
 ---
 
-## 💻 Technology You'll Master
+##  Technology You'll Master
 
 ### Core Platforms
-✅ NexusIQ Commerce Ecosystem  
-✅ RAG (Retrieval-Augmented Generation)  
-✅ Knowledge Graph Architecture  
-✅ Multi-channel Integration (Amazon, WhatsApp, Web)
+ NexusIQ Commerce Ecosystem  
+ RAG (Retrieval-Augmented Generation)  
+ Knowledge Graph Architecture  
+ Multi-channel Integration (Amazon, WhatsApp, Web)
 
 ### Data Systems
-✅ PIM (Product Information Management)  
-✅ DAM (Digital Asset Management)  
-✅ CMS (Content Management Systems)  
-✅ Unified Knowledge Base
+ PIM (Product Information Management)  
+ DAM (Digital Asset Management)  
+ CMS (Content Management Systems)  
+ Unified Knowledge Base
 
 ### AI & ML
-✅ LLM Integration & Prompting  
-✅ Intent Recognition & Classification  
-✅ Context Management  
-✅ Multimodal AI (Text, Voice, Image)
+ LLM Integration & Prompting  
+ Intent Recognition & Classification  
+ Context Management  
+ Multimodal AI (Text, Voice, Image)
 
 ### Compliance & Security
-✅ FDA/FALCPA Regulatory Compliance  
-✅ GDPR/CCPA Privacy Standards  
-✅ Human-in-the-Loop Workflows  
-✅ Content Validation Systems
+ FDA/FALCPA Regulatory Compliance  
+ GDPR/CCPA Privacy Standards  
+ Human-in-the-Loop Workflows  
+ Content Validation Systems
 
 ---
 
-## 🎯 Learning Outcomes
+##  Learning Outcomes
 
 By completing this course, you will:
 
@@ -121,7 +121,7 @@ By completing this course, you will:
 
 ---
 
-## 💼 Career Impact
+##  Career Impact
 
 ### Market Opportunity
 - **71%** of online shoppers expect real-time communication
@@ -138,13 +138,13 @@ Companies implementing CCIS achieve:
 
 ---
 
-## 📋 Prerequisites
+##  Prerequisites
 
 **Required:**
-- ✅ Understanding of e-commerce systems
-- ✅ Basic knowledge of AI/ML concepts
-- ✅ Familiarity with APIs and data integration
-- ✅ Understanding of customer experience principles
+-  Understanding of e-commerce systems
+-  Basic knowledge of AI/ML concepts
+-  Familiarity with APIs and data integration
+-  Understanding of customer experience principles
 
 **Helpful (Not Required):**
 - Experience with PIM/DAM/CMS systems
@@ -160,7 +160,7 @@ Companies implementing CCIS achieve:
 
 ---
 
-## 🚦 Getting Started (3 Steps)
+##  Getting Started (3 Steps)
 
 ### Step 1: Review Materials (30 min)
 1. Read **README.md** (10 min)
@@ -182,7 +182,7 @@ Companies implementing CCIS achieve:
 
 ---
 
-## 📊 Assessment Structure
+##  Assessment Structure
 
 **Total:** 100 points
 
@@ -196,7 +196,7 @@ Companies implementing CCIS achieve:
 
 ---
 
-## 📅 Time Commitment
+##  Time Commitment
 
 ### Per Week (Weeks 1-7)
 - Lectures: 2-3 hours
@@ -209,20 +209,20 @@ Companies implementing CCIS achieve:
 
 ---
 
-## 🎓 What You Get
+##  What You Get
 
 Upon completion:
 
-✅ **Skills:** Production-ready CCIS implementation  
-✅ **Certificate:** Digital credential (LinkedIn-shareable)  
-✅ **Portfolio:** Capstone project (GitHub showcase)  
-✅ **Network:** Alumni community  
-✅ **Knowledge:** Comprehensive content  
-✅ **Career:** Enhanced e-commerce AI expertise
+ **Skills:** Production-ready CCIS implementation  
+ **Certificate:** Digital credential (LinkedIn-shareable)  
+ **Portfolio:** Capstone project (GitHub showcase)  
+ **Network:** Alumni community  
+ **Knowledge:** Comprehensive content  
+ **Career:** Enhanced e-commerce AI expertise
 
 ---
 
-## 🔗 Navigation
+##  Navigation
 
 **Start Learning:**
 - [README.md](README.md) - Course home
@@ -231,27 +231,27 @@ Upon completion:
 
 ---
 
-## 💡 Success Tips
+##  Success Tips
 
 ### Do This:
-✅ Follow modules in order  
-✅ Complete ALL labs  
-✅ Use office hours  
-✅ Join study groups  
-✅ Document everything  
-✅ Test with real scenarios
+ Follow modules in order  
+ Complete ALL labs  
+ Use office hours  
+ Join study groups  
+ Document everything  
+ Test with real scenarios
 
 ### Avoid This:
-❌ Skipping prerequisites  
-❌ Rushing through labs  
-❌ Ignoring compliance module  
-❌ Waiting until last minute  
-❌ Working in isolation  
-❌ Not asking questions
+ Skipping prerequisites  
+ Rushing through labs  
+ Ignoring compliance module  
+ Waiting until last minute  
+ Working in isolation  
+ Not asking questions
 
 ---
 
-## 🌟 Success Stories
+##  Success Stories
 
 > **"Transformed our customer support from reactive to proactive. 40% reduction in support tickets."**  
 > — E-commerce Director
@@ -264,17 +264,17 @@ Upon completion:
 
 ---
 
-## 📞 Support
+##  Support
 
 **Have Questions?**
-- 📧 Email: ccis-course@example.com
-- 💬 Discord: Provided upon enrollment
-- 🕐 Office Hours: Tue/Thu 6-7 PM EST
-- 📚 Documentation: README.md and INDEX.md
+-  Email: ccis-course@example.com
+-  Discord: Provided upon enrollment
+-  Office Hours: Tue/Thu 6-7 PM EST
+-  Documentation: README.md and INDEX.md
 
 ---
 
-## 🎯 Your Next Action
+##  Your Next Action
 
 **Choose your path:**
 
@@ -298,19 +298,19 @@ Upon completion:
 
 ---
 
-## ⏰ Time to Start?
+##  Time to Start?
 
 **If you're ready:**  
-👉 **[Open README.md →](README.md)**
+ **[Open README.md →](README.md)**
 
 **Need more info?**  
-👉 **[View INDEX.md →](INDEX.md)**
+ **[View INDEX.md →](INDEX.md)**
 
 ---
 
 **The future of commerce is conversational. The time to learn is now.**
 
-**Let's build something amazing! 🚀**
+**Let's build something amazing! **
 
 ---
 

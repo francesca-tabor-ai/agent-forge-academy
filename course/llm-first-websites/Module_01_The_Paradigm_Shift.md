@@ -52,16 +52,16 @@ When an AI intermediary like ChatGPT or Amazon Rufus answers a user's question:
 ### The Interface Has Disappeared
 
 Traditional metrics become meaningless:
-- ❌ **Page views** - Users may never visit
-- ❌ **Click-through rates** - No clicks to measure
-- ❌ **Time on site** - No site to visit
-- ❌ **Bounce rates** - No pages to bounce from
+-  **Page views** - Users may never visit
+-  **Click-through rates** - No clicks to measure
+-  **Time on site** - No site to visit
+-  **Bounce rates** - No pages to bounce from
 
 New metrics matter:
-- ✅ **Presence** - Is your brand retrieved?
-- ✅ **Citation** - Are you cited as authority or example?
-- ✅ **Influence** - Does your information shape the outcome?
-- ✅ **Judgment participation** - Are you part of the AI's reasoning?
+-  **Presence** - Is your brand retrieved?
+-  **Citation** - Are you cited as authority or example?
+-  **Influence** - Does your information shape the outcome?
+-  **Judgment participation** - Are you part of the AI's reasoning?
 
 ### Real-World Examples
 
@@ -438,5 +438,5 @@ Serving the area for 20 years. 5-star rated!</p>
 
 ---
 
-**Module 1 Complete** ✅  
+**Module 1 Complete**   
 **Ready for Module 2?** → [Knowledge as Infrastructure](Module_02_Knowledge_as_Infrastructure.md)

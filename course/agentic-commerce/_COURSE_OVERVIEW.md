@@ -4,9 +4,9 @@ description: "Get started with the Agentic Commerce course in minutes"
 order: 0
 ---
 
-# 🎓 Mastering the Agentic Economy - Quick Start Guide
+#  Mastering the Agentic Economy - Quick Start Guide
 
-## 📍 You Are Here
+##  You Are Here
 
 This folder contains a **complete professional course** on understanding and mastering the agentic economy—where AI agents discover, evaluate, and purchase products on behalf of users.
 
@@ -16,7 +16,7 @@ This folder contains a **complete professional course** on understanding and mas
 
 ---
 
-## 🚀 What's Inside
+##  What's Inside
 
 ### 9 Markdown Files
 
@@ -30,21 +30,21 @@ This folder contains a **complete professional course** on understanding and mas
 
 ---
 
-## 🎯 Three Ways to Use This Course
+##  Three Ways to Use This Course
 
-### 1️⃣ Self-Paced Learning
+###  Self-Paced Learning
 - Follow modules in order
 - Complete labs independently
 - Build portfolio projects
 - **Time:** 6-8 hours/week for 7 weeks
 
-### 2️⃣ Team Training
+###  Team Training
 - Use as corporate training curriculum
 - Adapt labs to company use cases
 - Run cohorts with deadlines
 - **Time:** Customize to team needs
 
-### 3️⃣ Reference Material
+###  Reference Material
 - Jump to relevant modules
 - Use frameworks and strategies
 - Implement protocols
@@ -52,7 +52,7 @@ This folder contains a **complete professional course** on understanding and mas
 
 ---
 
-## 📚 Module Overview (What You'll Learn)
+##  Module Overview (What You'll Learn)
 
 | Week | Module | Core Skills |
 |------|--------|-------------|
@@ -66,42 +66,42 @@ This folder contains a **complete professional course** on understanding and mas
 
 ---
 
-## 💻 Technology & Concepts You'll Master
+##  Technology & Concepts You'll Master
 
 ### Commerce Protocols
-✅ Agentic Commerce Protocol (ACP)  
-✅ Decentralized Identifiers (DIDs)  
-✅ Verifiable Credentials (VCs)  
-✅ Shared Payment Token (SPT)  
-✅ Agent Payments Protocol (AP2)
+ Agentic Commerce Protocol (ACP)  
+ Decentralized Identifiers (DIDs)  
+ Verifiable Credentials (VCs)  
+ Shared Payment Token (SPT)  
+ Agent Payments Protocol (AP2)
 
 ### Marketing & Optimization
-✅ Retrieval-Share of Voice (RSOV)  
-✅ Answer Engine Optimization (AEO)  
-✅ Schema.org structured data  
-✅ Machine-readable authority  
-✅ Brand omission risk analysis
+ Retrieval-Share of Voice (RSOV)  
+ Answer Engine Optimization (AEO)  
+ Schema.org structured data  
+ Machine-readable authority  
+ Brand omission risk analysis
 
 ### Organizational & Measurement
-✅ Chief AI Officer (CAO) role definition  
-✅ Synthetic consumer panels  
-✅ Return on Integrity (ROI) metrics  
-✅ Reasoning Design teams
+ Chief AI Officer (CAO) role definition  
+ Synthetic consumer panels  
+ Return on Integrity (ROI) metrics  
+ Reasoning Design teams
 
 ### Governance & Compliance
-✅ Know Your Agent (KYA) protocols  
-✅ Tort law & AI liability  
-✅ EU AI Act compliance  
-✅ HIPAA & financial compliance
+ Know Your Agent (KYA) protocols  
+ Tort law & AI liability  
+ EU AI Act compliance  
+ HIPAA & financial compliance
 
 ### Auditing & Bias Detection
-✅ ACES Framework (Agentic e-CommercE Simulator)  
-✅ Position & ranking bias analysis  
-✅ Model shock response strategies
+ ACES Framework (Agentic e-CommercE Simulator)  
+ Position & ranking bias analysis  
+ Model shock response strategies
 
 ---
 
-## 🎯 Learning Outcomes
+##  Learning Outcomes
 
 By completing this course, you will:
 
@@ -137,7 +137,7 @@ By completing this course, you will:
 
 ---
 
-## 💼 Career Impact
+##  Career Impact
 
 ### Market Opportunity
 - **$2.6T** projected agent-mediated commerce by 2030
@@ -159,13 +159,13 @@ Companies implementing agentic commerce achieve:
 
 ---
 
-## 📋 Prerequisites
+##  Prerequisites
 
 **Required:**
-- ✅ Understanding of e-commerce fundamentals
-- ✅ Basic knowledge of AI/ML concepts
-- ✅ Familiarity with marketing principles
-- ✅ Interest in emerging technologies
+-  Understanding of e-commerce fundamentals
+-  Basic knowledge of AI/ML concepts
+-  Familiarity with marketing principles
+-  Interest in emerging technologies
 
 **Helpful (Not Required):**
 - Technical background (APIs, protocols)
@@ -181,7 +181,7 @@ Companies implementing agentic commerce achieve:
 
 ---
 
-## 🚦 Getting Started (3 Steps)
+##  Getting Started (3 Steps)
 
 ### Step 1: Review Materials (30 min)
 1. Read **README.md** (10 min)
@@ -203,7 +203,7 @@ Companies implementing agentic commerce achieve:
 
 ---
 
-## 📊 Assessment Structure
+##  Assessment Structure
 
 **Total:** 100 points
 
@@ -217,7 +217,7 @@ Companies implementing agentic commerce achieve:
 
 ---
 
-## 📅 Time Commitment
+##  Time Commitment
 
 ### Per Week (Weeks 1-7)
 - Lectures: 2-3 hours
@@ -234,20 +234,20 @@ Companies implementing agentic commerce achieve:
 
 ---
 
-## 🎓 What You Get
+##  What You Get
 
 Upon completion:
 
-✅ **Skills:** Mastery of agentic commerce ecosystem  
-✅ **Certificate:** Digital credential (LinkedIn-shareable)  
-✅ **Portfolio:** Capstone project (implementation plan)  
-✅ **Network:** Alumni community  
-✅ **Knowledge:** Comprehensive agentic economy expertise  
-✅ **Career:** $20K-50K salary increase potential
+ **Skills:** Mastery of agentic commerce ecosystem  
+ **Certificate:** Digital credential (LinkedIn-shareable)  
+ **Portfolio:** Capstone project (implementation plan)  
+ **Network:** Alumni community  
+ **Knowledge:** Comprehensive agentic economy expertise  
+ **Career:** $20K-50K salary increase potential
 
 ---
 
-## 🔗 Navigation
+##  Navigation
 
 **Start Learning:**
 - [README.md](README.md) - Course home
@@ -255,27 +255,27 @@ Upon completion:
 
 ---
 
-## 💡 Success Tips
+##  Success Tips
 
 ### Do This:
-✅ Follow modules in order  
-✅ Complete ALL labs  
-✅ Use office hours  
-✅ Join study groups  
-✅ Start capstone early  
-✅ Document everything
+ Follow modules in order  
+ Complete ALL labs  
+ Use office hours  
+ Join study groups  
+ Start capstone early  
+ Document everything
 
 ### Avoid This:
-❌ Skipping prerequisites  
-❌ Rushing through labs  
-❌ Ignoring trust module  
-❌ Waiting until last minute  
-❌ Working in isolation  
-❌ Not asking questions
+ Skipping prerequisites  
+ Rushing through labs  
+ Ignoring trust module  
+ Waiting until last minute  
+ Working in isolation  
+ Not asking questions
 
 ---
 
-## 🌟 Success Stories
+##  Success Stories
 
 > **"From traditional e-commerce to agentic commerce strategist. My capstone became our company's 3-year roadmap."**  
 > — Sarah Chen, E-Commerce Director
@@ -288,17 +288,17 @@ Upon completion:
 
 ---
 
-## 📞 Support
+##  Support
 
 **Have Questions?**
-- 📧 Email: agentic-commerce-course@example.com
-- 💬 Discord: Provided upon enrollment
-- 🕐 Office Hours: Tue/Thu 6-7 PM EST
-- 📚 Documentation: README.md
+-  Email: agentic-commerce-course@example.com
+-  Discord: Provided upon enrollment
+-  Office Hours: Tue/Thu 6-7 PM EST
+-  Documentation: README.md
 
 ---
 
-## 🎯 Your Next Action
+##  Your Next Action
 
 **Choose your path:**
 
@@ -322,16 +322,16 @@ Upon completion:
 
 ---
 
-## ⏰ Time to Start?
+##  Time to Start?
 
 **If you're ready:**  
-👉 **[Open README.md →](README.md)**
+ **[Open README.md →](README.md)**
 
 ---
 
 **The future of commerce is agentic. The time to learn is now.**
 
-**Let's build something amazing! 🚀**
+**Let's build something amazing! **
 
 ---
 

@@ -24,11 +24,11 @@ order: 3
 **Local-First Development** means running Supabase on your machine using Docker, rather than connecting to a cloud instance during development.
 
 **Benefits:**
-- ✅ **Fast:** No network latency
-- ✅ **Free:** No cloud costs during development
-- ✅ **Isolated:** Won't affect production data
-- ✅ **Offline:** Works without internet
-- ✅ **Version Control:** Database state in migrations
+-  **Fast:** No network latency
+-  **Free:** No cloud costs during development
+-  **Isolated:** Won't affect production data
+-  **Offline:** Works without internet
+-  **Version Control:** Database state in migrations
 
 ### Setting Up Local Supabase
 
@@ -172,13 +172,13 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 ### Migration Philosophy
 
-**❌ Bad: Manual Changes**
+** Bad: Manual Changes**
 - Making changes in Supabase Studio
 - No version control
 - Can't reproduce
 - Hard to rollback
 
-**✅ Good: Migration Files**
+** Good: Migration Files**
 - All changes in SQL files
 - Version controlled
 - Reproducible
@@ -245,7 +245,7 @@ Prompt: "Create a migration for a tasks table with:
 
 #### 1. One Logical Change Per Migration
 
-**❌ Bad:**
+** Bad:**
 ```sql
 -- Too many changes
 CREATE TABLE users (...);
@@ -254,7 +254,7 @@ CREATE TABLE comments (...);
 ALTER TABLE users ADD COLUMN avatar_url TEXT;
 ```
 
-**✅ Good:**
+** Good:**
 ```sql
 -- Migration 1: create_users_table.sql
 CREATE TABLE users (...);
@@ -400,16 +400,16 @@ FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE;
 ### Why Use MCP?
 
 Without MCP:
-- ❌ AI doesn't know your schema
-- ❌ Generates incorrect queries
-- ❌ Suggests non-existent columns
-- ❌ Can't understand relationships
+-  AI doesn't know your schema
+-  Generates incorrect queries
+-  Suggests non-existent columns
+-  Can't understand relationships
 
 With MCP:
-- ✅ AI knows your exact schema
-- ✅ Generates correct queries
-- ✅ Suggests real columns and tables
-- ✅ Understands relationships
+-  AI knows your exact schema
+-  Generates correct queries
+-  Suggests real columns and tables
+-  Understands relationships
 
 ### Setting Up MCP with Supabase
 
@@ -637,9 +637,9 @@ ALTER TABLE comments ENABLE ROW LEVEL SECURITY;
 #### 1. Normalization
 
 Avoid data duplication:
-- ✅ Store user_id, not user name/email in every table
-- ✅ Create separate tables for related data
-- ✅ Use foreign keys for relationships
+-  Store user_id, not user name/email in every table
+-  Create separate tables for related data
+-  Use foreign keys for relationships
 
 #### 2. Naming Conventions
 
@@ -657,13 +657,13 @@ Always include:
 #### 4. UUIDs vs Auto-Increment
 
 Use UUIDs for:
-- ✅ Distributed systems
-- ✅ Security (harder to guess)
-- ✅ Client-side generation
+-  Distributed systems
+-  Security (harder to guess)
+-  Client-side generation
 
 Use auto-increment for:
-- ✅ Simple apps
-- ✅ Performance-critical (slightly faster)
+-  Simple apps
+-  Performance-critical (slightly faster)
 
 #### 5. Soft Deletes
 
@@ -781,5 +781,5 @@ Module 4 will teach you authentication and identity primitives, including passwo
 
 ---
 
-**Module 3 Complete** ✓  
+**Module 3 Complete**   
 **Next:** Module 4 - Authentication & Identity Primitives

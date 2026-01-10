@@ -1063,5 +1063,5 @@ Module 4 will explore catalog intelligence and metadata enrichment, including at
 
 ---
 
-**Module 3 Complete** ✓  
+**Module 3 Complete**   
 **Next:** Module 4 - Catalog Intelligence and Metadata Enrichment

@@ -293,18 +293,18 @@ The EU AI Act uses a **risk-based approach**, meaning that regulatory requiremen
 ### The Risk Pyramid
 
 ```
-        ┌─────────────────────┐
-        │   UNACCEPTABLE      │  ← Prohibited
-        │      RISK           │
-        ├─────────────────────┤
-        │    HIGH RISK        │  ← Strictly Regulated
-        │                     │
-        ├─────────────────────┤
-        │   LIMITED RISK      │  ← Transparency Focused
-        │                     │
-        ├─────────────────────┤
-        │   MINIMAL RISK      │  ← No Specific Requirements
-        └─────────────────────┘
+        
+           UNACCEPTABLE        ← Prohibited
+              RISK           
+        
+            HIGH RISK          ← Strictly Regulated
+                             
+        
+           LIMITED RISK        ← Transparency Focused
+                             
+        
+           MINIMAL RISK        ← No Specific Requirements
+        
 ```
 
 ### Tier 1: Unacceptable Risk (Prohibited)
@@ -503,20 +503,20 @@ The EU AI Act uses a **risk-based approach**, meaning that regulatory requiremen
 
 ```
 Start
-  │
-  ├─ Is it a prohibited practice?
-  │   ├─ YES → PROHIBITED (Cannot deploy)
-  │   └─ NO → Continue
-  │
-  ├─ Is it in a high-risk domain?
-  │   ├─ YES → HIGH-RISK (Strict compliance required)
-  │   └─ NO → Continue
-  │
-  ├─ Does it interact with users or generate synthetic content?
-  │   ├─ YES → LIMITED RISK (Transparency required)
-  │   └─ NO → Continue
-  │
-  └─ MINIMAL RISK (No specific requirements)
+  
+   Is it a prohibited practice?
+      YES → PROHIBITED (Cannot deploy)
+      NO → Continue
+  
+   Is it in a high-risk domain?
+      YES → HIGH-RISK (Strict compliance required)
+      NO → Continue
+  
+   Does it interact with users or generate synthetic content?
+      YES → LIMITED RISK (Transparency required)
+      NO → Continue
+  
+   MINIMAL RISK (No specific requirements)
 ```
 
 ---
@@ -654,10 +654,10 @@ For one HIGH-RISK scenario:
 
 In this module, you've learned:
 
-✅ **AI System Definitions:** Understanding the distinction between specific-use AI and GPAI  
-✅ **Life Cycle Phases:** The five phases from ideation to continuous operation  
-✅ **Risk-Based Approach:** The four-tier classification system  
-✅ **Practical Application:** How to classify real-world content pipeline scenarios
+ **AI System Definitions:** Understanding the distinction between specific-use AI and GPAI  
+ **Life Cycle Phases:** The five phases from ideation to continuous operation  
+ **Risk-Based Approach:** The four-tier classification system  
+ **Practical Application:** How to classify real-world content pipeline scenarios
 
 **Next Steps:**
 - Complete Lab 1
@@ -667,4 +667,4 @@ In this module, you've learned:
 ---
 
 **Ready for Module 2?**  
-👉 **[Module 2: Scoping, Ideation, and Prohibited Practices →](Module_02_Scoping_Ideation_and_Prohibited_Practices.md)**
+ **[Module 2: Scoping, Ideation, and Prohibited Practices →](Module_02_Scoping_Ideation_and_Prohibited_Practices.md)**

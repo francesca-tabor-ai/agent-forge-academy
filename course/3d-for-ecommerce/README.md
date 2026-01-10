@@ -6,7 +6,7 @@ order: 0
 
 # Mastering 3D Commerce and Cinematic Capitalism
 
-## 📚 Course Overview
+##  Course Overview
 
 **Duration:** 6 weeks (8 total with capstone)  
 **Level:** Intermediate to Advanced  
@@ -15,21 +15,21 @@ order: 0
 
 ---
 
-## 🎯 What You'll Master
+##  What You'll Master
 
 By completing this course, you will be able to:
 
-✅ Build full-stack 3D commerce platforms using MERN stack  
-✅ Implement 3D rendering pipelines with Three.js and React Three Fiber  
-✅ Optimize 3D assets using glTF/GLB standards and compression  
-✅ Integrate with Amazon's Selling Partner API for 3D ASIN management  
-✅ Deploy video shopping infrastructure with AI-powered personalization  
-✅ Generate virtual influencers and UGC using Ready Player Me API  
-✅ Scale to enterprise requirements with security and compliance
+ Build full-stack 3D commerce platforms using MERN stack  
+ Implement 3D rendering pipelines with Three.js and React Three Fiber  
+ Optimize 3D assets using glTF/GLB standards and compression  
+ Integrate with Amazon's Selling Partner API for 3D ASIN management  
+ Deploy video shopping infrastructure with AI-powered personalization  
+ Generate virtual influencers and UGC using Ready Player Me API  
+ Scale to enterprise requirements with security and compliance
 
 ---
 
-## 📋 Course Modules
+##  Course Modules
 
 ### [Module 1: The Shift to Immersive Commerce](Module_01_The_Shift_to_Immersive_Commerce.md)
 - The End of 2D: Understanding why traditional photography is expensive, slow, and lacks flexibility
@@ -74,7 +74,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 🛠️ Technology Stack
+##  Technology Stack
 
 ### Frontend & 3D Rendering
 - React & React Three Fiber
@@ -108,7 +108,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 📊 Course Statistics
+##  Course Statistics
 
 **Market Opportunity:**
 - 9.7 million Amazon sellers needing 3D enablement
@@ -125,7 +125,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 🎓 Assessment Structure
+##  Assessment Structure
 
 - **Labs (40%):** 6 hands-on assignments
 - **Midterm Project (25%):** 3D commerce MVP
@@ -136,7 +136,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 💼 Career Outcomes
+##  Career Outcomes
 
 ### Roles & Salaries
 - 3D Commerce Engineer: $120K-$200K
@@ -145,16 +145,16 @@ By completing this course, you will be able to:
 - Immersive Commerce Specialist: $130K-$210K
 
 ### Skills Acquired
-✅ Full-stack 3D commerce development  
-✅ 3D asset optimization and pipeline management  
-✅ Amazon ecosystem integration  
-✅ Video shopping infrastructure  
-✅ AI-powered personalization  
-✅ Enterprise security and compliance
+ Full-stack 3D commerce development  
+ 3D asset optimization and pipeline management  
+ Amazon ecosystem integration  
+ Video shopping infrastructure  
+ AI-powered personalization  
+ Enterprise security and compliance
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites Checklist
 - [ ] Node.js 18+ installed
@@ -173,7 +173,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 📚 Additional Resources
+##  Additional Resources
 
 ### Documentation
 - [Three.js Docs](https://threejs.org/docs/)
@@ -189,7 +189,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 📝 Course Materials
+##  Course Materials
 
 Each module includes:
 - Detailed lessons with code examples
@@ -200,7 +200,7 @@ Each module includes:
 
 ---
 
-## 🌟 Success Stories
+##  Success Stories
 
 > "From zero 3D experience to deploying a production 3D commerce platform handling 1,000+ products in 8 weeks."  
 > **— Alex Martinez, Full-Stack Engineer**
@@ -213,7 +213,7 @@ Each module includes:
 
 ---
 
-## 📞 Contact & Enrollment
+##  Contact & Enrollment
 
 **Email:** 3d-commerce-course@example.com  
 **Website:** [Course website]  
@@ -225,7 +225,7 @@ Each module includes:
 
 ---
 
-## 📄 License
+##  License
 
 This course material is proprietary. All rights reserved.
 
@@ -233,7 +233,7 @@ This course material is proprietary. All rights reserved.
 
 ---
 
-## 🗺️ Course Navigation
+##  Course Navigation
 
 - [Start with Module 1 →](Module_01_The_Shift_to_Immersive_Commerce.md)
 - [View Index →](INDEX.md)
@@ -241,4 +241,4 @@ This course material is proprietary. All rights reserved.
 
 ---
 
-**Ready to master 3D commerce and cinematic capitalism? Let's begin! 🚀**
+**Ready to master 3D commerce and cinematic capitalism? Let's begin! **

@@ -44,7 +44,7 @@ Awareness → Interest → Consideration → Intent → Purchase → Loyalty
 ```
 User Intent → AI Agent Discovery → Evaluation → Purchase → Fulfillment
      ↑                                                              ↓
-     └─────────────────── Learning & Optimization ────────────────┘
+      Learning & Optimization 
 ```
 
 **Characteristics:**

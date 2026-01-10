@@ -159,11 +159,11 @@ An entity is a distinct, identifiable "thing" that can be referenced:
 **The GEO Strategy:**
 ```
 Brand Entity
-├── Wikipedia Entry (canonical facts)
-├── Reddit Presence (community validation)
-├── YouTube Channel (video content)
-├── News Coverage (authority signals)
-└── Social Mentions (real-time engagement)
+ Wikipedia Entry (canonical facts)
+ Reddit Presence (community validation)
+ YouTube Channel (video content)
+ News Coverage (authority signals)
+ Social Mentions (real-time engagement)
 ```
 
 ### Entity Relationships
@@ -177,10 +177,10 @@ Brand Entity
 **Example: Fitness Brand**
 ```
 Your Brand (Entity)
-├── Related to: "Home Workouts" (concept)
-├── Used with: "Resistance Bands" (product)
-├── Recommended by: "Fitness Influencers" (people)
-└── Mentioned in: "r/homefitness" (community)
+ Related to: "Home Workouts" (concept)
+ Used with: "Resistance Bands" (product)
+ Recommended by: "Fitness Influencers" (people)
+ Mentioned in: "r/homefitness" (community)
 ```
 
 ---
@@ -371,5 +371,5 @@ Module 2 will teach you how to strategically participate in Reddit communities t
 
 ---
 
-**Module 1 Complete** ✓  
+**Module 1 Complete**   
 **Next:** Module 2 - Strategic Community Participation

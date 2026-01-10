@@ -159,9 +159,9 @@ order: 2
 
 | Data Aspect | Available | Quality | Legal | Ethical | Feasible? |
 |-------------|-----------|---------|-------|---------|-----------|
-| Training Data | ✓ | High | ✓ | ✓ | ✓ |
-| Validation Data | ✓ | Medium | ✓ | ? | ? |
-| Test Data | ✗ | - | - | - | ✗ |
+| Training Data |  | High |  |  |  |
+| Validation Data |  | Medium |  | ? | ? |
+| Test Data |  | - | - | - |  |
 
 **Decision Framework:**
 - **All Green:** Proceed with confidence
@@ -203,10 +203,10 @@ order: 2
 - Any detrimental treatment
 
 **Examples of Prohibited Social Scoring:**
-- ❌ Credit scoring based on social media posts
-- ❌ Employment decisions based on Facebook friends
-- ❌ Insurance pricing based on lifestyle choices
-- ❌ Access to services based on political views
+-  Credit scoring based on social media posts
+-  Employment decisions based on Facebook friends
+-  Insurance pricing based on lifestyle choices
+-  Access to services based on political views
 
 **Content Pipeline Implications:**
 - Cannot generate content that evaluates individuals socially
@@ -229,11 +229,11 @@ order: 2
 - **Harm:** Physical or psychological damage
 
 **Prohibited Manipulation:**
-- ❌ Subliminal advertising
-- ❌ Dark patterns in AI-generated content
-- ❌ Exploiting cognitive biases
-- ❌ Targeting vulnerable populations with manipulative content
-- ❌ Creating addictive content patterns
+-  Subliminal advertising
+-  Dark patterns in AI-generated content
+-  Exploiting cognitive biases
+-  Targeting vulnerable populations with manipulative content
+-  Creating addictive content patterns
 
 **Content Pipeline Implications:**
 - Cannot generate content designed to manipulate users
@@ -253,11 +253,11 @@ order: 2
 **Definition:** Remote biometric identification systems that categorize natural persons based on sensitive attributes.
 
 **Prohibited Categorization:**
-- ❌ Categorization by race, ethnicity, or skin color
-- ❌ Categorization by political views
-- ❌ Categorization by religious beliefs
-- ❌ Categorization by sexual orientation
-- ❌ Categorization by gender identity
+-  Categorization by race, ethnicity, or skin color
+-  Categorization by political views
+-  Categorization by religious beliefs
+-  Categorization by sexual orientation
+-  Categorization by gender identity
 
 **Exceptions:**
 - Medical or safety purposes (with safeguards)
@@ -618,10 +618,10 @@ Choose one scenario and conduct a full compliance assessment:
 
 In this module, you've learned:
 
-✅ **Compliance by Design:** Integrating ethics and compliance into ideation  
-✅ **Prohibited Practices:** Identifying non-negotiable red lines  
-✅ **High-Risk Domains:** Determining if content pipelines fall into regulated domains  
-✅ **Assessment Frameworks:** Practical tools for compliance assessment
+ **Compliance by Design:** Integrating ethics and compliance into ideation  
+ **Prohibited Practices:** Identifying non-negotiable red lines  
+ **High-Risk Domains:** Determining if content pipelines fall into regulated domains  
+ **Assessment Frameworks:** Practical tools for compliance assessment
 
 **Next Steps:**
 - Complete Lab 2
@@ -631,4 +631,4 @@ In this module, you've learned:
 ---
 
 **Ready for Module 3?**  
-👉 **[Module 3: Data Strategy and Pipeline Governance →](Module_03_Data_Strategy_and_Pipeline_Governance.md)**
+ **[Module 3: Data Strategy and Pipeline Governance →](Module_03_Data_Strategy_and_Pipeline_Governance.md)**

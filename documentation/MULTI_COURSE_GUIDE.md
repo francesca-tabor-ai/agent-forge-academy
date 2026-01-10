@@ -18,15 +18,15 @@ Organize courses in subdirectories under the `course/` directory:
 
 ```
 course/
-├── multi-agent-deployment/          # Course 1
-│   ├── Module_01_Foundations.md
-│   ├── Module_02_Frameworks.md
-│   └── ...
-├── ai-fundamentals/                 # Course 2
-│   ├── Introduction.md
-│   ├── Neural_Networks.md
-│   └── ...
-└── [old lessons].md                 # Backward compatible (root level)
+ multi-agent-deployment/          # Course 1
+    Module_01_Foundations.md
+    Module_02_Frameworks.md
+    ...
+ ai-fundamentals/                 # Course 2
+    Introduction.md
+    Neural_Networks.md
+    ...
+ [old lessons].md                 # Backward compatible (root level)
 ```
 
 ### Course Slug

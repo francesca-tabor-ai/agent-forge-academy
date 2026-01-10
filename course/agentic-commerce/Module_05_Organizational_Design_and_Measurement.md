@@ -184,11 +184,11 @@ The **Chief AI Officer (CAO)** is responsible for:
 #### Option 1: Centralized AI Organization
 ```
 CEO
-├── CAO
-    ├── AI Strategy
-    ├── Reasoning Design
-    ├── AI Ethics
-    └── Agent Operations
+ CAO
+     AI Strategy
+     Reasoning Design
+     AI Ethics
+     Agent Operations
 ```
 
 **Pros:**
@@ -205,10 +205,10 @@ CEO
 #### Option 2: Distributed AI Teams
 ```
 CEO
-├── Business Units
-    ├── AI Teams (embedded)
-    └── AI Specialists
-└── CAO (coordination)
+ Business Units
+     AI Teams (embedded)
+     AI Specialists
+ CAO (coordination)
 ```
 
 **Pros:**
@@ -225,12 +225,12 @@ CEO
 #### Option 3: Hybrid Model
 ```
 CEO
-├── CAO
-    ├── Central AI Strategy
-    ├── Reasoning Design (shared)
-    └── AI Ethics (shared)
-└── Business Units
-    └── Embedded AI Teams
+ CAO
+     Central AI Strategy
+     Reasoning Design (shared)
+     AI Ethics (shared)
+ Business Units
+     Embedded AI Teams
 ```
 
 **Pros:**

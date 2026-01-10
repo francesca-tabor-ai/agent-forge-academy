@@ -4,7 +4,7 @@ Complete navigation guide for all course materials.
 
 ---
 
-## 📑 Course Files
+##  Course Files
 
 ### Overview & Getting Started
 - **[README.md](README.md)** - Course home page, full description, prerequisites
@@ -13,7 +13,7 @@ Complete navigation guide for all course materials.
 
 ---
 
-## 📚 Module Navigation
+##  Module Navigation
 
 ### Module 1: Solving the Cold Start Challenge
 **File:** [Module_01_Solving_the_Cold_Start_Challenge.md](Module_01_Solving_the_Cold_Start_Challenge.md)  
@@ -113,7 +113,7 @@ Complete navigation guide for all course materials.
 
 ---
 
-## 🔍 Topic-Based Navigation
+##  Topic-Based Navigation
 
 ### Algorithms
 - **Collaborative Filtering** → Module 2, Lesson 2.2
@@ -151,7 +151,7 @@ Complete navigation guide for all course materials.
 
 ---
 
-## 📖 Learning Paths
+##  Learning Paths
 
 ### Path 1: Complete Course (Recommended)
 1. Module 1 → Module 2 → Module 3 → Module 4 → Module 5 → Module 6 → Module 7
@@ -180,7 +180,7 @@ Complete navigation guide for all course materials.
 
 ---
 
-## 🎯 Quick Reference
+##  Quick Reference
 
 ### By Use Case
 
@@ -201,7 +201,7 @@ Complete navigation guide for all course materials.
 
 ---
 
-## 📝 Lab Navigation
+##  Lab Navigation
 
 - **Lab 1** (Module 1): Cold Start Analysis
 - **Lab 2** (Module 2): Matrix Factorization Implementation
@@ -213,7 +213,7 @@ Complete navigation guide for all course materials.
 
 ---
 
-## 🔗 External Resources
+##  External Resources
 
 ### Research Papers
 - Linked within each module
@@ -234,7 +234,7 @@ Complete navigation guide for all course materials.
 
 ---
 
-## 💡 Tips for Navigation
+##  Tips for Navigation
 
 1. **Start with README.md** - Get the full picture
 2. **Use INDEX.md** - Find topics quickly (this file)
@@ -245,7 +245,7 @@ Complete navigation guide for all course materials.
 
 ---
 
-## 🎓 Next Steps
+##  Next Steps
 
 **New to the course?**
 → Start with [README.md](README.md)
@@ -261,4 +261,4 @@ Complete navigation guide for all course materials.
 
 ---
 
-*Happy learning! 🚀*
+*Happy learning! *

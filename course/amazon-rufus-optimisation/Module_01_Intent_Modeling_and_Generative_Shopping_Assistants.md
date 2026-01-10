@@ -286,10 +286,10 @@ User Query
 [Query Understanding Layer]
     ↓
 [Knowledge Retrieval Layer]
-    ├→ Product Listings Database
-    ├→ Customer Reviews
-    ├→ Q&A Database
-    └→ Product Specifications
+    → Product Listings Database
+    → Customer Reviews
+    → Q&A Database
+    → Product Specifications
     ↓
 [LLM Generation Layer]
     ↓
@@ -891,5 +891,5 @@ Module 2 will explore multimodal search and visual discovery, including "shop th
 
 ---
 
-**Module 1 Complete** ✓  
+**Module 1 Complete**   
 **Next:** Module 2 - Multimodal Search and Visual Discovery

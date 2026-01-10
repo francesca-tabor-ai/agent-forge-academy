@@ -825,5 +825,5 @@ Build a session-based recommendation system for anonymous users.
 
 ---
 
-**Module 4 Complete** ✅  
+**Module 4 Complete**   
 *Ready for Module 5: Hybrid Architectures & Multi-Modal Fusion*

@@ -6,13 +6,13 @@ order: 0
 
 # Engineering for Machine Judgment (RX) - Complete Index
 
-## 📚 Course Materials Overview
+##  Course Materials Overview
 
 This directory contains all course materials for **Engineering for Machine Judgment (RX)**.
 
 ---
 
-## 🗂️ File Structure
+##  File Structure
 
 ### Core Course Files
 1. **[README.md](README.md)** - Main course overview, start here
@@ -53,7 +53,7 @@ This directory contains all course materials for **Engineering for Machine Judgm
 
 ---
 
-## 🎯 Quick Navigation
+##  Quick Navigation
 
 ### By Learning Goal
 
@@ -77,35 +77,35 @@ This directory contains all course materials for **Engineering for Machine Judgm
 
 ---
 
-## 📋 Learning Path by Role
+##  Learning Path by Role
 
 ### For Web Developers
-1. Module 1 (Paradigm Shift) ⭐
-2. Module 3 (APIs) ⭐
+1. Module 1 (Paradigm Shift) 
+2. Module 3 (APIs) 
 3. Module 4 (Safety)
 4. Module 5 (Observability)
 
 ### For Product Managers
-1. Module 1 (Paradigm Shift) ⭐
-2. Module 5 (Observability) ⭐
-3. Module 6 (Governance) ⭐
+1. Module 1 (Paradigm Shift) 
+2. Module 5 (Observability) 
+3. Module 6 (Governance) 
 4. Module 2 (Knowledge)
 
 ### For Data Architects
-1. Module 2 (Knowledge) ⭐
+1. Module 2 (Knowledge) 
 2. Module 3 (APIs)
 3. Module 5 (Observability)
-4. Module 6 (Governance) ⭐
+4. Module 6 (Governance) 
 
 ### For UX/Designers
-1. Module 1 (Paradigm Shift) ⭐
+1. Module 1 (Paradigm Shift) 
 2. Module 3 (Legibility)
 3. Module 4 (Safety)
 4. Module 5 (Observability)
 
 ---
 
-## 🔧 Technology Reference
+##  Technology Reference
 
 ### Core Concepts Covered
 - **Reasoning Experience (RX)** - Machine-first design (Modules 1, 3, 5)
@@ -131,7 +131,7 @@ This directory contains all course materials for **Engineering for Machine Judgm
 
 ---
 
-## 📊 Exercise Overview
+##  Exercise Overview
 
 | Exercise | Module | Topic | Duration |
 |----------|--------|-------|----------|
@@ -158,7 +158,7 @@ This directory contains all course materials for **Engineering for Machine Judgm
 
 ---
 
-## 🎓 Assessment Guide
+##  Assessment Guide
 
 ### Grade Breakdown
 - **Exercises (40%):** 18 exercises × 2-3% each
@@ -177,7 +177,7 @@ This directory contains all course materials for **Engineering for Machine Judgm
 
 ---
 
-## 📚 Additional Resources
+##  Additional Resources
 
 ### Reference Documents
 - [README.md](README.md) - Complete course overview
@@ -191,7 +191,7 @@ This directory contains all course materials for **Engineering for Machine Judgm
 
 ---
 
-## 🎯 Success Checklist
+##  Success Checklist
 
 ### Before Starting
 - [ ] Read README.md
@@ -225,7 +225,7 @@ This directory contains all course materials for **Engineering for Machine Judgm
 
 ---
 
-## 💡 Study Tips
+##  Study Tips
 
 ### Weekly Routine
 1. **Monday:** Read module materials (2-3h)
@@ -249,7 +249,7 @@ This directory contains all course materials for **Engineering for Machine Judgm
 
 ---
 
-## 🔗 Quick Links
+##  Quick Links
 
 - **[Start Course →](README.md)**
 - **[Module 1 →](Module_01_The_Paradigm_Shift.md)**
@@ -258,7 +258,7 @@ This directory contains all course materials for **Engineering for Machine Judgm
 
 ---
 
-## 📞 Contact
+##  Contact
 
 **Questions?** Email: rx-course@example.com  
 **Office Hours:** Weekly sessions  

@@ -114,12 +114,12 @@ Implementing CCIS isn't just a technology project—it requires organizational t
 
 ```
 CCIS Team
-├─ Conversation Designer
-├─ AI Engineer
-├─ Knowledge Engineer
-├─ Compliance Specialist
-├─ Analytics Manager
-└─ Integration Engineer
+ Conversation Designer
+ AI Engineer
+ Knowledge Engineer
+ Compliance Specialist
+ Analytics Manager
+ Integration Engineer
 ```
 
 **Pros:**
@@ -135,11 +135,11 @@ CCIS Team
 
 ```
 CCIS Program
-├─ Core Team (AI, Knowledge, Integration)
-└─ Embedded Specialists
-    ├─ Conversation Designer (Marketing)
-    ├─ Compliance Specialist (Legal)
-    └─ Analytics Manager (Business Intelligence)
+ Core Team (AI, Knowledge, Integration)
+ Embedded Specialists
+     Conversation Designer (Marketing)
+     Compliance Specialist (Legal)
+     Analytics Manager (Business Intelligence)
 ```
 
 **Pros:**
@@ -155,11 +155,11 @@ CCIS Program
 
 ```
 CCIS Center of Excellence
-├─ Core Team (AI, Knowledge, Integration)
-└─ Business Unit Liaisons
-    ├─ Product Teams
-    ├─ Marketing Teams
-    └─ Customer Service Teams
+ Core Team (AI, Knowledge, Integration)
+ Business Unit Liaisons
+     Product Teams
+     Marketing Teams
+     Customer Service Teams
 ```
 
 **Pros:**
@@ -528,13 +528,13 @@ Design a comprehensive, future-ready CCIS architecture that incorporates immersi
 **Congratulations!** You've completed the Mastering the NexusIQ Commerce Ecosystem course.
 
 **What You've Learned:**
-- ✅ Foundations of conversational commerce
-- ✅ Building unified knowledge systems
-- ✅ Designing brand-appropriate AI
-- ✅ Omnichannel distribution
-- ✅ Compliance and governance
-- ✅ Analytics and business impact
-- ✅ Future-proofing strategies
+-  Foundations of conversational commerce
+-  Building unified knowledge systems
+-  Designing brand-appropriate AI
+-  Omnichannel distribution
+-  Compliance and governance
+-  Analytics and business impact
+-  Future-proofing strategies
 
 **Next Steps:**
 - Complete your capstone project
@@ -575,6 +575,6 @@ The future of commerce is conversational. Customers expect real-time, accurate, 
 
 ---
 
-**Module 7 Complete | Course Complete! 🎉**
+**Module 7 Complete | Course Complete! **
 
 **Return to:** [Course Overview →](README.md) | [Index →](INDEX.md)

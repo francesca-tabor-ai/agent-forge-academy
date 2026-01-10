@@ -23,27 +23,27 @@ order: 2
 
 **Full-Stack Architecture:**
 ```
-┌─────────────────────────────────────────┐
-│         Frontend (React)                │
-│  - React Three Fiber (3D Viewer)        │
-│  - Product Management UI                │
-│  - Dashboard & Analytics                │
-└──────────────┬──────────────────────────┘
-               │
-┌──────────────▼──────────────────────────┐
-│      API Gateway (Express)              │
-│  - RESTful endpoints                    │
-│  - Authentication & Authorization       │
-│  - Request routing                     │
-└──────────────┬──────────────────────────┘
-               │
-┌──────────────▼──────────────────────────┐
-│      Microservices Layer                │
-│  ├─ Product Service (MongoDB)           │
-│  ├─ 3D Asset Service (S3)               │
-│  ├─ Rendering Service (Lambda)         │
-│  └─ Amazon Integration Service          │
-└─────────────────────────────────────────┘
+
+         Frontend (React)                
+  - React Three Fiber (3D Viewer)        
+  - Product Management UI                
+  - Dashboard & Analytics                
+
+               
+
+      API Gateway (Express)              
+  - RESTful endpoints                    
+  - Authentication & Authorization       
+  - Request routing                     
+
+               
+
+      Microservices Layer                
+   Product Service (MongoDB)           
+   3D Asset Service (S3)               
+   Rendering Service (Lambda)         
+   Amazon Integration Service          
+
 ```
 
 ### Project Structure
@@ -51,36 +51,36 @@ order: 2
 **Initial Setup:**
 ```bash
 3d-commerce-platform/
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── 3DViewer/
-│   │   │   ├── ProductCard/
-│   │   │   └── Dashboard/
-│   │   ├── hooks/
-│   │   │   └── use3DModel.js
-│   │   ├── utils/
-│   │   │   └── gltfLoader.js
-│   │   └── App.js
-│   ├── package.json
-│   └── vite.config.js
-├── backend/
-│   ├── services/
-│   │   ├── product/
-│   │   ├── asset/
-│   │   ├── rendering/
-│   │   └── amazon/
-│   ├── models/
-│   │   └── Product.js
-│   ├── routes/
-│   │   └── api.js
-│   ├── server.js
-│   └── package.json
-├── infrastructure/
-│   ├── terraform/
-│   ├── docker/
-│   └── kubernetes/
-└── README.md
+ frontend/
+    src/
+       components/
+          3DViewer/
+          ProductCard/
+          Dashboard/
+       hooks/
+          use3DModel.js
+       utils/
+          gltfLoader.js
+       App.js
+    package.json
+    vite.config.js
+ backend/
+    services/
+       product/
+       asset/
+       rendering/
+       amazon/
+    models/
+       Product.js
+    routes/
+       api.js
+    server.js
+    package.json
+ infrastructure/
+    terraform/
+    docker/
+    kubernetes/
+ README.md
 ```
 
 ### MongoDB Schema Design
@@ -467,22 +467,22 @@ async function runBlenderRender(inputPath, outputPath) {
 **Bucket Structure:**
 ```
 s3://your-bucket/
-├── models/
-│   ├── {productId}/
-│   │   ├── original.glb
-│   │   ├── compressed.glb
-│   │   ├── usdz/
-│   │   │   └── model.usdz
-│   │   └── thumbnails/
-│   │       ├── front.png
-│   │       ├── side.png
-│   │       └── top.png
-├── renders/
-│   └── {productId}/
-│       └── {timestamp}.png
-└── uploads/
-    └── {userId}/
-        └── {tempId}.glb
+ models/
+    {productId}/
+       original.glb
+       compressed.glb
+       usdz/
+          model.usdz
+       thumbnails/
+           front.png
+           side.png
+           top.png
+ renders/
+    {productId}/
+        {timestamp}.png
+ uploads/
+     {userId}/
+         {tempId}.glb
 ```
 
 **S3 Configuration:**
@@ -722,11 +722,11 @@ Create a functional 3D product viewer using React Three Fiber.
 
 ## Key Takeaways
 
-✅ **MERN stack provides solid foundation for 3D commerce platforms**  
-✅ **React Three Fiber makes 3D rendering declarative and React-friendly**  
-✅ **Blender headless enables server-side batch rendering**  
-✅ **AWS infrastructure (S3, EC2, Lambda) scales to any size**  
-✅ **Microservices architecture enables independent scaling**
+ **MERN stack provides solid foundation for 3D commerce platforms**  
+ **React Three Fiber makes 3D rendering declarative and React-friendly**  
+ **Blender headless enables server-side batch rendering**  
+ **AWS infrastructure (S3, EC2, Lambda) scales to any size**  
+ **Microservices architecture enables independent scaling**
 
 ---
 

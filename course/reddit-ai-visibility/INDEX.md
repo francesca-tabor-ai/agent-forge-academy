@@ -6,13 +6,13 @@ order: 0
 
 # Reddit AI Visibility and AEO Course - Complete Index
 
-## 📚 Course Materials Overview
+##  Course Materials Overview
 
 This directory contains all course materials for the **Mastering Reddit AI Visibility and Answer Engine Optimization (AEO) Course (2025)**.
 
 ---
 
-## 🗂️ File Structure
+##  File Structure
 
 ### Core Course Files
 1. **[README.md](README.md)** - Main course overview, start here
@@ -50,7 +50,7 @@ This directory contains all course materials for the **Mastering Reddit AI Visib
 
 ---
 
-## 🎯 Quick Navigation
+##  Quick Navigation
 
 ### By Learning Goal
 
@@ -74,39 +74,39 @@ This directory contains all course materials for the **Mastering Reddit AI Visib
 
 ---
 
-## 📋 Learning Path by Role
+##  Learning Path by Role
 
 ### For Marketing Professionals
-1. Module 1 (Foundations) ⭐
-2. Module 2 (Community Participation) ⭐
-3. Module 6 (Measurement) ⭐
+1. Module 1 (Foundations) 
+2. Module 2 (Community Participation) 
+3. Module 6 (Measurement) 
 4. Module 3 (Automation)
 5. Module 5 (Analysis)
 
 ### For Community Managers
-1. Module 2 (Community Participation) ⭐
-2. Module 4 (Risk Mitigation) ⭐
-3. Module 3 (Automation) ⭐
+1. Module 2 (Community Participation) 
+2. Module 4 (Risk Mitigation) 
+3. Module 3 (Automation) 
 4. Module 5 (Sentiment Analysis)
 5. Module 6 (Measurement)
 
 ### For Technical Marketers
 1. Module 1 (Foundations)
-2. Module 3 (Automation) ⭐
-3. Module 5 (Analysis) ⭐
-4. Module 6 (Structured Data) ⭐
+2. Module 3 (Automation) 
+3. Module 5 (Analysis) 
+4. Module 6 (Structured Data) 
 5. Module 2 (Community)
 
 ### For Brand Managers
-1. Module 1 (Foundations) ⭐
-2. Module 4 (Risk Mitigation) ⭐
+1. Module 1 (Foundations) 
+2. Module 4 (Risk Mitigation) 
 3. Module 2 (Community)
 4. Module 5 (Sentiment)
 5. Module 6 (Measurement)
 
 ---
 
-## 🔧 Technology Reference
+##  Technology Reference
 
 ### Tools Covered
 - **Reddit Pro** - Mention tracking (Modules 2, 3, 5)
@@ -125,7 +125,7 @@ This directory contains all course materials for the **Mastering Reddit AI Visib
 
 ---
 
-## 📊 Exercise Overview
+##  Exercise Overview
 
 | Exercise | Module | Topic | Duration |
 |----------|--------|-------|----------|
@@ -140,7 +140,7 @@ This directory contains all course materials for the **Mastering Reddit AI Visib
 
 ---
 
-## 🎓 Assessment Guide
+##  Assessment Guide
 
 ### Grade Breakdown
 - **Exercises (40%):** 6 exercises × ~7% each
@@ -158,7 +158,7 @@ This directory contains all course materials for the **Mastering Reddit AI Visib
 
 ---
 
-## 📚 Additional Resources
+##  Additional Resources
 
 ### Reference Documents
 - **[Course Overview](_COURSE_OVERVIEW.md)** - Quick start guide
@@ -172,7 +172,7 @@ This directory contains all course materials for the **Mastering Reddit AI Visib
 
 ---
 
-## 🎯 Success Checklist
+##  Success Checklist
 
 ### Before Starting
 - [ ] Read README.md
@@ -206,7 +206,7 @@ This directory contains all course materials for the **Mastering Reddit AI Visib
 
 ---
 
-## 💡 Study Tips
+##  Study Tips
 
 ### Weekly Routine
 1. **Monday:** Read module materials (1-2h)
@@ -230,7 +230,7 @@ This directory contains all course materials for the **Mastering Reddit AI Visib
 
 ---
 
-## 🔗 Quick Links
+##  Quick Links
 
 - **[Start Course →](README.md)**
 - **[Module 1 →](Module_01_The_Foundations_of_AI_Search_and_Reddits_Role.md)**
@@ -239,7 +239,7 @@ This directory contains all course materials for the **Mastering Reddit AI Visib
 
 ---
 
-## 📞 Contact
+##  Contact
 
 **Questions?** Email: reddit-aeo-course@example.com  
 **Office Hours:** Wednesday 6-7 PM EST  

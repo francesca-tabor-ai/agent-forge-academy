@@ -722,5 +722,5 @@ Module 4 will cover benchmarking AI-generated video against real-world physics a
 
 ---
 
-**Module 3 Complete** ✓  
+**Module 3 Complete**   
 **Next:** Module 4 - Benchmarking World Knowledge

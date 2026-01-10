@@ -4,9 +4,9 @@ description: "Get started with the AI-native software delivery course in minutes
 order: 0
 ---
 
-# 🎓 Mastering the AI Factory - Quick Start Guide
+#  Mastering the AI Factory - Quick Start Guide
 
-## 📍 You Are Here
+##  You Are Here
 
 This folder contains a **complete 7-week professional course** on AI-native software delivery and the AI Factory paradigm.
 
@@ -16,7 +16,7 @@ This folder contains a **complete 7-week professional course** on AI-native soft
 
 ---
 
-## 🚀 What's Inside
+##  What's Inside
 
 ### 10 Markdown Files
 
@@ -31,21 +31,21 @@ This folder contains a **complete 7-week professional course** on AI-native soft
 
 ---
 
-## 🎯 Three Ways to Use This Course
+##  Three Ways to Use This Course
 
-### 1️⃣ Self-Paced Learning
+###  Self-Paced Learning
 - Follow modules in order
 - Complete labs independently
 - Build portfolio projects
 - **Time:** 8-10 hours/week for 7 weeks
 
-### 2️⃣ Team Training
+###  Team Training
 - Use as corporate training curriculum
 - Adapt labs to company use cases
 - Run cohorts with deadlines
 - **Time:** Customize to team needs
 
-### 3️⃣ Reference Material
+###  Reference Material
 - Jump to relevant modules
 - Use code examples
 - Implement patterns
@@ -53,7 +53,7 @@ This folder contains a **complete 7-week professional course** on AI-native soft
 
 ---
 
-## 📚 Module Overview (What You'll Learn)
+##  Module Overview (What You'll Learn)
 
 | Week | Module | Core Skills |
 |------|--------|-------------|
@@ -67,29 +67,29 @@ This folder contains a **complete 7-week professional course** on AI-native soft
 
 ---
 
-## 💻 Technology You'll Master
+##  Technology You'll Master
 
 ### Core Frameworks
-✅ OpenSpec and Spec-Kit (specification-driven development)  
-✅ Model Context Protocol (MCP) (agent-data connections)  
-✅ TaskingAI and Claude Flow (agent orchestration)  
-✅ Tessl registries (knowledge management)
+ OpenSpec and Spec-Kit (specification-driven development)  
+ Model Context Protocol (MCP) (agent-data connections)  
+ TaskingAI and Claude Flow (agent orchestration)  
+ Tessl registries (knowledge management)
 
 ### AI-Native Infrastructure
-✅ Infinity and Vearch (hybrid search, multi-vector retrieval)  
-✅ RAG systems (context engineering)  
-✅ AI-enhanced CI/CD pipelines  
-✅ Automated refactoring tools
+ Infinity and Vearch (hybrid search, multi-vector retrieval)  
+ RAG systems (context engineering)  
+ AI-enhanced CI/CD pipelines  
+ Automated refactoring tools
 
 ### Security & Governance
-✅ Cedar and Warden (policy engines, sandboxing)  
-✅ Git AI (audit trails)  
-✅ Evaluation frameworks (AI testing)  
-✅ Invariant verification systems
+ Cedar and Warden (policy engines, sandboxing)  
+ Git AI (audit trails)  
+ Evaluation frameworks (AI testing)  
+ Invariant verification systems
 
 ---
 
-## 🎯 Learning Outcomes
+##  Learning Outcomes
 
 By completing this course, you will:
 
@@ -119,7 +119,7 @@ By completing this course, you will:
 
 ---
 
-## 💼 Career Impact
+##  Career Impact
 
 ### Market Opportunity
 - **10x productivity** gains through AI-native development
@@ -144,14 +144,14 @@ Companies adopting AI-native development achieve:
 
 ---
 
-## 📋 Prerequisites
+##  Prerequisites
 
 **Required:**
-- ✅ Software engineering experience (2+ years)
-- ✅ Familiarity with AI/LLMs (GPT, Claude, etc.)
-- ✅ Git/GitHub proficiency
-- ✅ Python or JavaScript experience
-- ✅ Understanding of software development lifecycle
+-  Software engineering experience (2+ years)
+-  Familiarity with AI/LLMs (GPT, Claude, etc.)
+-  Git/GitHub proficiency
+-  Python or JavaScript experience
+-  Understanding of software development lifecycle
 
 **Helpful (Not Required):**
 - Multi-agent system experience
@@ -167,7 +167,7 @@ Companies adopting AI-native development achieve:
 
 ---
 
-## 🚦 Getting Started (3 Steps)
+##  Getting Started (3 Steps)
 
 ### Step 1: Review Materials (30 min)
 1. Read **README.md** (10 min)
@@ -190,7 +190,7 @@ Companies adopting AI-native development achieve:
 
 ---
 
-## 📊 Assessment Structure
+##  Assessment Structure
 
 **Total:** 100 points
 
@@ -204,7 +204,7 @@ Companies adopting AI-native development achieve:
 
 ---
 
-## 📅 Time Commitment
+##  Time Commitment
 
 ### Per Week (Weeks 1-7)
 - Lectures: 2-3 hours
@@ -217,20 +217,20 @@ Companies adopting AI-native development achieve:
 
 ---
 
-## 🎓 What You Get
+##  What You Get
 
 Upon completion:
 
-✅ **Skills:** Production-ready AI-native development  
-✅ **Certificate:** Digital credential (LinkedIn-shareable)  
-✅ **Portfolio:** Final project (GitHub showcase)  
-✅ **Network:** Alumni community  
-✅ **Knowledge:** Comprehensive AI Factory methodology  
-✅ **Career:** $20K-50K salary increase potential
+ **Skills:** Production-ready AI-native development  
+ **Certificate:** Digital credential (LinkedIn-shareable)  
+ **Portfolio:** Final project (GitHub showcase)  
+ **Network:** Alumni community  
+ **Knowledge:** Comprehensive AI Factory methodology  
+ **Career:** $20K-50K salary increase potential
 
 ---
 
-## 🔗 Navigation
+##  Navigation
 
 **Start Learning:**
 - [README.md](README.md) - Course home
@@ -239,27 +239,27 @@ Upon completion:
 
 ---
 
-## 💡 Success Tips
+##  Success Tips
 
 ### Do This:
-✅ Follow modules in order  
-✅ Complete ALL labs  
-✅ Use office hours  
-✅ Join study groups  
-✅ Start projects early  
-✅ Document everything
+ Follow modules in order  
+ Complete ALL labs  
+ Use office hours  
+ Join study groups  
+ Start projects early  
+ Document everything
 
 ### Avoid This:
-❌ Skipping prerequisites  
-❌ Rushing through labs  
-❌ Ignoring governance module  
-❌ Waiting until last minute  
-❌ Working in isolation  
-❌ Not asking questions
+ Skipping prerequisites  
+ Rushing through labs  
+ Ignoring governance module  
+ Waiting until last minute  
+ Working in isolation  
+ Not asking questions
 
 ---
 
-## 🌟 Success Stories
+##  Success Stories
 
 > **"10x productivity gains are real. We went from weeks to days for feature development."**  
 > — Maria Santos, Engineering Director
@@ -272,17 +272,17 @@ Upon completion:
 
 ---
 
-## 📞 Support
+##  Support
 
 **Have Questions?**
-- 📧 Email: ai-native-course@example.com
-- 💬 Discord: Provided upon enrollment
-- 🕐 Office Hours: Tue/Thu 6-7 PM EST
-- 📚 Documentation: README.md and INDEX.md
+-  Email: ai-native-course@example.com
+-  Discord: Provided upon enrollment
+-  Office Hours: Tue/Thu 6-7 PM EST
+-  Documentation: README.md and INDEX.md
 
 ---
 
-## 🎯 Your Next Action
+##  Your Next Action
 
 **Choose your path:**
 
@@ -306,19 +306,19 @@ Upon completion:
 
 ---
 
-## ⏰ Time to Start?
+##  Time to Start?
 
 **If you're ready:**  
-👉 **[Open README.md →](README.md)**
+ **[Open README.md →](README.md)**
 
 **Need more info?**  
-👉 **[View INDEX.md →](INDEX.md)**
+ **[View INDEX.md →](INDEX.md)**
 
 ---
 
 **The future of software development is AI-native. The time to learn is now.**
 
-**Let's build something amazing! 🚀**
+**Let's build something amazing! **
 
 ---
 

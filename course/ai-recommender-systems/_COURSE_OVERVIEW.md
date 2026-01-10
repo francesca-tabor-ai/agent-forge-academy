@@ -4,9 +4,9 @@ description: "Get started with the AI Recommender Systems course in minutes"
 order: 0
 ---
 
-# 🎓 AI Recommender Systems Course - Quick Start Guide
+#  AI Recommender Systems Course - Quick Start Guide
 
-## 📍 You Are Here
+##  You Are Here
 
 This folder contains a **complete professional course** on building production-ready AI recommender systems.
 
@@ -16,7 +16,7 @@ This folder contains a **complete professional course** on building production-r
 
 ---
 
-## 🚀 What's Inside
+##  What's Inside
 
 ### Course Structure
 
@@ -31,21 +31,21 @@ This folder contains a **complete professional course** on building production-r
 
 ---
 
-## 🎯 Three Ways to Use This Course
+##  Three Ways to Use This Course
 
-### 1️⃣ Self-Paced Learning
+###  Self-Paced Learning
 - Follow modules in order
 - Complete labs independently
 - Build portfolio projects
 - **Time:** 6-8 hours/week for 7 weeks
 
-### 2️⃣ Team Training
+###  Team Training
 - Use as corporate training curriculum
 - Adapt labs to company use cases
 - Run cohorts with deadlines
 - **Time:** Customize to team needs
 
-### 3️⃣ Reference Material
+###  Reference Material
 - Jump to relevant modules
 - Use code examples
 - Implement patterns
@@ -53,7 +53,7 @@ This folder contains a **complete professional course** on building production-r
 
 ---
 
-## 📚 Module Overview (What You'll Learn)
+##  Module Overview (What You'll Learn)
 
 | Module | Topic | Startup Tool Focus | Core Skills |
 |--------|-------|-------------------|-------------|
@@ -67,34 +67,34 @@ This folder contains a **complete professional course** on building production-r
 
 ---
 
-## 💻 Technology You'll Master
+##  Technology You'll Master
 
 ### Core Algorithms
-✅ Collaborative Filtering (User-based, Item-based)  
-✅ Matrix Factorization (SVD, SVD++)  
-✅ Neural Collaborative Filtering (NeuMF)  
-✅ Recurrent Neural Networks (LSTM, GRU)  
-✅ Attention Mechanisms  
-✅ Transformer-based Recommenders
+ Collaborative Filtering (User-based, Item-based)  
+ Matrix Factorization (SVD, SVD++)  
+ Neural Collaborative Filtering (NeuMF)  
+ Recurrent Neural Networks (LSTM, GRU)  
+ Attention Mechanisms  
+ Transformer-based Recommenders
 
 ### Evaluation & Ethics
-✅ Ranking Metrics (NDCG, MAP)  
-✅ Accuracy Metrics (RMSE, MAE)  
-✅ Bias Detection & Mitigation  
-✅ Privacy-Preserving Techniques  
-✅ Fairness Auditing
+ Ranking Metrics (NDCG, MAP)  
+ Accuracy Metrics (RMSE, MAE)  
+ Bias Detection & Mitigation  
+ Privacy-Preserving Techniques  
+ Fairness Auditing
 
 ### Production Tools
-✅ ColdStart.ai (cold start solutions)  
-✅ NeuralMerch (neural recommenders)  
-✅ SessionSense (session-based recs)  
-✅ HybridFlow (hybrid architectures)  
-✅ ClearCast (explainable AI)  
-✅ FairRank Audit (fairness auditing)
+ ColdStart.ai (cold start solutions)  
+ NeuralMerch (neural recommenders)  
+ SessionSense (session-based recs)  
+ HybridFlow (hybrid architectures)  
+ ClearCast (explainable AI)  
+ FairRank Audit (fairness auditing)
 
 ---
 
-## 🎯 Learning Outcomes
+##  Learning Outcomes
 
 By completing this course, you will:
 
@@ -118,7 +118,7 @@ By completing this course, you will:
 
 ---
 
-## 💼 Career Impact
+##  Career Impact
 
 ### Market Opportunity
 - **$10.4B** recommender systems market by 2025
@@ -141,13 +141,13 @@ Companies with effective recommenders achieve:
 
 ---
 
-## 📋 Prerequisites
+##  Prerequisites
 
 **Required:**
-- ✅ Python programming (intermediate)
-- ✅ Basic machine learning knowledge
-- ✅ Understanding of linear algebra (matrices, vectors)
-- ✅ Familiarity with neural networks (helpful but not required)
+-  Python programming (intermediate)
+-  Basic machine learning knowledge
+-  Understanding of linear algebra (matrices, vectors)
+-  Familiarity with neural networks (helpful but not required)
 
 **Helpful (Not Required):**
 - Experience with deep learning frameworks (PyTorch/TensorFlow)
@@ -162,7 +162,7 @@ Companies with effective recommenders achieve:
 
 ---
 
-## 🚦 Getting Started (3 Steps)
+##  Getting Started (3 Steps)
 
 ### Step 1: Review Materials (30 min)
 1. Read **README.md** (10 min)
@@ -184,7 +184,7 @@ Companies with effective recommenders achieve:
 
 ---
 
-## 📊 Assessment Structure
+##  Assessment Structure
 
 **Total:** 100 points
 
@@ -198,7 +198,7 @@ Companies with effective recommenders achieve:
 
 ---
 
-## 📅 Time Commitment
+##  Time Commitment
 
 ### Per Week (Weeks 1-7)
 - Lectures: 2-3 hours
@@ -211,18 +211,18 @@ Companies with effective recommenders achieve:
 
 ---
 
-## 🎓 What You Get
+##  What You Get
 
 Upon completion:
 
-✅ **Skills:** Production-ready recommender systems  
-✅ **Portfolio:** Capstone project (GitHub showcase)  
-✅ **Knowledge:** Comprehensive content on modern recsys  
-✅ **Career:** $20K-40K salary increase potential
+ **Skills:** Production-ready recommender systems  
+ **Portfolio:** Capstone project (GitHub showcase)  
+ **Knowledge:** Comprehensive content on modern recsys  
+ **Career:** $20K-40K salary increase potential
 
 ---
 
-## 🔗 Navigation
+##  Navigation
 
 **Start Learning:**
 - [README.md](README.md) - Course home
@@ -231,27 +231,27 @@ Upon completion:
 
 ---
 
-## 💡 Success Tips
+##  Success Tips
 
 ### Do This:
-✅ Follow modules in order  
-✅ Complete ALL labs  
-✅ Experiment with different algorithms  
-✅ Join study groups  
-✅ Start final project early  
-✅ Document everything
+ Follow modules in order  
+ Complete ALL labs  
+ Experiment with different algorithms  
+ Join study groups  
+ Start final project early  
+ Document everything
 
 ### Avoid This:
-❌ Skipping prerequisites  
-❌ Rushing through labs  
-❌ Ignoring evaluation module  
-❌ Waiting until last minute  
-❌ Not asking questions  
-❌ Ignoring bias and ethics
+ Skipping prerequisites  
+ Rushing through labs  
+ Ignoring evaluation module  
+ Waiting until last minute  
+ Not asking questions  
+ Ignoring bias and ethics
 
 ---
 
-## 🌟 Success Stories
+##  Success Stories
 
 > **"From zero to production recommender in 7 weeks. My system increased our conversion by 28%."**  
 > — Alex Kim, ML Engineer
@@ -264,17 +264,17 @@ Upon completion:
 
 ---
 
-## 📞 Support
+##  Support
 
 **Have Questions?**
-- 📧 Email: recsys-course@example.com
-- 💬 Discord: Provided upon enrollment
-- 🕐 Office Hours: Tue/Thu 6-7 PM EST
-- 📚 Documentation: README.md and INDEX.md
+-  Email: recsys-course@example.com
+-  Discord: Provided upon enrollment
+-  Office Hours: Tue/Thu 6-7 PM EST
+-  Documentation: README.md and INDEX.md
 
 ---
 
-## 🎯 Your Next Action
+##  Your Next Action
 
 **Choose your path:**
 
@@ -299,19 +299,19 @@ Upon completion:
 
 ---
 
-## ⏰ Time to Start?
+##  Time to Start?
 
 **If you're ready:**  
-👉 **[Open README.md →](README.md)**
+ **[Open README.md →](README.md)**
 
 **Need more info?**  
-👉 **[View INDEX.md →](INDEX.md)**
+ **[View INDEX.md →](INDEX.md)**
 
 ---
 
 **The future of e-commerce and content platforms is personalized recommendations. The time to learn is now.**
 
-**Let's build something amazing! 🚀**
+**Let's build something amazing! **
 
 ---
 

@@ -489,17 +489,17 @@ def generate_viral_caption(script, platform, swipe_file):
 
 # Example output
 caption = """
-I was skeptical, but this actually works! 🎯
+I was skeptical, but this actually works! 
 
 After trying everything for [problem], I finally found
 a solution that actually delivers results.
 
 Here's what happened when I tried [product]:
-✅ [Benefit 1]
-✅ [Benefit 2]
-✅ [Benefit 3]
+ [Benefit 1]
+ [Benefit 2]
+ [Benefit 3]
 
-Have you tried this? Let me know in the comments! 👇
+Have you tried this? Let me know in the comments! 
 
 #productreview #solution #gamechanger #testimonial
 """
@@ -606,21 +606,21 @@ class UGCPipeline:
 1. Trigger: New content ready
    ↓
 2. Format Adaptation
-   ├── Resize video
-   ├── Adjust captions
-   └── Optimize hashtags
+    Resize video
+    Adjust captions
+    Optimize hashtags
    ↓
 3. Platform Publishing
-   ├── Instagram
-   ├── TikTok
-   ├── YouTube
-   ├── LinkedIn
-   └── ... (other platforms)
+    Instagram
+    TikTok
+    YouTube
+    LinkedIn
+    ... (other platforms)
    ↓
 4. Monitoring
-   ├── Track performance
-   ├── Collect metrics
-   └── Generate report
+    Track performance
+    Collect metrics
+    Generate report
 ```
 
 **n8n Implementation:**
@@ -874,13 +874,13 @@ Build a complete UGC content generation and omnichannel publishing pipeline.
 
 In this module, you've learned:
 
-✅ **Reverse-Engineering Performance** - Swipe files, transcription, pattern recognition
+ **Reverse-Engineering Performance** - Swipe files, transcription, pattern recognition
 
-✅ **AI UGC Workflow** - Scripting, actor selection, video generation, editing, captions
+ **AI UGC Workflow** - Scripting, actor selection, video generation, editing, captions
 
-✅ **Omnichannel Publishing** - Multi-platform automation, format adaptation, scheduling
+ **Omnichannel Publishing** - Multi-platform automation, format adaptation, scheduling
 
-✅ **Complete Marketing Pipeline** - End-to-end UGC and social media automation
+ **Complete Marketing Pipeline** - End-to-end UGC and social media automation
 
 **Next Module:** [Module 7: Quality Control, Brand Voice, and Human-in-the-Loop](Module_07_Quality_Control_Brand_Voice_and_Human_in_the_Loop.md)
 

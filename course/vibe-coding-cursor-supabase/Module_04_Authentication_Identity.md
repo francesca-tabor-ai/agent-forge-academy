@@ -22,11 +22,11 @@ order: 4
 ### The Password Problem
 
 Traditional password-based authentication has issues:
-- ❌ Users forget passwords
-- ❌ Weak passwords are common
-- ❌ Password reuse across sites
-- ❌ Phishing attacks
-- ❌ Password reset friction
+-  Users forget passwords
+-  Weak passwords are common
+-  Password reuse across sites
+-  Phishing attacks
+-  Password reset friction
 
 ### Passwordless Authentication
 
@@ -36,10 +36,10 @@ Traditional password-based authentication has issues:
 - You own your WhatsApp → You can receive WhatsApp messages
 
 **Benefits:**
-- ✅ No passwords to remember
-- ✅ More secure (possession-based)
-- ✅ Better user experience
-- ✅ Reduced support burden
+-  No passwords to remember
+-  More secure (possession-based)
+-  Better user experience
+-  Reduced support burden
 
 ### OTP Flow
 
@@ -293,10 +293,10 @@ const verification = await twilioClient.verify.v2
 - Standard flow
 
 **Custom Auth Flows:**
-- ✅ Branded experience
-- ✅ Custom email templates
-- ✅ Flexible UX
-- ✅ Better conversion
+-  Branded experience
+-  Custom email templates
+-  Flexible UX
+-  Better conversion
 
 ### Building Branded Authentication
 
@@ -506,10 +506,10 @@ export function BrandedAuth() {
 ### Why Anonymous Sign-ins?
 
 **Benefits:**
-- ✅ Lower friction (no sign-up required)
-- ✅ Better conversion rates
-- ✅ Users can explore before committing
-- ✅ Can convert to permanent account later
+-  Lower friction (no sign-up required)
+-  Better conversion rates
+-  Users can explore before committing
+-  Can convert to permanent account later
 
 ### Implementing Anonymous Auth
 
@@ -711,5 +711,5 @@ Module 5 will teach you security and Row Level Security (RLS), moving security l
 
 ---
 
-**Module 4 Complete** ✓  
+**Module 4 Complete**   
 **Next:** Module 5 - Security & Row Level Security (RLS)

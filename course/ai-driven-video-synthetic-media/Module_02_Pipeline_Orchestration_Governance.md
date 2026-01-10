@@ -834,5 +834,5 @@ Module 3 will cover engineering cinematic realism through technical camera contr
 
 ---
 
-**Module 2 Complete** ✓  
+**Module 2 Complete**   
 **Next:** Module 3 - Engineering Cinematic Realism

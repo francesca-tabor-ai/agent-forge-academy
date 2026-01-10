@@ -695,13 +695,13 @@ Video: 45-second professional video
 
 In this module, you've learned:
 
-✅ **Visual Consistency** - Character references, mood boards, visual anchoring
+ **Visual Consistency** - Character references, mood boards, visual anchoring
 
-✅ **AI Video Pipelines** - Image-to-video, multi-camera shots, video editing
+ **AI Video Pipelines** - Image-to-video, multi-camera shots, video editing
 
-✅ **Speech-to-Speech** - Voice cloning, natural voiceovers, audio quality
+ **Speech-to-Speech** - Voice cloning, natural voiceovers, audio quality
 
-✅ **Complete Multimedia Pipeline** - End-to-end video production
+ **Complete Multimedia Pipeline** - End-to-end video production
 
 **Next Module:** [Module 6: Specialized Marketing Pipelines - UGC and Social Media](Module_06_Specialized_Marketing_Pipelines_UGC_and_Social_Media.md)
 

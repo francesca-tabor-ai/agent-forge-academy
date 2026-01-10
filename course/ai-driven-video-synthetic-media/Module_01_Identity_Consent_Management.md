@@ -565,14 +565,14 @@ Not all synthetic personas carry the same risk. Classifying personas by risk lev
 - Spokespeople for regulated industries
 
 **Required Safeguards:**
-- ✅ Mandatory biometric verification
-- ✅ Explicit consent videos
-- ✅ Legal review of all content
-- ✅ Real-time kill switches
-- ✅ Sunset clauses on contracts
-- ✅ Enhanced audit logging
-- ✅ Pre-approval workflows
-- ✅ Regular consent renewal
+-  Mandatory biometric verification
+-  Explicit consent videos
+-  Legal review of all content
+-  Real-time kill switches
+-  Sunset clauses on contracts
+-  Enhanced audit logging
+-  Pre-approval workflows
+-  Regular consent renewal
 
 **Implementation:**
 
@@ -644,11 +644,11 @@ class ClassAPersona:
 - Customer testimonials (synthetic)
 
 **Required Safeguards:**
-- ✅ Basic identity verification
-- ✅ Consent documentation
-- ✅ Standard kill switches
-- ✅ Basic audit logging
-- ✅ Automated compliance checks
+-  Basic identity verification
+-  Consent documentation
+-  Standard kill switches
+-  Basic audit logging
+-  Automated compliance checks
 
 **Implementation:**
 
@@ -700,9 +700,9 @@ class ClassBPersona:
 - Non-identifiable representations
 
 **Required Safeguards:**
-- ✅ Basic documentation
-- ✅ Usage tracking
-- ✅ Standard audit logging
+-  Basic documentation
+-  Usage tracking
+-  Standard audit logging
 
 **Implementation:**
 
@@ -873,5 +873,5 @@ Module 2 will cover pipeline orchestration and governance-as-code, building on t
 
 ---
 
-**Module 1 Complete** ✓  
+**Module 1 Complete**   
 **Next:** Module 2 - Pipeline Orchestration & Governance

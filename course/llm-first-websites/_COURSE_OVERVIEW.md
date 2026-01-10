@@ -4,9 +4,9 @@ description: "Get started with Engineering for Machine Judgment (RX) in minutes"
 order: 0
 ---
 
-# 🎓 Engineering for Machine Judgment (RX) - Quick Start Guide
+#  Engineering for Machine Judgment (RX) - Quick Start Guide
 
-## 📍 You Are Here
+##  You Are Here
 
 This folder contains a **complete professional course** on building LLM-first websites optimized for AI intermediaries.
 
@@ -16,7 +16,7 @@ This folder contains a **complete professional course** on building LLM-first we
 
 ---
 
-## 🚀 What's Inside
+##  What's Inside
 
 ### Core Files
 
@@ -39,21 +39,21 @@ This folder contains a **complete professional course** on building LLM-first we
 
 ---
 
-## 🎯 Three Ways to Use This Course
+##  Three Ways to Use This Course
 
-### 1️⃣ Self-Paced Learning
+###  Self-Paced Learning
 - Follow modules in order
 - Complete practical exercises independently
 - Build portfolio projects
 - **Time:** 6-8 hours/week for 6 weeks
 
-### 2️⃣ Team Training
+###  Team Training
 - Use as corporate training curriculum
 - Adapt exercises to company use cases
 - Run cohorts with deadlines
 - **Time:** Customize to team needs
 
-### 3️⃣ Reference Material
+###  Reference Material
 - Jump to relevant modules
 - Use patterns and examples
 - Implement strategies
@@ -61,7 +61,7 @@ This folder contains a **complete professional course** on building LLM-first we
 
 ---
 
-## 📚 Module Overview (What You'll Learn)
+##  Module Overview (What You'll Learn)
 
 | Week | Module | Core Skills |
 |------|--------|-------------|
@@ -74,27 +74,27 @@ This folder contains a **complete professional course** on building LLM-first we
 
 ---
 
-## 💻 Technology You'll Master
+##  Technology You'll Master
 
 ### Core Concepts
-✅ Reasoning Experience (RX) design  
-✅ Ontology and taxonomy construction  
-✅ Evidence graph architecture  
-✅ Intent-driven API design  
-✅ State machine patterns  
-✅ Machine-first observability  
+ Reasoning Experience (RX) design  
+ Ontology and taxonomy construction  
+ Evidence graph architecture  
+ Intent-driven API design  
+ State machine patterns  
+ Machine-first observability  
 
 ### Tools & Patterns
-✅ Structured data formats (JSON-LD, Schema.org)  
-✅ API design for AI agents  
-✅ Uncertainty encoding patterns  
-✅ Action boundary implementation  
-✅ Telemetry and traceability systems  
-✅ Governance frameworks  
+ Structured data formats (JSON-LD, Schema.org)  
+ API design for AI agents  
+ Uncertainty encoding patterns  
+ Action boundary implementation  
+ Telemetry and traceability systems  
+ Governance frameworks  
 
 ---
 
-## 🎯 Learning Outcomes
+##  Learning Outcomes
 
 By completing this course, you will:
 
@@ -118,7 +118,7 @@ By completing this course, you will:
 
 ---
 
-## 💼 Career Impact
+##  Career Impact
 
 ### Market Opportunity
 - **Rapid shift** to AI intermediaries (ChatGPT, Amazon Rufus, Perplexity)
@@ -136,13 +136,13 @@ Companies implementing RX achieve:
 
 ---
 
-## 📋 Prerequisites
+##  Prerequisites
 
 **Required:**
-- ✅ Web development basics (HTML, APIs)
-- ✅ Understanding of AI/LLMs
-- ✅ Basic data modeling concepts
-- ✅ Familiarity with JSON/structured data
+-  Web development basics (HTML, APIs)
+-  Understanding of AI/LLMs
+-  Basic data modeling concepts
+-  Familiarity with JSON/structured data
 
 **Helpful (Not Required):**
 - SEO experience
@@ -158,7 +158,7 @@ Companies implementing RX achieve:
 
 ---
 
-## 🚦 Getting Started (3 Steps)
+##  Getting Started (3 Steps)
 
 ### Step 1: Review Materials (30 min)
 1. Read **README.md** (10 min)
@@ -180,7 +180,7 @@ Companies implementing RX achieve:
 
 ---
 
-## 📊 Assessment Structure
+##  Assessment Structure
 
 **Total:** 100 points
 
@@ -194,7 +194,7 @@ Companies implementing RX achieve:
 
 ---
 
-## 📅 Time Commitment
+##  Time Commitment
 
 ### Per Week (Weeks 1-6)
 - Reading: 2-3 hours
@@ -211,19 +211,19 @@ Companies implementing RX achieve:
 
 ---
 
-## 🎓 What You Get
+##  What You Get
 
 Upon completion:
 
-✅ **Skills:** Production-ready RX design  
-✅ **Certificate:** Digital credential (LinkedIn-shareable)  
-✅ **Portfolio:** Final project (GitHub showcase)  
-✅ **Knowledge:** Complete RX methodology  
-✅ **Career:** Competitive advantage in AI-first world  
+ **Skills:** Production-ready RX design  
+ **Certificate:** Digital credential (LinkedIn-shareable)  
+ **Portfolio:** Final project (GitHub showcase)  
+ **Knowledge:** Complete RX methodology  
+ **Career:** Competitive advantage in AI-first world  
 
 ---
 
-## 🔗 Navigation
+##  Navigation
 
 **Start Learning:**
 - [README.md](README.md) - Course home
@@ -232,27 +232,27 @@ Upon completion:
 
 ---
 
-## 💡 Success Tips
+##  Success Tips
 
 ### Do This:
-✅ Follow modules in order  
-✅ Complete ALL exercises  
-✅ Build real projects  
-✅ Test with actual AI agents  
-✅ Document your implementations  
-✅ Share learnings with community
+ Follow modules in order  
+ Complete ALL exercises  
+ Build real projects  
+ Test with actual AI agents  
+ Document your implementations  
+ Share learnings with community
 
 ### Avoid This:
-❌ Skipping foundational modules  
-❌ Rushing through exercises  
-❌ Ignoring safety module  
-❌ Not testing with real AI  
-❌ Working in isolation  
-❌ Not asking questions
+ Skipping foundational modules  
+ Rushing through exercises  
+ Ignoring safety module  
+ Not testing with real AI  
+ Working in isolation  
+ Not asking questions
 
 ---
 
-## 🌟 Success Stories
+##  Success Stories
 
 > **"This course transformed how we think about web presence. We're now cited as an authority by ChatGPT and other AI agents."**  
 > — Product Manager, Tech Company
@@ -265,16 +265,16 @@ Upon completion:
 
 ---
 
-## 📞 Support
+##  Support
 
 **Have Questions?**
-- 📧 Email: rx-course@example.com
-- 💬 Community: Provided upon enrollment
-- 📚 Documentation: README.md and INDEX.md
+-  Email: rx-course@example.com
+-  Community: Provided upon enrollment
+-  Documentation: README.md and INDEX.md
 
 ---
 
-## 🎯 Your Next Action
+##  Your Next Action
 
 **Choose your path:**
 
@@ -299,19 +299,19 @@ Upon completion:
 
 ---
 
-## ⏰ Time to Start?
+##  Time to Start?
 
 **If you're ready:**  
-👉 **[Open README.md →](README.md)**
+ **[Open README.md →](README.md)**
 
 **Need more info?**  
-👉 **[View INDEX.md →](INDEX.md)**
+ **[View INDEX.md →](INDEX.md)**
 
 ---
 
 **The future of web presence is machine-first. The time to learn is now.**
 
-**Let's build something amazing! 🚀**
+**Let's build something amazing! **
 
 ---
 

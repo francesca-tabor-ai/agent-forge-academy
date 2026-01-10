@@ -801,5 +801,5 @@ When errors occur, show what went wrong and where.
 
 ---
 
-**Module 5 Complete** ✅  
+**Module 5 Complete**   
 **Ready for Module 6?** → [Governance, Drift, and Power](Module_06_Governance_Drift_and_Power.md)

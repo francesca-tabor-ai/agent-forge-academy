@@ -393,7 +393,7 @@ class OrchestratorWorkerPattern:
 **Architecture:**
 ```
         Agent1 ←→ Agent2
-          ↕         ↕
+                   
         Agent3 ←→ Agent4
 ```
 

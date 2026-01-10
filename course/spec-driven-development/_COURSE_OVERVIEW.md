@@ -4,9 +4,9 @@ description: "Get started with the Spec-Driven Development course in minutes"
 order: 0
 ---
 
-# 🎓 Mastering Spec-Driven Development (SDDD) - Quick Start Guide
+#  Mastering Spec-Driven Development (SDDD) - Quick Start Guide
 
-## 📍 You Are Here
+##  You Are Here
 
 This folder contains a **complete professional course** on replacing the chaos of unstructured AI prompting with a rigorous, traceable, and scalable engineering framework.
 
@@ -16,7 +16,7 @@ This folder contains a **complete professional course** on replacing the chaos o
 
 ---
 
-## 🚀 What's Inside
+##  What's Inside
 
 ### 9 Markdown Files
 
@@ -31,21 +31,21 @@ This folder contains a **complete professional course** on replacing the chaos o
 
 ---
 
-## 🎯 Three Ways to Use This Course
+##  Three Ways to Use This Course
 
-### 1️⃣ Self-Paced Learning
+###  Self-Paced Learning
 - Follow modules in order
 - Complete labs independently
 - Build portfolio projects
 - **Time:** 6-8 hours/week for 6 weeks
 
-### 2️⃣ Team Training
+###  Team Training
 - Use as corporate training curriculum
 - Adapt labs to company use cases
 - Run cohorts with deadlines
 - **Time:** Customize to team needs
 
-### 3️⃣ Reference Material
+###  Reference Material
 - Jump to relevant modules
 - Use frameworks and strategies
 - Implement SDDD workflows
@@ -53,7 +53,7 @@ This folder contains a **complete professional course** on replacing the chaos o
 
 ---
 
-## 📚 Module Overview (What You'll Learn)
+##  Module Overview (What You'll Learn)
 
 | Week | Module | Core Skills |
 |------|--------|-------------|
@@ -66,42 +66,42 @@ This folder contains a **complete professional course** on replacing the chaos o
 
 ---
 
-## 💻 Technology & Concepts You'll Master
+##  Technology & Concepts You'll Master
 
 ### SDDD Framework
-✅ Specification-driven development workflow  
-✅ Intent over implementation philosophy  
-✅ Clarification loop methodology  
-✅ Governing principles (The Constitution)  
-✅ Context engineering and paper trail management
+ Specification-driven development workflow  
+ Intent over implementation philosophy  
+ Clarification loop methodology  
+ Governing principles (The Constitution)  
+ Context engineering and paper trail management
 
 ### Planning & Architecture
-✅ Technical planning and architecture design  
-✅ Task breakdown and decomposition  
-✅ API contract design  
-✅ Data modeling for specifications
+ Technical planning and architecture design  
+ Task breakdown and decomposition  
+ API contract design  
+ Data modeling for specifications
 
 ### Quality Assurance
-✅ Test-Driven Development (TDD) with AI  
-✅ Automated validation with Playwright  
-✅ Human-in-the-loop checkpoints  
-✅ Production readiness verification
+ Test-Driven Development (TDD) with AI  
+ Automated validation with Playwright  
+ Human-in-the-loop checkpoints  
+ Production readiness verification
 
 ### Tooling Ecosystem
-✅ AWS Kiro (three-phase workflow)  
-✅ GitHub Spec Kit (greenfield projects)  
-✅ OpenSpec (brownfield maintenance)  
-✅ BMAD Method (enterprise orchestration)
+ AWS Kiro (three-phase workflow)  
+ GitHub Spec Kit (greenfield projects)  
+ OpenSpec (brownfield maintenance)  
+ BMAD Method (enterprise orchestration)
 
 ### Enterprise Strategy
-✅ High-Leverage Human Pilot model  
-✅ Cost realignment strategies  
-✅ Learning curve management  
-✅ Governance & compliance automation
+ High-Leverage Human Pilot model  
+ Cost realignment strategies  
+ Learning curve management  
+ Governance & compliance automation
 
 ---
 
-## 🎯 Learning Outcomes
+##  Learning Outcomes
 
 By completing this course, you will:
 
@@ -136,7 +136,7 @@ By completing this course, you will:
 
 ---
 
-## 💼 Career Impact
+##  Career Impact
 
 ### Market Opportunity
 - **Critical need** for structured AI development frameworks
@@ -160,13 +160,13 @@ Teams implementing SDDD achieve:
 
 ---
 
-## 📋 Prerequisites
+##  Prerequisites
 
 **Required:**
-- ✅ Software development experience (2+ years)
-- ✅ Basic knowledge of AI/LLM tools (ChatGPT, Claude, etc.)
-- ✅ Understanding of software engineering principles
-- ✅ Familiarity with version control (Git)
+-  Software development experience (2+ years)
+-  Basic knowledge of AI/LLM tools (ChatGPT, Claude, etc.)
+-  Understanding of software engineering principles
+-  Familiarity with version control (Git)
 
 **Helpful (Not Required):**
 - Experience with test-driven development
@@ -183,7 +183,7 @@ Teams implementing SDDD achieve:
 
 ---
 
-## 🚦 Getting Started (3 Steps)
+##  Getting Started (3 Steps)
 
 ### Step 1: Review Materials (30 min)
 1. Read **README.md** (10 min)
@@ -206,7 +206,7 @@ Teams implementing SDDD achieve:
 
 ---
 
-## 📊 Assessment Structure
+##  Assessment Structure
 
 **Total:** 100 points
 
@@ -220,7 +220,7 @@ Teams implementing SDDD achieve:
 
 ---
 
-## 📅 Time Commitment
+##  Time Commitment
 
 ### Per Week (Weeks 1-6)
 - Lectures: 2-3 hours
@@ -237,20 +237,20 @@ Teams implementing SDDD achieve:
 
 ---
 
-## 🎓 What You Get
+##  What You Get
 
 Upon completion:
 
-✅ **Skills:** Mastery of SDDD framework and tooling  
-✅ **Certificate:** Digital credential (LinkedIn-shareable)  
-✅ **Portfolio:** Capstone project (complete SDDD workflow)  
-✅ **Network:** Alumni community  
-✅ **Knowledge:** Comprehensive SDDD expertise  
-✅ **Career:** $30K-60K salary increase potential
+ **Skills:** Mastery of SDDD framework and tooling  
+ **Certificate:** Digital credential (LinkedIn-shareable)  
+ **Portfolio:** Capstone project (complete SDDD workflow)  
+ **Network:** Alumni community  
+ **Knowledge:** Comprehensive SDDD expertise  
+ **Career:** $30K-60K salary increase potential
 
 ---
 
-## 🔗 Navigation
+##  Navigation
 
 **Start Learning:**
 - [README.md](README.md) - Course home
@@ -258,29 +258,29 @@ Upon completion:
 
 ---
 
-## 💡 Success Tips
+##  Success Tips
 
 ### Do This:
-✅ Follow modules in order  
-✅ Complete ALL labs  
-✅ Use office hours  
-✅ Join study groups  
-✅ Start capstone early  
-✅ Document everything  
-✅ Practice with real projects
+ Follow modules in order  
+ Complete ALL labs  
+ Use office hours  
+ Join study groups  
+ Start capstone early  
+ Document everything  
+ Practice with real projects
 
 ### Avoid This:
-❌ Skipping prerequisites  
-❌ Rushing through labs  
-❌ Ignoring clarification loops  
-❌ Waiting until last minute  
-❌ Working in isolation  
-❌ Not asking questions  
-❌ Falling back to "vibe coding"
+ Skipping prerequisites  
+ Rushing through labs  
+ Ignoring clarification loops  
+ Waiting until last minute  
+ Working in isolation  
+ Not asking questions  
+ Falling back to "vibe coding"
 
 ---
 
-## 🌟 Success Stories
+##  Success Stories
 
 > **"SDDD transformed our development process. We went from chaos to clarity, reducing bugs by 80% and shipping 50% faster."**  
 > — Sarah Chen, Engineering Director
@@ -293,17 +293,17 @@ Upon completion:
 
 ---
 
-## 📞 Support
+##  Support
 
 **Have Questions?**
-- 📧 Email: sddd-course@example.com
-- 💬 Discord: Provided upon enrollment
-- 🕐 Office Hours: Tue/Thu 6-7 PM EST
-- 📚 Documentation: README.md
+-  Email: sddd-course@example.com
+-  Discord: Provided upon enrollment
+-  Office Hours: Tue/Thu 6-7 PM EST
+-  Documentation: README.md
 
 ---
 
-## 🎯 Your Next Action
+##  Your Next Action
 
 **Choose your path:**
 
@@ -327,16 +327,16 @@ Upon completion:
 
 ---
 
-## ⏰ Time to Start?
+##  Time to Start?
 
 **If you're ready:**  
-👉 **[Open README.md →](README.md)**
+ **[Open README.md →](README.md)**
 
 ---
 
 **The future of AI development is structured. The time to learn SDDD is now.**
 
-**Let's build something amazing! 🚀**
+**Let's build something amazing! **
 
 ---
 

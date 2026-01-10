@@ -6,13 +6,13 @@ order: 0
 
 # Next-Generation AI for E-Commerce - Complete Index
 
-## 📚 Course Materials Overview
+##  Course Materials Overview
 
 This directory contains all course materials for the **Next-Generation AI for E-Commerce: From Intent Discovery to Intelligent Fulfillment** course.
 
 ---
 
-## 🗂️ File Structure
+##  File Structure
 
 ### Core Course Files
 1. **[README.md](README.md)** - Main course overview, start here
@@ -48,7 +48,7 @@ This directory contains all course materials for the **Next-Generation AI for E-
 
 ---
 
-## 🎯 Quick Navigation
+##  Quick Navigation
 
 ### By Learning Goal
 
@@ -69,36 +69,36 @@ This directory contains all course materials for the **Next-Generation AI for E-
 
 ---
 
-## 📋 Learning Path by Role
+##  Learning Path by Role
 
 ### For Search Engineers
-1. Module 1 (Intent Modeling) ⭐
-2. Module 2 (Multimodal Search) ⭐
-3. Module 3 (Advanced NLP) ⭐
+1. Module 1 (Intent Modeling) 
+2. Module 2 (Multimodal Search) 
+3. Module 3 (Advanced NLP) 
 4. Module 4 (Catalog Intelligence)
 
 ### For E-Commerce Product Managers
-1. Module 1 (Intent Modeling) ⭐
-2. Module 2 (Visual Discovery) ⭐
+1. Module 1 (Intent Modeling) 
+2. Module 2 (Visual Discovery) 
 3. Module 3 (Customer Experience)
 4. Module 5 (Operations)
 
 ### For Catalog/Data Engineers
 1. Module 1 (Intent Modeling)
-2. Module 4 (Catalog Intelligence) ⭐
+2. Module 4 (Catalog Intelligence) 
 3. Module 3 (NLP for Metadata)
 4. Module 5 (Compliance)
 
 ### For ML/AI Engineers
-1. Module 1 (COSMO, Rufus) ⭐
-2. Module 2 (Computer Vision) ⭐
-3. Module 3 (Seq2Seq, NLP) ⭐
+1. Module 1 (COSMO, Rufus) 
+2. Module 2 (Computer Vision) 
+3. Module 3 (Seq2Seq, NLP) 
 4. Module 4 (PatternRAG, AVE)
 5. Module 5 (Causal Inference, Optimization)
 
 ---
 
-## 🔧 Technology Reference
+##  Technology Reference
 
 ### Algorithms Covered
 - **COSMO** - Common Sense Mining (Module 1)
@@ -118,7 +118,7 @@ This directory contains all course materials for the **Next-Generation AI for E-
 
 ---
 
-## 📊 Lab Overview
+##  Lab Overview
 
 | Lab | Module | Topic | Duration |
 |-----|--------|-------|----------|
@@ -132,7 +132,7 @@ This directory contains all course materials for the **Next-Generation AI for E-
 
 ---
 
-## 🎓 Assessment Guide
+##  Assessment Guide
 
 ### Grade Breakdown
 - **Labs (40%):** 5 labs × 8% each
@@ -149,7 +149,7 @@ This directory contains all course materials for the **Next-Generation AI for E-
 
 ---
 
-## 📚 Additional Resources
+##  Additional Resources
 
 ### Research Papers
 - COSMO Algorithm papers
@@ -167,7 +167,7 @@ This directory contains all course materials for the **Next-Generation AI for E-
 
 ---
 
-## 🎯 Success Checklist
+##  Success Checklist
 
 ### Before Starting
 - [ ] Read README.md
@@ -207,7 +207,7 @@ This directory contains all course materials for the **Next-Generation AI for E-
 
 ---
 
-## 💡 Study Tips
+##  Study Tips
 
 ### Weekly Routine
 1. **Monday:** Read module materials (2-3h)
@@ -231,7 +231,7 @@ This directory contains all course materials for the **Next-Generation AI for E-
 
 ---
 
-## 🔗 Quick Links
+##  Quick Links
 
 - **[Start Course →](README.md)**
 - **[Module 1 →](Module_01_Intent_Modeling_and_Generative_Shopping_Assistants.md)**
@@ -240,7 +240,7 @@ This directory contains all course materials for the **Next-Generation AI for E-
 
 ---
 
-## 📞 Contact
+##  Contact
 
 **Questions?** Email: ecommerce-ai-course@example.com  
 **Office Hours:** Wednesday/Friday 4-5 PM EST  

@@ -785,5 +785,5 @@ Module 7 will teach you about the evolving role of the human engineer, from deve
 
 ---
 
-**Module 6 Complete** ✓  
+**Module 6 Complete**   
 **Next:** Module 7 - The Evolving Role of the Human Engineer

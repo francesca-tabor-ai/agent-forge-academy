@@ -4,9 +4,9 @@ description: "Get started with the Next-Generation AI for E-Commerce course in m
 order: 0
 ---
 
-# 🎓 Next-Generation AI for E-Commerce - Quick Start Guide
+#  Next-Generation AI for E-Commerce - Quick Start Guide
 
-## 📍 You Are Here
+##  You Are Here
 
 This folder contains a **complete professional course** on transitioning from traditional keyword-based retail systems to intent-driven, generative, and multimodal AI architectures.
 
@@ -17,7 +17,7 @@ This folder contains a **complete professional course** on transitioning from tr
 
 ---
 
-## 🚀 What's Inside
+##  What's Inside
 
 ### 8 Markdown Files
 
@@ -32,21 +32,21 @@ This folder contains a **complete professional course** on transitioning from tr
 
 ---
 
-## 🎯 Three Ways to Use This Course
+##  Three Ways to Use This Course
 
-### 1️⃣ Self-Paced Learning
+###  Self-Paced Learning
 - Follow modules in order
 - Complete labs independently
 - Build portfolio projects
 - **Time:** 6-8 hours/week for 5 weeks
 
-### 2️⃣ Team Training
+###  Team Training
 - Use as corporate training curriculum
 - Adapt labs to company use cases
 - Run cohorts with deadlines
 - **Time:** Customize to team needs
 
-### 3️⃣ Reference Material
+###  Reference Material
 - Jump to relevant modules
 - Use code examples
 - Implement patterns
@@ -54,7 +54,7 @@ This folder contains a **complete professional course** on transitioning from tr
 
 ---
 
-## 📚 Module Overview (What You'll Learn)
+##  Module Overview (What You'll Learn)
 
 | Module | Focus | Core Skills |
 |--------|-------|-------------|
@@ -66,32 +66,32 @@ This folder contains a **complete professional course** on transitioning from tr
 
 ---
 
-## 💻 Technology You'll Master
+##  Technology You'll Master
 
 ### AI/ML Frameworks
-✅ Large Language Models (LLMs) for intent understanding  
-✅ Computer Vision (YOLOv3, feature extractors)  
-✅ Seq2Seq models for query rewriting  
-✅ Siamese networks for multimodal classification  
-✅ Graph-based algorithms for de-duplication
+ Large Language Models (LLMs) for intent understanding  
+ Computer Vision (YOLOv3, feature extractors)  
+ Seq2Seq models for query rewriting  
+ Siamese networks for multimodal classification  
+ Graph-based algorithms for de-duplication
 
 ### E-Commerce Systems
-✅ Search and recommendation engines  
-✅ Product catalog management  
-✅ Customer review analysis  
-✅ Visual discovery pipelines  
-✅ Logistics optimization systems
+ Search and recommendation engines  
+ Product catalog management  
+ Customer review analysis  
+ Visual discovery pipelines  
+ Logistics optimization systems
 
 ### Industry Tools
-✅ Amazon Rufus architecture  
-✅ COSMO algorithm implementation  
-✅ PatternRAG systems  
-✅ ASPIRE causal inference  
-✅ DeepMMATE tax compliance
+ Amazon Rufus architecture  
+ COSMO algorithm implementation  
+ PatternRAG systems  
+ ASPIRE causal inference  
+ DeepMMATE tax compliance
 
 ---
 
-## 🎯 Learning Outcomes
+##  Learning Outcomes
 
 By completing this course, you will:
 
@@ -118,7 +118,7 @@ By completing this course, you will:
 
 ---
 
-## 💼 Career Impact
+##  Career Impact
 
 ### Market Opportunity
 - **$6.3T** global e-commerce market by 2024
@@ -141,13 +141,13 @@ Companies implementing these systems achieve:
 
 ---
 
-## 📋 Prerequisites
+##  Prerequisites
 
 **Required:**
-- ✅ Python programming (intermediate)
-- ✅ Machine learning fundamentals
-- ✅ Understanding of NLP and computer vision basics
-- ✅ Familiarity with APIs and data processing
+-  Python programming (intermediate)
+-  Machine learning fundamentals
+-  Understanding of NLP and computer vision basics
+-  Familiarity with APIs and data processing
 
 **Helpful (Not Required):**
 - E-commerce platform experience
@@ -163,7 +163,7 @@ Companies implementing these systems achieve:
 
 ---
 
-## 🚦 Getting Started (3 Steps)
+##  Getting Started (3 Steps)
 
 ### Step 1: Review Materials (30 min)
 1. Read **README.md** (10 min)
@@ -185,7 +185,7 @@ Companies implementing these systems achieve:
 
 ---
 
-## 📊 Assessment Structure
+##  Assessment Structure
 
 **Total:** 100 points
 
@@ -199,7 +199,7 @@ Companies implementing these systems achieve:
 
 ---
 
-## 📅 Time Commitment
+##  Time Commitment
 
 ### Per Week (Weeks 1-5)
 - Lectures: 2-3 hours
@@ -216,19 +216,19 @@ Companies implementing these systems achieve:
 
 ---
 
-## 🎓 What You Get
+##  What You Get
 
 Upon completion:
 
-✅ **Skills:** Production-ready e-commerce AI systems  
-✅ **Certificate:** Digital credential (LinkedIn-shareable)  
-✅ **Portfolio:** Capstone project (GitHub showcase)  
-✅ **Knowledge:** Comprehensive content on industry-leading algorithms  
-✅ **Career:** $20K-40K salary increase potential
+ **Skills:** Production-ready e-commerce AI systems  
+ **Certificate:** Digital credential (LinkedIn-shareable)  
+ **Portfolio:** Capstone project (GitHub showcase)  
+ **Knowledge:** Comprehensive content on industry-leading algorithms  
+ **Career:** $20K-40K salary increase potential
 
 ---
 
-## 🔗 Navigation
+##  Navigation
 
 **Start Learning:**
 - [README.md](README.md) - Course home
@@ -237,27 +237,27 @@ Upon completion:
 
 ---
 
-## 💡 Success Tips
+##  Success Tips
 
 ### Do This:
-✅ Follow modules in order  
-✅ Complete ALL labs  
-✅ Study real-world examples  
-✅ Implement code examples  
-✅ Build portfolio projects  
-✅ Document everything
+ Follow modules in order  
+ Complete ALL labs  
+ Study real-world examples  
+ Implement code examples  
+ Build portfolio projects  
+ Document everything
 
 ### Avoid This:
-❌ Skipping prerequisites  
-❌ Rushing through labs  
-❌ Ignoring business context  
-❌ Waiting until last minute  
-❌ Not asking questions  
-❌ Skipping hands-on practice
+ Skipping prerequisites  
+ Rushing through labs  
+ Ignoring business context  
+ Waiting until last minute  
+ Not asking questions  
+ Skipping hands-on practice
 
 ---
 
-## 🌟 Success Stories
+##  Success Stories
 
 > **"Understanding COSMO and intent modeling transformed how we approach search. 40% improvement in relevance."**  
 > — Alex Chen, Search Engineer
@@ -270,17 +270,17 @@ Upon completion:
 
 ---
 
-## 📞 Support
+##  Support
 
 **Have Questions?**
-- 📧 Email: ecommerce-ai-course@example.com
-- 💬 Discord: Provided upon enrollment
-- 🕐 Office Hours: Wed/Fri 4-5 PM EST
-- 📚 Documentation: README.md and INDEX.md
+-  Email: ecommerce-ai-course@example.com
+-  Discord: Provided upon enrollment
+-  Office Hours: Wed/Fri 4-5 PM EST
+-  Documentation: README.md and INDEX.md
 
 ---
 
-## 🎯 Your Next Action
+##  Your Next Action
 
 **Choose your path:**
 
@@ -304,19 +304,19 @@ Upon completion:
 
 ---
 
-## ⏰ Time to Start?
+##  Time to Start?
 
 **If you're ready:**  
-👉 **[Open README.md →](README.md)**
+ **[Open README.md →](README.md)**
 
 **Need more info?**  
-👉 **[View INDEX.md →](INDEX.md)**
+ **[View INDEX.md →](INDEX.md)**
 
 ---
 
 **The future of e-commerce is intent-driven AI. The time to learn is now.**
 
-**Let's build something amazing! 🚀**
+**Let's build something amazing! **
 
 ---
 

@@ -23,14 +23,14 @@ order: 2
 Every AI agent consists of four core components that work together to enable autonomous behavior:
 
 ```
-┌─────────────────────────────────────────┐
-│           AI Agent Architecture         │
-├─────────────────────────────────────────┤
-│ 1. LLM Reasoning Engine                 │
-│ 2. Memory (Short-term & Long-term)      │
-│ 3. Planning (Reflection & Self-Critique)│
-│ 4. Tool Integration                     │
-└─────────────────────────────────────────┘
+
+           AI Agent Architecture         
+
+ 1. LLM Reasoning Engine                 
+ 2. Memory (Short-term & Long-term)      
+ 3. Planning (Reflection & Self-Critique)
+ 4. Tool Integration                     
+
 ```
 
 #### Component 1: The LLM Reasoning Engine
@@ -166,19 +166,19 @@ class LongTermMemory:
 
 **Memory Architecture:**
 ```
-┌─────────────────────────────────────┐
-│      Memory Hierarchy               │
-├─────────────────────────────────────┤
-│  Long-Term Memory                   │
-│  ├─ Knowledge Base (Vector Store)  │
-│  ├─ User Profiles                  │
-│  └─ Historical Patterns             │
-│                                     │
-│  Short-Term Memory                  │
-│  ├─ Conversation History            │
-│  ├─ Current Context                 │
-│  └─ Working State                   │
-└─────────────────────────────────────┘
+
+      Memory Hierarchy               
+
+  Long-Term Memory                   
+   Knowledge Base (Vector Store)  
+   User Profiles                  
+   Historical Patterns             
+                                     
+  Short-Term Memory                  
+   Conversation History            
+   Current Context                 
+   Working State                   
+
 ```
 
 #### Component 3: Planning (Reflection & Self-Critique)
@@ -621,7 +621,7 @@ def create_agent_graph():
 ```
 Query → Planner → Retriever → Synthesizer → Verifier
                                     ↑              ↓
-                                    └── Refine ────┘
+                                     Refine 
 ```
 
 #### Context Management Strategies

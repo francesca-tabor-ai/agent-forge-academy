@@ -69,21 +69,21 @@ Intent-Driven Development creates a **feedback loop** between you (the human "di
 
 ```
 Human Director          AI Agent
-     │                     │
-     │ 1. Intent           │
-     ├───────────────────> │
-     │                     │
-     │                     │ 2. Implementation
-     │                     ├───────────────────>
-     │                     │
-     │ 3. Review           │
-     │<────────────────────┤
-     │                     │
-     │ 4. Refinement       │
-     ├───────────────────> │
-     │                     │
-     │ 5. Final Code       │
-     │<────────────────────┤
+                          
+      1. Intent           
+     > 
+                          
+                           2. Implementation
+                          >
+                          
+      3. Review           
+     <
+                          
+      4. Refinement       
+     > 
+                          
+      5. Final Code       
+     <
 ```
 
 ### Your Role as Director
@@ -140,17 +140,17 @@ AI: [Adds persistence logic]
 
 ### Common Pitfalls to Avoid
 
-❌ **Being Too Vague:** "Make it better"  
-✅ **Being Specific:** "Add error handling for network failures"
+ **Being Too Vague:** "Make it better"  
+ **Being Specific:** "Add error handling for network failures"
 
-❌ **No Context:** "Build a form"  
-✅ **With Context:** "Build a contact form with name, email, message fields, using our existing Button component"
+ **No Context:** "Build a form"  
+ **With Context:** "Build a contact form with name, email, message fields, using our existing Button component"
 
-❌ **Ignoring AI Suggestions:** Dismissing all AI recommendations  
-✅ **Evaluating Suggestions:** Consider AI's reasoning, accept or refine
+ **Ignoring AI Suggestions:** Dismissing all AI recommendations  
+ **Evaluating Suggestions:** Consider AI's reasoning, accept or refine
 
-❌ **No Review:** Accepting AI code without checking  
-✅ **Active Review:** Test, verify, and understand generated code
+ **No Review:** Accepting AI code without checking  
+ **Active Review:** Test, verify, and understand generated code
 
 ---
 
@@ -209,10 +209,10 @@ function TaskList() {
 ```
 
 **Benefits at this stage:**
-- ✅ UI is fully functional
-- ✅ Can test interactions immediately
-- ✅ No backend dependencies
-- ✅ Easy to iterate on design
+-  UI is fully functional
+-  Can test interactions immediately
+-  No backend dependencies
+-  Easy to iterate on design
 
 #### Phase 2: Define Real Data Structure
 
@@ -250,17 +250,17 @@ function TaskList() {
 ### When to Use Scaffolding
 
 **Use Scaffolding When:**
-- ✅ Building new features
-- ✅ Exploring UI/UX options
-- ✅ Prototyping quickly
-- ✅ Working with designers
-- ✅ Learning new patterns
+-  Building new features
+-  Exploring UI/UX options
+-  Prototyping quickly
+-  Working with designers
+-  Learning new patterns
 
 **Skip Scaffolding When:**
-- ❌ Data structure is already defined
-- ❌ Backend API exists
-- ❌ Building data-heavy features (reports, analytics)
-- ❌ Working with existing systems
+-  Data structure is already defined
+-  Backend API exists
+-  Building data-heavy features (reports, analytics)
+-  Working with existing systems
 
 ### Scaffolding Best Practices
 
@@ -415,5 +415,5 @@ Module 2 will teach you how to use Cursor Agent Mode effectively, create build p
 
 ---
 
-**Module 1 Complete** ✓  
+**Module 1 Complete**   
 **Next:** Module 2 - Scaffolding with Cursor Agent

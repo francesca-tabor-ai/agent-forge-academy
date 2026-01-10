@@ -40,9 +40,9 @@ Model Context Protocol (MCP) is a standardized protocol that acts as the "USB-C 
 **Core Components:**
 ```
 AI Agent (Client)
-    ↕ MCP Protocol
+     MCP Protocol
 MCP Server
-    ↕
+    
 Resource/Tool
 ```
 
@@ -205,9 +205,9 @@ In AI-native development, we separate agents by their cognitive function:
 **Traditional Approach:**
 ```
 Single Agent
-├── Plans
-├── Implements
-└── Reviews
+ Plans
+ Implements
+ Reviews
 (All in one, prone to errors)
 ```
 
@@ -594,9 +594,9 @@ Input → → Agent 2 → Combine → Result
 **3. Hierarchical Pattern:**
 ```
 Director Agent
-    ├→ Manager Agent 1 → Worker Agents
-    ├→ Manager Agent 2 → Worker Agents
-    └→ Manager Agent 3 → Worker Agents
+    → Manager Agent 1 → Worker Agents
+    → Manager Agent 2 → Worker Agents
+    → Manager Agent 3 → Worker Agents
 ```
 
 **4. Iterative Pattern:**
@@ -825,5 +825,5 @@ Module 5 will teach you how to deploy agentic DevOps and operations automation, 
 
 ---
 
-**Module 4 Complete** ✓  
+**Module 4 Complete**   
 **Next:** Module 5 - Agentic DevOps & Operations

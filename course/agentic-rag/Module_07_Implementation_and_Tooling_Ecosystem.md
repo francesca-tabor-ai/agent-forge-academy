@@ -650,7 +650,7 @@ Build and deploy a complete production agentic RAG system with full observabilit
 
 ---
 
-**Course Complete! 🎉**
+**Course Complete! **
 
 **Next Steps:**
 - Build your own agentic RAG system

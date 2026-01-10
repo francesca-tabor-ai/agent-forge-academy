@@ -383,30 +383,30 @@ class AttentionMLP(nn.Module):
 ```
 Input: (user_id, item_id)
     ↓
-┌─────────────────────────────────────┐
-│  Embedding Layer                     │
-│  - User Embedding (k dimensions)     │
-│  - Item Embedding (k dimensions)     │
-└─────────────────────────────────────┘
+
+  Embedding Layer                     
+  - User Embedding (k dimensions)     
+  - Item Embedding (k dimensions)     
+
     ↓                    ↓
-┌─────────────┐    ┌──────────────┐
-│     GMF     │    │     MLP      │
-│  (Linear)   │    │ (Non-linear) │
-└─────────────┘    └──────────────┘
+    
+     GMF              MLP      
+  (Linear)        (Non-linear) 
+    
     ↓                    ↓
-    └────────┬───────────┘
+    
              ↓
-    ┌─────────────────┐
-    │  Concatenation  │
-    └─────────────────┘
+    
+      Concatenation  
+    
              ↓
-    ┌─────────────────┐
-    │  Fusion Layer   │
-    └─────────────────┘
+    
+      Fusion Layer   
+    
              ↓
-    ┌─────────────────┐
-    │  Prediction     │
-    └─────────────────┘
+    
+      Prediction     
+    
 ```
 
 ### Generalized Matrix Factorization (GMF)
@@ -760,5 +760,5 @@ Implement and compare NeuMF with baseline models.
 
 ---
 
-**Module 3 Complete** ✅  
+**Module 3 Complete**   
 *Ready for Module 4: Temporal Dynamics & Session-Based Models*

@@ -811,5 +811,5 @@ Module 6 will teach you how to enforce governance, security, and high-assurance 
 
 ---
 
-**Module 5 Complete** ✓  
+**Module 5 Complete**   
 **Next:** Module 6 - Governance, Security & High-Assurance

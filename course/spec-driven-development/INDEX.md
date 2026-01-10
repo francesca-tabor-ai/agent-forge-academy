@@ -6,13 +6,13 @@ order: 0
 
 # Mastering Spec-Driven Development (SDDD) - Complete Index
 
-## 📚 Course Materials Overview
+##  Course Materials Overview
 
 This directory contains all course materials for the **Mastering Spec-Driven Development (SDDD) Professional Course (2025)**.
 
 ---
 
-## 🗂️ File Structure
+##  File Structure
 
 ### Core Course Files
 1. **[README.md](README.md)** - Main course overview, start here
@@ -53,7 +53,7 @@ This directory contains all course materials for the **Mastering Spec-Driven Dev
 
 ---
 
-## 🎯 Quick Navigation
+##  Quick Navigation
 
 ### By Learning Goal
 
@@ -77,43 +77,43 @@ This directory contains all course materials for the **Mastering Spec-Driven Dev
 
 ---
 
-## 📋 Learning Path by Role
+##  Learning Path by Role
 
 ### For Individual Developers
-1. Module 1 (Philosophy) ⭐
-2. Module 2 (Specifications) ⭐
-3. Module 3 (Planning) ⭐
-4. Module 4 (Implementation) ⭐
+1. Module 1 (Philosophy) 
+2. Module 2 (Specifications) 
+3. Module 3 (Planning) 
+4. Module 4 (Implementation) 
 5. Module 5 (Tooling) - Optional
 6. Module 6 (Enterprise) - Optional
 
 ### For Engineering Leads
 1. Module 1 (Philosophy)
-2. Module 2 (Specifications) ⭐
-3. Module 3 (Planning) ⭐
+2. Module 2 (Specifications) 
+3. Module 3 (Planning) 
 4. Module 4 (Implementation)
-5. Module 5 (Tooling) ⭐
-6. Module 6 (Enterprise) ⭐
+5. Module 5 (Tooling) 
+6. Module 6 (Enterprise) 
 
 ### For Enterprise Architects
 1. Module 1 (Philosophy)
 2. Module 2 (Specifications)
-3. Module 3 (Planning) ⭐
+3. Module 3 (Planning) 
 4. Module 4 (Implementation)
-5. Module 5 (Tooling) ⭐
-6. Module 6 (Enterprise) ⭐
+5. Module 5 (Tooling) 
+6. Module 6 (Enterprise) 
 
 ### For Product Managers
-1. Module 1 (Philosophy) ⭐
-2. Module 2 (Specifications) ⭐
-3. Module 3 (Planning) ⭐
+1. Module 1 (Philosophy) 
+2. Module 2 (Specifications) 
+3. Module 3 (Planning) 
 4. Module 4 (Implementation) - Optional
 5. Module 5 (Tooling) - Optional
-6. Module 6 (Enterprise) ⭐
+6. Module 6 (Enterprise) 
 
 ---
 
-## 🔧 Technology Reference
+##  Technology Reference
 
 ### SDDD Framework Components
 - **Specifications** - High-level markdown files (Module 2)
@@ -142,7 +142,7 @@ This directory contains all course materials for the **Mastering Spec-Driven Dev
 
 ---
 
-## 📊 Lab Overview
+##  Lab Overview
 
 | Lab | Module | Topic | Duration |
 |-----|--------|-------|----------|
@@ -157,7 +157,7 @@ This directory contains all course materials for the **Mastering Spec-Driven Dev
 
 ---
 
-## 🎓 Assessment Guide
+##  Assessment Guide
 
 ### Grade Breakdown
 - **Labs (40%):** 6 labs × 6-7% each
@@ -174,7 +174,7 @@ This directory contains all course materials for the **Mastering Spec-Driven Dev
 
 ---
 
-## 📚 Additional Resources
+##  Additional Resources
 
 ### Reference Documents
 - [SDDD Framework Documentation](https://example.com/sddd)
@@ -190,7 +190,7 @@ This directory contains all course materials for the **Mastering Spec-Driven Dev
 
 ---
 
-## 🎯 Success Checklist
+##  Success Checklist
 
 ### Before Starting
 - [ ] Read README.md
@@ -237,7 +237,7 @@ This directory contains all course materials for the **Mastering Spec-Driven Dev
 
 ---
 
-## 💡 Study Tips
+##  Study Tips
 
 ### Weekly Routine
 1. **Monday:** Watch lectures (2-3h)
@@ -262,7 +262,7 @@ This directory contains all course materials for the **Mastering Spec-Driven Dev
 
 ---
 
-## 🔗 Quick Links
+##  Quick Links
 
 - **[Start Course →](README.md)**
 - **[Module 1 →](Module_01_The_End_of_Vibe_Coding.md)**
@@ -271,7 +271,7 @@ This directory contains all course materials for the **Mastering Spec-Driven Dev
 
 ---
 
-## 📞 Contact
+##  Contact
 
 **Questions?** Email: sddd-course@example.com  
 **Office Hours:** Tuesday/Thursday 6-7 PM EST  

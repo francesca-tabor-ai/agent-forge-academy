@@ -38,11 +38,11 @@ Customers interact with brands across multiple channels:
 
 ```
 Unified Knowledge Base
-  ├─ Amazon Adapter → Amazon Q&A API
-  ├─ WhatsApp Adapter → WhatsApp Business API
-  ├─ Web Adapter → Chatbot API
-  ├─ Social Adapter → Facebook/Instagram APIs
-  └─ Email Adapter → Email Service API
+   Amazon Adapter → Amazon Q&A API
+   WhatsApp Adapter → WhatsApp Business API
+   Web Adapter → Chatbot API
+   Social Adapter → Facebook/Instagram APIs
+   Email Adapter → Email Service API
 ```
 
 ### Update Propagation Flow
@@ -59,10 +59,10 @@ Change Detection Triggered
 **Step 2: Channel Notification**
 ```
 For each active channel:
-  ├─ Check if update is relevant
-  ├─ Format update for channel
-  ├─ Validate channel requirements
-  └─ Queue for propagation
+   Check if update is relevant
+   Format update for channel
+   Validate channel requirements
+   Queue for propagation
 ```
 
 **Step 3: Channel-Specific Formatting**
@@ -78,7 +78,7 @@ tree nuts, so cross-contamination is possible."
 **WhatsApp Format:**
 ```
 Customer: "Does this contain nuts?"
-Bot: "No nuts! 🥜❌ But it's made in a facility 
+Bot: "No nuts!  But it's made in a facility 
 that also processes tree nuts, so there's a small 
 cross-contamination risk. Want more details?"
 ```
@@ -86,7 +86,7 @@ cross-contamination risk. Want more details?"
 **Web Chatbot Format:**
 ```
 [Rich Card with Product Info]
-Allergen Status: Nut-Free ✓
+Allergen Status: Nut-Free 
 Facility Warning: May contain traces
 [Learn More] [Add to Cart]
 ```
@@ -94,10 +94,10 @@ Facility Warning: May contain traces
 **Step 4: Propagation Execution**
 ```
 For each channel:
-  ├─ Authenticate with platform API
-  ├─ Submit formatted update
-  ├─ Verify success
-  └─ Log propagation status
+   Authenticate with platform API
+   Submit formatted update
+   Verify success
+   Log propagation status
 ```
 
 ### Conflict Resolution
@@ -279,24 +279,24 @@ Product listings on third-party platforms (like Amazon) can become outdated or i
 
 ```
 1. Scheduled Scraping
-   ├─ Scrape Amazon listings
-   ├─ Extract product information
-   └─ Store in monitoring database
+    Scrape Amazon listings
+    Extract product information
+    Store in monitoring database
 
 2. Comparison Engine
-   ├─ Compare with knowledge base
-   ├─ Identify discrepancies
-   └─ Calculate health score
+    Compare with knowledge base
+    Identify discrepancies
+    Calculate health score
 
 3. Alert System
-   ├─ Critical issues → Immediate alert
-   ├─ Medium issues → Daily report
-   └─ Low issues → Weekly summary
+    Critical issues → Immediate alert
+    Medium issues → Daily report
+    Low issues → Weekly summary
 
 4. Auto-Fix (Optional)
-   ├─ Non-critical updates → Auto-correct
-   ├─ Critical updates → Human review
-   └─ Log all changes
+    Non-critical updates → Auto-correct
+    Critical updates → Human review
+    Log all changes
 ```
 
 ### Health Score Calculation

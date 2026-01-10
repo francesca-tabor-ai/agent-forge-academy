@@ -797,5 +797,5 @@ Module 5 will cover scaling video content to 140+ languages while maintaining cu
 
 ---
 
-**Module 4 Complete** ✓  
+**Module 4 Complete**   
 **Next:** Module 5 - Cultural & Global Localization

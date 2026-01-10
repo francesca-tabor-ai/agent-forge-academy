@@ -6,7 +6,7 @@ order: 0
 
 # Mastering Reddit AI Visibility and Answer Engine Optimization (AEO)
 
-## 📚 Course Overview
+##  Course Overview
 
 **Duration:** 6 weeks  
 **Level:** Intermediate to Advanced  
@@ -15,20 +15,20 @@ order: 0
 
 ---
 
-## 🎯 What You'll Master
+##  What You'll Master
 
 By completing this course, you will be able to:
 
-✅ Understand why LLMs prioritize Reddit and how search has shifted to AI platforms  
-✅ Build long-term brand credibility through strategic Reddit community participation  
-✅ Automate AI citation opportunity detection and response generation  
-✅ Protect your brand from negative sentiment training data  
-✅ Analyze sentiment and stance to predict market trends  
-✅ Structure social proof for machine ingestion and measure AEO success
+ Understand why LLMs prioritize Reddit and how search has shifted to AI platforms  
+ Build long-term brand credibility through strategic Reddit community participation  
+ Automate AI citation opportunity detection and response generation  
+ Protect your brand from negative sentiment training data  
+ Analyze sentiment and stance to predict market trends  
+ Structure social proof for machine ingestion and measure AEO success
 
 ---
 
-## 📋 Course Modules
+##  Course Modules
 
 ### [Module 1: The Foundations of AI Search & Reddit's Role](Module_01_The_Foundations_of_AI_Search_and_Reddits_Role.md)
 - The death of search, the birth of dialogue (58% consumer shift)
@@ -72,7 +72,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 🛠️ Technology Stack
+##  Technology Stack
 
 ### Tools & Platforms
 - **Reddit Pro** - Mention tracking and analytics
@@ -91,7 +91,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 📊 Course Statistics
+##  Course Statistics
 
 **Market Opportunity:**
 - 58% of consumers have replaced traditional search with AI platforms
@@ -107,7 +107,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 🎓 Assessment Structure
+##  Assessment Structure
 
 - **Practical Exercises (40%):** 6 hands-on assignments
 - **Strategy Project (30%):** Complete AEO strategy for your brand
@@ -118,7 +118,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 💼 Career Outcomes
+##  Career Outcomes
 
 ### Roles & Opportunities
 - AEO Strategist: $80K-$150K
@@ -127,16 +127,16 @@ By completing this course, you will be able to:
 - Brand Reputation Manager: $70K-$130K
 
 ### Skills Acquired
-✅ AEO strategy development  
-✅ Reddit community management  
-✅ AI citation automation  
-✅ Sentiment analysis and monitoring  
-✅ Risk mitigation and crisis management  
-✅ Structured data implementation
+ AEO strategy development  
+ Reddit community management  
+ AI citation automation  
+ Sentiment analysis and monitoring  
+ Risk mitigation and crisis management  
+ Structured data implementation
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites Checklist
 - [ ] Basic understanding of SEO/marketing
@@ -155,7 +155,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 📚 Additional Resources
+##  Additional Resources
 
 ### Documentation
 - [Reddit API Documentation](https://www.reddit.com/dev/api/)
@@ -171,7 +171,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 📝 Course Materials
+##  Course Materials
 
 Each module includes:
 - Detailed lessons with real-world examples
@@ -182,7 +182,7 @@ Each module includes:
 
 ---
 
-## 🌟 Success Stories
+##  Success Stories
 
 > "Increased our brand mentions in ChatGPT responses by 400% in 3 months using the AEO framework."  
 > **— Marketing Director, E-commerce Brand**
@@ -195,7 +195,7 @@ Each module includes:
 
 ---
 
-## 📞 Contact & Enrollment
+##  Contact & Enrollment
 
 **Email:** reddit-aeo-course@example.com  
 **Website:** [Course website]  
@@ -207,7 +207,7 @@ Each module includes:
 
 ---
 
-## 📄 License
+##  License
 
 This course material is proprietary. All rights reserved.
 
@@ -215,7 +215,7 @@ This course material is proprietary. All rights reserved.
 
 ---
 
-## 🗺️ Course Navigation
+##  Course Navigation
 
 - [Start with Module 1 →](Module_01_The_Foundations_of_AI_Search_and_Reddits_Role.md)
 - [View Quick Reference Guide](_COURSE_OVERVIEW.md)
@@ -223,4 +223,4 @@ This course material is proprietary. All rights reserved.
 
 ---
 
-**Ready to master Reddit AI Visibility and AEO? Let's begin! 🚀**
+**Ready to master Reddit AI Visibility and AEO? Let's begin! **

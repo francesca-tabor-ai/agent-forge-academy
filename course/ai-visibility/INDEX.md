@@ -6,13 +6,13 @@ order: 0
 
 # Mastering the AI Visibility Playbook - Complete Index
 
-## 📚 Course Materials Overview
+##  Course Materials Overview
 
 This directory contains all course materials for **Mastering the AI Visibility Playbook**.
 
 ---
 
-## 🗂️ File Structure
+##  File Structure
 
 ### Core Course Files
 1. **[README.md](README.md)** - Main course overview, start here
@@ -64,7 +64,7 @@ This directory contains all course materials for **Mastering the AI Visibility P
 
 ---
 
-## 🎯 Quick Navigation
+##  Quick Navigation
 
 ### By Learning Goal
 
@@ -88,39 +88,39 @@ This directory contains all course materials for **Mastering the AI Visibility P
 
 ---
 
-## 📋 Learning Path by Role
+##  Learning Path by Role
 
 ### For SEO Specialists
-1. Module 1 (Understanding the shift) ⭐
-2. Module 2 (Technical implementation) ⭐
-3. Module 3 (Content optimization) ⭐
+1. Module 1 (Understanding the shift) 
+2. Module 2 (Technical implementation) 
+3. Module 3 (Content optimization) 
 4. Module 4 (Authority building)
 5. Module 5 (Analytics)
 
 ### For Content Marketers
 1. Module 1 (Understanding the shift)
-2. Module 3 (Content optimization) ⭐
-3. Module 4 (Authority building) ⭐
+2. Module 3 (Content optimization) 
+3. Module 4 (Authority building) 
 4. Module 5 (Analytics)
 5. Module 6 (Future-proofing)
 
 ### For Technical SEOs
 1. Module 1 (Understanding the shift)
-2. Module 2 (Technical implementation) ⭐
-3. Module 5 (Analytics) ⭐
+2. Module 2 (Technical implementation) 
+3. Module 5 (Analytics) 
 4. Module 6 (Future-proofing)
 5. Module 3 (Content optimization)
 
 ### For Marketing Directors
-1. Module 1 (Understanding the shift) ⭐
-2. Module 5 (Analytics) ⭐
+1. Module 1 (Understanding the shift) 
+2. Module 5 (Analytics) 
 3. Module 4 (Authority building)
-4. Module 6 (Future-proofing) ⭐
+4. Module 6 (Future-proofing) 
 5. Module 3 (Content optimization)
 
 ---
 
-## 🔧 Technology Reference
+##  Technology Reference
 
 ### Standards Covered
 - **llms.txt** - Smart sitemap for AI (Module 2)
@@ -149,7 +149,7 @@ This directory contains all course materials for **Mastering the AI Visibility P
 
 ---
 
-## 📊 Exercise Overview
+##  Exercise Overview
 
 | Exercise | Module | Topic | Duration |
 |----------|--------|-------|----------|
@@ -164,7 +164,7 @@ This directory contains all course materials for **Mastering the AI Visibility P
 
 ---
 
-## 🎓 Assessment Guide
+##  Assessment Guide
 
 ### Grade Breakdown
 - **Exercises (40%):** 6 exercises × ~6.7% each
@@ -184,7 +184,7 @@ This directory contains all course materials for **Mastering the AI Visibility P
 
 ---
 
-## 📚 Additional Resources
+##  Additional Resources
 
 ### Reference Documents
 - [llms.txt Specification](https://llmstxt.org/)
@@ -201,7 +201,7 @@ This directory contains all course materials for **Mastering the AI Visibility P
 
 ---
 
-## 🎯 Success Checklist
+##  Success Checklist
 
 ### Before Starting
 - [ ] Read README.md
@@ -234,7 +234,7 @@ This directory contains all course materials for **Mastering the AI Visibility P
 
 ---
 
-## 💡 Study Tips
+##  Study Tips
 
 ### Weekly Routine
 1. **Monday:** Read module materials (2-3h)
@@ -259,7 +259,7 @@ This directory contains all course materials for **Mastering the AI Visibility P
 
 ---
 
-## 🔗 Quick Links
+##  Quick Links
 
 - **[Start Course →](README.md)**
 - **[Module 1 →](Module_01_The_Great_Search_Exodus.md)**
@@ -268,7 +268,7 @@ This directory contains all course materials for **Mastering the AI Visibility P
 
 ---
 
-## 📞 Contact
+##  Contact
 
 **Questions?** Email: ai-visibility-course@example.com  
 **Office Hours:** Weekly Q&A sessions  

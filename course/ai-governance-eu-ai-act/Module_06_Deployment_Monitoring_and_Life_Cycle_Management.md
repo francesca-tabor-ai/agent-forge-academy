@@ -956,10 +956,10 @@ Design incident management system:
 
 In this module, you've learned:
 
-✅ **Conformity Assessment:** Understanding CE marking and assessment procedures  
-✅ **Impact Assessments:** Conducting Fundamental Rights Impact Assessments  
-✅ **Post-Market Monitoring:** Implementing continuous monitoring systems  
-✅ **Incident Management:** Managing serious incidents within 15-day requirements
+ **Conformity Assessment:** Understanding CE marking and assessment procedures  
+ **Impact Assessments:** Conducting Fundamental Rights Impact Assessments  
+ **Post-Market Monitoring:** Implementing continuous monitoring systems  
+ **Incident Management:** Managing serious incidents within 15-day requirements
 
 **Next Steps:**
 - Complete Lab 6
@@ -973,8 +973,8 @@ In this module, you've learned:
 You now have comprehensive knowledge of building and governing AI content pipelines in alignment with the EU AI Act.
 
 **Next: Capstone Project**  
-👉 Apply your knowledge to build a complete compliance framework for a real-world AI content pipeline.
+ Apply your knowledge to build a complete compliance framework for a real-world AI content pipeline.
 
 ---
 
-**Congratulations on completing the course! 🎉**
+**Congratulations on completing the course! **

@@ -303,43 +303,43 @@ Authorization: Bearer <token>
 #### Pattern 1: Layered Architecture
 
 ```
-┌─────────────────┐
-│  Presentation   │ (API Layer)
-├─────────────────┤
-│   Business      │ (Service Layer)
-├─────────────────┤
-│     Data        │ (Data Access Layer)
-└─────────────────┘
+
+  Presentation    (API Layer)
+
+   Business       (Service Layer)
+
+     Data         (Data Access Layer)
+
 ```
 
 #### Pattern 2: Microservices
 
 ```
-┌─────────────┐    ┌─────────────┐    ┌─────────────┐
-│   Auth      │    │    User     │    │   Product   │
-│  Service    │    │   Service   │    │   Service   │
-└─────────────┘    └─────────────┘    └─────────────┘
-       │                  │                  │
-       └──────────────────┼──────────────────┘
-                          │
-                   ┌──────┴──────┐
-                   │   Database   │
-                   └─────────────┘
+        
+   Auth              User            Product   
+  Service           Service          Service   
+        
+                                           
+       
+                          
+                   
+                      Database   
+                   
 ```
 
 #### Pattern 3: Event-Driven
 
 ```
-┌─────────────┐
-│   Service   │───Event───┐
-└─────────────┘            │
-                    ┌──────▼──────┐
-                    │ Event Bus   │
-                    └──────┬──────┘
-                           │
-                    ┌──────▼──────┐
-                    │   Service   │
-                    └─────────────┘
+
+   Service   Event
+            
+                    
+                     Event Bus   
+                    
+                           
+                    
+                       Service   
+                    
 ```
 
 ### Best Practices for Technical Planning
@@ -884,16 +884,16 @@ Result: Three different database systems in one project
 **Structure:**
 ```
 project/
-├── specs/
-│   ├── feature-authentication.md
-│   └── feature-products.md
-├── architecture/
-│   ├── ADR-001-database-choice.md
-│   └── ADR-002-api-design.md
-├── tasks/
-│   ├── auth-task-breakdown.md
-│   └── products-task-breakdown.md
-└── README.md
+ specs/
+    feature-authentication.md
+    feature-products.md
+ architecture/
+    ADR-001-database-choice.md
+    ADR-002-api-design.md
+ tasks/
+    auth-task-breakdown.md
+    products-task-breakdown.md
+ README.md
 ```
 
 #### Strategy 2: Architecture Decision Records (ADRs)

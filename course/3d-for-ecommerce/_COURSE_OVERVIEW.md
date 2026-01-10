@@ -4,9 +4,9 @@ description: "Get started with the 3D Commerce course in minutes"
 order: 0
 ---
 
-# 🎓 Mastering 3D Commerce and Cinematic Capitalism - Quick Start Guide
+#  Mastering 3D Commerce and Cinematic Capitalism - Quick Start Guide
 
-## 📍 You Are Here
+##  You Are Here
 
 This folder contains a **complete professional course** on building 3D commerce platforms and implementing cinematic capitalism strategies.
 
@@ -16,7 +16,7 @@ This folder contains a **complete professional course** on building 3D commerce 
 
 ---
 
-## 🚀 What's Inside
+##  What's Inside
 
 ### 9 Markdown Files
 
@@ -31,21 +31,21 @@ This folder contains a **complete professional course** on building 3D commerce 
 
 ---
 
-## 🎯 Three Ways to Use This Course
+##  Three Ways to Use This Course
 
-### 1️⃣ Self-Paced Learning
+###  Self-Paced Learning
 - Follow modules in order
 - Complete labs independently
 - Build portfolio projects
 - **Time:** 6-8 hours/week for 8 weeks
 
-### 2️⃣ Team Training
+###  Team Training
 - Use as corporate training curriculum
 - Adapt labs to company use cases
 - Run cohorts with deadlines
 - **Time:** Customize to team needs
 
-### 3️⃣ Reference Material
+###  Reference Material
 - Jump to relevant modules
 - Use code examples
 - Implement patterns
@@ -53,7 +53,7 @@ This folder contains a **complete professional course** on building 3D commerce 
 
 ---
 
-## 📚 Module Overview (What You'll Learn)
+##  Module Overview (What You'll Learn)
 
 | Week | Module | Core Skills |
 |------|--------|-------------|
@@ -66,38 +66,38 @@ This folder contains a **complete professional course** on building 3D commerce 
 
 ---
 
-## 💻 Technology You'll Master
+##  Technology You'll Master
 
 ### Frontend & 3D
-✅ React & React Three Fiber  
-✅ Three.js (3D rendering)  
-✅ glTF/GLB format  
-✅ USDZ conversion  
-✅ Model compression (Draco, Meshopt)
+ React & React Three Fiber  
+ Three.js (3D rendering)  
+ glTF/GLB format  
+ USDZ conversion  
+ Model compression (Draco, Meshopt)
 
 ### Backend & Infrastructure
-✅ Node.js & Express  
-✅ MongoDB  
-✅ AWS EC2 & Lambda  
-✅ S3 (Digital Asset Management)  
-✅ Distributed rendering pipelines
+ Node.js & Express  
+ MongoDB  
+ AWS EC2 & Lambda  
+ S3 (Digital Asset Management)  
+ Distributed rendering pipelines
 
 ### E-Commerce Integration
-✅ Amazon Selling Partner API  
-✅ ASIN management  
-✅ Mobile 3D scanning  
-✅ Catalog optimization
+ Amazon Selling Partner API  
+ ASIN management  
+ Mobile 3D scanning  
+ Catalog optimization
 
 ### Advanced Features
-✅ Video shopping infrastructure  
-✅ AI object recognition  
-✅ Dynamic product placement  
-✅ Ready Player Me API  
-✅ Avatar generation
+ Video shopping infrastructure  
+ AI object recognition  
+ Dynamic product placement  
+ Ready Player Me API  
+ Avatar generation
 
 ---
 
-## 🎯 Learning Outcomes
+##  Learning Outcomes
 
 By completing this course, you will:
 
@@ -120,7 +120,7 @@ By completing this course, you will:
 
 ---
 
-## 💼 Career Impact
+##  Career Impact
 
 ### Market Opportunity
 - **$9.7M** Amazon sellers needing 3D enablement
@@ -144,14 +144,14 @@ Companies implementing 3D commerce achieve:
 
 ---
 
-## 📋 Prerequisites
+##  Prerequisites
 
 **Required:**
-- ✅ JavaScript/TypeScript programming (intermediate)
-- ✅ React fundamentals
-- ✅ Node.js and Express basics
-- ✅ Understanding of REST APIs
-- ✅ Git/GitHub familiarity
+-  JavaScript/TypeScript programming (intermediate)
+-  React fundamentals
+-  Node.js and Express basics
+-  Understanding of REST APIs
+-  Git/GitHub familiarity
 
 **Helpful (Not Required):**
 - 3D graphics experience
@@ -168,7 +168,7 @@ Companies implementing 3D commerce achieve:
 
 ---
 
-## 🚦 Getting Started (3 Steps)
+##  Getting Started (3 Steps)
 
 ### Step 1: Review Materials (30 min)
 1. Read **README.md** (10 min)
@@ -191,7 +191,7 @@ Companies implementing 3D commerce achieve:
 
 ---
 
-## 📊 Assessment Structure
+##  Assessment Structure
 
 **Total:** 100 points
 
@@ -205,7 +205,7 @@ Companies implementing 3D commerce achieve:
 
 ---
 
-## 📅 Time Commitment
+##  Time Commitment
 
 ### Per Week (Weeks 1-6)
 - Lectures: 2-3 hours
@@ -222,20 +222,20 @@ Companies implementing 3D commerce achieve:
 
 ---
 
-## 🎓 What You Get
+##  What You Get
 
 Upon completion:
 
-✅ **Skills:** Production-ready 3D commerce platform  
-✅ **Certificate:** Digital credential (LinkedIn-shareable)  
-✅ **Portfolio:** Capstone project (GitHub showcase)  
-✅ **Network:** Alumni community  
-✅ **Knowledge:** Comprehensive 3D commerce expertise  
-✅ **Career:** $20K-40K salary increase potential
+ **Skills:** Production-ready 3D commerce platform  
+ **Certificate:** Digital credential (LinkedIn-shareable)  
+ **Portfolio:** Capstone project (GitHub showcase)  
+ **Network:** Alumni community  
+ **Knowledge:** Comprehensive 3D commerce expertise  
+ **Career:** $20K-40K salary increase potential
 
 ---
 
-## 🔗 Navigation
+##  Navigation
 
 **Start Learning:**
 - [README.md](README.md) - Course home
@@ -244,27 +244,27 @@ Upon completion:
 
 ---
 
-## 💡 Success Tips
+##  Success Tips
 
 ### Do This:
-✅ Follow modules in order  
-✅ Complete ALL labs  
-✅ Use office hours  
-✅ Join study groups  
-✅ Start capstone early  
-✅ Document everything
+ Follow modules in order  
+ Complete ALL labs  
+ Use office hours  
+ Join study groups  
+ Start capstone early  
+ Document everything
 
 ### Avoid This:
-❌ Skipping prerequisites  
-❌ Rushing through labs  
-❌ Ignoring optimization module  
-❌ Waiting until last minute  
-❌ Working in isolation  
-❌ Not asking questions
+ Skipping prerequisites  
+ Rushing through labs  
+ Ignoring optimization module  
+ Waiting until last minute  
+ Working in isolation  
+ Not asking questions
 
 ---
 
-## 🌟 Success Stories
+##  Success Stories
 
 > **"From zero 3D experience to deploying a production 3D commerce platform in 8 weeks. My capstone became our company's new product line."**  
 > — Alex Martinez, Full-Stack Engineer
@@ -277,17 +277,17 @@ Upon completion:
 
 ---
 
-## 📞 Support
+##  Support
 
 **Have Questions?**
-- 📧 Email: 3d-commerce-course@example.com
-- 💬 Discord: Provided upon enrollment
-- 🕐 Office Hours: Tue/Thu 6-7 PM EST
-- 📚 Documentation: README.md and INDEX.md
+-  Email: 3d-commerce-course@example.com
+-  Discord: Provided upon enrollment
+-  Office Hours: Tue/Thu 6-7 PM EST
+-  Documentation: README.md and INDEX.md
 
 ---
 
-## 🎯 Your Next Action
+##  Your Next Action
 
 **Choose your path:**
 
@@ -311,19 +311,19 @@ Upon completion:
 
 ---
 
-## ⏰ Time to Start?
+##  Time to Start?
 
 **If you're ready:**  
-👉 **[Open README.md →](README.md)**
+ **[Open README.md →](README.md)**
 
 **Need more info?**  
-👉 **[View INDEX.md →](INDEX.md)**
+ **[View INDEX.md →](INDEX.md)**
 
 ---
 
 **The future of e-commerce is immersive. The time to learn is now.**
 
-**Let's build something amazing! 🚀**
+**Let's build something amazing! **
 
 ---
 

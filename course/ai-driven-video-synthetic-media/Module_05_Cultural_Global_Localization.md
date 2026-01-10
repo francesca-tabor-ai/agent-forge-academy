@@ -657,5 +657,5 @@ Module 6 will cover automated quality assurance and drift detection to ensure co
 
 ---
 
-**Module 5 Complete** ✓  
+**Module 5 Complete**   
 **Next:** Module 6 - Drift Detection & Automated QA

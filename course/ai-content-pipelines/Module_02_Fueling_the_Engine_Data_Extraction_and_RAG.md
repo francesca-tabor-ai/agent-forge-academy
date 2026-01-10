@@ -927,15 +927,15 @@ includes three key features:
 
 In this module, you've learned:
 
-✅ **RAG Fundamentals** - How to ground AI in proprietary data
+ **RAG Fundamentals** - How to ground AI in proprietary data
 
-✅ **Document Extraction** - Parsing diverse formats with tools like Docling
+ **Document Extraction** - Parsing diverse formats with tools like Docling
 
-✅ **Chunking Strategies** - Breaking documents into searchable pieces
+ **Chunking Strategies** - Breaking documents into searchable pieces
 
-✅ **Embeddings and Vector DBs** - Storing and searching semantic representations
+ **Embeddings and Vector DBs** - Storing and searching semantic representations
 
-✅ **Complete RAG System** - End-to-end implementation
+ **Complete RAG System** - End-to-end implementation
 
 **Next Module:** [Module 3: Automated Ideation and Strategic Planning](Module_03_Automated_Ideation_and_Strategic_Planning.md)
 

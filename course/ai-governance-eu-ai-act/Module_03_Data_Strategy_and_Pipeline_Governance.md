@@ -903,10 +903,10 @@ Develop bias mitigation strategies:
 
 In this module, you've learned:
 
-✅ **Data as Foundation:** Strategic importance of high-quality data  
-✅ **Open Data:** Leveraging open data and European data spaces  
-✅ **Quality Protocols:** Ensuring dataset quality and integrity  
-✅ **Bias Detection and Mitigation:** Technical strategies for fairness
+ **Data as Foundation:** Strategic importance of high-quality data  
+ **Open Data:** Leveraging open data and European data spaces  
+ **Quality Protocols:** Ensuring dataset quality and integrity  
+ **Bias Detection and Mitigation:** Technical strategies for fairness
 
 **Next Steps:**
 - Complete Lab 3
@@ -916,4 +916,4 @@ In this module, you've learned:
 ---
 
 **Ready for Module 4?**  
-👉 **[Module 4: Development, Safety, and Robustness →](Module_04_Development_Safety_and_Robustness.md)**
+ **[Module 4: Development, Safety, and Robustness →](Module_04_Development_Safety_and_Robustness.md)**

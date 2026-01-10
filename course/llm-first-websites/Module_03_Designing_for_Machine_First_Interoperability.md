@@ -992,5 +992,5 @@ For every piece of content, ask:
 
 ---
 
-**Module 3 Complete** ✅  
+**Module 3 Complete**   
 **Ready for Module 4?** → [Systems That Can Act Safely](Module_04_Systems_That_Can_Act_Safely.md)

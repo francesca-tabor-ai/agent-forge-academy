@@ -90,11 +90,11 @@ LangGraph treats agent workflows as directed graphs with nodes (functions) and e
 **Core Concepts:**
 ```
 Graph Components:
-├── Nodes: Agent steps or tool calls
-├── Edges: Connections with transition logic
-├── State: Persistent data across nodes
-├── Conditional Routing: Dynamic path selection
-└── Checkpoints: Save/restore points
+ Nodes: Agent steps or tool calls
+ Edges: Connections with transition logic
+ State: Persistent data across nodes
+ Conditional Routing: Dynamic path selection
+ Checkpoints: Save/restore points
 ```
 
 ### Key Features
@@ -234,18 +234,18 @@ prefs = store.get(("user", "user_123"), "preferences")
 
 ### LangGraph Strengths
 
-✅ **Fine-Grained Control:** Explicit routing and state  
-✅ **Excellent Debugging:** LangGraph Studio visualization  
-✅ **Production-Grade:** Used by enterprises  
-✅ **Comprehensive Tooling:** Tracing, monitoring built-in  
-✅ **LangChain Integration:** Full ecosystem access
+ **Fine-Grained Control:** Explicit routing and state  
+ **Excellent Debugging:** LangGraph Studio visualization  
+ **Production-Grade:** Used by enterprises  
+ **Comprehensive Tooling:** Tracing, monitoring built-in  
+ **LangChain Integration:** Full ecosystem access
 
 ### LangGraph Limitations
 
-⚠️ **Steep Learning Curve:** Graph theory required  
-⚠️ **Verbose Code:** More boilerplate than alternatives  
-⚠️ **Setup Complexity:** Requires careful design  
-⚠️ **State Management:** Can become complex with many agents
+ **Steep Learning Curve:** Graph theory required  
+ **Verbose Code:** More boilerplate than alternatives  
+ **Setup Complexity:** Requires careful design  
+ **State Management:** Can become complex with many agents
 
 ---
 
@@ -258,11 +258,11 @@ CrewAI uses an intuitive role-based model where agents behave like employees wit
 **Core Concepts:**
 ```
 CrewAI Components:
-├── Agent: Team member with role and expertise
-├── Task: Specific work to be done
-├── Crew: Team of agents working together
-├── Tools: Functions agents can use
-└── Process: Sequential or hierarchical execution
+ Agent: Team member with role and expertise
+ Task: Specific work to be done
+ Crew: Team of agents working together
+ Tools: Functions agents can use
+ Process: Sequential or hierarchical execution
 ```
 
 ### Key Features
@@ -398,18 +398,18 @@ crew = Crew(
 
 ### CrewAI Strengths
 
-✅ **Intuitive Design:** Easy to understand and use  
-✅ **Quick Deployment:** Fastest time-to-production  
-✅ **Built-In Memory:** No setup required  
-✅ **Enterprise Features:** Control plane available  
-✅ **Active Community:** Growing ecosystem
+ **Intuitive Design:** Easy to understand and use  
+ **Quick Deployment:** Fastest time-to-production  
+ **Built-In Memory:** No setup required  
+ **Enterprise Features:** Control plane available  
+ **Active Community:** Growing ecosystem
 
 ### CrewAI Limitations
 
-⚠️ **Logging Challenges:** Debug difficulties inside tasks  
-⚠️ **Limited Flexibility:** Less control than LangGraph  
-⚠️ **Scaling Complexity:** Large systems harder to manage  
-⚠️ **Sequential Bias:** Parallel execution less natural
+ **Logging Challenges:** Debug difficulties inside tasks  
+ **Limited Flexibility:** Less control than LangGraph  
+ **Scaling Complexity:** Large systems harder to manage  
+ **Sequential Bias:** Parallel execution less natural
 
 ---
 
@@ -422,11 +422,11 @@ AutoGen frames multi-agent systems as conversations between specialized agents. 
 **Core Concepts:**
 ```
 AutoGen Components:
-├── ConversableAgent: Base agent class
-├── AssistantAgent: LLM-powered agent
-├── UserProxyAgent: Human-in-the-loop
-├── GroupChat: Multi-agent conversation
-└── Message Passing: Async agent communication
+ ConversableAgent: Base agent class
+ AssistantAgent: LLM-powered agent
+ UserProxyAgent: Human-in-the-loop
+ GroupChat: Multi-agent conversation
+ Message Passing: Async agent communication
 ```
 
 ### Key Features
@@ -542,18 +542,18 @@ results = asyncio.run(async_agent_workflow())
 
 ### AutoGen Strengths
 
-✅ **Flexible Architecture:** Highly adaptable  
-✅ **Async Support:** Non-blocking operations  
-✅ **Code Execution:** Built-in capability  
-✅ **Human-in-the-Loop:** Natural integration  
-✅ **Strong Research Backing:** Microsoft Research
+ **Flexible Architecture:** Highly adaptable  
+ **Async Support:** Non-blocking operations  
+ **Code Execution:** Built-in capability  
+ **Human-in-the-Loop:** Natural integration  
+ **Strong Research Backing:** Microsoft Research
 
 ### AutoGen Limitations
 
-⚠️ **Manual Orchestration:** No automatic DAG  
-⚠️ **Code Readability:** Complex for large systems  
-⚠️ **Learning Curve:** Async concepts required  
-⚠️ **Production Maturity:** Requires more setup
+ **Manual Orchestration:** No automatic DAG  
+ **Code Readability:** Complex for large systems  
+ **Learning Curve:** Async concepts required  
+ **Production Maturity:** Requires more setup
 
 ---
 
@@ -649,13 +649,13 @@ orchestrator = OrchestrationAgent(
 | Feature | LangGraph | CrewAI | AutoGen | OpenAI SDK | MS Framework | Google ADK |
 |---------|-----------|--------|---------|------------|--------------|------------|
 | **Learning Curve** | High | Low | Medium | Low | Medium | Medium |
-| **Production Ready** | ✅ Yes | ✅ Yes | ⚠️ Emerging | ⚠️ New | ⚠️ New | ✅ Yes |
-| **Debugging Tools** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
+| **Production Ready** |  Yes |  Yes |  Emerging |  New |  New |  Yes |
+| **Debugging Tools** |  |  |  |  |  |  |
 | **State Management** | Explicit | Automatic | Manual | Automatic | Automatic | Automatic |
 | **Memory Support** | MemorySaver | Built-in | Manual | Built-in | Built-in | Built-in |
-| **Async Support** | ✅ | ✅ | ✅✅ | ✅ | ✅ | ✅ |
+| **Async Support** |  |  |  |  |  |  |
 | **Vendor Lock-In** | Low | Low | Low | High | Medium | Medium |
-| **Enterprise Features** | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| **Enterprise Features** |  |  |  |  |  |  |
 | **Community Size** | Large | Growing | Large | New | Large | Large |
 | **Best For** | Complex workflows | Quick deploy | Research | OpenAI stack | Enterprise | GCP native |
 
@@ -749,5 +749,5 @@ Module 3 covers architecture patterns and design, including memory architecture,
 
 ---
 
-**Module 2 Complete** ✓  
+**Module 2 Complete**   
 **Next:** Module 3 - Architecture Patterns and Design

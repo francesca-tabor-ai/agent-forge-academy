@@ -6,7 +6,7 @@ order: 0
 
 # Mastering the AI Visibility Playbook
 
-## 📚 Course Overview
+##  Course Overview
 
 **Duration:** 6-8 weeks  
 **Level:** Intermediate to Advanced  
@@ -15,20 +15,20 @@ order: 0
 
 ---
 
-## 🎯 What You'll Master
+##  What You'll Master
 
 By completing this course, you will be able to:
 
-✅ Understand the collapse of traditional referral economy and the rise of AI-driven search  
-✅ Implement technical architecture for AI visibility (llms.txt, structured data, crawler management)  
-✅ Engineer content optimized for generative engines using GEO methods  
-✅ Build entity authority through high-signal sources and community signals  
-✅ Track, monitor, and defend against AI hallucinations  
-✅ Prepare infrastructure for agentic commerce and visual ideation
+ Understand the collapse of traditional referral economy and the rise of AI-driven search  
+ Implement technical architecture for AI visibility (llms.txt, structured data, crawler management)  
+ Engineer content optimized for generative engines using GEO methods  
+ Build entity authority through high-signal sources and community signals  
+ Track, monitor, and defend against AI hallucinations  
+ Prepare infrastructure for agentic commerce and visual ideation
 
 ---
 
-## 📋 Course Modules
+##  Course Modules
 
 ### [Module 1: The Great Search Exodus & The New Scoreboard](Module_01_The_Great_Search_Exodus.md)
 - The End of the Referral Era: Understanding zero-click searches exceeding 70% by 2025
@@ -67,7 +67,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 🛠️ Technology Stack
+##  Technology Stack
 
 ### Technical Standards
 - llms.txt (smart sitemap standard)
@@ -95,7 +95,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 📊 Course Statistics
+##  Course Statistics
 
 **Market Reality:**
 - 70%+ zero-click searches projected by 2025
@@ -111,7 +111,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 🎓 Assessment Structure
+##  Assessment Structure
 
 - **Practical Exercises (40%):** 8 hands-on assignments
 - **Implementation Project (30%):** Real-world AI visibility optimization
@@ -122,7 +122,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 💼 Career Outcomes
+##  Career Outcomes
 
 ### Roles & Salaries
 - AI Visibility Architect: $120K-$200K
@@ -131,16 +131,16 @@ By completing this course, you will be able to:
 - Agentic Commerce Strategist: $110K-$190K
 
 ### Skills Acquired
-✅ AI visibility strategy and architecture  
-✅ Technical implementation (llms.txt, structured data)  
-✅ Content engineering for generative engines  
-✅ Entity authority building  
-✅ Analytics and hallucination defense  
-✅ Future-proofing for agentic commerce
+ AI visibility strategy and architecture  
+ Technical implementation (llms.txt, structured data)  
+ Content engineering for generative engines  
+ Entity authority building  
+ Analytics and hallucination defense  
+ Future-proofing for agentic commerce
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites Checklist
 - [ ] Basic SEO knowledge
@@ -159,7 +159,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 📚 Additional Resources
+##  Additional Resources
 
 ### Documentation
 - [llms.txt Specification](https://llmstxt.org/)
@@ -175,7 +175,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 📝 Course Materials
+##  Course Materials
 
 Each module includes:
 - Detailed lessons with real-world examples
@@ -186,7 +186,7 @@ Each module includes:
 
 ---
 
-## 🌟 Success Stories
+##  Success Stories
 
 > "Transformed our organic traffic strategy. 40% visibility increase in AI Overviews within 3 months."  
 > **— Marketing Director, E-commerce Company**
@@ -199,7 +199,7 @@ Each module includes:
 
 ---
 
-## 📞 Contact & Enrollment
+##  Contact & Enrollment
 
 **Email:** ai-visibility-course@example.com  
 **Website:** [Course website]  
@@ -211,7 +211,7 @@ Each module includes:
 
 ---
 
-## 📄 License
+##  License
 
 This course material is proprietary. All rights reserved.
 
@@ -219,7 +219,7 @@ This course material is proprietary. All rights reserved.
 
 ---
 
-## 🗺️ Course Navigation
+##  Course Navigation
 
 - [Start with Module 1 →](Module_01_The_Great_Search_Exodus.md)
 - [View Index →](INDEX.md)
@@ -227,4 +227,4 @@ This course material is proprietary. All rights reserved.
 
 ---
 
-**Ready to transform from SEO to AI Visibility Architecture? Let's begin! 🚀**
+**Ready to transform from SEO to AI Visibility Architecture? Let's begin! **

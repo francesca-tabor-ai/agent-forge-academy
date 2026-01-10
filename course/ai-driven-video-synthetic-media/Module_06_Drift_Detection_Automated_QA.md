@@ -777,5 +777,5 @@ Module 7 will cover compliance, audit, and defense systems to ensure regulatory 
 
 ---
 
-**Module 6 Complete** ✓  
+**Module 6 Complete**   
 **Next:** Module 7 - Compliance, Audit, & Defense

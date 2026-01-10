@@ -6,7 +6,7 @@ order: 0
 
 # Mastering Agentic RAG for Enterprise AI
 
-## 📚 Course Overview
+##  Course Overview
 
 **Duration:** 7 weeks  
 **Level:** Intermediate to Advanced  
@@ -15,20 +15,20 @@ order: 0
 
 ---
 
-## 🎯 What You'll Master
+##  What You'll Master
 
 By completing this course, you will be able to:
 
-✅ Design and architect agentic RAG systems  
-✅ Build self-correcting and adaptive retrieval systems  
-✅ Implement specialized agentic RAG frameworks (CRAG, Adaptive RAG, Graph-based)  
-✅ Deploy enterprise-grade agentic RAG applications  
-✅ Evaluate, secure, and govern agentic systems  
-✅ Optimize for accuracy, cost, and latency
+ Design and architect agentic RAG systems  
+ Build self-correcting and adaptive retrieval systems  
+ Implement specialized agentic RAG frameworks (CRAG, Adaptive RAG, Graph-based)  
+ Deploy enterprise-grade agentic RAG applications  
+ Evaluate, secure, and govern agentic systems  
+ Optimize for accuracy, cost, and latency
 
 ---
 
-## 📋 Course Modules
+##  Course Modules
 
 ### [Module 1: Foundations of Retrieval-Augmented Generation](Module_01_Foundations_of_Retrieval-Augmented_Generation.md)
 - The Evolution of RAG: From Naïve to Advanced and Modular
@@ -78,7 +78,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 🛠️ Technology Stack
+##  Technology Stack
 
 ### Frameworks
 - LangChain & LangGraph (orchestration and state management)
@@ -98,7 +98,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 📊 Course Statistics
+##  Course Statistics
 
 **Market Opportunity:**
 - $375.4B projected AI market by 2034
@@ -113,7 +113,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 🎓 Assessment Structure
+##  Assessment Structure
 
 - **Labs (40%):** 7 hands-on assignments
 - **Midterm Project (20%):** Agentic RAG system with evaluation
@@ -124,7 +124,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 💼 Career Outcomes
+##  Career Outcomes
 
 ### Roles & Salaries
 - RAG Systems Engineer: $140K-$240K
@@ -133,15 +133,15 @@ By completing this course, you will be able to:
 - AI Evaluation Engineer: $120K-$200K
 
 ### Skills Acquired
-✅ Agentic RAG architecture design  
-✅ Self-correcting retrieval systems  
-✅ Enterprise deployment and governance  
-✅ Evaluation and optimization  
-✅ Security and risk management
+ Agentic RAG architecture design  
+ Self-correcting retrieval systems  
+ Enterprise deployment and governance  
+ Evaluation and optimization  
+ Security and risk management
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites Checklist
 - [ ] Python 3.11+ installed
@@ -159,7 +159,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 📚 Additional Resources
+##  Additional Resources
 
 ### Documentation
 - [LangChain Docs](https://python.langchain.com/)
@@ -175,7 +175,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 📝 Course Materials
+##  Course Materials
 
 Each module includes:
 - Detailed lessons with code examples
@@ -186,7 +186,7 @@ Each module includes:
 
 ---
 
-## 🌟 Success Stories
+##  Success Stories
 
 > "From basic RAG to deploying production agentic systems handling complex enterprise queries in 7 weeks."  
 > **— Sarah Chen, Senior AI Engineer**
@@ -199,7 +199,7 @@ Each module includes:
 
 ---
 
-## 📞 Contact & Enrollment
+##  Contact & Enrollment
 
 **Email:** agentic-rag-course@example.com  
 **Website:** [Course website]  
@@ -211,7 +211,7 @@ Each module includes:
 
 ---
 
-## 📄 License
+##  License
 
 This course material is proprietary. All rights reserved.
 
@@ -219,7 +219,7 @@ This course material is proprietary. All rights reserved.
 
 ---
 
-## 🗺️ Course Navigation
+##  Course Navigation
 
 - [Start with Module 1 →](Module_01_Foundations_of_Retrieval-Augmented_Generation.md)
 - [View Index →](INDEX.md)
@@ -227,4 +227,4 @@ This course material is proprietary. All rights reserved.
 
 ---
 
-**Ready to master agentic RAG for enterprise AI? Let's begin! 🚀**
+**Ready to master agentic RAG for enterprise AI? Let's begin! **

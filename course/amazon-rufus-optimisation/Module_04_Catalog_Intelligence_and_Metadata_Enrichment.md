@@ -1085,5 +1085,5 @@ Module 5 will explore strategic operations, logistics, and compliance, including
 
 ---
 
-**Module 4 Complete** ✓  
+**Module 4 Complete**   
 **Next:** Module 5 - Strategic Operations, Logistics, and Compliance

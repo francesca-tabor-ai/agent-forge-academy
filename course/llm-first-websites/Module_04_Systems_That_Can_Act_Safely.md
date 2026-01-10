@@ -858,5 +858,5 @@ Update when gaps exceed thresholds.
 
 ---
 
-**Module 4 Complete** ✅  
+**Module 4 Complete**   
 **Ready for Module 5?** → [Visibility & Observability](Module_05_Visibility_and_Observability.md)

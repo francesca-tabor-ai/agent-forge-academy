@@ -4,7 +4,7 @@
 
 ---
 
-## 📖 Course Description
+##  Course Description
 
 This comprehensive course covers the full spectrum of AI-powered recommender systems, from solving the cold start problem to implementing ethical, explainable recommendation engines. You'll learn both classical approaches (collaborative filtering, matrix factorization) and cutting-edge techniques (neural collaborative filtering, transformers, generative recommenders).
 
@@ -14,7 +14,7 @@ This comprehensive course covers the full spectrum of AI-powered recommender sys
 
 ---
 
-## 🎯 Learning Objectives
+##  Learning Objectives
 
 By the end of this course, you will be able to:
 
@@ -31,7 +31,7 @@ By the end of this course, you will be able to:
 
 ---
 
-## 📚 Course Modules
+##  Course Modules
 
 ### Module 1: Solving the Cold Start Challenge
 **Startup Tool Focus:** ColdStart.ai
@@ -110,7 +110,7 @@ By the end of this course, you will be able to:
 
 ---
 
-## 🛠️ Technology Stack
+##  Technology Stack
 
 ### Core Libraries
 - **NumPy & Pandas** - Data manipulation
@@ -135,7 +135,7 @@ By the end of this course, you will be able to:
 
 ---
 
-## 📋 Prerequisites
+##  Prerequisites
 
 ### Required Knowledge
 - **Python Programming** (intermediate level)
@@ -161,7 +161,7 @@ By the end of this course, you will be able to:
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Step 1: Environment Setup
 
@@ -193,7 +193,7 @@ Course datasets will be provided:
 
 ---
 
-## 📊 Course Structure
+##  Course Structure
 
 ### Weekly Breakdown
 
@@ -216,34 +216,34 @@ Course datasets will be provided:
 
 ---
 
-## 💡 Key Concepts You'll Master
+##  Key Concepts You'll Master
 
 ### Algorithms
-- ✅ Collaborative Filtering (User-based, Item-based)
-- ✅ Matrix Factorization (SVD, SVD++, NMF)
-- ✅ Neural Collaborative Filtering (NeuMF)
-- ✅ Recurrent Neural Networks (LSTM, GRU)
-- ✅ Attention Mechanisms
-- ✅ Transformer-based Recommenders
+-  Collaborative Filtering (User-based, Item-based)
+-  Matrix Factorization (SVD, SVD++, NMF)
+-  Neural Collaborative Filtering (NeuMF)
+-  Recurrent Neural Networks (LSTM, GRU)
+-  Attention Mechanisms
+-  Transformer-based Recommenders
 
 ### Challenges
-- ✅ Cold Start Problem (users, items, systems)
-- ✅ Data Sparsity
-- ✅ Scalability
-- ✅ Real-time Recommendations
-- ✅ Explainability
-- ✅ Bias and Fairness
+-  Cold Start Problem (users, items, systems)
+-  Data Sparsity
+-  Scalability
+-  Real-time Recommendations
+-  Explainability
+-  Bias and Fairness
 
 ### Evaluation
-- ✅ Accuracy Metrics (RMSE, MAE)
-- ✅ Ranking Metrics (NDCG, MAP, MRR)
-- ✅ Diversity Metrics
-- ✅ Novelty Metrics
-- ✅ Fairness Metrics
+-  Accuracy Metrics (RMSE, MAE)
+-  Ranking Metrics (NDCG, MAP, MRR)
+-  Diversity Metrics
+-  Novelty Metrics
+-  Fairness Metrics
 
 ---
 
-## 🎓 Learning Resources
+##  Learning Resources
 
 ### Required Reading
 - Each module's markdown file
@@ -262,7 +262,7 @@ Course datasets will be provided:
 
 ---
 
-## 🤝 Community & Support
+##  Community & Support
 
 ### Office Hours
 - **Tuesday & Thursday:** 6-7 PM EST
@@ -281,7 +281,7 @@ Course datasets will be provided:
 
 ---
 
-## 📈 Career Outcomes
+##  Career Outcomes
 
 ### Job Roles
 - **Recommendation Systems Engineer**
@@ -305,7 +305,7 @@ Course datasets will be provided:
 
 ---
 
-## 🔗 Quick Links
+##  Quick Links
 
 - [Course Overview](_COURSE_OVERVIEW.md)
 - [Detailed Index](INDEX.md)
@@ -319,7 +319,7 @@ Course datasets will be provided:
 
 ---
 
-## 📝 Course Updates
+##  Course Updates
 
 **Version 1.0** (January 2025)
 - Initial course release
@@ -329,7 +329,7 @@ Course datasets will be provided:
 
 ---
 
-## 🎯 Ready to Start?
+##  Ready to Start?
 
 **Begin your journey:** [Module 1: Solving the Cold Start Challenge →](Module_01_Solving_the_Cold_Start_Challenge.md)
 

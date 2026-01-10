@@ -6,7 +6,7 @@ order: 0
 
 # Next-Generation AI for E-Commerce: From Intent Discovery to Intelligent Fulfillment
 
-## 📚 Course Overview
+##  Course Overview
 
 **Duration:** 5 weeks  
 **Level:** Intermediate to Advanced  
@@ -15,20 +15,20 @@ order: 0
 
 ---
 
-## 🎯 What You'll Master
+##  What You'll Master
 
 By completing this course, you will be able to:
 
-✅ Understand and implement intent-driven search systems  
-✅ Build multimodal visual discovery pipelines  
-✅ Design generative shopping assistants like Amazon's Rufus  
-✅ Create catalog intelligence systems with extreme precision  
-✅ Optimize logistics and compliance with AI  
-✅ Bridge the "semantic gap" between user behavior and product discovery
+ Understand and implement intent-driven search systems  
+ Build multimodal visual discovery pipelines  
+ Design generative shopping assistants like Amazon's Rufus  
+ Create catalog intelligence systems with extreme precision  
+ Optimize logistics and compliance with AI  
+ Bridge the "semantic gap" between user behavior and product discovery
 
 ---
 
-## 📋 Course Modules
+##  Course Modules
 
 ### [Module 1: Intent Modeling and Generative Shopping Assistants](Module_01_Intent_Modeling_and_Generative_Shopping_Assistants.md)
 - The COSMO Algorithm and Common Sense Mining
@@ -62,7 +62,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 🛠️ Technology Stack
+##  Technology Stack
 
 ### AI/ML Technologies
 - Large Language Models (LLMs) for intent understanding
@@ -88,7 +88,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 📊 Course Statistics
+##  Course Statistics
 
 **Market Opportunity:**
 - $6.3T global e-commerce market by 2024
@@ -104,7 +104,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 🎓 Assessment Structure
+##  Assessment Structure
 
 - **Labs (40%):** 5 hands-on assignments (8 points each)
 - **Midterm Project (25%):** Intent-driven search system
@@ -115,7 +115,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 💼 Career Outcomes
+##  Career Outcomes
 
 ### Roles & Salaries
 - E-Commerce AI Engineer: $130K-$220K
@@ -125,16 +125,16 @@ By completing this course, you will be able to:
 - Generative Shopping Assistant Developer: $140K-$230K
 
 ### Skills Acquired
-✅ Intent modeling and understanding  
-✅ Multimodal search system design  
-✅ Generative AI assistant architecture  
-✅ Catalog intelligence automation  
-✅ Logistics optimization with AI  
-✅ Compliance and audit systems
+ Intent modeling and understanding  
+ Multimodal search system design  
+ Generative AI assistant architecture  
+ Catalog intelligence automation  
+ Logistics optimization with AI  
+ Compliance and audit systems
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites Checklist
 - [ ] Python 3.10+ installed
@@ -154,7 +154,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 📚 Additional Resources
+##  Additional Resources
 
 ### Documentation
 - [Transformers Library](https://huggingface.co/docs/transformers/)
@@ -176,7 +176,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 📝 Course Materials
+##  Course Materials
 
 Each module includes:
 - Detailed lessons with code examples
@@ -188,7 +188,7 @@ Each module includes:
 
 ---
 
-## 🌟 Success Stories
+##  Success Stories
 
 > "Understanding COSMO and intent modeling transformed how we approach search. We saw a 40% improvement in search relevance and 35% increase in conversions."  
 > **— Alex Chen, Search Engineer at Major E-Commerce Platform**
@@ -201,7 +201,7 @@ Each module includes:
 
 ---
 
-## 📞 Contact & Enrollment
+##  Contact & Enrollment
 
 **Email:** ecommerce-ai-course@example.com  
 **Website:** [Course website]  
@@ -213,7 +213,7 @@ Each module includes:
 
 ---
 
-## 📄 License
+##  License
 
 This course material is proprietary. All rights reserved.
 
@@ -221,7 +221,7 @@ This course material is proprietary. All rights reserved.
 
 ---
 
-## 🗺️ Course Navigation
+##  Course Navigation
 
 - [Start with Module 1 →](Module_01_Intent_Modeling_and_Generative_Shopping_Assistants.md)
 - [View Index →](INDEX.md)
@@ -229,4 +229,4 @@ This course material is proprietary. All rights reserved.
 
 ---
 
-**Ready to master next-generation AI for e-commerce? Let's begin! 🚀**
+**Ready to master next-generation AI for e-commerce? Let's begin! **

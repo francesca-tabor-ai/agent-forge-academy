@@ -684,15 +684,15 @@ Prepare for agentic commerce by building Smart Product Cards and create high-qua
 
 ## Key Takeaways
 
-✅ **Agentic commerce** is coming: Autonomous AI agents will research and purchase products
+ **Agentic commerce** is coming: Autonomous AI agents will research and purchase products
 
-✅ **Smart Product Cards** make inventory transactable: Structured data, APIs, and machine-readable policies
+ **Smart Product Cards** make inventory transactable: Structured data, APIs, and machine-readable policies
 
-✅ **VisAlchemy framework** creates high-quality visuals: 5-part approach (Subject, Aesthetics, Context, Application, Priorities)
+ **VisAlchemy framework** creates high-quality visuals: 5-part approach (Subject, Aesthetics, Context, Application, Priorities)
 
-✅ **Future-proofing** is essential: Prepare now for the agentic commerce era
+ **Future-proofing** is essential: Prepare now for the agentic commerce era
 
-✅ **Combined approach** positions you for success in the next evolution of AI-driven commerce
+ **Combined approach** positions you for success in the next evolution of AI-driven commerce
 
 ---
 
@@ -742,5 +742,5 @@ The future of search is AI. The time to adapt is now. You're equipped with the k
 ---
 
 **Ready to implement?**  
-👉 **[Review Course Materials →](README.md)**  
-👉 **[Start Implementation Project →](INDEX.md)**
+ **[Review Course Materials →](README.md)**  
+ **[Start Implementation Project →](INDEX.md)**

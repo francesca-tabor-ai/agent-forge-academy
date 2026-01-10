@@ -6,7 +6,7 @@ order: 0
 
 # Mastering Spec-Driven Development (SDDD)
 
-## 📚 Course Overview
+##  Course Overview
 
 **Duration:** 6 weeks (7 total with capstone)  
 **Level:** Intermediate to Advanced  
@@ -15,24 +15,24 @@ order: 0
 
 ---
 
-## 🎯 What You'll Master
+##  What You'll Master
 
 By completing this course, you will be able to:
 
-✅ Replace "vibe coding" with structured, traceable development  
-✅ Shift from implementation-focused to intent-focused development  
-✅ Capture requirements in high-level specifications  
-✅ Use clarification loops to surface gaps before coding  
-✅ Codify governing principles and standards  
-✅ Break down complex projects into actionable tasks  
-✅ Implement TDD workflows with AI agents  
-✅ Navigate the SDDD tooling ecosystem  
-✅ Understand enterprise economics and strategy  
-✅ Implement governance and compliance frameworks
+ Replace "vibe coding" with structured, traceable development  
+ Shift from implementation-focused to intent-focused development  
+ Capture requirements in high-level specifications  
+ Use clarification loops to surface gaps before coding  
+ Codify governing principles and standards  
+ Break down complex projects into actionable tasks  
+ Implement TDD workflows with AI agents  
+ Navigate the SDDD tooling ecosystem  
+ Understand enterprise economics and strategy  
+ Implement governance and compliance frameworks
 
 ---
 
-## 📋 Course Modules
+##  Course Modules
 
 ### [Module 1: The End of "Vibe Coding"](Module_01_The_End_of_Vibe_Coding.md)
 - **Lesson 1.1:** The Problem of Vibe Coding. Understanding why throwing vague prompts at AI leads to chaos, technical debt, and inconsistent code that fails in production.
@@ -74,7 +74,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 🛠️ Key Concepts & Technologies
+##  Key Concepts & Technologies
 
 ### SDDD Framework
 - Specification-driven development workflow
@@ -109,7 +109,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 📊 Course Statistics
+##  Course Statistics
 
 **Market Opportunity:**
 - Critical need for structured AI development frameworks
@@ -126,7 +126,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 🎓 Assessment Structure
+##  Assessment Structure
 
 - **Labs (40%):** 6 hands-on assignments
 - **Midterm Project (25%):** SDDD implementation
@@ -137,7 +137,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 💼 Career Outcomes
+##  Career Outcomes
 
 ### Roles & Salaries
 - SDDD Engineer: $140K-$250K
@@ -146,17 +146,17 @@ By completing this course, you will be able to:
 - Chief AI Engineering Officer: $220K-$400K+
 
 ### Skills Acquired
-✅ Understanding of SDDD framework and philosophy  
-✅ Specification writing and clarification loops  
-✅ Technical planning and task breakdown  
-✅ TDD workflows with AI agents  
-✅ SDDD tooling ecosystem navigation  
-✅ Enterprise economics and strategy  
-✅ Governance and compliance frameworks
+ Understanding of SDDD framework and philosophy  
+ Specification writing and clarification loops  
+ Technical planning and task breakdown  
+ TDD workflows with AI agents  
+ SDDD tooling ecosystem navigation  
+ Enterprise economics and strategy  
+ Governance and compliance frameworks
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites Checklist
 - [ ] Software development experience (2+ years)
@@ -178,7 +178,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 📚 Additional Resources
+##  Additional Resources
 
 ### Documentation
 - [SDDD Framework Documentation](https://example.com/sddd)
@@ -194,7 +194,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 📝 Course Materials
+##  Course Materials
 
 Each module includes:
 - Detailed lessons with case studies
@@ -205,7 +205,7 @@ Each module includes:
 
 ---
 
-## 🌟 Success Stories
+##  Success Stories
 
 > "SDDD transformed our development process. We went from chaos to clarity, reducing bugs by 80% and shipping 50% faster."  
 > **— Sarah Chen, Engineering Director**
@@ -218,7 +218,7 @@ Each module includes:
 
 ---
 
-## 📞 Contact & Enrollment
+##  Contact & Enrollment
 
 **Email:** sddd-course@example.com  
 **Website:** [Course website]  
@@ -230,7 +230,7 @@ Each module includes:
 
 ---
 
-## 📄 License
+##  License
 
 This course material is proprietary. All rights reserved.
 
@@ -238,7 +238,7 @@ This course material is proprietary. All rights reserved.
 
 ---
 
-## 🗺️ Course Navigation
+##  Course Navigation
 
 - [Start with Module 1 →](Module_01_The_End_of_Vibe_Coding.md)
 - [Course Overview →](_COURSE_OVERVIEW.md)
@@ -246,4 +246,4 @@ This course material is proprietary. All rights reserved.
 
 ---
 
-**Ready to master Spec-Driven Development? Let's begin! 🚀**
+**Ready to master Spec-Driven Development? Let's begin! **

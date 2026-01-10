@@ -4,9 +4,9 @@ description: "Get started with the AI Governance and EU AI Act course in minutes
 order: 0
 ---
 
-# 🎓 Building and Governing AI Content Pipelines - Quick Start Guide
+#  Building and Governing AI Content Pipelines - Quick Start Guide
 
-## 📍 You Are Here
+##  You Are Here
 
 This folder contains a **complete professional course** on developing, deploying, and managing AI content pipelines in alignment with technical best practices and the EU AI Act.
 
@@ -16,7 +16,7 @@ This folder contains a **complete professional course** on developing, deploying
 
 ---
 
-## 🚀 What's Inside
+##  What's Inside
 
 ### 9 Markdown Files
 
@@ -31,21 +31,21 @@ This folder contains a **complete professional course** on developing, deploying
 
 ---
 
-## 🎯 Three Ways to Use This Course
+##  Three Ways to Use This Course
 
-### 1️⃣ Self-Paced Learning
+###  Self-Paced Learning
 - Follow modules in order
 - Complete labs independently
 - Build compliance frameworks
 - **Time:** 6-8 hours/week for 6 weeks
 
-### 2️⃣ Team Training
+###  Team Training
 - Use as corporate training curriculum
 - Adapt labs to company use cases
 - Run cohorts with deadlines
 - **Time:** Customize to team needs
 
-### 3️⃣ Reference Material
+###  Reference Material
 - Jump to relevant modules
 - Use compliance checklists
 - Implement governance patterns
@@ -53,7 +53,7 @@ This folder contains a **complete professional course** on developing, deploying
 
 ---
 
-## 📚 Module Overview (What You'll Learn)
+##  Module Overview (What You'll Learn)
 
 | Week | Module | Core Skills |
 |------|--------|-------------|
@@ -66,34 +66,34 @@ This folder contains a **complete professional course** on developing, deploying
 
 ---
 
-## 💻 Regulatory Framework You'll Master
+##  Regulatory Framework You'll Master
 
 ### EU AI Act Compliance
-✅ Risk-based classification system  
-✅ Prohibited practices identification  
-✅ High-risk domain scoping  
-✅ Conformity assessment procedures  
-✅ Fundamental Rights Impact Assessments  
-✅ Post-market monitoring requirements
+ Risk-based classification system  
+ Prohibited practices identification  
+ High-risk domain scoping  
+ Conformity assessment procedures  
+ Fundamental Rights Impact Assessments  
+ Post-market monitoring requirements
 
 ### Technical Governance
-✅ Model cards and technical documentation  
-✅ Bias detection and mitigation  
-✅ Adversarial robustness testing  
-✅ Explainability and interpretability  
-✅ Human-in-the-loop design  
-✅ Incident management procedures
+ Model cards and technical documentation  
+ Bias detection and mitigation  
+ Adversarial robustness testing  
+ Explainability and interpretability  
+ Human-in-the-loop design  
+ Incident management procedures
 
 ### Data Governance
-✅ Data quality and integrity protocols  
-✅ Open data and European data spaces  
-✅ Dataset sourcing and validation  
-✅ Bias detection strategies  
-✅ Copyright and IP compliance
+ Data quality and integrity protocols  
+ Open data and European data spaces  
+ Dataset sourcing and validation  
+ Bias detection strategies  
+ Copyright and IP compliance
 
 ---
 
-## 🎯 Learning Outcomes
+##  Learning Outcomes
 
 By completing this course, you will:
 
@@ -117,7 +117,7 @@ By completing this course, you will:
 
 ---
 
-## 💼 Career Impact
+##  Career Impact
 
 ### Market Opportunity
 - **€50B+** AI market in Europe requiring compliance
@@ -141,13 +141,13 @@ Organizations implementing proper AI governance achieve:
 
 ---
 
-## 📋 Prerequisites
+##  Prerequisites
 
 **Required:**
-- ✅ Understanding of AI/ML systems (intermediate level)
-- ✅ Software development experience
-- ✅ Basic knowledge of regulatory compliance
-- ✅ Familiarity with data governance concepts
+-  Understanding of AI/ML systems (intermediate level)
+-  Software development experience
+-  Basic knowledge of regulatory compliance
+-  Familiarity with data governance concepts
 
 **Helpful (Not Required):**
 - EU regulatory framework knowledge
@@ -163,7 +163,7 @@ Organizations implementing proper AI governance achieve:
 
 ---
 
-## 🚦 Getting Started (3 Steps)
+##  Getting Started (3 Steps)
 
 ### Step 1: Review Materials (30 min)
 1. Read **README.md** (10 min)
@@ -185,7 +185,7 @@ Organizations implementing proper AI governance achieve:
 
 ---
 
-## 📊 Assessment Structure
+##  Assessment Structure
 
 **Total:** 100 points
 
@@ -199,7 +199,7 @@ Organizations implementing proper AI governance achieve:
 
 ---
 
-## 📅 Time Commitment
+##  Time Commitment
 
 ### Per Week (Weeks 1-6)
 - Lectures: 2-3 hours
@@ -216,20 +216,20 @@ Organizations implementing proper AI governance achieve:
 
 ---
 
-## 🎓 What You Get
+##  What You Get
 
 Upon completion:
 
-✅ **Skills:** Production-ready AI governance expertise  
-✅ **Certificate:** Digital credential (LinkedIn-shareable)  
-✅ **Portfolio:** Capstone project (GitHub showcase)  
-✅ **Network:** Alumni community  
-✅ **Knowledge:** Comprehensive EU AI Act compliance  
-✅ **Career:** €20K-40K salary increase potential
+ **Skills:** Production-ready AI governance expertise  
+ **Certificate:** Digital credential (LinkedIn-shareable)  
+ **Portfolio:** Capstone project (GitHub showcase)  
+ **Network:** Alumni community  
+ **Knowledge:** Comprehensive EU AI Act compliance  
+ **Career:** €20K-40K salary increase potential
 
 ---
 
-## 🔗 Navigation
+##  Navigation
 
 **Start Learning:**
 - [README.md](README.md) - Course home
@@ -238,27 +238,27 @@ Upon completion:
 
 ---
 
-## 💡 Success Tips
+##  Success Tips
 
 ### Do This:
-✅ Follow modules in order  
-✅ Complete ALL labs  
-✅ Use office hours  
-✅ Join study groups  
-✅ Start capstone early  
-✅ Document everything
+ Follow modules in order  
+ Complete ALL labs  
+ Use office hours  
+ Join study groups  
+ Start capstone early  
+ Document everything
 
 ### Avoid This:
-❌ Skipping prerequisites  
-❌ Rushing through labs  
-❌ Ignoring regulatory context  
-❌ Waiting until last minute  
-❌ Working in isolation  
-❌ Not asking questions
+ Skipping prerequisites  
+ Rushing through labs  
+ Ignoring regulatory context  
+ Waiting until last minute  
+ Working in isolation  
+ Not asking questions
 
 ---
 
-## 🌟 Success Stories
+##  Success Stories
 
 > **"From zero governance knowledge to leading our company's EU AI Act compliance initiative. The practical labs were invaluable."**  
 > — David Chen, Software Engineer
@@ -271,17 +271,17 @@ Upon completion:
 
 ---
 
-## 📞 Support
+##  Support
 
 **Have Questions?**
-- 📧 Email: ai-governance-course@example.com
-- 💬 Discord: Provided upon enrollment
-- 🕐 Office Hours: Tue/Thu 6-7 PM CET
-- 📚 Documentation: README.md and INDEX.md
+-  Email: ai-governance-course@example.com
+-  Discord: Provided upon enrollment
+-  Office Hours: Tue/Thu 6-7 PM CET
+-  Documentation: README.md and INDEX.md
 
 ---
 
-## 🎯 Your Next Action
+##  Your Next Action
 
 **Choose your path:**
 
@@ -305,19 +305,19 @@ Upon completion:
 
 ---
 
-## ⏰ Time to Start?
+##  Time to Start?
 
 **If you're ready:**  
-👉 **[Open README.md →](README.md)**
+ **[Open README.md →](README.md)**
 
 **Need more info?**  
-👉 **[View INDEX.md →](INDEX.md)**
+ **[View INDEX.md →](INDEX.md)**
 
 ---
 
 **The future of AI is governed. The time to learn is now.**
 
-**Let's build compliant AI systems! 🚀**
+**Let's build compliant AI systems! **
 
 ---
 

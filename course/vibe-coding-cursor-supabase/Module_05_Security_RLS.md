@@ -34,11 +34,11 @@ async function getTasks() {
 ```
 
 **Problems:**
-- ❌ Security logic scattered across codebase
-- ❌ Easy to forget checks
-- ❌ Bypassable if API called directly
-- ❌ Hard to audit
-- ❌ Different logic in different places
+-  Security logic scattered across codebase
+-  Easy to forget checks
+-  Bypassable if API called directly
+-  Hard to audit
+-  Different logic in different places
 
 ### Database-Enforced Security
 
@@ -51,11 +51,11 @@ CREATE POLICY "Users can only see own tasks"
 ```
 
 **Benefits:**
-- ✅ Security at the database level
-- ✅ Cannot be bypassed
-- ✅ Single source of truth
-- ✅ Easy to audit
-- ✅ Consistent across all access methods
+-  Security at the database level
+-  Cannot be bypassed
+-  Single source of truth
+-  Easy to audit
+-  Consistent across all access methods
 
 ### Why RLS Matters
 
@@ -707,5 +707,5 @@ Module 6 will teach you logic, intelligence, and side effects using Edge Functio
 
 ---
 
-**Module 5 Complete** ✓  
+**Module 5 Complete**   
 **Next:** Module 6 - Logic, Intelligence, & Side Effects

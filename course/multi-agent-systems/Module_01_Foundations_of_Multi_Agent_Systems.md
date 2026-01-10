@@ -31,11 +31,11 @@ A Multi-Agent System (MAS) is a computational system where multiple autonomous a
 **Agent Anatomy:**
 ```
 Agent Components:
-├── Role: Defined responsibility (e.g., Researcher, Coordinator)
-├── Tools: Functions the agent can call (APIs, databases, search)
-├── Memory: Short-term context and long-term knowledge
-├── Behavior: Decision-making logic and reasoning patterns
-└── Communication: Methods to interact with other agents
+ Role: Defined responsibility (e.g., Researcher, Coordinator)
+ Tools: Functions the agent can call (APIs, databases, search)
+ Memory: Short-term context and long-term knowledge
+ Behavior: Decision-making logic and reasoning patterns
+ Communication: Methods to interact with other agents
 ```
 
 ### Single-Agent vs Multi-Agent Approaches
@@ -55,10 +55,10 @@ User Query → Single Agent → Multiple Tools → Response
 **Multi-Agent Architecture:**
 ```
 User Query → Orchestrator Agent
-                ├→ Research Agent → Web Search Tool
-                ├→ Analysis Agent → Data Processing
-                ├→ Writing Agent → Document Generation
-                └→ Review Agent → Quality Check
+                → Research Agent → Web Search Tool
+                → Analysis Agent → Data Processing
+                → Writing Agent → Document Generation
+                → Review Agent → Quality Check
                        ↓
                   Final Response
 ```
@@ -337,9 +337,9 @@ class ConsensusProtocol:
 **Architecture:**
 ```
 AI Assistant (Client)
-        ↕ (MCP)
+         (MCP)
 MCP Server (Data Source)
-        ↕
+        
 External System/API
 ```
 
@@ -366,12 +366,12 @@ Different agent coordination approaches suit different use cases. Understanding 
 ```
         [Coordinator Agent]
                |
-    ┌──────────┼──────────┐
+    
     ↓          ↓          ↓
 [Agent A]  [Agent B]  [Agent C]
     ↓          ↓          ↓
 [Result A] [Result B] [Result C]
-    └──────────┼──────────┘
+    
                ↓
         [Final Output]
 ```
@@ -417,7 +417,7 @@ Coordinator receives document
 **Architecture:**
 ```
 [Agent A] ←→ [Agent B]
-    ↕  ⤡      ⤢  ↕
+              
 [Agent C] ←→ [Agent D]
 ```
 
@@ -464,11 +464,11 @@ Emergent threat detection
 ```
     [Director Agent]
            |
-    ┌──────┴──────┐
+    
     ↓             ↓
 [Manager A]   [Manager B]
     |             |
-  ┌─┴─┐         ┌─┴─┐
+           
   ↓   ↓         ↓   ↓
 [A1] [A2]     [B1] [B2]
 ```
@@ -501,20 +501,20 @@ Emergent threat detection
 **Example Implementation:**
 ```
 Enterprise Operations Director
-    ├─ Finance Pod Manager
-    │   ├─ Invoice Processing Agent
-    │   ├─ Expense Validation Agent
-    │   └─ Budget Analysis Agent
-    │
-    ├─ Legal Pod Manager
-    │   ├─ Contract Review Agent
-    │   ├─ Compliance Check Agent
-    │   └─ Risk Assessment Agent
-    │
-    └─ Operations Pod Manager
-        ├─ Scheduling Agent
-        ├─ Resource Allocation Agent
-        └─ Performance Monitoring Agent
+     Finance Pod Manager
+        Invoice Processing Agent
+        Expense Validation Agent
+        Budget Analysis Agent
+    
+     Legal Pod Manager
+        Contract Review Agent
+        Compliance Check Agent
+        Risk Assessment Agent
+    
+     Operations Pod Manager
+         Scheduling Agent
+         Resource Allocation Agent
+         Performance Monitoring Agent
 ```
 
 Each pod deploys as containerized microservice with independent scaling.
@@ -525,7 +525,7 @@ Each pod deploys as containerized microservice with independent scaling.
 ```
 [Event Source] → [Event Bus] → [Subscribed Agents]
                       ↑
-                      └─[Agents Publish Events]
+                      [Agents Publish Events]
 ```
 
 **Characteristics:**
@@ -800,5 +800,5 @@ Module 2 will dive deep into agent frameworks, comparing LangGraph, CrewAI, and 
 
 ---
 
-**Module 1 Complete** ✓  
+**Module 1 Complete**   
 **Next:** Module 2 - Agent Frameworks Deep Dive

@@ -108,35 +108,35 @@ An AI Factory is an integrated intelligent system that owns the entire software 
 
 ```
 AI Factory Architecture:
-├── Ideation Layer
-│   ├── Product requirement generation
-│   ├── Feature prioritization
-│   └── Market analysis agents
-│
-├── Specification Layer
-│   ├── PRD generation
-│   ├── Technical specification
-│   └── Algorithmic verification rules
-│
-├── Development Layer
-│   ├── Code generation agents
-│   ├── Architecture planning agents
-│   └── Implementation agents
-│
-├── Quality Layer
-│   ├── Automated testing agents
-│   ├── Code review agents
-│   └── Security analysis agents
-│
-├── Operations Layer
-│   ├── Deployment agents
-│   ├── Monitoring agents
-│   └── Incident response agents
-│
-└── Evolution Layer
-    ├── Performance optimization agents
-    ├── Refactoring agents
-    └── Learning and adaptation systems
+ Ideation Layer
+    Product requirement generation
+    Feature prioritization
+    Market analysis agents
+
+ Specification Layer
+    PRD generation
+    Technical specification
+    Algorithmic verification rules
+
+ Development Layer
+    Code generation agents
+    Architecture planning agents
+    Implementation agents
+
+ Quality Layer
+    Automated testing agents
+    Code review agents
+    Security analysis agents
+
+ Operations Layer
+    Deployment agents
+    Monitoring agents
+    Incident response agents
+
+ Evolution Layer
+     Performance optimization agents
+     Refactoring agents
+     Learning and adaptation systems
 ```
 
 ### AI Factory Principles
@@ -349,10 +349,10 @@ Human Architect
     ↓ (defines intent)
 AI Agent System
     ↓ (collaborates internally)
-    ├→ Planning Agent
-    ├→ Implementation Agent
-    ├→ Review Agent
-    └→ Operations Agent
+    → Planning Agent
+    → Implementation Agent
+    → Review Agent
+    → Operations Agent
     ↓ (orchestrates)
 Result
 ```
@@ -481,5 +481,5 @@ Module 2 will teach you how to move beyond "vibe coding" to specification-first 
 
 ---
 
-**Module 1 Complete** ✓  
+**Module 1 Complete**   
 **Next:** Module 2 - Specification-First Methodology (SDD)

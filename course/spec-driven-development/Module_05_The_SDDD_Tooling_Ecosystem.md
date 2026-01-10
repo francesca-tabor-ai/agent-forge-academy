@@ -336,24 +336,24 @@ GitHub Spec Kit is the "structured architect" for new (greenfield) projects requ
 **Structure:**
 ```
 project/
-├── specs/
-│   ├── _TEMPLATE.md
-│   └── README.md
-├── architecture/
-│   ├── ADR_TEMPLATE.md
-│   └── README.md
-├── tasks/
-│   ├── TASK_TEMPLATE.md
-│   └── README.md
-├── docs/
-│   └── README.md
-├── .github/
-│   ├── workflows/
-│   │   ├── spec-validation.yml
-│   │   └── quality-checks.yml
-│   └── ISSUE_TEMPLATE/
-│       └── task.md
-└── README.md
+ specs/
+    _TEMPLATE.md
+    README.md
+ architecture/
+    ADR_TEMPLATE.md
+    README.md
+ tasks/
+    TASK_TEMPLATE.md
+    README.md
+ docs/
+    README.md
+ .github/
+    workflows/
+       spec-validation.yml
+       quality-checks.yml
+    ISSUE_TEMPLATE/
+        task.md
+ README.md
 ```
 
 #### 2. Specification Templates

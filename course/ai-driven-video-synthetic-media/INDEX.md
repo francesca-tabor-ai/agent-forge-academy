@@ -6,13 +6,13 @@ order: 0
 
 # Synthetic Media Systems Architecture - Complete Index
 
-## 📚 Course Materials Overview
+##  Course Materials Overview
 
 This directory contains all course materials for the **Synthetic Media Systems Architecture Professional Course (2025)**.
 
 ---
 
-## 🗂️ File Structure
+##  File Structure
 
 ### Core Course Files
 1. **[README.md](README.md)** - Main course overview, start here
@@ -58,7 +58,7 @@ This directory contains all course materials for the **Synthetic Media Systems A
 
 ---
 
-## 🎯 Quick Navigation
+##  Quick Navigation
 
 ### By Learning Goal
 
@@ -85,44 +85,44 @@ This directory contains all course materials for the **Synthetic Media Systems A
 
 ---
 
-## 📋 Learning Path by Role
+##  Learning Path by Role
 
 ### For Video Production Engineers
-1. Module 1 (Identity & Consent) ⭐
-2. Module 2 (Pipeline Orchestration) ⭐
-3. Module 3 (Cinematic Realism) ⭐
+1. Module 1 (Identity & Consent) 
+2. Module 2 (Pipeline Orchestration) 
+3. Module 3 (Cinematic Realism) 
 4. Module 6 (Quality Assurance)
 5. Module 7 (Compliance)
 
 ### For AI/ML Engineers
-1. Module 2 (Pipeline Orchestration) ⭐
+1. Module 2 (Pipeline Orchestration) 
 2. Module 3 (Cinematic Realism)
-3. Module 4 (Physics Validation) ⭐
-4. Module 6 (Drift Detection) ⭐
+3. Module 4 (Physics Validation) 
+4. Module 6 (Drift Detection) 
 5. Module 7 (Compliance)
 
 ### For Compliance & Ethics Specialists
-1. Module 1 (Identity & Consent) ⭐
-2. Module 2 (Governance) ⭐
+1. Module 1 (Identity & Consent) 
+2. Module 2 (Governance) 
 3. Module 6 (Quality Assurance)
-4. Module 7 (Compliance & Audit) ⭐
+4. Module 7 (Compliance & Audit) 
 
 ### For Localization Engineers
 1. Module 2 (Pipeline Orchestration)
-2. Module 5 (Localization) ⭐
+2. Module 5 (Localization) 
 3. Module 6 (Quality Assurance)
 4. Module 7 (Compliance)
 
 ### For Solutions Architects
-1. Module 1 (Identity & Consent) ⭐
-2. Module 2 (Pipeline Orchestration) ⭐
+1. Module 1 (Identity & Consent) 
+2. Module 2 (Pipeline Orchestration) 
 3. Module 4 (Validation)
 4. Module 6 (Quality Assurance)
-5. Module 7 (Compliance) ⭐
+5. Module 7 (Compliance) 
 
 ---
 
-## 🔧 Technology Reference
+##  Technology Reference
 
 ### Tools Covered
 - **PersonaVault** - Identity verification and consent (Module 1)
@@ -155,7 +155,7 @@ This directory contains all course materials for the **Synthetic Media Systems A
 
 ---
 
-## 📊 Lab Overview
+##  Lab Overview
 
 | Lab | Module | Topic | Duration |
 |-----|--------|-------|----------|
@@ -171,7 +171,7 @@ This directory contains all course materials for the **Synthetic Media Systems A
 
 ---
 
-## 🎓 Assessment Guide
+##  Assessment Guide
 
 ### Grade Breakdown
 - **Labs (40%):** 7 labs × ~6% each
@@ -189,7 +189,7 @@ This directory contains all course materials for the **Synthetic Media Systems A
 
 ---
 
-## 📚 Additional Resources
+##  Additional Resources
 
 ### Reference Documents
 - [EU AI Act Documentation](https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai)
@@ -205,7 +205,7 @@ This directory contains all course materials for the **Synthetic Media Systems A
 
 ---
 
-## 🎯 Success Checklist
+##  Success Checklist
 
 ### Before Starting
 - [ ] Read README.md
@@ -248,7 +248,7 @@ This directory contains all course materials for the **Synthetic Media Systems A
 
 ---
 
-## 💡 Study Tips
+##  Study Tips
 
 ### Weekly Routine
 1. **Monday:** Watch lectures (2-3h)
@@ -272,7 +272,7 @@ This directory contains all course materials for the **Synthetic Media Systems A
 
 ---
 
-## 🔗 Quick Links
+##  Quick Links
 
 - **[Start Course →](README.md)**
 - **[Module 1 →](Module_01_Identity_Consent_Management.md)**
@@ -281,7 +281,7 @@ This directory contains all course materials for the **Synthetic Media Systems A
 
 ---
 
-## 📞 Contact
+##  Contact
 
 **Questions?** Email: synthetic-media-course@example.com  
 **Office Hours:** Tuesday/Thursday 6-7 PM EST  

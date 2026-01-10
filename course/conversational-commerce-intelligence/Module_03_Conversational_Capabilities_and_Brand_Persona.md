@@ -33,7 +33,7 @@ Every brand has a unique voice and personality. The persona engine ensures that 
 **Kinder (Playful, Family-Friendly):**
 ```
 Customer: "What's in this chocolate?"
-AI: "Hey! 😊 Our Kinder chocolate is made with creamy milk 
+AI: "Hey!  Our Kinder chocolate is made with creamy milk 
 chocolate and a delicious hazelnut filling that kids (and 
 grown-ups!) absolutely love! It's perfect for sharing with 
 the family. Want to know more about the ingredients?"
@@ -303,12 +303,12 @@ to hear more details?"
 
 **Example Card:**
 ```
-┌─────────────────────────────┐
-│  [Product Image]            │
-│  Premium Dark Chocolate    │
-│  $8.99 | Nut-Free ✓        │
-│  [Add to Cart] [Learn More] │
-└─────────────────────────────┘
+
+  [Product Image]            
+  Premium Dark Chocolate    
+  $8.99 | Nut-Free         
+  [Add to Cart] [Learn More] 
+
 ```
 
 ### Multimodal Response Generation

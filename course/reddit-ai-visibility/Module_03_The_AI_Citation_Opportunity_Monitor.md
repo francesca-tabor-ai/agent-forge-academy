@@ -393,22 +393,22 @@ If Approved → Post to Reddit
 
 **Slack Message Format:**
 ```
-🚨 New Citation Opportunity
+ New Citation Opportunity
 
-📊 Priority: High (85/100)
-🏷️ Type: Product Swap
-📍 Subreddit: r/yourniche
-👤 User: u/username
+ Priority: High (85/100)
+ Type: Product Swap
+ Subreddit: r/yourniche
+ User: u/username
 
-📝 Original Post:
+ Original Post:
 "[Post title and excerpt]"
 
-💬 Generated Responses:
+ Generated Responses:
 [Option 1]
 [Option 2]
 [Option 3]
 
-⚡ Actions:
+ Actions:
 [Approve Option 1] [Approve Option 2] [Approve Option 3]
 [Edit Response] [Reject] [View Full Post]
 ```
@@ -561,5 +561,5 @@ Module 4 will teach you how to protect your brand from negative sentiment traini
 
 ---
 
-**Module 3 Complete** ✓  
+**Module 3 Complete**   
 **Next:** Module 4 - Risk Mitigation & Ethical Design

@@ -6,13 +6,13 @@ order: 0
 
 # Mastering 3D Commerce and Cinematic Capitalism - Complete Index
 
-## 📚 Course Materials Overview
+##  Course Materials Overview
 
 This directory contains all course materials for the **Mastering 3D Commerce and Cinematic Capitalism Professional Course (2025)**.
 
 ---
 
-## 🗂️ File Structure
+##  File Structure
 
 ### Core Course Files
 1. **[README.md](README.md)** - Main course overview, start here
@@ -53,7 +53,7 @@ This directory contains all course materials for the **Mastering 3D Commerce and
 
 ---
 
-## 🎯 Quick Navigation
+##  Quick Navigation
 
 ### By Learning Goal
 
@@ -77,35 +77,35 @@ This directory contains all course materials for the **Mastering 3D Commerce and
 
 ---
 
-## 📋 Learning Path by Role
+##  Learning Path by Role
 
 ### For Frontend Developers
 1. Module 1 (Business Case)
-2. Module 2 (Technical Architecture) ⭐
-3. Module 3 (Standards & Optimization) ⭐
-4. Module 5 (Advanced Features) ⭐
+2. Module 2 (Technical Architecture) 
+3. Module 3 (Standards & Optimization) 
+4. Module 5 (Advanced Features) 
 
 ### For Backend Engineers
 1. Module 1 (Business Case)
-2. Module 2 (Technical Architecture) ⭐
-3. Module 4 (Amazon Integration) ⭐
-4. Module 6 (Scaling) ⭐
+2. Module 2 (Technical Architecture) 
+3. Module 4 (Amazon Integration) 
+4. Module 6 (Scaling) 
 
 ### For E-Commerce Specialists
-1. Module 1 (Business Case) ⭐
-2. Module 4 (Amazon Integration) ⭐
-3. Module 5 (Monetization) ⭐
-4. Module 6 (Implementation) ⭐
+1. Module 1 (Business Case) 
+2. Module 4 (Amazon Integration) 
+3. Module 5 (Monetization) 
+4. Module 6 (Implementation) 
 
 ### For Product Managers
-1. Module 1 (Business Case) ⭐
+1. Module 1 (Business Case) 
 2. Module 4 (Operations)
-3. Module 5 (Monetization) ⭐
-4. Module 6 (Roadmap) ⭐
+3. Module 5 (Monetization) 
+4. Module 6 (Roadmap) 
 
 ---
 
-## 🔧 Technology Reference
+##  Technology Reference
 
 ### Frontend Technologies
 - **React** - UI framework (Modules 2, 5)
@@ -137,7 +137,7 @@ This directory contains all course materials for the **Mastering 3D Commerce and
 
 ---
 
-## 📊 Lab Overview
+##  Lab Overview
 
 | Lab | Module | Topic | Duration |
 |-----|--------|-------|----------|
@@ -152,7 +152,7 @@ This directory contains all course materials for the **Mastering 3D Commerce and
 
 ---
 
-## 🎓 Assessment Guide
+##  Assessment Guide
 
 ### Grade Breakdown
 - **Labs (40%):** 6 labs × 6-7% each
@@ -169,7 +169,7 @@ This directory contains all course materials for the **Mastering 3D Commerce and
 
 ---
 
-## 📚 Additional Resources
+##  Additional Resources
 
 ### Reference Documents
 - [Three.js Documentation](https://threejs.org/docs/)
@@ -185,7 +185,7 @@ This directory contains all course materials for the **Mastering 3D Commerce and
 
 ---
 
-## 🎯 Success Checklist
+##  Success Checklist
 
 ### Before Starting
 - [ ] Read README.md
@@ -228,7 +228,7 @@ This directory contains all course materials for the **Mastering 3D Commerce and
 
 ---
 
-## 💡 Study Tips
+##  Study Tips
 
 ### Weekly Routine
 1. **Monday:** Watch lectures (2-3h)
@@ -252,7 +252,7 @@ This directory contains all course materials for the **Mastering 3D Commerce and
 
 ---
 
-## 🔗 Quick Links
+##  Quick Links
 
 - **[Start Course →](README.md)**
 - **[Module 1 →](Module_01_The_Shift_to_Immersive_Commerce.md)**
@@ -261,7 +261,7 @@ This directory contains all course materials for the **Mastering 3D Commerce and
 
 ---
 
-## 📞 Contact
+##  Contact
 
 **Questions?** Email: 3d-commerce-course@example.com  
 **Office Hours:** Tuesday/Thursday 6-7 PM EST  

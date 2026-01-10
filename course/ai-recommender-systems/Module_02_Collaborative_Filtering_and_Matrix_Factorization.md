@@ -1102,5 +1102,5 @@ Implement and compare different matrix factorization approaches.
 
 ---
 
-**Module 2 Complete** ✅  
+**Module 2 Complete**   
 *Ready for Module 3: Neural Collaborative Filtering*

@@ -116,24 +116,24 @@ Request → AI Pipeline → Automated Quality Check → Publish
 Every AI content pipeline follows four critical stages:
 
 ```
-┌─────────────┐
-│Initialization│ ← Validating requests, setting parameters
-└──────┬──────┘
-       │
-       ▼
-┌─────────────┐
-│   Planning   │ ← Devising global strategies, breaking into tasks
-└──────┬──────┘
-       │
-       ▼
-┌─────────────┐
-│  Execution   │ ← Task-specific generation (text, image, video)
-└──────┬──────┘
-       │
-       ▼
-┌─────────────┐
-│ Verification │ ← Quality checks, brand voice, accuracy
-└─────────────┘
+
+Initialization ← Validating requests, setting parameters
+
+       
+       
+
+   Planning    ← Devising global strategies, breaking into tasks
+
+       
+       
+
+  Execution    ← Task-specific generation (text, image, video)
+
+       
+       
+
+ Verification  ← Quality checks, brand voice, accuracy
+
 ```
 
 ### Stage 1: Initialization
@@ -170,13 +170,13 @@ Deadline: 48 hours
 
 **Initialization Output:**
 ```
-✅ Request validated
-✅ Brand voice guidelines loaded
-✅ 5 similar articles retrieved for style reference
-✅ Research sources identified (Perplexity, internal docs)
-✅ Agents allocated: Research → Writer → Editor → SEO
-✅ Estimated cost: $2.50
-✅ Estimated time: 4 hours
+ Request validated
+ Brand voice guidelines loaded
+ 5 similar articles retrieved for style reference
+ Research sources identified (Perplexity, internal docs)
+ Agents allocated: Research → Writer → Editor → SEO
+ Estimated cost: $2.50
+ Estimated time: 4 hours
 ```
 
 ### Stage 2: Planning
@@ -322,16 +322,16 @@ Quality Criteria:
 
 **Verification Checklist:**
 ```
-✅ Grammar: 0 errors
-✅ Spelling: 0 errors
-✅ Readability: 65 (target: 60+)
-✅ Brand voice match: 92% (target: 90%+)
-✅ Citations: 5 valid sources
-✅ Fact check: All claims verified
-✅ SEO: Keywords optimized
-✅ Length: 2000 words (target: 2000)
-✅ Structure: All sections complete
-✅ Images: 3 relevant images generated
+ Grammar: 0 errors
+ Spelling: 0 errors
+ Readability: 65 (target: 60+)
+ Brand voice match: 92% (target: 90%+)
+ Citations: 5 valid sources
+ Fact check: All claims verified
+ SEO: Keywords optimized
+ Length: 2000 words (target: 2000)
+ Structure: All sections complete
+ Images: 3 relevant images generated
 
 Confidence Score: 94% (High)
 Action: Auto-approve for publishing
@@ -404,10 +404,10 @@ def run_content_pipeline(request):
 - Basic tools (Zapier/n8n free tier)
 
 **Success Metrics:**
-- ✅ 5-10 pieces produced
-- ✅ Quality matches manual content
-- ✅ Time savings: 50%+
-- ✅ Cost per piece: 30-50% reduction
+-  5-10 pieces produced
+-  Quality matches manual content
+-  Time savings: 50%+
+-  Cost per piece: 30-50% reduction
 
 **Example Pilot: Blog Post Pipeline**
 
@@ -449,11 +449,11 @@ def run_content_pipeline(request):
 - Vector database (Pinecone or LanceDB)
 
 **Success Metrics:**
-- ✅ 50+ pieces produced
-- ✅ Quality: 90%+ match
-- ✅ Time savings: 70%+
-- ✅ Cost per piece: 60-70% reduction
-- ✅ Team satisfaction: 80%+
+-  50+ pieces produced
+-  Quality: 90%+ match
+-  Time savings: 70%+
+-  Cost per piece: 60-70% reduction
+-  Team satisfaction: 80%+
 
 **Example Expansion: Multi-Content Pipeline**
 
@@ -495,11 +495,11 @@ def run_content_pipeline(request):
 - Analytics and monitoring
 
 **Success Metrics:**
-- ✅ 200+ pieces produced
-- ✅ Quality: 95%+ match
-- ✅ Time savings: 80%+
-- ✅ Cost per piece: 70-80% reduction
-- ✅ Scalability: Handle 10x volume
+-  200+ pieces produced
+-  Quality: 95%+ match
+-  Time savings: 80%+
+-  Cost per piece: 70-80% reduction
+-  Scalability: Handle 10x volume
 
 **Optimization Focus Areas:**
 1. **Pipeline Efficiency**
@@ -536,11 +536,11 @@ def run_content_pipeline(request):
 - Enterprise AI infrastructure
 
 **Success Metrics:**
-- ✅ 1000+ pieces/month
-- ✅ Quality: 95%+ match
-- ✅ Time savings: 85%+
-- ✅ Cost per piece: 75-85% reduction
-- ✅ ROI: 300%+ return on investment
+-  1000+ pieces/month
+-  Quality: 95%+ match
+-  Time savings: 85%+
+-  Cost per piece: 75-85% reduction
+-  ROI: 300%+ return on investment
 
 ### Building Specialized Teams
 
@@ -565,15 +565,15 @@ Quality Lead → Reviewers (3-5)
 **Phase 4: Enterprise Team**
 ```
 Content Strategy Director
-    ├── Content Strategists (3-5)
-    ├── Technical Director
-    │   ├── Pipeline Engineers (3-5)
-    │   └── Platform Engineers (2-3)
-    ├── Quality Director
-    │   ├── QA Leads (2-3)
-    │   └── Reviewers (10-15)
-    └── Analytics Director
-        └── Data Analysts (2-3)
+     Content Strategists (3-5)
+     Technical Director
+        Pipeline Engineers (3-5)
+        Platform Engineers (2-3)
+     Quality Director
+        QA Leads (2-3)
+        Reviewers (10-15)
+     Analytics Director
+         Data Analysts (2-3)
 ```
 
 ### Setting Measurable KPIs
@@ -663,28 +663,28 @@ CPP = (Labor Cost + Tool Cost + API Cost) / Pieces Produced
 Content Velocity:
 - Pieces this week: 18
 - Target: 15
-- Growth: +20% vs. last week ✅
+- Growth: +20% vs. last week 
 
 Cost Per Piece:
 - Current: $28
 - Manual baseline: $500
-- Reduction: 94% ✅
+- Reduction: 94% 
 
 Quality Score:
 - Brand voice: 91%
 - Grammar: 98%
 - Fact accuracy: 96%
-- Overall: 94% ✅
+- Overall: 94% 
 
 Time Efficiency:
 - Hours per piece: 2.1
 - Manual baseline: 12 hours
-- Savings: 82% ✅
+- Savings: 82% 
 
 Scalability:
 - Max capacity: 25 pieces/week
 - Current utilization: 72%
-- Headroom: 28% ✅
+- Headroom: 28% 
 ```
 
 ---
@@ -779,13 +779,13 @@ Design a complete pipeline framework for a content use case of your choice.
 
 In this module, you've learned:
 
-✅ **The shift from "AI in Media" to "Media in AI"** - Understanding how AI pipelines transform content operations
+ **The shift from "AI in Media" to "Media in AI"** - Understanding how AI pipelines transform content operations
 
-✅ **The four-stage framework** - Initialization, Planning, Execution, and Verification
+ **The four-stage framework** - Initialization, Planning, Execution, and Verification
 
-✅ **Phased implementation** - From pilot to enterprise deployment
+ **Phased implementation** - From pilot to enterprise deployment
 
-✅ **Team building and KPIs** - How to structure teams and measure success
+ **Team building and KPIs** - How to structure teams and measure success
 
 **Next Module:** [Module 2: Fueling the Engine - Data Extraction and RAG](Module_02_Fueling_the_Engine_Data_Extraction_and_RAG.md)
 

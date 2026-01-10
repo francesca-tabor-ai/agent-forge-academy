@@ -90,21 +90,21 @@ Build connections between entities:
 
 ```
 Product: "Dark Chocolate Bar"
-  ├─ Contains → Ingredient: "Cocoa"
-  ├─ Contains → Ingredient: "Sugar"
-  ├─ Contains → Ingredient: "Milk"
-  ├─ Contains-Allergen → Allergen: "Milk"
-  ├─ Category → "Chocolate"
-  ├─ Brand → "Premium Chocolates"
-  └─ Similar-To → Product: "Milk Chocolate Bar"
+   Contains → Ingredient: "Cocoa"
+   Contains → Ingredient: "Sugar"
+   Contains → Ingredient: "Milk"
+   Contains-Allergen → Allergen: "Milk"
+   Category → "Chocolate"
+   Brand → "Premium Chocolates"
+   Similar-To → Product: "Milk Chocolate Bar"
 
 Ingredient: "Cocoa"
-  ├─ Part-Of → Product: "Dark Chocolate Bar"
-  └─ Source → "Ghana"
+   Part-Of → Product: "Dark Chocolate Bar"
+   Source → "Ghana"
 
 Allergen: "Milk"
-  ├─ Found-In → Product: "Dark Chocolate Bar"
-  └─ Risk-Level → "High"
+   Found-In → Product: "Dark Chocolate Bar"
+   Risk-Level → "High"
 ```
 
 ### Data Quality and Validation
@@ -254,16 +254,16 @@ An ontology is a formal specification of concepts, relationships, and rules with
 **Category Hierarchy:**
 ```
 Food & Beverage
-  ├─ Chocolate
-  │   ├─ Dark Chocolate
-  │   ├─ Milk Chocolate
-  │   └─ White Chocolate
-  ├─ Candy
-  │   ├─ Hard Candy
-  │   └─ Soft Candy
-  └─ Snacks
-      ├─ Chips
-      └─ Nuts
+   Chocolate
+      Dark Chocolate
+      Milk Chocolate
+      White Chocolate
+   Candy
+      Hard Candy
+      Soft Candy
+   Snacks
+       Chips
+       Nuts
 ```
 
 **Product Properties:**
@@ -294,10 +294,10 @@ Ingredient → Derived-From → Allergen-Source
 **Example:**
 ```
 Product: "Chocolate Chip Cookie"
-  ├─ Contains-Allergen → "Wheat" (from flour)
-  ├─ Contains-Allergen → "Eggs" (from egg ingredient)
-  ├─ Contains-Allergen → "Milk" (from chocolate chips)
-  └─ May-Contain → "Nuts" (cross-contamination risk)
+   Contains-Allergen → "Wheat" (from flour)
+   Contains-Allergen → "Eggs" (from egg ingredient)
+   Contains-Allergen → "Milk" (from chocolate chips)
+   May-Contain → "Nuts" (cross-contamination risk)
 ```
 
 ### Safety Rules and Constraints

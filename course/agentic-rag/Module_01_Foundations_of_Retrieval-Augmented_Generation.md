@@ -77,11 +77,11 @@ Reranking → Context Optimization → LLM → Response
 **Architecture:**
 ```
 User Query → Query Router → Specialized Modules →
-├─ Document Parser
-├─ Chunking Strategy
-├─ Embedding Model
-├─ Retrieval Strategy
-└─ Post-Processor
+ Document Parser
+ Chunking Strategy
+ Embedding Model
+ Retrieval Strategy
+ Post-Processor
 → LLM → Response
 ```
 

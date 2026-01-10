@@ -42,10 +42,10 @@ For regulated industries (FMCG, Health, Food), AI responses must comply with str
 AI Response Generated
   ↓
 Validation Layer
-  ├─ FDA Compliance Check
-  ├─ FALCPA Allergen Check
-  ├─ Health Claim Check
-  └─ Medical Claim Check
+   FDA Compliance Check
+   FALCPA Allergen Check
+   Health Claim Check
+   Medical Claim Check
   ↓
 If Pass → Return Response
 If Fail → Block + Alert
@@ -54,10 +54,10 @@ If Fail → Block + Alert
 ### FDA Compliance Rules
 
 **Prohibited Health Claims:**
-- ❌ "This product cures [condition]"
-- ❌ "This product prevents [disease]"
-- ❌ "This product treats [medical condition]"
-- ✅ "This product contains [nutrient] which supports [general health]"
+-  "This product cures [condition]"
+-  "This product prevents [disease]"
+-  "This product treats [medical condition]"
+-  "This product contains [nutrient] which supports [general health]"
 
 **Allowed vs. Prohibited:**
 
@@ -206,15 +206,15 @@ def validate_health_claims(response):
 AI Response Generated
   ↓
 Sensitivity Check
-  ├─ Low Risk → Auto-approve
-  ├─ Medium Risk → Queue for Review
-  └─ High Risk → Block + Urgent Review
+   Low Risk → Auto-approve
+   Medium Risk → Queue for Review
+   High Risk → Block + Urgent Review
   ↓
 SME Review Queue
-  ├─ Subject Matter Expert assigned
-  ├─ Review response accuracy
-  ├─ Verify compliance
-  └─ Approve/Reject/Edit
+   Subject Matter Expert assigned
+   Review response accuracy
+   Verify compliance
+   Approve/Reject/Edit
   ↓
 If Approved → Send to Customer
 If Rejected → Regenerate or Escalate
@@ -233,10 +233,10 @@ If Edited → Update Knowledge Base
 - Product context
 
 **Review Actions:**
-- ✅ Approve (send as-is)
-- ✏️ Edit (modify and approve)
-- ❌ Reject (block and regenerate)
-- 📝 Add Note (document decision)
+-  Approve (send as-is)
+-  Edit (modify and approve)
+-  Reject (block and regenerate)
+-  Add Note (document decision)
 
 **Example Review:**
 
@@ -251,7 +251,7 @@ is possible. We recommend consulting with your
 healthcare provider."
 
 SME Review:
-✅ Approved
+ Approved
 Note: "Response is accurate and appropriately 
 cautious. Good use of healthcare provider 
 recommendation."

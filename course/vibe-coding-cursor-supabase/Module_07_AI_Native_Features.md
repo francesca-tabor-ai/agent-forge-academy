@@ -37,14 +37,14 @@ order: 7
 ### Why Vector Search?
 
 **Traditional Keyword Search:**
-- ❌ "car" won't match "automobile"
-- ❌ "happy" won't match "joyful"
-- ❌ No understanding of meaning
+-  "car" won't match "automobile"
+-  "happy" won't match "joyful"
+-  No understanding of meaning
 
 **Vector/Semantic Search:**
-- ✅ "car" matches "automobile", "vehicle"
-- ✅ "happy" matches "joyful", "cheerful"
-- ✅ Understands meaning and context
+-  "car" matches "automobile", "vehicle"
+-  "happy" matches "joyful", "cheerful"
+-  Understands meaning and context
 
 ### Setting Up pgvector
 
@@ -812,5 +812,5 @@ Module 8 will teach you deployment and the iteration loop, including cloud synch
 
 ---
 
-**Module 7 Complete** ✓  
+**Module 7 Complete**   
 **Next:** Module 8 - Deployment & the Iteration Loop

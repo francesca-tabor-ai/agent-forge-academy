@@ -6,13 +6,13 @@ order: 0
 
 # Mastering Agentic RAG for Enterprise AI - Complete Index
 
-## 📚 Course Materials Overview
+##  Course Materials Overview
 
 This directory contains all course materials for the **Mastering Agentic RAG for Enterprise AI Course (2025)**.
 
 ---
 
-## 🗂️ File Structure
+##  File Structure
 
 ### Core Course Files
 1. **[README.md](README.md)** - Main course overview, start here
@@ -54,7 +54,7 @@ This directory contains all course materials for the **Mastering Agentic RAG for
 
 ---
 
-## 🎯 Quick Navigation
+##  Quick Navigation
 
 ### By Learning Goal
 
@@ -81,39 +81,39 @@ This directory contains all course materials for the **Mastering Agentic RAG for
 
 ---
 
-## 📋 Learning Path by Role
+##  Learning Path by Role
 
 ### For AI/ML Engineers
-1. Module 1 (Foundations) ⭐
-2. Module 2 (Architecture) ⭐
-3. Module 3 (Patterns) ⭐
-4. Module 4 (Frameworks) ⭐
+1. Module 1 (Foundations) 
+2. Module 2 (Architecture) 
+3. Module 3 (Patterns) 
+4. Module 4 (Frameworks) 
 5. Module 7 (Implementation)
 
 ### For Software Engineers
 1. Module 1 (Foundations)
-2. Module 2 (Architecture) ⭐
-3. Module 3 (Patterns) ⭐
-4. Module 7 (Implementation) ⭐
+2. Module 2 (Architecture) 
+3. Module 3 (Patterns) 
+4. Module 7 (Implementation) 
 5. Module 6 (Evaluation)
 
 ### For Data Engineers
 1. Module 1 (Foundations)
-2. Module 4 (Frameworks) ⭐
-3. Module 7 (Databases) ⭐
+2. Module 4 (Frameworks) 
+3. Module 7 (Databases) 
 4. Module 5 (Applications)
 5. Module 6 (Governance)
 
 ### For Solutions Architects
-1. Module 1 (Foundations) ⭐
-2. Module 2 (Architecture) ⭐
-3. Module 3 (Patterns) ⭐
-4. Module 5 (Applications) ⭐
-5. Module 6 (Governance) ⭐
+1. Module 1 (Foundations) 
+2. Module 2 (Architecture) 
+3. Module 3 (Patterns) 
+4. Module 5 (Applications) 
+5. Module 6 (Governance) 
 
 ---
 
-## 🔧 Technology Reference
+##  Technology Reference
 
 ### Frameworks Covered
 - **LangChain** - RAG orchestration (Modules 2, 3, 7)
@@ -133,7 +133,7 @@ This directory contains all course materials for the **Mastering Agentic RAG for
 
 ---
 
-## 📊 Lab Overview
+##  Lab Overview
 
 | Lab | Module | Topic | Duration |
 |-----|--------|-------|----------|
@@ -149,7 +149,7 @@ This directory contains all course materials for the **Mastering Agentic RAG for
 
 ---
 
-## 🎓 Assessment Guide
+##  Assessment Guide
 
 ### Grade Breakdown
 - **Labs (40%):** 7 labs × ~6% each
@@ -165,7 +165,7 @@ This directory contains all course materials for the **Mastering Agentic RAG for
 
 ---
 
-## 📚 Additional Resources
+##  Additional Resources
 
 ### External Links
 - [LangChain Documentation](https://python.langchain.com/)
@@ -176,7 +176,7 @@ This directory contains all course materials for the **Mastering Agentic RAG for
 
 ---
 
-## 🎯 Success Checklist
+##  Success Checklist
 
 ### Before Starting
 - [ ] Read README.md
@@ -219,7 +219,7 @@ This directory contains all course materials for the **Mastering Agentic RAG for
 
 ---
 
-## 💡 Study Tips
+##  Study Tips
 
 ### Weekly Routine
 1. **Monday:** Watch lectures (2-3h)
@@ -243,7 +243,7 @@ This directory contains all course materials for the **Mastering Agentic RAG for
 
 ---
 
-## 🔗 Quick Links
+##  Quick Links
 
 - **[Start Course →](README.md)**
 - **[Module 1 →](Module_01_Foundations_of_Retrieval-Augmented_Generation.md)**
@@ -252,7 +252,7 @@ This directory contains all course materials for the **Mastering Agentic RAG for
 
 ---
 
-## 📞 Contact
+##  Contact
 
 **Questions?** Email: agentic-rag-course@example.com  
 **Office Hours:** Tuesday/Thursday 6-7 PM EST  

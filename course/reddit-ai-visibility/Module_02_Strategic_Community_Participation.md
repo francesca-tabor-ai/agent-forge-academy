@@ -476,5 +476,5 @@ Module 3 will teach you how to automate AI citation opportunity detection using 
 
 ---
 
-**Module 2 Complete** ✓  
+**Module 2 Complete**   
 **Next:** Module 3 - The AI Citation Opportunity Monitor

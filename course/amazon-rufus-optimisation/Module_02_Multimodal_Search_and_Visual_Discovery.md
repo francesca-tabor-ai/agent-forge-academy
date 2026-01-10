@@ -963,5 +963,5 @@ Module 3 will explore advanced NLP techniques for search enhancement, including 
 
 ---
 
-**Module 2 Complete** ✓  
+**Module 2 Complete**   
 **Next:** Module 3 - Advanced NLP for Search and Customer Experience

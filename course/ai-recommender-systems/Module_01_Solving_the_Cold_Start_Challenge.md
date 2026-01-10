@@ -106,20 +106,20 @@ Not all cold start scenarios are equal. The severity depends on:
 
 ```
 Severity Factors:
-├── User Cold Start
-│   ├── Mild: Some demographic data available
-│   ├── Moderate: Only registration data
-│   └── Severe: Completely anonymous user
-│
-├── Item Cold Start
-│   ├── Mild: Rich metadata (title, description, category)
-│   ├── Moderate: Basic metadata
-│   └── Severe: Minimal or no metadata
-│
-└── System Cold Start
-    ├── Mild: Similar domain data available
-    ├── Moderate: Related domain data
-    └── Severe: No related data at all
+ User Cold Start
+    Mild: Some demographic data available
+    Moderate: Only registration data
+    Severe: Completely anonymous user
+
+ Item Cold Start
+    Mild: Rich metadata (title, description, category)
+    Moderate: Basic metadata
+    Severe: Minimal or no metadata
+
+ System Cold Start
+     Mild: Similar domain data available
+     Moderate: Related domain data
+     Severe: No related data at all
 ```
 
 ### Measuring Cold Start Performance
@@ -159,22 +159,22 @@ Present users with a short, strategic survey during registration or first visit.
 **Example: Netflix Onboarding**
 ```
 Question 1: "What genres do you enjoy?" (Multi-select with icons)
-- Action 🎬
-- Comedy 😂
-- Drama 🎭
-- Horror 👻
-- Sci-Fi 🚀
+- Action 
+- Comedy 
+- Drama 
+- Horror 
+- Sci-Fi 
 
 Question 2: "Rate these popular titles" (5-star ratings)
-- The Matrix ⭐⭐⭐⭐⭐
-- The Office ⭐⭐⭐⭐⭐
-- Stranger Things ⭐⭐⭐⭐⭐
+- The Matrix 
+- The Office 
+- Stranger Things 
 
 Question 3: "When do you usually watch?" (Single select)
-- Morning ☀️
-- Afternoon 🌤️
-- Evening 🌙
-- Late Night 🌃
+- Morning 
+- Afternoon 
+- Evening 
+- Late Night 
 ```
 
 **Implementation:**
@@ -225,7 +225,7 @@ Proactively ask users to rate items they've interacted with, especially in early
 **Example: Spotify Rating Prompt**
 ```
 After song ends:
-"👍 Like this song? Help us learn your taste!"
+" Like this song? Help us learn your taste!"
 [Thumbs Up] [Thumbs Down] [Skip]
 ```
 
@@ -929,5 +929,5 @@ Build a cold start recommendation system using preference elicitation and active
 
 ---
 
-**Module 1 Complete** ✅  
+**Module 1 Complete**   
 *Ready for Module 2: Collaborative Filtering & Matrix Factorization*

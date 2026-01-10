@@ -130,16 +130,16 @@ Freshness Score = (490 / 500) × 100 = 98%
 
 **Real-Time Metrics:**
 ```
-┌─────────────────────────────────────┐
-│ CCIS Performance Dashboard          │
-├─────────────────────────────────────┤
-│ Deflection Rate:     75%  ✓        │
-│ Response Accuracy:   97%  ✓        │
-│ Freshness Score:     98%  ✓        │
-│ Avg Response Time:   1.2s ✓        │
-│ CSAT Score:          4.6  ✓        │
-│ Conversion Rate:     12%  ↑        │
-└─────────────────────────────────────┘
+
+ CCIS Performance Dashboard          
+
+ Deflection Rate:     75%          
+ Response Accuracy:   97%          
+ Freshness Score:     98%          
+ Avg Response Time:   1.2s         
+ CSAT Score:          4.6          
+ Conversion Rate:     12%  ↑        
+
 ```
 
 **Trend Analysis:**
@@ -231,34 +231,34 @@ Visual representations showing:
 
 1. **Product Heatmap**
    ```
-   Product A: ████████ 150 queries, 20% conversion
-   Product B: ██████   100 queries, 15% conversion
-   Product C: ████     50 queries,  30% conversion
+   Product A:  150 queries, 20% conversion
+   Product B:    100 queries, 15% conversion
+   Product C:      50 queries,  30% conversion
    ```
 
 2. **Topic Heatmap**
    ```
-   Allergens:     ████████████ 300 queries
-   Ingredients:  ████████     200 queries
-   Storage:      ████         100 queries
-   Pricing:      ███          80 queries
+   Allergens:      300 queries
+   Ingredients:       200 queries
+   Storage:               100 queries
+   Pricing:                80 queries
    ```
 
 3. **Time Heatmap**
    ```
-   Monday:    ████████
-   Tuesday:   ██████████
-   Wednesday: ██████
-   Thursday:  ████████
-   Friday:    ████████████ (peak)
-   Weekend:   ████
+   Monday:    
+   Tuesday:   
+   Wednesday: 
+   Thursday:  
+   Friday:     (peak)
+   Weekend:   
    ```
 
 4. **Intent Heatmap**
    ```
-   Discovery:  ████████████ 400 queries, 5% conversion
-   Comparison: ████████     250 queries, 12% conversion
-   Purchase:   ████████████ 350 queries, 25% conversion
+   Discovery:   400 queries, 5% conversion
+   Comparison:      250 queries, 12% conversion
+   Purchase:    350 queries, 25% conversion
    ```
 
 ### Using Heatmaps for Business Decisions
@@ -290,51 +290,51 @@ Customer conversations are a goldmine of insights. The intelligence loop transfo
 **Step 1: Data Collection**
 ```
 Customer Conversations
-  ├─ Questions asked
-  ├─ Products discussed
-  ├─ Concerns raised
-  ├─ Preferences expressed
-  └─ Purchase outcomes
+   Questions asked
+   Products discussed
+   Concerns raised
+   Preferences expressed
+   Purchase outcomes
 ```
 
 **Step 2: Pattern Analysis**
 ```
 Identify:
-  ├─ Recurring questions
-  ├─ Information gaps
-  ├─ Product concerns
-  ├─ Feature requests
-  └─ Market trends
+   Recurring questions
+   Information gaps
+   Product concerns
+   Feature requests
+   Market trends
 ```
 
 **Step 3: Insight Generation**
 ```
 Generate Insights:
-  ├─ Product improvement opportunities
-  ├─ Content gaps to fill
-  ├─ New product ideas
-  ├─ Marketing messaging adjustments
-  └─ Customer segment preferences
+   Product improvement opportunities
+   Content gaps to fill
+   New product ideas
+   Marketing messaging adjustments
+   Customer segment preferences
 ```
 
 **Step 4: Action Implementation**
 ```
 Take Action:
-  ├─ Update product information
-  ├─ Create new content
-  ├─ Develop new products
-  ├─ Adjust marketing strategy
-  └─ Improve customer experience
+   Update product information
+   Create new content
+   Develop new products
+   Adjust marketing strategy
+   Improve customer experience
 ```
 
 **Step 5: Measure Impact**
 ```
 Track Results:
-  ├─ Query volume changes
-  ├─ Conversion improvements
-  ├─ Customer satisfaction
-  ├─ Revenue impact
-  └─ Iterate based on results
+   Query volume changes
+   Conversion improvements
+   Customer satisfaction
+   Revenue impact
+   Iterate based on results
 ```
 
 ### Example: Intelligence Loop in Action

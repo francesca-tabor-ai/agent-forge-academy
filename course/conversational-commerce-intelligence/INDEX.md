@@ -6,13 +6,13 @@ order: 0
 
 # Mastering the NexusIQ Commerce Ecosystem - Complete Index
 
-## 📚 Course Materials Overview
+##  Course Materials Overview
 
 This directory contains all course materials for the **Mastering the NexusIQ Commerce Ecosystem** course.
 
 ---
 
-## 🗂️ File Structure
+##  File Structure
 
 ### Core Course Files
 1. **[README.md](README.md)** - Main course overview, start here
@@ -55,7 +55,7 @@ This directory contains all course materials for the **Mastering the NexusIQ Com
 
 ---
 
-## 🎯 Quick Navigation
+##  Quick Navigation
 
 ### By Learning Goal
 
@@ -82,41 +82,41 @@ This directory contains all course materials for the **Mastering the NexusIQ Com
 
 ---
 
-## 📋 Learning Path by Role
+##  Learning Path by Role
 
 ### For E-commerce Managers
-1. Module 1 (Foundations) ⭐
-2. Module 4 (Omnichannel) ⭐
-3. Module 6 (Analytics) ⭐
+1. Module 1 (Foundations) 
+2. Module 4 (Omnichannel) 
+3. Module 6 (Analytics) 
 4. Module 7 (Future-Proofing)
 
 ### For Data Engineers
 1. Module 1 (Foundations)
-2. Module 2 (Knowledge Engineering) ⭐
+2. Module 2 (Knowledge Engineering) 
 3. Module 4 (Distribution)
-4. Module 6 (Analytics) ⭐
+4. Module 6 (Analytics) 
 
 ### For AI/ML Engineers
 1. Module 1 (Foundations)
-2. Module 2 (RAG Architecture) ⭐
-3. Module 3 (Conversational AI) ⭐
-4. Module 7 (Predictive Intelligence) ⭐
+2. Module 2 (RAG Architecture) 
+3. Module 3 (Conversational AI) 
+4. Module 7 (Predictive Intelligence) 
 
 ### For Compliance Officers
 1. Module 1 (Foundations)
-2. Module 5 (Governance) ⭐
+2. Module 5 (Governance) 
 3. Module 6 (Analytics)
 4. Module 7 (Organization)
 
 ### For Product Managers
-1. Module 1 (Foundations) ⭐
+1. Module 1 (Foundations) 
 2. Module 3 (Brand Persona)
-3. Module 4 (Distribution) ⭐
-4. Module 6 (Business Impact) ⭐
+3. Module 4 (Distribution) 
+4. Module 6 (Business Impact) 
 
 ---
 
-## 🔧 Technology Reference
+##  Technology Reference
 
 ### Core Platforms Covered
 - **NexusIQ** - Unified intelligence platform (All modules)
@@ -140,7 +140,7 @@ This directory contains all course materials for the **Mastering the NexusIQ Com
 
 ---
 
-## 📊 Lab Overview
+##  Lab Overview
 
 | Lab | Module | Topic | Duration |
 |-----|--------|-------|----------|
@@ -156,7 +156,7 @@ This directory contains all course materials for the **Mastering the NexusIQ Com
 
 ---
 
-## 🎓 Assessment Guide
+##  Assessment Guide
 
 ### Grade Breakdown
 - **Labs (40%):** 7 labs × ~6% each
@@ -175,7 +175,7 @@ This directory contains all course materials for the **Mastering the NexusIQ Com
 
 ---
 
-## 📚 Additional Resources
+##  Additional Resources
 
 ### Reference Documents
 - NexusIQ Platform Documentation
@@ -191,7 +191,7 @@ This directory contains all course materials for the **Mastering the NexusIQ Com
 
 ---
 
-## 🎯 Success Checklist
+##  Success Checklist
 
 ### Before Starting
 - [ ] Read README.md
@@ -234,7 +234,7 @@ This directory contains all course materials for the **Mastering the NexusIQ Com
 
 ---
 
-## 💡 Study Tips
+##  Study Tips
 
 ### Weekly Routine
 1. **Monday:** Watch lectures (2-3h)
@@ -258,7 +258,7 @@ This directory contains all course materials for the **Mastering the NexusIQ Com
 
 ---
 
-## 🔗 Quick Links
+##  Quick Links
 
 - **[Start Course →](README.md)**
 - **[Module 1 →](Module_01_Foundations_of_CCIS_and_The_Conversational_Revolution.md)**
@@ -267,7 +267,7 @@ This directory contains all course materials for the **Mastering the NexusIQ Com
 
 ---
 
-## 📞 Contact
+##  Contact
 
 **Questions?** Email: ccis-course@example.com  
 **Office Hours:** Tuesday/Thursday 6-7 PM EST  

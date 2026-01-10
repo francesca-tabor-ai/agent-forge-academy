@@ -4,9 +4,9 @@ description: "Get started with the multi-agent deployment course in minutes"
 order: 0
 ---
 
-# 🎓 Multi-Agent Deployment Course - Quick Start Guide
+#  Multi-Agent Deployment Course - Quick Start Guide
 
-## 📍 You Are Here
+##  You Are Here
 
 This folder contains a **complete 12-week professional course** on deploying multi-agent AI systems at scale.
 
@@ -16,7 +16,7 @@ This folder contains a **complete 12-week professional course** on deploying mul
 
 ---
 
-## 🚀 What's Inside
+##  What's Inside
 
 ### 14 Markdown Files
 
@@ -32,21 +32,21 @@ This folder contains a **complete 12-week professional course** on deploying mul
 
 ---
 
-## 🎯 Three Ways to Use This Course
+##  Three Ways to Use This Course
 
-### 1️⃣ Self-Paced Learning
+###  Self-Paced Learning
 - Follow modules in order
 - Complete labs independently
 - Build portfolio projects
 - **Time:** 8-10 hours/week for 19 weeks
 
-### 2️⃣ Team Training
+###  Team Training
 - Use as corporate training curriculum
 - Adapt labs to company use cases
 - Run cohorts with deadlines
 - **Time:** Customize to team needs
 
-### 3️⃣ Reference Material
+###  Reference Material
 - Jump to relevant modules
 - Use code examples
 - Implement patterns
@@ -54,7 +54,7 @@ This folder contains a **complete 12-week professional course** on deploying mul
 
 ---
 
-## 📚 Module Overview (What You'll Learn)
+##  Module Overview (What You'll Learn)
 
 | Week | Module | Core Skills |
 |------|--------|-------------|
@@ -72,36 +72,36 @@ This folder contains a **complete 12-week professional course** on deploying mul
 
 ---
 
-## 💻 Technology You'll Master
+##  Technology You'll Master
 
 ### Frameworks
-✅ LangGraph (graph-based orchestration)  
-✅ CrewAI (role-based collaboration)  
-✅ AutoGen (conversational multi-agent)  
-✅ Microsoft Agent Framework  
-✅ Google Agent Development Kit
+ LangGraph (graph-based orchestration)  
+ CrewAI (role-based collaboration)  
+ AutoGen (conversational multi-agent)  
+ Microsoft Agent Framework  
+ Google Agent Development Kit
 
 ### Infrastructure
-✅ Docker containerization  
-✅ Kubernetes (GKE/EKS/AKS)  
-✅ Terraform (infrastructure as code)  
-✅ ArgoCD (GitOps)
+ Docker containerization  
+ Kubernetes (GKE/EKS/AKS)  
+ Terraform (infrastructure as code)  
+ ArgoCD (GitOps)
 
 ### Observability
-✅ Prometheus + Grafana  
-✅ Jaeger (distributed tracing)  
-✅ ELK Stack (logging)  
-✅ Anomaly detection
+ Prometheus + Grafana  
+ Jaeger (distributed tracing)  
+ ELK Stack (logging)  
+ Anomaly detection
 
 ### Security
-✅ Kubernetes RBAC  
-✅ Secrets management  
-✅ Network policies  
-✅ Compliance (ISO, NIST, GDPR)
+ Kubernetes RBAC  
+ Secrets management  
+ Network policies  
+ Compliance (ISO, NIST, GDPR)
 
 ---
 
-## 🎯 Learning Outcomes
+##  Learning Outcomes
 
 By completing this course, you will:
 
@@ -127,7 +127,7 @@ By completing this course, you will:
 
 ---
 
-## 💼 Career Impact
+##  Career Impact
 
 ### Market Opportunity
 - **$375.4B** projected market by 2034
@@ -149,13 +149,13 @@ Companies deploying MAS achieve:
 
 ---
 
-## 📋 Prerequisites
+##  Prerequisites
 
 **Required:**
-- ✅ Python programming (intermediate)
-- ✅ Basic Docker knowledge
-- ✅ Git/GitHub familiarity
-- ✅ Understanding of APIs and HTTP
+-  Python programming (intermediate)
+-  Basic Docker knowledge
+-  Git/GitHub familiarity
+-  Understanding of APIs and HTTP
 
 **Helpful (Not Required):**
 - Kubernetes experience
@@ -171,7 +171,7 @@ Companies deploying MAS achieve:
 
 ---
 
-## 🚦 Getting Started (3 Steps)
+##  Getting Started (3 Steps)
 
 ### Step 1: Review Materials (30 min)
 1. Read **README.md** (10 min)
@@ -193,7 +193,7 @@ Companies deploying MAS achieve:
 
 ---
 
-## 📊 Assessment Structure
+##  Assessment Structure
 
 **Total:** 100 points
 
@@ -208,7 +208,7 @@ Companies deploying MAS achieve:
 
 ---
 
-## 📅 Time Commitment
+##  Time Commitment
 
 ### Per Week (Weeks 1-12)
 - Lectures: 2-3 hours
@@ -225,20 +225,20 @@ Companies deploying MAS achieve:
 
 ---
 
-## 🎓 What You Get
+##  What You Get
 
 Upon completion:
 
-✅ **Skills:** Production-ready multi-agent deployment  
-✅ **Certificate:** Digital credential (LinkedIn-shareable)  
-✅ **Portfolio:** Capstone project (GitHub showcase)  
-✅ **Network:** Alumni community (500+ members)  
-✅ **Knowledge:** 80,000+ words of content  
-✅ **Career:** $20K-40K salary increase potential
+ **Skills:** Production-ready multi-agent deployment  
+ **Certificate:** Digital credential (LinkedIn-shareable)  
+ **Portfolio:** Capstone project (GitHub showcase)  
+ **Network:** Alumni community (500+ members)  
+ **Knowledge:** 80,000+ words of content  
+ **Career:** $20K-40K salary increase potential
 
 ---
 
-## 🔗 Navigation
+##  Navigation
 
 **Start Learning:**
 - [README.md](README.md) - Course home
@@ -252,27 +252,27 @@ Upon completion:
 
 ---
 
-## 💡 Success Tips
+##  Success Tips
 
 ### Do This:
-✅ Follow modules in order  
-✅ Complete ALL labs  
-✅ Use office hours  
-✅ Join study groups  
-✅ Start capstone early  
-✅ Document everything
+ Follow modules in order  
+ Complete ALL labs  
+ Use office hours  
+ Join study groups  
+ Start capstone early  
+ Document everything
 
 ### Avoid This:
-❌ Skipping prerequisites  
-❌ Rushing through labs  
-❌ Ignoring security module  
-❌ Waiting until last minute  
-❌ Working in isolation  
-❌ Not asking questions
+ Skipping prerequisites  
+ Rushing through labs  
+ Ignoring security module  
+ Waiting until last minute  
+ Working in isolation  
+ Not asking questions
 
 ---
 
-## 🌟 Success Stories
+##  Success Stories
 
 > **"Zero Kubernetes to production in 12 weeks. My capstone became our company platform."**  
 > — Marcus Rodriguez, AI/ML Engineer
@@ -285,17 +285,17 @@ Upon completion:
 
 ---
 
-## 📞 Support
+##  Support
 
 **Have Questions?**
-- 📧 Email: multiagent-course@example.com
-- 💬 Discord: Provided upon enrollment
-- 🕐 Office Hours: Tue/Thu 6-7 PM EST
-- 📚 Documentation: README.md and INDEX.md
+-  Email: multiagent-course@example.com
+-  Discord: Provided upon enrollment
+-  Office Hours: Tue/Thu 6-7 PM EST
+-  Documentation: README.md and INDEX.md
 
 ---
 
-## 🎯 Your Next Action
+##  Your Next Action
 
 **Choose your path:**
 
@@ -320,22 +320,22 @@ Upon completion:
 
 ---
 
-## ⏰ Time to Start?
+##  Time to Start?
 
 **If you're ready:**  
-👉 **[Open README.md →](README.md)**
+ **[Open README.md →](README.md)**
 
 **Need more info?**  
-👉 **[View INDEX.md →](INDEX.md)**
+ **[View INDEX.md →](INDEX.md)**
 
 **Want structure?**  
-👉 **[See Course Structure →](00_Course_Structure.md)**
+ **[See Course Structure →](00_Course_Structure.md)**
 
 ---
 
 **The future of AI is multi-agent. The time to learn is now.**
 
-**Let's build something amazing! 🚀**
+**Let's build something amazing! **
 
 ---
 

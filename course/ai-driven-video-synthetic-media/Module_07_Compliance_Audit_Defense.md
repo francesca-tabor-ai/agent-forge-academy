@@ -637,11 +637,11 @@ class RegulatoryCompliance:
 - Cryptographic watermarking tools
 - Blockchain storage systems
 
-**Course Complete!** 🎉
+**Course Complete!** 
 
 ---
 
-**Module 7 Complete** ✓  
-**Course Complete** 🎓
+**Module 7 Complete**   
+**Course Complete** 
 
 **Congratulations on completing the Synthetic Media Systems Architecture course!**

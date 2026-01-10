@@ -617,11 +617,11 @@ Create a prototype video shopping experience with AI-powered product detection.
 
 ## Key Takeaways
 
-✅ **Video shopping makes every frame shoppable via AI recognition**  
-✅ **Dynamic product placement personalizes experience in real-time**  
-✅ **Virtual influencers and UGC scale content generation**  
-✅ **Spatial shopping feeds create immersive commerce experiences**  
-✅ **AI-powered personalization drives higher engagement and conversion**
+ **Video shopping makes every frame shoppable via AI recognition**  
+ **Dynamic product placement personalizes experience in real-time**  
+ **Virtual influencers and UGC scale content generation**  
+ **Spatial shopping feeds create immersive commerce experiences**  
+ **AI-powered personalization drives higher engagement and conversion**
 
 ---
 

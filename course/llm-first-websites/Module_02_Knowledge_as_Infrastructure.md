@@ -166,12 +166,12 @@ Entities organized in a tree structure.
 **Example: Product Categories**
 ```
 Electronics
-  ├── Computers
-  │   ├── Laptops
-  │   └── Desktops
-  └── Phones
-      ├── Smartphones
-      └── Feature Phones
+   Computers
+      Laptops
+      Desktops
+   Phones
+       Smartphones
+       Feature Phones
 ```
 
 #### Pattern 2: Network Entities
@@ -246,20 +246,20 @@ ex:belongsTo rdf:type owl:ObjectProperty ;
 ### Common Ontology Mistakes
 
 **Mistake 1: Too Vague**
-- ❌ "Product has properties"
-- ✅ "Product has: id (string), name (string), price (Money)"
+-  "Product has properties"
+-  "Product has: id (string), name (string), price (Money)"
 
 **Mistake 2: Missing Relationships**
-- ❌ "Products exist"
-- ✅ "Product belongs to Category, has Inventory, receives Reviews"
+-  "Products exist"
+-  "Product belongs to Category, has Inventory, receives Reviews"
 
 **Mistake 3: No Constraints**
-- ❌ "Price can be anything"
-- ✅ "Price must be >= 0, currency must be ISO 4217 code"
+-  "Price can be anything"
+-  "Price must be >= 0, currency must be ISO 4217 code"
 
 **Mistake 4: Ignoring Actions**
-- ❌ "Products just exist"
-- ✅ "Products can be: added to cart, purchased, reviewed, updated"
+-  "Products just exist"
+-  "Products can be: added to cart, purchased, reviewed, updated"
 
 ---
 
@@ -639,18 +639,18 @@ Create nodes and edges that connect evidence.
 **Example: Product Evidence Graph**
 ```
 Product (Node)
-  ├── Authoritative Knowledge
-  │   ├── Specifications (Node)
-  │   ├── Certifications (Node)
-  │   └── Legal Status (Node)
-  ├── Observed Reality
-  │   ├── Average Rating (Node) --[based on]--> Reviews (Node)
-  │   ├── Delivery Time (Node) --[based on]--> Orders (Node)
-  │   └── Return Rate (Node) --[based on]--> Returns (Node)
-  └── Reported Experience
-      ├── Customer Reviews (Node)
-      ├── Testimonials (Node)
-      └── Case Studies (Node)
+   Authoritative Knowledge
+      Specifications (Node)
+      Certifications (Node)
+      Legal Status (Node)
+   Observed Reality
+      Average Rating (Node) --[based on]--> Reviews (Node)
+      Delivery Time (Node) --[based on]--> Orders (Node)
+      Return Rate (Node) --[based on]--> Returns (Node)
+   Reported Experience
+       Customer Reviews (Node)
+       Testimonials (Node)
+       Case Studies (Node)
 ```
 
 #### Step 3: Link Evidence Types
@@ -901,5 +901,5 @@ Product X appears to be a good choice. Individual experiences vary.
 
 ---
 
-**Module 2 Complete** ✅  
+**Module 2 Complete**   
 **Ready for Module 3?** → [Designing for Machine-First Interoperability](Module_03_Designing_for_Machine_First_Interoperability.md)

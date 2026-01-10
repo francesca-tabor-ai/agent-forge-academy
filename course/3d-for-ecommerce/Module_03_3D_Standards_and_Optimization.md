@@ -33,30 +33,30 @@ order: 3
 **glTF (JSON + external files):**
 ```
 model.gltf (JSON)
-├── scene.bin (binary data)
-├── texture0.jpg
-├── texture1.jpg
-└── normal-map.png
+ scene.bin (binary data)
+ texture0.jpg
+ texture1.jpg
+ normal-map.png
 ```
 
 **GLB (Single binary file):**
 ```
 model.glb (all-in-one binary)
-├── JSON chunk
-├── Binary chunk (geometry, textures)
-└── Everything embedded
+ JSON chunk
+ Binary chunk (geometry, textures)
+ Everything embedded
 ```
 
 **When to use GLB:**
-- ✅ Web delivery (single file, faster)
-- ✅ Mobile apps
-- ✅ CDN distribution
-- ✅ Amazon integration
+-  Web delivery (single file, faster)
+-  Mobile apps
+-  CDN distribution
+-  Amazon integration
 
 **When to use glTF:**
-- ✅ Development (easier to edit)
-- ✅ Large textures (external references)
-- ✅ Streaming scenarios
+-  Development (easier to edit)
+-  Large textures (external references)
+-  Streaming scenarios
 
 ### glTF Structure
 
@@ -571,11 +571,11 @@ Optimize a 3D model using compression techniques and convert to multiple formats
 
 ## Key Takeaways
 
-✅ **glTF/GLB is the standard for 3D on the web**  
-✅ **USDZ conversion enables iOS Safari AR support**  
-✅ **Compression (Draco/Meshopt) reduces file size by 50-90%**  
-✅ **Optimization is critical for mobile performance**  
-✅ **Multiple formats ensure cross-platform compatibility**
+ **glTF/GLB is the standard for 3D on the web**  
+ **USDZ conversion enables iOS Safari AR support**  
+ **Compression (Draco/Meshopt) reduces file size by 50-90%**  
+ **Optimization is critical for mobile performance**  
+ **Multiple formats ensure cross-platform compatibility**
 
 ---
 

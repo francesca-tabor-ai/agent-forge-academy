@@ -641,7 +641,7 @@ Congratulations! You've completed the full Reddit AI Visibility and AEO course. 
 
 ---
 
-**Module 6 Complete** ✓  
-**Course Complete** 🎉
+**Module 6 Complete**   
+**Course Complete** 
 
 **Congratulations on mastering Reddit AI Visibility and AEO!**

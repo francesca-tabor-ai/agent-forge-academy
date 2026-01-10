@@ -4,9 +4,9 @@ description: "Get started with the Agentic RAG course in minutes"
 order: 0
 ---
 
-# 🎓 Mastering Agentic RAG for Enterprise AI - Quick Start Guide
+#  Mastering Agentic RAG for Enterprise AI - Quick Start Guide
 
-## 📍 You Are Here
+##  You Are Here
 
 This folder contains a **complete professional course** on building and deploying agentic RAG systems for enterprise applications.
 
@@ -16,7 +16,7 @@ This folder contains a **complete professional course** on building and deployin
 
 ---
 
-## 🚀 What's Inside
+##  What's Inside
 
 ### 10 Markdown Files
 
@@ -31,21 +31,21 @@ This folder contains a **complete professional course** on building and deployin
 
 ---
 
-## 🎯 Three Ways to Use This Course
+##  Three Ways to Use This Course
 
-### 1️⃣ Self-Paced Learning
+###  Self-Paced Learning
 - Follow modules in order
 - Complete labs independently
 - Build portfolio projects
 - **Time:** 6-8 hours/week for 7 weeks
 
-### 2️⃣ Team Training
+###  Team Training
 - Use as corporate training curriculum
 - Adapt labs to company use cases
 - Run cohorts with deadlines
 - **Time:** Customize to team needs
 
-### 3️⃣ Reference Material
+###  Reference Material
 - Jump to relevant modules
 - Use code examples
 - Implement patterns
@@ -53,7 +53,7 @@ This folder contains a **complete professional course** on building and deployin
 
 ---
 
-## 📚 Module Overview (What You'll Learn)
+##  Module Overview (What You'll Learn)
 
 | Week | Module | Core Skills |
 |------|--------|-------------|
@@ -67,29 +67,29 @@ This folder contains a **complete professional course** on building and deployin
 
 ---
 
-## 💻 Technology You'll Master
+##  Technology You'll Master
 
 ### Frameworks
-✅ LangChain (RAG orchestration)  
-✅ LangGraph (state management)  
-✅ LlamaIndex (data framework)  
-✅ AutoGen (multi-agent)  
-✅ CrewAI (collaborative agents)
+ LangChain (RAG orchestration)  
+ LangGraph (state management)  
+ LlamaIndex (data framework)  
+ AutoGen (multi-agent)  
+ CrewAI (collaborative agents)
 
 ### Databases
-✅ Vector stores (Qdrant, Pinecone)  
-✅ Graph databases (Memgraph, Neo4j)  
-✅ Hybrid architectures
+ Vector stores (Qdrant, Pinecone)  
+ Graph databases (Memgraph, Neo4j)  
+ Hybrid architectures
 
 ### Observability
-✅ Langfuse (monitoring)  
-✅ Cost tracking  
-✅ Latency optimization  
-✅ User feedback systems
+ Langfuse (monitoring)  
+ Cost tracking  
+ Latency optimization  
+ User feedback systems
 
 ---
 
-## 🎯 Learning Outcomes
+##  Learning Outcomes
 
 By completing this course, you will:
 
@@ -115,7 +115,7 @@ By completing this course, you will:
 
 ---
 
-## 💼 Career Impact
+##  Career Impact
 
 ### Market Opportunity
 - **$375.4B** projected AI market by 2034
@@ -136,13 +136,13 @@ Companies deploying agentic RAG achieve:
 
 ---
 
-## 📋 Prerequisites
+##  Prerequisites
 
 **Required:**
-- ✅ Python programming (intermediate)
-- ✅ Understanding of LLMs and embeddings
-- ✅ Basic RAG knowledge
-- ✅ Git/GitHub familiarity
+-  Python programming (intermediate)
+-  Understanding of LLMs and embeddings
+-  Basic RAG knowledge
+-  Git/GitHub familiarity
 
 **Helpful (Not Required):**
 - Vector database experience
@@ -158,7 +158,7 @@ Companies deploying agentic RAG achieve:
 
 ---
 
-## 🚦 Getting Started (3 Steps)
+##  Getting Started (3 Steps)
 
 ### Step 1: Review Materials (30 min)
 1. Read **README.md** (10 min)
@@ -180,7 +180,7 @@ Companies deploying agentic RAG achieve:
 
 ---
 
-## 📊 Assessment Structure
+##  Assessment Structure
 
 **Total:** 100 points
 
@@ -194,7 +194,7 @@ Companies deploying agentic RAG achieve:
 
 ---
 
-## 📅 Time Commitment
+##  Time Commitment
 
 ### Per Week (Weeks 1-7)
 - Lectures: 2-3 hours
@@ -207,19 +207,19 @@ Companies deploying agentic RAG achieve:
 
 ---
 
-## 🎓 What You Get
+##  What You Get
 
 Upon completion:
 
-✅ **Skills:** Production-ready agentic RAG systems  
-✅ **Certificate:** Digital credential (LinkedIn-shareable)  
-✅ **Portfolio:** Capstone project (GitHub showcase)  
-✅ **Knowledge:** Comprehensive content on agentic RAG  
-✅ **Career:** Enhanced AI engineering capabilities
+ **Skills:** Production-ready agentic RAG systems  
+ **Certificate:** Digital credential (LinkedIn-shareable)  
+ **Portfolio:** Capstone project (GitHub showcase)  
+ **Knowledge:** Comprehensive content on agentic RAG  
+ **Career:** Enhanced AI engineering capabilities
 
 ---
 
-## 🔗 Navigation
+##  Navigation
 
 **Start Learning:**
 - [README.md](README.md) - Course home
@@ -228,27 +228,27 @@ Upon completion:
 
 ---
 
-## 💡 Success Tips
+##  Success Tips
 
 ### Do This:
-✅ Follow modules in order  
-✅ Complete ALL labs  
-✅ Use office hours  
-✅ Join study groups  
-✅ Start capstone early  
-✅ Document everything
+ Follow modules in order  
+ Complete ALL labs  
+ Use office hours  
+ Join study groups  
+ Start capstone early  
+ Document everything
 
 ### Avoid This:
-❌ Skipping prerequisites  
-❌ Rushing through labs  
-❌ Ignoring evaluation module  
-❌ Waiting until last minute  
-❌ Working in isolation  
-❌ Not asking questions
+ Skipping prerequisites  
+ Rushing through labs  
+ Ignoring evaluation module  
+ Waiting until last minute  
+ Working in isolation  
+ Not asking questions
 
 ---
 
-## 🌟 Success Stories
+##  Success Stories
 
 > **"From basic RAG to enterprise agentic systems in 7 weeks. My capstone became our company platform."**  
 > — Alex Chen, AI Engineer
@@ -261,17 +261,17 @@ Upon completion:
 
 ---
 
-## 📞 Support
+##  Support
 
 **Have Questions?**
-- 📧 Email: agentic-rag-course@example.com
-- 💬 Discord: Provided upon enrollment
-- 🕐 Office Hours: Tue/Thu 6-7 PM EST
-- 📚 Documentation: README.md and INDEX.md
+-  Email: agentic-rag-course@example.com
+-  Discord: Provided upon enrollment
+-  Office Hours: Tue/Thu 6-7 PM EST
+-  Documentation: README.md and INDEX.md
 
 ---
 
-## 🎯 Your Next Action
+##  Your Next Action
 
 **Choose your path:**
 
@@ -295,19 +295,19 @@ Upon completion:
 
 ---
 
-## ⏰ Time to Start?
+##  Time to Start?
 
 **If you're ready:**  
-👉 **[Open README.md →](README.md)**
+ **[Open README.md →](README.md)**
 
 **Need more info?**  
-👉 **[View INDEX.md →](INDEX.md)**
+ **[View INDEX.md →](INDEX.md)**
 
 ---
 
 **The future of enterprise AI is agentic. The time to learn is now.**
 
-**Let's build something amazing! 🚀**
+**Let's build something amazing! **
 
 ---
 

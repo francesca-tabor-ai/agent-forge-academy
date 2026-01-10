@@ -763,8 +763,8 @@ Monitor for ethical violations.
 
 ---
 
-**Module 6 Complete** ✅  
-**Course Complete!** 🎉
+**Module 6 Complete**   
+**Course Complete!** 
 
 **Next:** Final Project - Build a complete RX-optimized system integrating all modules.
 
@@ -781,4 +781,4 @@ You've learned:
 5. **Visibility & Observability** - Presence, citation, influence, telemetry, traceability
 6. **Governance, Drift, and Power** - Managing decay, institutional reform, ethical governance
 
-**You're now ready to build LLM-first websites optimized for AI intermediaries!** 🚀
+**You're now ready to build LLM-first websites optimized for AI intermediaries!** 

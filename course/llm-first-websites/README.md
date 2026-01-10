@@ -6,7 +6,7 @@ order: 0
 
 # Engineering for Machine Judgment (RX)
 
-## 📚 Course Overview
+##  Course Overview
 
 **Duration:** 6 weeks (7 total with final project)  
 **Level:** Intermediate to Advanced  
@@ -15,20 +15,20 @@ order: 0
 
 ---
 
-## 🎯 What You'll Master
+##  What You'll Master
 
 By completing this course, you will be able to:
 
-✅ Design websites optimized for AI intermediaries (ChatGPT, Amazon Rufus, Perplexity)  
-✅ Build structured knowledge systems that machines can reliably understand  
-✅ Create intent-driven APIs that enable safe machine actions  
-✅ Implement safety boundaries and governance for AI-operated systems  
-✅ Measure and optimize participation in AI judgment processes  
-✅ Navigate the shift from User Experience (UX) to Reasoning Experience (RX)  
+ Design websites optimized for AI intermediaries (ChatGPT, Amazon Rufus, Perplexity)  
+ Build structured knowledge systems that machines can reliably understand  
+ Create intent-driven APIs that enable safe machine actions  
+ Implement safety boundaries and governance for AI-operated systems  
+ Measure and optimize participation in AI judgment processes  
+ Navigate the shift from User Experience (UX) to Reasoning Experience (RX)  
 
 ---
 
-## 📋 Course Modules
+##  Course Modules
 
 ### [Module 1: The Paradigm Shift – From Search to Judgment](Module_01_The_Paradigm_Shift.md)
 - The End of the Interface: How discovery moved into AI reasoning
@@ -80,7 +80,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 🛠️ Technology Stack
+##  Technology Stack
 
 ### Core Concepts
 - Reasoning Experience (RX) design patterns
@@ -100,7 +100,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 📊 Course Statistics
+##  Course Statistics
 
 **Market Opportunity:**
 - AI intermediaries becoming primary discovery interface
@@ -117,7 +117,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 🎓 Assessment Structure
+##  Assessment Structure
 
 - **Exercises (40%):** 18 hands-on assignments
 - **Module Projects (30%):** 6 practical implementations
@@ -128,7 +128,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 💼 Career Outcomes
+##  Career Outcomes
 
 ### Roles & Applications
 - RX Designer: Optimize for AI intermediaries
@@ -138,16 +138,16 @@ By completing this course, you will be able to:
 - Governance Specialist: Ensure safe AI operations
 
 ### Skills Acquired
-✅ RX design and optimization  
-✅ Ontology and taxonomy construction  
-✅ Intent-driven API design  
-✅ Safety boundary implementation  
-✅ Machine-first observability  
-✅ Governance and ethics frameworks  
+ RX design and optimization  
+ Ontology and taxonomy construction  
+ Intent-driven API design  
+ Safety boundary implementation  
+ Machine-first observability  
+ Governance and ethics frameworks  
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites Checklist
 - [ ] Web development basics (HTML, APIs)
@@ -166,7 +166,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 📚 Additional Resources
+##  Additional Resources
 
 ### Documentation
 - [Schema.org Documentation](https://schema.org/)
@@ -182,7 +182,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 📝 Course Materials
+##  Course Materials
 
 Each module includes:
 - Detailed lessons with examples
@@ -193,7 +193,7 @@ Each module includes:
 
 ---
 
-## 🌟 Success Stories
+##  Success Stories
 
 > "This course transformed how we think about web presence. We're now cited as an authority by ChatGPT and other AI agents."  
 > **— Product Manager, Tech Company**
@@ -206,7 +206,7 @@ Each module includes:
 
 ---
 
-## 📞 Contact & Enrollment
+##  Contact & Enrollment
 
 **Email:** rx-course@example.com  
 **Website:** [Course website]  
@@ -218,7 +218,7 @@ Each module includes:
 
 ---
 
-## 📄 License
+##  License
 
 This course material is proprietary. All rights reserved.
 
@@ -226,7 +226,7 @@ This course material is proprietary. All rights reserved.
 
 ---
 
-## 🗺️ Course Navigation
+##  Course Navigation
 
 - [Start with Module 1 →](Module_01_The_Paradigm_Shift.md)
 - [View Index →](INDEX.md)
@@ -234,4 +234,4 @@ This course material is proprietary. All rights reserved.
 
 ---
 
-**Ready to master Engineering for Machine Judgment? Let's begin! 🚀**
+**Ready to master Engineering for Machine Judgment? Let's begin! **

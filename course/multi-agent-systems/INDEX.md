@@ -6,13 +6,13 @@ order: 0
 
 # Multi-Agent Deployment Course - Complete Index
 
-## 📚 Course Materials Overview
+##  Course Materials Overview
 
 This directory contains all course materials for the **Multi-Agent Deployment Professional Course (2025)**.
 
 ---
 
-## 🗂️ File Structure
+##  File Structure
 
 ### Core Course Files
 1. **[README.md](README.md)** - Main course overview, start here
@@ -71,7 +71,7 @@ This directory contains all course materials for the **Multi-Agent Deployment Pr
 
 ---
 
-## 🎯 Quick Navigation
+##  Quick Navigation
 
 ### By Learning Goal
 
@@ -98,39 +98,39 @@ This directory contains all course materials for the **Multi-Agent Deployment Pr
 
 ---
 
-## 📋 Learning Path by Role
+##  Learning Path by Role
 
 ### For Software Engineers
 1. Module 1 (Foundations)
-2. Module 2 (Frameworks) ⭐
-3. Module 4 (Deployment) ⭐
-4. Module 7 (Operations) ⭐
+2. Module 2 (Frameworks) 
+3. Module 4 (Deployment) 
+4. Module 7 (Operations) 
 5. Module 8 (Performance)
 
 ### For DevOps/Platform Engineers
 1. Module 1 (Foundations)
-2. Module 4 (Deployment) ⭐
-3. Module 5 (Security) ⭐
-4. Module 6 (Monitoring) ⭐
-5. Module 7 (Operations) ⭐
+2. Module 4 (Deployment) 
+3. Module 5 (Security) 
+4. Module 6 (Monitoring) 
+5. Module 7 (Operations) 
 
 ### For Security Engineers
 1. Module 1 (Foundations)
-2. Module 5 (Security) ⭐
+2. Module 5 (Security) 
 3. Module 6 (Monitoring)
 4. Module 7 (Operations)
-5. Module 9 (Safety & Alignment) ⭐
+5. Module 9 (Safety & Alignment) 
 
 ### For Solutions Architects
-1. Module 1 (Foundations) ⭐
+1. Module 1 (Foundations) 
 2. Module 2 (Frameworks)
-3. Module 3 (Architecture) ⭐
+3. Module 3 (Architecture) 
 4. Module 5 (Security)
-5. Module 11 (Trends) ⭐
+5. Module 11 (Trends) 
 
 ---
 
-## 🔧 Technology Reference
+##  Technology Reference
 
 ### Frameworks Covered
 - **LangGraph** - Graph-based orchestration (Modules 2, 3, 7)
@@ -159,7 +159,7 @@ This directory contains all course materials for the **Multi-Agent Deployment Pr
 
 ---
 
-## 📊 Lab Overview
+##  Lab Overview
 
 | Lab | Module | Topic | Duration |
 |-----|--------|-------|----------|
@@ -183,7 +183,7 @@ This directory contains all course materials for the **Multi-Agent Deployment Pr
 
 ---
 
-## 🎓 Assessment Guide
+##  Assessment Guide
 
 ### Grade Breakdown
 - **Labs (30%):** 15 labs × 2% each
@@ -202,7 +202,7 @@ This directory contains all course materials for the **Multi-Agent Deployment Pr
 
 ---
 
-## 📚 Additional Resources
+##  Additional Resources
 
 ### Reference Documents
 Located in parent directory:
@@ -219,7 +219,7 @@ Located in parent directory:
 
 ---
 
-## 🎯 Success Checklist
+##  Success Checklist
 
 ### Before Starting
 - [ ] Read README.md
@@ -263,7 +263,7 @@ Located in parent directory:
 
 ---
 
-## 💡 Study Tips
+##  Study Tips
 
 ### Weekly Routine
 1. **Monday:** Watch lectures (2-3h)
@@ -287,7 +287,7 @@ Located in parent directory:
 
 ---
 
-## 🔗 Quick Links
+##  Quick Links
 
 - **[Start Course →](README.md)**
 - **[Module 1 →](Module_01_Foundations_of_Multi_Agent_Systems.md)**
@@ -296,7 +296,7 @@ Located in parent directory:
 
 ---
 
-## 📞 Contact
+##  Contact
 
 **Questions?** Email: multiagent-course@example.com  
 **Office Hours:** Tuesday/Thursday 6-7 PM EST  

@@ -493,5 +493,5 @@ Module 6 will teach you how to structure social proof for machine ingestion usin
 
 ---
 
-**Module 5 Complete** ✓  
+**Module 5 Complete**   
 **Next:** Module 6 - Structuring Social Proof for Machine Ingestion

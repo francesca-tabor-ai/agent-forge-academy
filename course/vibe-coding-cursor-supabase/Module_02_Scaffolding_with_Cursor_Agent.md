@@ -199,7 +199,7 @@ Cursor Agent Mode is a powerful feature that allows the AI to:
 
 ### Effective Agent Prompts
 
-#### Good Prompts ✅
+#### Good Prompts 
 
 **Specific and Clear:**
 ```
@@ -227,7 +227,7 @@ Follow this build plan to implement the dashboard feature.
 Start with Step 1 and work through each step.
 ```
 
-#### Bad Prompts ❌
+#### Bad Prompts 
 
 **Too Vague:**
 ```
@@ -514,11 +514,11 @@ Prompt: "Create a new user profile component"
 ```
 
 Check if the generated code:
-- ✅ Uses your tech stack
-- ✅ Follows naming conventions
-- ✅ Matches file structure
-- ✅ Uses your patterns
-- ✅ Includes proper types
+-  Uses your tech stack
+-  Follows naming conventions
+-  Matches file structure
+-  Uses your patterns
+-  Includes proper types
 
 If not, refine your `.cursorrules` file.
 
@@ -798,5 +798,5 @@ Module 3 will teach you database engineering with Supabase, including local deve
 
 ---
 
-**Module 2 Complete** ✓  
+**Module 2 Complete**   
 **Next:** Module 3 - Database Engineering & Schema-First Thinking

@@ -6,7 +6,7 @@ order: 0
 
 # Building and Governing AI Content Pipelines
 
-## 📚 Course Overview
+##  Course Overview
 
 **Duration:** 6 weeks  
 **Level:** Intermediate to Advanced  
@@ -15,22 +15,22 @@ order: 0
 
 ---
 
-## 🎯 What You'll Master
+##  What You'll Master
 
 By completing this course, you will be able to:
 
-✅ Understand the EU AI Act and its risk-based approach to AI governance  
-✅ Navigate the five phases of the AI life cycle from ideation to deployment  
-✅ Identify prohibited practices and high-risk domains for AI content pipelines  
-✅ Implement data governance strategies aligned with EU regulations  
-✅ Build robust, safe, and transparent AI content systems  
-✅ Conduct conformity assessments and manage post-market monitoring  
-✅ Design systems with human oversight and explainability  
-✅ Handle serious incidents and maintain compliance throughout the system lifecycle
+ Understand the EU AI Act and its risk-based approach to AI governance  
+ Navigate the five phases of the AI life cycle from ideation to deployment  
+ Identify prohibited practices and high-risk domains for AI content pipelines  
+ Implement data governance strategies aligned with EU regulations  
+ Build robust, safe, and transparent AI content systems  
+ Conduct conformity assessments and manage post-market monitoring  
+ Design systems with human oversight and explainability  
+ Handle serious incidents and maintain compliance throughout the system lifecycle
 
 ---
 
-## 📋 Course Modules
+##  Course Modules
 
 ### [Module 1: Foundations of the AI Life Cycle](Module_01_Foundations_of_the_AI_Life_Cycle.md)
 - Defining AI Systems and General Purpose AI (GPAI)
@@ -73,7 +73,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 🛠️ Key Concepts & Frameworks
+##  Key Concepts & Frameworks
 
 ### Regulatory Framework
 - EU AI Act (Regulation (EU) 2024/1689)
@@ -98,7 +98,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 📊 Course Statistics
+##  Course Statistics
 
 **Market Context:**
 - EU AI Act enforcement begins 2025-2026
@@ -114,7 +114,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 🎓 Assessment Structure
+##  Assessment Structure
 
 - **Labs (40%):** 6 hands-on assignments
 - **Midterm Project (25%):** Compliance framework for AI content pipeline
@@ -125,7 +125,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 💼 Career Outcomes
+##  Career Outcomes
 
 ### Roles & Salaries
 - AI Governance Specialist: €80K-€150K
@@ -134,16 +134,16 @@ By completing this course, you will be able to:
 - Regulatory Affairs Manager: €85K-€140K
 
 ### Skills Acquired
-✅ EU AI Act compliance expertise  
-✅ Risk-based AI system classification  
-✅ Data governance and bias mitigation  
-✅ Security and robustness engineering  
-✅ Transparency and explainability design  
-✅ Life cycle management and monitoring
+ EU AI Act compliance expertise  
+ Risk-based AI system classification  
+ Data governance and bias mitigation  
+ Security and robustness engineering  
+ Transparency and explainability design  
+ Life cycle management and monitoring
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites Checklist
 - [ ] Understanding of AI/ML systems (intermediate level)
@@ -161,7 +161,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 📚 Additional Resources
+##  Additional Resources
 
 ### Documentation
 - [EU AI Act Official Text](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689)
@@ -177,7 +177,7 @@ By completing this course, you will be able to:
 
 ---
 
-## 📝 Course Materials
+##  Course Materials
 
 Each module includes:
 - Detailed lessons with regulatory context
@@ -189,7 +189,7 @@ Each module includes:
 
 ---
 
-## 🌟 Success Stories
+##  Success Stories
 
 > "This course transformed how we approach AI development. We now have a comprehensive compliance framework that saved us months of regulatory work."  
 > **— Maria Santos, AI Product Manager**
@@ -202,7 +202,7 @@ Each module includes:
 
 ---
 
-## 📞 Contact & Enrollment
+##  Contact & Enrollment
 
 **Email:** ai-governance-course@example.com  
 **Website:** [Course website]  
@@ -214,7 +214,7 @@ Each module includes:
 
 ---
 
-## 📄 License
+##  License
 
 This course material is proprietary. All rights reserved.
 
@@ -222,7 +222,7 @@ This course material is proprietary. All rights reserved.
 
 ---
 
-## 🗺️ Course Navigation
+##  Course Navigation
 
 - [Start with Module 1 →](Module_01_Foundations_of_the_AI_Life_Cycle.md)
 - [View Index →](INDEX.md)
@@ -230,4 +230,4 @@ This course material is proprietary. All rights reserved.
 
 ---
 
-**Ready to build compliant AI content pipelines? Let's begin! 🚀**
+**Ready to build compliant AI content pipelines? Let's begin! **

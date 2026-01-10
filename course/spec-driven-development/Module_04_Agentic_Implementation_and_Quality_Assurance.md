@@ -83,10 +83,10 @@ In SDDD, the developer's role shifts from "coder" to "Human Pilot"—a decision 
 Task: AUTH-005 - Create POST /api/auth/login endpoint
 
 Human Pilot Actions:
-✓ Review task description
-✓ Check dependencies (AUTH-001, AUTH-002, AUTH-003, AUTH-004 complete)
-✓ Validate specification reference
-✓ Assign to AI agent
+ Review task description
+ Check dependencies (AUTH-001, AUTH-002, AUTH-003, AUTH-004 complete)
+ Validate specification reference
+ Assign to AI agent
 ```
 
 #### Step 2: AI Implementation

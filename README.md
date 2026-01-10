@@ -29,23 +29,23 @@ It combines:
 
 ```
 agentforge/
-├── apps/
-│   └── web/                 # Next.js application
-│
-├── packages/
-│   ├── content/             # Markdown lessons + media registry
-│   ├── ui/                  # Shared UI components
-│   └── lib/                 # Supabase clients & helpers
-│
-├── supabase/
-│   ├── migrations/          # SQL migrations
-│   ├── seed.sql
-│   └── policies.sql         # RLS policies
-│
-├── docs/
-│   └── cursor-prompts.md    # Cursor agent prompt pack
-│
-└── README.md
+ apps/
+    web/                 # Next.js application
+
+ packages/
+    content/             # Markdown lessons + media registry
+    ui/                  # Shared UI components
+    lib/                 # Supabase clients & helpers
+
+ supabase/
+    migrations/          # SQL migrations
+    seed.sql
+    policies.sql         # RLS policies
+
+ docs/
+    cursor-prompts.md    # Cursor agent prompt pack
+
+ README.md
 ```
 
 ## 3. Core Principles (Read Before Coding)
@@ -101,9 +101,9 @@ All external content is registered centrally:
 
 ```
 packages/content/media/
-├── videos.yaml
-├── books.yaml
-└── blogs.yaml
+ videos.yaml
+ books.yaml
+ blogs.yaml
 ```
 
 Lessons reference media by ID, not URLs.
@@ -214,19 +214,19 @@ Cursor is the primary development tool.
 
 ### Included:
 
-- ✅ Auth & roles
-- ✅ Markdown lessons
-- ✅ Student profiles & portfolios
-- ✅ Recruiter directory
-- ✅ Demo day pages
-- ✅ Tutor Q&A
+-  Auth & roles
+-  Markdown lessons
+-  Student profiles & portfolios
+-  Recruiter directory
+-  Demo day pages
+-  Tutor Q&A
 
 ### Deferred:
 
-- ❌ Automated skill scoring
-- ❌ Ranking algorithms
-- ❌ Agent telemetry
-- ❌ Enterprise features
+-  Automated skill scoring
+-  Ranking algorithms
+-  Agent telemetry
+-  Enterprise features
 
 ## 13. Security & Privacy Notes
 

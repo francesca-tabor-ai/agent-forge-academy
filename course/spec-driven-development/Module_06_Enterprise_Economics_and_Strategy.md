@@ -966,6 +966,6 @@ Create a comprehensive enterprise SDDD adoption plan, including headcount shift 
 
 ---
 
-**Module 6 Complete. Course Complete! 🎉**
+**Module 6 Complete. Course Complete! **
 
 **Congratulations on completing Mastering Spec-Driven Development (SDDD)!**

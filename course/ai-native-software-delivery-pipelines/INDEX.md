@@ -6,13 +6,13 @@ order: 0
 
 # Mastering the AI Factory - Complete Index
 
-## 📚 Course Materials Overview
+##  Course Materials Overview
 
 This directory contains all course materials for **Mastering the AI Factory: AI-Native Software Delivery**.
 
 ---
 
-## 🗂️ File Structure
+##  File Structure
 
 ### Core Course Files
 1. **[README.md](README.md)** - Main course overview, start here
@@ -55,7 +55,7 @@ This directory contains all course materials for **Mastering the AI Factory: AI-
 
 ---
 
-## 🎯 Quick Navigation
+##  Quick Navigation
 
 ### By Learning Goal
 
@@ -82,11 +82,11 @@ This directory contains all course materials for **Mastering the AI Factory: AI-
 
 ---
 
-## 📋 Learning Path by Role
+##  Learning Path by Role
 
 ### For Software Engineers
-1. Module 1 (Foundations) ⭐
-2. Module 2 (Specification-First) ⭐
+1. Module 1 (Foundations) 
+2. Module 2 (Specification-First) 
 3. Module 4 (Orchestration)
 4. Module 5 (DevOps)
 5. Module 7 (Human-AI Collaboration)
@@ -94,34 +94,34 @@ This directory contains all course materials for **Mastering the AI Factory: AI-
 ### For DevOps Engineers
 1. Module 1 (Foundations)
 2. Module 3 (Context Engineering)
-3. Module 4 (Orchestration) ⭐
-4. Module 5 (DevOps) ⭐
-5. Module 6 (Governance) ⭐
+3. Module 4 (Orchestration) 
+4. Module 5 (DevOps) 
+5. Module 6 (Governance) 
 
 ### For Security Engineers
 1. Module 1 (Foundations)
 2. Module 3 (Context Engineering)
-3. Module 6 (Governance) ⭐
+3. Module 6 (Governance) 
 4. Module 7 (Human-AI Collaboration)
 5. Module 2 (Specification-First)
 
 ### For Engineering Managers
-1. Module 1 (Foundations) ⭐
+1. Module 1 (Foundations) 
 2. Module 2 (Specification-First)
-3. Module 7 (Human-AI Collaboration) ⭐
+3. Module 7 (Human-AI Collaboration) 
 4. Module 6 (Governance)
 5. Module 5 (DevOps)
 
 ### For Solutions Architects
-1. Module 1 (Foundations) ⭐
+1. Module 1 (Foundations) 
 2. Module 2 (Specification-First)
-3. Module 3 (Context Engineering) ⭐
-4. Module 4 (Orchestration) ⭐
+3. Module 3 (Context Engineering) 
+4. Module 4 (Orchestration) 
 5. Module 6 (Governance)
 
 ---
 
-## 🔧 Technology Reference
+##  Technology Reference
 
 ### Specification Tools
 - **OpenSpec** - Specification format (Module 2)
@@ -152,7 +152,7 @@ This directory contains all course materials for **Mastering the AI Factory: AI-
 
 ---
 
-## 📊 Lab Overview
+##  Lab Overview
 
 | Lab | Module | Topic | Duration |
 |-----|--------|-------|----------|
@@ -168,7 +168,7 @@ This directory contains all course materials for **Mastering the AI Factory: AI-
 
 ---
 
-## 🎓 Assessment Guide
+##  Assessment Guide
 
 ### Grade Breakdown
 - **Labs (40%):** 7 labs × ~6% each
@@ -184,7 +184,7 @@ This directory contains all course materials for **Mastering the AI Factory: AI-
 
 ---
 
-## 📚 Additional Resources
+##  Additional Resources
 
 ### Reference Documents
 - [Model Context Protocol Documentation](https://modelcontextprotocol.io/)
@@ -199,7 +199,7 @@ This directory contains all course materials for **Mastering the AI Factory: AI-
 
 ---
 
-## 🎯 Success Checklist
+##  Success Checklist
 
 ### Before Starting
 - [ ] Read README.md
@@ -242,7 +242,7 @@ This directory contains all course materials for **Mastering the AI Factory: AI-
 
 ---
 
-## 💡 Study Tips
+##  Study Tips
 
 ### Weekly Routine
 1. **Monday:** Watch lectures (2-3h)
@@ -266,7 +266,7 @@ This directory contains all course materials for **Mastering the AI Factory: AI-
 
 ---
 
-## 🔗 Quick Links
+##  Quick Links
 
 - **[Start Course →](README.md)**
 - **[Module 1 →](Module_01_Foundations_of_AI_Native_Engineering.md)**
@@ -275,7 +275,7 @@ This directory contains all course materials for **Mastering the AI Factory: AI-
 
 ---
 
-## 📞 Contact
+##  Contact
 
 **Questions?** Email: ai-native-course@example.com  
 **Office Hours:** Tuesday/Thursday 6-7 PM EST  

@@ -400,9 +400,9 @@ OpenSpec File
     ↓
 Spec-Kit Parser
     ↓
-┌───────────────┬───────────────┬───────────────┐
-│ Test Generator│ Doc Generator │ Code Stubs   │
-└───────────────┴───────────────┴───────────────┘
+
+ Test Generator Doc Generator  Code Stubs   
+
     ↓               ↓               ↓
 Tests          Documentation    Implementation
 ```
@@ -628,5 +628,5 @@ Module 3 will teach you how to build knowledge fabrics and context engineering s
 
 ---
 
-**Module 2 Complete** ✓  
+**Module 2 Complete**   
 **Next:** Module 3 - Context Engineering & The Knowledge Fabric

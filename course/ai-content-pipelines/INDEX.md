@@ -6,13 +6,13 @@ order: 0
 
 # Designing and Scaling AI Content Pipelines - Complete Index
 
-## 📚 Course Materials Overview
+##  Course Materials Overview
 
 This directory contains all course materials for **Designing and Scaling AI Content Pipelines**.
 
 ---
 
-## 🗂️ File Structure
+##  File Structure
 
 ### Core Course Files
 1. **[README.md](README.md)** - Main course overview, start here
@@ -72,7 +72,7 @@ This directory contains all course materials for **Designing and Scaling AI Cont
 
 ---
 
-## 🎯 Quick Navigation
+##  Quick Navigation
 
 ### By Learning Goal
 
@@ -99,39 +99,39 @@ This directory contains all course materials for **Designing and Scaling AI Cont
 
 ---
 
-## 📋 Learning Path by Role
+##  Learning Path by Role
 
 ### For Content Managers
-1. Module 1 (Pipeline foundations) ⭐
-2. Module 3 (Ideation automation) ⭐
-3. Module 4 (Text workflows) ⭐
-4. Module 7 (Quality control) ⭐
+1. Module 1 (Pipeline foundations) 
+2. Module 3 (Ideation automation) 
+3. Module 4 (Text workflows) 
+4. Module 7 (Quality control) 
 5. Module 6 (Marketing pipelines)
 
 ### For Technical Content Engineers
-1. Module 1 (Pipeline foundations) ⭐
-2. Module 2 (RAG systems) ⭐
-3. Module 4 (Text workflows) ⭐
-4. Module 7 (Quality control) ⭐
+1. Module 1 (Pipeline foundations) 
+2. Module 2 (RAG systems) 
+3. Module 4 (Text workflows) 
+4. Module 7 (Quality control) 
 5. Module 5 (Multimedia)
 
 ### For Marketing Automation Specialists
 1. Module 1 (Pipeline foundations)
-2. Module 6 (Marketing pipelines) ⭐
-3. Module 3 (Ideation automation) ⭐
+2. Module 6 (Marketing pipelines) 
+3. Module 3 (Ideation automation) 
 4. Module 7 (Quality control)
-5. Module 5 (Multimedia) ⭐
+5. Module 5 (Multimedia) 
 
 ### For AI/ML Engineers
-1. Module 1 (Pipeline foundations) ⭐
-2. Module 2 (RAG systems) ⭐
-3. Module 3 (Multi-agent planning) ⭐
+1. Module 1 (Pipeline foundations) 
+2. Module 2 (RAG systems) 
+3. Module 3 (Multi-agent planning) 
 4. Module 7 (Quality control)
 5. Module 4 (Text workflows)
 
 ---
 
-## 🔧 Technology Reference
+##  Technology Reference
 
 ### Data & RAG (Module 2)
 - **Docling** - Document parsing and extraction
@@ -158,7 +158,7 @@ This directory contains all course materials for **Designing and Scaling AI Cont
 
 ---
 
-## 📊 Exercise Overview
+##  Exercise Overview
 
 | Exercise | Module | Topic | Duration |
 |----------|--------|-------|----------|
@@ -174,7 +174,7 @@ This directory contains all course materials for **Designing and Scaling AI Cont
 
 ---
 
-## 🎓 Assessment Guide
+##  Assessment Guide
 
 ### Grade Breakdown
 - **Exercises (40%):** 7 exercises × ~5.7% each
@@ -195,7 +195,7 @@ This directory contains all course materials for **Designing and Scaling AI Cont
 
 ---
 
-## 📚 Additional Resources
+##  Additional Resources
 
 ### Reference Documents
 - [LangChain Documentation](https://python.langchain.com/)
@@ -213,7 +213,7 @@ This directory contains all course materials for **Designing and Scaling AI Cont
 
 ---
 
-## 🎯 Success Checklist
+##  Success Checklist
 
 ### Before Starting
 - [ ] Read README.md
@@ -247,7 +247,7 @@ This directory contains all course materials for **Designing and Scaling AI Cont
 
 ---
 
-## 💡 Study Tips
+##  Study Tips
 
 ### Weekly Routine
 1. **Monday:** Read module materials (2-3h)
@@ -272,7 +272,7 @@ This directory contains all course materials for **Designing and Scaling AI Cont
 
 ---
 
-## 🔗 Quick Links
+##  Quick Links
 
 - **[Start Course →](README.md)**
 - **[Module 1 →](Module_01_Foundations_of_AI_Content_Orchestration.md)**
@@ -281,7 +281,7 @@ This directory contains all course materials for **Designing and Scaling AI Cont
 
 ---
 
-## 📞 Contact
+##  Contact
 
 **Questions?** Email: ai-content-pipelines@example.com  
 **Office Hours:** Weekly Q&A sessions  
