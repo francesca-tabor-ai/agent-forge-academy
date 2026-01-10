@@ -8,7 +8,7 @@ interface Offer {
   title: string;
   provider: string;
   description: string;
-  category: 'api' | 'hosting' | 'monitoring' | 'data' | 'tools' | 'services';
+  category: 'api' | 'hosting' | 'monitoring' | 'data' | 'tools' | 'services' | 'database' | 'vector_database' | 'ai_llm' | 'observability' | 'analytics' | 'ml_tools';
   discount_text: string;
   discount_type: 'percentage' | 'fixed_amount' | 'free_credits' | 'extended_trial' | 'tier_upgrade';
   discount_value: number | null;
@@ -129,6 +129,12 @@ export default async function OffersPage() {
     data: '💾',
     tools: '🛠️',
     services: '⚙️',
+    database: '🗄️',
+    vector_database: '🔍',
+    ai_llm: '🤖',
+    observability: '👁️',
+    analytics: '📈',
+    ml_tools: '🧪',
   };
 
   const categoryColors: Record<string, string> = {
@@ -138,6 +144,12 @@ export default async function OffersPage() {
     data: 'bg-yellow-50 border-yellow-200',
     tools: 'bg-orange-50 border-orange-200',
     services: 'bg-pink-50 border-pink-200',
+    database: 'bg-indigo-50 border-indigo-200',
+    vector_database: 'bg-cyan-50 border-cyan-200',
+    ai_llm: 'bg-violet-50 border-violet-200',
+    observability: 'bg-emerald-50 border-emerald-200',
+    analytics: 'bg-rose-50 border-rose-200',
+    ml_tools: 'bg-amber-50 border-amber-200',
   };
 
   const getDaysUntilExpiration = (dateString: string | null) => {
