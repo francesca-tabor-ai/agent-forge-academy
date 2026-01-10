@@ -112,10 +112,10 @@ export default async function CoursesPage() {
 
   // Sort courses by category for better organization
   const categoryOrder = [
-    'Build & Ship (Engineering)',
-    'Agents & Retrieval',
-    'Growth & Visibility',
-    'Commerce & Experiences',
+    'Vibe Engineering',
+    'Agentic Systems',
+    'AI Search & Viability',
+    'Shopping & E-Commerce',
     'Media & Content Ops',
     'Trust & Regulation',
   ];
@@ -152,9 +152,12 @@ export default async function CoursesPage() {
           {/* Group courses by category */}
           {Object.entries(
             allCourses.reduce((acc, course) => {
-              const category = course.metadata?.category || 'Other';
-              if (!acc[category]) acc[category] = [];
-              acc[category].push(course);
+              const category = course.metadata?.category;
+              // Only include courses with valid metadata categories
+              if (category) {
+                if (!acc[category]) acc[category] = [];
+                acc[category].push(course);
+              }
               return acc;
             }, {} as Record<string, typeof allCourses>)
           ).map(([category, categoryCourses]) => (
