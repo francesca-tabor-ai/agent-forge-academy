@@ -64,7 +64,7 @@ export function QuestionsList({
             id="context_type"
             value={contextType}
             onChange={(e) => setContextType(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent"
+            className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ca-gold focus:border-transparent"
           >
             <option value="all">All Contexts</option>
             <option value="lesson">Lesson</option>
@@ -82,7 +82,7 @@ export function QuestionsList({
               value={contextId}
               onChange={(e) => setContextId(e.target.value)}
               placeholder="e.g., lesson-01"
-              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent"
+              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ca-gold focus:border-transparent"
             />
           </div>
         )}

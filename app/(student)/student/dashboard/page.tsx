@@ -1,9 +1,14 @@
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
-import Link from 'next/link';
 import { getAllCourseSlugs, loadAllLessons } from '@/lib/lessons';
 import { courseMetadata } from '@/lib/course-metadata';
-import { CourseCard } from '@/components/courses/CourseCard';
+import { CoursesSection } from '@/components/dashboard/CoursesSection';
+import { PortfolioSection } from '@/components/dashboard/PortfolioSection';
+import { JobOpportunitiesSection } from '@/components/dashboard/JobOpportunitiesSection';
+import { AIAdvisorSection } from '@/components/dashboard/AIAdvisorSection';
+import { OffersSection } from '@/components/dashboard/OffersSection';
+import { SubscriptionSection } from '@/components/dashboard/SubscriptionSection';
+import { getUserRole } from '@/lib/supabase/server';
 
 export default async function StudentDashboard() {
   const supabase = await createUserSupabaseClient();
@@ -14,6 +19,8 @@ export default async function StudentDashboard() {
   if (!user) {
     redirect('/auth/login');
   }
+
+  const role = await getUserRole();
 
   // Get student profile to check enrollments
   const { data: profile } = await supabase
@@ -111,113 +118,57 @@ export default async function StudentDashboard() {
     }
   }
 
-  // Sort courses by category for better organization
-  const categoryOrder = [
-    'Build & Ship (Engineering)',
-    'Agents & Retrieval',
-    'Growth & Visibility',
-    'Commerce & Experiences',
-    'Media & Content Ops',
-    'Trust & Regulation',
-  ];
+  // Get portfolio data
+  let portfolioData = null;
+  if (studentProfileId) {
+    const { data: studentProfile } = await supabase
+      .from('student_profiles')
+      .select('id, visibility, bio')
+      .eq('id', studentProfileId)
+      .single();
 
-  allCourses.sort((a, b) => {
-    const categoryA = a.metadata?.category || '';
-    const categoryB = b.metadata?.category || '';
-    const indexA = categoryOrder.indexOf(categoryA);
-    const indexB = categoryOrder.indexOf(categoryB);
-    
-    if (indexA !== -1 && indexB !== -1) {
-      return indexA - indexB;
-    }
-    if (indexA !== -1) return -1;
-    if (indexB !== -1) return 1;
-    return (a.title || '').localeCompare(b.title || '');
-  });
+    const { data: projects } = await supabase
+      .from('portfolio_projects')
+      .select('id, title, description, visibility, created_at')
+      .eq('student_profile_id', studentProfileId)
+      .order('created_at', { ascending: false });
 
-  // Get actionable items
-  // TODO: Add actual queries for:
-  // - Continue lesson
-  // - Upcoming session
-  // - Pending question
-  // - Demo day reminder
+    portfolioData = {
+      profile: studentProfile,
+      projects: projects || [],
+    };
+  }
 
   return (
-    <div>
-      <h1 className="text-2xl font-semibold text-gray-900 mb-8">Dashboard</h1>
+    <div className="space-y-8">
+      <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
       
-      <div className="space-y-8">
-        {/* Action items - only show what user should act on */}
-        <section>
-          <h2 className="text-lg font-medium text-gray-900 mb-4">Next Actions</h2>
-          <div className="space-y-3">
-            {/* Example: Continue lesson */}
-            <div className="bg-white border border-gray-200 rounded-lg p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-base font-medium text-gray-900">Continue Learning</h3>
-                  <p className="text-sm text-gray-600 mt-1">Resume where you left off</p>
-                </div>
-                <Link
-                  href="/student/lessons"
-                  className="text-sm font-medium text-brand-light hover:text-brand-light/90"
-                >
-                  View →
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
+      {/* (1) Courses Section - Primary reason users log in */}
+      <CoursesSection 
+        courses={allCourses}
+        enrollments={enrollments}
+        studentProfileId={studentProfileId}
+      />
 
-        {/* All Courses */}
-        <section>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-medium text-gray-900">All Courses</h2>
-            <Link
-              href="/student/courses"
-              className="text-sm font-medium text-brand-light hover:text-brand-light/90"
-            >
-              View All →
-            </Link>
-          </div>
-          
-          {allCourses.length === 0 ? (
-            <div className="bg-white border border-gray-200 rounded-lg p-8 text-center">
-              <p className="text-gray-600">No courses available at this time.</p>
-            </div>
-          ) : (
-            <div className="space-y-8">
-              {/* Group courses by category */}
-              {Object.entries(
-                allCourses.reduce((acc, course) => {
-                  const category = course.metadata?.category || 'Other';
-                  if (!acc[category]) acc[category] = [];
-                  acc[category].push(course);
-                  return acc;
-                }, {} as Record<string, typeof allCourses>)
-              ).map(([category, categoryCourses]) => (
-                <div key={category}>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-4">{category}</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {categoryCourses.map((course) => {
-                      const enrollment = course.id ? enrollments[course.id] : null;
-                      return (
-                        <CourseCard
-                          key={course.slug}
-                          course={course}
-                          metadata={course.metadata}
-                          enrollment={enrollment || null}
-                        />
-                      );
-                    })}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </section>
-      </div>
+      {/* (2) Portfolio Section - Career signal layer */}
+      {portfolioData && (
+        <PortfolioSection portfolioData={portfolioData} />
+      )}
+
+      {/* (3) Job Opportunities Section - Motivation + outcome alignment */}
+      <JobOpportunitiesSection studentProfileId={studentProfileId} />
+
+      {/* (4) AI Advisor Section - Support + momentum recovery */}
+      <AIAdvisorSection 
+        studentProfileId={studentProfileId}
+        activeCourses={allCourses.filter(c => c.id && enrollments[c.id])}
+      />
+
+      {/* (5) Offers Section - Tool Discounts (small card, never above learning/career) */}
+      <OffersSection />
+
+      {/* (6) Subscription Section - Lowest priority, admin-only */}
+      {role === 'admin' && <SubscriptionSection />}
     </div>
   );
 }
-

@@ -71,7 +71,7 @@ export default async function QuestionsPage({
         <h1 className="text-2xl font-semibold text-gray-900">Questions & Answers</h1>
         <Link
           href="/student/questions/ask"
-          className="px-4 py-2 text-sm font-medium text-white bg-brand-light rounded-md hover:bg-brand-light/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-light"
+          className="btn-primary text-sm"
         >
           Ask Question
         </Link>

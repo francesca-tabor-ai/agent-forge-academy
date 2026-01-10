@@ -86,7 +86,7 @@ export function EditProjectForm({ project }: EditProjectFormProps) {
             required
             value={formData.title}
             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ca-gold focus:border-transparent"
           />
         </div>
 
@@ -99,7 +99,7 @@ export function EditProjectForm({ project }: EditProjectFormProps) {
             value={formData.description}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
             rows={8}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent font-mono text-sm"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ca-gold focus:border-transparent font-mono text-sm"
             placeholder="Describe your project. Use markdown for formatting."
           />
           <p className="mt-1 text-xs text-gray-500">Markdown supported</p>
@@ -116,7 +116,7 @@ export function EditProjectForm({ project }: EditProjectFormProps) {
               value={formData.github_url}
               onChange={(e) => setFormData({ ...formData, github_url: e.target.value })}
               placeholder="https://github.com/..."
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ca-gold focus:border-transparent"
             />
           </div>
 
@@ -130,7 +130,7 @@ export function EditProjectForm({ project }: EditProjectFormProps) {
               value={formData.demo_url}
               onChange={(e) => setFormData({ ...formData, demo_url: e.target.value })}
               placeholder="https://..."
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ca-gold focus:border-transparent"
             />
           </div>
         </div>
@@ -149,7 +149,7 @@ export function EditProjectForm({ project }: EditProjectFormProps) {
                   visibility: e.target.value as 'private' | 'recruiters_only' | 'public',
                 })
               }
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ca-gold focus:border-transparent"
             >
               <option value="private">Private - Only you can see this</option>
               <option value="recruiters_only">Recruiters Only - Visible to verified recruiters</option>
@@ -168,14 +168,14 @@ export function EditProjectForm({ project }: EditProjectFormProps) {
             type="button"
             onClick={() => router.push('/student/portfolio')}
             disabled={loading}
-            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-light"
+            className="btn-secondary text-sm"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={loading || saveState === 'saving'}
-            className="px-4 py-2 text-sm font-medium text-white bg-brand-light rounded-md hover:bg-brand-light/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-light disabled:opacity-50 disabled:cursor-not-allowed"
+            className="btn-primary text-sm disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {saveState === 'saving' ? 'Saving...' : saveState === 'saved' ? 'Saved' : 'Save Changes'}
           </button>

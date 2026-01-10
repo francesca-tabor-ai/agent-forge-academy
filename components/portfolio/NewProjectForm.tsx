@@ -101,7 +101,7 @@ export function NewProjectForm() {
             value={formData.title}
             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
             placeholder="RAG Support Bot for E-commerce (FastAPI + Pinecone)"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ca-gold focus:border-transparent"
           />
           <p className="mt-1 text-xs text-gray-500">
             Format: What it is + who it's for + key tech
@@ -117,7 +117,7 @@ export function NewProjectForm() {
             value={formData.description}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
             rows={10}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent font-mono text-sm"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ca-gold focus:border-transparent font-mono text-sm"
             placeholder={`• **Problem:** What did you build and why?
 • **Users:** Who is it for?
 • **Approach:** How does it work (high level)?
@@ -138,7 +138,7 @@ export function NewProjectForm() {
               value={formData.github_url}
               onChange={(e) => setFormData({ ...formData, github_url: e.target.value })}
               placeholder="https://github.com/username/repo"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ca-gold focus:border-transparent"
             />
             <p className="mt-1 text-xs text-gray-500">Make sure your README includes setup steps and screenshots</p>
           </div>
@@ -153,7 +153,7 @@ export function NewProjectForm() {
               value={formData.demo_url}
               onChange={(e) => setFormData({ ...formData, demo_url: e.target.value })}
               placeholder="https://demo.example.com or Loom/YouTube link"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ca-gold focus:border-transparent"
             />
             <p className="mt-1 text-xs text-gray-500">Live demo or video (Loom/YouTube is fine)</p>
           </div>
@@ -173,7 +173,7 @@ export function NewProjectForm() {
                   visibility: e.target.value as 'private' | 'recruiters_only' | 'public',
                 })
               }
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ca-gold focus:border-transparent"
             >
               <option value="private">Private - Only you can see this</option>
               <option value="recruiters_only">Recruiters Only - Recommended when applying</option>
@@ -192,14 +192,14 @@ export function NewProjectForm() {
             type="button"
             onClick={() => router.push('/student/portfolio')}
             disabled={loading}
-            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-light"
+            className="btn-secondary text-sm"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={loading}
-            className="px-4 py-2 text-sm font-medium text-white bg-brand-light rounded-md hover:bg-brand-light/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-light disabled:opacity-50 disabled:cursor-not-allowed"
+            className="btn-primary text-sm disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? 'Creating...' : 'Create Project'}
           </button>

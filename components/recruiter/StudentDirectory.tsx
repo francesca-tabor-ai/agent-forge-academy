@@ -71,14 +71,14 @@ export function StudentDirectory({
             value={search}
             onChange={(e) => handleSearch(e.target.value)}
             disabled={isPending}
-            className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent"
+            className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ca-gold focus:border-transparent"
           />
           <select
             id="visibility"
             value={visibility}
             onChange={(e) => handleVisibilityChange(e.target.value)}
             disabled={isPending}
-            className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent"
+            className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ca-gold focus:border-transparent"
           >
             <option value="all">All Visible</option>
             <option value="recruiters_only">Recruiters Only</option>
@@ -120,7 +120,7 @@ export function StudentDirectory({
                 </Link>
                 <Link
                   href={`/recruiter/contact/${student.id}`}
-                  className="px-4 py-2 text-sm font-medium text-white bg-brand-light rounded-md hover:bg-brand-light/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-light"
+                  className="btn-primary text-sm"
                 >
                   Request Contact
                 </Link>
