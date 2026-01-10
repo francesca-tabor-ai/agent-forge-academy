@@ -33,80 +33,30 @@ export function JobOpportunitiesSection({ studentProfileId }: JobOpportunitiesSe
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // TODO: Replace with actual API call
-    // For now, using mock data
-    setTimeout(() => {
-      setRecommendedJobs([
-        {
-          id: '1',
-          title: 'Senior AI Engineer',
-          company: 'Tech Corp',
-          matchingScore: 85,
-          status: 'new',
-          skills: ['Multi-Agent Systems', 'RAG', 'LLMs', 'Product Strategy'],
-        },
-        {
-          id: '2',
-          title: 'AI Product Manager',
-          company: 'StartupXYZ',
-          matchingScore: 72,
-          status: 'unlocked',
-          skills: ['Agentic Commerce', 'Product Strategy', 'AI/ML'],
-        },
-        {
-          id: '3',
-          title: 'ML Engineer',
-          company: 'DataCo',
-          matchingScore: 68,
-          status: 'recommended',
-          skills: ['Recommender Systems', 'Python', 'TensorFlow'],
-        },
-        {
-          id: '4',
-          title: 'AI Research Scientist',
-          company: 'ResearchLab',
-          matchingScore: 45,
-          status: 'stretch',
-          skills: ['Multi-Agent Systems', 'RAG', 'LLMs', 'Research'],
-          skillsMissing: ['Research', 'Advanced ML'],
-          isStretch: true,
-        },
-        {
-          id: '5',
-          title: 'Senior ML Engineer',
-          company: 'BigTech',
-          matchingScore: 30,
-          status: 'locked',
-          skills: ['Deep Learning', 'PyTorch', 'Distributed Systems'],
-          skillsMissing: ['Deep Learning', 'PyTorch'],
-          isLocked: true,
-        },
-      ]);
+    const fetchJobs = async () => {
+      try {
+        const response = await fetch('/api/jobs');
+        if (!response.ok) {
+          throw new Error('Failed to fetch jobs');
+        }
+        const data = await response.json();
+        setRecommendedJobs(data.jobs || []);
+        
+        // Count new jobs (status === 'new')
+        const newCount = (data.jobs || []).filter((job: JobOpportunity) => job.status === 'new').length;
+        setNewOpportunitiesCount(newCount);
+        
+        // TODO: Fetch saved applications from database when job_applications table is created
+        setSavedApplications([]);
+        
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching jobs:', error);
+        setLoading(false);
+      }
+    };
 
-      setSavedApplications([
-        {
-          id: '1',
-          jobTitle: 'AI Engineer',
-          company: 'Company A',
-          status: 'applied',
-        },
-        {
-          id: '2',
-          jobTitle: 'Product Manager',
-          company: 'Company B',
-          status: 'draft',
-        },
-        {
-          id: '3',
-          jobTitle: 'Senior ML Engineer',
-          company: 'Company C',
-          status: 'interview',
-        },
-      ]);
-
-      setNewOpportunitiesCount(2);
-      setLoading(false);
-    }, 500);
+    fetchJobs();
   }, []);
 
   const getStatusBadge = (status?: string) => {
@@ -188,9 +138,10 @@ export function JobOpportunitiesSection({ studentProfileId }: JobOpportunitiesSe
               const isLockedOrStretch = job.isLocked || job.isStretch;
 
               return (
-                <div
+                <Link
                   key={job.id}
-                  className="p-5 border border-gray-200 rounded-lg hover:border-brand-light transition-colors"
+                  href={`/student/jobs/${job.id}`}
+                  className="block p-5 border border-gray-200 rounded-lg hover:border-brand-light transition-colors"
                 >
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex-1">
@@ -244,18 +195,36 @@ export function JobOpportunitiesSection({ studentProfileId }: JobOpportunitiesSe
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex items-center gap-2 pt-4 border-t border-gray-100">
-                    <button className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium">
+                  <div className="flex items-center gap-2 pt-4 border-t border-gray-100" onClick={(e) => e.preventDefault()}>
+                    <button 
+                      className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        // TODO: Implement CV generation
+                      }}
+                    >
                       Generate CV
                     </button>
-                    <button className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium">
+                    <button 
+                      className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        // TODO: Implement cover letter generation
+                      }}
+                    >
                       Cover Letter
                     </button>
-                    <button className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium">
+                    <button 
+                      className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        // TODO: Implement portfolio tailoring
+                      }}
+                    >
                       Tailor Portfolio
                     </button>
                   </div>
-                </div>
+                </Link>
               );
             })}
           </div>

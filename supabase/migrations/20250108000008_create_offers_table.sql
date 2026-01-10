@@ -2,8 +2,22 @@
 -- Provides curated, high-signal offers that support building AI projects
 
 -- Create offer category enum (idempotent)
+-- Include ALL categories from the start to avoid "unsafe use of new value" errors
 DO $$ BEGIN
-    CREATE TYPE offer_category AS ENUM ('api', 'hosting', 'monitoring', 'data', 'tools', 'services');
+    CREATE TYPE offer_category AS ENUM (
+        'api', 
+        'hosting', 
+        'monitoring', 
+        'data', 
+        'tools', 
+        'services',
+        'database',
+        'vector_database',
+        'ai_llm',
+        'observability',
+        'analytics',
+        'ml_tools'
+    );
 EXCEPTION
     WHEN duplicate_object THEN null;
 END $$;
@@ -59,6 +73,8 @@ CREATE TRIGGER update_offers_updated_at
 ALTER TABLE offers ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies: All authenticated users can read active offers
+-- Use DROP POLICY IF EXISTS to make this idempotent
+DROP POLICY IF EXISTS "Students can view active offers" ON offers;
 CREATE POLICY "Students can view active offers"
   ON offers
   FOR SELECT
@@ -66,6 +82,7 @@ CREATE POLICY "Students can view active offers"
   USING (is_active = true);
 
 -- Admins can manage all offers
+DROP POLICY IF EXISTS "Admins can manage offers" ON offers;
 CREATE POLICY "Admins can manage offers"
   ON offers
   FOR ALL

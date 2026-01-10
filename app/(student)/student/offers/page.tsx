@@ -88,6 +88,35 @@ export default async function OffersPage() {
 
   const allOffers: Offer[] = (offers || []) as Offer[];
 
+  // Filter and sort active discounts (offers with significant discounts)
+  const activeDiscounts = allOffers
+    .filter(offer => {
+      // Include offers with:
+      // - Percentage discounts >= 10%
+      // - Fixed amount discounts
+      // - Discount codes
+      // - Price differences (original vs discounted)
+      const hasPercentageDiscount = offer.discount_type === 'percentage' && 
+        offer.discount_value && offer.discount_value >= 10;
+      const hasFixedDiscount = offer.discount_type === 'fixed_amount' && 
+        offer.discount_value && offer.discount_value > 0;
+      const hasDiscountCode = offer.discount_code && offer.discount_code.trim() !== '';
+      const hasPriceDifference = offer.original_price && offer.discounted_price;
+      
+      return hasPercentageDiscount || hasFixedDiscount || hasDiscountCode || hasPriceDifference;
+    })
+    .sort((a, b) => {
+      // Sort by discount value (highest first)
+      const aValue = a.discount_value || 0;
+      const bValue = b.discount_value || 0;
+      if (a.discount_type === 'percentage' && b.discount_type === 'percentage') {
+        return bValue - aValue;
+      }
+      if (a.discount_type === 'percentage') return -1;
+      if (b.discount_type === 'percentage') return 1;
+      return bValue - aValue;
+    });
+
   // Determine which offers are recommended for this student
   const recommendedOffers: Offer[] = [];
   const otherOffers: Offer[] = [];
@@ -170,6 +199,121 @@ export default async function OffersPage() {
           Exclusive tools to help you build and ship faster
         </p>
       </div>
+
+      {/* Active Discounts Section */}
+      {activeDiscounts.length > 0 && (
+        <div className="mb-8">
+          <div className="flex items-center gap-2 mb-4">
+            <h2 className="text-xl font-semibold text-gray-900">Active Discounts</h2>
+            <span className="px-2 py-1 bg-red-100 text-red-700 text-xs font-bold rounded-full animate-pulse">
+              🔥 Limited Time
+            </span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {activeDiscounts.map((offer) => {
+              const daysUntilExpiration = getDaysUntilExpiration(offer.expiration_date);
+              const usagePercentage = offer.max_usage 
+                ? Math.round((offer.usage_count || 0) / offer.max_usage * 100)
+                : 0;
+
+              // Calculate discount display
+              const discountDisplay = offer.discount_type === 'percentage' && offer.discount_value
+                ? `${Math.round(offer.discount_value)}% OFF`
+                : offer.discount_text;
+
+              return (
+                <div
+                  key={offer.id}
+                  className="bg-gradient-to-br from-red-50 to-orange-50 border-2 border-red-200 rounded-lg p-5 hover:shadow-xl transition-all relative overflow-hidden"
+                >
+                  {/* Discount Badge - Prominent */}
+                  <div className="absolute top-0 right-0 bg-red-600 text-white px-3 py-1 text-xs font-bold rounded-bl-lg">
+                    {discountDisplay}
+                  </div>
+                  
+                  {/* Header */}
+                  <div className="flex items-start gap-3 mb-3 pr-16">
+                    <span className="text-3xl">{categoryIcons[offer.category] || '🛠️'}</span>
+                    <div className="flex-1">
+                      <h3 className="text-base font-bold text-gray-900">{offer.title}</h3>
+                      <p className="text-xs text-gray-600 font-medium">{offer.provider}</p>
+                    </div>
+                  </div>
+                  
+                  {/* Description */}
+                  <p className="text-sm text-gray-700 mb-4">{offer.description}</p>
+                  
+                  {/* Price Comparison - Prominent */}
+                  {offer.original_price && offer.discounted_price && (
+                    <div className="mb-4 p-3 bg-white rounded-lg border-2 border-red-300">
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-lg text-gray-400 line-through">{offer.original_price}</span>
+                        <span className="text-2xl font-bold text-red-600">{offer.discounted_price}</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Discount Code - If Available */}
+                  {offer.discount_code && (
+                    <div className="mb-4 p-3 bg-white border-2 border-dashed border-red-300 rounded-lg">
+                      <p className="text-xs text-gray-500 mb-1">Discount Code:</p>
+                      <p className="text-sm font-mono font-bold text-red-600">{offer.discount_code}</p>
+                      <p className="text-xs text-gray-500 mt-1">Click to view details and copy code</p>
+                    </div>
+                  )}
+
+                  {/* Eligibility */}
+                  {offer.eligibility && (
+                    <div className="mb-3">
+                      <p className="text-xs text-gray-600 font-medium">✓ {offer.eligibility}</p>
+                    </div>
+                  )}
+
+                  {/* Usage/Expiration Info */}
+                  <div className="mb-4 space-y-2">
+                    {daysUntilExpiration !== null && daysUntilExpiration > 0 && (
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="text-gray-600 font-medium">⏰ Expires in:</span>
+                        <span className={`font-bold ${
+                          daysUntilExpiration <= 7 ? 'text-red-600' : 'text-orange-600'
+                        }`}>
+                          {daysUntilExpiration} day{daysUntilExpiration !== 1 ? 's' : ''}
+                        </span>
+                      </div>
+                    )}
+                    {offer.max_usage && (
+                      <div>
+                        <div className="flex items-center justify-between text-xs mb-1">
+                          <span className="text-gray-600 font-medium">Available:</span>
+                          <span className="font-bold text-gray-700">
+                            {offer.max_usage - (offer.usage_count || 0)} remaining
+                          </span>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div
+                            className="bg-red-500 h-2 rounded-full transition-all"
+                            style={{ width: `${100 - usagePercentage}%` }}
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* CTA */}
+                  <div className="pt-3 border-t-2 border-red-200">
+                    <Link
+                      href={`/student/offers/${offer.id}`}
+                      className="block w-full text-center px-4 py-2 bg-red-600 text-white text-sm font-bold rounded-lg hover:bg-red-700 transition-colors"
+                    >
+                      Claim Discount Now →
+                    </Link>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Recommended Offers Section */}
       {recommendedOffers.length > 0 && (
