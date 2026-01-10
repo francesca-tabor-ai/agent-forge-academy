@@ -1,6 +1,7 @@
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import { SubscriptionPageContent } from '@/components/subscription/SubscriptionPageContent';
+import type { SubscriptionData } from '@/lib/types/subscription';
 
 export default async function SubscriptionPage() {
   const supabase = await createUserSupabaseClient();
@@ -25,7 +26,7 @@ export default async function SubscriptionPage() {
 
   // TODO: Fetch actual subscription data from database
   // For now, using mock data structure that matches requirements
-  const subscriptionData = {
+  const subscriptionData: SubscriptionData = {
     plan: {
       name: 'Starter',
       tier: 'starter', // starter, pro, career
