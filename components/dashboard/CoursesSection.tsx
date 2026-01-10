@@ -40,20 +40,46 @@ export async function CoursesSection({ courses, enrollments, studentProfileId }:
     return dateB - dateA;
   });
 
-  // Get next lesson for each active course
-  const activeCoursesWithNextLesson = await Promise.all(
+  // Get detailed information for each active course
+  const activeCoursesWithDetails = await Promise.all(
     activeCourses.map(async (course) => {
-      if (!course.slug) return { course, nextLesson: null, timeEstimate: null };
+      if (!course.slug) return { 
+        course, 
+        nextLesson: null, 
+        timeEstimate: null, 
+        totalLessons: 0,
+        completedLessons: 0,
+        lessonsRemaining: 0,
+        timeSpent: '0h',
+        estimatedTimeRemaining: null,
+        nextMilestone: null,
+        streakDays: 0,
+      };
       
       const lessons = loadAllLessons(undefined, course.slug);
-      if (lessons.length === 0) return { course, nextLesson: null, timeEstimate: null };
+      if (lessons.length === 0) return { 
+        course, 
+        nextLesson: null, 
+        timeEstimate: null,
+        totalLessons: 0,
+        completedLessons: 0,
+        lessonsRemaining: 0,
+        timeSpent: '0h',
+        estimatedTimeRemaining: null,
+        nextMilestone: null,
+        streakDays: 0,
+      };
 
       // Find next lesson based on progress
       const enrollment = course.id ? enrollments[course.id] : null;
       const progress = enrollment?.progress_percentage || 0;
       
+      // Calculate lesson completion
+      const completedLessons = Math.floor((progress / 100) * lessons.length);
+      const lessonsRemaining = lessons.length - completedLessons;
+      
       // Estimate which lesson they should be on (rough calculation)
-      const estimatedLessonIndex = Math.floor((progress / 100) * lessons.length);
+      const estimatedLessonIndex = Math.min(completedLessons, lessons.length - 1);
       const nextLesson = lessons[estimatedLessonIndex] || lessons[0];
 
       // Calculate time estimate to next milestone (25%, 50%, 75%, 100%)
@@ -62,21 +88,68 @@ export async function CoursesSection({ courses, enrollments, studentProfileId }:
       const progressToMilestone = nextMilestone - progress;
       const lessonsPerPercent = lessons.length / 100;
       const lessonsToMilestone = Math.ceil(progressToMilestone * lessonsPerPercent);
-      // Estimate 30-60 minutes per lesson
+      
+      // Estimate 30-60 minutes per lesson (average 45)
       const avgMinutesPerLesson = 45;
       const totalMinutes = lessonsToMilestone * avgMinutesPerLesson;
       const hours = Math.floor(totalMinutes / 60);
       const minutes = totalMinutes % 60;
       const timeEstimate = hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
+      
+      // Calculate total estimated time remaining
+      const totalRemainingMinutes = lessonsRemaining * avgMinutesPerLesson;
+      const totalRemainingHours = Math.floor(totalRemainingMinutes / 60);
+      const totalRemainingMins = totalRemainingMinutes % 60;
+      const estimatedTimeRemaining = totalRemainingHours > 0 
+        ? `${totalRemainingHours}h ${totalRemainingMins}m`
+        : `${totalRemainingMins}m`;
 
-      return { course, nextLesson, timeEstimate, nextMilestone };
+      // Estimate time spent (based on completed lessons)
+      const timeSpentMinutes = completedLessons * avgMinutesPerLesson;
+      const timeSpentHours = Math.floor(timeSpentMinutes / 60);
+      const timeSpent = timeSpentHours > 0 ? `${timeSpentHours}h` : `${timeSpentMinutes}m`;
+
+      // Calculate learning streak (mock - would come from database)
+      const enrollmentDate = enrollment ? new Date(enrollment.enrolled_at) : new Date();
+      const daysSinceEnrollment = Math.floor((Date.now() - enrollmentDate.getTime()) / (1000 * 60 * 60 * 24));
+      const streakDays = Math.min(daysSinceEnrollment, 7); // Mock: assume active for last 7 days
+
+      return { 
+        course, 
+        nextLesson, 
+        timeEstimate, 
+        nextMilestone,
+        totalLessons: lessons.length,
+        completedLessons,
+        lessonsRemaining,
+        timeSpent,
+        estimatedTimeRemaining,
+        streakDays,
+      };
     })
   );
+
+  // Calculate overall statistics
+  const totalActiveCourses = activeCourses.length;
+  const totalCompletedCourses = completedCourses.length;
+  const overallProgress = activeCourses.length > 0
+    ? Math.round(
+        activeCourses.reduce((sum, c) => {
+          const progress = c.id ? (enrollments[c.id]?.progress_percentage || 0) : 0;
+          return sum + progress;
+        }, 0) / activeCourses.length
+      )
+    : 0;
 
   return (
     <section className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-semibold text-gray-900">Courses</h2>
+        <div>
+          <h2 className="text-2xl font-semibold text-gray-900">Courses</h2>
+          <p className="text-sm text-gray-600 mt-1">
+            {totalActiveCourses} active • {totalCompletedCourses} completed • {overallProgress}% average progress
+          </p>
+        </div>
         <Link
           href="/student/courses"
           className="text-sm font-medium text-brand-light hover:text-brand-light/90"
@@ -86,12 +159,27 @@ export async function CoursesSection({ courses, enrollments, studentProfileId }:
       </div>
 
       {/* Active Courses First */}
-      {activeCoursesWithNextLesson.length > 0 ? (
+      {activeCoursesWithDetails.length > 0 ? (
         <div className="space-y-4">
-          {activeCoursesWithNextLesson.map(({ course, nextLesson, timeEstimate, nextMilestone }) => {
+          {activeCoursesWithDetails.map(({ 
+            course, 
+            nextLesson, 
+            timeEstimate, 
+            nextMilestone,
+            totalLessons,
+            completedLessons,
+            lessonsRemaining,
+            timeSpent,
+            estimatedTimeRemaining,
+            streakDays,
+          }) => {
             const enrollment = course.id ? enrollments[course.id] : null;
             const progress = enrollment?.progress_percentage || 0;
             const displayTitle = course.metadata?.title || course.title;
+            const enrolledDate = enrollment ? new Date(enrollment.enrolled_at) : null;
+            const daysEnrolled = enrolledDate 
+              ? Math.floor((Date.now() - enrolledDate.getTime()) / (1000 * 60 * 60 * 24))
+              : 0;
 
             return (
               <div
@@ -100,75 +188,186 @@ export async function CoursesSection({ courses, enrollments, studentProfileId }:
               >
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
+                    <div className="flex items-center gap-3 mb-3">
                       <h3 className="text-lg font-semibold text-gray-900">{displayTitle}</h3>
                       {course.metadata?.category && (
                         <span className="px-2 py-1 text-xs font-medium text-brand-light bg-brand-light/10 rounded-full">
                           {course.metadata.category}
                         </span>
                       )}
+                      {course.difficulty_level && (
+                        <span className="px-2 py-1 text-xs font-medium text-gray-600 bg-gray-100 rounded-full capitalize">
+                          {course.difficulty_level}
+                        </span>
+                      )}
                     </div>
                     
-                    {/* Progress Bar */}
-                    <div className="mb-3">
-                      <div className="flex items-center justify-between mb-1">
+                    {/* Detailed Progress Information */}
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4 p-3 bg-gray-50 rounded-lg">
+                      <div>
+                        <p className="text-xs text-gray-500 mb-1">Progress</p>
+                        <p className="text-sm font-semibold text-gray-900">{progress}%</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500 mb-1">Lessons</p>
+                        <p className="text-sm font-semibold text-gray-900">
+                          {completedLessons}/{totalLessons}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500 mb-1">Time Spent</p>
+                        <p className="text-sm font-semibold text-gray-900">{timeSpent}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500 mb-1">Remaining</p>
+                        <p className="text-sm font-semibold text-gray-900">{estimatedTimeRemaining}</p>
+                      </div>
+                    </div>
+                    
+                    {/* Progress Bar with Milestones */}
+                    <div className="mb-4">
+                      <div className="flex items-center justify-between mb-2">
                         <span className="text-sm font-medium text-gray-700">
                           {progress}% Complete
                         </span>
-                        <span className="text-xs text-gray-500">
-                          {nextMilestone}% milestone in ~{timeEstimate}
-                        </span>
+                        <div className="flex items-center gap-2">
+                          {streakDays > 0 && (
+                            <span className="flex items-center gap-1 text-xs text-orange-600">
+                              <span>🔥</span>
+                              <span>{streakDays} day streak</span>
+                            </span>
+                          )}
+                          <span className="text-xs text-gray-500">
+                            {nextMilestone}% milestone in ~{timeEstimate}
+                          </span>
+                        </div>
                       </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div className="relative w-full bg-gray-200 rounded-full h-3">
                         <div
-                          className="bg-brand-light h-2 rounded-full transition-all"
+                          className="bg-brand-light h-3 rounded-full transition-all"
                           style={{ width: `${progress}%` }}
                         />
+                        {/* Milestone markers */}
+                        {[25, 50, 75, 100].map((milestone) => (
+                          <div
+                            key={milestone}
+                            className="absolute top-0 h-3 w-0.5 bg-gray-400"
+                            style={{ left: `${milestone}%` }}
+                            title={`${milestone}% milestone`}
+                          />
+                        ))}
+                      </div>
+                      <div className="flex justify-between mt-1 text-xs text-gray-400">
+                        <span>{completedLessons} lessons done</span>
+                        <span>{lessonsRemaining} lessons remaining</span>
                       </div>
                     </div>
 
                     {/* Next Lesson */}
                     {nextLesson && (
-                      <div className="mt-4 p-3 bg-gray-50 rounded-lg">
-                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">
-                          Next Lesson
-                        </p>
-                        <Link
-                          href={course.slug 
-                            ? `/student/courses/${course.slug}/lessons/${nextLesson.slug}`
-                            : `/student/lessons/${nextLesson.slug}`
-                          }
-                          className="text-sm font-medium text-gray-900 hover:text-brand-light"
-                        >
-                          {nextLesson.frontmatter.title || nextLesson.slug}
-                        </Link>
-                        {nextLesson.frontmatter.description && (
-                          <p className="text-xs text-gray-600 mt-1 line-clamp-2">
-                            {nextLesson.frontmatter.description}
-                          </p>
-                        )}
+                      <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <p className="text-xs font-medium text-blue-800 uppercase tracking-wide mb-1">
+                              Next Lesson
+                            </p>
+                            <Link
+                              href={course.slug 
+                                ? `/student/courses/${course.slug}/lessons/${nextLesson.slug}`
+                                : `/student/lessons/${nextLesson.slug}`
+                              }
+                              className="text-sm font-semibold text-gray-900 hover:text-brand-light block mb-1"
+                            >
+                              {nextLesson.frontmatter.title || nextLesson.slug}
+                            </Link>
+                            {nextLesson.frontmatter.description && (
+                              <p className="text-xs text-gray-600 mb-2 line-clamp-2">
+                                {nextLesson.frontmatter.description}
+                              </p>
+                            )}
+                            {nextLesson.frontmatter.module && (
+                              <span className="inline-block px-2 py-0.5 bg-blue-100 text-blue-700 text-xs rounded">
+                                {nextLesson.frontmatter.module}
+                              </span>
+                            )}
+                          </div>
+                          <Link
+                            href={course.slug 
+                              ? `/student/courses/${course.slug}/lessons/${nextLesson.slug}`
+                              : `/student/lessons/${nextLesson.slug}`
+                            }
+                            className="ml-4 px-4 py-2 bg-brand-light text-white rounded-lg hover:bg-brand-light/90 text-sm font-medium whitespace-nowrap"
+                          >
+                            Start Lesson →
+                          </Link>
+                        </div>
                       </div>
                     )}
 
                     {/* Upcoming Capstone/Assessment */}
-                    {progress >= 75 && (
-                      <div className="mt-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                        <p className="text-xs font-medium text-yellow-800 mb-1">
-                          🎯 Upcoming Capstone
-                        </p>
-                        <p className="text-sm text-yellow-700">
-                          You're approaching the final assessment. Complete remaining lessons to unlock.
-                        </p>
+                    {progress >= 75 && progress < 100 && (
+                      <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                        <div className="flex items-start gap-3">
+                          <span className="text-xl">🎯</span>
+                          <div className="flex-1">
+                            <p className="text-sm font-medium text-yellow-800 mb-1">
+                              Upcoming Capstone Project
+                            </p>
+                            <p className="text-sm text-yellow-700 mb-2">
+                              You're approaching the final assessment. Complete the remaining {lessonsRemaining} lesson{lessonsRemaining !== 1 ? 's' : ''} to unlock the capstone project.
+                            </p>
+                            <p className="text-xs text-yellow-600">
+                              Estimated time to capstone: ~{estimatedTimeRemaining}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Course Completion Celebration */}
+                    {progress === 100 && (
+                      <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+                        <div className="flex items-center gap-3">
+                          <span className="text-2xl">🎉</span>
+                          <div>
+                            <p className="text-sm font-medium text-green-800 mb-1">
+                              Course Completed!
+                            </p>
+                            <p className="text-xs text-green-700">
+                              Great work! You've completed all {totalLessons} lessons. View your certificate and continue learning.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Course Statistics */}
+                    {daysEnrolled > 0 && (
+                      <div className="mt-4 pt-4 border-t border-gray-200">
+                        <div className="flex items-center gap-4 text-xs text-gray-500">
+                          <span>Enrolled {daysEnrolled} day{daysEnrolled !== 1 ? 's' : ''} ago</span>
+                          {course.metadata?.time && (
+                            <span>• Estimated duration: {course.metadata.time}</span>
+                          )}
+                        </div>
                       </div>
                     )}
                   </div>
 
-                  <Link
-                    href={`/student/courses/${course.slug}`}
-                    className="ml-4 text-sm font-medium text-brand-light hover:text-brand-light/90 whitespace-nowrap"
-                  >
-                    Continue →
-                  </Link>
+                  <div className="ml-4 flex flex-col gap-2">
+                    <Link
+                      href={`/student/courses/${course.slug}`}
+                      className="px-4 py-2 bg-brand-light text-white rounded-lg hover:bg-brand-light/90 text-sm font-medium text-center whitespace-nowrap"
+                    >
+                      Continue →
+                    </Link>
+                    <Link
+                      href={`/student/courses/${course.slug}`}
+                      className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 text-sm font-medium text-center"
+                    >
+                      View Details
+                    </Link>
+                  </div>
                 </div>
               </div>
             );
@@ -177,35 +376,60 @@ export async function CoursesSection({ courses, enrollments, studentProfileId }:
       ) : (
         /* Recommend a course if nothing is active */
         <div className="bg-white border border-gray-200 rounded-lg p-8 text-center">
-          <p className="text-gray-600 mb-4">You don't have any active courses.</p>
-          <p className="text-sm text-gray-500 mb-6">
-            Start learning to build your AI skills and advance your career.
-          </p>
-          <Link
-            href="/student/courses"
-            className="btn-primary inline-block"
-          >
-            Browse Courses →
-          </Link>
+          <div className="max-w-md mx-auto">
+            <div className="text-4xl mb-4">📚</div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Start Your Learning Journey</h3>
+            <p className="text-gray-600 mb-4">
+              You don't have any active courses. Browse our curriculum and start building your AI skills.
+            </p>
+            <p className="text-sm text-gray-500 mb-6">
+              Choose from courses covering AI fundamentals, agentic systems, commerce, and more.
+            </p>
+            <Link
+              href="/student/courses"
+              className="btn-primary inline-block"
+            >
+              Browse Courses →
+            </Link>
+          </div>
         </div>
       )}
 
       {/* Completed Courses (Collapsed by default, can expand) */}
       {completedCourses.length > 0 && (
         <details className="bg-white border border-gray-200 rounded-lg p-4">
-          <summary className="text-sm font-medium text-gray-700 cursor-pointer">
-            Completed Courses ({completedCourses.length})
+          <summary className="text-sm font-medium text-gray-700 cursor-pointer hover:text-gray-900">
+            <span className="flex items-center gap-2">
+              <span>✅ Completed Courses ({completedCourses.length})</span>
+              <span className="text-xs text-gray-500">Click to expand</span>
+            </span>
           </summary>
-          <div className="mt-4 space-y-2">
+          <div className="mt-4 space-y-3">
             {completedCourses.map((course) => {
               const displayTitle = course.metadata?.title || course.title;
+              const enrollment = course.id ? enrollments[course.id] : null;
+              const completedDate = enrollment?.enrolled_at 
+                ? new Date(enrollment.enrolled_at).toLocaleDateString()
+                : null;
+
               return (
                 <Link
                   key={course.slug}
                   href={`/student/courses/${course.slug}`}
-                  className="block p-3 hover:bg-gray-50 rounded text-sm text-gray-700"
+                  className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors group"
                 >
-                  {displayTitle} ✓
+                  <div className="flex items-center gap-3">
+                    <span className="text-green-600">✓</span>
+                    <div>
+                      <p className="text-sm font-medium text-gray-900 group-hover:text-brand-light">
+                        {displayTitle}
+                      </p>
+                      {completedDate && (
+                        <p className="text-xs text-gray-500">Completed on {completedDate}</p>
+                      )}
+                    </div>
+                  </div>
+                  <span className="text-xs text-gray-400 group-hover:text-brand-light">View →</span>
                 </Link>
               );
             })}

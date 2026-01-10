@@ -24,10 +24,12 @@ export default function Sidebar({ role }: SidebarProps) {
     switch (role) {
       case 'student':
         return [
-          { href: '/student/dashboard', label: 'Dashboard' },
           { href: '/student/courses', label: 'Courses' },
           { href: '/student/portfolio', label: 'Portfolio' },
-          { href: '/student/questions', label: 'Questions' },
+          { href: '/student/jobs', label: 'Job Opportunities' },
+          { href: '/student/ai-advisor', label: 'AI Advisor' },
+          { href: '/student/offers', label: 'Offers' },
+          { href: '/student/subscription', label: 'Subscription' },
         ];
       case 'instructor':
         return [
