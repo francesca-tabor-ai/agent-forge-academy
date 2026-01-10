@@ -87,10 +87,16 @@ export default async function LessonPage({ params, searchParams }: LessonPagePro
   );
 }
 
-// Generate static params for all lessons
+// Generate static params for all lessons (legacy route - only non-course lessons)
+// Note: Since this is an authenticated route, consider using dynamic rendering instead
+// by adding: export const dynamic = 'force-dynamic';
 export async function generateStaticParams() {
   const slugs = getAllLessonSlugs();
-  return slugs.map((slug) => ({
-    slug,
-  }));
+  // Filter to only legacy lessons (no courseSlug) and extract slug string
+  // Ensure slug is always a string, not an object
+  return slugs
+    .filter((item) => !item.courseSlug && typeof item.slug === 'string') // Only legacy lessons without course context
+    .map((item) => ({
+      slug: item.slug, // Extract the slug string property (already verified as string above)
+    }));
 }
