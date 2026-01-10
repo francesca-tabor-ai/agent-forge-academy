@@ -1,7 +1,8 @@
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
-import Link from 'next/link';
 import { getAllCourseSlugs, loadAllLessons } from '@/lib/lessons';
+import { courseMetadata } from '@/lib/course-metadata';
+import { CourseCard } from '@/components/courses/CourseCard';
 
 export default async function CoursesPage() {
   const supabase = await createUserSupabaseClient();
@@ -65,9 +66,25 @@ export default async function CoursesPage() {
   const courseSlugSet = new Set(courseSlugs);
 
   // Merge database courses with file system courses
-  const allCourses = (courses || []).map((course) => ({
+  type CourseWithMetadata = {
+    id: string | null;
+    slug: string;
+    title: string;
+    description: string | null;
+    thumbnail_url: string | null;
+    duration_weeks: number | null;
+    difficulty_level: string | null;
+    is_published: boolean;
+    created_at: string | null;
+    updated_at: string | null;
+    hasContent: boolean;
+    metadata?: typeof courseMetadata[string];
+  };
+
+  const allCourses: CourseWithMetadata[] = (courses || []).map((course) => ({
     ...course,
     hasContent: courseSlugSet.has(course.slug),
+    metadata: courseMetadata[course.slug],
   }));
 
   // Also include courses from file system that aren't in database yet
@@ -75,11 +92,12 @@ export default async function CoursesPage() {
     if (!allCourses.find((c) => c.slug === slug)) {
       // Try to get lesson count
       const lessons = loadAllLessons(undefined, slug);
+      const metadata = courseMetadata[slug];
       allCourses.push({
         id: null, // Not in database yet
         slug,
-        title: slug.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()),
-        description: null,
+        title: metadata?.title || slug.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()),
+        description: metadata?.outcome || null,
         thumbnail_url: null,
         duration_weeks: null,
         difficulty_level: null,
@@ -87,9 +105,34 @@ export default async function CoursesPage() {
         created_at: null,
         updated_at: null,
         hasContent: lessons.length > 0,
+        metadata,
       });
     }
   }
+
+  // Sort courses by category for better organization
+  const categoryOrder = [
+    'Build & Ship (Engineering)',
+    'Agents & Retrieval',
+    'Growth & Visibility',
+    'Commerce & Experiences',
+    'Media & Content Ops',
+    'Trust & Regulation',
+  ];
+
+  allCourses.sort((a, b) => {
+    const categoryA = a.metadata?.category || '';
+    const categoryB = b.metadata?.category || '';
+    const indexA = categoryOrder.indexOf(categoryA);
+    const indexB = categoryOrder.indexOf(categoryB);
+    
+    if (indexA !== -1 && indexB !== -1) {
+      return indexA - indexB;
+    }
+    if (indexA !== -1) return -1;
+    if (indexB !== -1) return 1;
+    return (a.title || '').localeCompare(b.title || '');
+  });
 
   return (
     <div>
@@ -105,63 +148,33 @@ export default async function CoursesPage() {
           <p className="text-gray-600">No courses available at this time.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {allCourses.map((course) => {
-            const enrollment = course.id ? enrollments[course.id] : null;
-            const isEnrolled = !!enrollment;
-
-            return (
-              <Link
-                key={course.slug}
-                href={`/student/courses/${course.slug}`}
-                className="block bg-white border border-gray-200 rounded-lg p-6 hover:border-brand-light hover:shadow-md transition-all"
-              >
-                <div className="flex flex-col h-full">
-                  {course.thumbnail_url && (
-                    <div className="mb-4 aspect-video bg-gray-100 rounded overflow-hidden">
-                      <img
-                        src={course.thumbnail_url}
-                        alt={course.title}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  )}
-                  
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">
-                    {course.title}
-                  </h3>
-                  
-                  {course.description && (
-                    <p className="text-sm text-gray-600 mb-4 flex-1">
-                      {course.description}
-                    </p>
-                  )}
-
-                  <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
-                    <div className="flex items-center gap-4 text-xs text-gray-500">
-                      {course.duration_weeks && (
-                        <span>{course.duration_weeks} weeks</span>
-                      )}
-                      {course.difficulty_level && (
-                        <span className="capitalize">{course.difficulty_level}</span>
-                      )}
-                    </div>
-                    
-                    {isEnrolled ? (
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs text-brand-light font-medium">
-                          {enrollment.progress_percentage}% Complete
-                        </span>
-                        <span className="text-brand-light">→</span>
-                      </div>
-                    ) : (
-                      <span className="text-brand-light text-sm">View →</span>
-                    )}
-                  </div>
-                </div>
-              </Link>
-            );
-          })}
+        <div className="space-y-8">
+          {/* Group courses by category */}
+          {Object.entries(
+            allCourses.reduce((acc, course) => {
+              const category = course.metadata?.category || 'Other';
+              if (!acc[category]) acc[category] = [];
+              acc[category].push(course);
+              return acc;
+            }, {} as Record<string, typeof allCourses>)
+          ).map(([category, categoryCourses]) => (
+            <div key={category}>
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">{category}</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {categoryCourses.map((course) => {
+                  const enrollment = course.id ? enrollments[course.id] : null;
+                  return (
+                    <CourseCard
+                      key={course.slug}
+                      course={course}
+                      metadata={course.metadata}
+                      enrollment={enrollment || null}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </div>
       )}
     </div>
