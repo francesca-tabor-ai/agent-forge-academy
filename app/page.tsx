@@ -109,19 +109,15 @@ export default async function Home() {
             </h3>
             <div className="grid sm:grid-cols-2 gap-6">
               <div className="flex items-start gap-3">
-                <span className="text-2xl">✅</span>
                 <p className="text-gray-700">Applied, real-world AI — not abstract theory</p>
               </div>
               <div className="flex items-start gap-3">
-                <span className="text-2xl">✅</span>
                 <p className="text-gray-700">Courses updated as models, platforms, and regulations change</p>
               </div>
               <div className="flex items-start gap-3">
-                <span className="text-2xl">✅</span>
                 <p className="text-gray-700">Designed for career longevity, not short-term hacks</p>
               </div>
               <div className="flex items-start gap-3">
-                <span className="text-2xl">✅</span>
                 <p className="text-gray-700">Learn once, then keep relearning as AI evolves</p>
               </div>
             </div>
@@ -141,21 +137,18 @@ export default async function Home() {
 
           <div className="grid md:grid-cols-3 gap-8 mb-16">
             <div className="bg-white p-6 rounded-lg shadow-sm">
-              <div className="text-4xl mb-4">🧠</div>
               <h3 className="text-xl font-bold text-brand-dark mb-3 font-playfair">Foundations & Literacy</h3>
               <p className="text-gray-700">
                 Understand how AI works, how it's governed, and how to use it responsibly and effectively.
               </p>
             </div>
             <div className="bg-white p-6 rounded-lg shadow-sm">
-              <div className="text-4xl mb-4">🛠️</div>
               <h3 className="text-xl font-bold text-brand-dark mb-3 font-playfair">Applied Systems & Workflows</h3>
               <p className="text-gray-700">
                 Learn how AI is actually used in production — across software, content, commerce, and marketing.
               </p>
             </div>
             <div className="bg-white p-6 rounded-lg shadow-sm">
-              <div className="text-4xl mb-4">🤖</div>
               <h3 className="text-xl font-bold text-brand-dark mb-3 font-playfair">Agentic & Advanced AI</h3>
               <p className="text-gray-700">
                 Design, deploy, and reason about autonomous systems that represent the future of work.
@@ -218,7 +211,7 @@ export default async function Home() {
             <div className="bg-white rounded-lg p-8 shadow-lg">
               <div className="mb-6">
                 <span className="inline-block bg-green-100 text-green-800 text-sm font-semibold px-3 py-1 rounded-full mb-4">
-                  🟢 Essential Access
+                  Essential Access
                 </span>
                 <div className="text-4xl font-bold text-brand-dark mb-2">£39</div>
                 <div className="text-gray-600">/ month</div>
@@ -253,7 +246,7 @@ export default async function Home() {
               </div>
               <div className="mb-6">
                 <span className="inline-block bg-blue-100 text-blue-800 text-sm font-semibold px-3 py-1 rounded-full mb-4">
-                  🔵 Professional Access
+                  Professional Access
                 </span>
                 <div className="text-4xl font-bold text-brand-dark mb-2">£79</div>
                 <div className="text-gray-600">/ month</div>
@@ -281,9 +274,9 @@ export default async function Home() {
               <div className="mb-6 pt-6 border-t border-gray-200">
                 <p className="text-sm font-semibold text-gray-900 mb-3">Plus professional perks:</p>
                 <ul className="space-y-2 text-sm text-gray-700">
-                  <li>🎓 Certificate of Completion</li>
-                  <li>🧠 Monthly Live Q&A / AMA with instructors</li>
-                  <li>🤝 Community access (Slack / Discord)</li>
+                  <li>Certificate of Completion</li>
+                  <li>Monthly Live Q&A / AMA with instructors</li>
+                  <li>Community access (Slack / Discord)</li>
                 </ul>
               </div>
               <div className="pt-6 border-t border-gray-200">
@@ -372,7 +365,7 @@ export default async function Home() {
             href="/auth/signup"
             className="btn-primary inline-block focus:outline-none focus:ring-2 focus:ring-brand-yellow focus:ring-offset-2 focus:ring-offset-brand-dark focus-visible:outline-none"
           >
-            👉 Start learning now
+            Start learning now
           </Link>
         </div>
       </section>
