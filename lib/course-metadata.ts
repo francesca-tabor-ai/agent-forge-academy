@@ -93,12 +93,12 @@ export const courseMetadata: Record<string, CourseMetadata> = {
   },
   'agentic-commerce': {
     slug: 'agentic-commerce',
-    title: 'Agentic Commerce',
+    title: 'Mastering the Agentic Economy',
     category: 'Commerce & Experiences',
-    outcome: 'Design agents that sell without breaking trust.',
-    build: 'A commerce agent flow (discovery → compare → recommend → checkout support → follow-up) with escalation paths.',
-    bestFor: 'Product + growth teams building assistant-led shopping.',
-    time: '~4–8 hours',
+    outcome: 'Master the agentic economy from foundations to implementation, including trust-building, technical protocols, marketing strategy, and governance.',
+    build: 'Complete agentic commerce implementation with ACP protocols, AEO optimization, trust frameworks, organizational design, compliance, and bias auditing.',
+    bestFor: 'E-commerce leaders, product managers, marketing directors, CAOs, and strategists building agent-mediated commerce experiences.',
+    time: '~7–8 weeks',
   },
   'conversational-commerce-intelligence': {
     slug: 'conversational-commerce-intelligence',
