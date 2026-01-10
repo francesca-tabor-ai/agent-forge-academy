@@ -165,7 +165,7 @@ export default async function OffersPage() {
     <div>
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-gray-900">Tool Discounts</h1>
+        <h1 className="text-2xl font-semibold text-gray-900">Offers</h1>
         <p className="text-sm text-gray-500 mt-2">
           Exclusive tools to help you build and ship faster
         </p>
@@ -175,7 +175,7 @@ export default async function OffersPage() {
       {recommendedOffers.length > 0 && (
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-4">
-            <h2 className="text-lg font-semibold text-gray-900">Recommended for You</h2>
+            <h2 className="text-lg font-semibold text-gray-900">Offers</h2>
             <span className="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs font-medium rounded">
               Recommended for your current project
             </span>
@@ -288,7 +288,7 @@ export default async function OffersPage() {
       {/* All Offers Section */}
       {otherOffers.length > 0 && (
         <div>
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">All Offers</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Offers</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {otherOffers.map((offer) => {
               const daysUntilExpiration = getDaysUntilExpiration(offer.expiration_date);
