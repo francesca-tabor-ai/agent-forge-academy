@@ -5,10 +5,17 @@
 -- - Tutors cannot see recruiter-only fields
 -- - Admins can read everything
 
+-- Drop policies that depend on is_admin function first (idempotent)
+-- This allows us to drop and recreate the function if needed
+DROP POLICY IF EXISTS "Admins can read all profiles" ON profiles;
+DROP POLICY IF EXISTS "Admins can update all profiles" ON profiles;
+
 -- Helper function to check if user is admin
 -- Note: This will be properly implemented in a later migration
 -- For now, returning false - proper implementation in 20250107000008_fix_issues.sql
-CREATE OR REPLACE FUNCTION is_admin(check_user_id UUID)
+-- Drop function first if it exists with different signature (idempotent)
+DROP FUNCTION IF EXISTS is_admin(UUID) CASCADE;
+CREATE FUNCTION is_admin(check_user_id UUID)
 RETURNS BOOLEAN AS $$
 BEGIN
   -- This is a placeholder - will be replaced in migration 20250107000008
@@ -16,8 +23,9 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- Helper function to get user's role
-CREATE OR REPLACE FUNCTION get_user_role(user_id UUID)
+-- Helper function to get user's role (idempotent)
+DROP FUNCTION IF EXISTS get_user_role(UUID) CASCADE;
+CREATE FUNCTION get_user_role(user_id UUID)
 RETURNS user_role AS $$
 BEGIN
   RETURN (SELECT role FROM profiles WHERE profiles.user_id = user_id);
@@ -46,14 +54,12 @@ CREATE POLICY "Users can insert own profile"
   WITH CHECK (auth.uid() = user_id);
 
 -- Policy: Admins can read everything (idempotent)
-DROP POLICY IF EXISTS "Admins can read all profiles" ON profiles;
 CREATE POLICY "Admins can read all profiles"
   ON profiles
   FOR SELECT
   USING (is_admin(auth.uid()));
 
 -- Policy: Admins can update everything (idempotent)
-DROP POLICY IF EXISTS "Admins can update all profiles" ON profiles;
 CREATE POLICY "Admins can update all profiles"
   ON profiles
   FOR UPDATE

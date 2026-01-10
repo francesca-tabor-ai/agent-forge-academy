@@ -1,9 +1,14 @@
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { loadAllLessons, type Lesson } from '@/lib/lessons';
+import { loadAllLessons, getAllCourseSlugs, type Lesson } from '@/lib/lessons';
+import { CourseFilter } from '@/components/lessons/CourseFilter';
 
-export default async function LessonsPage() {
+interface LessonsPageProps {
+  searchParams: Promise<{ course?: string }>;
+}
+
+export default async function LessonsPage({ searchParams }: LessonsPageProps) {
   const supabase = await createUserSupabaseClient();
   const {
     data: { user },
@@ -13,11 +18,14 @@ export default async function LessonsPage() {
     redirect('/auth/login');
   }
 
-  // Load all lessons from the course directory
+  const params = await searchParams;
+  const courseSlug = typeof params.course === 'string' ? params.course : undefined;
+
+  // Load lessons (filtered by course if specified)
   let lessons: ReturnType<typeof loadAllLessons> = [];
 
   try {
-    lessons = loadAllLessons();
+    lessons = loadAllLessons(undefined, courseSlug);
     // Sort by order if available, otherwise by title
     lessons.sort((a, b) => {
       const orderA = a.frontmatter.order ?? 999;
@@ -35,13 +43,40 @@ export default async function LessonsPage() {
     lessons = [];
   }
 
+  // Get all courses for filter dropdown
+  const courseSlugs = getAllCourseSlugs();
+  const { data: courses } = await supabase
+    .from('courses')
+    .select('slug, title')
+    .eq('is_published', true)
+    .order('title', { ascending: true });
+
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-gray-900">Lessons</h1>
-        <p className="text-sm text-gray-600 mt-2">
-          Browse and access all course materials
-        </p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-semibold text-gray-900">Lessons</h1>
+            <p className="text-sm text-gray-600 mt-2">
+              {courseSlug 
+                ? `Lessons for ${courses?.find(c => c.slug === courseSlug)?.title || courseSlug}`
+                : 'Browse and access all course materials'}
+            </p>
+          </div>
+          <Link
+            href="/student/courses"
+            className="text-sm text-brand-light hover:text-brand-light/90"
+          >
+            Browse Courses →
+          </Link>
+        </div>
+
+        {/* Course filter */}
+        <CourseFilter
+          courses={courses || undefined}
+          courseSlugs={courseSlugs}
+          currentCourseSlug={courseSlug}
+        />
       </div>
 
       {lessons.length === 0 ? (
@@ -50,12 +85,17 @@ export default async function LessonsPage() {
         </div>
       ) : (
         <div className="space-y-4">
-          {lessons.map((lesson) => (
-            <Link
-              key={lesson.slug}
-              href={`/student/lessons/${lesson.slug}`}
-              className="block bg-white border border-gray-200 rounded-lg p-6 hover:border-brand-light hover:shadow-md transition-all"
-            >
+          {lessons.map((lesson) => {
+            const lessonUrl = lesson.courseSlug
+              ? `/student/courses/${lesson.courseSlug}/lessons/${lesson.slug}`
+              : `/student/lessons/${lesson.slug}`;
+            
+            return (
+              <Link
+                key={lesson.courseSlug ? `${lesson.courseSlug}-${lesson.slug}` : lesson.slug}
+                href={lessonUrl}
+                className="block bg-white border border-gray-200 rounded-lg p-6 hover:border-brand-light hover:shadow-md transition-all"
+              >
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <h3 className="text-lg font-medium text-gray-900 mb-2">
@@ -67,6 +107,11 @@ export default async function LessonsPage() {
                     </p>
                   )}
                   <div className="flex items-center gap-4 text-xs text-gray-500">
+                    {lesson.courseSlug && (
+                      <span className="text-brand-light">
+                        {courses?.find(c => c.slug === lesson.courseSlug)?.title || lesson.courseSlug}
+                      </span>
+                    )}
                     {lesson.frontmatter.module && (
                       <span>Module {lesson.frontmatter.module}</span>
                     )}
@@ -80,7 +125,8 @@ export default async function LessonsPage() {
                 </div>
               </div>
             </Link>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>

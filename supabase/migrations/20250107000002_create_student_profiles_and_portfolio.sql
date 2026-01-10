@@ -12,20 +12,14 @@ END $$;
 
 -- Create student_profiles table
 -- Extends profiles for student-specific data
+-- Note: Role validation is handled by triggers in migration 20250107000008_fix_issues.sql
 CREATE TABLE IF NOT EXISTS student_profiles (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   profile_id UUID NOT NULL UNIQUE REFERENCES profiles(id) ON DELETE CASCADE,
   visibility visibility_level NOT NULL DEFAULT 'private',
   bio TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  CONSTRAINT student_profiles_profile_must_be_student CHECK (
-    EXISTS (
-      SELECT 1 FROM profiles 
-      WHERE profiles.id = student_profiles.profile_id 
-      AND profiles.role = 'student'
-    )
-  )
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 -- Create portfolio_projects table

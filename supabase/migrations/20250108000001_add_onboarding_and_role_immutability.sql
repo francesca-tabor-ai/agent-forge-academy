@@ -51,18 +51,15 @@ CREATE TRIGGER set_onboarding_completed_at_trigger
   FOR EACH ROW
   EXECUTE FUNCTION set_onboarding_completed_at();
 
--- Update RLS policy to prevent users from updating their own role
--- Users can update their profile but not the role field
+-- Update RLS policy - users can update their own profile
+-- Note: Role changes are prevented by the prevent_role_change trigger above
+-- RLS policies cannot reference OLD/NEW, so role immutability is enforced by trigger only
 DROP POLICY IF EXISTS "Users can update own profile" ON profiles;
 CREATE POLICY "Users can update own profile"
   ON profiles
   FOR UPDATE
   USING (auth.uid() = user_id)
-  WITH CHECK (
-    auth.uid() = user_id
-    -- Prevent role changes (enforced by trigger, but also in policy for clarity)
-    AND (OLD.role = NEW.role OR is_admin(auth.uid()))
-  );
+  WITH CHECK (auth.uid() = user_id);
 
 -- Add index for onboarding queries
 CREATE INDEX IF NOT EXISTS idx_profiles_onboarding_completed ON profiles(onboarding_completed);

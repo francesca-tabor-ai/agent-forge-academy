@@ -13,19 +13,13 @@ END $$;
 
 -- Create recruiter_profiles table
 -- Extends profiles for recruiter-specific data
+-- Note: Role validation is handled by triggers in migration 20250107000008_fix_issues.sql
 CREATE TABLE IF NOT EXISTS recruiter_profiles (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   profile_id UUID NOT NULL UNIQUE REFERENCES profiles(id) ON DELETE CASCADE,
   company_name VARCHAR(255),
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  CONSTRAINT recruiter_profiles_profile_must_be_recruiter CHECK (
-    EXISTS (
-      SELECT 1 FROM profiles 
-      WHERE profiles.id = recruiter_profiles.profile_id 
-      AND profiles.role = 'recruiter'
-    )
-  )
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 -- Create contact_requests table
@@ -37,9 +31,7 @@ CREATE TABLE IF NOT EXISTS contact_requests (
   status contact_request_status NOT NULL DEFAULT 'pending',
   message TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  CONSTRAINT contact_requests_unique_pending UNIQUE (recruiter_profile_id, student_profile_id, status) 
-    WHERE status = 'pending'
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 -- Create indexes for common queries
@@ -48,6 +40,12 @@ CREATE INDEX IF NOT EXISTS idx_contact_requests_recruiter_profile_id ON contact_
 CREATE INDEX IF NOT EXISTS idx_contact_requests_student_profile_id ON contact_requests(student_profile_id);
 CREATE INDEX IF NOT EXISTS idx_contact_requests_status ON contact_requests(status);
 CREATE INDEX IF NOT EXISTS idx_contact_requests_created_at ON contact_requests(created_at DESC);
+
+-- Create partial unique index to prevent duplicate pending requests
+-- This ensures a recruiter can only have one pending request per student
+CREATE UNIQUE INDEX IF NOT EXISTS idx_contact_requests_unique_pending 
+  ON contact_requests(recruiter_profile_id, student_profile_id) 
+  WHERE status = 'pending';
 
 -- Create triggers to update updated_at (idempotent)
 DROP TRIGGER IF EXISTS update_recruiter_profiles_updated_at ON recruiter_profiles;

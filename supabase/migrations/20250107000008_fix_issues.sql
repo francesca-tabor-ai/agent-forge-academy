@@ -55,7 +55,15 @@ CREATE TRIGGER validate_recruiter_profile_role_trigger
   EXECUTE FUNCTION validate_recruiter_profile_role();
 
 -- Fix is_admin function to check for admin role
-CREATE OR REPLACE FUNCTION is_admin(check_user_id UUID)
+-- Drop policies that depend on it first, then drop and recreate function
+DROP POLICY IF EXISTS "Admins can read all profiles" ON profiles;
+DROP POLICY IF EXISTS "Admins can update all profiles" ON profiles;
+-- Drop any other policies that might depend on is_admin
+-- (These will be recreated in their respective migration files)
+
+-- Drop function first if it exists with different signature (idempotent)
+DROP FUNCTION IF EXISTS is_admin(UUID) CASCADE;
+CREATE FUNCTION is_admin(check_user_id UUID)
 RETURNS BOOLEAN AS $$
 BEGIN
   RETURN EXISTS (
@@ -65,4 +73,17 @@ BEGIN
   );
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Recreate the policies that depend on is_admin (idempotent)
+DROP POLICY IF EXISTS "Admins can read all profiles" ON profiles;
+CREATE POLICY "Admins can read all profiles"
+  ON profiles
+  FOR SELECT
+  USING (is_admin(auth.uid()));
+
+DROP POLICY IF EXISTS "Admins can update all profiles" ON profiles;
+CREATE POLICY "Admins can update all profiles"
+  ON profiles
+  FOR UPDATE
+  USING (is_admin(auth.uid()));
 

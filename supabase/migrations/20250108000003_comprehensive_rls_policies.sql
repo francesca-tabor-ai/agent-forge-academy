@@ -30,15 +30,13 @@ CREATE POLICY "Users can read own profile"
   USING (auth.uid() = user_id);
 
 -- Users can update their own profile (except role - enforced by trigger)
+-- Note: RLS policies cannot reference OLD/NEW, so role immutability is enforced by trigger only
 DROP POLICY IF EXISTS "Users can update own profile" ON profiles;
 CREATE POLICY "Users can update own profile"
   ON profiles
   FOR UPDATE
   USING (auth.uid() = user_id)
-  WITH CHECK (
-    auth.uid() = user_id
-    AND (OLD.role = NEW.role OR is_admin(auth.uid()))
-  );
+  WITH CHECK (auth.uid() = user_id);
 
 -- Users can insert their own profile
 DROP POLICY IF EXISTS "Users can insert own profile" ON profiles;

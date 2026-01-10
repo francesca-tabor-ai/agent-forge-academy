@@ -1,15 +1,14 @@
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { redirect, notFound } from 'next/navigation';
 import Link from 'next/link';
-import { loadLessonBySlug, getAllLessonSlugs } from '@/lib/lessons';
+import { loadLessonBySlug } from '@/lib/lessons';
 import LessonContent from '@/components/lessons/LessonContent';
 
-interface LessonPageProps {
-  params: Promise<{ slug: string }>;
-  searchParams: Promise<{ course?: string }>;
+interface CourseLessonPageProps {
+  params: Promise<{ courseSlug: string; slug: string }>;
 }
 
-export default async function LessonPage({ params, searchParams }: LessonPageProps) {
+export default async function CourseLessonPage({ params }: CourseLessonPageProps) {
   const supabase = await createUserSupabaseClient();
   const {
     data: { user },
@@ -19,14 +18,21 @@ export default async function LessonPage({ params, searchParams }: LessonPagePro
     redirect('/auth/login');
   }
 
-  const { slug } = await params;
-  const params_search = await searchParams;
-  const courseSlug = typeof params_search.course === 'string' ? params_search.course : undefined;
+  const { courseSlug, slug } = await params;
   const lesson = loadLessonBySlug(slug, undefined, courseSlug);
 
   if (!lesson) {
     notFound();
   }
+
+  // Get course info
+  const { data: course } = await supabase
+    .from('courses')
+    .select('title, slug')
+    .eq('slug', courseSlug)
+    .single();
+
+  const courseTitle = course?.title || courseSlug.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -34,21 +40,12 @@ export default async function LessonPage({ params, searchParams }: LessonPagePro
       <div className="max-w-[900px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header section - above the fold */}
         <div className="mb-8">
-          {lesson.courseSlug ? (
-            <Link
-              href={`/student/courses/${lesson.courseSlug}`}
-              className="text-sm text-brand-light hover:text-brand-light/90 mb-6 inline-block"
-            >
-              ← Back to Course
-            </Link>
-          ) : (
-            <Link
-              href="/student/lessons"
-              className="text-sm text-brand-light hover:text-brand-light/90 mb-6 inline-block"
-            >
-              ← Back to Lessons
-            </Link>
-          )}
+          <Link
+            href={`/student/courses/${courseSlug}`}
+            className="text-sm text-brand-light hover:text-brand-light/90 mb-6 inline-block"
+          >
+            ← Back to {courseTitle}
+          </Link>
           
           {/* Module title (H1) */}
           <h1 className="text-3xl font-semibold text-gray-900 mb-4">
@@ -64,11 +61,7 @@ export default async function LessonPage({ params, searchParams }: LessonPagePro
           
           {/* Meta information */}
           <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 mb-6">
-            {lesson.courseSlug && (
-              <span className="text-brand-light">
-                {lesson.courseSlug.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())}
-              </span>
-            )}
+            <span className="text-brand-light">{courseTitle}</span>
             {lesson.frontmatter.module && (
               <span>Module: {lesson.frontmatter.module}</span>
             )}
@@ -87,10 +80,15 @@ export default async function LessonPage({ params, searchParams }: LessonPagePro
   );
 }
 
-// Generate static params for all lessons
+// Generate static params for all course lessons
 export async function generateStaticParams() {
+  const { getAllLessonSlugs } = await import('@/lib/lessons');
   const slugs = getAllLessonSlugs();
-  return slugs.map((slug) => ({
-    slug,
-  }));
+  
+  return slugs
+    .filter((item) => item.courseSlug) // Only course-based lessons
+    .map((item) => ({
+      courseSlug: item.courseSlug!,
+      slug: item.slug,
+    }));
 }
