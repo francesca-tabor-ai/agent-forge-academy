@@ -59,7 +59,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     slug: 'amazon-rufus-optimisation',
     title: 'Amazon Rufus Optimisation',
     category: 'Growth & Visibility',
-    outcome: 'Make your listings win in Amazon's AI shopping experiences.',
+    outcome: "Make your listings win in Amazon's AI shopping experiences.",
     build: 'A listing optimisation checklist + experimentation loop (titles, bullets, A+ content, Q&A signals).',
     bestFor: 'E-commerce operators and growth teams on Amazon.',
     time: '~2–4 hours',
