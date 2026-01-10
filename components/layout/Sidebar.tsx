@@ -25,6 +25,7 @@ export default function Sidebar({ role }: SidebarProps) {
       case 'student':
         return [
           { href: '/student/dashboard', label: 'Dashboard' },
+          { href: '/student/courses', label: 'Courses' },
           { href: '/student/portfolio', label: 'Portfolio' },
           { href: '/student/questions', label: 'Questions' },
         ];

@@ -151,9 +151,7 @@ export default async function StudentDashboard() {
       />
 
       {/* (2) Portfolio Section - Career signal layer */}
-      {portfolioData && (
-        <PortfolioSection portfolioData={portfolioData} />
-      )}
+      <PortfolioSection portfolioData={portfolioData} />
 
       {/* (3) Job Opportunities Section - Motivation + outcome alignment */}
       <JobOpportunitiesSection studentProfileId={studentProfileId} />
