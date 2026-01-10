@@ -1,92 +1,74 @@
 import Link from 'next/link';
+import { createUserSupabaseClient } from '@/lib/supabase/server';
 
 interface Offer {
   id: string;
   title: string;
   description: string;
-  discount: string;
-  discountValue: number;
-  category: 'api' | 'hosting' | 'monitoring' | 'tools' | 'services';
-  recommendedFor?: string;
-  expirationDate?: string;
-  usageCount?: number;
-  maxUsage?: number;
+  discount_text: string;
+  discount_value: number | null;
+  category: 'api' | 'hosting' | 'monitoring' | 'data' | 'tools' | 'services';
+  recommended_for_courses: string[] | null;
+  expiration_date: string | null;
+  usage_count: number;
+  max_usage: number | null;
   provider: string;
-  originalPrice?: string;
-  discountedPrice?: string;
-  features?: string[];
+  original_price: string | null;
+  discounted_price: string | null;
+  features: string[] | null;
+  is_recommended: boolean;
 }
 
-export function OffersSection() {
-  // Mock offers - in production, these would come from a database
-  const offers: Offer[] = [
-    {
-      id: '1',
-      title: 'Supabase Pro',
-      description: 'Database, authentication, and hosting for your projects. Perfect for building full-stack applications.',
-      discount: '20% off first 3 months',
-      discountValue: 20,
-      category: 'hosting',
-      recommendedFor: 'vibe-coding-cursor-supabase',
-      expirationDate: '2024-03-31',
-      usageCount: 45,
-      maxUsage: 100,
-      provider: 'Supabase',
-      originalPrice: '$25/month',
-      discountedPrice: '$20/month',
-      features: ['Unlimited API requests', '500GB database', '50GB file storage', 'Priority support'],
-    },
-    {
-      id: '2',
-      title: 'OpenAI API Credits',
-      description: 'Additional API credits for development and testing. Perfect for AI-powered projects.',
-      discount: '15% bonus credits',
-      discountValue: 15,
-      category: 'api',
-      expirationDate: '2024-04-30',
-      usageCount: 12,
-      maxUsage: 50,
-      provider: 'OpenAI',
-      originalPrice: '$100',
-      discountedPrice: '$115 value',
-      features: ['GPT-4 access', 'Whisper API', 'Embeddings API', 'DALL-E credits'],
-    },
-    {
-      id: '3',
-      title: 'Sentry Monitoring',
-      description: 'Error tracking and performance monitoring for production applications.',
-      discount: 'Free tier upgrade',
-      discountValue: 100,
-      category: 'monitoring',
-      expirationDate: '2024-06-30',
-      usageCount: 8,
-      maxUsage: 25,
-      provider: 'Sentry',
-      originalPrice: '$26/month',
-      discountedPrice: 'Free (3 months)',
-      features: ['50K events/month', 'Performance monitoring', 'Release tracking', 'Team collaboration'],
-    },
-    {
-      id: '4',
-      title: 'Vercel Pro',
-      description: 'Deploy and host your projects with zero configuration. Perfect for Next.js and React apps.',
-      discount: '30% off first month',
-      discountValue: 30,
-      category: 'hosting',
-      expirationDate: '2024-05-31',
-      usageCount: 23,
-      maxUsage: 75,
-      provider: 'Vercel',
-      originalPrice: '$20/month',
-      discountedPrice: '$14/month',
-      features: ['Unlimited deployments', '100GB bandwidth', 'Team collaboration', 'Analytics'],
-    },
-  ];
+interface OffersSectionProps {
+  studentProfileId: string | null;
+  enrolledCourseSlugs: string[];
+}
+
+export async function OffersSection({ studentProfileId, enrolledCourseSlugs }: OffersSectionProps) {
+  const supabase = await createUserSupabaseClient();
+
+  // Fetch active offers
+  const { data: offers, error } = await supabase
+    .from('offers')
+    .select('*')
+    .eq('is_active', true)
+    .order('is_recommended', { ascending: false })
+    .order('created_at', { ascending: false })
+    .limit(4);
+
+  if (error) {
+    console.error('Error fetching offers:', error);
+  }
+
+  const allOffers: Offer[] = (offers || []) as Offer[];
+
+  // Determine which offers are recommended for this student
+  const recommendedOffers: Offer[] = [];
+  const otherOffers: Offer[] = [];
+
+  allOffers.forEach(offer => {
+    const isRecommended = offer.is_recommended || 
+      (offer.recommended_for_courses && 
+       offer.recommended_for_courses.some(slug => enrolledCourseSlugs.includes(slug)));
+    
+    if (isRecommended) {
+      recommendedOffers.push(offer);
+    } else {
+      otherOffers.push(offer);
+    }
+  });
+
+  // Show up to 4 offers, prioritizing recommended ones
+  const displayOffers = [
+    ...recommendedOffers.slice(0, 4),
+    ...otherOffers.slice(0, 4 - recommendedOffers.length)
+  ].slice(0, 4);
 
   const categoryIcons: Record<string, string> = {
     api: '🔌',
     hosting: '☁️',
     monitoring: '📊',
+    data: '💾',
     tools: '🛠️',
     services: '⚙️',
   };
@@ -95,25 +77,31 @@ export function OffersSection() {
     api: 'bg-purple-50 border-purple-200',
     hosting: 'bg-blue-50 border-blue-200',
     monitoring: 'bg-green-50 border-green-200',
+    data: 'bg-yellow-50 border-yellow-200',
     tools: 'bg-orange-50 border-orange-200',
     services: 'bg-pink-50 border-pink-200',
   };
 
-  const getDaysUntilExpiration = (dateString?: string) => {
+  const getDaysUntilExpiration = (dateString: string | null) => {
     if (!dateString) return null;
     const expiration = new Date(dateString);
     const now = new Date();
     const diffTime = expiration.getTime() - now.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays;
+    return diffDays > 0 ? diffDays : 0;
   };
+
+  // Don't show section if no offers
+  if (displayOffers.length === 0) {
+    return null;
+  }
 
   return (
     <section className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-xl font-semibold text-gray-900">Tool Discounts</h2>
-          <p className="text-xs text-gray-500 mt-1">Exclusive offers for students</p>
+          <p className="text-xs text-gray-500 mt-1">Exclusive tools to help you build and ship faster</p>
         </div>
         <Link
           href="/student/offers"
@@ -124,11 +112,13 @@ export function OffersSection() {
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {offers.map((offer) => {
-          const daysUntilExpiration = getDaysUntilExpiration(offer.expirationDate);
-          const isRecommended = !!offer.recommendedFor;
-          const usagePercentage = offer.maxUsage 
-            ? Math.round((offer.usageCount || 0) / offer.maxUsage * 100)
+        {displayOffers.map((offer) => {
+          const daysUntilExpiration = getDaysUntilExpiration(offer.expiration_date);
+          const isRecommended = offer.is_recommended || 
+            (offer.recommended_for_courses && 
+             offer.recommended_for_courses.some(slug => enrolledCourseSlugs.includes(slug)));
+          const usagePercentage = offer.max_usage 
+            ? Math.round((offer.usage_count || 0) / offer.max_usage * 100)
             : 0;
 
           return (
@@ -160,15 +150,15 @@ export function OffersSection() {
               {/* Discount Badge */}
               <div className="mb-3 p-2 bg-green-50 border border-green-200 rounded">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-medium text-green-800">{offer.discount}</span>
-                  {offer.discountValue >= 50 && (
+                  <span className="text-xs font-medium text-green-800">{offer.discount_text}</span>
+                  {offer.discount_value && offer.discount_value >= 50 && (
                     <span className="text-xs font-bold text-green-600">🔥 Hot Deal</span>
                   )}
                 </div>
-                {offer.originalPrice && offer.discountedPrice && (
+                {offer.original_price && offer.discounted_price && (
                   <div className="flex items-center gap-2 mt-1">
-                    <span className="text-xs text-gray-400 line-through">{offer.originalPrice}</span>
-                    <span className="text-xs font-semibold text-green-700">{offer.discountedPrice}</span>
+                    <span className="text-xs text-gray-400 line-through">{offer.original_price}</span>
+                    <span className="text-xs font-semibold text-green-700">{offer.discounted_price}</span>
                   </div>
                 )}
               </div>
@@ -203,12 +193,12 @@ export function OffersSection() {
                     </span>
                   </div>
                 )}
-                {offer.maxUsage && (
+                {offer.max_usage && (
                   <div>
                     <div className="flex items-center justify-between text-xs mb-1">
                       <span className="text-gray-500">Available:</span>
                       <span className="font-medium text-gray-700">
-                        {offer.maxUsage - (offer.usageCount || 0)} remaining
+                        {offer.max_usage - (offer.usage_count || 0)} remaining
                       </span>
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-1.5">
@@ -238,13 +228,6 @@ export function OffersSection() {
         })}
       </div>
 
-      {/* Info Note */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-        <p className="text-xs text-blue-800">
-          <span className="font-medium">💡 Tip:</span> These offers are exclusive to students and may have limited availability. 
-          Claim them while they last!
-        </p>
-      </div>
     </section>
   );
 }

@@ -139,6 +139,25 @@ export default async function StudentDashboard() {
     };
   }
 
+  // Get enrolled course slugs for offer recommendations
+  let enrolledCourseSlugs: string[] = [];
+  if (studentProfileId) {
+    const { data: enrollments } = await supabase
+      .from('course_enrollments')
+      .select('course_id')
+      .eq('student_profile_id', studentProfileId);
+
+    if (enrollments && enrollments.length > 0) {
+      const courseIds = enrollments.map(e => e.course_id);
+      const { data: courses } = await supabase
+        .from('courses')
+        .select('slug')
+        .in('id', courseIds);
+      
+      enrolledCourseSlugs = (courses || []).map(c => c.slug).filter(Boolean);
+    }
+  }
+
   return (
     <div className="space-y-8">
       <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
@@ -163,7 +182,10 @@ export default async function StudentDashboard() {
       />
 
       {/* (5) Offers Section - Tool Discounts (small card, never above learning/career) */}
-      <OffersSection />
+      <OffersSection 
+        studentProfileId={studentProfileId}
+        enrolledCourseSlugs={enrolledCourseSlugs}
+      />
 
       {/* (6) Subscription Section - Lowest priority, admin-only */}
       {role === 'admin' && <SubscriptionSection />}
