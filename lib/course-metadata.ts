@@ -120,12 +120,12 @@ export const courseMetadata: Record<string, CourseMetadata> = {
   },
   '3d-for-ecommerce': {
     slug: '3d-for-ecommerce',
-    title: '3D for E-Commerce',
+    title: 'Mastering 3D Commerce and Cinematic Capitalism',
     category: 'Commerce & Experiences',
-    outcome: 'Increase confidence and reduce returns with 3D.',
-    build: 'A 3D asset workflow (capture → optimisation → viewer → analytics → merchandising).',
-    bestFor: 'Brands and platforms with visual product complexity.',
-    time: '~2–5 hours',
+    outcome: 'Build production-ready 3D commerce platforms that drive 2x conversion and 9% sales lift.',
+    build: 'Full-stack 3D commerce platform with MERN stack, Three.js, Amazon SP-API integration, video shopping infrastructure, and enterprise scaling.',
+    bestFor: 'E-commerce developers, platform architects, Amazon sellers, and product managers building immersive commerce experiences.',
+    time: '~6–8 weeks',
   },
   'ai-driven-video-synthetic-media': {
     slug: 'ai-driven-video-synthetic-media',
