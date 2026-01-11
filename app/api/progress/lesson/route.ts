@@ -2,7 +2,7 @@ import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
- * POST /api/lessons/progress
+ * POST /api/progress/lesson
  * Track lesson progress (started or completed)
  * 
  * Body: {
@@ -150,7 +150,7 @@ export async function POST(request: NextRequest) {
 }
 
 /**
- * GET /api/lessons/progress
+ * GET /api/progress/lesson
  * Get lesson progress for a student
  * 
  * Query params:

@@ -20,7 +20,7 @@ export function LessonProgressTracker({
   useEffect(() => {
     const trackStarted = async () => {
       try {
-        const response = await fetch('/api/lessons/progress', {
+        const response = await fetch('/api/progress/lesson', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
