@@ -151,9 +151,20 @@ psql "$SUPABASE_DB_URL" -f supabase/seed/99_verify.sql
   - These are populated when students enroll and RSVP
 
 ### Jobs & Offers (`04_seed_jobs_offers.sql`)
-- **jobs**: 6 sample job listings
-  - Mix of entry, mid, senior, and lead positions
-  - Includes recommended and stretch roles
+- **jobs**: Comprehensive collection of 25 job listings
+  - **Entry Level** (4 jobs): Junior Prompt Engineer, AI Content Intern, Frontend Developer - LLM-First Websites, Full-Stack Developer - AI-Native Applications
+  - **Mid Level** (8 jobs): RAG Systems Engineer, E-commerce AI Product Manager, 3D Commerce Developer, AI DevOps Engineer, SEO to AEO Specialist, Hyper-Personalization Engineer, Amazon Rufus Optimization Specialist, E-commerce AI Engineer
+  - **Senior Level** (5 jobs): Senior Multi-Agent Systems Architect, Head of AI Visibility, Senior Conversational Commerce Engineer, Senior AI Visibility Specialist, AI Governance Consultant
+  - **Lead/Executive** (3 jobs): Lead AI Architect (stretch), VP of AI Engineering (stretch), Chief AI Officer (stretch)
+  - **Locked Roles** (2 jobs): Senior Recommender Systems Engineer, AI Video Production Lead (require additional skills)
+  - **Contract/Freelance** (3 jobs): AI Governance Consultant (contract), Freelance Prompt Engineer, Part-Time AI Content Strategist
+  - Mix of job types: full_time, part_time, contract, internship, freelance
+  - Mix of statuses: new, unlocked, recommended, locked, stretch
+  - Mix of remote and on-site positions
+  - Realistic salary ranges and hourly rates
+  - Skills arrays and course recommendations linked to actual courses
+  - Some jobs marked as featured
+  - Uses hardcoded UUIDs for easy reference in dependent seed scripts
 - **offers**: 5 sample tool discounts
   - Supabase, OpenAI, Vercel, Pinecone, LangSmith offers
 
@@ -357,7 +368,7 @@ Each table type uses a distinct UUID prefix for easy identification:
 - **Events**: `b1b2c3d4-e5f6-4789-a012-3456789abc01` through `b1b2c3d4-e5f6-4789-a012-3456789abc15` (15 events)
   - Example: Q1 2025 Demo Day = `b1b2c3d4-e5f6-4789-a012-3456789abc01`
   
-- **Jobs**: `c1b2c3d4-e5f6-4789-a012-3456789abc01` through `c1b2c3d4-e5f6-4789-a012-3456789abc06`
+- **Jobs**: `c1b2c3d4-e5f6-4789-a012-3456789abc01` through `c1b2c3d4-e5f6-4789-a012-3456789abc25` (25 jobs)
   - Example: AI Engineer - TechCorp AI = `c1b2c3d4-e5f6-4789-a012-3456789abc01`
   
 - **Offers**: `d1b2c3d4-e5f6-4789-a012-3456789abc01` through `d1b2c3d4-e5f6-4789-a012-3456789abc05`
@@ -429,5 +440,5 @@ After running seeds, check the output of `99_verify.sql` to ensure:
 - Subscription plans are seeded
 - Courses are seeded (20 expected)
 - Events are seeded (15 expected)
-- Jobs are seeded (6 expected)
+- Jobs are seeded (25 expected)
 - Offers are seeded (5 expected)
