@@ -2,7 +2,7 @@
 -- Users can read their own referral fields, but only admins can modify them
 -- Attribution is set when a user signs up via a referral link
 
--- Check if sales tables exist before adding foreign key constraints
+-- First, check if sales tables exist and add columns/constraints
 DO $$
 BEGIN
   -- Check if sales_referral_links and sales_reps tables exist
@@ -19,7 +19,7 @@ BEGIN
     RETURN;
   END IF;
 
-  -- Add referral attribution columns to profiles with foreign key constraints
+  -- Add referral attribution columns to profiles
   ALTER TABLE profiles 
   ADD COLUMN IF NOT EXISTS referral_link_id UUID;
 
@@ -49,36 +49,36 @@ BEGIN
     ADD CONSTRAINT profiles_sales_rep_id_fkey 
     FOREIGN KEY (sales_rep_id) REFERENCES sales_reps(id) ON DELETE SET NULL;
   END IF;
-
-  -- Create indexes for referral fields
-  CREATE INDEX IF NOT EXISTS idx_profiles_referral_link_id ON profiles(referral_link_id);
-  CREATE INDEX IF NOT EXISTS idx_profiles_sales_rep_id ON profiles(sales_rep_id);
-
-  -- Create function to prevent referral field changes by non-admins
-  -- Use different delimiter ($function$) to avoid conflict with DO block's $$
-  CREATE OR REPLACE FUNCTION prevent_referral_field_change()
-  RETURNS TRIGGER AS $function$
-  BEGIN
-    -- Check if any referral field is being changed
-    IF (OLD.referral_link_id IS DISTINCT FROM NEW.referral_link_id)
-       OR (OLD.sales_rep_id IS DISTINCT FROM NEW.sales_rep_id)
-       OR (OLD.referred_at IS DISTINCT FROM NEW.referred_at) THEN
-      -- Only allow if user is admin (checked via is_admin function)
-      IF NOT is_admin(auth.uid()) THEN
-        RAISE EXCEPTION 'Referral attribution fields cannot be changed. Contact an administrator if you need to update referral information.';
-      END IF;
-    END IF;
-    RETURN NEW;
-  END;
-  $function$ LANGUAGE plpgsql SECURITY DEFINER;
-
-  -- Create trigger to enforce referral field immutability for non-admins
-  DROP TRIGGER IF EXISTS prevent_referral_field_change_trigger ON profiles;
-  CREATE TRIGGER prevent_referral_field_change_trigger
-    BEFORE UPDATE ON profiles
-    FOR EACH ROW
-    EXECUTE FUNCTION prevent_referral_field_change();
 END $$;
+
+-- Create indexes (outside DO block, but only if tables exist)
+-- These will fail gracefully if sales tables don't exist (foreign keys will fail first)
+CREATE INDEX IF NOT EXISTS idx_profiles_referral_link_id ON profiles(referral_link_id);
+CREATE INDEX IF NOT EXISTS idx_profiles_sales_rep_id ON profiles(sales_rep_id);
+
+-- Create function to prevent referral field changes by non-admins
+CREATE OR REPLACE FUNCTION prevent_referral_field_change()
+RETURNS TRIGGER AS $function$
+BEGIN
+  -- Check if any referral field is being changed
+  IF (OLD.referral_link_id IS DISTINCT FROM NEW.referral_link_id)
+     OR (OLD.sales_rep_id IS DISTINCT FROM NEW.sales_rep_id)
+     OR (OLD.referred_at IS DISTINCT FROM NEW.referred_at) THEN
+    -- Only allow if user is admin (checked via is_admin function)
+    IF NOT is_admin(auth.uid()) THEN
+      RAISE EXCEPTION 'Referral attribution fields cannot be changed. Contact an administrator if you need to update referral information.';
+    END IF;
+  END IF;
+  RETURN NEW;
+END;
+$function$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Create trigger to enforce referral field immutability for non-admins
+DROP TRIGGER IF EXISTS prevent_referral_field_change_trigger ON profiles;
+CREATE TRIGGER prevent_referral_field_change_trigger
+  BEFORE UPDATE ON profiles
+  FOR EACH ROW
+  EXECUTE FUNCTION prevent_referral_field_change();
 
 -- Note: RLS policies for reading referral fields are already covered by existing policies:
 -- - "Users can read own profile" allows users to read their own profile (including referral fields)
