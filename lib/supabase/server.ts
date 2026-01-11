@@ -3,6 +3,8 @@ import 'server-only';
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { createClient } from '@supabase/supabase-js';
+import { NextResponse } from 'next/server';
+import type { User } from '@supabase/supabase-js';
 import type { UserRole } from '@/lib/types/roles';
 
 /**

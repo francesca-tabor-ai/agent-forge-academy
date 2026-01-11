@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createServerSupabaseClient } from '@/lib/supabase/server';
-import { hasRole } from '@/lib/supabase/server';
+import { createServerSupabaseClient, requireAdmin } from '@/lib/supabase/server';
 
 // Force dynamic rendering (uses cookies)
 export const dynamic = 'force-dynamic';
@@ -25,12 +24,9 @@ export const dynamic = 'force-dynamic';
 export async function GET(request: NextRequest) {
   try {
     // Check admin role
-    const isAdmin = await hasRole('admin');
-    if (!isAdmin) {
-      return NextResponse.json(
-        { error: 'Unauthorized. Admin role required.' },
-        { status: 403 }
-      );
+    const adminResult = await requireAdmin();
+    if (adminResult instanceof NextResponse) {
+      return adminResult; // Returns 401 or 403
     }
 
     // Parse query parameters

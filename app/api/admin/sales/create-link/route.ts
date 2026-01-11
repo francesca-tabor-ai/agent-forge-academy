@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createServerSupabaseClient } from '@/lib/supabase/server';
-import { hasRole } from '@/lib/supabase/server';
+import { createServerSupabaseClient, requireAdmin } from '@/lib/supabase/server';
 
 /**
  * POST /api/admin/sales/create-link
@@ -22,12 +21,9 @@ import { hasRole } from '@/lib/supabase/server';
 export async function POST(request: NextRequest) {
   try {
     // Check admin role
-    const isAdmin = await hasRole('admin');
-    if (!isAdmin) {
-      return NextResponse.json(
-        { error: 'Unauthorized. Admin role required.' },
-        { status: 403 }
-      );
+    const adminResult = await requireAdmin();
+    if (adminResult instanceof NextResponse) {
+      return adminResult; // Returns 401 or 403
     }
 
     // Parse and validate request body
