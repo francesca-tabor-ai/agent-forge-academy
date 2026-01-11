@@ -1,10 +1,6 @@
 import 'server-only';
 
 import { createUserSupabaseClient } from '@/lib/supabase/server';
-import type { VideoChapter } from '@/lib/lessons';
-
-// Re-export VideoChapter for convenience
-export type { VideoChapter };
 
 // Type definition for Video matching the database schema
 export interface Video {
