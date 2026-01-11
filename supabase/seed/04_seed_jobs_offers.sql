@@ -1,6 +1,10 @@
 -- Seed jobs and offers: sample job listings and tool discounts
 -- No dependencies - can be seeded independently
 -- Uses hardcoded UUIDs for easy reference and consistency
+--
+-- NOTE: This script should be run using a direct database connection (psql)
+-- which bypasses Row Level Security (RLS). The connection string should be
+-- the "Direct connection" or "Transaction pooler" from Supabase Dashboard.
 
 BEGIN;
 

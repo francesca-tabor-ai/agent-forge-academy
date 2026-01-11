@@ -178,6 +178,41 @@ BEGIN
 END $$;
 ```
 
+## Row Level Security (RLS) and Seeding
+
+**Important**: Seed scripts must bypass RLS to insert data into tables with RLS enabled.
+
+### Recommended Approach: Direct Database Connection
+
+The seed scripts use **direct database connection strings** (via `psql`), which automatically bypass RLS:
+
+- ✅ **Direct Connection**: `postgresql://postgres:[PASSWORD]@[HOST]:5432/postgres`
+- ✅ **Transaction Pooler**: `postgresql://postgres.[PROJECT]:[PASSWORD]@[HOST]:5432/postgres`
+
+When you connect via `psql` using the direct database connection string, you're connecting directly to PostgreSQL (not through PostgREST), which bypasses RLS automatically.
+
+### How It Works
+
+1. **Get Connection String**: 
+   - Supabase Dashboard → Project Settings → Database
+   - Copy "Direct connection" or "Transaction pooler" connection string
+   - Add to `.env` as `SUPABASE_DB_URL`
+
+2. **Run Seeds**:
+   ```bash
+   ./scripts/run-seeds.sh
+   ```
+   The script uses `psql` with the direct connection string, which bypasses RLS.
+
+3. **Why This Works**:
+   - Direct PostgreSQL connections don't go through PostgREST
+   - RLS policies only apply to PostgREST API requests
+   - `psql` connects as the database user, not an application user
+
+### Alternative: Service Role (Not Recommended for Seeding)
+
+If you need to use the Supabase API (not recommended for seeding), you could use the service role key, but this is more complex and slower. The direct database connection is preferred.
+
 ## Important Notes
 
 1. **Stripe Integration**: Update `01_seed_core.sql` with your actual Stripe product and price IDs
@@ -185,7 +220,8 @@ END $$;
 3. **Idempotent**: Scripts use `ON CONFLICT` clauses to be safely re-runnable
 4. **Reset Warning**: `00_reset.sql` will delete seed data - use with caution!
 5. **Schema Accuracy**: Seed scripts are based on migration files. Use schema discovery to verify column names and types match your database.
-6. **Deterministic UUIDs**: All parent records use deterministic UUIDs for easy reference in dependent seed scripts
+6. **Deterministic UUIDs**: All parent records use hardcoded UUIDs for easy reference in dependent seed scripts
+7. **RLS Bypass**: Using direct database connection string automatically bypasses RLS - no additional configuration needed
 
 ## Verification
 

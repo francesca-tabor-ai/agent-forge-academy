@@ -1,5 +1,9 @@
 -- Seed core data: subscription plans
 -- No dependencies - can be seeded first
+--
+-- NOTE: This script should be run using a direct database connection (psql)
+-- which bypasses Row Level Security (RLS). The connection string should be
+-- the "Direct connection" or "Transaction pooler" from Supabase Dashboard.
 
 BEGIN;
 

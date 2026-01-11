@@ -1,6 +1,13 @@
 #!/bin/bash
 # Run Supabase seed scripts in order
 # Usage: ./scripts/run-seeds.sh [--reset]
+#
+# IMPORTANT: This script uses the direct database connection string (SUPABASE_DB_URL)
+# which bypasses Row Level Security (RLS). This is the recommended approach for seeding.
+#
+# The connection string should be the "Direct connection" or "Transaction pooler" 
+# connection string from Supabase Dashboard → Project Settings → Database
+# This connects directly to PostgreSQL, bypassing RLS automatically.
 
 set -e
 
@@ -8,6 +15,7 @@ set -e
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # Load environment variables from .env file
@@ -22,8 +30,16 @@ fi
 # Check if SUPABASE_DB_URL is set
 if [ -z "$SUPABASE_DB_URL" ]; then
     echo -e "${RED}❌ Error: SUPABASE_DB_URL not set in .env file${NC}"
+    echo ""
+    echo "Get your connection string from: Supabase Dashboard → Project Settings → Database"
+    echo "Use the 'Direct connection' or 'Transaction pooler' connection string"
     exit 1
 fi
+
+# Display connection info (hide password)
+echo -e "${BLUE}ℹ️  Using direct database connection (bypasses RLS)${NC}"
+echo "   Connection: ${SUPABASE_DB_URL//:*@/:***@}"
+echo ""
 
 # Check if psql is available
 if ! command -v psql &> /dev/null; then
