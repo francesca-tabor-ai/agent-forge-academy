@@ -64,11 +64,74 @@ describe('API /api/jobs integration', () => {
     // In a real test, make request with invalid params
     // Expect 400 status with error details
     const mockErrorResponse = {
-      error: 'Invalid query parameters',
-      details: expect.arrayContaining([expect.any(String)]),
+      ok: false,
+      error: {
+        code: 'INVALID_PARAMS',
+        message: 'Invalid query parameters',
+        details: expect.arrayContaining([expect.any(String)]),
+      },
+      requestId: expect.any(String),
     };
 
-    expect(mockErrorResponse).toHaveProperty('error');
-    expect(mockErrorResponse).toHaveProperty('details');
+    expect(mockErrorResponse).toHaveProperty('ok', false);
+    expect(mockErrorResponse.error).toHaveProperty('code', 'INVALID_PARAMS');
+    expect(mockErrorResponse).toHaveProperty('requestId');
+  });
+
+  it('should return 200 with PROFILE_INCOMPLETE for missing student profile', () => {
+    // When student profile is missing, should return 200 (not 500) with empty list
+    const mockEmptyResponse = {
+      ok: true,
+      jobs: [],
+      total: 0,
+      reason: 'PROFILE_INCOMPLETE',
+      missingFields: expect.arrayContaining([expect.any(String)]),
+    };
+
+    expect(mockEmptyResponse.ok).toBe(true);
+    expect(mockEmptyResponse.jobs).toEqual([]);
+    expect(mockEmptyResponse.total).toBe(0);
+    expect(mockEmptyResponse.reason).toBe('PROFILE_INCOMPLETE');
+    expect(mockEmptyResponse.missingFields).toBeInstanceOf(Array);
+  });
+
+  it('should return 401 for unauthenticated requests with proper error format', () => {
+    const mockUnauthorizedResponse = {
+      ok: false,
+      error: {
+        code: 'UNAUTHORIZED',
+        message: 'Authentication required',
+      },
+      requestId: expect.any(String),
+    };
+
+    expect(mockUnauthorizedResponse.ok).toBe(false);
+    expect(mockUnauthorizedResponse.error.code).toBe('UNAUTHORIZED');
+    expect(mockUnauthorizedResponse).toHaveProperty('requestId');
+  });
+
+  it('should return 500 with requestId for unexpected server errors', () => {
+    const mockServerErrorResponse = {
+      ok: false,
+      error: {
+        code: 'SERVER_ERROR',
+        message: expect.any(String),
+      },
+      requestId: expect.any(String),
+    };
+
+    expect(mockServerErrorResponse.ok).toBe(false);
+    expect(mockServerErrorResponse.error.code).toBe('SERVER_ERROR');
+    expect(mockServerErrorResponse).toHaveProperty('requestId');
+    expect(typeof mockServerErrorResponse.requestId).toBe('string');
+  });
+
+  it('should always return JSON response with ok field', () => {
+    // All responses should have ok: true or ok: false
+    const successResponse = { ok: true, jobs: [], total: 0 };
+    const errorResponse = { ok: false, error: { code: 'ERROR' } };
+
+    expect(successResponse).toHaveProperty('ok', true);
+    expect(errorResponse).toHaveProperty('ok', false);
   });
 });

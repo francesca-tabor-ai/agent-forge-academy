@@ -885,6 +885,26 @@ export async function POST(request: NextRequest) {
                       responseLength: fullResponse.length 
                     });
 
+                    // Guard: Ensure response is not empty
+                    if (!fullResponse || !fullResponse.trim()) {
+                      safeLogger.error('AI Advisor: Empty completion from LLM', { requestId });
+                      controller.enqueue(
+                        encoder.encode(`data: ${JSON.stringify({ 
+                          ok: false,
+                          error: { 
+                            code: 'EMPTY_COMPLETION', 
+                            message: 'AI returned an empty response. Please try again.',
+                            requestId 
+                          },
+                          done: true 
+                        })}\n\n`)
+                      );
+                      controller.close();
+                      streamCompleted = true;
+                      if (streamTimeout) clearTimeout(streamTimeout);
+                      return;
+                    }
+
                     // Add citations to response if chunks were retrieved and not already present
                     let finalResponse = fullResponse;
                     if (retrievedChunks.length > 0) {
@@ -1071,6 +1091,22 @@ export async function POST(request: NextRequest) {
         llmLatency,
         responseLength: llmResponse.content.length 
       });
+
+      // Guard: Ensure response is not empty
+      if (!llmResponse.content || !llmResponse.content.trim()) {
+        safeLogger.error('AI Advisor: Empty completion from LLM', { requestId });
+        return NextResponse.json(
+          { 
+            ok: false,
+            error: { 
+              code: 'EMPTY_COMPLETION', 
+              message: 'AI returned an empty response. Please try again.',
+              requestId 
+            } 
+          },
+          { status: 500 }
+        );
+      }
 
       // Add citations to response if chunks were retrieved
       let responseContent = llmResponse.content;

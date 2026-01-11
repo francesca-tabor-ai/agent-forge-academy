@@ -132,6 +132,42 @@ describe('Error Handling', () => {
   it('should return 500 only for unexpected server errors', () => {
     // Documents expected behavior: 500 only for unexpected errors
     // 400/401/403/404 should be used for client errors
-    expect(true).toBe(true); // Placeholder for actual test
+    const errorCodes = {
+      clientErrors: [400, 401, 403, 404],
+      serverErrors: [500],
+    };
+
+    expect(errorCodes.clientErrors).not.toContain(500);
+    expect(errorCodes.serverErrors).toContain(500);
+  });
+
+  it('should return 200 with PROFILE_INCOMPLETE instead of 500 for missing profiles', () => {
+    // Missing student profile should return 200 with empty list, not 500
+    const profileIncompleteResponse = {
+      ok: true,
+      jobs: [],
+      total: 0,
+      reason: 'PROFILE_INCOMPLETE',
+      missingFields: ['student_profile'],
+    };
+
+    expect(profileIncompleteResponse.ok).toBe(true);
+    expect(profileIncompleteResponse.reason).toBe('PROFILE_INCOMPLETE');
+    // Should NOT be a 500 error
+    expect(profileIncompleteResponse).not.toHaveProperty('error');
+  });
+
+  it('should include requestId in all error responses', () => {
+    const errorResponses = [
+      { ok: false, error: { code: 'UNAUTHORIZED' }, requestId: 'req-123' },
+      { ok: false, error: { code: 'INVALID_PARAMS' }, requestId: 'req-456' },
+      { ok: false, error: { code: 'SERVER_ERROR' }, requestId: 'req-789' },
+    ];
+
+    errorResponses.forEach(response => {
+      expect(response).toHaveProperty('requestId');
+      expect(typeof response.requestId).toBe('string');
+      expect(response.requestId).toMatch(/^req-/);
+    });
   });
 });

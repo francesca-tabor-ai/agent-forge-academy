@@ -140,22 +140,34 @@ export function ChatPanel({ messages, isLoading, chatEndRef, activeContext, onAp
               msg.role === 'user' ? 'text-right' : ''
             }`}
           >
+            {/* Render message content first - always show content if present */}
+            {msg.content && msg.content.trim() ? (
+              <div
+                className={`inline-block p-3 rounded-lg ${
+                  msg.role === 'user'
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-white border border-gray-200 text-gray-900'
+                }`}
+              >
+                <div className={`text-sm ${msg.role === 'user' ? 'prose-invert' : ''} prose prose-sm max-w-none prose-headings:mt-0 prose-headings:mb-2 prose-p:my-1 prose-ul:my-1 prose-ol:my-1 prose-li:my-0`}>
+                  {formatMessage(msg.content)}
+                </div>
+              </div>
+            ) : msg.role === 'assistant' ? (
+              <div className="inline-block p-3 rounded-lg bg-yellow-50 border border-yellow-200 text-gray-900">
+                <div className="text-sm text-yellow-800">
+                  <p className="font-medium mb-1">⚠️ No response returned</p>
+                  <p className="text-xs">The AI didn't return any content. Please try again or contact support if this persists.</p>
+                </div>
+              </div>
+            ) : null}
+            
+            {/* Render context links below the message content */}
             {msg.context && (msg.context.course || msg.context.project || msg.context.job) && (
-              <div className="flex items-center gap-1 mb-1">
+              <div className="flex items-center gap-1 mt-2">
                 {getContextLink(msg.context)}
               </div>
             )}
-            <div
-              className={`inline-block p-3 rounded-lg ${
-                msg.role === 'user'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-white border border-gray-200 text-gray-900'
-              }`}
-            >
-              <div className={`text-sm ${msg.role === 'user' ? 'prose-invert' : ''} prose prose-sm max-w-none prose-headings:mt-0 prose-headings:mb-2 prose-p:my-1 prose-ul:my-1 prose-ol:my-1 prose-li:my-0`}>
-                {formatMessage(msg.content)}
-              </div>
-            </div>
             
             {/* Writeback actions for project descriptions */}
             {msg.role === 'assistant' && 

@@ -335,9 +335,39 @@ export function AIAdvisor({
                     }
 
                     if (parsed.done) {
+                      // Guard: Ensure we have content before finalizing
+                      if (!fullContent || !fullContent.trim()) {
+                        // Remove empty message and show error
+                        setMessages((prev) => {
+                          return prev.filter(msg => msg.id !== assistantMessageId);
+                        });
+                        const errorMessage: Message = {
+                          id: (Date.now() + 1).toString(),
+                          role: 'assistant',
+                          content: '⚠️ **No response returned** — The AI didn\'t return any content. Please try again.',
+                          timestamp: new Date(),
+                        };
+                        setMessages((prev) => [...prev, errorMessage]);
+                        setIsLoading(false);
+                        if (timeoutId) clearTimeout(timeoutId);
+                        return;
+                      }
+                      
                       if (parsed.conversationId) {
                         setConversationId(parsed.conversationId);
                       }
+                      
+                      // Update final message with nextActions if provided
+                      if (parsed.nextActions) {
+                        setMessages((prev) =>
+                          prev.map((msg) =>
+                            msg.id === assistantMessageId
+                              ? { ...msg, content: fullContent, nextActions: parsed.nextActions }
+                              : msg
+                          )
+                        );
+                      }
+                      
                       setIsLoading(false);
                       // Speak the response if voice output is enabled
                       if (voiceOutputEnabled && fullContent) {
@@ -428,6 +458,19 @@ export function AIAdvisor({
             setConversationId(data.conversationId);
           }
           
+          // Guard: Ensure response content exists
+          if (!data.response || !data.response.trim()) {
+            const errorMessage: Message = {
+              id: (Date.now() + 1).toString(),
+              role: 'assistant',
+              content: '⚠️ **No response returned** — The AI didn\'t return any content. Please try again.',
+              timestamp: new Date(),
+            };
+            setMessages((prev) => [...prev, errorMessage]);
+            setIsLoading(false);
+            return;
+          }
+
           const assistantMessage: Message = {
             id: (Date.now() + 1).toString(),
             role: 'assistant',

@@ -84,6 +84,7 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
   const [showMatchExplanation, setShowMatchExplanation] = useState(false);
   const [showApplyModal, setShowApplyModal] = useState(false);
   const [applyJob, setApplyJob] = useState<NormalizedJobOpportunity | null>(null);
+  const [profileIncomplete, setProfileIncomplete] = useState<{ reason: string; missingFields: string[] } | null>(null);
   
   const abortControllerRef = useRef<AbortController | null>(null);
   const searchDebounceRef = useRef<NodeJS.Timeout | null>(null);
@@ -189,8 +190,15 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
         setJobs([]);
         setError(null);
         setRetryCount(0);
+        setProfileIncomplete({
+          reason: data.reason,
+          missingFields: data.missingFields || [],
+        });
         return;
       }
+      
+      // Clear profile incomplete state if we got jobs
+      setProfileIncomplete(null);
       
       // Map API response (snake_case) to component format
       // API returns computed matching_score, status, skills_missing
@@ -731,26 +739,68 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
         </div>
       ) : (
         <div className="bg-white border border-gray-200 rounded-lg p-12 text-center mb-8">
-          <p className="text-sm text-gray-500 mb-4">
-            {searchQuery || statusFilter.length > 0 || skillFilter.length > 0
-              ? 'No jobs match your filters. Try adjusting your search criteria.'
-              : "We'll recommend jobs once you complete a course or add a project."}
-          </p>
-          {!searchQuery && statusFilter.length === 0 && skillFilter.length === 0 && (
-            <div className="flex items-center justify-center gap-4 mt-6">
-              <Link
-                href="/student/courses"
-                className="px-4 py-2 bg-brand-light text-white rounded-lg hover:bg-brand-light/90 transition-colors text-sm font-medium"
-              >
-                Browse Courses
-              </Link>
-              <Link
-                href="/student/portfolio"
-                className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
-              >
-                Add a Project
-              </Link>
-            </div>
+          {profileIncomplete ? (
+            <>
+              <div className="mb-4">
+                <svg
+                  className="w-16 h-16 mx-auto text-gray-400 mb-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                To unlock matched roles, complete your profile
+              </h3>
+              <p className="text-sm text-gray-600 mb-6">
+                Add skills and at least one project to your portfolio to start seeing job matches tailored to your experience.
+              </p>
+              <div className="flex items-center justify-center gap-4">
+                <Link
+                  href="/student/profile"
+                  className="px-6 py-2 bg-brand-light text-white rounded-lg hover:bg-brand-light/90 transition-colors text-sm font-medium"
+                >
+                  Edit Profile
+                </Link>
+                <Link
+                  href="/student/portfolio"
+                  className="px-6 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                >
+                  Add a Project
+                </Link>
+              </div>
+            </>
+          ) : (
+            <>
+              <p className="text-sm text-gray-500 mb-4">
+                {searchQuery || statusFilter.length > 0 || skillFilter.length > 0
+                  ? 'No jobs match your filters. Try adjusting your search criteria.'
+                  : "We'll recommend jobs once you complete a course or add a project."}
+              </p>
+              {!searchQuery && statusFilter.length === 0 && skillFilter.length === 0 && (
+                <div className="flex items-center justify-center gap-4 mt-6">
+                  <Link
+                    href="/student/courses"
+                    className="px-4 py-2 bg-brand-light text-white rounded-lg hover:bg-brand-light/90 transition-colors text-sm font-medium"
+                  >
+                    Browse Courses
+                  </Link>
+                  <Link
+                    href="/student/portfolio"
+                    className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                  >
+                    Add a Project
+                  </Link>
+                </div>
+              )}
+            </>
           )}
         </div>
       )}

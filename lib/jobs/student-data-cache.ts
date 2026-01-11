@@ -18,6 +18,16 @@ interface StudentData {
 const requestCache = new Map<string, Promise<StudentData>>();
 
 /**
+ * Custom error class for student profile not found
+ */
+export class StudentProfileNotFoundError extends Error {
+  constructor(message: string = 'Student profile not found') {
+    super(message);
+    this.name = 'StudentProfileNotFoundError';
+  }
+}
+
+/**
  * Internal function to fetch student data from database
  */
 async function fetchStudentDataFromDB(
@@ -31,11 +41,31 @@ async function fetchStudentDataFromDB(
     .eq('id', studentProfileId)
     .single();
 
-  if (profileError || !studentProfile) {
-    throw new Error('Student profile not found');
+  // Check for "not found" errors (PGRST116 is Supabase's "no rows returned" code)
+  const isNotFound = profileError?.code === 'PGRST116' || 
+                     profileError?.message?.includes('No rows returned') ||
+                     profileError?.message?.includes('not found') ||
+                     (!profileError && !studentProfile);
+
+  if (isNotFound) {
+    throw new StudentProfileNotFoundError('Student profile not found');
   }
 
-  // Fetch enrollments
+  // If there's a real database error (not just "not found"), throw it
+  if (profileError) {
+    safeLogger.error('Database error fetching student profile', {
+      error: profileError,
+      code: profileError.code,
+      message: profileError.message,
+    });
+    throw new Error(`Database error: ${profileError.message || 'Failed to fetch student profile'}`);
+  }
+
+  if (!studentProfile) {
+    throw new StudentProfileNotFoundError('Student profile not found');
+  }
+
+  // Fetch enrollments (non-critical, continue with empty array on error)
   const { data: enrollments, error: enrollmentsError } = await supabase
     .from('course_enrollments')
     .select('course_id, progress_percentage, completed_at')
@@ -43,10 +73,10 @@ async function fetchStudentDataFromDB(
 
   if (enrollmentsError) {
     safeLogger.error('Error fetching enrollments', enrollmentsError);
-    // Continue with empty array if error
+    // Continue with empty array if error (non-critical)
   }
 
-  // Fetch portfolio projects
+  // Fetch portfolio projects (non-critical, continue with empty array on error)
   const { data: projects, error: projectsError } = await supabase
     .from('portfolio_projects')
     .select('id, tech_stack, title, description')
@@ -54,7 +84,7 @@ async function fetchStudentDataFromDB(
 
   if (projectsError) {
     safeLogger.error('Error fetching portfolio projects', projectsError);
-    // Continue with empty array if error
+    // Continue with empty array if error (non-critical)
   }
 
   return {

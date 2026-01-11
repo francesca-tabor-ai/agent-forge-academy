@@ -1,7 +1,7 @@
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
 import { calculateJobMatch, type Job } from '@/lib/jobs/matching';
-import { getStudentDataForMatching } from '@/lib/jobs/student-data-cache';
+import { getStudentDataForMatching, StudentProfileNotFoundError } from '@/lib/jobs/student-data-cache';
 import { safeLogger } from '@/lib/utils/redactPII';
 
 // Force dynamic rendering (uses cookies)
@@ -419,16 +419,24 @@ export async function GET(request: NextRequest) {
       const studentDataTime = Date.now() - studentDataStartTime;
       safeLogger.info(`[${requestId}] Student data fetched`, { duration: `${studentDataTime}ms` });
     } catch (studentDataError: any) {
+      const studentDataTime = Date.now() - studentDataStartTime;
       safeLogger.error(`[${requestId}] Error fetching student data`, {
         error: studentDataError,
         message: studentDataError?.message,
         stack: studentDataError?.stack,
         name: studentDataError?.name,
+        code: studentDataError?.code,
+        duration: `${studentDataTime}ms`,
       });
       
-      // If student profile not found in getStudentDataForMatching, return empty list
-      if (studentDataError?.message?.includes('not found')) {
-        safeLogger.info(`[${requestId}] Student data not found - returning empty list`);
+      // Check if it's a "not found" error (StudentProfileNotFoundError or message contains "not found")
+      const isNotFound = studentDataError?.name === 'StudentProfileNotFoundError' ||
+                         studentDataError?.message?.includes('not found') ||
+                         studentDataError?.message?.includes('No rows returned') ||
+                         studentDataError?.code === 'PGRST116';
+      
+      if (isNotFound) {
+        safeLogger.info(`[${requestId}] Student data not found - returning empty list with PROFILE_INCOMPLETE`);
         return NextResponse.json({
           ok: true,
           jobs: [],
@@ -438,6 +446,7 @@ export async function GET(request: NextRequest) {
         });
       }
       
+      // For other errors, return 500 with requestId
       return NextResponse.json(
         { 
           ok: false,
@@ -520,6 +529,18 @@ export async function GET(request: NextRequest) {
       duration: `${jobsTime}ms`,
     });
 
+    // Defensive check: ensure studentData is valid before processing jobs
+    if (!studentData || !studentData.studentProfile) {
+      safeLogger.warn(`[${requestId}] Invalid student data - returning empty list`);
+      return NextResponse.json({
+        ok: true,
+        jobs: [],
+        total: 0,
+        reason: 'PROFILE_INCOMPLETE',
+        missingFields: ['student_data'],
+      });
+    }
+
     // Calculate matching scores for each job (on-the-fly, no DB writes)
     const matchingStartTime = Date.now();
     const jobsWithScores = (jobs || []).map((job: any) => {
@@ -531,12 +552,12 @@ export async function GET(request: NextRequest) {
           experience_level: job.experience_level || null,
         };
 
-        // Compute match for this job
+        // Compute match for this job (with defensive checks)
         const matchResult = calculateJobMatch(
           jobData,
           studentData.studentProfile,
-          studentData.enrollments,
-          studentData.portfolioProjects
+          studentData.enrollments || [],
+          studentData.portfolioProjects || []
         );
 
         // Return all job fields with computed matching_score, skills_missing, and status
