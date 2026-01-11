@@ -3,6 +3,9 @@ import { createServerSupabaseClient } from '@/lib/supabase/server';
 import { calculateJobMatch, type Job, determineJobStatus } from '@/lib/jobs/matching';
 import { getStudentDataForMatching } from '@/lib/jobs/student-data-cache';
 
+// Force dynamic rendering (uses request.headers)
+export const dynamic = 'force-dynamic';
+
 /**
  * Get ISO week number for a date
  * ISO weeks start on Monday, week 1 is the first week with a Thursday

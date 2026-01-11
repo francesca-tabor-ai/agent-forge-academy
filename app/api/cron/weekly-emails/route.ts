@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+// Force dynamic rendering (uses request.headers)
+export const dynamic = 'force-dynamic';
+
 /**
  * GET /api/cron/weekly-emails
  * 

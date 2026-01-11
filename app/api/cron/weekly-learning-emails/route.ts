@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 import { loadAllLessons } from '@/lib/lessons';
 
+// Force dynamic rendering (uses request.headers)
+export const dynamic = 'force-dynamic';
+
 /**
  * Get ISO week number for a date
  * ISO weeks start on Monday, week 1 is the first week with a Thursday

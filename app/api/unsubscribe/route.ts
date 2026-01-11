@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 
+// Force dynamic rendering (uses nextUrl.searchParams)
+export const dynamic = 'force-dynamic';
+
 /**
  * GET /api/email/unsubscribe?token=<unsubscribe_token>&type=learning|jobs|all
  * 

@@ -4,6 +4,9 @@ import { calculateJobMatch, type Job } from '@/lib/jobs/matching';
 import { getStudentDataForMatching } from '@/lib/jobs/student-data-cache';
 import { safeLogger } from '@/lib/utils/redactPII';
 
+// Force dynamic rendering (uses cookies)
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     const supabase = await createUserSupabaseClient();

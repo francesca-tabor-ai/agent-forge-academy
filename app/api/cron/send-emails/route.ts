@@ -8,6 +8,9 @@ import {
   renderWeeklyJobsEmailText,
 } from '@/lib/email/templates';
 
+// Force dynamic rendering (uses request.headers)
+export const dynamic = 'force-dynamic';
+
 /**
  * GET /api/cron/send-emails
  * 

@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 
+// Force dynamic rendering (uses cookies)
+export const dynamic = 'force-dynamic';
+
 // GET: Fetch conversation history for current context
 export async function GET(request: NextRequest) {
   try {
