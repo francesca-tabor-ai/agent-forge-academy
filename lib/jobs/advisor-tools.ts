@@ -54,7 +54,7 @@ export async function getTopJobMatches(
     }
 
     // Calculate matches for all jobs
-    const jobsWithMatches = jobs.map((job: any) => {
+    const jobsWithMatches: JobMatch[] = jobs.map((job: any) => {
       const jobData: Job = {
         id: job.id,
         skills: (job.skills as string[]) || [],
@@ -89,7 +89,7 @@ export async function getTopJobMatches(
 
     // Sort by matching score (descending) and return top matches
     return jobsWithMatches
-      .sort((a, b) => b.matchingScore - a.matchingScore)
+      .sort((a: JobMatch, b: JobMatch) => b.matchingScore - a.matchingScore)
       .slice(0, limit);
   } catch (error) {
     console.error('Error in getTopJobMatches:', error);
