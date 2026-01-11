@@ -102,7 +102,7 @@ export function calculateJobMatch(
   // 1. Skills Match (40% weight)
   // Unconfirmed CV skills are given very low weight (0.3x) in the calculation
   const skillsMatch = calculateSkillsMatch(job.skills || [], studentSkills, cvSkills);
-  const skillsMissing = (job.skills || []).filter(
+  const missingSkills = (job.skills || []).filter(
     skill => !studentSkills.includes(normalizeSkill(skill))
   );
   
@@ -147,7 +147,7 @@ export function calculateJobMatch(
     courseMatch,
     portfolioMatch,
     experienceMatch,
-    skillsMissing,
+    skillsMissing: missingSkills,
     jobSkills: job.skills || [],
     recommendedCourses: job.recommended_for_courses || [],
     enrolledCourses,
