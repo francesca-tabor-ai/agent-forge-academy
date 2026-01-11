@@ -1,9 +1,6 @@
 -- Add email preference fields to student_profiles
 -- Weekly learning emails with day/hour preferences and unsubscribe token
 
--- Enable pgcrypto extension for gen_random_bytes()
-CREATE EXTENSION IF NOT EXISTS pgcrypto;
-
 -- Add email preference columns
 ALTER TABLE student_profiles
   ADD COLUMN IF NOT EXISTS weekly_learning_emails_enabled BOOLEAN NOT NULL DEFAULT true,
@@ -15,11 +12,13 @@ ALTER TABLE student_profiles
 CREATE INDEX IF NOT EXISTS idx_student_profiles_unsubscribe_token ON student_profiles(unsubscribe_token) WHERE unsubscribe_token IS NOT NULL;
 
 -- Function to generate a random unsubscribe token
+-- Uses md5() which doesn't require any extensions (built into PostgreSQL)
 CREATE OR REPLACE FUNCTION generate_unsubscribe_token()
 RETURNS TEXT AS $$
 BEGIN
-  -- Generate a random 32-character hex string
-  RETURN encode(gen_random_bytes(16), 'hex');
+  -- Generate a random 32-character hex string using md5 (no extension required)
+  -- Combines random() and clock_timestamp() for uniqueness
+  RETURN md5(random()::text || clock_timestamp()::text || random()::text);
 END;
 $$ LANGUAGE plpgsql;
 

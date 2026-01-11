@@ -1,15 +1,14 @@
 -- Update email preferences: add jobs emails, consolidate day/hour, add last_sent tracking
 -- This migration extends the existing email preferences with jobs emails and shared scheduling
 
--- Ensure pgcrypto extension is enabled (required for generate_unsubscribe_token)
-CREATE EXTENSION IF NOT EXISTS pgcrypto;
-
 -- Ensure generate_unsubscribe_token function exists (in case migrations run out of order)
+-- Uses md5() which doesn't require any extensions (built into PostgreSQL)
 CREATE OR REPLACE FUNCTION generate_unsubscribe_token()
 RETURNS TEXT AS $$
 BEGIN
-  -- Generate a random 32-character hex string
-  RETURN encode(gen_random_bytes(16), 'hex');
+  -- Generate a random 32-character hex string using md5 (no extension required)
+  -- Combines random() and clock_timestamp() for uniqueness
+  RETURN md5(random()::text || clock_timestamp()::text || random()::text);
 END;
 $$ LANGUAGE plpgsql;
 
