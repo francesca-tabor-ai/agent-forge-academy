@@ -59,9 +59,17 @@ BEGIN
   END IF;
 END $$;
 
--- Add UNIQUE constraint
-ALTER TABLE email_outbox
-  ADD CONSTRAINT email_outbox_dedupe_key_unique UNIQUE (dedupe_key);
+-- Add UNIQUE constraint (only if it doesn't exist)
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_constraint 
+    WHERE conname = 'email_outbox_dedupe_key_unique'
+  ) THEN
+    ALTER TABLE email_outbox
+      ADD CONSTRAINT email_outbox_dedupe_key_unique UNIQUE (dedupe_key);
+  END IF;
+END $$;
 
 -- Create index on dedupe_key for quick lookups
 CREATE INDEX IF NOT EXISTS idx_email_outbox_dedupe_key ON email_outbox(dedupe_key);

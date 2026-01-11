@@ -39,6 +39,7 @@ ALTER TABLE project_images ENABLE ROW LEVEL SECURITY;
 -- ============================================
 
 -- SELECT: Users can see images for projects they own
+DROP POLICY IF EXISTS "Users can view their own project images" ON project_images;
 CREATE POLICY "Users can view their own project images"
 ON project_images
 FOR SELECT
@@ -47,6 +48,7 @@ USING (
 );
 
 -- INSERT: Users can only insert images for their own projects
+DROP POLICY IF EXISTS "Users can insert images for their own projects" ON project_images;
 CREATE POLICY "Users can insert images for their own projects"
 ON project_images
 FOR INSERT
@@ -62,6 +64,7 @@ WITH CHECK (
 );
 
 -- UPDATE: Users can update their own project images
+DROP POLICY IF EXISTS "Users can update their own project images" ON project_images;
 CREATE POLICY "Users can update their own project images"
 ON project_images
 FOR UPDATE
@@ -69,6 +72,7 @@ USING (owner_id = auth.uid())
 WITH CHECK (owner_id = auth.uid());
 
 -- DELETE: Users can delete their own project images
+DROP POLICY IF EXISTS "Users can delete their own project images" ON project_images;
 CREATE POLICY "Users can delete their own project images"
 ON project_images
 FOR DELETE
@@ -95,6 +99,7 @@ ON CONFLICT (id) DO NOTHING;
 
 -- INSERT: Users can upload only to their own user-scoped paths
 -- Path format: userId/projectId/filename
+DROP POLICY IF EXISTS "Users can upload to their own project images" ON storage.objects;
 CREATE POLICY "Users can upload to their own project images"
 ON storage.objects
 FOR INSERT
@@ -105,6 +110,7 @@ WITH CHECK (
 );
 
 -- SELECT: Users can read their own project images
+DROP POLICY IF EXISTS "Users can read their own project images" ON storage.objects;
 CREATE POLICY "Users can read their own project images"
 ON storage.objects
 FOR SELECT
@@ -115,6 +121,7 @@ USING (
 );
 
 -- DELETE: Users can delete their own project images
+DROP POLICY IF EXISTS "Users can delete their own project images" ON storage.objects;
 CREATE POLICY "Users can delete their own project images"
 ON storage.objects
 FOR DELETE
