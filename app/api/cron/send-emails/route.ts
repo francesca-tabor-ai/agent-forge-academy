@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 import { sendEmail } from '@/lib/email/send';
-import { renderWeeklyLearningEmailHTML, renderWeeklyLearningEmailText } from '@/lib/email/templates';
+import { 
+  renderWeeklyLearningEmailHTML, 
+  renderWeeklyLearningEmailText,
+  renderWeeklyJobsEmailHTML,
+  renderWeeklyJobsEmailText,
+} from '@/lib/email/templates';
 
 /**
  * GET /api/cron/send-emails
@@ -112,9 +117,9 @@ export async function GET(request: NextRequest) {
           html = renderWeeklyLearningEmailHTML(payload);
           text = renderWeeklyLearningEmailText(payload);
         } else if (email.email_type === 'weekly_jobs') {
-          // TODO: Implement weekly_jobs email template
-          html = '<p>Weekly jobs email template not yet implemented.</p>';
-          text = 'Weekly jobs email template not yet implemented.';
+          const payload = email.payload as any;
+          html = renderWeeklyJobsEmailHTML(payload);
+          text = renderWeeklyJobsEmailText(payload);
         } else {
           console.error(`Unknown email_type: ${email.email_type}`);
           await supabase
