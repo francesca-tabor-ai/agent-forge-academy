@@ -72,7 +72,12 @@ function processEmailContent(
         </p>
       </div>
     `;
-    processedHtml = processedHtml.replace('</body>', `${unsubscribeLink}</body>`) || processedHtml + unsubscribeLink;
+    // Try to insert before </body>, otherwise append to end
+    if (processedHtml.includes('</body>')) {
+      processedHtml = processedHtml.replace('</body>', `${unsubscribeLink}</body>`);
+    } else {
+      processedHtml = processedHtml + unsubscribeLink;
+    }
   }
 
   // Add UTM parameters to all links in HTML
