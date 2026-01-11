@@ -209,6 +209,7 @@ export function AIAdvisor({
     };
 
     setMessages((prev) => [...prev, userMessage]);
+    const messageToSend = messageText; // Store message for retry
     setInputMessage('');
     setIsLoading(true);
     setConversationAttempts((prev) => prev + 1);
@@ -216,28 +217,37 @@ export function AIAdvisor({
     // Check if streaming is enabled (can be controlled via localStorage or feature flag)
     const enableStreaming = localStorage.getItem('aiAdvisorStreaming') !== 'false'; // Default to true
 
-    try {
-      if (enableStreaming) {
-        // Use streaming (SSE)
-        const response = await fetch('/api/ai-advisor/chat?stream=true', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Accept: 'text/event-stream',
-          },
-          body: JSON.stringify({
-            message: messageText,
-            context: activeContext,
-            studentProfileId,
-            conversationHistory: messages.slice(-10), // Last 10 messages for context
-            intent,
-            conversationId,
-          }),
-        });
+    const sendRequest = async (retryCount = 0): Promise<void> => {
+      try {
+        if (enableStreaming) {
+          // Use streaming (SSE)
+          const response = await fetch('/api/ai-advisor/chat?stream=true', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Accept: 'text/event-stream',
+            },
+            body: JSON.stringify({
+              message: messageToSend,
+              context: activeContext,
+              studentProfileId,
+              conversationHistory: messages.slice(-10), // Last 10 messages for context
+              intent,
+              conversationId,
+            }),
+          });
 
-        if (!response.ok) {
-          throw new Error('Failed to get response');
-        }
+          if (!response.ok) {
+            // Try to read error message
+            let errorMessage = 'Failed to get response';
+            try {
+              const errorData = await response.json();
+              errorMessage = errorData.error || errorMessage;
+            } catch {
+              errorMessage = response.statusText || errorMessage;
+            }
+            throw new Error(errorMessage);
+          }
 
         // Create placeholder assistant message
         const assistantMessageId = (Date.now() + 1).toString();
@@ -251,125 +261,156 @@ export function AIAdvisor({
         };
         setMessages((prev) => [...prev, assistantMessage]);
 
-        // Read streaming response
-        const reader = response.body?.getReader();
-        if (!reader) {
-          throw new Error('Failed to get response reader');
-        }
+          // Read streaming response
+          const reader = response.body?.getReader();
+          if (!reader) {
+            throw new Error('Failed to get response reader');
+          }
 
-        const decoder = new TextDecoder();
-        let buffer = '';
-        let fullContent = '';
+          const decoder = new TextDecoder();
+          let buffer = '';
+          let fullContent = '';
 
-        try {
-          while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
+          try {
+            while (true) {
+              const { done, value } = await reader.read();
+              if (done) break;
 
-            buffer += decoder.decode(value, { stream: true });
-            const lines = buffer.split('\n');
-            buffer = lines.pop() || '';
+              buffer += decoder.decode(value, { stream: true });
+              const lines = buffer.split('\n');
+              buffer = lines.pop() || '';
 
-            for (const line of lines) {
-              if (line.startsWith('data: ')) {
-                const data = line.slice(6);
-                try {
-                  const parsed = JSON.parse(data);
-                  
-                  if (parsed.error) {
-                    throw new Error(parsed.error);
-                  }
-
-                  if (parsed.content !== undefined) {
-                    fullContent += parsed.content;
-                    // Update message content in real-time
-                    setMessages((prev) =>
-                      prev.map((msg) =>
-                        msg.id === assistantMessageId
-                          ? { ...msg, content: fullContent }
-                          : msg
-                      )
-                    );
-                  }
-
-                  if (parsed.done) {
-                    if (parsed.conversationId) {
-                      setConversationId(parsed.conversationId);
+              for (const line of lines) {
+                if (line.startsWith('data: ')) {
+                  const data = line.slice(6);
+                  try {
+                    const parsed = JSON.parse(data);
+                    
+                    if (parsed.error) {
+                      throw new Error(parsed.error);
                     }
-                    setIsLoading(false);
-                    // Speak the response if voice output is enabled
-                    if (voiceOutputEnabled && fullContent) {
-                      speakResponse(fullContent);
+
+                    if (parsed.content !== undefined) {
+                      fullContent += parsed.content;
+                      // Update message content in real-time
+                      setMessages((prev) =>
+                        prev.map((msg) =>
+                          msg.id === assistantMessageId
+                            ? { ...msg, content: fullContent }
+                            : msg
+                        )
+                      );
                     }
-                    return;
+
+                    if (parsed.done) {
+                      if (parsed.conversationId) {
+                        setConversationId(parsed.conversationId);
+                      }
+                      setIsLoading(false);
+                      // Speak the response if voice output is enabled
+                      if (voiceOutputEnabled && fullContent) {
+                        speakResponse(fullContent);
+                      }
+                      return;
+                    }
+                  } catch (e) {
+                    // Skip invalid JSON
                   }
-                } catch (e) {
-                  // Skip invalid JSON
                 }
               }
             }
+          } finally {
+            reader.releaseLock();
+            setIsLoading(false);
           }
-        } finally {
-          reader.releaseLock();
-          setIsLoading(false);
-        }
-      } else {
-        // Non-streaming fallback
-        const response = await fetch('/api/ai-advisor/chat', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            message: messageText,
+        } else {
+          // Non-streaming fallback
+          const response = await fetch('/api/ai-advisor/chat', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              message: messageToSend,
+              context: activeContext,
+              studentProfileId,
+              conversationHistory: messages.slice(-10), // Last 10 messages for context
+              intent,
+              conversationId,
+            }),
+          });
+
+          if (!response.ok) {
+            // Try to read error message
+            let errorMessage = 'Failed to get response';
+            try {
+              const errorData = await response.json();
+              errorMessage = errorData.error || errorMessage;
+            } catch {
+              errorMessage = response.statusText || errorMessage;
+            }
+            throw new Error(errorMessage);
+          }
+
+          const data = await response.json();
+          
+          // Update conversation ID if provided
+          if (data.conversationId) {
+            setConversationId(data.conversationId);
+          }
+          
+          const assistantMessage: Message = {
+            id: (Date.now() + 1).toString(),
+            role: 'assistant',
+            content: data.response,
+            timestamp: new Date(),
             context: activeContext,
-            studentProfileId,
-            conversationHistory: messages.slice(-10), // Last 10 messages for context
-            intent,
-            conversationId,
-          }),
-        });
+            intent, // Store intent for writeback actions
+            nextActions: data.nextActions || undefined, // Include next actions from API
+          };
 
-        if (!response.ok) {
-          throw new Error('Failed to get response');
+          setMessages((prev) => [...prev, assistantMessage]);
+          
+          // Speak the response if voice output is enabled
+          if (voiceOutputEnabled && data.response) {
+            speakResponse(data.response);
+          }
         }
-
-        const data = await response.json();
+      } catch (error: any) {
+        // Check if it's a network error or 5xx error that we should retry
+        const isNetworkError = error.message?.includes('Failed to fetch') || 
+                              error.message?.includes('NetworkError') ||
+                              error.name === 'TypeError';
+        const isServerError = error.message?.includes('500') || 
+                             error.message?.includes('Internal Server Error');
         
-        // Update conversation ID if provided
-        if (data.conversationId) {
-          setConversationId(data.conversationId);
+        // Retry up to 2 times for network/server errors
+        if ((isNetworkError || isServerError) && retryCount < 2) {
+          const delay = 1000 * Math.pow(2, retryCount); // Exponential backoff
+          await new Promise(resolve => setTimeout(resolve, delay));
+          return sendRequest(retryCount + 1);
         }
         
-        const assistantMessage: Message = {
+        // If retries exhausted or non-retryable error, show error message
+        console.error('Error sending message:', error);
+        
+        // Restore the user's message in the input for retry
+        setInputMessage(messageToSend);
+        
+        const errorMessage: Message = {
           id: (Date.now() + 1).toString(),
           role: 'assistant',
-          content: data.response,
+          content: isNetworkError 
+            ? "⚠️ **Connection issue** — I couldn't reach the server. Please check your connection and try again. Your message has been restored in the input field."
+            : "I'm sorry, I encountered an error. Please try again or connect with a human advisor for help.",
           timestamp: new Date(),
-          context: activeContext,
-          intent, // Store intent for writeback actions
-          nextActions: data.nextActions || undefined, // Include next actions from API
         };
-
-        setMessages((prev) => [...prev, assistantMessage]);
-        
-        // Speak the response if voice output is enabled
-        if (voiceOutputEnabled && data.response) {
-          speakResponse(data.response);
-        }
+        setMessages((prev) => [...prev, errorMessage]);
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.error('Error sending message:', error);
-      const errorMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: "I'm sorry, I encountered an error. Please try again or connect with a human advisor for help.",
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, errorMessage]);
-    } finally {
-      setIsLoading(false);
-    }
+    };
+    
+    sendRequest();
   };
 
   const handleSubmit = (e: React.FormEvent) => {

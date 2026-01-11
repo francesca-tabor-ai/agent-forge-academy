@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { MatchExplanationModal } from './MatchExplanationModal';
@@ -15,16 +15,78 @@ interface JobOpportunitiesPageProps {
 type SortOption = 'best-match' | 'newest' | 'least-missing' | 'company-az';
 type RoleType = 'engineer' | 'architect' | 'pm' | 'content' | 'other' | 'all';
 
+/**
+ * Retry fetch with exponential backoff
+ */
+async function fetchWithRetry(
+  url: string,
+  options: RequestInit = {},
+  maxRetries = 2,
+  retryDelay = 1000
+): Promise<Response> {
+  let lastError: Error | null = null;
+  
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      const response = await fetch(url, options);
+      
+      // Only retry on 5xx errors or network failures
+      if (response.ok || (response.status < 500 && response.status >= 400)) {
+        return response;
+      }
+      
+      // For 5xx errors, throw to trigger retry
+      if (response.status >= 500) {
+        throw new Error(`Server error: ${response.status}`);
+      }
+      
+      return response;
+    } catch (error: any) {
+      lastError = error;
+      
+      // Don't retry on last attempt
+      if (attempt === maxRetries) {
+        break;
+      }
+      
+      // Don't retry on network errors that aren't 5xx
+      if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+        // Network error - retry with backoff
+        const delay = retryDelay * Math.pow(2, attempt);
+        await new Promise(resolve => setTimeout(resolve, delay));
+        continue;
+      }
+      
+      // For other errors, check if it's a 5xx
+      if (error.message?.includes('Server error')) {
+        const delay = retryDelay * Math.pow(2, attempt);
+        await new Promise(resolve => setTimeout(resolve, delay));
+        continue;
+      }
+      
+      // Don't retry for other errors
+      break;
+    }
+  }
+  
+  throw lastError || new Error('Failed to fetch after retries');
+}
+
 export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   
   const [jobs, setJobs] = useState<JobOpportunity[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<{ message: string; retryable: boolean } | null>(null);
+  const [retryCount, setRetryCount] = useState(0);
   const [selectedJob, setSelectedJob] = useState<JobOpportunity | null>(null);
   const [showMatchExplanation, setShowMatchExplanation] = useState(false);
   const [showApplyModal, setShowApplyModal] = useState(false);
   const [applyJob, setApplyJob] = useState<NormalizedJobOpportunity | null>(null);
+  
+  const abortControllerRef = useRef<AbortController | null>(null);
+  const searchDebounceRef = useRef<NodeJS.Timeout | null>(null);
 
   // Filter and sort state from URL params
   const searchQuery = searchParams.get('search') || '';
@@ -35,36 +97,118 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
   const skillFilter = searchParams.get('skills')?.split(',') || [];
   const sortBy = (searchParams.get('sort') || 'best-match') as SortOption;
 
-  useEffect(() => {
-    const fetchJobs = async () => {
-      try {
-        const response = await fetch('/api/jobs');
-        if (!response.ok) {
-          throw new Error('Failed to fetch jobs');
+  const fetchJobs = useCallback(async (signal?: AbortSignal) => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const response = await fetchWithRetry('/api/jobs', {
+        signal,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      
+      if (!response.ok) {
+        // Try to read error message from response
+        let errorMessage = 'Failed to fetch jobs';
+        let retryable = response.status >= 500;
+        
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.error || errorMessage;
+          if (errorData.details) {
+            errorMessage += `: ${errorData.details}`;
+          }
+        } catch {
+          // If JSON parsing fails, use status text
+          errorMessage = response.statusText || errorMessage;
         }
-        const data = await response.json();
-        // Map API response (snake_case) to component format
-        // API returns computed matching_score, status, skills_missing
-        const mappedJobs = (data.jobs || []).map((job: any) => ({
-          ...job,
-          // Ensure computed fields are used (from API)
-          matching_score: job.matching_score ?? 0,
-          status: job.status ?? 'new',
-          skills_missing: job.skills_missing ?? [],
-          // Legacy camelCase for backward compatibility
-          matchingScore: job.matching_score,
-          skillsMissing: job.skills_missing,
-        }));
-        setJobs(mappedJobs);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching jobs:', error);
-        setLoading(false);
+        
+        throw new Error(errorMessage);
+      }
+      
+      const data = await response.json();
+      
+      // Map API response (snake_case) to component format
+      // API returns computed matching_score, status, skills_missing
+      const mappedJobs = (data.jobs || []).map((job: any) => ({
+        ...job,
+        // Ensure computed fields are used (from API)
+        matching_score: job.matching_score ?? 0,
+        status: job.status ?? 'new',
+        skills_missing: job.skills_missing ?? [],
+        // Legacy camelCase for backward compatibility
+        matchingScore: job.matching_score,
+        skillsMissing: job.skills_missing,
+      }));
+      
+      setJobs(mappedJobs);
+      setError(null);
+      setRetryCount(0);
+    } catch (error: any) {
+      // Don't set error if request was aborted
+      if (error.name === 'AbortError') {
+        return;
+      }
+      
+      console.error('Error fetching jobs:', error);
+      
+      const isNetworkError = error.message?.includes('Failed to fetch') || 
+                            error.message?.includes('NetworkError') ||
+                            error.name === 'TypeError';
+      const isServerError = error.message?.includes('Server error') || 
+                           error.message?.includes('500');
+      
+      setError({
+        message: error.message || 'Failed to fetch jobs. Please check your connection and try again.',
+        retryable: isNetworkError || isServerError,
+      });
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  // Initial fetch on mount
+  useEffect(() => {
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+    
+    fetchJobs(controller.signal);
+    
+    return () => {
+      controller.abort();
+    };
+  }, [fetchJobs]);
+
+  // Debounced search - refetch when search query changes (but debounced)
+  useEffect(() => {
+    // Clear previous debounce timer
+    if (searchDebounceRef.current) {
+      clearTimeout(searchDebounceRef.current);
+    }
+    
+    // Only debounce if search query changed (not on initial mount)
+    if (searchQuery !== '') {
+      searchDebounceRef.current = setTimeout(() => {
+        // Search is handled client-side, no need to refetch
+        // But we could trigger a refetch if needed
+      }, 300);
+    }
+    
+    return () => {
+      if (searchDebounceRef.current) {
+        clearTimeout(searchDebounceRef.current);
       }
     };
+  }, [searchQuery]);
 
-    fetchJobs();
-  }, []);
+  const handleRetry = useCallback(() => {
+    setRetryCount(prev => prev + 1);
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+    fetchJobs(controller.signal);
+  }, [fetchJobs]);
 
   // Get all unique skills from jobs for filter
   const allSkills = useMemo(() => {
@@ -149,7 +293,14 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
   };
 
   const handleSearchChange = (value: string) => {
-    updateURLParams({ search: value || null });
+    // Debounce search input updates
+    if (searchDebounceRef.current) {
+      clearTimeout(searchDebounceRef.current);
+    }
+    
+    searchDebounceRef.current = setTimeout(() => {
+      updateURLParams({ search: value || null });
+    }, 300);
   };
 
   const handleStatusToggle = (status: string) => {
@@ -206,11 +357,51 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
     return 'text-sm font-medium';
   };
 
-  if (loading) {
+  if (loading && jobs.length === 0) {
     return (
       <div>
         <div className="bg-white border border-gray-200 rounded-lg p-6">
           <p className="text-sm text-gray-500">Loading opportunities...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error && jobs.length === 0) {
+    return (
+      <div>
+        <div className="bg-white border border-red-200 rounded-lg p-6">
+          <div className="flex flex-col items-center justify-center text-center space-y-4">
+            <div className="text-red-600">
+              <svg
+                className="w-12 h-12 mx-auto"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                We couldn't load jobs right now
+              </h3>
+              <p className="text-sm text-gray-600 mb-4">{error.message}</p>
+              {error.retryable && (
+                <button
+                  onClick={handleRetry}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                >
+                  Retry
+                </button>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -235,114 +426,127 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
           </div>
 
           {/* Filters Row */}
-          <div className="flex flex-wrap items-center gap-4">
-            {/* Status Filter (using computed statuses from API) */}
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-gray-700">Status:</span>
-              {['new', 'recommended', 'unlocked', 'locked', 'stretch'].map((status) => (
-                <button
-                  key={status}
-                  onClick={() => handleStatusToggle(status)}
-                  className={`px-3 py-1 text-xs font-medium rounded-full transition-colors ${
-                    statusFilter.includes(status)
-                      ? 'bg-brand-light text-white'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  {status.charAt(0).toUpperCase() + status.slice(1)}
-                </button>
-              ))}
-            </div>
-
-            {/* Match % Range */}
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-gray-700">Match:</span>
+          {/* Desktop: Single horizontal row with all filters aligned on one baseline */}
+          {/* Mobile: 2-row layout (Status+Sort, Match+Skills) */}
+          <div className="grid grid-cols-1 grid-rows-2 lg:flex lg:flex-row lg:items-center gap-4 lg:gap-6">
+            {/* Row 1 on mobile: Status + Sort */}
+            <div className="flex flex-wrap items-center gap-4 lg:contents">
+              {/* Status Filter */}
               <div className="flex items-center gap-2">
-                <input
-                  type="number"
-                  min="0"
-                  max="100"
-                  value={matchMin}
-                  onChange={(e) => {
-                    const val = Math.max(0, Math.min(100, parseInt(e.target.value) || 0));
-                    handleMatchRangeChange(val, matchMax);
-                  }}
-                  className="w-16 px-2 py-1 text-xs border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-brand-light"
-                />
-                <span className="text-xs text-gray-400">-</span>
-                <input
-                  type="number"
-                  min="0"
-                  max="100"
-                  value={matchMax}
-                  onChange={(e) => {
-                    const val = Math.max(0, Math.min(100, parseInt(e.target.value) || 100));
-                    handleMatchRangeChange(matchMin, val);
-                  }}
-                  className="w-16 px-2 py-1 text-xs border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-brand-light"
-                />
-                <span className="text-xs text-gray-600">%</span>
-              </div>
-            </div>
-
-            {/* Skills Filter */}
-            {allSkills.length > 0 && (
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-sm font-medium text-gray-700">Skills:</span>
-                {skillFilter.length > 0 && (
-                  <div className="flex flex-wrap gap-1">
-                    {skillFilter.map((skill) => (
-                      <span
-                        key={skill}
-                        className="inline-flex items-center gap-1 px-2 py-1 bg-brand-light/10 text-brand-light text-xs font-medium rounded-full"
-                      >
-                        {skill}
-                        <button
-                          onClick={() => {
-                            const newSkills = skillFilter.filter(s => s !== skill);
-                            updateURLParams({ skills: newSkills.length > 0 ? newSkills.join(',') : null });
-                          }}
-                          className="hover:text-brand-light/70"
-                        >
-                          ×
-                        </button>
-                      </span>
-                    ))}
-                  </div>
-                )}
-                <select
-                  value=""
-                  onChange={(e) => {
-                    if (e.target.value && !skillFilter.includes(e.target.value)) {
-                      updateURLParams({ skills: [...skillFilter, e.target.value].join(',') });
-                      e.target.value = '';
-                    }
-                  }}
-                  className="px-3 py-1 text-xs border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light"
-                >
-                  <option value="">Add skill...</option>
-                  {allSkills.filter(skill => !skillFilter.includes(skill)).map((skill) => (
-                    <option key={skill} value={skill}>
-                      {skill}
-                    </option>
+                <span className="text-sm font-medium text-gray-700 whitespace-nowrap">Status:</span>
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  {['new', 'recommended', 'unlocked', 'locked', 'stretch'].map((status) => (
+                    <button
+                      key={status}
+                      onClick={() => handleStatusToggle(status)}
+                      className={`h-10 px-3 text-xs font-medium rounded-full transition-colors whitespace-nowrap ${
+                        statusFilter.includes(status)
+                          ? 'bg-brand-light text-white'
+                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
+                    >
+                      {status.charAt(0).toUpperCase() + status.slice(1)}
+                    </button>
                   ))}
+                </div>
+              </div>
+
+              {/* Sort */}
+              <div className="flex items-center gap-2 lg:ml-auto">
+                <span className="text-sm font-medium text-gray-700 whitespace-nowrap">Sort:</span>
+                <select
+                  value={sortBy}
+                  onChange={(e) => handleSortChange(e.target.value as SortOption)}
+                  className="h-10 px-3 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light"
+                >
+                  <option value="best-match">Best Match</option>
+                  <option value="newest">Newest</option>
+                  <option value="least-missing">Least Missing Skills</option>
+                  <option value="company-az">Company A-Z</option>
                 </select>
               </div>
-            )}
+            </div>
 
-            {/* Sort */}
-            <div className="flex items-center gap-2 ml-auto">
-              <span className="text-sm font-medium text-gray-700">Sort:</span>
-              <select
-                value={sortBy}
-                onChange={(e) => handleSortChange(e.target.value as SortOption)}
-                className="px-3 py-1 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light"
-              >
-                <option value="best-match">Best Match</option>
-                <option value="newest">Newest</option>
-                <option value="least-missing">Least Missing Skills</option>
-                <option value="company-az">Company A-Z</option>
-              </select>
+            {/* Row 2 on mobile: Match + Skills */}
+            <div className="flex flex-wrap items-center gap-4 lg:contents">
+              {/* Match % Range */}
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium text-gray-700 whitespace-nowrap">Match:</span>
+                <div className="flex items-center gap-1.5 whitespace-nowrap">
+                  <input
+                    type="number"
+                    min="0"
+                    max="100"
+                    value={matchMin}
+                    onChange={(e) => {
+                      const val = Math.max(0, Math.min(100, parseInt(e.target.value) || 0));
+                      handleMatchRangeChange(val, matchMax);
+                    }}
+                    className="h-10 w-[72px] px-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light text-center"
+                  />
+                  <span className="text-sm text-gray-400">–</span>
+                  <input
+                    type="number"
+                    min="0"
+                    max="100"
+                    value={matchMax}
+                    onChange={(e) => {
+                      const val = Math.max(0, Math.min(100, parseInt(e.target.value) || 100));
+                      handleMatchRangeChange(matchMin, val);
+                    }}
+                    className="h-10 w-[72px] px-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light text-center"
+                  />
+                  <span className="text-sm text-gray-600">%</span>
+                </div>
+              </div>
+
+              {/* Skills Filter */}
+              {allSkills.length > 0 && (
+                <div className="flex items-center gap-2 flex-1 min-w-0 w-full lg:w-auto">
+                  <span className="text-sm font-medium text-gray-700 whitespace-nowrap">Skills:</span>
+                  <div className="flex items-center gap-2 flex-1 min-w-0">
+                    {skillFilter.length > 0 && (
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        {skillFilter.map((skill) => (
+                          <span
+                            key={skill}
+                            className="inline-flex items-center gap-1 h-10 px-2.5 bg-brand-light/10 text-brand-light text-xs font-medium rounded-full"
+                          >
+                            {skill}
+                            <button
+                              onClick={() => {
+                                const newSkills = skillFilter.filter(s => s !== skill);
+                                updateURLParams({ skills: newSkills.length > 0 ? newSkills.join(',') : null });
+                              }}
+                              className="hover:text-brand-light/70 text-base leading-none"
+                              aria-label={`Remove ${skill}`}
+                            >
+                              ×
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                    <select
+                      value=""
+                      onChange={(e) => {
+                        if (e.target.value && !skillFilter.includes(e.target.value)) {
+                          updateURLParams({ skills: [...skillFilter, e.target.value].join(',') });
+                          e.target.value = '';
+                        }
+                      }}
+                      className="h-10 px-3 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light min-w-[140px]"
+                    >
+                      <option value="">Add skill...</option>
+                      {allSkills.filter(skill => !skillFilter.includes(skill)).map((skill) => (
+                        <option key={skill} value={skill}>
+                          {skill}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 

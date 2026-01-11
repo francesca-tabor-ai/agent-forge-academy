@@ -26,7 +26,15 @@ export function JobOpportunitiesSection({ studentProfileId }: JobOpportunitiesSe
       try {
         const response = await fetch('/api/jobs');
         if (!response.ok) {
-          throw new Error('Failed to fetch jobs');
+          // Try to read error message from response
+          let errorMessage = 'Failed to fetch jobs';
+          try {
+            const errorData = await response.json();
+            errorMessage = errorData.error || errorMessage;
+          } catch {
+            errorMessage = response.statusText || errorMessage;
+          }
+          throw new Error(errorMessage);
         }
         const data = await response.json();
         // Map API response (snake_case) to component format with computed fields
@@ -54,6 +62,8 @@ export function JobOpportunitiesSection({ studentProfileId }: JobOpportunitiesSe
         setLoading(false);
       } catch (error) {
         console.error('Error fetching jobs:', error);
+        // Don't show error in dashboard section - just log it
+        // The main jobs page will handle errors with retry UI
         setLoading(false);
       }
     };
