@@ -65,9 +65,39 @@ export function SubscriptionPageContent({ subscriptionData, userEmail }: Subscri
     setShowChangePlanModal(false);
   };
 
-  const handleUpdatePayment = () => {
-    // TODO: Open payment method update modal/page
-    console.log('Update payment method');
+  const handleUpdatePayment = async () => {
+    try {
+      const response = await fetch('/api/stripe/create-portal-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          returnUrl: `${window.location.origin}/student/subscription`,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to open billing portal');
+      }
+
+      if (!data.portalUrl) {
+        throw new Error('No portal URL returned');
+      }
+
+      // Redirect to Stripe Customer Portal
+      window.location.href = data.portalUrl;
+    } catch (err: any) {
+      console.error('Error opening billing portal:', err);
+      // Show error to user - could use a toast notification here
+      alert(
+        err.message === 'No active subscription found' || err.message === 'NO_STRIPE_CUSTOMER'
+          ? 'No active subscription found. Please contact support.'
+          : 'We couldn\'t open billing settings. Please try again.'
+      );
+    }
   };
 
   return (

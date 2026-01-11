@@ -13,6 +13,10 @@ import { getStripeClient } from '@/lib/stripe';
  * }
  */
 export async function POST(request: NextRequest) {
+  let userId: string | undefined;
+  let stripeCustomerId: string | undefined;
+  const requestId = crypto.randomUUID();
+  
   try {
     const supabase = await createUserSupabaseClient();
     const {
@@ -25,6 +29,8 @@ export async function POST(request: NextRequest) {
         { status: 401 }
       );
     }
+
+    userId = user.id;
 
     const body = await request.json();
     const { returnUrl } = body;
@@ -63,18 +69,25 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (!subscription || !subscription.stripe_customer_id) {
+      console.error('No Stripe customer ID found', {
+        userId,
+        studentProfileId: studentProfile.id,
+        requestId,
+      });
       return NextResponse.json(
-        { error: 'No active subscription found' },
+        { error: 'NO_STRIPE_CUSTOMER', message: 'No active subscription found' },
         { status: 404 }
       );
     }
+
+    stripeCustomerId = subscription.stripe_customer_id;
 
     // Get Stripe client
     const stripe = getStripeClient();
 
     // Create portal session
     const session = await stripe.billingPortal.sessions.create({
-      customer: subscription.stripe_customer_id,
+      customer: stripeCustomerId,
       return_url: returnUrl || `${process.env.NEXT_PUBLIC_APP_URL}/student/subscription`,
     });
 
@@ -83,9 +96,24 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error: any) {
-    console.error('Error creating portal session:', error);
+    console.error('Error creating portal session:', {
+      error: error.message,
+      stack: error.stack,
+      requestId,
+      userId: userId || 'unknown',
+      stripeCustomerId: stripeCustomerId || 'unknown',
+    });
+    
+    // Return more specific error if it's a Stripe error
+    if (error.type === 'StripeInvalidRequestError' || error.type?.startsWith('Stripe')) {
+      return NextResponse.json(
+        { error: 'STRIPE_ERROR', message: error.message },
+        { status: 400 }
+      );
+    }
+    
     return NextResponse.json(
-      { error: 'Failed to create portal session' },
+      { error: 'Failed to create portal session', message: 'An unexpected error occurred' },
       { status: 500 }
     );
   }

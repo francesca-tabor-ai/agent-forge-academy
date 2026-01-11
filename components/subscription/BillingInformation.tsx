@@ -32,6 +32,9 @@ interface BillingInformationProps {
 }
 
 export function BillingInformation({ billing, invoices, userEmail }: BillingInformationProps) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-GB', {
       style: 'currency',
@@ -47,16 +50,90 @@ export function BillingInformation({ billing, invoices, userEmail }: BillingInfo
     });
   };
 
+  const handleOpenBillingPortal = async () => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch('/api/stripe/create-portal-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          returnUrl: `${window.location.origin}/student/subscription`,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to open billing portal');
+      }
+
+      if (!data.portalUrl) {
+        throw new Error('No portal URL returned');
+      }
+
+      // Redirect to Stripe Customer Portal
+      window.location.href = data.portalUrl;
+    } catch (err: any) {
+      console.error('Error opening billing portal:', err);
+      setError(
+        err.message === 'No active subscription found' || err.message === 'NO_STRIPE_CUSTOMER'
+          ? 'No active subscription found. Please contact support.'
+          : 'We couldn\'t open billing settings. Please try again.'
+      );
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="bg-white border border-gray-200 rounded-lg p-6 space-y-6">
       <h2 className="text-lg font-semibold text-gray-900">Billing Information</h2>
+
+      {/* Error Message */}
+      {error && (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-800">
+          <div className="flex items-start gap-2">
+            <svg
+              className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <div className="flex-1">
+              <p className="font-medium mb-1">Error</p>
+              <p>{error}</p>
+            </div>
+            <button
+              onClick={() => setError(null)}
+              className="text-red-600 hover:text-red-800"
+              aria-label="Dismiss error"
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Payment Method */}
       <div>
         <div className="flex items-center justify-between mb-2">
           <h3 className="text-sm font-medium text-gray-900">Payment Method</h3>
-          <button className="text-sm font-medium text-brand-light hover:text-brand-light/90">
-            Update Payment Method
+          <button
+            onClick={handleOpenBillingPortal}
+            disabled={isLoading}
+            className="text-sm font-medium text-brand-light hover:text-brand-light/90 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isLoading ? 'Opening billing portal...' : 'Update Payment Method'}
           </button>
         </div>
         <div className="p-4 bg-gray-50 rounded-lg">
@@ -73,8 +150,12 @@ export function BillingInformation({ billing, invoices, userEmail }: BillingInfo
       <div>
         <div className="flex items-center justify-between mb-2">
           <h3 className="text-sm font-medium text-gray-900">Billing Email</h3>
-          <button className="text-sm font-medium text-brand-light hover:text-brand-light/90">
-            Update Email
+          <button
+            onClick={handleOpenBillingPortal}
+            disabled={isLoading}
+            className="text-sm font-medium text-brand-light hover:text-brand-light/90 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isLoading ? 'Opening billing portal...' : 'Update Email'}
           </button>
         </div>
         <div className="p-4 bg-gray-50 rounded-lg">
