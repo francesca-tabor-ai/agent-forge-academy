@@ -18,7 +18,7 @@ export function getStripeClient(): Stripe {
       throw new Error('STRIPE_SECRET_KEY environment variable is not set');
     }
     stripeInstance = new Stripe(secretKey, {
-      apiVersion: '2024-06-20',
+      apiVersion: '2023-10-16',
     });
   }
   return stripeInstance;

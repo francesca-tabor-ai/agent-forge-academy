@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
   }
 
   // Initialize clients inside handler (not at module scope)
-  const stripe = new Stripe(secretKey, { apiVersion: '2024-06-20' });
+  const stripe = new Stripe(secretKey, { apiVersion: '2023-10-16' });
   const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
   const body = await request.text();
