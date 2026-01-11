@@ -2,24 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import type { JobOpportunity } from '@/lib/types/job-opportunity';
 
 interface JobOpportunitiesSectionProps {
   studentProfileId: string | null;
-}
-
-interface JobOpportunity {
-  id: string;
-  title: string;
-  company: string;
-  matching_score: number; // Computed from API
-  status: 'new' | 'unlocked' | 'recommended' | 'locked' | 'stretch'; // Computed from API
-  skills: string[];
-  skills_missing: string[]; // Computed from API
-  // Legacy camelCase for backward compatibility
-  matchingScore?: number;
-  skillsMissing?: string[];
-  isLocked?: boolean;
-  isStretch?: boolean;
 }
 
 interface SavedApplication {

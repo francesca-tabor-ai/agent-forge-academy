@@ -5,28 +5,11 @@ import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { MatchExplanationModal } from './MatchExplanationModal';
 import { ApplyWithAIModal } from './ApplyWithAIModal';
+import type { JobOpportunity } from '@/lib/types/job-opportunity';
+import { normalizeJobOpportunity } from '@/lib/types/job-opportunity';
 
 interface JobOpportunitiesPageProps {
   studentProfileId: string | null;
-}
-
-interface JobOpportunity {
-  id: string;
-  title: string;
-  company: string;
-  matching_score: number; // Computed from API
-  status: 'new' | 'unlocked' | 'recommended' | 'locked' | 'stretch'; // Computed from API
-  skills: string[];
-  skills_missing: string[]; // Computed from API
-  explanation?: string; // Computed explanation from API (optional)
-  job_type?: string;
-  experience_level?: string;
-  location?: string;
-  is_remote?: boolean;
-  salary_range?: string;
-  // Legacy camelCase fields for backward compatibility (will be mapped)
-  matchingScore?: number;
-  skillsMissing?: string[];
 }
 
 type SortOption = 'best-match' | 'newest' | 'least-missing' | 'company-az';
@@ -438,7 +421,8 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
                   <div className="flex items-center gap-3 pt-2 border-t border-gray-100">
                     <button
                       onClick={() => {
-                        setApplyJob(job);
+                        // Normalize job to ensure matchingScore is always a number
+                        setApplyJob(normalizeJobOpportunity(job));
                         setShowApplyModal(true);
                       }}
                       className="px-6 py-2 bg-brand-light text-white rounded-lg hover:bg-brand-light/90 transition-colors font-medium"

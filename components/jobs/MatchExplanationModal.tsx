@@ -2,19 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-
-interface JobOpportunity {
-  id: string;
-  title: string;
-  company: string;
-  matchingScore?: number;
-  matching_score?: number; // Computed from API
-  status?: 'new' | 'unlocked' | 'recommended' | 'locked' | 'stretch'; // Computed from API
-  skills: string[];
-  skillsMissing?: string[];
-  skills_missing?: string[]; // Computed from API
-  explanation?: string; // Computed explanation from API
-}
+import type { JobOpportunity } from '@/lib/types/job-opportunity';
 
 interface MatchExplanationModalProps {
   job: JobOpportunity;

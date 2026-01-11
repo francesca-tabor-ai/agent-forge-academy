@@ -2,15 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-
-interface JobOpportunity {
-  id: string;
-  title: string;
-  company: string;
-  matchingScore: number;
-  status?: 'new' | 'unlocked' | 'recommended' | 'locked' | 'stretch';
-  skills: string[];
-}
+import type { JobOpportunity } from '@/lib/types/job-opportunity';
 
 interface ApplyWithAIModalProps {
   job: JobOpportunity | null;
@@ -151,8 +143,10 @@ export function ApplyWithAIModal({
                         id: e.target.value,
                         title: 'Selected Job',
                         company: 'Company',
-                        matchingScore: 75,
+                        matching_score: 75,
+                        status: 'unlocked',
                         skills: [],
+                        skills_missing: [],
                       });
                     }
                   }}
