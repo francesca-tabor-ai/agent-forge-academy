@@ -18,6 +18,15 @@
   --ca-neutral-500: #80796B;
   --ca-neutral-300: #CECAC3;
   --ca-neutral-200: #B4AA90;
+
+  /* Spacing Scale - Single source of truth */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
 }
 
 @layer base {

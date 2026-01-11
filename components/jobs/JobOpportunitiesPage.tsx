@@ -206,7 +206,7 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
 
   if (loading) {
     return (
-      <div className="space-y-6">
+      <div>
         <div className="bg-white border border-gray-200 rounded-lg p-6">
           <p className="text-sm text-gray-500">Loading opportunities...</p>
         </div>
@@ -215,9 +215,9 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
   }
 
   return (
-    <div className="space-y-6">
+    <div>
       {/* Sticky Control Bar */}
-      <div className="sticky top-0 z-10 bg-white border-b border-gray-200 py-4 mb-6 shadow-sm">
+      <div className="sticky top-0 z-10 bg-white border-b border-gray-200 py-4 mb-8 shadow-sm">
         <div className="space-y-4">
           {/* Search */}
           <div className="flex items-center gap-4">
@@ -353,7 +353,7 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
 
       {/* Job Cards */}
       {filteredAndSortedJobs.length > 0 ? (
-        <div className="space-y-4">
+        <div className="space-y-4 mb-8">
           {filteredAndSortedJobs.map((job) => {
             const statusBadge = getStatusBadge(job.status);
             const displayedSkills = job.skills.slice(0, 3);
@@ -439,7 +439,7 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
           })}
         </div>
       ) : (
-        <div className="bg-white border border-gray-200 rounded-lg p-12 text-center">
+        <div className="bg-white border border-gray-200 rounded-lg p-12 text-center mb-8">
           <p className="text-sm text-gray-500 mb-4">
             {searchQuery || statusFilter.length > 0 || skillFilter.length > 0
               ? 'No jobs match your filters. Try adjusting your search criteria.'
@@ -466,7 +466,7 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
 
       {/* Unified Bottom CTA */}
       {filteredAndSortedJobs.length > 0 && (
-        <div className="bg-white border border-gray-200 rounded-lg p-6 text-center">
+        <div className="bg-white border border-gray-200 rounded-lg p-6 text-center mt-8">
           <button
             onClick={() => {
               setApplyJob(null);
