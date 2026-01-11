@@ -244,7 +244,7 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
 
   const { data: existingSubscription } = await supabase
     .from('subscriptions')
-    .select('tier, student_profile_id')
+    .select('id, tier, student_profile_id')
     .eq('stripe_subscription_id', subscriptionId)
     .single();
 
