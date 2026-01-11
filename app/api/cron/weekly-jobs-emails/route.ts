@@ -119,10 +119,10 @@ export async function GET(request: NextRequest) {
           continue;
         }
 
-        // Fetch student data for matching
+        // Fetch student data for matching (same logic as /api/jobs)
         const studentData = await getStudentDataForMatching(supabase, studentProfile.id);
 
-        // Fetch all active jobs
+        // Fetch all active jobs (same logic as /api/jobs)
         const { data: jobs, error: jobsError } = await supabase
           .from('jobs')
           .select('*')
@@ -135,8 +135,8 @@ export async function GET(request: NextRequest) {
           continue;
         }
 
-        // Calculate matching scores for all jobs
-        const jobsWithScores = jobs.map((job: any) => {
+        // Calculate matching scores for all jobs (same logic as /api/jobs)
+        const jobsWithScores = (jobs || []).map((job: any) => {
           const jobData: Job = {
             id: job.id,
             skills: (job.skills as string[]) || [],
@@ -171,46 +171,39 @@ export async function GET(request: NextRequest) {
           };
         });
 
-        // Sort by matching score (descending)
-        jobsWithScores.sort((a, b) => b.matching_score - a.matching_score);
+        // Filter to statuses: recommended, unlocked, new
+        // Sort by matching_score desc
+        const eligibleJobs = jobsWithScores
+          .filter(job => ['recommended', 'unlocked', 'new'].includes(job.status))
+          .sort((a, b) => b.matching_score - a.matching_score);
 
-        // Find Top Match: highest score with status recommended/unlocked/new
-        const topMatch = jobsWithScores.find(
-          job => ['recommended', 'unlocked', 'new'].includes(job.status)
-        ) || jobsWithScores[0]; // Fallback to highest score if no recommended/unlocked/new
-
-        if (!topMatch) {
-          // Skip if no jobs available
+        if (eligibleJobs.length === 0) {
+          // Skip if no eligible jobs
           continue;
         }
 
-        // Find 2 Near Miss roles: good score (>= 50), minimal missing skills (<= 3)
-        const nearMisses = jobsWithScores
-          .filter(job => 
-            job.id !== topMatch.id &&
-            job.matching_score >= 50 &&
-            job.skills_missing.length <= 3 &&
-            ['recommended', 'unlocked', 'locked'].includes(job.status)
-          )
-          .slice(0, 2);
+        // Pick top 3 distinct roles
+        const top3Roles = eligibleJobs.slice(0, 3);
 
-        // Calculate Skill gap of the week: most common missing skill across top roles
-        const topRoles = [topMatch, ...nearMisses].filter(Boolean);
-        const missingSkillsCount = new Map<string, number>();
-        
-        topRoles.forEach(job => {
-          job.skills_missing.forEach(skill => {
-            missingSkillsCount.set(skill, (missingSkillsCount.get(skill) || 0) + 1);
-          });
+        // Compute common_missing_skill from aggregated skills_missing[]
+        const allMissingSkills: string[] = [];
+        top3Roles.forEach(job => {
+          allMissingSkills.push(...(job.skills_missing || []));
+        });
+
+        // Count occurrences of each missing skill
+        const skillCount = new Map<string, number>();
+        allMissingSkills.forEach(skill => {
+          skillCount.set(skill, (skillCount.get(skill) || 0) + 1);
         });
 
         // Find most common missing skill
-        let skillGapOfTheWeek: string | null = null;
+        let commonMissingSkill: string | null = null;
         let maxCount = 0;
-        missingSkillsCount.forEach((count, skill) => {
+        skillCount.forEach((count, skill) => {
           if (count > maxCount) {
             maxCount = count;
-            skillGapOfTheWeek = skill;
+            commonMissingSkill = skill;
           }
         });
 
@@ -227,26 +220,14 @@ export async function GET(request: NextRequest) {
         }
 
         // Build email subject
-        const subject = topMatch
-          ? `New job match: ${topMatch.title} at ${topMatch.company}`
+        const subject = top3Roles.length > 0
+          ? `3 roles you're closest to: ${top3Roles[0].title} at ${top3Roles[0].company}`
           : 'Your weekly job opportunities';
 
         // Build payload
         const payload = {
           name: studentName,
-          topMatch: {
-            id: topMatch.id,
-            title: topMatch.title,
-            company: topMatch.company,
-            matching_score: topMatch.matching_score,
-            status: topMatch.status,
-            skills_missing: topMatch.skills_missing,
-            location: topMatch.location,
-            is_remote: topMatch.is_remote,
-            salary_range: topMatch.salary_range,
-            external_url: topMatch.external_url,
-          },
-          nearMisses: nearMisses.map(job => ({
+          roles: top3Roles.map(job => ({
             id: job.id,
             title: job.title,
             company: job.company,
@@ -258,7 +239,7 @@ export async function GET(request: NextRequest) {
             salary_range: job.salary_range,
             external_url: job.external_url,
           })),
-          skillGapOfTheWeek,
+          common_missing_skill: commonMissingSkill,
           unsubscribeToken,
         };
 
