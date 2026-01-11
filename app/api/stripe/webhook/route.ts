@@ -7,15 +7,19 @@ export const dynamic = 'force-dynamic';
 /**
  * POST /api/stripe/webhook
  * 
- * Handles Stripe webhook events to keep database in sync
+ * Handles Stripe webhook events to keep database in sync with Stripe (source of truth)
  * 
  * Required Events:
+ * - checkout.session.completed
  * - customer.subscription.created
  * - customer.subscription.updated
  * - customer.subscription.deleted
- * - invoice.payment_succeeded
+ * - invoice.paid
  * - invoice.payment_failed
- * - customer.subscription.trial_will_end
+ * 
+ * Optional Events:
+ * - payment_intent.succeeded
+ * - charge.succeeded
  * 
  * Uses lazy imports to avoid build-time errors when env vars are not set.
  */
@@ -76,6 +80,10 @@ export async function POST(request: NextRequest) {
   try {
     // Handle the event
     switch (event.type) {
+      case 'checkout.session.completed':
+        await handleCheckoutSessionCompleted(event.data.object, stripe, supabase);
+        break;
+
       case 'customer.subscription.created':
         await handleSubscriptionCreated(event.data.object, stripe, supabase);
         break;
@@ -88,16 +96,20 @@ export async function POST(request: NextRequest) {
         await handleSubscriptionDeleted(event.data.object, supabase);
         break;
 
-      case 'invoice.payment_succeeded':
-        await handlePaymentSucceeded(event.data.object, supabase);
+      case 'invoice.paid':
+        await handleInvoicePaid(event.data.object, supabase);
         break;
 
       case 'invoice.payment_failed':
-        await handlePaymentFailed(event.data.object, supabase);
+        await handleInvoicePaymentFailed(event.data.object, supabase);
         break;
 
-      case 'customer.subscription.trial_will_end':
-        await handleTrialWillEnd(event.data.object);
+      case 'payment_intent.succeeded':
+        await handlePaymentIntentSucceeded(event.data.object, supabase);
+        break;
+
+      case 'charge.succeeded':
+        await handleChargeSucceeded(event.data.object, supabase);
         break;
 
       default:
@@ -109,10 +121,111 @@ export async function POST(request: NextRequest) {
     console.error('Error processing webhook:', error);
     // Return 500 so Stripe will retry
     return NextResponse.json(
-      { error: 'Webhook processing failed' },
+      { error: 'Webhook processing failed', message: error.message },
       { status: 500 }
     );
   }
+}
+
+/**
+ * Resolve user_id from event payload
+ * Priority: client_reference_id > metadata.user_id > stripe_customers lookup
+ */
+async function resolveUserId(
+  event: any,
+  stripe: any,
+  supabase: any
+): Promise<string | null> {
+  // 1. Try client_reference_id (from checkout session)
+  if (event.client_reference_id) {
+    return event.client_reference_id;
+  }
+
+  // 2. Try metadata.user_id
+  if (event.metadata?.user_id) {
+    return event.metadata.user_id;
+  }
+
+  // 3. Try subscription metadata (if subscription is expanded in event)
+  if (event.subscription) {
+    let subscription = event.subscription;
+    if (typeof subscription === 'string') {
+      try {
+        subscription = await stripe.subscriptions.retrieve(subscription);
+      } catch (err) {
+        // Subscription retrieval failed, continue to next method
+        console.warn('Could not retrieve subscription for user_id resolution:', err);
+      }
+    }
+    
+    if (subscription && typeof subscription === 'object' && subscription.metadata?.user_id) {
+      return subscription.metadata.user_id;
+    }
+  }
+
+  // 4. Try customer lookup via stripe_customers table
+  const customerId = event.customer || event.customer?.id;
+  if (customerId) {
+    const { data: customer } = await supabase
+      .from('stripe_customers')
+      .select('user_id')
+      .eq('stripe_customer_id', customerId)
+      .single();
+
+    if (customer?.user_id) {
+      return customer.user_id;
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Ensure stripe_customers record exists
+ */
+async function ensureStripeCustomer(
+  userId: string,
+  stripeCustomerId: string,
+  supabase: any
+): Promise<void> {
+  const { error } = await supabase
+    .from('stripe_customers')
+    .upsert(
+      {
+        user_id: userId,
+        stripe_customer_id: stripeCustomerId,
+      },
+      {
+        onConflict: 'user_id',
+      }
+    );
+
+  if (error) {
+    console.error('Error upserting stripe_customer:', error);
+    throw error;
+  }
+}
+
+/**
+ * Handle checkout.session.completed event
+ */
+async function handleCheckoutSessionCompleted(
+  session: any,
+  stripe: any,
+  supabase: any
+) {
+  const userId = await resolveUserId(session, stripe, supabase);
+  if (!userId) {
+    console.error('Could not resolve user_id for checkout session:', session.id);
+    return;
+  }
+
+  const customerId = session.customer as string;
+  if (customerId) {
+    await ensureStripeCustomer(userId, customerId, supabase);
+  }
+
+  console.log('Checkout session completed:', session.id, 'user:', userId);
 }
 
 /**
@@ -123,93 +236,66 @@ async function handleSubscriptionCreated(
   stripe: any,
   supabase: any
 ) {
-  const customerId = subscription.customer as string;
   const subscriptionId = subscription.id;
+  const customerId = subscription.customer as string;
   const priceId = subscription.items.data[0]?.price.id;
 
-  // Get tier from price metadata or price ID lookup
-  const { data: tierConfig } = await supabase
-    .from('subscription_tier_config')
-    .select('tier')
-    .eq('stripe_price_id', priceId)
-    .single();
-
-  if (!tierConfig) {
-    console.error('Tier config not found for price ID:', priceId);
+  if (!priceId) {
+    console.error('No price ID found in subscription:', subscriptionId);
     return;
   }
 
-  // Get customer email to find user
-  const customer = await stripe.customers.retrieve(customerId);
-  const email = typeof customer === 'object' && !customer.deleted
-    ? customer.email
-    : null;
-
-  if (!email) {
-    console.error('Customer email not found:', customerId);
+  // Resolve user_id
+  const userId = await resolveUserId(subscription, stripe, supabase);
+  if (!userId) {
+    console.error('Could not resolve user_id for subscription:', subscriptionId);
     return;
   }
 
-  // Find user by email
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('id, user_id')
-    .eq('email', email)
-    .single();
+  // Ensure stripe_customer exists
+  await ensureStripeCustomer(userId, customerId, supabase);
 
-  if (!profile) {
-    console.error('Profile not found for email:', email);
-    return;
-  }
+  // Upsert subscription
+  const subscriptionData = {
+    id: subscriptionId,
+    user_id: userId,
+    stripe_customer_id: customerId,
+    stripe_price_id: priceId,
+    status: subscription.status,
+    cancel_at_period_end: subscription.cancel_at_period_end || false,
+    current_period_start: subscription.current_period_start
+      ? new Date(subscription.current_period_start * 1000).toISOString()
+      : null,
+    current_period_end: subscription.current_period_end
+      ? new Date(subscription.current_period_end * 1000).toISOString()
+      : null,
+    trial_start: subscription.trial_start
+      ? new Date(subscription.trial_start * 1000).toISOString()
+      : null,
+    trial_end: subscription.trial_end
+      ? new Date(subscription.trial_end * 1000).toISOString()
+      : null,
+    canceled_at: subscription.canceled_at
+      ? new Date(subscription.canceled_at * 1000).toISOString()
+      : null,
+    ended_at: subscription.ended_at
+      ? new Date(subscription.ended_at * 1000).toISOString()
+      : null,
+    updated_at: new Date().toISOString(),
+  };
 
-  // Get student profile
-  const { data: studentProfile } = await supabase
-    .from('student_profiles')
-    .select('id')
-    .eq('profile_id', profile.id)
-    .single();
-
-  if (!studentProfile) {
-    console.error('Student profile not found for profile:', profile.id);
-    return;
-  }
-
-  // Get tier config for price
-  const { data: tierConfigFull } = await supabase
-    .from('subscription_tier_config')
-    .select('price_monthly')
-    .eq('tier', tierConfig.tier)
-    .single();
-
-  // Determine status
-  const status = subscription.status === 'trialing' ? 'trial' : 'active';
-  const trialEnd = subscription.trial_end
-    ? new Date(subscription.trial_end * 1000).toISOString()
-    : null;
-
-  // Create subscription record
   const { error } = await supabase
     .from('subscriptions')
-    .insert({
-      student_profile_id: studentProfile.id,
-      tier: tierConfig.tier,
-      status,
-      price_monthly: tierConfigFull?.price_monthly || 0,
-      currency: 'GBP',
-      started_at: new Date(subscription.created * 1000).toISOString(),
-      current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
-      current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
-      trial_end_at: trialEnd,
-      stripe_subscription_id: subscriptionId,
-      stripe_customer_id: customerId,
+    .upsert(subscriptionData, {
+      onConflict: 'id',
     });
 
   if (error) {
-    console.error('Error creating subscription:', error);
+    console.error('Error upserting subscription:', error);
     throw error;
   }
 
-  console.log('Subscription created:', subscriptionId);
+  console.log('Subscription created/updated:', subscriptionId);
 }
 
 /**
@@ -221,79 +307,62 @@ async function handleSubscriptionUpdated(
   supabase: any
 ) {
   const subscriptionId = subscription.id;
+  const customerId = subscription.customer as string;
   const priceId = subscription.items.data[0]?.price.id;
 
-  // Get tier from price
-  const { data: tierConfig } = await supabase
-    .from('subscription_tier_config')
-    .select('tier, price_monthly')
-    .eq('stripe_price_id', priceId)
-    .single();
-
-  // Map Stripe status to our status
-  let status: 'active' | 'trial' | 'paused' | 'canceled' | 'expired';
-  switch (subscription.status) {
-    case 'active':
-      status = 'active';
-      break;
-    case 'trialing':
-      status = 'trial';
-      break;
-    case 'canceled':
-    case 'unpaid':
-      status = 'canceled';
-      break;
-    case 'past_due':
-      status = 'paused';
-      break;
-    default:
-      status = 'active';
+  if (!priceId) {
+    console.error('No price ID found in subscription:', subscriptionId);
+    return;
   }
 
-  // Update subscription
-  const updateData: any = {
-    status,
-    current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
-    current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
+  // Resolve user_id
+  const userId = await resolveUserId(subscription, stripe, supabase);
+  if (!userId) {
+    console.error('Could not resolve user_id for subscription:', subscriptionId);
+    return;
+  }
+
+  // Ensure stripe_customer exists
+  await ensureStripeCustomer(userId, customerId, supabase);
+
+  // Upsert subscription
+  const subscriptionData = {
+    id: subscriptionId,
+    user_id: userId,
+    stripe_customer_id: customerId,
+    stripe_price_id: priceId,
+    status: subscription.status,
+    cancel_at_period_end: subscription.cancel_at_period_end || false,
+    current_period_start: subscription.current_period_start
+      ? new Date(subscription.current_period_start * 1000).toISOString()
+      : null,
+    current_period_end: subscription.current_period_end
+      ? new Date(subscription.current_period_end * 1000).toISOString()
+      : null,
+    trial_start: subscription.trial_start
+      ? new Date(subscription.trial_start * 1000).toISOString()
+      : null,
+    trial_end: subscription.trial_end
+      ? new Date(subscription.trial_end * 1000).toISOString()
+      : null,
+    canceled_at: subscription.canceled_at
+      ? new Date(subscription.canceled_at * 1000).toISOString()
+      : null,
+    ended_at: subscription.ended_at
+      ? new Date(subscription.ended_at * 1000).toISOString()
+      : null,
     updated_at: new Date().toISOString(),
   };
 
-  // Update tier if changed
-  if (tierConfig) {
-    updateData.tier = tierConfig.tier;
-    updateData.price_monthly = tierConfig.price_monthly;
-  }
-
-  // Update canceled_at if canceled
-  if (subscription.canceled_at) {
-    updateData.canceled_at = new Date(subscription.canceled_at * 1000).toISOString();
-  }
-
-  const { data: existingSubscription } = await supabase
+  const { error } = await supabase
     .from('subscriptions')
-    .select('id, tier, student_profile_id')
-    .eq('stripe_subscription_id', subscriptionId)
-    .single();
-
-  if (existingSubscription && tierConfig && existingSubscription.tier !== tierConfig.tier) {
-    // Tier changed - log it
-    await supabase.rpc('change_subscription_tier', {
-      p_subscription_id: existingSubscription.id,
-      p_new_tier: tierConfig.tier,
-      p_effective_immediately: true,
-      p_prorated_amount: null,
+    .upsert(subscriptionData, {
+      onConflict: 'id',
     });
-  } else {
-    // Just update the subscription
-    const { error } = await supabase
-      .from('subscriptions')
-      .update(updateData)
-      .eq('stripe_subscription_id', subscriptionId);
 
-    if (error) {
-      console.error('Error updating subscription:', error);
-      throw error;
-    }
+  if (error) {
+    console.error('Error upserting subscription:', error);
+    throw error;
   }
 
   console.log('Subscription updated:', subscriptionId);
@@ -308,98 +377,310 @@ async function handleSubscriptionDeleted(
 ) {
   const subscriptionId = subscription.id;
 
+  const subscriptionData = {
+    id: subscriptionId,
+    status: 'canceled',
+    ended_at: subscription.ended_at
+      ? new Date(subscription.ended_at * 1000).toISOString()
+      : new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  };
+
   const { error } = await supabase
     .from('subscriptions')
-    .update({
-      status: 'canceled',
-      canceled_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    })
-    .eq('stripe_subscription_id', subscriptionId);
+    .upsert(subscriptionData, {
+      onConflict: 'id',
+    });
 
   if (error) {
-    console.error('Error canceling subscription:', error);
+    console.error('Error updating deleted subscription:', error);
     throw error;
   }
 
-  console.log('Subscription canceled:', subscriptionId);
+  console.log('Subscription deleted:', subscriptionId);
 }
 
 /**
- * Handle payment succeeded event
+ * Handle invoice.paid event
  */
-async function handlePaymentSucceeded(
+async function handleInvoicePaid(
   invoice: any,
   supabase: any
 ) {
-  const subscriptionId = invoice.subscription as string;
+  const invoiceId = invoice.id;
+  const subscriptionId = invoice.subscription as string | null;
+  const customerId = invoice.customer as string;
+  const paymentIntentId = invoice.payment_intent as string | null;
+  const chargeId = invoice.charge as string | null;
 
-  if (!subscriptionId) {
-    return; // One-time payment, not subscription
+  // Resolve user_id from subscription or customer
+  let userId: string | null = null;
+
+  if (subscriptionId) {
+    const { data: subscription } = await supabase
+      .from('subscriptions')
+      .select('user_id')
+      .eq('id', subscriptionId)
+      .single();
+
+    userId = subscription?.user_id || null;
   }
 
-  // Update subscription period
+  if (!userId && customerId) {
+    const { data: customer } = await supabase
+      .from('stripe_customers')
+      .select('user_id')
+      .eq('stripe_customer_id', customerId)
+      .single();
+
+    userId = customer?.user_id || null;
+  }
+
+  if (!userId) {
+    console.error('Could not resolve user_id for invoice:', invoiceId);
+    return;
+  }
+
+  // Upsert payment record
+  // Use payment_intent or charge ID if available, otherwise use invoice ID
+  const paymentId = paymentIntentId || chargeId || invoiceId;
+  const paymentData = {
+    id: paymentId,
+    user_id: userId,
+    stripe_customer_id: customerId,
+    amount: invoice.total, // For paid invoices, total is the amount paid
+    currency: invoice.currency || 'gbp',
+    status: 'succeeded',
+    stripe_invoice_id: invoiceId,
+    stripe_subscription_id: subscriptionId,
+  };
+
   const { error } = await supabase
-    .from('subscriptions')
-    .update({
-      status: 'active',
-      current_period_start: invoice.period_start
-        ? new Date(invoice.period_start * 1000).toISOString()
-        : undefined,
-      current_period_end: invoice.period_end
-        ? new Date(invoice.period_end * 1000).toISOString()
-        : undefined,
-      updated_at: new Date().toISOString(),
-    })
-    .eq('stripe_subscription_id', subscriptionId);
+    .from('payments')
+    .upsert(paymentData, {
+      onConflict: 'id',
+    });
 
   if (error) {
-    console.error('Error updating subscription after payment:', error);
+    console.error('Error upserting payment:', error);
     throw error;
   }
 
-  console.log('Payment succeeded for subscription:', subscriptionId);
+  // Update subscription period if it's a subscription invoice
+  if (subscriptionId) {
+    const { error: subError } = await supabase
+      .from('subscriptions')
+      .update({
+        current_period_start: invoice.period_start
+          ? new Date(invoice.period_start * 1000).toISOString()
+          : null,
+        current_period_end: invoice.period_end
+          ? new Date(invoice.period_end * 1000).toISOString()
+          : null,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', subscriptionId);
+
+    if (subError) {
+      console.error('Error updating subscription period:', subError);
+    }
+  }
+
+  console.log('Invoice paid:', invoiceId, 'user:', userId);
 }
 
 /**
- * Handle payment failed event
+ * Handle invoice.payment_failed event
  */
-async function handlePaymentFailed(
+async function handleInvoicePaymentFailed(
   invoice: any,
   supabase: any
 ) {
-  const subscriptionId = invoice.subscription as string;
+  const invoiceId = invoice.id;
+  const subscriptionId = invoice.subscription as string | null;
+  const customerId = invoice.customer as string;
 
-  if (!subscriptionId) {
-    return; // One-time payment, not subscription
+  // Resolve user_id
+  let userId: string | null = null;
+
+  if (subscriptionId) {
+    const { data: subscription } = await supabase
+      .from('subscriptions')
+      .select('user_id')
+      .eq('id', subscriptionId)
+      .single();
+
+    userId = subscription?.user_id || null;
   }
 
-  // Get subscription
-  const { data: subscription } = await supabase
-    .from('subscriptions')
-    .select('id')
-    .eq('stripe_subscription_id', subscriptionId)
+  if (!userId && customerId) {
+    const { data: customer } = await supabase
+      .from('stripe_customers')
+      .select('user_id')
+      .eq('stripe_customer_id', customerId)
+      .single();
+
+    userId = customer?.user_id || null;
+  }
+
+  if (!userId) {
+    console.error('Could not resolve user_id for failed invoice:', invoiceId);
+    return;
+  }
+
+  // Insert payment failure record
+  const paymentId = invoice.payment_intent || invoice.charge || `failed_${invoiceId}`;
+  const paymentData = {
+    id: paymentId,
+    user_id: userId,
+    stripe_customer_id: customerId,
+    amount: invoice.amount_due || invoice.total,
+    currency: invoice.currency || 'gbp',
+    status: 'failed',
+    stripe_invoice_id: invoiceId,
+    stripe_subscription_id: subscriptionId,
+  };
+
+  const { error } = await supabase
+    .from('payments')
+    .upsert(paymentData, {
+      onConflict: 'id',
+    });
+
+  if (error) {
+    console.error('Error upserting failed payment:', error);
+    throw error;
+  }
+
+  console.log('Invoice payment failed:', invoiceId, 'user:', userId);
+}
+
+/**
+ * Handle payment_intent.succeeded event (optional)
+ */
+async function handlePaymentIntentSucceeded(
+  paymentIntent: any,
+  supabase: any
+) {
+  const paymentIntentId = paymentIntent.id;
+  const customerId = paymentIntent.customer as string | null;
+  const invoiceId = paymentIntent.invoice as string | null;
+  const subscriptionId = paymentIntent.subscription as string | null;
+
+  if (!customerId) {
+    return; // No customer, skip
+  }
+
+  // Resolve user_id
+  let userId: string | null = null;
+
+  if (subscriptionId) {
+    const { data: subscription } = await supabase
+      .from('subscriptions')
+      .select('user_id')
+      .eq('id', subscriptionId)
+      .single();
+
+    userId = subscription?.user_id || null;
+  }
+
+  if (!userId && customerId) {
+    const { data: customer } = await supabase
+      .from('stripe_customers')
+      .select('user_id')
+      .eq('stripe_customer_id', customerId)
+      .single();
+
+    userId = customer?.user_id || null;
+  }
+
+  if (!userId) {
+    return; // Can't resolve user, skip
+  }
+
+  // Upsert payment record
+  const paymentData = {
+    id: paymentIntentId,
+    user_id: userId,
+    stripe_customer_id: customerId,
+    amount: paymentIntent.amount,
+    currency: paymentIntent.currency || 'gbp',
+    status: 'succeeded',
+    stripe_invoice_id: invoiceId,
+    stripe_subscription_id: subscriptionId,
+  };
+
+  const { error } = await supabase
+    .from('payments')
+    .upsert(paymentData, {
+      onConflict: 'id',
+    });
+
+  if (error) {
+    console.error('Error upserting payment intent:', error);
+    // Don't throw - this is optional
+  }
+
+  console.log('Payment intent succeeded:', paymentIntentId);
+}
+
+/**
+ * Handle charge.succeeded event (optional)
+ */
+async function handleChargeSucceeded(
+  charge: any,
+  supabase: any
+) {
+  const chargeId = charge.id;
+  const customerId = charge.customer as string | null;
+  const invoiceId = charge.invoice as string | null;
+  const paymentIntentId = charge.payment_intent as string | null;
+
+  if (!customerId) {
+    return; // No customer, skip
+  }
+
+  // Resolve user_id
+  const { data: customer } = await supabase
+    .from('stripe_customers')
+    .select('user_id')
+    .eq('stripe_customer_id', customerId)
     .single();
 
-  if (subscription) {
-    // Call payment failure handler
-    await supabase.rpc('handle_payment_failure', {
-      p_subscription_id: subscription.id,
-      p_grace_period_days: 7,
-    });
+  if (!customer?.user_id) {
+    return; // Can't resolve user, skip
   }
 
-  console.log('Payment failed for subscription:', subscriptionId);
-}
+  // Get subscription from invoice if available
+  let subscriptionId: string | null = null;
+  if (invoiceId) {
+    // Note: We'd need to fetch invoice from Stripe to get subscription_id
+    // For now, skip subscription_id for charges
+  }
 
-/**
- * Handle trial will end event
- */
-async function handleTrialWillEnd(subscription: any) {
-  // This is a notification event - we can log it or send email
-  // The UI should check trial_end_at and show banner
-  console.log('Trial ending soon for subscription:', subscription.id);
-  
-  // Could trigger email notification here
-  // For now, just log - UI will handle display
+  // Upsert payment record (use payment_intent if available, otherwise charge)
+  const paymentId = paymentIntentId || chargeId;
+  const paymentData = {
+    id: paymentId,
+    user_id: customer.user_id,
+    stripe_customer_id: customerId,
+    amount: charge.amount,
+    currency: charge.currency || 'gbp',
+    status: 'succeeded',
+    stripe_invoice_id: invoiceId,
+    stripe_subscription_id: subscriptionId,
+  };
+
+  const { error } = await supabase
+    .from('payments')
+    .upsert(paymentData, {
+      onConflict: 'id',
+    });
+
+  if (error) {
+    console.error('Error upserting charge:', error);
+    // Don't throw - this is optional
+  }
+
+  console.log('Charge succeeded:', chargeId);
 }
