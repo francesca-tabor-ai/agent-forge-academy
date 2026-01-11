@@ -45,6 +45,18 @@ These tables cannot be seeded without existing user accounts:
 
 **Note:** `05_seed_user_dependent.sql` contains example queries (commented out) that you can uncomment and run after users have signed up and profiles exist.
 
+## AI-Assisted Seed Generation
+
+**Quick way to generate seed scripts**: Use the Cursor prompt template in `CURSOR_PROMPT.md`
+
+1. Run schema discovery: `./scripts/discover-schema.sh`
+2. Open Cursor Chat
+3. Copy the prompt from `CURSOR_PROMPT.md`
+4. Attach your schema dump or paste it
+5. Cursor will generate seed scripts in dependency order
+
+This is faster than writing seed scripts manually!
+
 ## Example Seed Templates
 
 See `06_seed_example_templates.sql` for copy/paste templates you can adapt:
