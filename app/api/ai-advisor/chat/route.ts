@@ -612,6 +612,10 @@ function containsSensitiveInfo(message: string): boolean {
 }
 
 export async function POST(request: NextRequest) {
+  // Generate requestId for observability
+  const requestId = `req_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+  const startTime = Date.now();
+
   try {
     const supabase = await createUserSupabaseClient();
     const {
@@ -619,7 +623,14 @@ export async function POST(request: NextRequest) {
     } = await supabase.auth.getUser();
 
     if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      safeLogger.warn('AI Advisor: Unauthorized request', { requestId, userId: null });
+      return NextResponse.json(
+        { 
+          ok: false,
+          error: { code: 'UNAUTHORIZED', message: 'Session expired — please sign in again.', requestId } 
+        },
+        { status: 401 }
+      );
     }
 
     const body: ChatRequest = await request.json();
@@ -627,15 +638,31 @@ export async function POST(request: NextRequest) {
 
     if (!message || !message.trim()) {
       return NextResponse.json(
-        { error: 'Message is required' },
+        { 
+          ok: false,
+          error: { code: 'BAD_REQUEST', message: 'Message is required', requestId } 
+        },
         { status: 400 }
       );
     }
 
+    // Log request details
+    safeLogger.info('AI Advisor: Request received', {
+      requestId,
+      userId: user.id,
+      messageLength: message.length,
+      hasContext: !!context,
+      activeCourseId: context?.course?.id || null,
+      activeProjectId: context?.project?.id || null,
+      activeJobId: context?.job?.id || null,
+    });
+
     // Check for sensitive information
     if (containsSensitiveInfo(message)) {
       return NextResponse.json({
+        ok: true,
         response: `⚠️ **Security Warning:** I noticed you may have shared sensitive information (like passwords or API keys). Please redact any secrets before continuing. I can still help you, but make sure to remove any credentials from your message.\n\n**Next Steps:**\n1. Remove any passwords, API keys, or secrets from your question\n2. Rephrase your question without sensitive data\n3. If you need help with authentication, describe the problem without sharing actual credentials`,
+        requestId,
       });
     }
 
@@ -644,36 +671,81 @@ export async function POST(request: NextRequest) {
                    new URL(request.url).searchParams.get('stream') === 'true';
 
     // Load active context from database (needed for intent classification and later)
-    const activeContext = await loadActiveContext(supabase, studentProfileId);
+    // Make this non-blocking - if it fails, continue with null context
+    let activeContext: { activeCourseId: string | null; activeProjectId: string | null; activeJobId: string | null } = {
+      activeCourseId: null,
+      activeProjectId: null,
+      activeJobId: null,
+    };
+    try {
+      activeContext = await loadActiveContext(supabase, studentProfileId);
+    } catch (error) {
+      safeLogger.warn('AI Advisor: Failed to load active context, continuing without it', { requestId, error });
+    }
 
     // Fetch context data (needed for intent classification and later)
-    const contextData = await fetchContextData(context, supabase, studentProfileId, activeContext);
+    // Make this non-blocking - if it fails, continue with minimal context
+    let contextData: {
+      courseData: any;
+      projectData: any;
+      jobData: any;
+      userProfile: any;
+      activeContextIds: { courseId: string | null; projectId: string | null; jobId: string | null };
+    } = {
+      courseData: null,
+      projectData: null,
+      jobData: null,
+      userProfile: null,
+      activeContextIds: {
+        courseId: context?.course?.id || null,
+        projectId: context?.project?.id || null,
+        jobId: context?.job?.id || null,
+      },
+    };
+    try {
+      contextData = await fetchContextData(context, supabase, studentProfileId, activeContext);
+    } catch (error) {
+      safeLogger.warn('AI Advisor: Failed to fetch context data, continuing with minimal context', { requestId, error });
+      // Use fallback context from request
+      contextData.activeContextIds = {
+        courseId: context?.course?.id || null,
+        projectId: context?.project?.id || null,
+        jobId: context?.job?.id || null,
+      };
+    }
 
     // Classify intent if not provided
+    // Make this non-blocking - if it fails, use 'general' intent
     let inferredIntent: AdvisorIntent | undefined = intent as AdvisorIntent | undefined;
     let intentClassification: IntentClassification | undefined;
     
     if (!inferredIntent) {
-      // Build context for intent classification
-      const intentContext = {
-        course: contextData.courseData ? {
-          id: contextData.courseData.id,
-          slug: contextData.courseData.slug,
-          title: contextData.courseData.title,
-        } : undefined,
-        project: contextData.projectData ? {
-          id: contextData.projectData.id,
-          title: contextData.projectData.title,
-        } : undefined,
-        job: contextData.jobData ? {
-          id: contextData.jobData.id,
-          title: contextData.jobData.title,
-          company: contextData.jobData.company,
-        } : undefined,
-      };
+      try {
+        // Build context for intent classification
+        const intentContext = {
+          course: contextData.courseData ? {
+            id: contextData.courseData.id,
+            slug: contextData.courseData.slug,
+            title: contextData.courseData.title,
+          } : undefined,
+          project: contextData.projectData ? {
+            id: contextData.projectData.id,
+            title: contextData.projectData.title,
+          } : undefined,
+          job: contextData.jobData ? {
+            id: contextData.jobData.id,
+            title: contextData.jobData.title,
+            company: contextData.jobData.company,
+          } : undefined,
+        };
 
-      intentClassification = await classifyIntent(message, intentContext);
-      inferredIntent = intentClassification.intent;
+        intentClassification = await classifyIntent(message, intentContext);
+        inferredIntent = intentClassification.intent;
+      } catch (error) {
+        safeLogger.warn('AI Advisor: Intent classification failed, using general intent', { requestId, error });
+        inferredIntent = 'general';
+        intentClassification = { intent: 'general', confidence: 0.5 };
+      }
     }
 
     // Get tools to use based on inferred intent
@@ -728,116 +800,228 @@ export async function POST(request: NextRequest) {
           async start(controller) {
             const encoder = new TextEncoder();
             let fullResponse = '';
+            const STREAM_TIMEOUT_MS = 60000; // 60 seconds
+            let streamTimeout: NodeJS.Timeout | null = null;
+            let streamCompleted = false;
+
+            // Set timeout to prevent hanging
+            const timeoutPromise = new Promise<void>((resolve) => {
+              streamTimeout = setTimeout(() => {
+                if (!streamCompleted) {
+                  safeLogger.error('AI Advisor: Stream timeout', { requestId, elapsed: Date.now() - startTime });
+                  try {
+                    controller.enqueue(
+                      encoder.encode(`data: ${JSON.stringify({ 
+                        ok: false,
+                        error: { 
+                          code: 'TIMEOUT', 
+                          message: 'Response took too long. Please try again.',
+                          requestId 
+                        },
+                        done: true 
+                      })}\n\n`)
+                    );
+                    controller.close();
+                  } catch (e) {
+                    // Stream may already be closed
+                  }
+                  streamCompleted = true;
+                  resolve();
+                }
+              }, STREAM_TIMEOUT_MS);
+            });
 
             try {
-              const llm = getLLMProvider();
-              
-              // Stream response chunks
-              for await (const chunk of llm.generateStream(llmMessages, {
-                temperature: 0.7,
-                maxTokens: 2000,
-              })) {
-                if (chunk.content) {
-                  fullResponse += chunk.content;
-                  // Send chunk to client
-                  controller.enqueue(
-                    encoder.encode(`data: ${JSON.stringify({ content: chunk.content, done: false })}\n\n`)
-                  );
-                }
-
-                if (chunk.done) {
-                  // Add citations to response if chunks were retrieved and not already present
-                  let finalResponse = fullResponse;
-                  if (retrievedChunks.length > 0) {
-                    if (!finalResponse.includes('## Citations') && !finalResponse.includes('**Citations**')) {
-                      const citations = retrievedChunks.map((c, idx) => ({
-                        ref: idx + 1,
-                        courseSlug: c.courseSlug,
-                        lessonSlug: c.lessonSlug,
-                        chunkIndex: c.chunkIndex,
-                        score: c.score,
-                      }));
-
-                      const citationsText = citations
-                        .map((c) => `[${c.ref}] ${c.courseSlug}/${c.lessonSlug}`)
-                        .join('\n');
-                      finalResponse += `\n\n---\n\n**Citations:**\n${citationsText}`;
-
-                      // Send citations as final chunk
-                      controller.enqueue(
-                        encoder.encode(`data: ${JSON.stringify({ content: `\n\n---\n\n**Citations:**\n${citationsText}`, done: false })}\n\n`)
-                      );
-                    }
-                  }
-
-                  // Generate next actions based on intent and context
-                  let nextActions: NextAction[] = [];
-                  try {
-                    // Get job data if available for unlock plan generation
-                    let jobDataForUnlockPlan: { id: string; skills_missing?: string[]; recommended_for_courses?: string[] } | undefined;
-                    if (contextData.jobData) {
-                      jobDataForUnlockPlan = {
-                        id: contextData.jobData.id,
-                        skills_missing: contextData.jobData.skillsMissing,
-                        recommended_for_courses: contextData.jobData.recommendedForCourses,
-                      };
-                    }
-
-                    nextActions = await generateNextActions(
-                      inferredIntent,
-                      context,
-                      finalResponse,
-                      jobDataForUnlockPlan
-                    );
-                  } catch (error) {
-                    safeLogger.warn('Error generating next actions', error);
-                    // Continue without next actions if generation fails
-                  }
-
-                  // Store complete response in database with RAG metadata and next actions
-                  if (studentProfileId) {
-                    // Generate citations for chunks
-                    const citations = retrievedChunks.map((c, idx) => ({
-                      ref: idx + 1,
-                      courseSlug: c.courseSlug,
-                      lessonSlug: c.lessonSlug,
-                      chunkIndex: c.chunkIndex,
-                      score: c.score,
-                    }));
-
-                    await supabase.from('advisor_conversations').insert({
-                      student_profile_id: studentProfileId,
-                      conversation_id: convId,
-                      active_course_id: contextData.activeContextIds.courseId,
-                      active_project_id: contextData.activeContextIds.projectId,
-                      active_job_id: contextData.activeContextIds.jobId,
-                      role: 'assistant',
-                      content: finalResponse,
-                      metadata: {
-                        intent: inferredIntent,
-                        intentConfidence: intentClassification?.confidence,
-                        intentReasoning: intentClassification?.reasoning,
-                        tools: tools,
-                        ragChunks: retrievedChunks.length > 0 ? retrievedChunks : undefined,
-                        citations: citations.length > 0 ? citations : undefined,
-                        next_actions: nextActions.length > 0 ? nextActions : undefined,
-                      },
-                    });
-                  }
-
-                  // Send final chunk with next actions
-                  controller.enqueue(
-                    encoder.encode(`data: ${JSON.stringify({ content: '', done: true, conversationId: convId, nextActions: nextActions.length > 0 ? nextActions : undefined })}\n\n`)
-                  );
-                  controller.close();
-                }
+              // Check if LLM provider is configured
+              let llm;
+              try {
+                llm = getLLMProvider();
+              } catch (llmError: any) {
+                const errorMessage = llmError.message || 'LLM provider not configured';
+                safeLogger.error('AI Advisor: LLM provider error', { requestId, error: llmError });
+                
+                // Send error to client
+                controller.enqueue(
+                  encoder.encode(`data: ${JSON.stringify({ 
+                    ok: false,
+                    error: { 
+                      code: 'UPSTREAM_ERROR', 
+                      message: errorMessage.includes('LLM_API_KEY') 
+                        ? 'AI service is not configured. Please contact support.'
+                        : 'AI service error. Please try again.',
+                      requestId 
+                    },
+                    done: true 
+                  })}\n\n`)
+                );
+                controller.close();
+                if (streamTimeout) clearTimeout(streamTimeout);
+                return;
               }
-            } catch (error) {
-              safeLogger.error('Error in streaming LLM response', error);
-              controller.enqueue(
-                encoder.encode(`data: ${JSON.stringify({ error: 'Failed to generate response' })}\n\n`)
-              );
-              controller.close();
+              
+              const llmStartTime = Date.now();
+              
+              // Stream response chunks with timeout
+              const streamPromise = (async () => {
+                for await (const chunk of llm.generateStream(llmMessages, {
+                  temperature: 0.7,
+                  maxTokens: 2000,
+                })) {
+                  if (streamCompleted) break;
+                  
+                  if (chunk.content) {
+                    fullResponse += chunk.content;
+                    // Send chunk to client
+                    controller.enqueue(
+                      encoder.encode(`data: ${JSON.stringify({ content: chunk.content, done: false })}\n\n`)
+                    );
+                  }
+
+                  if (chunk.done) {
+                    const llmLatency = Date.now() - llmStartTime;
+                    safeLogger.info('AI Advisor: Stream completed', { 
+                      requestId, 
+                      llmLatency,
+                      responseLength: fullResponse.length 
+                    });
+
+                    // Add citations to response if chunks were retrieved and not already present
+                    let finalResponse = fullResponse;
+                    if (retrievedChunks.length > 0) {
+                      if (!finalResponse.includes('## Citations') && !finalResponse.includes('**Citations**')) {
+                        const citations = retrievedChunks.map((c, idx) => ({
+                          ref: idx + 1,
+                          courseSlug: c.courseSlug,
+                          lessonSlug: c.lessonSlug,
+                          chunkIndex: c.chunkIndex,
+                          score: c.score,
+                        }));
+
+                        const citationsText = citations
+                          .map((c) => `[${c.ref}] ${c.courseSlug}/${c.lessonSlug}`)
+                          .join('\n');
+                        finalResponse += `\n\n---\n\n**Citations:**\n${citationsText}`;
+
+                        // Send citations as final chunk
+                        controller.enqueue(
+                          encoder.encode(`data: ${JSON.stringify({ content: `\n\n---\n\n**Citations:**\n${citationsText}`, done: false })}\n\n`)
+                        );
+                      }
+                    }
+
+                    // Generate next actions based on intent and context
+                    let nextActions: NextAction[] = [];
+                    try {
+                      // Get job data if available for unlock plan generation
+                      let jobDataForUnlockPlan: { id: string; skills_missing?: string[]; recommended_for_courses?: string[] } | undefined;
+                      if (contextData.jobData) {
+                        jobDataForUnlockPlan = {
+                          id: contextData.jobData.id,
+                          skills_missing: contextData.jobData.skillsMissing,
+                          recommended_for_courses: contextData.jobData.recommendedForCourses,
+                        };
+                      }
+
+                      nextActions = await generateNextActions(
+                        inferredIntent,
+                        context,
+                        finalResponse,
+                        jobDataForUnlockPlan
+                      );
+                    } catch (error) {
+                      safeLogger.warn('AI Advisor: Error generating next actions', { requestId, error });
+                      // Continue without next actions if generation fails
+                    }
+
+                    // Store complete response in database with RAG metadata and next actions
+                    if (studentProfileId) {
+                      try {
+                        // Generate citations for chunks
+                        const citations = retrievedChunks.map((c, idx) => ({
+                          ref: idx + 1,
+                          courseSlug: c.courseSlug,
+                          lessonSlug: c.lessonSlug,
+                          chunkIndex: c.chunkIndex,
+                          score: c.score,
+                        }));
+
+                        await supabase.from('advisor_conversations').insert({
+                          student_profile_id: studentProfileId,
+                          conversation_id: convId,
+                          active_course_id: contextData.activeContextIds.courseId,
+                          active_project_id: contextData.activeContextIds.projectId,
+                          active_job_id: contextData.activeContextIds.jobId,
+                          role: 'assistant',
+                          content: finalResponse,
+                          metadata: {
+                            intent: inferredIntent,
+                            intentConfidence: intentClassification?.confidence,
+                            intentReasoning: intentClassification?.reasoning,
+                            tools: tools,
+                            ragChunks: retrievedChunks.length > 0 ? retrievedChunks : undefined,
+                            citations: citations.length > 0 ? citations : undefined,
+                            next_actions: nextActions.length > 0 ? nextActions : undefined,
+                            requestId,
+                          },
+                        });
+                      } catch (dbError) {
+                        safeLogger.warn('AI Advisor: Failed to store response in database', { requestId, error: dbError });
+                        // Continue even if DB write fails
+                      }
+                    }
+
+                    // Send final chunk with next actions
+                    controller.enqueue(
+                      encoder.encode(`data: ${JSON.stringify({ 
+                        content: '', 
+                        done: true, 
+                        conversationId: convId, 
+                        nextActions: nextActions.length > 0 ? nextActions : undefined,
+                        requestId 
+                      })}\n\n`)
+                    );
+                    controller.close();
+                    streamCompleted = true;
+                    if (streamTimeout) clearTimeout(streamTimeout);
+                  }
+                }
+              })();
+
+              // Race between stream and timeout
+              await Promise.race([streamPromise, timeoutPromise]);
+            } catch (error: any) {
+              const elapsed = Date.now() - startTime;
+              safeLogger.error('AI Advisor: Error in streaming LLM response', { 
+                requestId, 
+                error: error?.message || String(error),
+                stack: error?.stack,
+                elapsed 
+              });
+              
+              try {
+                const errorCode = error?.message?.includes('API key') || error?.message?.includes('LLM_API_KEY')
+                  ? 'UPSTREAM_ERROR'
+                  : error?.message?.includes('timeout') || error?.message?.includes('TIMEOUT')
+                  ? 'TIMEOUT'
+                  : 'UPSTREAM_ERROR';
+                
+                controller.enqueue(
+                  encoder.encode(`data: ${JSON.stringify({ 
+                    ok: false,
+                    error: { 
+                      code: errorCode, 
+                      message: error?.message || 'Failed to generate response. Please try again.',
+                      requestId 
+                    },
+                    done: true 
+                  })}\n\n`)
+                );
+                controller.close();
+              } catch (e) {
+                // Stream may already be closed
+              }
+              streamCompleted = true;
+              if (streamTimeout) clearTimeout(streamTimeout);
             }
           },
         }),
@@ -846,6 +1030,7 @@ export async function POST(request: NextRequest) {
             'Content-Type': 'text/event-stream',
             'Cache-Control': 'no-cache',
             Connection: 'keep-alive',
+            'X-Request-ID': requestId,
           },
         }
       );
@@ -853,10 +1038,38 @@ export async function POST(request: NextRequest) {
 
     // Non-streaming response
     try {
-      const llm = getLLMProvider();
+      let llm;
+      try {
+        llm = getLLMProvider();
+      } catch (llmError: any) {
+        const errorMessage = llmError.message || 'LLM provider not configured';
+        safeLogger.error('AI Advisor: LLM provider error', { requestId, error: llmError });
+        return NextResponse.json(
+          { 
+            ok: false,
+            error: { 
+              code: 'UPSTREAM_ERROR', 
+              message: errorMessage.includes('LLM_API_KEY') 
+                ? 'AI service is not configured. Please contact support.'
+                : 'AI service error. Please try again.',
+              requestId 
+            } 
+          },
+          { status: 500 }
+        );
+      }
+
+      const llmStartTime = Date.now();
       const llmResponse = await llm.generate(llmMessages, {
         temperature: 0.7,
         maxTokens: 2000,
+      });
+      const llmLatency = Date.now() - llmStartTime;
+
+      safeLogger.info('AI Advisor: Response generated', { 
+        requestId, 
+        llmLatency,
+        responseLength: llmResponse.content.length 
       });
 
       // Add citations to response if chunks were retrieved
@@ -899,56 +1112,100 @@ export async function POST(request: NextRequest) {
           jobDataForUnlockPlan
         );
       } catch (error) {
-        safeLogger.warn('Error generating next actions', error);
+        safeLogger.warn('AI Advisor: Error generating next actions', { requestId, error });
         // Continue without next actions if generation fails
       }
 
       // Store assistant response in database with RAG metadata and next actions
       if (studentProfileId) {
-        const citations = retrievedChunks.map((c, idx) => ({
-          ref: idx + 1,
-          courseSlug: c.courseSlug,
-          lessonSlug: c.lessonSlug,
-          chunkIndex: c.chunkIndex,
-          score: c.score,
-        }));
+        try {
+          const citations = retrievedChunks.map((c, idx) => ({
+            ref: idx + 1,
+            courseSlug: c.courseSlug,
+            lessonSlug: c.lessonSlug,
+            chunkIndex: c.chunkIndex,
+            score: c.score,
+          }));
 
-      await supabase.from('advisor_conversations').insert({
-        student_profile_id: studentProfileId,
-        conversation_id: convId,
-          active_course_id: contextData.activeContextIds.courseId,
-          active_project_id: contextData.activeContextIds.projectId,
-          active_job_id: contextData.activeContextIds.jobId,
-        role: 'assistant',
-          content: responseContent,
-          metadata: {
-            intent: inferredIntent,
-            intentConfidence: intentClassification?.confidence,
-            intentReasoning: intentClassification?.reasoning,
-            tools: tools,
-            ragChunks: retrievedChunks.length > 0 ? retrievedChunks : undefined,
-            citations: citations.length > 0 ? citations : undefined,
-            next_actions: nextActions.length > 0 ? nextActions : undefined,
-          },
-        });
+          await supabase.from('advisor_conversations').insert({
+            student_profile_id: studentProfileId,
+            conversation_id: convId,
+            active_course_id: contextData.activeContextIds.courseId,
+            active_project_id: contextData.activeContextIds.projectId,
+            active_job_id: contextData.activeContextIds.jobId,
+            role: 'assistant',
+            content: responseContent,
+            metadata: {
+              intent: inferredIntent,
+              intentConfidence: intentClassification?.confidence,
+              intentReasoning: intentClassification?.reasoning,
+              tools: tools,
+              ragChunks: retrievedChunks.length > 0 ? retrievedChunks : undefined,
+              citations: citations.length > 0 ? citations : undefined,
+              next_actions: nextActions.length > 0 ? nextActions : undefined,
+              requestId,
+            },
+          });
+        } catch (dbError) {
+          safeLogger.warn('AI Advisor: Failed to store response in database', { requestId, error: dbError });
+          // Continue even if DB write fails
+        }
       }
 
+      const totalLatency = Date.now() - startTime;
+      safeLogger.info('AI Advisor: Request completed', { requestId, totalLatency });
+
       return NextResponse.json({
+        ok: true,
         response: responseContent,
         conversationId: convId,
         nextActions: nextActions.length > 0 ? nextActions : undefined,
+        requestId,
       });
-    } catch (error) {
-      safeLogger.error('Error generating LLM response', error);
+    } catch (error: any) {
+      const elapsed = Date.now() - startTime;
+      safeLogger.error('AI Advisor: Error generating LLM response', { 
+        requestId, 
+        error: error?.message || String(error),
+        stack: error?.stack,
+        elapsed 
+      });
+      
+      const errorCode = error?.message?.includes('API key') || error?.message?.includes('LLM_API_KEY')
+        ? 'UPSTREAM_ERROR'
+        : error?.message?.includes('timeout') || error?.message?.includes('TIMEOUT')
+        ? 'TIMEOUT'
+        : 'UPSTREAM_ERROR';
+      
       return NextResponse.json(
-        { error: 'Failed to generate response. Please try again.' },
+        { 
+          ok: false,
+          error: { 
+            code: errorCode, 
+            message: error?.message || 'Failed to generate response. Please try again.',
+            requestId 
+          } 
+        },
         { status: 500 }
       );
     }
-  } catch (error) {
-    safeLogger.error('Error in AI advisor chat', error);
+  } catch (error: any) {
+    const elapsed = Date.now() - startTime;
+    safeLogger.error('AI Advisor: Error in chat handler', { 
+      requestId, 
+      error: error?.message || String(error),
+      stack: error?.stack,
+      elapsed 
+    });
     return NextResponse.json(
-      { error: 'Failed to process request' },
+      { 
+        ok: false,
+        error: { 
+          code: 'INTERNAL_ERROR', 
+          message: 'Failed to process request. Please try again.',
+          requestId 
+        } 
+      },
       { status: 500 }
     );
   }

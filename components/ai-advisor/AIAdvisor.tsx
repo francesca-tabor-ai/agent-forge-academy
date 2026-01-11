@@ -220,10 +220,19 @@ export function AIAdvisor({
     const sendRequest = async (retryCount = 0): Promise<void> => {
       // Create placeholder assistant message ID (for cleanup on error)
       let assistantMessageId: string | null = null;
+      const CLIENT_TIMEOUT_MS = 45000; // 45 seconds
+      let timeoutId: NodeJS.Timeout | null = null;
       
       try {
         if (enableStreaming) {
           // Use streaming (SSE)
+          const controller = new AbortController();
+          
+          // Set client-side timeout
+          timeoutId = setTimeout(() => {
+            controller.abort();
+          }, CLIENT_TIMEOUT_MS);
+
           const response = await fetch('/api/ai-advisor/chat?stream=true', {
             method: 'POST',
             headers: {
@@ -238,18 +247,31 @@ export function AIAdvisor({
               intent,
               conversationId,
             }),
+            signal: controller.signal,
           });
+
+          if (timeoutId) clearTimeout(timeoutId);
 
           if (!response.ok) {
             // Try to read error message
             let errorMessage = 'Failed to get response';
+            let requestId: string | undefined;
             try {
               const errorData = await response.json();
-              errorMessage = errorData.error || errorMessage;
+              if (errorData.error) {
+                errorMessage = errorData.error.message || errorData.error.code || errorMessage;
+                requestId = errorData.error.requestId;
+              } else {
+                errorMessage = errorData.error || errorMessage;
+              }
             } catch {
               errorMessage = response.statusText || errorMessage;
             }
-            throw new Error(errorMessage);
+            
+            const errorWithId = requestId 
+              ? `${errorMessage} (Request ID: ${requestId})`
+              : errorMessage;
+            throw new Error(errorWithId);
           }
 
           // Create placeholder assistant message (store ID for cleanup on error)
@@ -289,8 +311,15 @@ export function AIAdvisor({
                   try {
                     const parsed = JSON.parse(data);
                     
+                    // Handle error response
                     if (parsed.error) {
-                      throw new Error(parsed.error);
+                      const errorCode = parsed.error.code || 'ERROR';
+                      const errorMsg = parsed.error.message || 'Failed to generate response';
+                      const requestId = parsed.error.requestId;
+                      const errorWithId = requestId 
+                        ? `${errorMsg} (Request ID: ${requestId})`
+                        : errorMsg;
+                      throw new Error(errorWithId);
                     }
 
                     if (parsed.content !== undefined) {
@@ -314,10 +343,15 @@ export function AIAdvisor({
                       if (voiceOutputEnabled && fullContent) {
                         speakResponse(fullContent);
                       }
+                      if (timeoutId) clearTimeout(timeoutId);
                       return;
                     }
-                  } catch (e) {
-                    // Skip invalid JSON
+                  } catch (e: any) {
+                    // If it's an error object we threw, re-throw it
+                    if (e instanceof Error && e.message.includes('Request ID')) {
+                      throw e;
+                    }
+                    // Otherwise skip invalid JSON
                   }
                 }
               }
@@ -325,9 +359,17 @@ export function AIAdvisor({
           } finally {
             reader.releaseLock();
             setIsLoading(false);
+            if (timeoutId) clearTimeout(timeoutId);
           }
         } else {
           // Non-streaming fallback
+          const controller = new AbortController();
+          
+          // Set client-side timeout
+          timeoutId = setTimeout(() => {
+            controller.abort();
+          }, CLIENT_TIMEOUT_MS);
+
           const response = await fetch('/api/ai-advisor/chat', {
             method: 'POST',
             headers: {
@@ -341,21 +383,45 @@ export function AIAdvisor({
               intent,
               conversationId,
             }),
+            signal: controller.signal,
           });
+
+          if (timeoutId) clearTimeout(timeoutId);
 
           if (!response.ok) {
             // Try to read error message
             let errorMessage = 'Failed to get response';
+            let requestId: string | undefined;
             try {
               const errorData = await response.json();
-              errorMessage = errorData.error || errorMessage;
+              if (errorData.error) {
+                errorMessage = errorData.error.message || errorData.error.code || errorMessage;
+                requestId = errorData.error.requestId;
+              } else {
+                errorMessage = errorData.error || errorMessage;
+              }
             } catch {
               errorMessage = response.statusText || errorMessage;
             }
-            throw new Error(errorMessage);
+            
+            const errorWithId = requestId 
+              ? `${errorMessage} (Request ID: ${requestId})`
+              : errorMessage;
+            throw new Error(errorWithId);
           }
 
           const data = await response.json();
+          
+          // Check for error in response body (even if status is 200)
+          if (data.ok === false || data.error) {
+            const errorCode = data.error?.code || 'ERROR';
+            const errorMsg = data.error?.message || 'Failed to generate response';
+            const requestId = data.error?.requestId;
+            const errorWithId = requestId 
+              ? `${errorMsg} (Request ID: ${requestId})`
+              : errorMsg;
+            throw new Error(errorWithId);
+          }
           
           // Update conversation ID if provided
           if (data.conversationId) {
@@ -380,17 +446,28 @@ export function AIAdvisor({
           }
         }
       } catch (error: any) {
+        if (timeoutId) clearTimeout(timeoutId);
+        
+        // Check if it's a timeout error
+        const isTimeout = error.name === 'AbortError' || 
+                         error.message?.includes('timeout') || 
+                         error.message?.includes('TIMEOUT') ||
+                         error.message?.includes('took too long');
+        
         // Check if it's a network error or 5xx error that we should retry
         const isNetworkError = error.message?.includes('Failed to fetch') || 
                               error.message?.includes('NetworkError') ||
                               error.message?.includes('network') ||
-                              error.name === 'TypeError';
+                              error.name === 'TypeError' ||
+                              error.name === 'AbortError';
         const isServerError = error.message?.includes('500') || 
                              error.message?.includes('Internal Server Error') ||
                              error.message?.includes('Internal server error');
         
-        // Retry up to 2 times for network/server errors
-        if ((isNetworkError || isServerError) && retryCount < 2) {
+        // Don't retry on timeout or upstream errors (they're likely configuration issues)
+        const shouldRetry = (isNetworkError || isServerError) && !isTimeout && retryCount < 2;
+        
+        if (shouldRetry) {
           const delay = 1000 * Math.pow(2, retryCount); // Exponential backoff
           await new Promise(resolve => setTimeout(resolve, delay));
           return sendRequest(retryCount + 1);
@@ -418,12 +495,22 @@ export function AIAdvisor({
           });
         }
         
+        // Build user-friendly error message
+        let errorContent = '';
+        if (isTimeout) {
+          errorContent = "⏱️ **Taking longer than expected** — The AI response is taking too long. This might be due to high demand or a temporary issue. Please try again in a moment. Your message has been restored in the input field above.";
+        } else if (isNetworkError) {
+          errorContent = "⚠️ **Connection issue** — I couldn't reach the server. Please check your connection and try again. Your message has been restored in the input field above. You can click Send again to retry.";
+        } else if (error.message?.includes('UPSTREAM_ERROR') || error.message?.includes('not configured')) {
+          errorContent = "⚠️ **Service unavailable** — The AI service is currently unavailable. Please contact support if this persists. " + (error.message.includes('Request ID') ? `\n\n**Request ID:** ${error.message.match(/Request ID: ([^\\)]+)/)?.[1] || 'N/A'}` : '');
+        } else {
+          errorContent = `⚠️ **Error** — ${error.message || "I encountered an error. Please try again or connect with a human advisor for help."}`;
+        }
+        
         const errorMessage: Message = {
           id: (Date.now() + 1).toString(),
           role: 'assistant',
-          content: isNetworkError 
-            ? "⚠️ **Connection issue** — I couldn't reach the server. Please check your connection and try again. Your message has been restored in the input field above. You can click Send again to retry."
-            : "I'm sorry, I encountered an error. Please try again or connect with a human advisor for help.",
+          content: errorContent,
           timestamp: new Date(),
         };
         setMessages((prev) => [...prev, errorMessage]);
