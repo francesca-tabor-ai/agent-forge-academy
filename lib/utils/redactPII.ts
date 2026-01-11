@@ -48,7 +48,7 @@ export function redactPII(
   if (redactEmails) {
     redacted = redacted.replace(
       /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g,
-      preserveLength ? (match) => '[REDACTED]'.padEnd(match.length, 'X') : '[REDACTED: email]'
+      (match) => preserveLength ? '[REDACTED]'.padEnd(match.length, 'X') : '[REDACTED: email]'
     );
   }
 
@@ -57,7 +57,7 @@ export function redactPII(
     // US/UK phone formats: (555) 123-4567, 555-123-4567, +1 555 123 4567, etc.
     redacted = redacted.replace(
       /(\+?\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b/g,
-      preserveLength ? (match) => '[REDACTED]'.padEnd(match.length, 'X') : '[REDACTED: phone]'
+      (match) => preserveLength ? '[REDACTED]'.padEnd(match.length, 'X') : '[REDACTED: phone]'
     );
   }
 
@@ -65,7 +65,7 @@ export function redactPII(
   if (redactSSN) {
     redacted = redacted.replace(
       /\b\d{3}-\d{2}-\d{4}\b/g,
-      preserveLength ? '[REDACTED]'.padEnd(11, 'X') : '[REDACTED: SSN]'
+      (match) => preserveLength ? '[REDACTED]'.padEnd(match.length, 'X') : '[REDACTED: SSN]'
     );
   }
 
@@ -73,7 +73,7 @@ export function redactPII(
   if (redactCreditCards) {
     redacted = redacted.replace(
       /\b\d{4}[-.\s]?\d{4}[-.\s]?\d{4}[-.\s]?\d{4}\b/g,
-      preserveLength ? (match) => '[REDACTED]'.padEnd(match.length, 'X') : '[REDACTED: card]'
+      (match) => preserveLength ? '[REDACTED]'.padEnd(match.length, 'X') : '[REDACTED: card]'
     );
   }
 
@@ -82,7 +82,7 @@ export function redactPII(
     // Street addresses: "123 Main St", "456 Oak Avenue", etc.
     redacted = redacted.replace(
       /\b\d+\s+[A-Za-z0-9\s]+(?:Street|St|Avenue|Ave|Road|Rd|Lane|Ln|Drive|Dr|Boulevard|Blvd|Court|Ct|Way|Circle|Cir)\b/gi,
-      preserveLength ? (match) => '[REDACTED]'.padEnd(match.length, 'X') : '[REDACTED: address]'
+      (match) => preserveLength ? '[REDACTED]'.padEnd(match.length, 'X') : '[REDACTED: address]'
     );
   }
 
@@ -90,7 +90,7 @@ export function redactPII(
   if (redactURLs) {
     redacted = redacted.replace(
       /https?:\/\/[^\s]+/g,
-      preserveLength ? (match) => '[REDACTED]'.padEnd(match.length, 'X') : '[REDACTED: url]'
+      (match) => preserveLength ? '[REDACTED]'.padEnd(match.length, 'X') : '[REDACTED: url]'
     );
   }
 
@@ -100,7 +100,7 @@ export function redactPII(
     // This is a simple heuristic and may have false positives
     redacted = redacted.replace(
       /\b[A-Z][a-z]+ [A-Z][a-z]+\b/g,
-      preserveLength ? (match) => '[REDACTED]'.padEnd(match.length, 'X') : '[REDACTED: name]'
+      (match) => preserveLength ? '[REDACTED]'.padEnd(match.length, 'X') : '[REDACTED: name]'
     );
   }
 
