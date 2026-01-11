@@ -22,7 +22,8 @@ Run scripts in this order (following dependency order):
 14. **`14_seed_email_outbox.sql`** - Seeds email outbox: email queue for weekly learning and jobs emails (requires existing student_profiles)
 15. **`15_seed_event_attendance.sql`** - Seeds event attendance: RSVP and attendance records for events (requires existing events and profiles)
 16. **`16_seed_event_presentations.sql`** - Seeds event presentations: links students to projects they're presenting at events (requires existing events, student_profiles, and portfolio_projects)
-17. **`99_verify.sql`** - Verification script to check seed data integrity
+17. **`17_seed_lesson_chunks.sql`** - Seeds lesson chunks: chunked lesson content for RAG (requires existing courses)
+18. **`99_verify.sql`** - Verification script to check seed data integrity
 
 ## Dependency Order
 
@@ -34,6 +35,9 @@ The seed scripts follow this dependency order based on foreign key relationships
 - `events` - No dependencies
 - `jobs` - No dependencies
 - `offers` - No dependencies
+
+### Content-Dependent Tables (Require existing courses)
+- `lesson_chunks` - Depends on `courses` (course_slug references)
 
 ### User-Dependent Tables (Require existing auth.users/profiles)
 These tables cannot be seeded without existing user accounts:
@@ -305,6 +309,27 @@ psql "$SUPABASE_DB_URL" -f supabase/seed/99_verify.sql
     - Historical presentations for past demo day (Q4 2024)
     - Simple seed using ROW_NUMBER() for ordering
   - Helps demonstrate the event presentation and demo day functionality
+
+### Lesson Chunks (`17_seed_lesson_chunks.sql`)
+- **lesson_chunks**: Chunked lesson content for RAG (Retrieval Augmented Generation)
+  - Note: Typically populated programmatically via the `indexLesson` function, but seed file available for testing
+  - Requires existing `courses` (from 02_seed_content.sql) - course_slug references must exist
+  - Creates example chunks that demonstrate the structure:
+    - Chunks for prompt engineering lessons (3 chunks)
+    - Chunks for multi-agent systems lessons (3 chunks)
+    - Chunks for vibe coding lessons (3 chunks)
+    - Bulk seeding pattern for multiple courses
+  - Each chunk includes:
+    - course_slug and lesson_slug references
+    - chunk_index (0-indexed order within lesson)
+    - content (200-1000 characters for optimal RAG performance)
+    - content_length (character count)
+    - embedding (NULL in seed data - typically generated programmatically via OpenAI API)
+    - metadata (JSONB with title, module, week, order, sectionHeaders)
+  - Respects unique constraint: only one chunk per (course_slug, lesson_slug, chunk_index)
+  - Note: In production, chunks are generated from markdown lesson files using the `chunkLesson` function
+  - Embeddings are generated via OpenAI API (1536 dimensions) and stored as vector(1536)
+  - Helps demonstrate the RAG indexing and retrieval functionality
 
 ## Schema Discovery
 
