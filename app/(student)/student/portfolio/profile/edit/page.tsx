@@ -26,7 +26,7 @@ export default async function ProfileEditPage() {
   // Get or create student profile
   let { data: studentProfile } = await supabase
     .from('student_profiles')
-    .select('id, headline, bio, skills, location, linkedin_url, github_url, website_url, headshot_image_url')
+    .select('id, full_name, headline, bio, skills, location, linkedin_url, github_url, website_url, headshot_image_url')
     .eq('profile_id', profile.id)
     .single();
 
@@ -36,6 +36,7 @@ export default async function ProfileEditPage() {
       .from('student_profiles')
       .insert({
         profile_id: profile.id,
+        full_name: null,
         headline: '',
         bio: null,
         skills: [],
@@ -45,7 +46,7 @@ export default async function ProfileEditPage() {
         website_url: null,
         headshot_image_url: null,
       })
-      .select('id, headline, bio, skills, location, linkedin_url, github_url, website_url, headshot_image_url')
+      .select('id, full_name, headline, bio, skills, location, linkedin_url, github_url, website_url, headshot_image_url')
       .single();
 
     if (createError) {
@@ -62,6 +63,7 @@ export default async function ProfileEditPage() {
       <h1 className="text-2xl font-semibold text-gray-900 mb-8">Edit Profile</h1>
       <ProfileEditForm
         initialData={{
+          full_name: studentProfile?.full_name || '',
           headline: studentProfile?.headline || '',
           bio: studentProfile?.bio || '',
           skills: (studentProfile?.skills as string[]) || [],

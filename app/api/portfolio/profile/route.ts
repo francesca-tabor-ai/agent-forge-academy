@@ -36,7 +36,7 @@ export async function GET() {
     // Get or create student profile
     let { data: studentProfile } = await supabase
       .from('student_profiles')
-      .select('id, headline, bio, skills, location, linkedin_url, github_url, website_url, headshot_image_url')
+      .select('id, full_name, headline, bio, skills, location, linkedin_url, github_url, website_url, headshot_image_url')
       .eq('profile_id', profile.id)
       .single();
 
@@ -46,6 +46,7 @@ export async function GET() {
         .from('student_profiles')
         .insert({
           profile_id: profile.id,
+          full_name: null,
           headline: '',
           bio: null,
           skills: [],
@@ -55,7 +56,7 @@ export async function GET() {
           website_url: null,
           headshot_image_url: null,
         })
-        .select('id, headline, bio, skills, location, linkedin_url, github_url, website_url, headshot_image_url')
+        .select('id, full_name, headline, bio, skills, location, linkedin_url, github_url, website_url, headshot_image_url')
         .single();
 
       if (createError) {
@@ -107,7 +108,7 @@ export async function PATCH(request: Request) {
     }
 
     const body = await request.json();
-    let { headline, bio, skills, location, linkedin_url, github_url, website_url } = body;
+    let { full_name, headline, bio, skills, location, linkedin_url, github_url, website_url } = body;
 
     // Normalize empty strings to null for URL fields
     const normalizeUrl = (url: string | null | undefined): string | null => {
@@ -119,6 +120,48 @@ export async function PATCH(request: Request) {
     linkedin_url = normalizeUrl(linkedin_url);
     github_url = normalizeUrl(github_url);
     website_url = normalizeUrl(website_url);
+
+    // Validate full_name
+    const fieldErrors: Record<string, string> = {};
+    full_name = full_name?.trim() || '';
+    if (!full_name || full_name.length < 2) {
+      fieldErrors.full_name = 'Full name is required and must be at least 2 characters';
+    } else if (full_name.length > 80) {
+      fieldErrors.full_name = 'Full name must be 80 characters or less';
+    }
+
+    // Validate headline
+    headline = headline?.trim() || '';
+    if (!headline || headline.length < 5) {
+      fieldErrors.headline = 'Professional headline must be at least 5 characters';
+    }
+
+    // Validate bio length if provided
+    if (bio && bio.trim().length > 2000) {
+      fieldErrors.bio = 'Bio must be 2000 characters or less';
+    }
+
+    // Validate skills array
+    if (!Array.isArray(skills)) {
+      fieldErrors.skills = 'Skills must be an array';
+    } else if (skills.length > 30) {
+      fieldErrors.skills = 'Maximum 30 skills allowed';
+    }
+
+    // Return validation errors if any
+    if (Object.keys(fieldErrors).length > 0) {
+      return NextResponse.json(
+        { 
+          ok: false, 
+          error: { 
+            code: 'VALIDATION_ERROR', 
+            message: 'Validation failed',
+            fieldErrors 
+          } 
+        },
+        { status: 400 }
+      );
+    }
 
     // Validate URLs if provided
     const isValidUrl = (url: string | null): boolean => {
@@ -133,27 +176,45 @@ export async function PATCH(request: Request) {
 
     if (linkedin_url && !isValidUrl(linkedin_url)) {
       return NextResponse.json(
-        { ok: false, error: { code: 'INVALID_URL', message: 'Invalid LinkedIn URL format' } },
+        { 
+          ok: false, 
+          error: { 
+            code: 'VALIDATION_ERROR', 
+            message: 'Invalid LinkedIn URL format',
+            fieldErrors: { linkedin_url: 'Please enter a valid URL' }
+          } 
+        },
         { status: 400 }
       );
     }
 
     if (github_url && !isValidUrl(github_url)) {
       return NextResponse.json(
-        { ok: false, error: { code: 'INVALID_URL', message: 'Invalid GitHub URL format' } },
+        { 
+          ok: false, 
+          error: { 
+            code: 'VALIDATION_ERROR', 
+            message: 'Invalid GitHub URL format',
+            fieldErrors: { github_url: 'Please enter a valid URL' }
+          } 
+        },
         { status: 400 }
       );
     }
 
     if (website_url && !isValidUrl(website_url)) {
       return NextResponse.json(
-        { ok: false, error: { code: 'INVALID_URL', message: 'Invalid website URL format' } },
+        { 
+          ok: false, 
+          error: { 
+            code: 'VALIDATION_ERROR', 
+            message: 'Invalid website URL format',
+            fieldErrors: { website_url: 'Please enter a valid URL' }
+          } 
+        },
         { status: 400 }
       );
     }
-
-    // Validate headline - will check after we know if profile exists
-    headline = headline?.trim() || '';
 
     // Get user's profile
     const { data: profile } = await supabase
@@ -182,11 +243,11 @@ export async function PATCH(request: Request) {
 
     if (!studentProfile) {
       // Create student profile if it doesn't exist
-      // Allow empty headline on initial create
       const { data: newProfile, error: createError } = await supabase
         .from('student_profiles')
         .insert({
           profile_id: profile.id,
+          full_name: full_name || null,
           headline: headline || '',
           bio: bio || null,
           skills: skills || [],
@@ -195,7 +256,7 @@ export async function PATCH(request: Request) {
           github_url: github_url,
           website_url: website_url,
         })
-        .select('id, headline, bio, skills, location, linkedin_url, github_url, website_url, headshot_image_url')
+        .select('id, full_name, headline, bio, skills, location, linkedin_url, github_url, website_url, headshot_image_url')
         .single();
 
       if (createError) {
@@ -213,17 +274,10 @@ export async function PATCH(request: Request) {
     }
 
     // Update existing student profile (RLS will enforce ownership)
-    // Require headline to be at least 5 chars on update
-    if (!headline || headline.length < 5) {
-      return NextResponse.json(
-        { ok: false, error: { code: 'VALIDATION_ERROR', message: 'Professional headline must be at least 5 characters' } },
-        { status: 400 }
-      );
-    }
-
     const { data: updatedProfile, error } = await supabase
       .from('student_profiles')
       .update({
+        full_name: full_name || null,
         headline,
         bio: bio || null,
         skills: skills || [],
@@ -233,7 +287,7 @@ export async function PATCH(request: Request) {
         website_url: website_url,
       })
       .eq('id', studentProfile.id)
-      .select('id, headline, bio, skills, location, linkedin_url, github_url, website_url, headshot_image_url')
+      .select('id, full_name, headline, bio, skills, location, linkedin_url, github_url, website_url, headshot_image_url')
       .single();
 
     if (error) {

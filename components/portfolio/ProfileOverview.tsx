@@ -6,6 +6,7 @@ import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
 
 interface ProfileOverviewProps {
+  fullName?: string | null;
   headline?: string | null;
   bio?: string | null;
   primaryRoles?: string[];
@@ -13,7 +14,7 @@ interface ProfileOverviewProps {
   headshotImageUrl?: string | null;
 }
 
-export function ProfileOverview({ headline, bio, primaryRoles = [], coreSkills = [], headshotImageUrl }: ProfileOverviewProps) {
+export function ProfileOverview({ fullName, headline, bio, primaryRoles = [], coreSkills = [], headshotImageUrl }: ProfileOverviewProps) {
   const [isBioExpanded, setIsBioExpanded] = useState(false);
   const [showAllSkills, setShowAllSkills] = useState(false);
   
@@ -66,7 +67,7 @@ export function ProfileOverview({ headline, bio, primaryRoles = [], coreSkills =
       </div>
 
       <div className="space-y-4">
-        {/* Headshot and Headline */}
+        {/* Headshot and Name/Headline */}
         <div className="flex items-start gap-4">
           {headshotImageUrl && (
             <div className="flex-shrink-0">
@@ -81,11 +82,14 @@ export function ProfileOverview({ headline, bio, primaryRoles = [], coreSkills =
               </div>
             </div>
           )}
-          {headline && (
-            <div className="flex-1">
-              <h3 className="text-xl font-semibold text-gray-900">{headline}</h3>
-            </div>
-          )}
+          <div className="flex-1">
+            {fullName && (
+              <h3 className="text-2xl font-semibold text-gray-900 mb-1">{fullName}</h3>
+            )}
+            {headline && (
+              <p className={`text-lg text-gray-700 ${fullName ? '' : 'font-semibold'}`}>{headline}</p>
+            )}
+          </div>
         </div>
 
         {bio && (

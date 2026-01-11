@@ -8,6 +8,7 @@ import { HeadshotUpload } from './HeadshotUpload';
 
 interface ProfileEditFormProps {
   initialData: {
+    full_name?: string;
     headline: string;
     bio: string;
     skills: string[];
@@ -25,6 +26,7 @@ export function ProfileEditForm({ initialData }: ProfileEditFormProps) {
   const [error, setError] = useState<string | null>(null);
   const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved'>('idle');
   const [formData, setFormData] = useState({
+    full_name: initialData.full_name || '',
     ...initialData,
     headshot_image_url: initialData.headshot_image_url || null,
   });
@@ -32,6 +34,13 @@ export function ProfileEditForm({ initialData }: ProfileEditFormProps) {
 
   const validate = () => {
     const errors: Record<string, string> = {};
+
+    // Validate full_name (required)
+    if (!formData.full_name || formData.full_name.trim().length < 2) {
+      errors.full_name = 'Full name is required and must be at least 2 characters';
+    } else if (formData.full_name.trim().length > 80) {
+      errors.full_name = 'Full name must be 80 characters or less';
+    }
 
     if (!formData.headline || formData.headline.trim().length < 5) {
       errors.headline = 'Professional headline must be at least 5 characters';
@@ -41,8 +50,16 @@ export function ProfileEditForm({ initialData }: ProfileEditFormProps) {
       errors.bio = 'Bio should be at least 50 characters (recommended)';
     }
 
+    if (formData.bio && formData.bio.trim().length > 2000) {
+      errors.bio = 'Bio must be 2000 characters or less';
+    }
+
     if (formData.skills.length < 3) {
       errors.skills = 'At least 3 skills are recommended';
+    }
+
+    if (formData.skills.length > 30) {
+      errors.skills = 'Maximum 30 skills allowed';
     }
 
     // URL validation
@@ -85,6 +102,7 @@ export function ProfileEditForm({ initialData }: ProfileEditFormProps) {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          full_name: formData.full_name.trim(),
           headline: formData.headline.trim(),
           bio: formData.bio.trim(),
           skills: formData.skills,
@@ -95,23 +113,37 @@ export function ProfileEditForm({ initialData }: ProfileEditFormProps) {
         }),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        const data = await response.json();
-        const errorMessage = data.error?.message || data.error || 'Failed to update profile';
-        
         // Handle specific error codes
         if (response.status === 401) {
           router.push('/login');
           return;
         }
         
-        throw new Error(errorMessage);
+        // Handle validation errors with field-level errors
+        if (data.error?.code === 'VALIDATION_ERROR' && data.error?.fieldErrors) {
+          setValidationErrors(data.error.fieldErrors);
+          setError(data.error.message || 'Please fix the errors below');
+        } else {
+          const errorMessage = data.error?.message || data.error || 'Failed to update profile';
+          setError(errorMessage);
+        }
+        
+        setSaveState('idle');
+        return;
       }
 
+      // Success - show saved state and redirect
       setSaveState('saved');
+      setError(null);
+      setValidationErrors({});
+      
+      // Redirect with query param for toast notification
       setTimeout(() => {
-        router.push('/student/portfolio');
-      }, 1000);
+        router.push('/student/portfolio?profileSaved=1');
+      }, 500);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
       setSaveState('idle');
@@ -130,9 +162,32 @@ export function ProfileEditForm({ initialData }: ProfileEditFormProps) {
 
       {saveState === 'saved' && (
         <div className="bg-green-50 border border-green-200 rounded-md p-4">
-          <p className="text-sm text-green-800">Profile saved successfully</p>
+          <p className="text-sm text-green-800 font-medium">Profile saved successfully</p>
         </div>
       )}
+
+      {/* Full Name Field */}
+      <div>
+        <label htmlFor="full_name" className="block text-sm font-medium text-gray-700 mb-2">
+          Full Name <span className="text-red-500">*</span>
+        </label>
+        <input
+          id="full_name"
+          type="text"
+          required
+          value={formData.full_name}
+          onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
+          className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent ${
+            validationErrors.full_name ? 'border-red-300' : 'border-gray-300'
+          }`}
+          placeholder="e.g., Francesca Tabor"
+          maxLength={80}
+        />
+        {validationErrors.full_name && (
+          <p className="mt-1 text-xs text-red-600">{validationErrors.full_name}</p>
+        )}
+        <p className="mt-1 text-xs text-gray-500">Shown on your public profile and to employers.</p>
+      </div>
 
       {/* Headshot Upload */}
       <HeadshotUpload
@@ -285,7 +340,7 @@ export function ProfileEditForm({ initialData }: ProfileEditFormProps) {
           disabled={loading || saveState === 'saving'}
           className="btn-primary text-sm disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {saveState === 'saving' ? 'Saving...' : saveState === 'saved' ? 'Saved' : 'Save Changes'}
+          {saveState === 'saving' ? 'Saving...' : saveState === 'saved' ? 'Saved ✓' : 'Save Changes'}
         </button>
       </div>
     </form>

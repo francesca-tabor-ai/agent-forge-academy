@@ -7,6 +7,8 @@ import { RecruiterVisibilitySection } from '@/components/portfolio/RecruiterVisi
 import { PortfolioAdvisorSection } from '@/components/portfolio/PortfolioAdvisorSection';
 import { ProjectsView } from '@/components/portfolio/ProjectsView';
 import { AutoImportSection } from '@/components/portfolio/AutoImportSection';
+import { ProfileSavedToast } from '@/components/portfolio/ProfileSavedToast';
+import { Suspense } from 'react';
 
 export default async function PortfolioPage() {
   const supabase = await createUserSupabaseClient();
@@ -32,7 +34,7 @@ export default async function PortfolioPage() {
   // Get student profile
   const { data: studentProfile } = await supabase
     .from('student_profiles')
-    .select('id, visibility, bio, headline, skills, location, linkedin_url, github_url, website_url, headshot_image_url')
+    .select('id, visibility, full_name, bio, headline, skills, location, linkedin_url, github_url, website_url, headshot_image_url')
     .eq('profile_id', profile.id)
     .single();
 
@@ -81,6 +83,11 @@ export default async function PortfolioPage() {
 
   return (
     <div className="space-y-8">
+      {/* Toast Notification */}
+      <Suspense fallback={null}>
+        <ProfileSavedToast />
+      </Suspense>
+
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -143,6 +150,7 @@ export default async function PortfolioPage() {
 
       {/* Profile Overview */}
       <ProfileOverview
+        fullName={studentProfile?.full_name || null}
         headline={headline}
         bio={studentProfile?.bio || null}
         primaryRoles={primaryRoles}
