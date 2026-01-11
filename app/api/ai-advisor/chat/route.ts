@@ -319,13 +319,26 @@ function buildSystemPrompt(
 }
 
 /**
+ * Job with matching score for sorting
+ */
+interface JobWithScore {
+  id: string;
+  title: string;
+  company: string;
+  matchingScore: number;
+  status: string;
+  skills: string[];
+  skillsMissing: string[];
+}
+
+/**
  * Fetch top matching jobs for student
  */
 async function fetchMatchingJobs(
   supabase: any,
   studentProfileId: string | null,
   limit: number = 5
-): Promise<any[]> {
+): Promise<JobWithScore[]> {
   if (!studentProfileId) return [];
 
   try {
@@ -380,7 +393,7 @@ async function fetchMatchingJobs(
     }));
 
     // Calculate matches
-    const jobsWithScores = jobs.map((job: any) => {
+    const jobsWithScores: JobWithScore[] = jobs.map((job: any) => {
       const matchResult = calculateJobMatch(
         {
           id: job.id,
@@ -406,7 +419,7 @@ async function fetchMatchingJobs(
 
     // Sort and return top matches
     return jobsWithScores
-      .sort((a, b) => b.matchingScore - a.matchingScore)
+      .sort((a: JobWithScore, b: JobWithScore) => b.matchingScore - a.matchingScore)
       .slice(0, limit);
   } catch (error) {
     safeLogger.error('Error fetching matching jobs', error);
