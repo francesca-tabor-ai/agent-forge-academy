@@ -222,7 +222,7 @@ export async function guardCourseAccess(
           // Get subscription to provide helpful error message
           const { data: subscription } = await supabase
             .from('subscriptions')
-            .select('tier, status, current_period_end')
+            .select('tier, status, current_period_end, trial_end_at')
             .eq('student_profile_id', studentProfile.id)
             .single();
 
