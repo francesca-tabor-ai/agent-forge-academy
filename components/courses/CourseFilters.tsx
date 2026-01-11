@@ -4,20 +4,24 @@ import { useState, useEffect, useMemo } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { CourseMetadata } from '@/lib/course-metadata';
 
+type Course = {
+  id: string | null;
+  slug: string;
+  title: string;
+  description: string | null;
+  thumbnail_url: string | null;
+  duration_weeks: number | null;
+  difficulty_level: string | null;
+  is_published: boolean;
+  created_at: string | null;
+  updated_at: string | null;
+  hasContent: boolean;
+  metadata?: CourseMetadata;
+};
+
 interface CourseFiltersProps {
-  courses: Array<{
-    id: string | null;
-    slug: string;
-    title: string;
-    description: string | null;
-    thumbnail_url: string | null;
-    duration_weeks: number | null;
-    difficulty_level: string | null;
-    is_published: boolean;
-    created_at: string | null;
-    metadata?: CourseMetadata;
-  }>;
-  onFilteredCoursesChange: (filtered: typeof courses) => void;
+  courses: Array<Course>;
+  onFilteredCoursesChange: (filtered: Array<Course>) => void;
 }
 
 const TRACKS = [

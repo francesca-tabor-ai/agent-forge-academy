@@ -368,18 +368,18 @@ async function generateAIResponse(
     if (intent === 'generate_cv' || lowerMessage.includes('cv') || lowerMessage.includes('resume') || lowerMessage.includes('tailor')) {
       response += `## CV for ${jobTitle} at ${company}\n\n`;
       response += `### 1-Page ATS-Friendly Format\n\n`;
-      response += `**${userProfile?.headline || 'Your Name'}**\n`;
-      response += `${userProfile?.headline || 'Software Developer'}\n\n`;
+      response += `**${contextData?.userProfile?.headline || 'Your Name'}**\n`;
+      response += `${contextData?.userProfile?.headline || 'Software Developer'}\n\n`;
       response += `**PROFESSIONAL SUMMARY**\n`;
       response += `Experienced developer with expertise in ${job?.skills?.slice(0, 3).join(', ') || 'relevant technologies'}. `;
-      response += `Strong background in ${userProfile?.skills?.slice(0, 2).join(' and ') || 'software development'}.\n\n`;
+      response += `Strong background in ${contextData?.userProfile?.skills?.slice(0, 2).join(' and ') || 'software development'}.\n\n`;
       response += `**KEY SKILLS**\n`;
       response += `${(job?.skills || []).slice(0, 8).join(' • ')}\n\n`;
       response += `**RELEVANT PROJECTS**\n`;
       response += `• ${contextData?.projectData?.title || 'Project Name'}: ${contextData?.projectData?.description?.substring(0, 80) || 'Description'}\n`;
       response += `  Technologies: ${(contextData?.projectData?.techStack || []).join(', ')}\n\n`;
       response += `**KEYWORD COVERAGE**\n`;
-      response += `✅ Matched: ${job?.skills?.filter((s: string) => userProfile?.skills?.includes(s)).length || 0} / ${job?.skills?.length || 0} required skills\n`;
+      response += `✅ Matched: ${job?.skills?.filter((s: string) => contextData?.userProfile?.skills?.includes(s)).length || 0} / ${job?.skills?.length || 0} required skills\n`;
       if (job?.skillsMissing && job.skillsMissing.length > 0) {
         response += `⚠️ Missing: ${job.skillsMissing.join(', ')}\n`;
       }
@@ -388,7 +388,7 @@ async function generateAIResponse(
       response += `## Cover Letter: ${jobTitle} at ${company}\n\n`;
       response += `Dear Hiring Manager,\n\n`;
       response += `I am writing to express my interest in the ${jobTitle} position at ${company}. `;
-      response += `With my experience in ${userProfile?.skills?.slice(0, 2).join(' and ') || 'software development'}, `;
+      response += `With my experience in ${contextData?.userProfile?.skills?.slice(0, 2).join(' and ') || 'software development'}, `;
       response += `I am excited about the opportunity to contribute to your team.\n\n`;
       response += `**Relevant Experience:**\n`;
       if (contextData?.projectData) {

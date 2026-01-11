@@ -95,20 +95,23 @@ export async function GET(request: NextRequest) {
     let mostRecentConversation: any[] | null = null;
     let mostRecentTime = 0;
 
-    conversationGroups.forEach((messages) => {
+    for (const messages of conversationGroups.values()) {
       const latestTime = Math.max(...messages.map((m) => new Date(m.created_at).getTime()));
       if (latestTime > mostRecentTime) {
         mostRecentTime = latestTime;
         mostRecentConversation = messages;
       }
-    });
+    }
 
     if (!mostRecentConversation || mostRecentConversation.length === 0) {
       return NextResponse.json({ messages: [], conversationId: null });
     }
 
+    // TypeScript needs this assignment to properly narrow the type
+    const conversation = mostRecentConversation;
+
     // Convert to message format
-    const messages = mostRecentConversation.map((conv) => ({
+    const messages = conversation.map((conv) => ({
       id: conv.id,
       role: conv.role,
       content: conv.content,
@@ -118,7 +121,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       messages,
-      conversationId: mostRecentConversation[0].conversation_id,
+      conversationId: conversation[0].conversation_id,
     });
   } catch (error) {
     console.error('Error fetching conversations:', error);

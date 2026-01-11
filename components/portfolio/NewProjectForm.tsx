@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { RichTextEditor } from './RichTextEditor';
-import { RichTextEditor } from './RichTextEditor';
 
 export function NewProjectForm() {
   const router = useRouter();

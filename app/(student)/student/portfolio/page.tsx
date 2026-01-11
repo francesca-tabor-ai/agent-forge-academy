@@ -42,14 +42,23 @@ export default async function PortfolioPage() {
     .eq('student_profile_id', studentProfile?.id)
     .order('created_at', { ascending: false });
 
+  // Get CV data
+  const { data: cv } = await supabase
+    .from('student_cvs')
+    .select('file_name, uploaded_at, visibility')
+    .eq('student_profile_id', studentProfile?.id)
+    .order('uploaded_at', { ascending: false })
+    .limit(1)
+    .single();
+
+  const hasCV = !!cv;
+
   // Calculate portfolio completion percentage
   // Scoring: Profile (25%), CV (25%), Projects (25%), Visibility (25%)
   let completionScore = 0;
   const hasProfile = studentProfile && studentProfile.bio && studentProfile.bio.length > 50;
   if (hasProfile) completionScore += 25;
 
-  // TODO: Check if CV exists (currently mocked)
-  const hasCV = false; // Mock: will be replaced with actual CV check
   if (hasCV) completionScore += 25;
 
   const hasProjects = projects && projects.length >= 2;
@@ -62,17 +71,6 @@ export default async function PortfolioPage() {
   const headline = studentProfile?.headline || null;
   const primaryRoles: string[] = []; // Can be derived from skills or separate field in future
   const coreSkills = (studentProfile?.skills as string[]) || [];
-
-  // Get CV data
-  const { data: cv } = await supabase
-    .from('student_cvs')
-    .select('file_name, uploaded_at, visibility')
-    .eq('student_profile_id', studentProfile?.id)
-    .order('uploaded_at', { ascending: false })
-    .limit(1)
-    .single();
-
-  const hasCV = !!cv;
   const cvFileName = cv?.file_name || null;
   const cvLastUpdated = cv?.uploaded_at || null;
   const cvVisibility = cv?.visibility || null;

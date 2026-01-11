@@ -63,6 +63,9 @@ export function ProjectCard({
   // Determine status from description length if not provided
   const displayStatus = status || (description && description.length > 50 ? 'complete' : 'draft');
 
+  // Gallery images (currently not passed as prop, so default to empty array)
+  const galleryImages: string[] = [];
+
   if (viewMode === 'card') {
     return (
       <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-gray-300 transition-colors flex flex-col">

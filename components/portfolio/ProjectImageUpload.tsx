@@ -67,7 +67,7 @@ export function ProjectImageUpload({
           setUploading(false);
           return;
         }
-        onImagesChange(coverImageUrl, [...images, imageUrl]);
+        onImagesChange(coverImageUrl ?? null, [...images, imageUrl]);
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Upload failed');
@@ -94,7 +94,7 @@ export function ProjectImageUpload({
 
   const removeImage = (index: number) => {
     const newImages = images.filter((_, i) => i !== index);
-    onImagesChange(coverImageUrl, newImages);
+    onImagesChange(coverImageUrl ?? null, newImages);
   };
 
   const setAsCover = (imageUrl: string) => {
@@ -106,7 +106,7 @@ export function ProjectImageUpload({
     const newImages = [...images];
     const [removed] = newImages.splice(fromIndex, 1);
     newImages.splice(toIndex, 0, removed);
-    onImagesChange(coverImageUrl, newImages);
+    onImagesChange(coverImageUrl ?? null, newImages);
   };
 
   return (
