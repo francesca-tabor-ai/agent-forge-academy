@@ -4,6 +4,20 @@ import { calculateJobMatch, type Job, determineJobStatus } from '@/lib/jobs/matc
 import { getStudentDataForMatching } from '@/lib/jobs/student-data-cache';
 
 /**
+ * Get ISO week number for a date
+ * ISO weeks start on Monday, week 1 is the first week with a Thursday
+ * @param date - Date to get week number for
+ * @returns ISO week number (1-53)
+ */
+function getISOWeekNumber(date: Date): number {
+  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const dayNum = d.getUTCDay() || 7;
+  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  return Math.ceil((((d.getTime() - yearStart.getTime()) / 86400000) + 1) / 7);
+}
+
+/**
  * GET /api/cron/weekly-jobs-emails
  * 
  * Weekly cron endpoint to enqueue job opportunity emails for students.
@@ -243,9 +257,14 @@ export async function GET(request: NextRequest) {
           unsubscribeToken,
         };
 
-        // Generate dedupe_key: email_type:YYYY-MM-DD:student_profile_id
-        const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
-        const dedupeKey = `weekly_jobs:${today}:${studentProfile.id}`;
+        // Generate dedupe_key: email_type:YYYY-WW:student_profile_id
+        // YYYY-WW format (ISO week number) allows safe re-runs within the same week
+        const now = new Date();
+        const year = now.getFullYear();
+        // Get ISO week number
+        const weekNumber = getISOWeekNumber(now);
+        const weekStr = weekNumber.toString().padStart(2, '0');
+        const dedupeKey = `weekly_jobs:${year}-W${weekStr}:${studentProfile.id}`;
 
         // Enqueue to email_outbox with new structure
         // Note: Using service role client (createServerSupabaseClient) bypasses RLS
