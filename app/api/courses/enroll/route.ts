@@ -62,6 +62,31 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Course is not available for enrollment' }, { status: 403 });
     }
 
+    // Check subscription access using the database function
+    const { data: hasAccess, error: accessError } = await supabase
+      .rpc('has_course_access', {
+        p_user_id: user.id,
+        p_course_id: courseId,
+      });
+
+    if (accessError) {
+      console.error('Error checking course access:', accessError);
+      return NextResponse.json(
+        { error: 'Failed to verify course access' },
+        { status: 500 }
+      );
+    }
+
+    if (!hasAccess) {
+      return NextResponse.json(
+        { 
+          error: 'Course access denied. Please upgrade your subscription to access this course.',
+          requires_subscription: true 
+        },
+        { status: 403 }
+      );
+    }
+
     // Check if already enrolled
     const { data: existingEnrollment } = await supabase
       .from('course_enrollments')
