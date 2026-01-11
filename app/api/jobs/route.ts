@@ -116,9 +116,21 @@ export async function GET(request: NextRequest) {
   const startTime = Date.now();
   
   try {
+    // Extract query params for logging
+    const { searchParams } = new URL(request.url);
+    const queryParams = {
+      status: searchParams.get('status'),
+      matchMin: searchParams.get('matchMin'),
+      matchMax: searchParams.get('matchMax'),
+      skills: searchParams.get('skills'),
+      sort: searchParams.get('sort'),
+      search: searchParams.get('search'),
+    };
+
     safeLogger.info(`[${requestId}] GET /api/jobs - Request started`, {
       timestamp: new Date().toISOString(),
       url: request.url,
+      queryParams,
     });
 
     const supabase = await createUserSupabaseClient();
@@ -130,7 +142,11 @@ export async function GET(request: NextRequest) {
     } = await supabase.auth.getUser();
 
     if (userError) {
-      safeLogger.error(`[${requestId}] Error getting user`, userError);
+      safeLogger.error(`[${requestId}] Error getting user`, {
+        error: userError,
+        code: userError.code,
+        message: userError.message,
+      });
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -144,7 +160,10 @@ export async function GET(request: NextRequest) {
     // Validate query parameters
     const queryValidation = validateQueryParams(request);
     if (queryValidation.errors.length > 0) {
-      safeLogger.warn(`[${requestId}] Invalid query parameters`, { errors: queryValidation.errors });
+      safeLogger.warn(`[${requestId}] Invalid query parameters`, { 
+        errors: queryValidation.errors,
+        queryParams,
+      });
       return NextResponse.json(
         { error: 'Invalid query parameters', details: queryValidation.errors },
         { status: 400 }
@@ -204,12 +223,30 @@ export async function GET(request: NextRequest) {
 
     // Fetch all active jobs (we'll compute matching on-the-fly for all of them)
     const jobsStartTime = Date.now();
-    const { data: jobs, error: jobsError } = await supabase
-      .from('jobs')
-      .select('*')
-      .eq('is_active', true)
-      .order('is_featured', { ascending: false }) // Featured jobs first (before sorting by match)
-      .order('created_at', { ascending: false }); // Then by newest
+    let jobs: any[] | null = null;
+    let jobsError: any = null;
+    
+    try {
+      const result = await supabase
+        .from('jobs')
+        .select('*')
+        .eq('is_active', true)
+        .order('is_featured', { ascending: false }) // Featured jobs first (before sorting by match)
+        .order('created_at', { ascending: false }); // Then by newest
+      
+      jobs = result.data;
+      jobsError = result.error;
+    } catch (dbError: any) {
+      safeLogger.error(`[${requestId}] Database query exception`, {
+        error: dbError?.message || 'Unknown database error',
+        stack: dbError?.stack,
+        name: dbError?.name,
+      });
+      return NextResponse.json(
+        { error: 'Database query failed', requestId },
+        { status: 500 }
+      );
+    }
 
     if (jobsError) {
       safeLogger.error(`[${requestId}] Error fetching jobs from database`, {
@@ -217,11 +254,18 @@ export async function GET(request: NextRequest) {
         code: jobsError.code,
         message: jobsError.message,
         details: jobsError.details,
+        hint: jobsError.hint,
       });
       return NextResponse.json(
-        { error: 'Failed to fetch jobs', details: jobsError.message },
+        { error: 'Failed to fetch jobs', details: jobsError.message, requestId },
         { status: 500 }
       );
+    }
+
+    // Defensive: handle null jobs array
+    if (!jobs) {
+      safeLogger.warn(`[${requestId}] Jobs query returned null, using empty array`);
+      jobs = [];
     }
 
     const jobsTime = Date.now() - jobsStartTime;
@@ -324,12 +368,16 @@ export async function GET(request: NextRequest) {
     safeLogger.error(`[${requestId}] GET /api/jobs - Unhandled error`, {
       error: error?.message || 'Unknown error',
       stack: error?.stack,
+      name: error?.name,
+      code: error?.code,
       duration: `${totalTime}ms`,
+      url: request.url,
     });
     return NextResponse.json(
       {
         error: 'Internal server error',
         requestId,
+        message: process.env.NODE_ENV === 'development' ? error?.message : undefined,
       },
       { status: 500 }
     );

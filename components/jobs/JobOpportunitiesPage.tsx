@@ -118,17 +118,48 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
           const errorData = await response.json();
           errorMessage = errorData.error || errorMessage;
           if (errorData.details) {
-            errorMessage += `: ${errorData.details}`;
+            if (Array.isArray(errorData.details)) {
+              errorMessage += `: ${errorData.details.join(', ')}`;
+            } else {
+              errorMessage += `: ${errorData.details}`;
+            }
           }
-        } catch {
-          // If JSON parsing fails, use status text
-          errorMessage = response.statusText || errorMessage;
+          if (errorData.requestId) {
+            console.error(`[Jobs API Error] Request ID: ${errorData.requestId}`);
+          }
+        } catch (parseError) {
+          // If JSON parsing fails, try to read as text
+          try {
+            const text = await response.text();
+            if (text) {
+              errorMessage = text.length > 100 ? `${text.substring(0, 100)}...` : text;
+            } else {
+              errorMessage = response.statusText || errorMessage;
+            }
+          } catch {
+            errorMessage = response.statusText || errorMessage;
+          }
+        }
+        
+        // Determine if error is retryable
+        if (response.status >= 500 || response.status === 429) {
+          retryable = true;
+        } else if (response.status === 401 || response.status === 403) {
+          retryable = false;
+          errorMessage = 'Authentication error. Please refresh the page.';
+        } else if (response.status === 400) {
+          retryable = false;
         }
         
         throw new Error(errorMessage);
       }
       
       const data = await response.json();
+      
+      // Validate response structure
+      if (!data || typeof data !== 'object') {
+        throw new Error('Invalid response format from server');
+      }
       
       // Map API response (snake_case) to component format
       // API returns computed matching_score, status, skills_missing
@@ -156,9 +187,11 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
       
       const isNetworkError = error.message?.includes('Failed to fetch') || 
                             error.message?.includes('NetworkError') ||
-                            error.name === 'TypeError';
+                            error.name === 'TypeError' ||
+                            error.message?.includes('network');
       const isServerError = error.message?.includes('Server error') || 
-                           error.message?.includes('500');
+                           error.message?.includes('500') ||
+                           error.message?.includes('Internal server error');
       
       setError({
         message: error.message || 'Failed to fetch jobs. Please check your connection and try again.',

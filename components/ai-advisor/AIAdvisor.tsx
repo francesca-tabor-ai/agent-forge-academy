@@ -218,6 +218,9 @@ export function AIAdvisor({
     const enableStreaming = localStorage.getItem('aiAdvisorStreaming') !== 'false'; // Default to true
 
     const sendRequest = async (retryCount = 0): Promise<void> => {
+      // Create placeholder assistant message ID (for cleanup on error)
+      let assistantMessageId: string | null = null;
+      
       try {
         if (enableStreaming) {
           // Use streaming (SSE)
@@ -249,17 +252,17 @@ export function AIAdvisor({
             throw new Error(errorMessage);
           }
 
-        // Create placeholder assistant message
-        const assistantMessageId = (Date.now() + 1).toString();
-        const assistantMessage: Message = {
-          id: assistantMessageId,
-          role: 'assistant',
-          content: '',
-          timestamp: new Date(),
-          context: activeContext,
-          intent,
-        };
-        setMessages((prev) => [...prev, assistantMessage]);
+          // Create placeholder assistant message (store ID for cleanup on error)
+          assistantMessageId = (Date.now() + 1).toString();
+          const assistantMessage: Message = {
+            id: assistantMessageId,
+            role: 'assistant',
+            content: '',
+            timestamp: new Date(),
+            context: activeContext,
+            intent,
+          };
+          setMessages((prev) => [...prev, assistantMessage]);
 
           // Read streaming response
           const reader = response.body?.getReader();
@@ -380,9 +383,11 @@ export function AIAdvisor({
         // Check if it's a network error or 5xx error that we should retry
         const isNetworkError = error.message?.includes('Failed to fetch') || 
                               error.message?.includes('NetworkError') ||
+                              error.message?.includes('network') ||
                               error.name === 'TypeError';
         const isServerError = error.message?.includes('500') || 
-                             error.message?.includes('Internal Server Error');
+                             error.message?.includes('Internal Server Error') ||
+                             error.message?.includes('Internal server error');
         
         // Retry up to 2 times for network/server errors
         if ((isNetworkError || isServerError) && retryCount < 2) {
@@ -397,11 +402,27 @@ export function AIAdvisor({
         // Restore the user's message in the input for retry
         setInputMessage(messageToSend);
         
+        // Remove the placeholder assistant message if it exists (for streaming)
+        if (assistantMessageId) {
+          setMessages((prev) => {
+            return prev.filter(msg => msg.id !== assistantMessageId);
+          });
+        } else {
+          // Fallback: remove last empty assistant message
+          setMessages((prev) => {
+            const lastMessage = prev[prev.length - 1];
+            if (lastMessage && lastMessage.role === 'assistant' && !lastMessage.content) {
+              return prev.slice(0, -1);
+            }
+            return prev;
+          });
+        }
+        
         const errorMessage: Message = {
           id: (Date.now() + 1).toString(),
           role: 'assistant',
           content: isNetworkError 
-            ? "⚠️ **Connection issue** — I couldn't reach the server. Please check your connection and try again. Your message has been restored in the input field."
+            ? "⚠️ **Connection issue** — I couldn't reach the server. Please check your connection and try again. Your message has been restored in the input field above. You can click Send again to retry."
             : "I'm sorry, I encountered an error. Please try again or connect with a human advisor for help.",
           timestamp: new Date(),
         };

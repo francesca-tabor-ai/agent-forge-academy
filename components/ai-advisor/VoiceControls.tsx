@@ -333,6 +333,8 @@ export function VoiceControls({
             setError('Voice input isn\'t available right now. You can still type your message.');
             // Don't console.error repeatedly - just set the error state
             // The error boundary and UI will handle displaying it gracefully
+            // Stop listening to prevent repeated errors
+            stopListening();
           } else if (event.error === 'aborted') {
             // User or system aborted, don't show error
             setError(null);
