@@ -43,7 +43,12 @@ export default function Sidebar({ role }: SidebarProps) {
         ];
       case 'admin':
         return [
-          { href: '/admin', label: 'Admin' },
+          { href: '/admin', label: 'Overview' },
+          { href: '/admin/users', label: 'Users' },
+          { href: '/admin/subscriptions', label: 'Subscriptions' },
+          { href: '/admin/api-tester', label: 'API Tester' },
+          { href: '/admin/logs', label: 'Logs' },
+          { href: '/admin/bulk-upload', label: 'Bulk Upload' },
         ];
       default:
         return [];
