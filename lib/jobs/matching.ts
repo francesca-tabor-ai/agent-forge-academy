@@ -40,7 +40,7 @@ export interface Job {
 
 export interface MatchingResult {
   score0to100: number; // Main score (0-100)
-  status: 'recommended' | 'unlocked' | 'locked' | 'stretch';
+  status: 'recommended' | 'unlocked' | 'locked' | 'stretch' | 'new';
   missingSkills: string[];
   explanation: string;
   // Detailed breakdown (for debugging/transparency)
