@@ -7,7 +7,17 @@ import { ChatPanel } from './ChatPanel';
 import { QuickActions } from './QuickActions';
 import { ContextSelectorModal } from './ContextSelectorModal';
 import { HumanEscalationModal } from './HumanEscalationModal';
-import { VoiceControls } from './VoiceControls';
+import { VoiceControls, triggerVoiceSpeak } from './VoiceControls';
+import { VoiceErrorBoundary } from './VoiceErrorBoundary';
+
+export interface NextAction {
+  type: 'start_course' | 'open_course' | 'open_lesson' | 'open_job' | 'view_portfolio' | 'add_project' | 'browse_jobs' | 'unlock_plan';
+  label: string;
+  courseSlug?: string;
+  lessonSlug?: string;
+  jobId?: string;
+  deepLink: string;
+}
 
 export interface Message {
   id: string;
@@ -20,6 +30,7 @@ export interface Message {
     job?: { id: string; title: string; company: string };
   };
   intent?: string; // For quick actions
+  nextActions?: NextAction[]; // Structured next actions for UI buttons
 }
 
 export interface ActiveContext {
@@ -111,6 +122,7 @@ export function AIAdvisor({
                   timestamp: new Date(msg.timestamp),
                   context: loadedContext,
                   intent: msg.intent,
+                  nextActions: msg.metadata?.next_actions || undefined, // Load next actions from metadata
                 }));
                 
                 // Replace initial greeting with loaded messages
@@ -179,25 +191,9 @@ export function AIAdvisor({
       .replace(/\n+/g, '. ') // Replace newlines with pauses
       .trim();
 
-    if (cleanText && window.speechSynthesis) {
-      // Cancel any ongoing speech
-      window.speechSynthesis.cancel();
-
-      const utterance = new SpeechSynthesisUtterance(cleanText);
-      utterance.rate = 1.0;
-      utterance.pitch = 1.0;
-      utterance.volume = 1.0;
-
-      // Try to use a natural-sounding voice
-      const voices = window.speechSynthesis.getVoices();
-      const preferredVoice = voices.find(
-        (voice) => voice.name.includes('Google') || voice.name.includes('Samantha') || voice.name.includes('Alex')
-      );
-      if (preferredVoice) {
-        utterance.voice = preferredVoice;
-      }
-
-      window.speechSynthesis.speak(utterance);
+    if (cleanText) {
+      // Trigger voice speak via VoiceControls component
+      triggerVoiceSpeak(cleanText);
     }
   }, [voiceOutputEnabled]);
 
@@ -352,6 +348,7 @@ export function AIAdvisor({
           timestamp: new Date(),
           context: activeContext,
           intent, // Store intent for writeback actions
+          nextActions: data.nextActions || undefined, // Include next actions from API
         };
 
         setMessages((prev) => [...prev, assistantMessage]);
@@ -514,18 +511,38 @@ export function AIAdvisor({
 
         {/* Composer */}
         <div className="border-t border-gray-200 p-4">
-          {/* Voice Controls */}
-          <VoiceControls
-            onTranscript={(text) => {
-              setInputMessage(text);
-              handleSendMessage(text);
+          {/* Voice Controls - positioned above input, wrapped in error boundary */}
+          <VoiceErrorBoundary
+            onError={(error, errorInfo) => {
+              console.error('VoiceControls error caught by boundary:', error, errorInfo);
+              // Don't break text chat - error boundary handles the UI
             }}
-            disabled={isLoading}
-            voiceOutputEnabled={voiceOutputEnabled}
-            onVoiceOutputToggle={handleVoiceOutputToggle}
-          />
+          >
+            <VoiceControls
+              onTranscript={(text) => {
+                // On transcript finalization, call the existing send handler
+                // Wrap in try-catch to ensure text chat still works if voice fails
+                try {
+                  handleSendMessage(text);
+                } catch (error) {
+                  console.error('Error sending voice transcript:', error);
+                  // Text input is still available, so user can retry
+                }
+              }}
+              onSpeak={(text) => {
+                // Called when speech starts
+              }}
+              onStopSpeaking={() => {
+                // Called when speech stops
+              }}
+              disabled={isLoading}
+              autoSpeak={voiceOutputEnabled}
+              voiceOutputEnabled={voiceOutputEnabled}
+              onVoiceOutputToggle={handleVoiceOutputToggle}
+            />
+          </VoiceErrorBoundary>
           
-          <form onSubmit={handleSubmit} className="flex gap-2">
+          <form onSubmit={handleSubmit} className="flex gap-2 mt-3">
             <input
               type="text"
               value={inputMessage}

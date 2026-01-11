@@ -1,6 +1,6 @@
 'use client';
 
-import { Message, ActiveContext } from './AIAdvisor';
+import { Message, ActiveContext, NextAction } from './AIAdvisor';
 import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 import { useState } from 'react';
@@ -55,6 +55,28 @@ export function ChatPanel({ messages, isLoading, chatEndRef, activeContext, onAp
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
     // Could show a toast notification here
+  };
+
+  const getActionIcon = (type: NextAction['type']): string => {
+    switch (type) {
+      case 'start_course':
+      case 'open_course':
+        return '📚';
+      case 'open_lesson':
+        return '📖';
+      case 'open_job':
+        return '💼';
+      case 'view_portfolio':
+        return '📁';
+      case 'add_project':
+        return '➕';
+      case 'browse_jobs':
+        return '🔍';
+      case 'unlock_plan':
+        return '🎯';
+      default:
+        return '→';
+    }
   };
 
   const getContextLink = (context: Message['context']) => {
@@ -154,6 +176,22 @@ export function ChatPanel({ messages, isLoading, chatEndRef, activeContext, onAp
                 >
                   Copy
                 </button>
+              </div>
+            )}
+
+            {/* Next Actions (structured action buttons) */}
+            {msg.role === 'assistant' && msg.nextActions && msg.nextActions.length > 0 && (
+              <div className="mt-3 flex flex-wrap gap-2">
+                {msg.nextActions.map((action: NextAction, idx: number) => (
+                  <Link
+                    key={idx}
+                    href={action.deepLink}
+                    className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium inline-flex items-center gap-2"
+                  >
+                    {getActionIcon(action.type)}
+                    {action.label}
+                  </Link>
+                ))}
               </div>
             )}
             

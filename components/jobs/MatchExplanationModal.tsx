@@ -7,10 +7,13 @@ interface JobOpportunity {
   id: string;
   title: string;
   company: string;
-  matchingScore: number;
-  status?: 'new' | 'unlocked' | 'recommended' | 'locked' | 'stretch';
+  matchingScore?: number;
+  matching_score?: number; // Computed from API
+  status?: 'new' | 'unlocked' | 'recommended' | 'locked' | 'stretch'; // Computed from API
   skills: string[];
   skillsMissing?: string[];
+  skills_missing?: string[]; // Computed from API
+  explanation?: string; // Computed explanation from API
 }
 
 interface MatchExplanationModalProps {
@@ -39,39 +42,54 @@ export function MatchExplanationModal({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch match explanation data
-    const fetchExplanation = async () => {
+    // Use computed explanation from API if available, otherwise generate from job data
+    const loadExplanation = async () => {
       try {
-        // TODO: Replace with actual API call when backend is ready
-        // For now, generate mock data based on job data
-        const mockExplanation: MatchExplanation = {
-          matchedSkills: job.skills.slice(0, Math.ceil(job.skills.length * 0.7)),
-          missingSkills: job.skillsMissing || [],
+        // If job has explanation field from API, parse and use it
+        if (job.explanation) {
+          // Parse the explanation text to extract structured data
+          // The explanation is a formatted string, so we'll extract what we can
+          const missingSkills = job.skills_missing ?? job.skillsMissing ?? [];
+          const matchedSkills = job.skills.filter(
+            skill => !missingSkills.includes(skill)
+          );
+
+          const explanation: MatchExplanation = {
+            matchedSkills,
+            missingSkills,
+            contributingProjects: [], // Would need to parse from explanation or fetch separately
+            suggestedCourses: [], // Would need to parse from explanation or fetch separately
+            impactEstimates: {},
+          };
+          setExplanation(explanation);
+          setLoading(false);
+          return;
+        }
+
+        // Fallback: Generate from job data (no explanation field available)
+        const missingSkills = job.skills_missing ?? job.skillsMissing ?? [];
+        const matchedSkills = job.skills.filter(
+          skill => !missingSkills.includes(skill)
+        );
+
+        const explanation: MatchExplanation = {
+          matchedSkills,
+          missingSkills,
           contributingProjects: [
-            { id: '1', title: 'E-commerce Platform', url: '/student/portfolio' },
-            { id: '2', title: 'AI Chatbot', url: '/student/portfolio' },
+            { id: '1', title: 'View your portfolio', url: '/student/portfolio' },
           ],
-          suggestedCourses: [
-            { slug: 'agentic-rag', title: 'Agentic RAG Systems' },
-            { slug: 'ai-recommender-systems', title: 'AI Recommender Systems' },
-          ],
-          impactEstimates: {
-            addProject: '+5%',
-            completeCourse: {
-              course: 'Agentic RAG Systems',
-              impact: '+8%',
-            },
-          },
+          suggestedCourses: [],
+          impactEstimates: {},
         };
-        setExplanation(mockExplanation);
+        setExplanation(explanation);
         setLoading(false);
       } catch (error) {
-        console.error('Error fetching match explanation:', error);
+        console.error('Error loading match explanation:', error);
         setLoading(false);
       }
     };
 
-    fetchExplanation();
+    loadExplanation();
   }, [job]);
 
   return (
@@ -79,7 +97,7 @@ export function MatchExplanationModal({
       <div className="bg-white rounded-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto">
         <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
           <h2 className="text-xl font-semibold text-gray-900">
-            Why {job.matchingScore}% Match?
+            Why {(job.matching_score ?? job.matchingScore ?? 0)}% Match?
           </h2>
           <button
             onClick={onClose}
@@ -94,24 +112,38 @@ export function MatchExplanationModal({
             <p className="text-sm text-gray-500">Loading explanation...</p>
           ) : explanation ? (
             <>
+              {/* Computed Explanation Text (if available from API) */}
+              {job.explanation && (
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                  <h3 className="text-sm font-semibold text-blue-900 mb-2">Match Breakdown</h3>
+                  <pre className="text-xs text-blue-800 whitespace-pre-wrap font-mono">
+                    {job.explanation}
+                  </pre>
+                </div>
+              )}
+
               {/* Matched Skills */}
               <div>
                 <h3 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
                   <span className="text-green-600">✅</span> Matched Skills
                 </h3>
                 <div className="flex flex-wrap gap-2">
-                  {explanation.matchedSkills.map((skill, idx) => (
-                    <span
-                      key={idx}
-                      className="px-3 py-1.5 bg-green-50 text-green-700 text-sm font-medium rounded-lg border border-green-200"
-                    >
-                      {skill}
-                    </span>
-                  ))}
+                  {explanation.matchedSkills.length > 0 ? (
+                    explanation.matchedSkills.map((skill, idx) => (
+                      <span
+                        key={idx}
+                        className="px-3 py-1.5 bg-green-50 text-green-700 text-sm font-medium rounded-lg border border-green-200"
+                      >
+                        {skill}
+                      </span>
+                    ))
+                  ) : (
+                    <span className="text-sm text-gray-500">No matched skills found</span>
+                  )}
                 </div>
               </div>
 
-              {/* Missing Skills */}
+              {/* Missing Skills (computed from API) */}
               {explanation.missingSkills.length > 0 && (
                 <div>
                   <h3 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">

@@ -1,6 +1,8 @@
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
-import { calculateJobMatch, determineJobStatus, type StudentProfile, type PortfolioProject, type CourseEnrollment, type Job } from '@/lib/jobs/matching';
+import { calculateJobMatch, type Job } from '@/lib/jobs/matching';
+import { getStudentDataForMatching } from '@/lib/jobs/student-data-cache';
+import { safeLogger } from '@/lib/utils/redactPII';
 
 export async function GET() {
   try {
@@ -26,10 +28,10 @@ export async function GET() {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    // Get student profile with skills
+    // Get student profile ID
     const { data: studentProfile } = await supabase
       .from('student_profiles')
-      .select('id, skills')
+      .select('id')
       .eq('profile_id', profile.id)
       .single();
 
@@ -37,50 +39,23 @@ export async function GET() {
       return NextResponse.json({ error: 'Student profile not found' }, { status: 404 });
     }
 
-    // Get enrolled courses
-    const { data: enrollments } = await supabase
-      .from('course_enrollments')
-      .select('course_id, progress_percentage, completed_at')
-      .eq('student_profile_id', studentProfile.id);
+    // Fetch student data with caching (request-scope memoization + Next.js cache)
+    const studentData = await getStudentDataForMatching(supabase, studentProfile.id);
 
-    // Get portfolio projects with tech_stack
-    const { data: projects } = await supabase
-      .from('portfolio_projects')
-      .select('id, tech_stack, title, description')
-      .eq('student_profile_id', studentProfile.id);
-
-    // Fetch active jobs
+    // Fetch all active jobs (we'll compute matching on-the-fly for all of them)
     const { data: jobs, error } = await supabase
       .from('jobs')
       .select('*')
       .eq('is_active', true)
-      .limit(50); // Fetch more jobs for better matching
+      .order('is_featured', { ascending: false }) // Featured jobs first (before sorting by match)
+      .order('created_at', { ascending: false }); // Then by newest
 
     if (error) {
-      console.error('Error fetching jobs:', error);
+      safeLogger.error('Error fetching jobs', error);
       return NextResponse.json({ error: 'Failed to fetch jobs' }, { status: 500 });
     }
 
-    // Prepare student data for matching
-    const studentProfileData: StudentProfile = {
-      id: studentProfile.id,
-      skills: (studentProfile.skills as string[]) || [],
-    };
-
-    const portfolioProjectsData: PortfolioProject[] = (projects || []).map((p: any) => ({
-      id: p.id,
-      tech_stack: (p.tech_stack as string[]) || [],
-      title: p.title,
-      description: p.description,
-    }));
-
-    const enrolledCoursesData: CourseEnrollment[] = (enrollments || []).map((e: any) => ({
-      course_id: e.course_id,
-      progress_percentage: e.progress_percentage,
-      completed_at: e.completed_at,
-    }));
-
-    // Calculate matching scores for each job
+    // Calculate matching scores for each job (on-the-fly, no DB writes)
     const jobsWithScores = (jobs || []).map((job: any) => {
       const jobData: Job = {
         id: job.id,
@@ -89,38 +64,45 @@ export async function GET() {
         experience_level: job.experience_level,
       };
 
+      // Compute match for this job
       const matchResult = calculateJobMatch(
         jobData,
-        studentProfileData,
-        enrolledCoursesData,
-        portfolioProjectsData
+        studentData.studentProfile,
+        studentData.enrollments,
+        studentData.portfolioProjects
       );
 
-      // Determine status based on calculated score
-      const status = determineJobStatus(matchResult.matchingScore);
-
+      // Return all job fields with computed matching_score, skills_missing, and status
       return {
         id: job.id,
         title: job.title,
         company: job.company,
-        matchingScore: matchResult.matchingScore,
-        status,
+        description: job.description,
+        job_type: job.job_type,
+        experience_level: job.experience_level,
+        location: job.location,
+        is_remote: job.is_remote,
+        salary_range: job.salary_range,
+        status: matchResult.status, // Computed status: recommended/unlocked/locked/stretch/new
+        matching_score: matchResult.score0to100, // Computed matching score (0-100)
         skills: jobData.skills,
-        skillsMissing: matchResult.skillsMissing,
-        isLocked: status === 'locked',
-        isStretch: status === 'stretch',
+        skills_missing: matchResult.missingSkills, // Computed missing skills
+        recommended_for_courses: job.recommended_for_courses || [],
+        external_url: job.external_url,
+        application_deadline: job.application_deadline,
+        is_active: job.is_active,
+        is_featured: job.is_featured,
+        created_at: job.created_at,
+        updated_at: job.updated_at,
       };
     });
 
-    // Sort by matching score (descending)
-    jobsWithScores.sort((a, b) => b.matchingScore - a.matchingScore);
+    // Sort by matching score (descending) - best matches first
+    jobsWithScores.sort((a, b) => b.matching_score - a.matching_score);
 
-    // Limit to top 20
-    const topJobs = jobsWithScores.slice(0, 20);
-
-    return NextResponse.json({ jobs: topJobs });
+    return NextResponse.json({ jobs: jobsWithScores });
   } catch (error) {
-    console.error('Error in jobs API:', error);
+    safeLogger.error('Error in jobs API', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

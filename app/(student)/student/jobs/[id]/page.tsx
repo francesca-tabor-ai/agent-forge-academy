@@ -1,6 +1,7 @@
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { redirect, notFound } from 'next/navigation';
 import Link from 'next/link';
+import { cookies } from 'next/headers';
 
 interface Job {
   id: string;
@@ -49,19 +50,55 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
 
   const { id } = await params;
 
-  // Fetch the job
-  const { data: job, error } = await supabase
-    .from('jobs')
-    .select('*')
-    .eq('id', id)
-    .eq('is_active', true)
-    .single();
+  // Fetch the job from API (uses computed matching fields)
+  // Get auth cookies to forward to API
+  const cookieStore = await cookies();
+  const cookieHeader = cookieStore.toString();
 
-  if (error || !job) {
-    notFound();
+  // Determine base URL for API call
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
+
+  let jobData: Job;
+  try {
+    const response = await fetch(`${baseUrl}/api/jobs/${id}`, {
+      headers: {
+        Cookie: cookieHeader,
+      },
+      cache: 'no-store', // Always get fresh computed values
+    });
+
+    if (!response.ok) {
+      if (response.status === 404) {
+        notFound();
+      }
+      throw new Error('Failed to fetch job');
+    }
+
+    jobData = (await response.json()) as Job;
+  } catch (error) {
+    console.error('Error fetching job from API:', error);
+    // Fallback: if API fails, still try to show the job (but without computed fields)
+    // This ensures the page doesn't break if API is temporarily unavailable
+    const { data: job, error: dbError } = await supabase
+      .from('jobs')
+      .select('*')
+      .eq('id', id)
+      .eq('is_active', true)
+      .single();
+
+    if (dbError || !job) {
+      notFound();
+    }
+
+    // Use static values as fallback (not ideal, but better than breaking)
+    jobData = {
+      ...job,
+      status: (job.status as any) || 'new',
+      matching_score: job.matching_score || 0,
+      skills_missing: (job.skills_missing as string[]) || [],
+    } as Job;
   }
-
-  const jobData = job as Job;
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -201,13 +238,27 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
           </div>
         </div>
 
-        {/* Missing Skills (for locked/stretch roles) */}
+        {/* Match Explanation (computed from API) */}
+        {(jobData as any).explanation && (
+          <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <h3 className="text-sm font-semibold text-blue-900 mb-2">Match Breakdown</h3>
+            <pre className="text-xs text-blue-800 whitespace-pre-wrap font-sans">
+              {(jobData as any).explanation}
+            </pre>
+          </div>
+        )}
+
+        {/* Missing Skills (computed from API) */}
         {jobData.skills_missing && jobData.skills_missing.length > 0 && (
           <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
             <p className="text-sm font-medium text-yellow-800 mb-2">
-              {jobData.status === 'locked' ? '🔒 One step away' : '🎯 Close match'}
+              {jobData.status === 'locked' ? '🔒 One step away' : jobData.status === 'stretch' ? '🎯 Close match' : '⚠️ Missing Skills'}
             </p>
-            <p className="text-xs text-yellow-700 mb-2">Complete these skills to unlock this role:</p>
+            <p className="text-xs text-yellow-700 mb-2">
+              {jobData.status === 'locked' || jobData.status === 'stretch' 
+                ? 'Complete these skills to improve your match:' 
+                : 'These skills are required for this role:'}
+            </p>
             <div className="flex flex-wrap gap-2">
               {jobData.skills_missing.map((skill, idx) => (
                 <span

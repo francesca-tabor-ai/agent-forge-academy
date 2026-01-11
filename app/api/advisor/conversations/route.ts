@@ -117,6 +117,7 @@ export async function GET(request: NextRequest) {
       content: conv.content,
       timestamp: new Date(conv.created_at),
       intent: conv.metadata?.intent,
+      metadata: conv.metadata, // Include full metadata for next_actions
     }));
 
     return NextResponse.json({

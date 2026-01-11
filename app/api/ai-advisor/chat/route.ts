@@ -1,5 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createUserSupabaseClient } from '@/lib/supabase/server';
+import { getLLMProvider, type LLMMessage } from '@/lib/ai/llm';
+import { retrieveChunks, formatChunksForContext, generateCitations } from '@/lib/rag/retrieve';
+import { classifyIntent, getToolsForIntent, type AdvisorIntent } from '@/lib/ai/intent';
+import { getTopJobMatches, formatJobMatchesForLLM } from '@/lib/jobs/advisor-tools';
+import { generateNextActions, type NextAction } from '@/lib/ai/nextActions';
+import { redactPII, safeLogger } from '@/lib/utils/redactPII';
 
 interface ChatRequest {
   message: string;
@@ -19,24 +25,63 @@ interface ChatRequest {
   conversationId?: string; // For conversation persistence
 }
 
+/**
+ * Load active context from advisor_context table
+ */
+async function loadActiveContext(
+  supabase: any,
+  studentProfileId: string | null
+): Promise<{
+  activeCourseId: string | null;
+  activeProjectId: string | null;
+  activeJobId: string | null;
+}> {
+  if (!studentProfileId) {
+    return { activeCourseId: null, activeProjectId: null, activeJobId: null };
+  }
+
+  const { data: context } = await supabase
+    .from('advisor_context')
+    .select('active_course_id, active_project_id, active_job_id')
+    .eq('student_profile_id', studentProfileId)
+    .single();
+
+  if (!context) {
+    return { activeCourseId: null, activeProjectId: null, activeJobId: null };
+  }
+
+  return {
+    activeCourseId: context.active_course_id,
+    activeProjectId: context.active_project_id,
+    activeJobId: context.active_job_id,
+  };
+}
+
 // Fetch real data for context
 async function fetchContextData(
   context: ChatRequest['context'],
   supabase: any,
-  studentProfileId: string | null
+  studentProfileId: string | null,
+  activeContext?: { activeCourseId: string | null; activeProjectId: string | null; activeJobId: string | null }
 ): Promise<{
   courseData: any;
   projectData: any;
   jobData: any;
   userProfile: any;
+  activeContextIds: { courseId: string | null; projectId: string | null; jobId: string | null };
 }> {
+  // Use active context from database if available, otherwise use request context
+  const courseId = activeContext?.activeCourseId || context?.course?.id;
+  const projectId = activeContext?.activeProjectId || context?.project?.id;
+  const jobId = activeContext?.activeJobId || context?.job?.id;
+
   // Fetch course data
   let courseData = null;
-  if (context?.course?.id) {
+  if (courseId) {
     const { data: course } = await supabase
       .from('courses')
       .select('*')
-      .eq('id', context.course.id)
+      .eq('id', courseId)
       .single();
     if (course) {
       courseData = {
@@ -52,11 +97,11 @@ async function fetchContextData(
 
   // Fetch project data
   let projectData = null;
-  if (context?.project?.id && studentProfileId) {
+  if (projectId && studentProfileId) {
     const { data: project } = await supabase
       .from('portfolio_projects')
       .select('*')
-      .eq('id', context.project.id)
+      .eq('id', projectId)
       .eq('student_profile_id', studentProfileId)
       .single();
     if (project) {
@@ -76,11 +121,11 @@ async function fetchContextData(
 
   // Fetch job data
   let jobData = null;
-  if (context?.job?.id) {
+  if (jobId) {
     const { data: job } = await supabase
       .from('jobs')
       .select('*')
-      .eq('id', context.job.id)
+      .eq('id', jobId)
       .eq('is_active', true)
       .single();
     if (job) {
@@ -98,6 +143,7 @@ async function fetchContextData(
         matchingScore: job.matching_score,
         skills: job.skills || [],
         skillsMissing: job.skills_missing || [],
+        recommendedForCourses: job.recommended_for_courses || [],
       };
     }
   }
@@ -127,332 +173,416 @@ async function fetchContextData(
     }
   }
 
-  return { courseData, projectData, jobData, userProfile };
+  return {
+    courseData,
+    projectData,
+    jobData,
+    userProfile,
+    activeContextIds: {
+      courseId: courseId || null,
+      projectId: projectId || null,
+      jobId: jobId || null,
+    },
+  };
 }
 
-// Mock AI advisor response generator
-// In production, this would call an actual LLM API (OpenAI, Anthropic, etc.)
-async function generateAIResponse(
+/**
+ * Build system prompt with context information and intent-specific guidance
+ */
+function buildSystemPrompt(
+  context: ChatRequest['context'],
+  contextData?: { courseData: any; projectData: any; jobData: any; userProfile: any },
+  intent?: AdvisorIntent,
+  tools?: { useRAG: boolean; useJobsMatching: boolean; usePortfolioFetch: boolean; useCourseContext: boolean }
+): string {
+  let systemPrompt = `You are an AI advisor for an online learning platform focused on AI, multi-agent systems, and software engineering. Your role is to help students with:
+
+1. **Course Learning**: Explain concepts, provide practice tasks, quiz students, and guide them through lessons
+2. **Project Guidance**: Review architecture, suggest improvements, help write project descriptions, and provide technical feedback
+3. **Career Support**: Help tailor CVs/resumes, write cover letters, prepare for interviews, and provide job application advice
+
+**Guidelines:**
+- Be helpful, encouraging, and clear
+- Use markdown formatting for better readability
+- Provide actionable next steps when appropriate
+- If a student is stuck after multiple attempts, suggest connecting with a human advisor
+- Never share sensitive information (passwords, API keys, etc.) - warn students if they try to share these
+- Be context-aware and reference the student's current course, project, or job when relevant
+`;
+
+  // Add intent-specific guidance
+  if (intent) {
+    switch (intent) {
+      case 'learning_help':
+        systemPrompt += `\n\n**Current Intent: Learning Help**\n`;
+        systemPrompt += `- Focus on explaining course concepts clearly\n`;
+        systemPrompt += `- Use course content to provide accurate information\n`;
+        systemPrompt += `- Provide examples and practice suggestions when helpful\n`;
+        break;
+
+      case 'project_review':
+        systemPrompt += `\n\n**Current Intent: Project Review**\n`;
+        systemPrompt += `- Review the project architecture and implementation\n`;
+        systemPrompt += `- Provide constructive feedback and improvement suggestions\n`;
+        systemPrompt += `- Help with project descriptions and documentation\n`;
+        break;
+
+      case 'job_matching':
+        systemPrompt += `\n\n**Current Intent: Job Matching**\n`;
+        systemPrompt += `- Help identify suitable job opportunities\n`;
+        systemPrompt += `- Match student skills and experience to job requirements\n`;
+        systemPrompt += `- Suggest relevant courses or skills to develop\n`;
+        break;
+
+      case 'application_help':
+        systemPrompt += `\n\n**Current Intent: Application Help**\n`;
+        systemPrompt += `- Help tailor CV/resume to specific job requirements\n`;
+        systemPrompt += `- Assist with cover letter writing\n`;
+        systemPrompt += `- Provide interview preparation guidance\n`;
+        break;
+
+      case 'general_career':
+        systemPrompt += `\n\n**Current Intent: General Career Advice**\n`;
+        systemPrompt += `- Provide career path guidance\n`;
+        systemPrompt += `- Suggest skill development opportunities\n`;
+        systemPrompt += `- Help with career planning and next steps\n`;
+        break;
+    }
+  }
+
+  // Add context-specific information
+  if (context?.course && contextData?.courseData) {
+    const course = contextData.courseData;
+    systemPrompt += `\n**Current Course Context:**\n`;
+    systemPrompt += `- Course: ${course.title}\n`;
+    systemPrompt += `- Slug: ${course.slug}\n`;
+    if (course.description) {
+      systemPrompt += `- Description: ${course.description}\n`;
+    }
+    if (course.difficultyLevel) {
+      systemPrompt += `- Difficulty: ${course.difficultyLevel}\n`;
+    }
+    if (course.durationWeeks) {
+      systemPrompt += `- Duration: ${course.durationWeeks} weeks\n`;
+    }
+  }
+
+  if (context?.project && contextData?.projectData) {
+    const project = contextData.projectData;
+    systemPrompt += `\n**Current Project Context:**\n`;
+    systemPrompt += `- Project: ${project.title}\n`;
+    if (project.description) {
+      systemPrompt += `- Description: ${project.description.substring(0, 300)}${project.description.length > 300 ? '...' : ''}\n`;
+    }
+    if (project.techStack && project.techStack.length > 0) {
+      systemPrompt += `- Tech Stack: ${project.techStack.join(', ')}\n`;
+    }
+    systemPrompt += `- GitHub: ${project.githubUrl || 'Not linked'}\n`;
+    systemPrompt += `- Demo: ${project.demoUrl || 'Not linked'}\n`;
+  }
+
+  if (context?.job && contextData?.jobData) {
+    const job = contextData.jobData;
+    systemPrompt += `\n**Current Job Context:**\n`;
+    systemPrompt += `- Position: ${job.title} at ${job.company}\n`;
+    if (job.description) {
+      systemPrompt += `- Description: ${job.description.substring(0, 300)}${job.description.length > 300 ? '...' : ''}\n`;
+    }
+    if (job.skills && job.skills.length > 0) {
+      systemPrompt += `- Required Skills: ${job.skills.join(', ')}\n`;
+    }
+    if (job.skillsMissing && job.skillsMissing.length > 0) {
+      systemPrompt += `- Missing Skills: ${job.skillsMissing.join(', ')}\n`;
+    }
+    if (job.matchingScore !== undefined) {
+      systemPrompt += `- Match Score: ${job.matchingScore}%\n`;
+    }
+  }
+
+  if (contextData?.userProfile) {
+    const profile = contextData.userProfile;
+    systemPrompt += `\n**Student Profile:**\n`;
+    if (profile.headline) {
+      systemPrompt += `- Headline: ${profile.headline}\n`;
+    }
+    if (profile.skills && profile.skills.length > 0) {
+      systemPrompt += `- Skills: ${profile.skills.join(', ')}\n`;
+    }
+    if (profile.publicProjectsCount) {
+      systemPrompt += `- Public Projects: ${profile.publicProjectsCount}\n`;
+    }
+  }
+
+  systemPrompt += `\n**Important:** Always be helpful, specific, and actionable. Use the context provided to give personalized advice.`;
+
+  return systemPrompt;
+}
+
+/**
+ * Fetch top matching jobs for student
+ */
+async function fetchMatchingJobs(
+  supabase: any,
+  studentProfileId: string | null,
+  limit: number = 5
+): Promise<any[]> {
+  if (!studentProfileId) return [];
+
+  try {
+    // Get student profile directly by ID
+    const { data: studentProfile } = await supabase
+      .from('student_profiles')
+      .select('id, skills')
+      .eq('id', studentProfileId)
+      .single();
+
+    if (!studentProfile) return [];
+
+    // Get enrolled courses and portfolio projects
+    const { data: enrollments } = await supabase
+      .from('course_enrollments')
+      .select('course_id, progress_percentage, completed_at')
+      .eq('student_profile_id', studentProfile.id);
+
+    const { data: projects } = await supabase
+      .from('portfolio_projects')
+      .select('id, tech_stack, title, description')
+      .eq('student_profile_id', studentProfile.id);
+
+    // Fetch jobs and calculate matches
+    const { data: jobs } = await supabase
+      .from('jobs')
+      .select('*')
+      .eq('is_active', true)
+      .limit(50);
+
+    if (!jobs || jobs.length === 0) return [];
+
+    // Import matching function
+    const { calculateJobMatch } = await import('@/lib/jobs/matching');
+
+    const studentProfileData = {
+      id: studentProfile.id,
+      skills: (studentProfile.skills as string[]) || [],
+    };
+
+    const portfolioProjectsData = (projects || []).map((p: any) => ({
+      id: p.id,
+      tech_stack: (p.tech_stack as string[]) || [],
+      title: p.title,
+      description: p.description,
+    }));
+
+    const enrolledCoursesData = (enrollments || []).map((e: any) => ({
+      course_id: e.course_id,
+      progress_percentage: e.progress_percentage,
+      completed_at: e.completed_at,
+    }));
+
+    // Calculate matches
+    const jobsWithScores = jobs.map((job: any) => {
+      const matchResult = calculateJobMatch(
+        {
+          id: job.id,
+          skills: job.skills || [],
+          recommended_for_courses: job.recommended_for_courses || [],
+          experience_level: job.experience_level,
+        },
+        studentProfileData,
+        enrolledCoursesData,
+        portfolioProjectsData
+      );
+
+      return {
+        id: job.id,
+        title: job.title,
+        company: job.company,
+        matchingScore: matchResult.score0to100,
+        status: matchResult.status,
+        skills: job.skills || [],
+        skillsMissing: matchResult.missingSkills,
+      };
+    });
+
+    // Sort and return top matches
+    return jobsWithScores
+      .sort((a, b) => b.matchingScore - a.matchingScore)
+      .slice(0, limit);
+  } catch (error) {
+    safeLogger.error('Error fetching matching jobs', error);
+    return [];
+  }
+}
+
+/**
+ * Fetch portfolio projects for student
+ */
+async function fetchPortfolioProjects(
+  supabase: any,
+  studentProfileId: string | null,
+  limit: number = 5
+): Promise<any[]> {
+  if (!studentProfileId) return [];
+
+  try {
+    const { data: projects } = await supabase
+      .from('portfolio_projects')
+      .select('id, title, description, tech_stack, github_url, demo_url, visibility')
+      .eq('student_profile_id', studentProfileId)
+      .order('created_at', { ascending: false })
+      .limit(limit);
+
+    return projects || [];
+  } catch (error) {
+    safeLogger.error('Error fetching portfolio projects', error);
+    return [];
+  }
+}
+
+/**
+ * Build conversation messages for LLM with RAG context
+ * Returns messages and retrieved chunks metadata
+ */
+async function buildLLMMessages(
   message: string,
   context: ChatRequest['context'],
   conversationHistory: ChatRequest['conversationHistory'],
-  intent?: string,
-  contextData?: { courseData: any; projectData: any; jobData: any; userProfile: any }
-): Promise<string> {
-  const lowerMessage = message.toLowerCase();
-  
-  // Context-aware responses with real data
-  let response = '';
-  let nextSteps: string[] = [];
+  contextData?: {
+    courseData: any;
+    projectData: any;
+    jobData: any;
+    userProfile: any;
+    activeContextIds: { courseId: string | null; projectId: string | null; jobId: string | null };
+  },
+  intent?: AdvisorIntent,
+  tools?: { useRAG: boolean; useJobsMatching: boolean; usePortfolioFetch: boolean; useCourseContext: boolean },
+  supabase?: any,
+  studentProfileId?: string | null
+): Promise<{
+  messages: LLMMessage[];
+  retrievedChunks: Array<{ courseSlug: string; lessonSlug: string; chunkIndex: number; score?: number }>;
+}> {
+  let systemPrompt = buildSystemPrompt(context, contextData, intent, tools);
+  const retrievedChunks: Array<{ courseSlug: string; lessonSlug: string; chunkIndex: number; score?: number }> = [];
 
-  // Handle structured intents from quick actions
-  if (intent === 'architecture_review' && contextData?.projectData) {
-    const project = contextData.projectData;
-    response = `## Architecture Review: ${project.title}\n\n`;
-    response += `### Strengths\n`;
-    response += `- Your project uses a solid tech stack: ${(project.techStack || []).join(', ') || 'modern technologies'}\n`;
-    if (project.githubUrl) {
-      response += `- Good practice: GitHub repository is available\n`;
+  // Retrieve relevant course chunks using RAG based on intent and tools
+  const activeCourseId = contextData?.activeContextIds?.courseId || context?.course?.id;
+  const courseSlug = context?.course?.slug || contextData?.courseData?.slug;
+
+  // Use RAG if tools indicate it should be used
+  const shouldRetrieveChunks = tools?.useRAG && (
+    activeCourseId ||
+    courseSlug ||
+    message.toLowerCase().includes('course') ||
+    message.toLowerCase().includes('lesson') ||
+    message.toLowerCase().includes('module') ||
+    message.toLowerCase().includes('explain') ||
+    message.toLowerCase().includes('how') ||
+    message.toLowerCase().includes('what') ||
+    message.toLowerCase().includes('understand')
+  );
+
+  if (shouldRetrieveChunks) {
+    try {
+      const chunks = await retrieveChunks(message, {
+        limit: 5,
+        courseSlug: courseSlug || undefined,
+        minScore: 0.5,
+      });
+
+      if (chunks.length > 0) {
+        const ragContext = formatChunksForContext(chunks);
+        systemPrompt += `\n\n**Relevant Course Content (use this to answer questions accurately):**${ragContext}`;
+        systemPrompt += `\n**Instructions:** 
+- Use the relevant course content above to provide accurate, specific answers
+- When referencing content, cite the source using [ref:N] format where N is the chunk number
+- Reference specific modules, lessons, or concepts when relevant
+- If the content doesn't fully answer the question, say so and provide what you can based on the content
+- Always include citations in your response when using information from the course content`;
+
+        // Store chunk metadata for later
+        retrievedChunks.push(
+          ...chunks.map((chunk) => ({
+            courseSlug: chunk.courseSlug,
+            lessonSlug: chunk.lessonSlug,
+            chunkIndex: chunk.chunkIndex,
+            score: chunk.score,
+          }))
+        );
+      }
+    } catch (error) {
+      safeLogger.warn('RAG retrieval failed, continuing without course content', error);
+      // Continue without RAG context if retrieval fails
     }
-    if (project.demoUrl) {
-      response += `- Excellent: Live demo available for recruiters\n`;
-    }
-    response += `\n### Risks & Missing Pieces\n`;
-    if (!project.githubUrl) {
-      response += `- ⚠️ **Missing GitHub URL**: Recruiters expect to see your code\n`;
-    }
-    if (!project.demoUrl) {
-      response += `- ⚠️ **Missing Demo URL**: A live demo significantly increases visibility\n`;
-    }
-    if (!project.description || project.description.length < 100) {
-      response += `- ⚠️ **Description too brief**: Expand to explain architecture, challenges, and outcomes\n`;
-    }
-    response += `- Consider adding: Security considerations, observability/monitoring, testing strategy\n`;
-    response += `\n### Next Steps Checklist\n`;
-    response += `1. Add comprehensive project description\n`;
-    if (!project.githubUrl) response += `2. Link your GitHub repository\n`;
-    if (!project.demoUrl) response += `3. Deploy and link a live demo\n`;
-    response += `4. Document your architecture decisions\n`;
-    response += `5. Add screenshots/images to showcase the project\n`;
-    return response;
   }
 
-  if (intent === 'risks_and_improvements' && contextData?.projectData) {
-    const project = contextData.projectData;
-    response = `## Risks & Improvements: ${project.title}\n\n`;
-    response += `### Top 5 Risks\n\n`;
-    response += `1. **Low Visibility** (High)\n`;
-    response += `   - Missing GitHub/demo links reduce recruiter engagement\n`;
-    response += `   - Mitigation: Add both links and ensure they're working\n\n`;
-    response += `2. **Incomplete Description** (Medium)\n`;
-    response += `   - Brief descriptions don't showcase your skills\n`;
-    response += `   - Mitigation: Expand to 200+ words with technical details\n\n`;
-    response += `3. **No Visual Proof** (Medium)\n`;
-    response += `   - Missing images make it hard to understand the project\n`;
-    response += `   - Mitigation: Add cover image and project screenshots\n\n`;
-    response += `4. **Tech Stack Not Highlighted** (Low)\n`;
-    response += `   - Skills aren't clearly visible\n`;
-    response += `   - Mitigation: List technologies used in description\n\n`;
-    response += `5. **No Metrics/Outcomes** (Low)\n`;
-    response += `   - Missing quantifiable results\n`;
-    response += `   - Mitigation: Add performance metrics, user stats, etc.\n\n`;
-    response += `### Suggested Refactors\n`;
-    response += `- Rewrite description to lead with impact\n`;
-    response += `- Add a "What I Learned" section\n`;
-    response += `- Include challenges faced and how you solved them\n`;
-    return response;
-  }
+  // Fetch matching jobs if intent requires it (use new tool function)
+  if (tools?.useJobsMatching && supabase && studentProfileId) {
+    try {
+      // Use the new getTopJobMatches tool function which includes explanations
+      const matchingJobs = await getTopJobMatches(supabase, studentProfileId, 5);
+      if (matchingJobs.length > 0) {
+        const jobsContext = formatJobMatchesForLLM(matchingJobs);
 
-  if (intent === 'rewrite_description' && contextData?.projectData) {
-    const project = contextData.projectData;
-    response = `## Project Description: ${project.title}\n\n`;
-    response += `### Recruiter-Optimized Description\n\n`;
-    response += `**${project.title}** is a ${project.techStack?.length ? project.techStack.join(', ') : 'modern'} application that ${project.description ? project.description.substring(0, 100) + '...' : 'demonstrates technical skills and problem-solving abilities'}.\n\n`;
-    response += `**Key Features:**\n`;
-    response += `- Built with ${(project.techStack || ['modern technologies']).join(', ')}\n`;
-    if (project.githubUrl) {
-      response += `- Source code available on [GitHub](${project.githubUrl})\n`;
-    }
-    if (project.demoUrl) {
-      response += `- Live demo: [View Project](${project.demoUrl})\n`;
-    }
-    response += `\n**Technical Highlights:**\n`;
-    response += `- Clean architecture and best practices\n`;
-    response += `- Responsive design and user experience focus\n`;
-    response += `- Performance optimization and scalability considerations\n\n`;
-    response += `### Technical Description (Optional)\n\n`;
-    response += `${project.description || 'Add detailed technical implementation details here, including architecture decisions, data flow, and key technical challenges overcome.'}\n\n`;
-    response += `### TL;DR\n`;
-    response += `${project.title}: A ${project.techStack?.length ? project.techStack[0] : 'full-stack'} project showcasing ${project.description ? 'real-world application' : 'technical skills'}. ${project.githubUrl ? 'Code available on GitHub.' : ''} ${project.demoUrl ? 'Live demo available.' : ''}\n`;
-    return response;
-  }
-
-  // Course-related queries
-  if (context?.course || lowerMessage.includes('course') || lowerMessage.includes('lesson') || lowerMessage.includes('module')) {
-    const courseName = context?.course?.title || 'the course';
-    const courseInfo = contextData?.courseData;
-    response = `I can help you with **${courseName}**. `;
-    if (courseInfo) {
-      response += `This is a ${courseInfo.difficultyLevel || 'intermediate'}-level course`;
-      if (courseInfo.durationWeeks) {
-        response += ` spanning ${courseInfo.durationWeeks} weeks`;
-      }
-      response += `. `;
-    }
-    
-    if (lowerMessage.includes('explain') || lowerMessage.includes('understand')) {
-      response += `Let me break this down in simpler terms. `;
-      nextSteps = [
-        `Review the relevant module in ${courseName}`,
-        'Try the practice exercises',
-        'Ask a follow-up question if anything is unclear',
-      ];
-    } else if (lowerMessage.includes('quiz') || lowerMessage.includes('test')) {
-      response += `Here are some key concepts to test your understanding: `;
-      nextSteps = [
-        'Answer the questions I provide',
-        'Review the course material for any you miss',
-        'Practice with real-world examples',
-      ];
-    } else if (lowerMessage.includes('practice') || lowerMessage.includes('task')) {
-      response += `Here's a practical task to reinforce your learning: `;
-      nextSteps = [
-        'Complete the practice task',
-        'Share your approach or results',
-        'Ask for feedback on your solution',
-      ];
-    } else {
-      response += `Based on your question, here's what I recommend: `;
-      nextSteps = [
-        `Focus on the core concepts in ${courseName}`,
-        'Work through the examples step by step',
-        'Apply what you learn to a small project',
-      ];
-    }
-  }
-  // Project-related queries
-  else if (context?.project || lowerMessage.includes('project') || lowerMessage.includes('architecture') || lowerMessage.includes('code')) {
-    const projectName = context?.project?.title || 'your project';
-    const project = contextData?.projectData;
-    response = `Let me help you with **${projectName}**. `;
-    
-    if (project) {
-      if (project.description) {
-        response += `I can see your current description: "${project.description.substring(0, 150)}${project.description.length > 150 ? '...' : ''}"\n\n`;
-      }
-      if (!project.githubUrl) {
-        response += `⚠️ **Note**: Your project doesn't have a GitHub URL linked. Adding one will significantly improve recruiter engagement.\n\n`;
-      }
-      if (!project.demoUrl) {
-        response += `⚠️ **Note**: Consider adding a live demo URL to showcase your work.\n\n`;
-      }
-    }
-    
-    if (lowerMessage.includes('review') || lowerMessage.includes('architecture')) {
-      response += `Here's my review of your approach: `;
-      if (project) {
-        response += `\n\n**Current Status:**\n`;
-        response += `- Title: ${project.title}\n`;
-        response += `- Tech Stack: ${(project.techStack || []).join(', ') || 'Not specified'}\n`;
-        response += `- GitHub: ${project.githubUrl ? '✅ Linked' : '❌ Missing'}\n`;
-        response += `- Demo: ${project.demoUrl ? '✅ Linked' : '❌ Missing'}\n`;
-      }
-      nextSteps = [
-        'Consider the feedback I provide',
-        'Refactor based on best practices',
-        'Test your changes thoroughly',
-      ];
-    } else if (lowerMessage.includes('improve') || lowerMessage.includes('risk')) {
-      response += `Here are some improvements and potential risks to consider: `;
-      if (project) {
-        response += `\n\n**For ${project.title}:**\n`;
-        if (!project.description || project.description.length < 100) {
-          response += `- Expand your description to at least 200 words\n`;
-        }
-        if (!project.githubUrl) {
-          response += `- Add your GitHub repository link\n`;
-        }
-        if (!project.demoUrl) {
-          response += `- Deploy and link a live demo\n`;
+        systemPrompt += `\n\n**Top Matching Job Opportunities:**\n${jobsContext}\n\n`;
+        
+        // Add specific instructions based on intent
+        if (intent === 'job_matching') {
+          systemPrompt += `**Instructions for Job Matching:**
+- Summarize the top ${matchingJobs.length} job opportunities that best match the student's profile
+- Highlight why each role is a good fit based on the match explanation
+- Mention any missing skills that could improve their match score
+- Suggest specific courses or projects that could help them qualify for these roles
+- Be encouraging and actionable in your recommendations
+- Format your response clearly with job titles, companies, and key details`;
+        } else {
+          systemPrompt += `**Instructions:** Use this job matching information to provide relevant job recommendations and career guidance when appropriate.`;
         }
       }
-      nextSteps = [
-        'Prioritize the most critical improvements',
-        'Address potential risks early',
-        'Document your decisions',
-      ];
-    } else if (lowerMessage.includes('description') || lowerMessage.includes('write')) {
-      response += `Here's a compelling project description: `;
-      if (project && project.description) {
-        response += `\n\n**Current Description:**\n${project.description}\n\n`;
-        response += `**Suggested Improvement:**\n`;
-      }
-      nextSteps = [
-        'Review and customize the description',
-        'Add specific technical details',
-        'Update your portfolio with this description',
-      ];
-    } else {
-      response += `For ${projectName}, here's my guidance: `;
-      nextSteps = [
-        'Break down the problem into smaller parts',
-        'Research best practices for similar projects',
-        'Iterate and get feedback',
-      ];
+    } catch (error) {
+      safeLogger.warn('Jobs matching fetch failed', error);
     }
   }
-  // Career-related queries
-  else if (context?.job || lowerMessage.includes('cv') || lowerMessage.includes('resume') || lowerMessage.includes('cover letter') || lowerMessage.includes('interview') || lowerMessage.includes('job')) {
-    const jobTitle = context?.job?.title || 'this role';
-    const company = context?.job?.company || 'the company';
-    const job = contextData?.jobData;
-    response = `I can help you with your application for **${jobTitle}** at **${company}**. `;
-    
-    if (job) {
-      response += `\n\n**Job Details:**\n`;
-      response += `- Type: ${job.jobType}\n`;
-      response += `- Level: ${job.experienceLevel}\n`;
-      response += `- Location: ${job.location || 'Not specified'} ${job.isRemote ? '(Remote)' : ''}\n`;
-      if (job.salaryRange) {
-        response += `- Salary: ${job.salaryRange}\n`;
+
+  // Fetch portfolio projects if intent requires it
+  if (tools?.usePortfolioFetch && supabase && studentProfileId) {
+    try {
+      const portfolioProjects = await fetchPortfolioProjects(supabase, studentProfileId, 5);
+      if (portfolioProjects.length > 0) {
+        const portfolioContext = portfolioProjects
+          .map((project, idx) => {
+            return `[${idx + 1}] ${project.title}
+${project.description ? `- Description: ${project.description.substring(0, 200)}${project.description.length > 200 ? '...' : ''}` : ''}
+${project.tech_stack && project.tech_stack.length > 0 ? `- Tech Stack: ${project.tech_stack.join(', ')}` : ''}
+${project.github_url ? `- GitHub: ${project.github_url}` : ''}
+${project.demo_url ? `- Demo: ${project.demo_url}` : ''}`;
+          })
+          .join('\n\n');
+
+        systemPrompt += `\n\n**Student Portfolio Projects:**\n${portfolioContext}\n\n`;
+        systemPrompt += `**Instructions:** Use this portfolio information to provide project-specific feedback, CV/resume content, or job application guidance.`;
       }
-      if (job.skills && job.skills.length > 0) {
-        response += `- Required Skills: ${job.skills.join(', ')}\n`;
-      }
-      if (job.matchingScore) {
-        response += `- Your Match Score: ${job.matchingScore}%\n`;
-      }
-      response += `\n`;
-    }
-    
-    if (intent === 'generate_cv' || lowerMessage.includes('cv') || lowerMessage.includes('resume') || lowerMessage.includes('tailor')) {
-      response += `## CV for ${jobTitle} at ${company}\n\n`;
-      response += `### 1-Page ATS-Friendly Format\n\n`;
-      response += `**${contextData?.userProfile?.headline || 'Your Name'}**\n`;
-      response += `${contextData?.userProfile?.headline || 'Software Developer'}\n\n`;
-      response += `**PROFESSIONAL SUMMARY**\n`;
-      response += `Experienced developer with expertise in ${job?.skills?.slice(0, 3).join(', ') || 'relevant technologies'}. `;
-      response += `Strong background in ${contextData?.userProfile?.skills?.slice(0, 2).join(' and ') || 'software development'}.\n\n`;
-      response += `**KEY SKILLS**\n`;
-      response += `${(job?.skills || []).slice(0, 8).join(' • ')}\n\n`;
-      response += `**RELEVANT PROJECTS**\n`;
-      response += `• ${contextData?.projectData?.title || 'Project Name'}: ${contextData?.projectData?.description?.substring(0, 80) || 'Description'}\n`;
-      response += `  Technologies: ${(contextData?.projectData?.techStack || []).join(', ')}\n\n`;
-      response += `**KEYWORD COVERAGE**\n`;
-      response += `✅ Matched: ${job?.skills?.filter((s: string) => contextData?.userProfile?.skills?.includes(s)).length || 0} / ${job?.skills?.length || 0} required skills\n`;
-      if (job?.skillsMissing && job.skillsMissing.length > 0) {
-        response += `⚠️ Missing: ${job.skillsMissing.join(', ')}\n`;
-      }
-      return response;
-    } else if (intent === 'generate_cover_letter' || lowerMessage.includes('cover letter')) {
-      response += `## Cover Letter: ${jobTitle} at ${company}\n\n`;
-      response += `Dear Hiring Manager,\n\n`;
-      response += `I am writing to express my interest in the ${jobTitle} position at ${company}. `;
-      response += `With my experience in ${contextData?.userProfile?.skills?.slice(0, 2).join(' and ') || 'software development'}, `;
-      response += `I am excited about the opportunity to contribute to your team.\n\n`;
-      response += `**Relevant Experience:**\n`;
-      if (contextData?.projectData) {
-        response += `In my project "${contextData.projectData.title}", I ${contextData.projectData.description?.substring(0, 100) || 'demonstrated technical skills'}.\n\n`;
-      }
-      response += `**Why ${company}?**\n`;
-      response += `[Customize this section based on company research]\n\n`;
-      response += `I look forward to discussing how my skills align with your needs.\n\n`;
-      response += `Best regards,\n[Your Name]`;
-      return response;
-    } else if (intent === 'tailor_portfolio' || lowerMessage.includes('tailor portfolio')) {
-      response += `## Tailored Portfolio for ${jobTitle}\n\n`;
-      response += `### Featured Projects (1-3)\n\n`;
-      if (contextData?.projectData) {
-        response += `**1. ${contextData.projectData.title}**\n`;
-        response += `- Relevance: ${job?.skills?.filter((s: string) => contextData.projectData.techStack?.includes(s)).length || 0} matching skills\n`;
-        response += `- Why feature: ${contextData.projectData.description?.substring(0, 100) || 'Relevant to role'}\n\n`;
-      }
-      response += `### Rewritten Project Intros\n\n`;
-      response += `Focus on:\n`;
-      response += `- Skills that match the job description\n`;
-      response += `- Quantifiable outcomes\n`;
-      response += `- Technologies mentioned in the job posting\n`;
-      return response;
-    } else if (lowerMessage.includes('interview') || lowerMessage.includes('mock')) {
-      response += `Here are some mock interview questions: `;
-      nextSteps = [
-        'Practice answering out loud',
-        'Prepare specific examples (STAR method)',
-        'Research the company and role',
-      ];
-    } else {
-      response += `For your job application, here's my advice: `;
-      nextSteps = [
-        'Tailor your application to the specific role',
-        'Showcase relevant projects and skills',
-        'Follow up professionally after applying',
-      ];
+    } catch (error) {
+      safeLogger.warn('Portfolio fetch failed', error);
     }
   }
-  // General queries
-  else {
-    response = `I'm here to help! `;
-    nextSteps = [
-      'Be specific about what you need help with',
-      'Share relevant context (course, project, or job)',
-      'Ask follow-up questions if needed',
-    ];
+
+  const messages: LLMMessage[] = [{ role: 'system', content: systemPrompt }];
+
+  // Add conversation history (last 10 messages)
+  for (const msg of conversationHistory.slice(-10)) {
+    if (msg.role === 'user' || msg.role === 'assistant') {
+      messages.push({
+        role: msg.role === 'user' ? 'user' : 'assistant',
+        content: msg.content,
+      });
+    }
   }
 
-  // Add a helpful response based on the message
-  if (lowerMessage.includes('stuck') || lowerMessage.includes('help')) {
-    response += `Don't worry, let's work through this together. `;
-  }
+  // Add current message
+  messages.push({ role: 'user', content: message });
 
-  // Always end with next steps
-  response += `\n\n**Next Steps:**\n${nextSteps.map((step, idx) => `${idx + 1}. ${step}`).join('\n')}`;
-
-  // Add a note about escalation if needed
-  if (conversationHistory.length >= 3) {
-    response += `\n\n*If you're still stuck after trying these steps, I can connect you with a human advisor who can provide more personalized help.*`;
-  }
-
-  return response;
+  return { messages, retrievedChunks };
 }
 
 // Check for sensitive information
@@ -480,7 +610,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body: ChatRequest = await request.json();
-    const { message, context, studentProfileId, conversationHistory, intent, conversationId } = body;
+    let { message, context, studentProfileId, conversationHistory, intent, conversationId } = body;
 
     if (!message || !message.trim()) {
       return NextResponse.json(
@@ -496,18 +626,49 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Fetch real context data
-    const contextData = await fetchContextData(context, supabase, studentProfileId);
+    // Check if streaming is requested
+    const stream = request.headers.get('accept')?.includes('text/event-stream') || 
+                   new URL(request.url).searchParams.get('stream') === 'true';
 
-    // Generate AI response with real data
-    const response = await generateAIResponse(message, context, conversationHistory, intent, contextData);
+    // Load active context from database (needed for intent classification and later)
+    const activeContext = await loadActiveContext(supabase, studentProfileId);
 
-    // Store conversation in database
-    if (studentProfileId) {
-      // Generate UUID if not provided - use database function
+    // Fetch context data (needed for intent classification and later)
+    const contextData = await fetchContextData(context, supabase, studentProfileId, activeContext);
+
+    // Classify intent if not provided
+    let inferredIntent: AdvisorIntent | undefined = intent as AdvisorIntent | undefined;
+    let intentClassification;
+    
+    if (!inferredIntent) {
+      // Build context for intent classification
+      const intentContext = {
+        course: contextData.courseData ? {
+          id: contextData.courseData.id,
+          slug: contextData.courseData.slug,
+          title: contextData.courseData.title,
+        } : undefined,
+        project: contextData.projectData ? {
+          id: contextData.projectData.id,
+          title: contextData.projectData.title,
+        } : undefined,
+        job: contextData.jobData ? {
+          id: contextData.jobData.id,
+          title: contextData.jobData.title,
+          company: contextData.jobData.company,
+        } : undefined,
+      };
+
+      intentClassification = await classifyIntent(message, intentContext);
+      inferredIntent = intentClassification.intent;
+    }
+
+    // Get tools to use based on inferred intent
+    const tools = getToolsForIntent(inferredIntent || 'general');
+
+    // Generate UUID if not provided
       let convId = conversationId;
       if (!convId) {
-        // Generate a UUID v4
         const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
           const r = (Math.random() * 16) | 0;
           const v = c === 'x' ? r : (r & 0x3) | 0x8;
@@ -516,39 +677,263 @@ export async function POST(request: NextRequest) {
         convId = uuid;
       }
       
-      // Store user message
+    // Store user message in database with inferred intent
+    if (studentProfileId) {
       await supabase.from('advisor_conversations').insert({
         student_profile_id: studentProfileId,
         conversation_id: convId,
-        active_course_id: context?.course?.id || null,
-        active_project_id: context?.project?.id || null,
-        active_job_id: context?.job?.id || null,
+        active_course_id: contextData.activeContextIds.courseId,
+        active_project_id: contextData.activeContextIds.projectId,
+        active_job_id: contextData.activeContextIds.jobId,
         role: 'user',
         content: message,
-        metadata: { intent },
-      });
-
-      // Store assistant response
-      await supabase.from('advisor_conversations').insert({
-        student_profile_id: studentProfileId,
-        conversation_id: convId,
-        active_course_id: context?.course?.id || null,
-        active_project_id: context?.project?.id || null,
-        active_job_id: context?.job?.id || null,
-        role: 'assistant',
-        content: response,
-        metadata: { intent },
+        metadata: {
+          intent: inferredIntent,
+          intentConfidence: intentClassification?.confidence,
+          intentReasoning: intentClassification?.reasoning,
+          tools: tools,
+        },
       });
     }
 
-    // TODO: In production, you would:
-    // 1. Call an actual LLM API (OpenAI, Anthropic, etc.)
-    // 2. Use RAG to pull in relevant course content
-    // 3. Track metrics (response time, helpfulness, etc.)
+    // Build LLM messages (with RAG context if applicable, based on intent)
+    const { messages: llmMessages, retrievedChunks } = await buildLLMMessages(
+      message,
+      context,
+      conversationHistory,
+      contextData,
+      inferredIntent,
+      tools,
+      supabase,
+      studentProfileId
+    );
 
-    return NextResponse.json({ response, conversationId: conversationId || null });
+    // Handle streaming response
+    if (stream) {
+      return new Response(
+        new ReadableStream({
+          async start(controller) {
+            const encoder = new TextEncoder();
+            let fullResponse = '';
+
+            try {
+              const llm = getLLMProvider();
+              
+              // Stream response chunks
+              for await (const chunk of llm.generateStream(llmMessages, {
+                temperature: 0.7,
+                maxTokens: 2000,
+              })) {
+                if (chunk.content) {
+                  fullResponse += chunk.content;
+                  // Send chunk to client
+                  controller.enqueue(
+                    encoder.encode(`data: ${JSON.stringify({ content: chunk.content, done: false })}\n\n`)
+                  );
+                }
+
+                if (chunk.done) {
+                  // Add citations to response if chunks were retrieved and not already present
+                  let finalResponse = fullResponse;
+                  if (retrievedChunks.length > 0) {
+                    if (!finalResponse.includes('## Citations') && !finalResponse.includes('**Citations**')) {
+                      const citations = retrievedChunks.map((c, idx) => ({
+                        ref: idx + 1,
+                        courseSlug: c.courseSlug,
+                        lessonSlug: c.lessonSlug,
+                        chunkIndex: c.chunkIndex,
+                        score: c.score,
+                      }));
+
+                      const citationsText = citations
+                        .map((c) => `[${c.ref}] ${c.courseSlug}/${c.lessonSlug}`)
+                        .join('\n');
+                      finalResponse += `\n\n---\n\n**Citations:**\n${citationsText}`;
+
+                      // Send citations as final chunk
+                      controller.enqueue(
+                        encoder.encode(`data: ${JSON.stringify({ content: `\n\n---\n\n**Citations:**\n${citationsText}`, done: false })}\n\n`)
+                      );
+                    }
+                  }
+
+                  // Generate next actions based on intent and context
+                  let nextActions: NextAction[] = [];
+                  try {
+                    // Get job data if available for unlock plan generation
+                    let jobDataForUnlockPlan: { id: string; skills_missing?: string[]; recommended_for_courses?: string[] } | undefined;
+                    if (contextData.jobData) {
+                      jobDataForUnlockPlan = {
+                        id: contextData.jobData.id,
+                        skills_missing: contextData.jobData.skillsMissing,
+                        recommended_for_courses: contextData.jobData.recommendedForCourses,
+                      };
+                    }
+
+                    nextActions = await generateNextActions(
+                      inferredIntent,
+                      context,
+                      finalResponse,
+                      jobDataForUnlockPlan
+                    );
+                  } catch (error) {
+                    safeLogger.warn('Error generating next actions', error);
+                    // Continue without next actions if generation fails
+                  }
+
+                  // Store complete response in database with RAG metadata and next actions
+                  if (studentProfileId) {
+                    // Generate citations for chunks
+                    const citations = retrievedChunks.map((c, idx) => ({
+                      ref: idx + 1,
+                      courseSlug: c.courseSlug,
+                      lessonSlug: c.lessonSlug,
+                      chunkIndex: c.chunkIndex,
+                      score: c.score,
+                    }));
+
+                    await supabase.from('advisor_conversations').insert({
+                      student_profile_id: studentProfileId,
+                      conversation_id: convId,
+                      active_course_id: contextData.activeContextIds.courseId,
+                      active_project_id: contextData.activeContextIds.projectId,
+                      active_job_id: contextData.activeContextIds.jobId,
+                      role: 'assistant',
+                      content: finalResponse,
+                      metadata: {
+                        intent: inferredIntent,
+                        intentConfidence: intentClassification?.confidence,
+                        intentReasoning: intentClassification?.reasoning,
+                        tools: tools,
+                        ragChunks: retrievedChunks.length > 0 ? retrievedChunks : undefined,
+                        citations: citations.length > 0 ? citations : undefined,
+                        next_actions: nextActions.length > 0 ? nextActions : undefined,
+                      },
+                    });
+                  }
+
+                  // Send final chunk with next actions
+                  controller.enqueue(
+                    encoder.encode(`data: ${JSON.stringify({ content: '', done: true, conversationId: convId, nextActions: nextActions.length > 0 ? nextActions : undefined })}\n\n`)
+                  );
+                  controller.close();
+                }
+              }
+            } catch (error) {
+              safeLogger.error('Error in streaming LLM response', error);
+              controller.enqueue(
+                encoder.encode(`data: ${JSON.stringify({ error: 'Failed to generate response' })}\n\n`)
+              );
+              controller.close();
+            }
+          },
+        }),
+        {
+          headers: {
+            'Content-Type': 'text/event-stream',
+            'Cache-Control': 'no-cache',
+            Connection: 'keep-alive',
+          },
+        }
+      );
+    }
+
+    // Non-streaming response
+    try {
+      const llm = getLLMProvider();
+      const llmResponse = await llm.generate(llmMessages, {
+        temperature: 0.7,
+        maxTokens: 2000,
+      });
+
+      // Add citations to response if chunks were retrieved
+      let responseContent = llmResponse.content;
+      if (retrievedChunks.length > 0) {
+        // Generate citation references
+        const citations = retrievedChunks.map((c, idx) => ({
+          ref: idx + 1,
+          courseSlug: c.courseSlug,
+          lessonSlug: c.lessonSlug,
+          title: undefined, // Title not available in this context
+        }));
+
+        // Append citations section if not already present
+        if (!responseContent.includes('## Citations') && !responseContent.includes('**Citations**')) {
+          const citationsText = citations
+            .map((c) => `[${c.ref}] ${c.courseSlug}/${c.lessonSlug}${c.title ? ` - ${c.title}` : ''}`)
+            .join('\n');
+          responseContent += `\n\n---\n\n**Citations:**\n${citationsText}`;
+        }
+      }
+
+      // Generate next actions based on intent and context
+      let nextActions: NextAction[] = [];
+      try {
+        // Get job data if available for unlock plan generation
+        let jobDataForUnlockPlan: { id: string; skills_missing?: string[]; recommended_for_courses?: string[] } | undefined;
+        if (contextData.jobData) {
+          jobDataForUnlockPlan = {
+            id: contextData.jobData.id,
+            skills_missing: contextData.jobData.skillsMissing,
+            recommended_for_courses: contextData.jobData.recommendedForCourses,
+          };
+        }
+
+        nextActions = await generateNextActions(
+          inferredIntent,
+          context,
+          responseContent,
+          jobDataForUnlockPlan
+        );
+      } catch (error) {
+        safeLogger.warn('Error generating next actions', error);
+        // Continue without next actions if generation fails
+      }
+
+      // Store assistant response in database with RAG metadata and next actions
+      if (studentProfileId) {
+        const citations = retrievedChunks.map((c, idx) => ({
+          ref: idx + 1,
+          courseSlug: c.courseSlug,
+          lessonSlug: c.lessonSlug,
+          chunkIndex: c.chunkIndex,
+          score: c.score,
+        }));
+
+      await supabase.from('advisor_conversations').insert({
+        student_profile_id: studentProfileId,
+        conversation_id: convId,
+          active_course_id: contextData.activeContextIds.courseId,
+          active_project_id: contextData.activeContextIds.projectId,
+          active_job_id: contextData.activeContextIds.jobId,
+        role: 'assistant',
+          content: responseContent,
+          metadata: {
+            intent: inferredIntent,
+            intentConfidence: intentClassification?.confidence,
+            intentReasoning: intentClassification?.reasoning,
+            tools: tools,
+            ragChunks: retrievedChunks.length > 0 ? retrievedChunks : undefined,
+            citations: citations.length > 0 ? citations : undefined,
+            next_actions: nextActions.length > 0 ? nextActions : undefined,
+          },
+        });
+      }
+
+      return NextResponse.json({
+        response: responseContent,
+        conversationId: convId,
+        nextActions: nextActions.length > 0 ? nextActions : undefined,
+      });
+    } catch (error) {
+      safeLogger.error('Error generating LLM response', error);
+      return NextResponse.json(
+        { error: 'Failed to generate response. Please try again.' },
+        { status: 500 }
+      );
+    }
   } catch (error) {
-    console.error('Error in AI advisor chat:', error);
+    safeLogger.error('Error in AI advisor chat', error);
     return NextResponse.json(
       { error: 'Failed to process request' },
       { status: 500 }

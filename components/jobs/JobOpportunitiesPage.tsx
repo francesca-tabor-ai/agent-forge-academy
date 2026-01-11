@@ -14,17 +14,19 @@ interface JobOpportunity {
   id: string;
   title: string;
   company: string;
-  matchingScore: number;
-  status?: 'new' | 'unlocked' | 'recommended' | 'locked' | 'stretch';
+  matching_score: number; // Computed from API
+  status: 'new' | 'unlocked' | 'recommended' | 'locked' | 'stretch'; // Computed from API
   skills: string[];
-  skillsMissing?: string[];
-  isLocked?: boolean;
-  isStretch?: boolean;
-  jobType?: string;
-  experienceLevel?: string;
+  skills_missing: string[]; // Computed from API
+  explanation?: string; // Computed explanation from API (optional)
+  job_type?: string;
+  experience_level?: string;
   location?: string;
-  isRemote?: boolean;
-  salaryRange?: string;
+  is_remote?: boolean;
+  salary_range?: string;
+  // Legacy camelCase fields for backward compatibility (will be mapped)
+  matchingScore?: number;
+  skillsMissing?: string[];
 }
 
 type SortOption = 'best-match' | 'newest' | 'least-missing' | 'company-az';
@@ -58,7 +60,19 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
           throw new Error('Failed to fetch jobs');
         }
         const data = await response.json();
-        setJobs(data.jobs || []);
+        // Map API response (snake_case) to component format
+        // API returns computed matching_score, status, skills_missing
+        const mappedJobs = (data.jobs || []).map((job: any) => ({
+          ...job,
+          // Ensure computed fields are used (from API)
+          matching_score: job.matching_score ?? 0,
+          status: job.status ?? 'new',
+          skills_missing: job.skills_missing ?? [],
+          // Legacy camelCase for backward compatibility
+          matchingScore: job.matching_score,
+          skillsMissing: job.skills_missing,
+        }));
+        setJobs(mappedJobs);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching jobs:', error);
@@ -98,9 +112,10 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
       filtered = filtered.filter(job => job.status && statusFilter.includes(job.status));
     }
 
-    // Match score filter
+    // Match score filter (use computed matching_score from API)
     filtered = filtered.filter(
-      job => job.matchingScore >= matchMin && job.matchingScore <= matchMax
+      job => (job.matching_score ?? job.matchingScore ?? 0) >= matchMin && 
+             (job.matching_score ?? job.matchingScore ?? 0) <= matchMax
     );
 
     // Role type filter (simplified - would need jobType field in API)
@@ -116,17 +131,17 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
       );
     }
 
-    // Sort
+    // Sort (use computed fields from API)
     filtered.sort((a, b) => {
       switch (sortBy) {
         case 'best-match':
-          return b.matchingScore - a.matchingScore;
+          return (b.matching_score ?? b.matchingScore ?? 0) - (a.matching_score ?? a.matchingScore ?? 0);
         case 'newest':
           // Would need created_at field - for now use match score
-          return b.matchingScore - a.matchingScore;
+          return (b.matching_score ?? b.matchingScore ?? 0) - (a.matching_score ?? a.matchingScore ?? 0);
         case 'least-missing':
-          const aMissing = a.skillsMissing?.length || 0;
-          const bMissing = b.skillsMissing?.length || 0;
+          const aMissing = (a.skills_missing ?? a.skillsMissing ?? []).length;
+          const bMissing = (b.skills_missing ?? b.skillsMissing ?? []).length;
           return aMissing - bMissing;
         case 'company-az':
           return a.company.localeCompare(b.company);
@@ -187,6 +202,10 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
         return { label: 'Unlocked', className: 'bg-blue-100 text-blue-700' };
       case 'recommended':
         return { label: 'Recommended', className: 'bg-purple-100 text-purple-700' };
+      case 'locked':
+        return { label: 'Locked', className: 'bg-gray-100 text-gray-700' };
+      case 'stretch':
+        return { label: 'Stretch', className: 'bg-yellow-100 text-yellow-700' };
       default:
         return null;
     }
@@ -234,10 +253,10 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
 
           {/* Filters Row */}
           <div className="flex flex-wrap items-center gap-4">
-            {/* Status Filter */}
+            {/* Status Filter (using computed statuses from API) */}
             <div className="flex items-center gap-2">
               <span className="text-sm font-medium text-gray-700">Status:</span>
-              {['new', 'recommended', 'unlocked'].map((status) => (
+              {['new', 'recommended', 'unlocked', 'locked', 'stretch'].map((status) => (
                 <button
                   key={status}
                   onClick={() => handleStatusToggle(status)}
@@ -379,9 +398,9 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
                         setSelectedJob(job);
                         setShowMatchExplanation(true);
                       }}
-                      className={`px-4 py-2 rounded-lg border ${getMatchingColor(job.matchingScore)} ${getMatchingBadgeSize(job.matchingScore)} hover:opacity-90 transition-opacity cursor-pointer`}
+                      className={`px-4 py-2 rounded-lg border ${getMatchingColor(job.matching_score ?? job.matchingScore ?? 0)} ${getMatchingBadgeSize(job.matching_score ?? job.matchingScore ?? 0)} hover:opacity-90 transition-opacity cursor-pointer`}
                     >
-                      {job.matchingScore}% Match
+                      {job.matching_score ?? job.matchingScore ?? 0}% Match
                     </button>
                     {statusBadge && (
                       <span className={`px-3 py-1 text-xs font-medium rounded-full ${statusBadge.className}`}>

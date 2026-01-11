@@ -11,10 +11,13 @@ interface JobOpportunity {
   id: string;
   title: string;
   company: string;
-  matchingScore: number;
-  status?: 'new' | 'unlocked' | 'recommended' | 'locked' | 'stretch';
-  skills: string[]; // 2-4 relevant skills/domains
-  skillsMissing?: string[]; // For locked/stretch roles
+  matching_score: number; // Computed from API
+  status: 'new' | 'unlocked' | 'recommended' | 'locked' | 'stretch'; // Computed from API
+  skills: string[];
+  skills_missing: string[]; // Computed from API
+  // Legacy camelCase for backward compatibility
+  matchingScore?: number;
+  skillsMissing?: string[];
   isLocked?: boolean;
   isStretch?: boolean;
 }
@@ -40,10 +43,23 @@ export function JobOpportunitiesSection({ studentProfileId }: JobOpportunitiesSe
           throw new Error('Failed to fetch jobs');
         }
         const data = await response.json();
-        setRecommendedJobs(data.jobs || []);
+        // Map API response (snake_case) to component format with computed fields
+        const mappedJobs = (data.jobs || []).map((job: any) => ({
+          ...job,
+          // Ensure computed fields are used (from API)
+          matching_score: job.matching_score ?? 0,
+          status: job.status ?? 'new',
+          skills_missing: job.skills_missing ?? [],
+          // Legacy camelCase for backward compatibility
+          matchingScore: job.matching_score,
+          skillsMissing: job.skills_missing,
+          isLocked: job.status === 'locked',
+          isStretch: job.status === 'stretch',
+        }));
+        setRecommendedJobs(mappedJobs);
         
-        // Count new jobs (status === 'new')
-        const newCount = (data.jobs || []).filter((job: JobOpportunity) => job.status === 'new').length;
+        // Count new jobs (status === 'new') - use computed status from API
+        const newCount = mappedJobs.filter((job: JobOpportunity) => job.status === 'new').length;
         setNewOpportunitiesCount(newCount);
         
         // TODO: Fetch saved applications from database when job_applications table is created
@@ -121,7 +137,7 @@ export function JobOpportunitiesSection({ studentProfileId }: JobOpportunitiesSe
           <div className="space-y-4 mb-8">
             {displayedJobs.map((job) => {
               const statusBadge = getStatusBadge(job.status);
-              const isLockedOrStretch = job.isLocked || job.isStretch;
+              const isLockedOrStretch = job.status === 'locked' || job.status === 'stretch';
 
               return (
                 <Link
@@ -141,11 +157,11 @@ export function JobOpportunitiesSection({ studentProfileId }: JobOpportunitiesSe
                       </div>
                       <p className="text-sm text-gray-600 mb-3">{job.company}</p>
 
-                      {/* Match Score */}
+                      {/* Match Score (computed from API) */}
                       <div className="flex items-center gap-3 mb-3">
-                        <div className={`px-3 py-1 rounded-full ${getMatchingColor(job.matchingScore)}`}>
+                        <div className={`px-3 py-1 rounded-full ${getMatchingColor(job.matching_score ?? job.matchingScore ?? 0)}`}>
                           <span className="text-sm font-semibold">
-                            {job.matchingScore}% Match
+                            {job.matching_score ?? job.matchingScore ?? 0}% Match
                           </span>
                         </div>
                       </div>
@@ -162,14 +178,14 @@ export function JobOpportunitiesSection({ studentProfileId }: JobOpportunitiesSe
                         ))}
                       </div>
 
-                      {/* Locked/Stretch Role Messaging */}
-                      {isLockedOrStretch && job.skillsMissing && job.skillsMissing.length > 0 && (
+                      {/* Locked/Stretch Role Messaging (using computed skills_missing from API) */}
+                      {isLockedOrStretch && (job.skills_missing ?? job.skillsMissing ?? []).length > 0 && (
                         <div className="mt-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
                           <p className="text-xs font-medium text-yellow-800 mb-1">
-                            {job.isLocked ? '🔒 One step away' : '🎯 Close match'}
+                            {job.status === 'locked' ? '🔒 One step away' : '🎯 Close match'}
                           </p>
                           <div className="space-y-1">
-                            {job.skillsMissing.map((skill, idx) => (
+                            {(job.skills_missing ?? job.skillsMissing ?? []).map((skill, idx) => (
                               <p key={idx} className="text-xs text-yellow-700">
                                 • Complete: {skill}
                               </p>

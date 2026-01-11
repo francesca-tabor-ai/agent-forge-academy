@@ -1,5 +1,7 @@
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
+import { extractTextFromCV } from '@/lib/cv/extractText';
+import { safeLogger, redactPII } from '@/lib/utils/redactPII';
 
 export async function POST(request: Request) {
   try {
@@ -104,6 +106,25 @@ export async function POST(request: Request) {
         .eq('student_profile_id', studentProfileId);
     }
 
+    // Extract text from CV
+    let extractedText: string | null = null;
+    try {
+      const extractionResult = await extractTextFromCV(file, file.type);
+      if (extractionResult.success && extractionResult.text) {
+        extractedText = extractionResult.text;
+      } else {
+        // Log warning but don't fail the upload if text extraction fails
+        // Note: extractionResult.error may contain CV text snippets, so we redact it
+        safeLogger.warn('CV text extraction failed', extractionResult.error ? redactPII(String(extractionResult.error), { maxLength: 200 }) : 'Unknown error');
+        // If it's a scanned PDF (no text layer), we'll leave cv_text as null
+        // OCR support is TODO
+      }
+    } catch (error) {
+      // Log error but don't fail the upload
+      // CV text is never logged - only error messages (which are redacted)
+      safeLogger.error('Error extracting CV text', error);
+    }
+
     // Save CV metadata to database
     const { data: cvRecord, error: dbError } = await supabase
       .from('student_cvs')
@@ -127,10 +148,25 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: dbError.message }, { status: 500 });
     }
 
+    // Update student_profiles with extracted CV text
+    if (extractedText) {
+      const { error: updateError } = await supabase
+        .from('student_profiles')
+        .update({ cv_text: extractedText })
+        .eq('id', studentProfileId);
+
+      if (updateError) {
+        // Log error but don't fail the upload
+        // Note: Never log extractedText - it contains PII
+        safeLogger.error('Error updating student_profiles.cv_text', updateError);
+      }
+    }
+
     return NextResponse.json({
       success: true,
       cv: cvRecord,
       url: urlData.publicUrl,
+      textExtracted: !!extractedText,
     });
   } catch (error) {
     return NextResponse.json(

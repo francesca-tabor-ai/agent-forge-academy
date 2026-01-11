@@ -1,46 +1,7 @@
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
-
-// Extract text from CV file (PDF or DOCX)
-async function extractTextFromCV(file: File): Promise<string> {
-  try {
-    const arrayBuffer = await file.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
-    
-    if (file.type === 'application/pdf') {
-      try {
-        // Try to use pdf-parse if available
-        // Install with: npm install pdf-parse
-        const pdfParse = require('pdf-parse');
-        const data = await pdfParse(buffer);
-        return data.text;
-      } catch (error) {
-        // If pdf-parse is not installed, return empty string
-        // The CV will still be uploaded, but text extraction won't work
-        console.log('PDF parsing requires pdf-parse package. Install with: npm install pdf-parse');
-        return '';
-      }
-    } else if (file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
-      try {
-        // Try to use mammoth if available
-        // Install with: npm install mammoth
-        const mammoth = require('mammoth');
-        const result = await mammoth.extractRawText({ buffer });
-        return result.value;
-      } catch (error) {
-        // If mammoth is not installed, return empty string
-        // The CV will still be uploaded, but text extraction won't work
-        console.log('DOCX parsing requires mammoth package. Install with: npm install mammoth');
-        return '';
-      }
-    }
-    
-    return '';
-  } catch (error) {
-    console.error('Error extracting text from CV:', error);
-    return '';
-  }
-}
+import { extractTextFromCV } from '@/lib/cv/extractText';
+import { safeLogger } from '@/lib/utils/redactPII';
 
 // Extract profile data from CV text
 function extractProfileFromCV(cvText: string): {
@@ -174,7 +135,7 @@ async function fetchGitHubRepos(githubUrl: string, token?: string): Promise<any[
         topics: repo.topics || [],
       }));
   } catch (error) {
-    console.error('Error fetching GitHub repos:', error);
+    safeLogger.error('Error fetching GitHub repos', error);
     throw error;
   }
 }
@@ -270,7 +231,8 @@ export async function POST(request: Request) {
     if (cvFile) {
       try {
         // Extract text from CV
-        const cvText = await extractTextFromCV(cvFile);
+        const extractionResult = await extractTextFromCV(cvFile, cvFile.type);
+        const cvText = extractionResult.success ? extractionResult.text : '';
         
         // For now, we'll upload the CV and extract basic info
         // In production, use proper parsing libraries
@@ -316,6 +278,14 @@ export async function POST(request: Request) {
               visibility: 'private',
             });
 
+          // Update student_profiles with extracted CV text
+          if (cvText && cvText.length > 0) {
+            await supabase
+              .from('student_profiles')
+              .update({ cv_text: cvText })
+              .eq('id', studentProfileId);
+          }
+
           cvUploaded = true;
 
           // Extract profile data from CV (if text extraction works)
@@ -351,7 +321,8 @@ export async function POST(request: Request) {
           }
         }
       } catch (error) {
-        console.error('Error processing CV:', error);
+        // Note: cvText is never logged - it contains PII
+        safeLogger.error('Error processing CV', error);
         // Continue with other imports even if CV fails
       }
     }
@@ -375,7 +346,7 @@ export async function POST(request: Request) {
         // Note: LinkedIn profile scraping requires LinkedIn API or web scraping
         // which may violate ToS. For now, we just store the URL.
       } catch (error) {
-        console.error('Error processing LinkedIn:', error);
+        safeLogger.error('Error processing LinkedIn', error);
       }
     }
 
@@ -398,7 +369,7 @@ export async function POST(request: Request) {
           projectsCreated = await createProjectsFromRepos(supabase, studentProfileId, repos);
         }
       } catch (error) {
-        console.error('Error processing GitHub:', error);
+        safeLogger.error('Error processing GitHub', error);
         // Still update the GitHub URL even if fetching repos fails
         await supabase
           .from('student_profiles')
@@ -415,7 +386,7 @@ export async function POST(request: Request) {
       cvUploaded,
     });
   } catch (error) {
-    console.error('Error in auto-import:', error);
+    safeLogger.error('Error in auto-import', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Internal server error' },
       { status: 500 }
