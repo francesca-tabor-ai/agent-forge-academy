@@ -6,6 +6,7 @@ import { CVResumeSection } from '@/components/portfolio/CVResumeSection';
 import { RecruiterVisibilitySection } from '@/components/portfolio/RecruiterVisibilitySection';
 import { PortfolioAdvisorSection } from '@/components/portfolio/PortfolioAdvisorSection';
 import { ProjectsView } from '@/components/portfolio/ProjectsView';
+import { AutoImportSection } from '@/components/portfolio/AutoImportSection';
 
 export default async function PortfolioPage() {
   const supabase = await createUserSupabaseClient();
@@ -31,7 +32,7 @@ export default async function PortfolioPage() {
   // Get student profile
   const { data: studentProfile } = await supabase
     .from('student_profiles')
-    .select('id, visibility, bio, headline, skills, location, linkedin_url, github_url, website_url')
+    .select('id, visibility, bio, headline, skills, location, linkedin_url, github_url, website_url, headshot_image_url')
     .eq('profile_id', profile.id)
     .single();
 
@@ -132,12 +133,21 @@ export default async function PortfolioPage() {
         />
       )}
 
+      {/* Auto-Import Section */}
+      {studentProfile && (
+        <AutoImportSection
+          studentProfileId={studentProfile.id}
+          hasExistingData={hasProfile || hasCV || (projects && projects.length > 0)}
+        />
+      )}
+
       {/* Profile Overview */}
       <ProfileOverview
         headline={headline}
         bio={studentProfile?.bio || null}
         primaryRoles={primaryRoles}
         coreSkills={coreSkills}
+        headshotImageUrl={studentProfile?.headshot_image_url || null}
       />
 
       {/* CV & Resume */}
