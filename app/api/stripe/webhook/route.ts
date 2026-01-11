@@ -20,7 +20,12 @@ const supabase = createClient(
  * - invoice.payment_succeeded
  * - invoice.payment_failed
  * - customer.subscription.trial_will_end
+ * 
+ * Route Config:
+ * - Disables body parsing to ensure raw body is available for signature verification
  */
+export const runtime = 'nodejs'; // Ensure Node.js runtime for webhook processing
+
 export async function POST(request: NextRequest) {
   const body = await request.text();
   const signature = request.headers.get('stripe-signature');
