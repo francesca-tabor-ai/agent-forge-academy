@@ -475,7 +475,7 @@ export async function POST(request: NextRequest) {
     const audioFile = formData.get('audio') as File;
     const studentProfileId = formData.get('studentProfileId') as string | null;
     const conversationId = formData.get('conversationId') as string | undefined;
-    const generateAudio = formData.get('generateAudio') === 'true';
+    const shouldGenerateAudio = formData.get('generateAudio') === 'true';
     const intent = formData.get('intent') as string | undefined;
 
     // Parse context JSON if provided
@@ -675,7 +675,7 @@ export async function POST(request: NextRequest) {
 
     // Generate audio response if requested
     let responseAudio: string | undefined = undefined;
-    if (generateAudio) {
+    if (shouldGenerateAudio) {
       const audioResult = await generateAudio(responseContent);
       if (audioResult) {
         // Convert buffer to base64 for JSON response
