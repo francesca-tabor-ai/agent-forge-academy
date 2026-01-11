@@ -252,54 +252,66 @@ export function VoiceControls({
   useEffect(() => {
     try {
       const capabilities = checkVoiceCapabilities();
-      setIsSupported(capabilities.isFullySupported);
-
-      if (!capabilities.isFullySupported) {
-        console.warn('Voice capabilities not fully supported:', capabilities);
-        if (capabilities.unsupportedReason) {
-          setError(capabilities.unsupportedReason);
-        }
-        return;
-      }
-
-      // Additional check: secure context required
+      
+      // Check secure context first (required for voice)
       if (!capabilities.isSecureContext) {
         setIsSupported(false);
+        setVoiceUnavailableReason('secure-context');
         setError('Voice requires HTTPS. Please use a secure connection.');
         return;
       }
 
-      if (capabilities.speechRecognition) {
-        // Initialize Speech Recognition with error handling
-        let SpeechRecognition;
-        try {
-          SpeechRecognition =
-            (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
-        } catch (error) {
-          console.error('Error accessing SpeechRecognition API:', error);
-          setIsSupported(false);
-          setError('Speech Recognition API not available');
-          return;
-        }
-        
-        if (!SpeechRecognition) {
-          setIsSupported(false);
-          setError('Speech Recognition not supported in this browser');
-          return;
-        }
+      // Check if speech recognition is available
+      if (!capabilities.speechRecognition) {
+        setIsSupported(false);
+        setVoiceUnavailableReason('not-supported');
+        setError('Voice input isn\'t supported in this browser.');
+        return;
+      }
 
-        let recognition;
-        try {
-          recognition = new SpeechRecognition();
-        } catch (error) {
-          console.error('Error creating SpeechRecognition instance:', error);
-          setIsSupported(false);
-          setError('Failed to initialize voice recognition');
-          return;
-        }
-        recognition.continuous = true;
-        recognition.interimResults = true;
-        recognition.lang = 'en-US';
+      // Check if media devices are available
+      if (!capabilities.mediaDevices) {
+        setIsSupported(false);
+        setVoiceUnavailableReason('no-media-devices');
+        setError('Microphone access isn\'t supported in this browser.');
+        return;
+      }
+
+      setIsSupported(true);
+
+      // Initialize Speech Recognition with error handling
+      let SpeechRecognition;
+      try {
+        SpeechRecognition =
+          (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
+      } catch (error) {
+        console.error('Error accessing SpeechRecognition API:', error);
+        setIsSupported(false);
+        setVoiceUnavailableReason('api-error');
+        setError('Speech Recognition API not available');
+        return;
+      }
+      
+      if (!SpeechRecognition) {
+        setIsSupported(false);
+        setVoiceUnavailableReason('not-supported');
+        setError('Speech Recognition not supported in this browser');
+        return;
+      }
+
+      let recognition;
+      try {
+        recognition = new SpeechRecognition();
+      } catch (error) {
+        console.error('Error creating SpeechRecognition instance:', error);
+        setIsSupported(false);
+        setVoiceUnavailableReason('init-error');
+        setError('Failed to initialize voice recognition');
+        return;
+      }
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.lang = 'en-US';
 
         recognition.onstart = () => {
           setIsListening(true);
@@ -415,7 +427,7 @@ export function VoiceControls({
           }
           setRecordingDuration(0);
           
-          // Handle network errors with deduplication
+          // Handle network errors with deduplication and proper cleanup
           if (errorType === 'network') {
             // Only log once per 30 seconds to prevent spam
             const timeSinceLastNetworkLog = now - networkErrorLoggedAtRef.current;
@@ -440,12 +452,26 @@ export function VoiceControls({
             }
             
             // Stop listening and prevent auto-restart
-            stopListening();
+            setIsListening(false);
+            setRecognitionState('idle');
+            
+            // Stop recording timer
+            if (recordingIntervalRef.current) {
+              clearInterval(recordingIntervalRef.current);
+              recordingIntervalRef.current = null;
+            }
+            setRecordingDuration(0);
             
             // Clear any pending restart timeouts
             if (restartTimeoutRef.current) {
               clearTimeout(restartTimeoutRef.current);
               restartTimeoutRef.current = null;
+            }
+            
+            // Clear silence timer
+            if (silenceTimerRef.current) {
+              clearTimeout(silenceTimerRef.current);
+              silenceTimerRef.current = null;
             }
             
             // Disable hands-free mode automatically if active
@@ -561,10 +587,6 @@ export function VoiceControls({
         };
 
         recognitionRef.current = recognition;
-      } else {
-        setIsSupported(false);
-        setError('Speech Recognition not available');
-      }
     } catch (error) {
       console.error('Error initializing voice controls:', error);
       setIsSupported(false);
@@ -582,6 +604,25 @@ export function VoiceControls({
       return;
     }
 
+    // Check if network error is still active (require manual retry)
+    if (voiceUnavailableReason === 'network') {
+      setError('Voice service is temporarily unavailable. Click "Try again" to retry.');
+      return;
+    }
+
+    // Additional safety checks before starting
+    if (!isSpeechRecognitionSupported()) {
+      setError('Speech Recognition is not supported in this browser');
+      setVoiceUnavailableReason('not-supported');
+      return;
+    }
+    
+    if (!isSecureContext()) {
+      setError('Voice requires HTTPS. Please use a secure connection.');
+      setVoiceUnavailableReason('secure-context');
+      return;
+    }
+
     try {
       setPartialTranscript('');
       setFinalTranscript('');
@@ -595,15 +636,22 @@ export function VoiceControls({
         restartBackoffRef.current = 1000; // Reset backoff on manual retry
       }
       
-      // Additional safety checks before starting
-      if (!isSpeechRecognitionSupported()) {
-        setError('Speech Recognition is not supported in this browser');
-        return;
-      }
-      
-      if (!isSecureContext()) {
-        setError('Voice requires HTTPS. Please use a secure connection.');
-        return;
+      // Ensure recognition is not already running
+      try {
+        if (recognitionRef.current && recognitionRef.current.state !== 'idle') {
+          recognitionRef.current.stop();
+          // Wait a bit before restarting
+          setTimeout(() => {
+            try {
+              recognitionRef.current?.start();
+            } catch (retryError) {
+              setError('Failed to start voice recognition. Please try again.');
+            }
+          }, 200);
+          return;
+        }
+      } catch (e) {
+        // Ignore errors from checking state
       }
 
       recognitionRef.current.start();
@@ -621,12 +669,13 @@ export function VoiceControls({
             } catch (retryError) {
               setError('Failed to start voice recognition. Please try again.');
             }
-          }, 100);
+          }, 200);
         } catch (stopError) {
           setError('Voice recognition is already active');
         }
       } else {
         setError('Failed to start voice recognition. Text input is still available.');
+        setVoiceUnavailableReason('start-error');
       }
     }
   }, [disabled, isListening, voiceUnavailableReason, isOffline]);
@@ -849,13 +898,29 @@ export function VoiceControls({
   // Fallback UI for unsupported browsers
   if (!isSupported) {
     const capabilities = checkVoiceCapabilities();
-    const reason = capabilities.unsupportedReason || 'Voice input isn\'t supported in this browser.';
+    let reason = capabilities.unsupportedReason || 'Voice input isn\'t supported in this browser.';
+    
+    // Provide more specific messages based on the reason
+    if (voiceUnavailableReason === 'secure-context') {
+      reason = 'Voice requires HTTPS. Please use a secure connection.';
+    } else if (voiceUnavailableReason === 'not-supported') {
+      reason = 'Voice input isn\'t supported in this browser.';
+    } else if (voiceUnavailableReason === 'no-media-devices') {
+      reason = 'Microphone access isn\'t supported in this browser.';
+    } else if (voiceUnavailableReason === 'offline') {
+      reason = 'You appear offline — voice input is unavailable.';
+    } else if (voiceUnavailableReason === 'network') {
+      reason = 'Voice service is temporarily unavailable. Try again, or keep typing.';
+    }
     
     return (
       <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 text-sm text-yellow-800">
-        <p className="font-medium mb-1">Voice controls not available</p>
-        <p className="text-xs">
-          {reason} Please use text input instead.
+        <p className="font-medium mb-1">Voice input isn&apos;t available right now</p>
+        <p className="text-xs mb-2">
+          {reason}
+        </p>
+        <p className="text-xs text-yellow-700">
+          Please use text input instead.
         </p>
       </div>
     );
@@ -1167,10 +1232,18 @@ export function VoiceControls({
 
       {/* General Error Display */}
       {error && !permissionError && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-800">
+        <div className={`rounded-lg p-3 text-sm ${
+          voiceUnavailableReason === 'network' || voiceUnavailableReason === 'offline'
+            ? 'bg-yellow-50 border border-yellow-200 text-yellow-800'
+            : 'bg-red-50 border border-red-200 text-red-800'
+        }`}>
           <div className="flex items-start gap-2">
             <svg
-              className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5"
+              className={`w-5 h-5 flex-shrink-0 mt-0.5 ${
+                voiceUnavailableReason === 'network' || voiceUnavailableReason === 'offline'
+                  ? 'text-yellow-600'
+                  : 'text-red-600'
+              }`}
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -1183,39 +1256,48 @@ export function VoiceControls({
               />
             </svg>
             <div className="flex-1">
-              <p className="font-medium mb-1">Error</p>
+              <p className="font-medium mb-1">
+                {voiceUnavailableReason === 'network' || voiceUnavailableReason === 'offline'
+                  ? 'Voice service unavailable'
+                  : 'Error'}
+              </p>
               <p className="mb-2">{error}</p>
               {(voiceUnavailableReason === 'network' || voiceUnavailableReason === 'offline') && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setError(null);
-                    setVoiceUnavailableReason(null);
-                    networkErrorLoggedRef.current = false;
-                    lastErrorTypeRef.current = null;
-                    restartBackoffRef.current = 1000;
-                    // Clear any pending restart timeouts
-                    if (restartTimeoutRef.current) {
-                      clearTimeout(restartTimeoutRef.current);
-                      restartTimeoutRef.current = null;
-                    }
-                    // Re-run feature detection and reinitialize
-                    if (recognitionRef.current) {
-                      try {
-                        recognitionRef.current.abort();
-                      } catch (e) {
-                        // Ignore abort errors
+                <div className="mt-3 space-y-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setError(null);
+                      setVoiceUnavailableReason(null);
+                      networkErrorLoggedRef.current = false;
+                      lastErrorTypeRef.current = null;
+                      restartBackoffRef.current = 1000;
+                      // Clear any pending restart timeouts
+                      if (restartTimeoutRef.current) {
+                        clearTimeout(restartTimeoutRef.current);
+                        restartTimeoutRef.current = null;
                       }
-                    }
-                    // Small delay before retry to allow cleanup
-                    setTimeout(() => {
-                      startListening();
-                    }, 300);
-                  }}
-                  className="mt-2 px-3 py-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-xs font-medium"
-                >
-                  Try again
-                </button>
+                      // Re-run feature detection and reinitialize
+                      if (recognitionRef.current) {
+                        try {
+                          recognitionRef.current.abort();
+                        } catch (e) {
+                          // Ignore abort errors
+                        }
+                      }
+                      // Small delay before retry to allow cleanup
+                      setTimeout(() => {
+                        startListening();
+                      }, 300);
+                    }}
+                    className="px-3 py-1.5 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors text-xs font-medium"
+                  >
+                    Try again
+                  </button>
+                  <p className="text-xs text-yellow-700">
+                    You can continue using text input while voice is unavailable.
+                  </p>
+                </div>
               )}
             </div>
           </div>

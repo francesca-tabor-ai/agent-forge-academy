@@ -82,6 +82,14 @@ export async function POST(request: NextRequest) {
 
     stripeCustomerId = subscription.stripe_customer_id;
 
+    // Guard: ensure stripeCustomerId exists before creating portal session
+    if (!stripeCustomerId) {
+      return NextResponse.json(
+        { error: "No Stripe customer found for this user" },
+        { status: 400 }
+      );
+    }
+
     // Get Stripe client
     const stripe = getStripeClient();
 
