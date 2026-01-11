@@ -16,7 +16,111 @@ const VALID_SORT_OPTIONS = ['best-match', 'newest', 'least-missing', 'company-az
 type SortOption = typeof VALID_SORT_OPTIONS[number];
 
 /**
- * Validate and sanitize query parameters
+ * Parse and validate query parameters with safe defaults
+ * Returns parsed params or throws error with details
+ */
+function parseJobsQuery(request: NextRequest): {
+  status?: StatusFilter[];
+  matchMin: number;
+  matchMax: number;
+  skills?: string[];
+  sort: SortOption;
+  search?: string;
+} {
+  const { searchParams } = new URL(request.url);
+  
+  // Parse status filter (optional, can be comma-separated or repeated params)
+  let status: StatusFilter[] | undefined;
+  const statusParam = searchParams.get('status');
+  if (statusParam) {
+    const statusList = statusParam.split(',').map(s => s.trim()).filter(Boolean);
+    const validStatuses = statusList.filter(s => VALID_STATUSES.includes(s as StatusFilter));
+    if (validStatuses.length > 0) {
+      status = validStatuses as StatusFilter[];
+    }
+  }
+  // Also check for repeated params (e.g., ?status=new&status=recommended)
+  const allStatusParams = searchParams.getAll('status');
+  if (allStatusParams.length > 0 && !statusParam) {
+    const statusList = allStatusParams.map(s => s.trim()).filter(Boolean);
+    const validStatuses = statusList.filter(s => VALID_STATUSES.includes(s as StatusFilter));
+    if (validStatuses.length > 0) {
+      status = validStatuses as StatusFilter[];
+    }
+  }
+
+  // Parse match range with defaults (0-100)
+  let matchMin = 0;
+  let matchMax = 100;
+  const matchMinParam = searchParams.get('matchMin');
+  const matchMaxParam = searchParams.get('matchMax');
+  
+  if (matchMinParam) {
+    const min = parseInt(matchMinParam, 10);
+    if (!isNaN(min)) {
+      matchMin = Math.max(0, Math.min(100, min)); // Clamp to 0-100
+    }
+  }
+  if (matchMaxParam) {
+    const max = parseInt(matchMaxParam, 10);
+    if (!isNaN(max)) {
+      matchMax = Math.max(0, Math.min(100, max)); // Clamp to 0-100
+    }
+  }
+  
+  // Ensure min <= max (swap if needed)
+  if (matchMin > matchMax) {
+    [matchMin, matchMax] = [matchMax, matchMin];
+  }
+
+  // Parse skills filter (accept comma-separated or repeated params, max 10)
+  let skills: string[] | undefined;
+  const skillsParam = searchParams.get('skills');
+  if (skillsParam) {
+    const skillsList = skillsParam.split(',').map(s => s.trim()).filter(Boolean);
+    if (skillsList.length > 0 && skillsList.length <= 10) {
+      // Filter out skills longer than 50 chars
+      const validSkills = skillsList.filter(s => s.length <= 50);
+      if (validSkills.length > 0) {
+        skills = validSkills;
+      }
+    }
+  }
+  // Also check for repeated params
+  const allSkillsParams = searchParams.getAll('skills');
+  if (allSkillsParams.length > 0 && !skillsParam) {
+    const skillsList = allSkillsParams.flatMap(s => s.split(',').map(x => x.trim())).filter(Boolean);
+    if (skillsList.length > 0 && skillsList.length <= 10) {
+      const validSkills = skillsList.filter(s => s.length <= 50);
+      if (validSkills.length > 0) {
+        skills = validSkills;
+      }
+    }
+  }
+
+  // Parse sort option with default
+  let sort: SortOption = 'best-match';
+  const sortParam = searchParams.get('sort');
+  if (sortParam && VALID_SORT_OPTIONS.includes(sortParam as SortOption)) {
+    sort = sortParam as SortOption;
+  }
+
+  // Parse search query (max 80 characters, normalize empty strings)
+  let search: string | undefined;
+  const searchParam = searchParams.get('search');
+  if (searchParam && searchParam.trim().length > 0) {
+    const trimmed = searchParam.trim();
+    if (trimmed.length <= 80) {
+      search = trimmed;
+    }
+  }
+
+  return { status, matchMin, matchMax, skills, sort, search };
+}
+
+/**
+ * Validate query parameters and return errors if any
+ * This is a separate validation step that returns 400 for invalid params
  */
 function validateQueryParams(request: NextRequest): {
   status?: StatusFilter[];
@@ -146,18 +250,39 @@ export async function GET(request: NextRequest) {
         error: userError,
         code: userError.code,
         message: userError.message,
+        stack: userError.stack,
       });
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        { 
+          ok: false,
+          error: { 
+            code: 'UNAUTHORIZED',
+            message: 'Authentication required'
+          },
+          requestId 
+        },
+        { status: 401 }
+      );
     }
 
     if (!user) {
       safeLogger.info(`[${requestId}] No user found`);
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        { 
+          ok: false,
+          error: { 
+            code: 'UNAUTHORIZED',
+            message: 'Authentication required'
+          },
+          requestId 
+        },
+        { status: 401 }
+      );
     }
 
     safeLogger.info(`[${requestId}] User authenticated`, { userId: user.id });
 
-    // Validate query parameters
+    // Validate query parameters (strict validation for 400 errors)
     const queryValidation = validateQueryParams(request);
     if (queryValidation.errors.length > 0) {
       safeLogger.warn(`[${requestId}] Invalid query parameters`, { 
@@ -165,10 +290,21 @@ export async function GET(request: NextRequest) {
         queryParams,
       });
       return NextResponse.json(
-        { error: 'Invalid query parameters', details: queryValidation.errors },
+        { 
+          ok: false,
+          error: { 
+            code: 'INVALID_PARAMS',
+            message: 'Invalid query parameters',
+            details: queryValidation.errors
+          },
+          requestId 
+        },
         { status: 400 }
       );
     }
+
+    // Parse query parameters with safe defaults (after validation passes)
+    const parsedParams = parseJobsQuery(request);
 
     // Get student profile
     const { data: profile, error: profileError } = await supabase
@@ -178,13 +314,40 @@ export async function GET(request: NextRequest) {
       .single();
 
     if (profileError) {
-      safeLogger.error(`[${requestId}] Error fetching profile`, profileError);
-      return NextResponse.json({ error: 'Failed to fetch profile' }, { status: 500 });
+      safeLogger.error(`[${requestId}] Error fetching profile`, {
+        error: profileError,
+        code: profileError.code,
+        message: profileError.message,
+        details: profileError.details,
+        hint: profileError.hint,
+        stack: profileError.stack || new Error().stack,
+      });
+      return NextResponse.json(
+        { 
+          ok: false,
+          error: { 
+            code: 'SERVER_ERROR',
+            message: 'Failed to fetch profile'
+          },
+          requestId 
+        },
+        { status: 500 }
+      );
     }
 
     if (!profile || profile.role !== 'student') {
       safeLogger.info(`[${requestId}] User is not a student`, { role: profile?.role });
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+      return NextResponse.json(
+        { 
+          ok: false,
+          error: { 
+            code: 'FORBIDDEN',
+            message: 'Access denied. Student role required.'
+          },
+          requestId 
+        },
+        { status: 403 }
+      );
     }
 
     // Get student profile ID
@@ -195,13 +358,55 @@ export async function GET(request: NextRequest) {
       .single();
 
     if (studentProfileError) {
-      safeLogger.error(`[${requestId}] Error fetching student profile`, studentProfileError);
-      return NextResponse.json({ error: 'Failed to fetch student profile' }, { status: 500 });
+      // Check if it's a "not found" error (PGRST116) vs a real DB error
+      const isNotFound = studentProfileError.code === 'PGRST116' || 
+                         studentProfileError.message?.includes('No rows returned');
+      
+      if (isNotFound) {
+        safeLogger.info(`[${requestId}] Student profile not found - returning empty list`, {
+          profileId: profile.id,
+        });
+        // Return 200 with empty list and reason (healthy empty state)
+        return NextResponse.json({
+          ok: true,
+          jobs: [],
+          total: 0,
+          reason: 'PROFILE_INCOMPLETE',
+          missingFields: ['student_profile'],
+        });
+      }
+      
+      safeLogger.error(`[${requestId}] Error fetching student profile`, {
+        error: studentProfileError,
+        code: studentProfileError.code,
+        message: studentProfileError.message,
+        details: studentProfileError.details,
+        hint: studentProfileError.hint,
+        stack: studentProfileError.stack || new Error().stack,
+      });
+      return NextResponse.json(
+        { 
+          ok: false,
+          error: { 
+            code: 'SERVER_ERROR',
+            message: 'Failed to fetch student profile'
+          },
+          requestId 
+        },
+        { status: 500 }
+      );
     }
 
     if (!studentProfile) {
-      safeLogger.info(`[${requestId}] Student profile not found`);
-      return NextResponse.json({ error: 'Student profile not found' }, { status: 404 });
+      safeLogger.info(`[${requestId}] Student profile not found - returning empty list`);
+      // Return 200 with empty list and reason (healthy empty state)
+      return NextResponse.json({
+        ok: true,
+        jobs: [],
+        total: 0,
+        reason: 'PROFILE_INCOMPLETE',
+        missingFields: ['student_profile'],
+      });
     }
 
     safeLogger.info(`[${requestId}] Student profile found`, { studentProfileId: studentProfile.id });
@@ -214,9 +419,34 @@ export async function GET(request: NextRequest) {
       const studentDataTime = Date.now() - studentDataStartTime;
       safeLogger.info(`[${requestId}] Student data fetched`, { duration: `${studentDataTime}ms` });
     } catch (studentDataError: any) {
-      safeLogger.error(`[${requestId}] Error fetching student data`, studentDataError);
+      safeLogger.error(`[${requestId}] Error fetching student data`, {
+        error: studentDataError,
+        message: studentDataError?.message,
+        stack: studentDataError?.stack,
+        name: studentDataError?.name,
+      });
+      
+      // If student profile not found in getStudentDataForMatching, return empty list
+      if (studentDataError?.message?.includes('not found')) {
+        safeLogger.info(`[${requestId}] Student data not found - returning empty list`);
+        return NextResponse.json({
+          ok: true,
+          jobs: [],
+          total: 0,
+          reason: 'PROFILE_INCOMPLETE',
+          missingFields: ['student_data'],
+        });
+      }
+      
       return NextResponse.json(
-        { error: 'Failed to fetch student data', details: studentDataError?.message },
+        { 
+          ok: false,
+          error: { 
+            code: 'SERVER_ERROR',
+            message: 'Failed to fetch student data'
+          },
+          requestId 
+        },
         { status: 500 }
       );
     }
@@ -239,11 +469,19 @@ export async function GET(request: NextRequest) {
     } catch (dbError: any) {
       safeLogger.error(`[${requestId}] Database query exception`, {
         error: dbError?.message || 'Unknown database error',
-        stack: dbError?.stack,
+        stack: dbError?.stack || new Error().stack,
         name: dbError?.name,
+        code: dbError?.code,
       });
       return NextResponse.json(
-        { error: 'Database query failed', requestId },
+        { 
+          ok: false,
+          error: { 
+            code: 'SERVER_ERROR',
+            message: 'Database query failed'
+          },
+          requestId 
+        },
         { status: 500 }
       );
     }
@@ -255,9 +493,17 @@ export async function GET(request: NextRequest) {
         message: jobsError.message,
         details: jobsError.details,
         hint: jobsError.hint,
+        stack: jobsError.stack || new Error().stack,
       });
       return NextResponse.json(
-        { error: 'Failed to fetch jobs', details: jobsError.message, requestId },
+        { 
+          ok: false,
+          error: { 
+            code: 'SERVER_ERROR',
+            message: 'Failed to fetch jobs'
+          },
+          requestId 
+        },
         { status: 500 }
       );
     }
@@ -357,9 +603,12 @@ export async function GET(request: NextRequest) {
     safeLogger.info(`[${requestId}] GET /api/jobs - Request completed`, {
       duration: `${totalTime}ms`,
       jobsCount: jobsWithScores.length,
+      dbQueryTime: `${jobsTime}ms`,
+      matchingTime: `${matchingTime}ms`,
     });
 
     return NextResponse.json({
+      ok: true,
       jobs: jobsWithScores,
       total: jobsWithScores.length,
     });
@@ -367,7 +616,7 @@ export async function GET(request: NextRequest) {
     const totalTime = Date.now() - startTime;
     safeLogger.error(`[${requestId}] GET /api/jobs - Unhandled error`, {
       error: error?.message || 'Unknown error',
-      stack: error?.stack,
+      stack: error?.stack || new Error().stack,
       name: error?.name,
       code: error?.code,
       duration: `${totalTime}ms`,
@@ -375,9 +624,16 @@ export async function GET(request: NextRequest) {
     });
     return NextResponse.json(
       {
-        error: 'Internal server error',
+        ok: false,
+        error: {
+          code: 'SERVER_ERROR',
+          message: 'Internal server error',
+        },
         requestId,
-        message: process.env.NODE_ENV === 'development' ? error?.message : undefined,
+        // Only include error details in development
+        ...(process.env.NODE_ENV === 'development' && { 
+          details: error?.message 
+        }),
       },
       { status: 500 }
     );

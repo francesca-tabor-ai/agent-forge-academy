@@ -109,35 +109,43 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
         },
       });
       
-      if (!response.ok) {
+      const data = await response.json();
+      
+      // Check if response indicates an error (even if status is 200)
+      if (!response.ok || (data && data.ok === false)) {
         // Try to read error message from response
         let errorMessage = 'Failed to fetch jobs';
         let retryable = response.status >= 500;
+        let requestId: string | undefined;
         
-        try {
-          const errorData = await response.json();
-          errorMessage = errorData.error || errorMessage;
-          if (errorData.details) {
-            if (Array.isArray(errorData.details)) {
-              errorMessage += `: ${errorData.details.join(', ')}`;
-            } else {
-              errorMessage += `: ${errorData.details}`;
+        if (data && typeof data === 'object') {
+          // New error format with error.code and error.message
+          if (data.error) {
+            if (typeof data.error === 'object' && data.error.message) {
+              errorMessage = data.error.message;
+            } else if (typeof data.error === 'string') {
+              errorMessage = data.error;
+            }
+            
+            // Add error code if available
+            if (typeof data.error === 'object' && data.error.code) {
+              errorMessage = `${data.error.code}: ${errorMessage}`;
             }
           }
-          if (errorData.requestId) {
-            console.error(`[Jobs API Error] Request ID: ${errorData.requestId}`);
-          }
-        } catch (parseError) {
-          // If JSON parsing fails, try to read as text
-          try {
-            const text = await response.text();
-            if (text) {
-              errorMessage = text.length > 100 ? `${text.substring(0, 100)}...` : text;
+          
+          // Add details if available
+          if (data.details) {
+            if (Array.isArray(data.details)) {
+              errorMessage += `: ${data.details.join(', ')}`;
             } else {
-              errorMessage = response.statusText || errorMessage;
+              errorMessage += `: ${data.details}`;
             }
-          } catch {
-            errorMessage = response.statusText || errorMessage;
+          }
+          
+          // Extract requestId for logging
+          if (data.requestId) {
+            requestId = data.requestId;
+            console.error(`[Jobs API Error] Request ID: ${requestId}`);
           }
         }
         
@@ -151,14 +159,37 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
           retryable = false;
         }
         
-        throw new Error(errorMessage);
+        // Include requestId in error message if available
+        const errorWithRequestId = requestId 
+          ? new Error(`${errorMessage} (Error ID: ${requestId})`)
+          : new Error(errorMessage);
+        (errorWithRequestId as any).requestId = requestId;
+        throw errorWithRequestId;
       }
-      
-      const data = await response.json();
       
       // Validate response structure
       if (!data || typeof data !== 'object') {
         throw new Error('Invalid response format from server');
+      }
+      
+      // Check for ok: false even with 200 status
+      if (data.ok === false) {
+        const errorMessage = data.error?.message || 'Failed to fetch jobs';
+        const requestId = data.requestId;
+        const errorWithRequestId = requestId 
+          ? new Error(`${errorMessage} (Error ID: ${requestId})`)
+          : new Error(errorMessage);
+        (errorWithRequestId as any).requestId = requestId;
+        throw errorWithRequestId;
+      }
+      
+      // Handle empty state with reason (e.g., PROFILE_INCOMPLETE)
+      if (data.reason === 'PROFILE_INCOMPLETE') {
+        // This is a healthy empty state - no error, just no jobs yet
+        setJobs([]);
+        setError(null);
+        setRetryCount(0);
+        return;
       }
       
       // Map API response (snake_case) to component format
@@ -191,10 +222,20 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
                             error.message?.includes('network');
       const isServerError = error.message?.includes('Server error') || 
                            error.message?.includes('500') ||
-                           error.message?.includes('Internal server error');
+                           error.message?.includes('Internal server error') ||
+                           error.message?.includes('SERVER_ERROR');
+      
+      // Extract requestId from error if available
+      const requestId = (error as any).requestId;
+      let errorMessage = error.message || 'Failed to fetch jobs. Please check your connection and try again.';
+      
+      // Ensure requestId is shown in the error message
+      if (requestId && !errorMessage.includes(requestId)) {
+        errorMessage = `${errorMessage} (Error ID: ${requestId})`;
+      }
       
       setError({
-        message: error.message || 'Failed to fetch jobs. Please check your connection and try again.',
+        message: errorMessage,
         retryable: isNetworkError || isServerError,
       });
     } finally {
@@ -424,7 +465,17 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
                 We couldn't load jobs right now
               </h3>
-              <p className="text-sm text-gray-600 mb-4">{error.message}</p>
+              <p className="text-sm text-gray-600 mb-2">{error.message}</p>
+              {error.message.includes('Error ID:') && (
+                <p className="text-xs text-gray-500 mb-4">
+                  If this problem persists, please contact support with the Error ID above.
+                </p>
+              )}
+              {!error.message.includes('Error ID:') && (
+                <p className="text-xs text-gray-500 mb-4">
+                  Please check your connection and try again.
+                </p>
+              )}
               {error.retryable && (
                 <button
                   onClick={handleRetry}
