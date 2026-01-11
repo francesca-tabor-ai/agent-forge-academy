@@ -42,7 +42,7 @@ export default async function EditProjectPage({ params }: EditProjectPageProps) 
   // Get project (verify ownership via RLS)
   const { data: project } = await supabase
     .from('portfolio_projects')
-    .select('id, title, description, github_url, demo_url, visibility, cover_image_url, images')
+    .select('id, title, description, github_url, demo_url, visibility')
     .eq('id', id)
     .eq('student_profile_id', studentProfile.id)
     .single();
@@ -51,10 +51,18 @@ export default async function EditProjectPage({ params }: EditProjectPageProps) 
     redirect('/student/portfolio');
   }
 
+  // Images are now fetched separately via the component
+  // Pass empty arrays initially, component will fetch via API
+  const projectWithImages = {
+    ...project,
+    cover_image_url: null,
+    images: [],
+  };
+
   return (
     <div className="edit-project-page">
       <h1>Edit Project</h1>
-      <EditProjectForm project={project} />
+      <EditProjectForm project={projectWithImages} />
     </div>
   );
 }

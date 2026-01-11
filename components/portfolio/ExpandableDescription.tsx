@@ -1,31 +1,21 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 
 interface ExpandableDescriptionProps {
   content: string;
   maxLines?: number;
   className?: string;
-  showTLDR?: boolean;
 }
 
-export function ExpandableDescription({ content, maxLines = 2, className = '', showTLDR = false }: ExpandableDescriptionProps) {
+export function ExpandableDescription({ content, maxLines = 2, className = '' }: ExpandableDescriptionProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   if (!content) return null;
 
-  // Extract TL;DR (first 1-2 lines) for preview
-  const tldr = useMemo(() => {
-    if (!showTLDR) return null;
-    const lines = content.split('\n').filter(line => line.trim().length > 0);
-    return lines.slice(0, 2).join(' ').substring(0, 150);
-  }, [content, showTLDR]);
-
   // Determine if content is long enough to need expansion
   const needsExpansion = content.length > 150 || content.split('\n').length > maxLines;
-
-  const lineClampClass = isExpanded ? '' : `line-clamp-${maxLines}`;
 
   // Use proper Tailwind line-clamp classes
   const getLineClampClass = (lines: number) => {
@@ -42,12 +32,6 @@ export function ExpandableDescription({ content, maxLines = 2, className = '', s
 
   return (
     <div className={className}>
-      {showTLDR && !isExpanded && tldr && (
-        <div className="mb-2">
-          <p className="text-sm text-gray-700 font-medium">TL;DR:</p>
-          <p className="text-sm text-gray-600">{tldr}...</p>
-        </div>
-      )}
       <div
         className={`overflow-hidden transition-all duration-300 ${isExpanded ? '' : getLineClampClass(maxLines)}`}
       >

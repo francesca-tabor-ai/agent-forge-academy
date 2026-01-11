@@ -92,7 +92,7 @@ export function ProjectCard({
 
           {description && (
             <div className="mb-3 flex-1">
-              <ExpandableDescription content={description} maxLines={2} showTLDR={true} />
+              <ExpandableDescription content={description} maxLines={2} />
             </div>
           )}
 
@@ -153,7 +153,7 @@ export function ProjectCard({
 
           {description && (
             <div className="mb-3">
-              <ExpandableDescription content={description} maxLines={2} showTLDR={true} />
+              <ExpandableDescription content={description} maxLines={2} />
             </div>
           )}
 

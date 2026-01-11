@@ -18,9 +18,10 @@ export async function PATCH(request: Request, { params }: RouteParams) {
     }
 
     const body = await request.json();
-    const { title, description, github_url, demo_url, visibility, cover_image_url, images } = body;
+    const { title, description, github_url, demo_url, visibility } = body;
 
     // Update project (RLS will enforce ownership)
+    // Note: Images are now handled via separate API routes
     const { data: project, error } = await supabase
       .from('portfolio_projects')
       .update({
@@ -29,8 +30,6 @@ export async function PATCH(request: Request, { params }: RouteParams) {
         github_url,
         demo_url,
         visibility,
-        cover_image_url: cover_image_url || null,
-        images: images || [],
       })
       .eq('id', id)
       .select()

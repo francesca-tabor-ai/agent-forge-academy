@@ -5,6 +5,12 @@ import { useRouter } from 'next/navigation';
 import { RichTextEditor } from './RichTextEditor';
 import { ProjectImageUpload } from './ProjectImageUpload';
 
+interface GalleryImage {
+  id: string;
+  url: string;
+  sort_order: number;
+}
+
 interface Project {
   id: string;
   title: string;
@@ -13,7 +19,7 @@ interface Project {
   demo_url: string | null;
   visibility: 'private' | 'recruiters_only' | 'public';
   cover_image_url?: string | null;
-  images?: string[] | null;
+  images?: GalleryImage[] | null;
 }
 
 interface EditProjectFormProps {
@@ -32,7 +38,7 @@ export function EditProjectForm({ project }: EditProjectFormProps) {
     demo_url: project.demo_url || '',
     visibility: project.visibility,
     cover_image_url: project.cover_image_url || '',
-    images: (project.images as string[]) || [],
+    images: (project.images as GalleryImage[]) || [],
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -51,8 +57,7 @@ export function EditProjectForm({ project }: EditProjectFormProps) {
           github_url: formData.github_url,
           demo_url: formData.demo_url,
           visibility: formData.visibility,
-          cover_image_url: formData.cover_image_url || null,
-          images: formData.images,
+          // Images are now handled separately via dedicated API routes
         }),
       });
 
@@ -157,6 +162,7 @@ export function EditProjectForm({ project }: EditProjectFormProps) {
             coverImageUrl={formData.cover_image_url}
             images={formData.images}
             onImagesChange={(coverUrl, images) => {
+              // Images are automatically saved via API, just update local state for display
               setFormData({
                 ...formData,
                 cover_image_url: coverUrl || '',
