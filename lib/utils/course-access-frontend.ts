@@ -12,12 +12,12 @@ import { ESSENTIAL_TIER_COURSES, type SubscriptionTier } from './subscription-ty
  * Checks if a course is accessible based on subscription tier
  * 
  * @param courseSlug - The slug of the course to check
- * @param subscriptionTier - The user's subscription tier ('essential' | 'professional' | null)
+ * @param subscriptionTier - The user's subscription tier ('essential' | 'professional' | null | undefined)
  * @returns true if course is accessible, false if locked
  */
 export function isCourseAccessible(
   courseSlug: string,
-  subscriptionTier: SubscriptionTier | null
+  subscriptionTier: SubscriptionTier | null | undefined
 ): boolean {
   // No subscription = no access
   if (!subscriptionTier) {
@@ -47,7 +47,7 @@ export function isCourseAccessible(
  */
 export function isCourseLocked(
   courseSlug: string,
-  subscriptionTier: SubscriptionTier | null
+  subscriptionTier: SubscriptionTier | null | undefined
 ): boolean {
   return !isCourseAccessible(courseSlug, subscriptionTier);
 }
@@ -59,7 +59,7 @@ export function isCourseLocked(
  * @returns Lock reason message or null if not locked
  */
 export function getCourseLockReason(
-  subscriptionTier: SubscriptionTier | null
+  subscriptionTier: SubscriptionTier | null | undefined
 ): string | null {
   if (!subscriptionTier) {
     return 'A subscription is required to access this course.';
@@ -78,7 +78,7 @@ export function getCourseLockReason(
  * @param subscriptionTier - The user's subscription tier
  * @returns Upgrade message
  */
-export function getUpgradeMessage(subscriptionTier: SubscriptionTier | null): string {
+export function getUpgradeMessage(subscriptionTier: SubscriptionTier | null | undefined): string {
   if (!subscriptionTier) {
     return 'Upgrade to Professional Access to unlock all courses.';
   }
