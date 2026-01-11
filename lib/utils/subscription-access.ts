@@ -9,6 +9,8 @@
  * - PROFESSIONAL: Full access to all courses
  */
 
+import 'server-only';
+
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 
 /**

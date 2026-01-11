@@ -22,6 +22,8 @@
  * ```
  */
 
+import 'server-only';
+
 import { NextResponse } from 'next/server';
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { canUserAccessCourse } from '@/lib/utils/subscription-access';

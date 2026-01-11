@@ -3,6 +3,8 @@
  * Chunks lessons, generates embeddings, and stores in Supabase
  */
 
+import 'server-only';
+
 import { loadAllLessons, type Lesson } from '@/lib/lessons';
 import { getEmbeddingProvider } from './embeddings';
 import { createServerSupabaseClient } from '@/lib/supabase/server';

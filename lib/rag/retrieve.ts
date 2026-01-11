@@ -3,6 +3,8 @@
  * Supports both vector similarity search (if pgvector available) and keyword search fallback
  */
 
+import 'server-only';
+
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { getEmbeddingProvider } from './embeddings';
 
