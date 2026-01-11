@@ -76,20 +76,21 @@ See `06_seed_example_templates.sql` for copy/paste templates you can adapt:
 ./scripts/run-seeds.sh --reset
 ```
 
-### Manual execution
+### Manual execution (from Cursor terminal)
 
 ```bash
-# Load environment variables
+# Load environment variables (if not already loaded)
 export $(grep -v '^#' .env | xargs)
 
 # Run each script in order
-psql "$SUPABASE_DB_URL" -f supabase/seed/00_reset.sql
 psql "$SUPABASE_DB_URL" -f supabase/seed/01_seed_core.sql
 psql "$SUPABASE_DB_URL" -f supabase/seed/02_seed_content.sql
 psql "$SUPABASE_DB_URL" -f supabase/seed/03_seed_events.sql
 psql "$SUPABASE_DB_URL" -f supabase/seed/04_seed_jobs_offers.sql
 psql "$SUPABASE_DB_URL" -f supabase/seed/99_verify.sql
 ```
+
+**Note**: Skip `00_reset.sql` unless you want to clear existing seed data first.
 
 ## What Gets Seeded
 
