@@ -28,9 +28,9 @@ interface SendEmailResult {
 /**
  * Build unsubscribe URL with token
  */
-function buildUnsubscribeUrl(token: string): string {
+function buildUnsubscribeUrl(token: string, type: 'learning' | 'jobs' | 'all' = 'all'): string {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://your-domain.com';
-  return `${baseUrl}/api/unsubscribe?token=${encodeURIComponent(token)}`;
+  return `${baseUrl}/api/email/unsubscribe?token=${encodeURIComponent(token)}&type=${type}`;
 }
 
 /**
