@@ -18,6 +18,7 @@ export interface Message {
     project?: { id: string; title: string };
     job?: { id: string; title: string; company: string };
   };
+  intent?: string; // For quick actions
 }
 
 export interface ActiveContext {
@@ -55,9 +56,9 @@ export function AIAdvisor({
   const [conversationAttempts, setConversationAttempts] = useState(0);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
-  // Load context from database on mount
+  // Load context and conversation history from database on mount
   useEffect(() => {
-    const loadContext = async () => {
+    const loadContextAndHistory = async () => {
       try {
         const response = await fetch('/api/advisor/context');
         if (response.ok) {
@@ -81,6 +82,34 @@ export function AIAdvisor({
           
           if (Object.keys(loadedContext).length > 0) {
             setActiveContext(loadedContext);
+            
+            // Load conversation history for this context
+            const convParams = new URLSearchParams();
+            if (loadedContext.course) convParams.set('courseId', loadedContext.course.id);
+            if (loadedContext.project) convParams.set('projectId', loadedContext.project.id);
+            if (loadedContext.job) convParams.set('jobId', loadedContext.job.id);
+            
+            const convResponse = await fetch(`/api/advisor/conversations?${convParams.toString()}`);
+            if (convResponse.ok) {
+              const convData = await convResponse.json();
+              if (convData.messages && convData.messages.length > 0) {
+                // Convert to Message format
+                const loadedMessages: Message[] = convData.messages.map((msg: any) => ({
+                  id: msg.id,
+                  role: msg.role,
+                  content: msg.content,
+                  timestamp: new Date(msg.timestamp),
+                  context: loadedContext,
+                  intent: msg.intent,
+                }));
+                
+                // Replace initial greeting with loaded messages
+                setMessages(loadedMessages);
+                if (convData.conversationId) {
+                  setConversationId(convData.conversationId);
+                }
+              }
+            }
           } else {
             // Fallback: auto-detect context if none persisted
             const fallbackContext: ActiveContext = {};
@@ -117,7 +146,7 @@ export function AIAdvisor({
       }
     };
     
-    loadContext();
+    loadContextAndHistory();
   }, []); // Only run on mount
 
   // Auto-scroll to bottom when new messages arrive
@@ -125,7 +154,9 @@ export function AIAdvisor({
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const handleSendMessage = async (messageText: string, isQuickAction = false) => {
+  const [conversationId, setConversationId] = useState<string | null>(null);
+
+  const handleSendMessage = async (messageText: string, isQuickAction = false, intent?: string) => {
     if (!messageText.trim() || isLoading) return;
 
     const userMessage: Message = {
@@ -152,6 +183,8 @@ export function AIAdvisor({
           context: activeContext,
           studentProfileId,
           conversationHistory: messages.slice(-10), // Last 10 messages for context
+          intent,
+          conversationId,
         }),
       });
 
@@ -161,12 +194,18 @@ export function AIAdvisor({
 
       const data = await response.json();
       
+      // Update conversation ID if provided
+      if (data.conversationId) {
+        setConversationId(data.conversationId);
+      }
+      
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
         content: data.response,
         timestamp: new Date(),
         context: activeContext,
+        intent, // Store intent for writeback actions
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
@@ -189,8 +228,8 @@ export function AIAdvisor({
     handleSendMessage(inputMessage);
   };
 
-  const handleQuickAction = (prompt: string) => {
-    handleSendMessage(prompt, true);
+  const handleQuickAction = (prompt: string, intent?: string) => {
+    handleSendMessage(prompt, true, intent);
   };
 
   const handleEscalateToHuman = () => {
@@ -202,11 +241,31 @@ export function AIAdvisor({
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-3xl font-semibold text-gray-900">AI Advisor</h1>
-        <p className="text-sm text-gray-600 mt-1">
-          Get help with courses, projects, and job applications.
-        </p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-semibold text-gray-900">AI Advisor</h1>
+          <p className="text-sm text-gray-600 mt-1">
+            Get help with courses, projects, and job applications.
+          </p>
+        </div>
+        {messages.length > 1 && (
+          <button
+            onClick={() => {
+              setMessages([
+                {
+                  id: '1',
+                  role: 'assistant',
+                  content: "Hi! I'm your AI advisor. I can help you with course explanations, project guidance, and job application support. What would you like help with today?",
+                  timestamp: new Date(),
+                },
+              ]);
+              setConversationId(null);
+            }}
+            className="px-4 py-2 text-sm bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+          >
+            New Chat
+          </button>
+        )}
       </div>
 
       {/* Context Bar */}
@@ -251,6 +310,36 @@ export function AIAdvisor({
           isLoading={isLoading}
           chatEndRef={chatEndRef}
           activeContext={activeContext}
+          onApplyDescription={async (description: string) => {
+            if (!activeContext.project?.id) return;
+            
+            try {
+              const response = await fetch(`/api/projects/${activeContext.project.id}`, {
+                method: 'PATCH',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ description }),
+              });
+              
+              if (!response.ok) {
+                throw new Error('Failed to update project');
+              }
+              
+              // Show success message
+              const successMessage: Message = {
+                id: Date.now().toString(),
+                role: 'assistant',
+                content: `✅ **Success!** Project description has been updated. You can view it in your [portfolio](/student/portfolio).`,
+                timestamp: new Date(),
+                context: activeContext,
+              };
+              setMessages((prev) => [...prev, successMessage]);
+            } catch (error) {
+              console.error('Error applying description:', error);
+              throw error;
+            }
+          }}
         />
 
         {/* Quick Actions */}

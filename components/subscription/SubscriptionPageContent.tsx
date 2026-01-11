@@ -6,7 +6,9 @@ import { PlanBenefits } from './PlanBenefits';
 import { BillingInformation } from './BillingInformation';
 import { CancelSubscriptionModal } from './CancelSubscriptionModal';
 import { ChangePlanModal } from './ChangePlanModal';
+import { ComparePlansModal } from './ComparePlansModal';
 import { PaymentErrorBanner } from './PaymentErrorBanner';
+import { InvoicesList } from './InvoicesList';
 import type { SubscriptionData } from '@/lib/types/subscription';
 
 interface SubscriptionPageContentProps {
@@ -17,6 +19,7 @@ interface SubscriptionPageContentProps {
 export function SubscriptionPageContent({ subscriptionData, userEmail }: SubscriptionPageContentProps) {
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [showChangePlanModal, setShowChangePlanModal] = useState(false);
+  const [showComparePlansModal, setShowComparePlansModal] = useState(false);
   const [subscription, setSubscription] = useState(subscriptionData);
   const [paymentError, setPaymentError] = useState<'failed_payment' | 'expired_card' | 'trial_ending_soon' | null>(null);
 
@@ -85,24 +88,45 @@ export function SubscriptionPageContent({ subscriptionData, userEmail }: Subscri
         />
       )}
 
-      {/* Current Plan Card */}
-      <CurrentPlanCard
-        plan={subscription.plan}
-        onUpgrade={() => setShowChangePlanModal(true)}
-        onChangePlan={() => setShowChangePlanModal(true)}
-        onCancel={() => setShowCancelModal(true)}
-        availablePlans={subscription.availablePlans}
-      />
+      {/* Plan Section */}
+      <div className="space-y-6">
+        <div>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Plan</h2>
+          <CurrentPlanCard
+            plan={subscription.plan}
+            onUpgrade={() => setShowChangePlanModal(true)}
+            onManagePlan={() => setShowChangePlanModal(true)}
+            onCancel={() => setShowCancelModal(true)}
+            availablePlans={subscription.availablePlans}
+            usage={subscription.usage}
+            benefits={subscription.benefits}
+          />
+        </div>
 
-      {/* Plan Benefits */}
-      <PlanBenefits benefits={subscription.benefits} />
+        <PlanBenefits
+          benefits={subscription.benefits}
+          usage={subscription.usage}
+          onUpgrade={() => setShowChangePlanModal(true)}
+          onComparePlans={() => setShowComparePlansModal(true)}
+        />
+      </div>
 
-      {/* Billing Information */}
-      <BillingInformation
-        billing={subscription.billing}
-        invoices={subscription.invoices}
-        userEmail={userEmail}
-      />
+      {/* Billing Section */}
+      <div className="space-y-6">
+        <div>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Billing</h2>
+          <BillingInformation
+            billing={subscription.billing}
+            invoices={subscription.invoices}
+            userEmail={userEmail}
+          />
+        </div>
+
+        <div>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Invoice History</h2>
+          <InvoicesList invoices={subscription.invoices} />
+        </div>
+      </div>
 
       {/* Modals */}
       {showCancelModal && (
@@ -110,6 +134,10 @@ export function SubscriptionPageContent({ subscriptionData, userEmail }: Subscri
           onConfirm={handleCancelSubscription}
           onClose={() => setShowCancelModal(false)}
           renewalDate={subscription.plan.renewalDate}
+          onDowngrade={() => {
+            setShowCancelModal(false);
+            setShowChangePlanModal(true);
+          }}
         />
       )}
 
@@ -119,6 +147,18 @@ export function SubscriptionPageContent({ subscriptionData, userEmail }: Subscri
           availablePlans={subscription.availablePlans}
           onConfirm={handleChangePlan}
           onClose={() => setShowChangePlanModal(false)}
+        />
+      )}
+
+      {showComparePlansModal && (
+        <ComparePlansModal
+          currentPlanTier={subscription.plan.tier}
+          availablePlans={subscription.availablePlans}
+          onClose={() => setShowComparePlansModal(false)}
+          onSelectPlan={(tier) => {
+            setShowComparePlansModal(false);
+            handleChangePlan(tier);
+          }}
         />
       )}
     </div>

@@ -10,6 +10,7 @@ interface Plan {
   renewalDate: string;
   trialEndDate: string | null;
   trialDaysRemaining: number | null;
+  valueSummary?: string;
 }
 
 interface AvailablePlan {
@@ -19,20 +20,37 @@ interface AvailablePlan {
   billingCycle: string;
 }
 
+interface Usage {
+  projectsUsed: number;
+  portfoliosUsed: number;
+  aiAdvisorUsed?: number;
+  jobsApplied?: number;
+}
+
+interface Benefits {
+  projectLimit: number;
+  portfolioLimit: number;
+  toolDiscountEligibility: boolean;
+}
+
 interface CurrentPlanCardProps {
   plan: Plan;
   onUpgrade: () => void;
-  onChangePlan: () => void;
+  onManagePlan: () => void;
   onCancel: () => void;
   availablePlans: AvailablePlan[];
+  usage?: Usage;
+  benefits?: Benefits;
 }
 
 export function CurrentPlanCard({
   plan,
   onUpgrade,
-  onChangePlan,
+  onManagePlan,
   onCancel,
   availablePlans,
+  usage,
+  benefits,
 }: CurrentPlanCardProps) {
   const formatCurrency = (amount: number, currency: string) => {
     return new Intl.NumberFormat('en-GB', {
@@ -93,6 +111,28 @@ export function CurrentPlanCard({
     return formatDate(plan.renewalDate);
   };
 
+  const getValueSummary = () => {
+    if (plan.valueSummary) return plan.valueSummary;
+    // Default value summaries based on tier
+    const summaries: Record<string, string> = {
+      starter: 'Best for builders actively shipping AI projects and applying for roles.',
+      pro: 'Best for professionals building portfolios and advancing their careers.',
+      career: 'Best for teams and organizations scaling AI talent.',
+    };
+    return summaries[plan.tier] || 'Your current subscription plan.';
+  };
+
+  const getUsagePercentage = (used: number, limit: number) => {
+    return Math.min(Math.round((used / limit) * 100), 100);
+  };
+
+  const getUsageColor = (used: number, limit: number) => {
+    const percentage = (used / limit) * 100;
+    if (percentage >= 90) return 'text-red-600';
+    if (percentage >= 70) return 'text-yellow-600';
+    return 'text-gray-600';
+  };
+
   return (
     <div className="bg-white border border-gray-200 rounded-lg p-6">
       <h2 className="text-lg font-semibold text-gray-900 mb-4">Current Plan</h2>
@@ -100,7 +140,7 @@ export function CurrentPlanCard({
       <div className="space-y-4">
         {/* Plan Details */}
         <div className="flex items-start justify-between">
-          <div className="space-y-2">
+          <div className="space-y-2 flex-1">
             <div className="flex items-center gap-3">
               <h3 className="text-xl font-semibold text-gray-900">{plan.name}</h3>
               {getStatusBadge()}
@@ -113,8 +153,74 @@ export function CurrentPlanCard({
                 {plan.status === 'trial' ? 'Trial ends' : 'Renews'} on {getNextBillingDate()}
               </p>
             </div>
+            {/* Value Summary */}
+            <p className="text-sm text-gray-700 mt-3 italic">{getValueSummary()}</p>
           </div>
         </div>
+
+        {/* Usage Indicators */}
+        {usage && benefits && (
+          <div className="pt-4 border-t border-gray-200 space-y-3">
+            <h4 className="text-sm font-medium text-gray-900">Usage</h4>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-700">Projects</span>
+                <span className={`text-sm font-medium ${getUsageColor(usage.projectsUsed, benefits.projectLimit)}`}>
+                  {usage.projectsUsed} / {benefits.projectLimit} used
+                </span>
+              </div>
+              {usage.projectsUsed > 0 && (
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div
+                    className={`h-2 rounded-full ${
+                      getUsagePercentage(usage.projectsUsed, benefits.projectLimit) >= 90
+                        ? 'bg-red-500'
+                        : getUsagePercentage(usage.projectsUsed, benefits.projectLimit) >= 70
+                          ? 'bg-yellow-500'
+                          : 'bg-brand-light'
+                    }`}
+                    style={{
+                      width: `${getUsagePercentage(usage.projectsUsed, benefits.projectLimit)}%`,
+                    }}
+                  />
+                </div>
+              )}
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-700">Portfolios</span>
+                <span className={`text-sm font-medium ${getUsageColor(usage.portfoliosUsed, benefits.portfolioLimit)}`}>
+                  {usage.portfoliosUsed} / {benefits.portfolioLimit} used
+                </span>
+              </div>
+              {usage.portfoliosUsed > 0 && (
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div
+                    className={`h-2 rounded-full ${
+                      getUsagePercentage(usage.portfoliosUsed, benefits.portfolioLimit) >= 90
+                        ? 'bg-red-500'
+                        : getUsagePercentage(usage.portfoliosUsed, benefits.portfolioLimit) >= 70
+                          ? 'bg-yellow-500'
+                          : 'bg-brand-light'
+                    }`}
+                    style={{
+                      width: `${getUsagePercentage(usage.portfoliosUsed, benefits.portfolioLimit)}%`,
+                    }}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Missing Features Highlight */}
+        {benefits && !benefits.toolDiscountEligibility && (
+          <div className="pt-4 border-t border-gray-200">
+            <div className="flex items-center gap-2 text-sm text-gray-700">
+              <span className="text-red-500">❌</span>
+              <span>Tool discounts: Not included</span>
+              <span className="text-gray-500">(available on Pro)</span>
+            </div>
+          </div>
+        )}
 
         {/* Primary Actions */}
         <div className="flex flex-wrap gap-3 pt-4 border-t border-gray-200">
@@ -128,16 +234,16 @@ export function CurrentPlanCard({
           )}
           {plan.status === 'active' && (
             <button
-              onClick={onChangePlan}
+              onClick={onManagePlan}
               className="px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors"
             >
-              Change Plan
+              Manage Plan
             </button>
           )}
           {plan.status === 'active' && (
             <button
               onClick={onCancel}
-              className="px-4 py-2 bg-white border border-red-300 text-red-700 text-sm font-medium rounded-lg hover:bg-red-50 transition-colors"
+              className="px-4 py-2 text-sm font-medium text-red-700 hover:text-red-800 transition-colors"
             >
               Cancel Subscription
             </button>

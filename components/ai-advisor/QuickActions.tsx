@@ -4,7 +4,7 @@ import { ActiveContext } from './AIAdvisor';
 
 interface QuickActionsProps {
   activeContext: ActiveContext;
-  onAction: (prompt: string) => void;
+  onAction: (prompt: string, intent?: string) => void;
 }
 
 export function QuickActions({ activeContext, onAction }: QuickActionsProps) {
@@ -35,39 +35,52 @@ export function QuickActions({ activeContext, onAction }: QuickActionsProps) {
       prompt: activeContext.project
         ? `Review the architecture for my project: ${activeContext.project.title}.`
         : 'Review my project architecture.',
+      intent: 'architecture_review',
     },
     {
       label: 'Suggest improvements and risks',
       prompt: activeContext.project
         ? `Suggest improvements and potential risks for my project: ${activeContext.project.title}.`
         : 'Suggest improvements and risks for my project.',
+      intent: 'risks_and_improvements',
     },
     {
       label: 'Help me write my project description',
       prompt: activeContext.project
         ? `Help me write a compelling project description for: ${activeContext.project.title}.`
         : 'Help me write my project description.',
+      intent: 'rewrite_description',
     },
   ];
 
   const careerActions = [
     {
-      label: 'Tailor my CV for this role',
+      label: 'Generate CV for this job',
       prompt: activeContext.job
-        ? `Help me tailor my CV for the ${activeContext.job.title} role at ${activeContext.job.company}.`
-        : 'Help me tailor my CV for this role.',
+        ? `Generate a CV for the ${activeContext.job.title} role at ${activeContext.job.company}.`
+        : 'Generate a CV for this job.',
+      intent: 'generate_cv',
     },
     {
-      label: 'Write a cover letter for this job',
+      label: 'Generate cover letter',
       prompt: activeContext.job
-        ? `Help me write a cover letter for the ${activeContext.job.title} role at ${activeContext.job.company}.`
-        : 'Help me write a cover letter for this job.',
+        ? `Generate a cover letter for the ${activeContext.job.title} role at ${activeContext.job.company}.`
+        : 'Generate a cover letter for this job.',
+      intent: 'generate_cover_letter',
     },
     {
-      label: 'Mock interview questions',
+      label: 'Tailor portfolio for this job',
       prompt: activeContext.job
-        ? `Give me mock interview questions for the ${activeContext.job.title} role at ${activeContext.job.company}.`
-        : 'Give me mock interview questions for this role.',
+        ? `Help me tailor my portfolio for the ${activeContext.job.title} role at ${activeContext.job.company}.`
+        : 'Help me tailor my portfolio for this job.',
+      intent: 'tailor_portfolio',
+    },
+    {
+      label: 'Improve match score',
+      prompt: activeContext.job
+        ? `Help me improve my match score for the ${activeContext.job.title} role at ${activeContext.job.company}.`
+        : 'Help me improve my match score.',
+      intent: 'improve_match_score',
     },
   ];
 
@@ -85,7 +98,7 @@ export function QuickActions({ activeContext, onAction }: QuickActionsProps) {
           {learningActions.map((action, idx) => (
             <button
               key={idx}
-              onClick={() => onAction(action.prompt)}
+              onClick={() => onAction(action.prompt, (action as any).intent)}
               className="px-3 py-1.5 text-xs bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
             >
               {action.label}
@@ -94,7 +107,7 @@ export function QuickActions({ activeContext, onAction }: QuickActionsProps) {
           {projectActions.map((action, idx) => (
             <button
               key={idx}
-              onClick={() => onAction(action.prompt)}
+              onClick={() => onAction(action.prompt, action.intent)}
               className="px-3 py-1.5 text-xs bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
             >
               {action.label}
@@ -103,7 +116,7 @@ export function QuickActions({ activeContext, onAction }: QuickActionsProps) {
           {careerActions.map((action, idx) => (
             <button
               key={idx}
-              onClick={() => onAction(action.prompt)}
+              onClick={() => onAction(action.prompt, action.intent)}
               className="px-3 py-1.5 text-xs bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
             >
               {action.label}
@@ -123,7 +136,7 @@ export function QuickActions({ activeContext, onAction }: QuickActionsProps) {
             {learningActions.map((action, idx) => (
               <button
                 key={idx}
-                onClick={() => onAction(action.prompt)}
+                onClick={() => onAction(action.prompt, (action as any).intent)}
                 className="px-3 py-1.5 text-xs bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
               >
                 {action.label}
@@ -140,7 +153,7 @@ export function QuickActions({ activeContext, onAction }: QuickActionsProps) {
             {projectActions.map((action, idx) => (
               <button
                 key={idx}
-                onClick={() => onAction(action.prompt)}
+                onClick={() => onAction(action.prompt, action.intent)}
                 className="px-3 py-1.5 text-xs bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
               >
                 {action.label}
@@ -157,7 +170,7 @@ export function QuickActions({ activeContext, onAction }: QuickActionsProps) {
             {careerActions.map((action, idx) => (
               <button
                 key={idx}
-                onClick={() => onAction(action.prompt)}
+                onClick={() => onAction(action.prompt, action.intent)}
                 className="px-3 py-1.5 text-xs bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
               >
                 {action.label}

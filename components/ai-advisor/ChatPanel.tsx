@@ -3,18 +3,58 @@
 import { Message, ActiveContext } from './AIAdvisor';
 import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
+import { useState } from 'react';
 
 interface ChatPanelProps {
   messages: Message[];
   isLoading: boolean;
   chatEndRef: React.RefObject<HTMLDivElement>;
   activeContext: ActiveContext;
+  onApplyDescription?: (description: string) => Promise<void>;
 }
 
-export function ChatPanel({ messages, isLoading, chatEndRef, activeContext }: ChatPanelProps) {
+export function ChatPanel({ messages, isLoading, chatEndRef, activeContext, onApplyDescription }: ChatPanelProps) {
+  const [applying, setApplying] = useState<string | null>(null);
+
   const formatMessage = (content: string) => {
     // Convert markdown to JSX with proper formatting
     return <ReactMarkdown>{content}</ReactMarkdown>;
+  };
+
+  // Extract project description from message content
+  const extractProjectDescription = (content: string): string | null => {
+    // Look for "Recruiter-Optimized Description" or "Project Description" sections
+    const recruiterMatch = content.match(/### Recruiter-Optimized Description\s*\n\n(.*?)(?=\n\n###|$)/s);
+    if (recruiterMatch) {
+      return recruiterMatch[1].trim();
+    }
+    
+    const projectMatch = content.match(/## Project Description:.*?\n\n(.*?)(?=\n\n###|$)/s);
+    if (projectMatch) {
+      return projectMatch[1].trim();
+    }
+    
+    // If message contains "rewrite_description" intent and has a project context
+    return null;
+  };
+
+  const handleApplyDescription = async (messageId: string, description: string) => {
+    if (!onApplyDescription || !activeContext.project) return;
+    
+    setApplying(messageId);
+    try {
+      await onApplyDescription(description);
+    } catch (error) {
+      console.error('Error applying description:', error);
+      alert('Failed to apply description. Please try again.');
+    } finally {
+      setApplying(null);
+    }
+  };
+
+  const handleCopy = (text: string) => {
+    navigator.clipboard.writeText(text);
+    // Could show a toast notification here
   };
 
   const getContextLink = (context: Message['context']) => {
@@ -94,6 +134,29 @@ export function ChatPanel({ messages, isLoading, chatEndRef, activeContext }: Ch
                 {formatMessage(msg.content)}
               </div>
             </div>
+            
+            {/* Writeback actions for project descriptions */}
+            {msg.role === 'assistant' && 
+             msg.intent === 'rewrite_description' && 
+             activeContext.project && 
+             extractProjectDescription(msg.content) && (
+              <div className="mt-2 flex gap-2 flex-wrap">
+                <button
+                  onClick={() => handleApplyDescription(msg.id, extractProjectDescription(msg.content)!)}
+                  disabled={applying === msg.id}
+                  className="px-3 py-1.5 text-xs bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {applying === msg.id ? 'Applying...' : 'Apply to Project Description'}
+                </button>
+                <button
+                  onClick={() => handleCopy(extractProjectDescription(msg.content)!)}
+                  className="px-3 py-1.5 text-xs bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  Copy
+                </button>
+              </div>
+            )}
+            
             <p className="text-xs text-gray-400 mt-1">
               {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </p>

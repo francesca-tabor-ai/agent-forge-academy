@@ -4,5 +4,6 @@ export { PlanBenefits } from './PlanBenefits';
 export { BillingInformation } from './BillingInformation';
 export { CancelSubscriptionModal } from './CancelSubscriptionModal';
 export { ChangePlanModal } from './ChangePlanModal';
+export { ComparePlansModal } from './ComparePlansModal';
 export { PaymentErrorBanner } from './PaymentErrorBanner';
 export { InvoicesList } from './InvoicesList';

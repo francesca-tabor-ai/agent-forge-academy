@@ -24,6 +24,8 @@ interface BillingInformationProps {
     paymentMethod: PaymentMethod;
     billingEmail: string;
     nextInvoiceAmount: number;
+    nextInvoiceDate?: string;
+    taxNote?: string;
   };
   invoices: Invoice[];
   userEmail: string;
@@ -83,10 +85,18 @@ export function BillingInformation({ billing, invoices, userEmail }: BillingInfo
       {/* Next Invoice */}
       <div>
         <h3 className="text-sm font-medium text-gray-900 mb-2">Next Invoice</h3>
-        <div className="p-4 bg-gray-50 rounded-lg">
+        <div className="p-4 bg-gray-50 rounded-lg space-y-2">
           <p className="text-sm font-semibold text-gray-900">
             {formatCurrency(billing.nextInvoiceAmount)}
           </p>
+          {billing.nextInvoiceDate && (
+            <p className="text-xs text-gray-600">
+              You will not be charged until {formatDate(billing.nextInvoiceDate)}
+            </p>
+          )}
+          {billing.taxNote && (
+            <p className="text-xs text-gray-500 italic">{billing.taxNote}</p>
+          )}
         </div>
       </div>
 
@@ -130,9 +140,13 @@ export function BillingInformation({ billing, invoices, userEmail }: BillingInfo
                   <Link
                     href={invoice.url}
                     target="_blank"
-                    className="text-xs font-medium text-brand-light hover:text-brand-light/90"
+                    className="text-xs font-medium text-brand-light hover:text-brand-light/90 inline-flex items-center gap-1"
+                    download
                   >
-                    View →
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                    Download
                   </Link>
                 )}
               </div>

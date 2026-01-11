@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useMemo } from 'react';
 import Link from 'next/link';
 
 interface Invoice {
@@ -8,6 +9,7 @@ interface Invoice {
   amount: number;
   status: string;
   url: string;
+  downloadUrl?: string;
 }
 
 interface InvoicesListProps {
@@ -15,6 +17,16 @@ interface InvoicesListProps {
 }
 
 export function InvoicesList({ invoices }: InvoicesListProps) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  // Sort invoices newest to oldest
+  const sortedInvoices = useMemo(() => {
+    return [...invoices].sort((a, b) => {
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
+    });
+  }, [invoices]);
+
+  const displayedInvoices = isExpanded ? sortedInvoices : sortedInvoices.slice(0, 5);
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-GB', {
       style: 'currency',
@@ -30,10 +42,24 @@ export function InvoicesList({ invoices }: InvoicesListProps) {
     });
   };
 
-  if (invoices.length === 0) {
+  if (sortedInvoices.length === 0) {
     return (
-      <div className="bg-white border border-gray-200 rounded-lg p-6 text-center">
-        <p className="text-sm text-gray-600">No invoices found.</p>
+      <div className="bg-white border border-gray-200 rounded-lg p-8 text-center">
+        <svg
+          className="mx-auto h-12 w-12 text-gray-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+          />
+        </svg>
+        <p className="mt-2 text-sm text-gray-600">No invoices yet</p>
+        <p className="mt-1 text-xs text-gray-500">Your invoices will appear here once you have billing activity.</p>
       </div>
     );
   }
@@ -41,7 +67,7 @@ export function InvoicesList({ invoices }: InvoicesListProps) {
   return (
     <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
       <div className="divide-y divide-gray-200">
-        {invoices.map((invoice) => (
+        {displayedInvoices.map((invoice) => (
           <div
             key={invoice.id}
             className="p-4 hover:bg-gray-50 transition-colors"
@@ -70,13 +96,17 @@ export function InvoicesList({ invoices }: InvoicesListProps) {
                 >
                   {invoice.status}
                 </span>
-                {invoice.url && (
+                {(invoice.url || invoice.downloadUrl) && (
                   <Link
-                    href={invoice.url}
+                    href={invoice.downloadUrl || invoice.url}
                     target="_blank"
-                    className="text-sm font-medium text-brand-light hover:text-brand-light/90"
+                    className="text-sm font-medium text-brand-light hover:text-brand-light/90 inline-flex items-center gap-1"
+                    download
                   >
-                    Download →
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                    Download
                   </Link>
                 )}
               </div>
@@ -84,6 +114,16 @@ export function InvoicesList({ invoices }: InvoicesListProps) {
           </div>
         ))}
       </div>
+      {sortedInvoices.length > 5 && (
+        <div className="p-4 border-t border-gray-200 text-center">
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="text-sm font-medium text-brand-light hover:text-brand-light/90"
+          >
+            {isExpanded ? 'Show less' : `Show all ${sortedInvoices.length} invoices`}
+          </button>
+        </div>
+      )}
     </div>
   );
 }

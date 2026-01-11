@@ -22,61 +22,108 @@ interface ChatRequest {
 // Fetch real data for context
 async function fetchContextData(
   context: ChatRequest['context'],
-  supabase: any
+  supabase: any,
+  studentProfileId: string | null
 ): Promise<{
   courseData: any;
   projectData: any;
   jobData: any;
   userProfile: any;
 }> {
-  const courseData = context?.course?.id
-    ? await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/courses/${context.course.id}`)
-        .then((r) => r.ok ? r.json() : null)
-        .catch(() => null)
-    : null;
+  // Fetch course data
+  let courseData = null;
+  if (context?.course?.id) {
+    const { data: course } = await supabase
+      .from('courses')
+      .select('*')
+      .eq('id', context.course.id)
+      .single();
+    if (course) {
+      courseData = {
+        id: course.id,
+        slug: course.slug,
+        title: course.title,
+        description: course.description,
+        durationWeeks: course.duration_weeks,
+        difficultyLevel: course.difficulty_level,
+      };
+    }
+  }
 
-  const projectData = context?.project?.id
-    ? await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/projects/${context.project.id}`)
-        .then((r) => r.ok ? r.json() : null)
-        .catch(() => null)
-    : null;
+  // Fetch project data
+  let projectData = null;
+  if (context?.project?.id && studentProfileId) {
+    const { data: project } = await supabase
+      .from('portfolio_projects')
+      .select('*')
+      .eq('id', context.project.id)
+      .eq('student_profile_id', studentProfileId)
+      .single();
+    if (project) {
+      projectData = {
+        id: project.id,
+        title: project.title,
+        description: project.description,
+        githubUrl: project.github_url,
+        demoUrl: project.demo_url,
+        visibility: project.visibility,
+        coverImageUrl: project.cover_image_url,
+        images: project.images || [],
+        techStack: project.tech_stack || [],
+      };
+    }
+  }
 
-  const jobData = context?.job?.id
-    ? await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/jobs/${context.job.id}`)
-        .then((r) => r.ok ? r.json() : null)
-        .catch(() => null)
-    : null;
+  // Fetch job data
+  let jobData = null;
+  if (context?.job?.id) {
+    const { data: job } = await supabase
+      .from('jobs')
+      .select('*')
+      .eq('id', context.job.id)
+      .eq('is_active', true)
+      .single();
+    if (job) {
+      jobData = {
+        id: job.id,
+        title: job.title,
+        company: job.company,
+        description: job.description,
+        jobType: job.job_type,
+        experienceLevel: job.experience_level,
+        location: job.location,
+        isRemote: job.is_remote,
+        salaryRange: job.salary_range,
+        status: job.status,
+        matchingScore: job.matching_score,
+        skills: job.skills || [],
+        skillsMissing: job.skills_missing || [],
+      };
+    }
+  }
 
   // Get user profile summary
   let userProfile = null;
-  if (context?.project?.id) {
-    const { data: project } = await supabase
-      .from('portfolio_projects')
-      .select('student_profile_id')
-      .eq('id', context.project.id)
+  if (studentProfileId) {
+    const { data: studentProfile } = await supabase
+      .from('student_profiles')
+      .select('headline, bio, skills')
+      .eq('id', studentProfileId)
       .single();
     
-    if (project) {
-      const { data: studentProfile } = await supabase
-        .from('student_profiles')
-        .select('headline, bio, skills')
-        .eq('id', project.student_profile_id)
-        .single();
+    if (studentProfile) {
+      const { count: projectCount } = await supabase
+        .from('portfolio_projects')
+        .select('*', { count: 'exact', head: true })
+        .eq('student_profile_id', studentProfileId)
+        .eq('visibility', 'public');
       
-      if (studentProfile) {
-        const { count: projectCount } = await supabase
-          .from('portfolio_projects')
-          .select('*', { count: 'exact', head: true })
-          .eq('student_profile_id', project.student_profile_id)
-          .eq('visibility', 'public');
-        
-        userProfile = {
-          headline: studentProfile.headline,
-          hasBio: !!studentProfile.bio,
-          skills: studentProfile.skills || [],
-          publicProjectsCount: projectCount || 0,
-        };
-      }
+      userProfile = {
+        headline: studentProfile.headline,
+        hasBio: !!studentProfile.bio,
+        skills: studentProfile.skills || [],
+        publicProjectsCount: projectCount || 0,
+      };
     }
   }
 
@@ -450,14 +497,24 @@ export async function POST(request: NextRequest) {
     }
 
     // Fetch real context data
-    const contextData = await fetchContextData(context, supabase);
+    const contextData = await fetchContextData(context, supabase, studentProfileId);
 
     // Generate AI response with real data
     const response = await generateAIResponse(message, context, conversationHistory, intent, contextData);
 
     // Store conversation in database
     if (studentProfileId) {
-      const convId = conversationId || crypto.randomUUID();
+      // Generate UUID if not provided - use database function
+      let convId = conversationId;
+      if (!convId) {
+        // Generate a UUID v4
+        const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+          const r = (Math.random() * 16) | 0;
+          const v = c === 'x' ? r : (r & 0x3) | 0x8;
+          return v.toString(16);
+        });
+        convId = uuid;
+      }
       
       // Store user message
       await supabase.from('advisor_conversations').insert({

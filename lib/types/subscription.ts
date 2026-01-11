@@ -9,6 +9,13 @@ export interface SubscriptionData {
     renewalDate: string;
     trialEndDate: string | null;
     trialDaysRemaining: number | null;
+    valueSummary?: string; // e.g., "Best for builders actively shipping AI projects"
+  };
+  usage?: {
+    projectsUsed: number;
+    portfoliosUsed: number;
+    aiAdvisorUsed: number;
+    jobsApplied: number;
   };
   benefits: {
     courseAccess: string;
@@ -28,6 +35,8 @@ export interface SubscriptionData {
     };
     billingEmail: string;
     nextInvoiceAmount: number;
+    nextInvoiceDate?: string;
+    taxNote?: string;
   };
   invoices: Array<{
     id: string;
@@ -35,11 +44,14 @@ export interface SubscriptionData {
     amount: number;
     status: string;
     url: string;
+    downloadUrl?: string;
   }>;
   availablePlans: Array<{
     name: string;
     tier: string;
     price: number;
     billingCycle: string;
+    features?: string[];
+    isPopular?: boolean;
   }>;
 }
