@@ -4,19 +4,16 @@ import { loadAllLessons } from '@/lib/lessons';
 
 /**
  * Get course-specific default email action if lesson doesn't have email_action
+ * Minimal scope: Only high-value courses that map cleanly to "one lever per week"
  * @param courseSlug - The course slug
  * @param nextLessonTitle - The next lesson title (optional, for generic fallback)
  * @returns Default action string for the course
  */
 function defaultActionByCourse(courseSlug: string, nextLessonTitle?: string | null): string {
-  // Course-specific default actions
+  // Course-specific default actions (minimal scope: high-value courses only)
   const courseDefaults: Record<string, string> = {
     'multi-agent-systems': 'Design a simple multi-agent workflow for a task you do manually today.',
-    'vibe-coding-cursor-supabase': 'Open Cursor and use Cmd+I to scaffold a new component or feature.',
     'ai-native-software-delivery-pipelines': 'Sketch the architecture for your next AI-native feature.',
-    'spec-driven-development': 'Write a 3-sentence spec for a feature you want to build.',
-    'agentic-rag': 'Create a vector embedding for one document in your project.',
-    'agentic-commerce': 'Map out a conversational flow for a customer interaction.',
   };
 
   // Return course-specific default if available
