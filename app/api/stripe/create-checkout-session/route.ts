@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createUserSupabaseClient } from '@/lib/supabase/server';
+import { createUserSupabaseClient, createServerSupabaseClient } from '@/lib/supabase/server';
 import { getStripeClient } from '@/lib/stripe';
 
 /**
@@ -9,7 +9,7 @@ import { getStripeClient } from '@/lib/stripe';
  * 
  * Body:
  * {
- *   "tier": "essential" | "professional",
+ *   "plan_id": "essential_monthly" | "pro_monthly" | "essential_annual" | "pro_annual",
  *   "successUrl": "/student/subscription?success=true",
  *   "cancelUrl": "/student/subscription?canceled=true"
  * }
@@ -29,26 +29,40 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { tier, successUrl, cancelUrl } = body;
+    const { plan_id, successUrl, cancelUrl } = body;
 
-    // Validate tier
-    if (!tier || !['essential', 'professional'].includes(tier)) {
+    // Validate plan_id
+    if (!plan_id) {
       return NextResponse.json(
-        { error: 'Invalid tier. Must be "essential" or "professional"' },
+        { error: 'plan_id is required' },
         { status: 400 }
       );
     }
 
-    // Get tier config with Stripe price ID
-    const { data: tierConfig } = await supabase
-      .from('subscription_tier_config')
-      .select('stripe_price_id, name')
-      .eq('tier', tier)
+    // Look up plan from subscription_plans table
+    const { data: plan } = await supabase
+      .from('subscription_plans')
+      .select('id, name, stripe_price_id, active')
+      .eq('id', plan_id)
       .single();
 
-    if (!tierConfig || !tierConfig.stripe_price_id) {
+    if (!plan) {
       return NextResponse.json(
-        { error: 'Stripe price ID not configured for this tier' },
+        { error: 'Plan not found' },
+        { status: 404 }
+      );
+    }
+
+    if (!plan.active) {
+      return NextResponse.json(
+        { error: 'Plan is not active' },
+        { status: 400 }
+      );
+    }
+
+    if (!plan.stripe_price_id) {
+      return NextResponse.json(
+        { error: 'Stripe price ID not configured for this plan' },
         { status: 500 }
       );
     }
@@ -60,84 +74,90 @@ export async function POST(request: NextRequest) {
       .eq('user_id', user.id)
       .single();
 
-    if (!profile) {
+    if (!profile || !profile.email) {
       return NextResponse.json(
-        { error: 'Profile not found' },
+        { error: 'Profile not found or email missing' },
         { status: 404 }
       );
-    }
-
-    // Get user's profile
-    const { data: userProfile } = await supabase
-      .from('profiles')
-      .select('id')
-      .eq('user_id', user.id)
-      .single();
-
-    if (!userProfile) {
-      return NextResponse.json(
-        { error: 'Profile not found' },
-        { status: 404 }
-      );
-    }
-
-    // Check if user already has a Stripe customer ID
-    const { data: studentProfile } = await supabase
-      .from('student_profiles')
-      .select('id')
-      .eq('profile_id', userProfile.id)
-      .single();
-
-    let customerId: string | undefined;
-
-    if (studentProfile) {
-      const { data: existingSubscription } = await supabase
-        .from('subscriptions')
-        .select('stripe_customer_id')
-        .eq('student_profile_id', studentProfile.id)
-        .single();
-
-      customerId = existingSubscription?.stripe_customer_id;
     }
 
     // Get Stripe client
     const stripe = getStripeClient();
 
-    // Create or retrieve Stripe customer
-    let stripeCustomer: any;
-    
-    if (customerId) {
-      stripeCustomer = await stripe.customers.retrieve(customerId);
+    // Check if Stripe customer exists in stripe_customers table
+    const { data: existingCustomer } = await supabase
+      .from('stripe_customers')
+      .select('stripe_customer_id')
+      .eq('user_id', user.id)
+      .single();
+
+    let stripeCustomerId: string;
+
+    if (existingCustomer?.stripe_customer_id) {
+      // Retrieve existing customer
+      stripeCustomerId = existingCustomer.stripe_customer_id;
+      try {
+        await stripe.customers.retrieve(stripeCustomerId);
+      } catch (error: any) {
+        // Customer might have been deleted in Stripe, create a new one
+        const newCustomer = await stripe.customers.create({
+          email: profile.email,
+          metadata: {
+            user_id: user.id,
+          },
+        });
+        stripeCustomerId = newCustomer.id;
+
+        // Update stripe_customers table (use service role to bypass RLS)
+        const serverSupabase = createServerSupabaseClient();
+        await serverSupabase
+          .from('stripe_customers')
+          .update({ stripe_customer_id: stripeCustomerId })
+          .eq('user_id', user.id);
+      }
     } else {
-      stripeCustomer = await stripe.customers.create({
+      // Create new Stripe customer
+      const newCustomer = await stripe.customers.create({
         email: profile.email,
         metadata: {
           user_id: user.id,
         },
       });
+      stripeCustomerId = newCustomer.id;
+
+      // Insert into stripe_customers table (use service role to bypass RLS)
+      const serverSupabase = createServerSupabaseClient();
+      await serverSupabase
+        .from('stripe_customers')
+        .insert({
+          user_id: user.id,
+          stripe_customer_id: stripeCustomerId,
+        });
     }
 
     // Create checkout session
     const session = await stripe.checkout.sessions.create({
-      customer: stripeCustomer.id,
+      customer: stripeCustomerId,
       payment_method_types: ['card'],
       line_items: [
         {
-          price: tierConfig.stripe_price_id,
+          price: plan.stripe_price_id,
           quantity: 1,
         },
       ],
       mode: 'subscription',
       success_url: successUrl || `${process.env.NEXT_PUBLIC_APP_URL}/student/subscription?success=true`,
       cancel_url: cancelUrl || `${process.env.NEXT_PUBLIC_APP_URL}/student/subscription?canceled=true`,
+      allow_promotion_codes: true,
+      client_reference_id: user.id,
       metadata: {
-        tier,
         user_id: user.id,
+        plan_id: plan_id,
       },
       subscription_data: {
         metadata: {
-          tier,
           user_id: user.id,
+          plan_id: plan_id,
         },
       },
     });
@@ -150,7 +170,7 @@ export async function POST(request: NextRequest) {
   } catch (error: any) {
     console.error('Error creating checkout session:', error);
     return NextResponse.json(
-      { error: 'Failed to create checkout session' },
+      { error: 'Failed to create checkout session', message: error.message },
       { status: 500 }
     );
   }
