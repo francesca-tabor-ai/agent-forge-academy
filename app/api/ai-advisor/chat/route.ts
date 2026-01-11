@@ -298,22 +298,74 @@ async function generateAIResponse(
   else if (context?.job || lowerMessage.includes('cv') || lowerMessage.includes('resume') || lowerMessage.includes('cover letter') || lowerMessage.includes('interview') || lowerMessage.includes('job')) {
     const jobTitle = context?.job?.title || 'this role';
     const company = context?.job?.company || 'the company';
-    response = `I can help you with your application for ${jobTitle} at ${company}. `;
+    const job = contextData?.jobData;
+    response = `I can help you with your application for **${jobTitle}** at **${company}**. `;
     
-    if (lowerMessage.includes('cv') || lowerMessage.includes('resume') || lowerMessage.includes('tailor')) {
-      response += `Here's how to tailor your CV: `;
-      nextSteps = [
-        'Highlight relevant skills and projects',
-        'Quantify your achievements',
-        'Match keywords from the job description',
-      ];
-    } else if (lowerMessage.includes('cover letter')) {
-      response += `Here's a strong cover letter structure: `;
-      nextSteps = [
-        'Customize the opening to show genuine interest',
-        'Connect your experience to their needs',
-        'Proofread and keep it concise',
-      ];
+    if (job) {
+      response += `\n\n**Job Details:**\n`;
+      response += `- Type: ${job.jobType}\n`;
+      response += `- Level: ${job.experienceLevel}\n`;
+      response += `- Location: ${job.location || 'Not specified'} ${job.isRemote ? '(Remote)' : ''}\n`;
+      if (job.salaryRange) {
+        response += `- Salary: ${job.salaryRange}\n`;
+      }
+      if (job.skills && job.skills.length > 0) {
+        response += `- Required Skills: ${job.skills.join(', ')}\n`;
+      }
+      if (job.matchingScore) {
+        response += `- Your Match Score: ${job.matchingScore}%\n`;
+      }
+      response += `\n`;
+    }
+    
+    if (intent === 'generate_cv' || lowerMessage.includes('cv') || lowerMessage.includes('resume') || lowerMessage.includes('tailor')) {
+      response += `## CV for ${jobTitle} at ${company}\n\n`;
+      response += `### 1-Page ATS-Friendly Format\n\n`;
+      response += `**${userProfile?.headline || 'Your Name'}**\n`;
+      response += `${userProfile?.headline || 'Software Developer'}\n\n`;
+      response += `**PROFESSIONAL SUMMARY**\n`;
+      response += `Experienced developer with expertise in ${job?.skills?.slice(0, 3).join(', ') || 'relevant technologies'}. `;
+      response += `Strong background in ${userProfile?.skills?.slice(0, 2).join(' and ') || 'software development'}.\n\n`;
+      response += `**KEY SKILLS**\n`;
+      response += `${(job?.skills || []).slice(0, 8).join(' • ')}\n\n`;
+      response += `**RELEVANT PROJECTS**\n`;
+      response += `• ${contextData?.projectData?.title || 'Project Name'}: ${contextData?.projectData?.description?.substring(0, 80) || 'Description'}\n`;
+      response += `  Technologies: ${(contextData?.projectData?.techStack || []).join(', ')}\n\n`;
+      response += `**KEYWORD COVERAGE**\n`;
+      response += `✅ Matched: ${job?.skills?.filter((s: string) => userProfile?.skills?.includes(s)).length || 0} / ${job?.skills?.length || 0} required skills\n`;
+      if (job?.skillsMissing && job.skillsMissing.length > 0) {
+        response += `⚠️ Missing: ${job.skillsMissing.join(', ')}\n`;
+      }
+      return response;
+    } else if (intent === 'generate_cover_letter' || lowerMessage.includes('cover letter')) {
+      response += `## Cover Letter: ${jobTitle} at ${company}\n\n`;
+      response += `Dear Hiring Manager,\n\n`;
+      response += `I am writing to express my interest in the ${jobTitle} position at ${company}. `;
+      response += `With my experience in ${userProfile?.skills?.slice(0, 2).join(' and ') || 'software development'}, `;
+      response += `I am excited about the opportunity to contribute to your team.\n\n`;
+      response += `**Relevant Experience:**\n`;
+      if (contextData?.projectData) {
+        response += `In my project "${contextData.projectData.title}", I ${contextData.projectData.description?.substring(0, 100) || 'demonstrated technical skills'}.\n\n`;
+      }
+      response += `**Why ${company}?**\n`;
+      response += `[Customize this section based on company research]\n\n`;
+      response += `I look forward to discussing how my skills align with your needs.\n\n`;
+      response += `Best regards,\n[Your Name]`;
+      return response;
+    } else if (intent === 'tailor_portfolio' || lowerMessage.includes('tailor portfolio')) {
+      response += `## Tailored Portfolio for ${jobTitle}\n\n`;
+      response += `### Featured Projects (1-3)\n\n`;
+      if (contextData?.projectData) {
+        response += `**1. ${contextData.projectData.title}**\n`;
+        response += `- Relevance: ${job?.skills?.filter((s: string) => contextData.projectData.techStack?.includes(s)).length || 0} matching skills\n`;
+        response += `- Why feature: ${contextData.projectData.description?.substring(0, 100) || 'Relevant to role'}\n\n`;
+      }
+      response += `### Rewritten Project Intros\n\n`;
+      response += `Focus on:\n`;
+      response += `- Skills that match the job description\n`;
+      response += `- Quantifiable outcomes\n`;
+      response += `- Technologies mentioned in the job posting\n`;
+      return response;
     } else if (lowerMessage.includes('interview') || lowerMessage.includes('mock')) {
       response += `Here are some mock interview questions: `;
       nextSteps = [
@@ -371,8 +423,17 @@ function containsSensitiveInfo(message: string): boolean {
 
 export async function POST(request: NextRequest) {
   try {
+    const supabase = await createUserSupabaseClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const body: ChatRequest = await request.json();
-    const { message, context, studentProfileId, conversationHistory } = body;
+    const { message, context, studentProfileId, conversationHistory, intent, conversationId } = body;
 
     if (!message || !message.trim()) {
       return NextResponse.json(
@@ -388,17 +449,47 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Generate AI response
-    const response = generateAIResponse(message, context, conversationHistory);
+    // Fetch real context data
+    const contextData = await fetchContextData(context, supabase);
+
+    // Generate AI response with real data
+    const response = await generateAIResponse(message, context, conversationHistory, intent, contextData);
+
+    // Store conversation in database
+    if (studentProfileId) {
+      const convId = conversationId || crypto.randomUUID();
+      
+      // Store user message
+      await supabase.from('advisor_conversations').insert({
+        student_profile_id: studentProfileId,
+        conversation_id: convId,
+        active_course_id: context?.course?.id || null,
+        active_project_id: context?.project?.id || null,
+        active_job_id: context?.job?.id || null,
+        role: 'user',
+        content: message,
+        metadata: { intent },
+      });
+
+      // Store assistant response
+      await supabase.from('advisor_conversations').insert({
+        student_profile_id: studentProfileId,
+        conversation_id: convId,
+        active_course_id: context?.course?.id || null,
+        active_project_id: context?.project?.id || null,
+        active_job_id: context?.job?.id || null,
+        role: 'assistant',
+        content: response,
+        metadata: { intent },
+      });
+    }
 
     // TODO: In production, you would:
     // 1. Call an actual LLM API (OpenAI, Anthropic, etc.)
-    // 2. Include conversation history for context
-    // 3. Use RAG to pull in relevant course content
-    // 4. Store conversation history in database
-    // 5. Track metrics (response time, helpfulness, etc.)
+    // 2. Use RAG to pull in relevant course content
+    // 3. Track metrics (response time, helpfulness, etc.)
 
-    return NextResponse.json({ response });
+    return NextResponse.json({ response, conversationId: conversationId || null });
   } catch (error) {
     console.error('Error in AI advisor chat:', error);
     return NextResponse.json(
