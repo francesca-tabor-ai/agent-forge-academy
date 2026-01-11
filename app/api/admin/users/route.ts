@@ -143,10 +143,90 @@ export async function GET(request: NextRequest) {
       studentProfiles?.map(sp => [sp.profile_id, sp.full_name]) || []
     );
 
+    // Get user IDs for subscription lookup
+    const userIds = profiles.map(p => p.user_id).filter(Boolean);
+
+    // Fetch subscriptions for these users
+    const { data: subscriptions, error: subscriptionsError } = await supabase
+      .from('subscriptions')
+      .select('user_id, status, stripe_price_id, current_period_end')
+      .in('user_id', userIds);
+
+    if (subscriptionsError) {
+      console.error('Error fetching subscriptions:', subscriptionsError);
+      // Continue without subscription data if error (non-critical)
+    }
+
+    // Fetch all subscription plans to map stripe_price_id to tier name
+    const { data: plans, error: plansError } = await supabase
+      .from('subscription_plans')
+      .select('id, name, stripe_price_id');
+
+    if (plansError) {
+      console.error('Error fetching subscription plans:', plansError);
+    }
+
+    // Create maps for quick lookups
+    const subscriptionMap = new Map(
+      subscriptions?.map(s => [s.user_id, s]) || []
+    );
+    const planMap = new Map(
+      plans?.map(p => [p.stripe_price_id, p]) || []
+    );
+
+    // Helper function to get tier display name from plan ID
+    const getTierDisplayName = (planId: string | null): string | null => {
+      if (!planId) return null;
+      
+      // Map plan IDs to display names
+      if (planId.startsWith('essential_')) return 'Essential';
+      if (planId.startsWith('pro_')) return 'Professional';
+      if (planId.startsWith('starter_')) return 'Starter';
+      
+      // Fallback to plan name if available
+      return planId;
+    };
+
+    // Helper function to normalize status
+    const normalizeStatus = (status: string | null): string | null => {
+      if (!status) return null;
+      
+      // Map Stripe statuses to normalized values
+      const statusMap: Record<string, string> = {
+        'active': 'active',
+        'trialing': 'active', // Treat trialing as active
+        'canceled': 'canceled',
+        'past_due': 'past_due',
+        'unpaid': 'past_due',
+        'incomplete': 'past_due',
+        'incomplete_expired': 'canceled',
+      };
+      
+      return statusMap[status.toLowerCase()] || status;
+    };
+
     // Combine data
     const users = profiles.map(profile => {
       const userData = userMap.get(profile.user_id);
       const fullName = fullNameMap.get(profile.id) || null;
+      const subscription = subscriptionMap.get(profile.user_id);
+      
+      // Get tier from subscription plan
+      let tier: string | null = null;
+      let planId: string | null = null;
+      if (subscription?.stripe_price_id) {
+        const plan = planMap.get(subscription.stripe_price_id);
+        planId = plan?.id || null;
+        tier = getTierDisplayName(planId);
+      }
+
+      // Get normalized status
+      const status = normalizeStatus(subscription?.status || null);
+      
+      // Detect mismatches
+      const hasMismatch = 
+        (status === 'active' && !tier) || // Active but no tier
+        (status && !subscription); // Status exists but subscription data missing
 
       return {
         user_id: profile.user_id,
@@ -154,6 +234,13 @@ export async function GET(request: NextRequest) {
         full_name: fullName,
         role: profile.role,
         created_at: profile.created_at,
+        subscription: subscription ? {
+          tier,
+          status,
+          current_period_end: subscription.current_period_end,
+          plan_id: planId,
+        } : null,
+        has_subscription_mismatch: hasMismatch,
       };
     });
 
