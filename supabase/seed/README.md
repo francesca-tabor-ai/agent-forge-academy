@@ -45,6 +45,25 @@ These tables cannot be seeded without existing user accounts:
 
 **Note:** `05_seed_user_dependent.sql` contains example queries (commented out) that you can uncomment and run after users have signed up and profiles exist.
 
+## Example Seed Templates
+
+See `06_seed_example_templates.sql` for copy/paste templates you can adapt:
+
+- **Template 1**: Seed profiles (NOTE: profiles depend on auth.users - cannot seed directly)
+- **Template 2**: Seed courses (5 courses with generated data)
+- **Template 3**: Seed course_enrollments (random enrollment)
+- **Template 4**: Seed jobs (15 jobs with generated data)
+- **Template 5**: Seed offers (tool discounts)
+- **Template 6**: Seed portfolio_projects (requires student_profiles)
+- **Template 7**: Seed questions (requires student_profiles)
+- **Template 8**: Seed event_attendance (requires events + profiles)
+
+**Important**: 
+- All templates use `gen_random_uuid()` - replace with hardcoded UUIDs for deterministic seeding
+- Templates are commented out - uncomment and adapt to your needs
+- Adjust `generate_series()` ranges to control record counts
+- Match column names to your actual schema (use schema discovery if needed)
+
 ## Usage
 
 ### Using the run-seeds.sh script (Recommended)
