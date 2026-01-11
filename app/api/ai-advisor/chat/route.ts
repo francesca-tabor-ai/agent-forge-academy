@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { getLLMProvider, type LLMMessage } from '@/lib/ai/llm';
 import { retrieveChunks, formatChunksForContext, generateCitations } from '@/lib/rag/retrieve';
-import { classifyIntent, getToolsForIntent, type AdvisorIntent } from '@/lib/ai/intent';
+import { classifyIntent, getToolsForIntent, type AdvisorIntent, type IntentClassification } from '@/lib/ai/intent';
 import { getTopJobMatches, formatJobMatchesForLLM } from '@/lib/jobs/advisor-tools';
 import { generateNextActions, type NextAction } from '@/lib/ai/nextActions';
 import { redactPII, safeLogger } from '@/lib/utils/redactPII';
@@ -651,7 +651,7 @@ export async function POST(request: NextRequest) {
 
     // Classify intent if not provided
     let inferredIntent: AdvisorIntent | undefined = intent as AdvisorIntent | undefined;
-    let intentClassification;
+    let intentClassification: IntentClassification | undefined;
     
     if (!inferredIntent) {
       // Build context for intent classification
