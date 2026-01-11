@@ -49,12 +49,11 @@ BEGIN
     ADD CONSTRAINT profiles_sales_rep_id_fkey 
     FOREIGN KEY (sales_rep_id) REFERENCES sales_reps(id) ON DELETE SET NULL;
   END IF;
-END $$;
 
--- Create indexes (outside DO block, but only if tables exist)
--- These will fail gracefully if sales tables don't exist (foreign keys will fail first)
-CREATE INDEX IF NOT EXISTS idx_profiles_referral_link_id ON profiles(referral_link_id);
-CREATE INDEX IF NOT EXISTS idx_profiles_sales_rep_id ON profiles(sales_rep_id);
+  -- Create indexes for referral fields (using EXECUTE since we're in a DO block)
+  EXECUTE 'CREATE INDEX IF NOT EXISTS idx_profiles_referral_link_id ON profiles(referral_link_id)';
+  EXECUTE 'CREATE INDEX IF NOT EXISTS idx_profiles_sales_rep_id ON profiles(sales_rep_id)';
+END $$;
 
 -- Create function to prevent referral field changes by non-admins
 CREATE OR REPLACE FUNCTION prevent_referral_field_change()
