@@ -55,8 +55,9 @@ BEGIN
   CREATE INDEX IF NOT EXISTS idx_profiles_sales_rep_id ON profiles(sales_rep_id);
 
   -- Create function to prevent referral field changes by non-admins
+  -- Use different delimiter ($function$) to avoid conflict with DO block's $$
   CREATE OR REPLACE FUNCTION prevent_referral_field_change()
-  RETURNS TRIGGER AS $$
+  RETURNS TRIGGER AS $function$
   BEGIN
     -- Check if any referral field is being changed
     IF (OLD.referral_link_id IS DISTINCT FROM NEW.referral_link_id)
@@ -69,7 +70,7 @@ BEGIN
     END IF;
     RETURN NEW;
   END;
-  $$ LANGUAGE plpgsql SECURITY DEFINER;
+  $function$ LANGUAGE plpgsql SECURITY DEFINER;
 
   -- Create trigger to enforce referral field immutability for non-admins
   DROP TRIGGER IF EXISTS prevent_referral_field_change_trigger ON profiles;
