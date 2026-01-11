@@ -3,6 +3,36 @@ import { createServerSupabaseClient } from '@/lib/supabase/server';
 import { loadAllLessons } from '@/lib/lessons';
 
 /**
+ * Get course-specific default email action if lesson doesn't have email_action
+ * @param courseSlug - The course slug
+ * @param nextLessonTitle - The next lesson title (optional, for generic fallback)
+ * @returns Default action string for the course
+ */
+function defaultActionByCourse(courseSlug: string, nextLessonTitle?: string | null): string {
+  // Course-specific default actions
+  const courseDefaults: Record<string, string> = {
+    'multi-agent-systems': 'Design a simple multi-agent workflow for a task you do manually today.',
+    'vibe-coding-cursor-supabase': 'Open Cursor and use Cmd+I to scaffold a new component or feature.',
+    'ai-native-software-delivery-pipelines': 'Sketch the architecture for your next AI-native feature.',
+    'spec-driven-development': 'Write a 3-sentence spec for a feature you want to build.',
+    'agentic-rag': 'Create a vector embedding for one document in your project.',
+    'agentic-commerce': 'Map out a conversational flow for a customer interaction.',
+  };
+
+  // Return course-specific default if available
+  if (courseDefaults[courseSlug]) {
+    return courseDefaults[courseSlug];
+  }
+
+  // Generic fallback
+  if (nextLessonTitle) {
+    return `Continue with "${nextLessonTitle}"`;
+  }
+
+  return 'Continue learning';
+}
+
+/**
  * GET /api/cron/weekly-learning-emails
  * 
  * Weekly cron endpoint to enqueue learning emails for students.
@@ -205,6 +235,8 @@ export async function GET(request: NextRequest) {
         const lastLessonTitle = lastLesson?.frontmatter.title || lastLessonSlug || null;
 
         // Extract email_takeaway and email_action from next lesson with fallbacks
+        // Pattern: takeaway = nextLesson.email_takeaway || nextLesson.description
+        //          action = nextLesson.email_action || defaultActionByCourse(courseSlug)
         let emailTakeaway: string | null = null;
         let emailAction: string | null = null;
 
@@ -212,13 +244,8 @@ export async function GET(request: NextRequest) {
           // Use email_takeaway if available, otherwise fallback to description
           emailTakeaway = nextLesson.frontmatter.email_takeaway || nextLesson.frontmatter.description || null;
           
-          // Use email_action if available, otherwise use generic template
-          if (nextLesson.frontmatter.email_action) {
-            emailAction = nextLesson.frontmatter.email_action;
-          } else {
-            // Generic action template based on course category or default
-            emailAction = `Continue with "${nextLessonTitle}"`;
-          }
+          // Use email_action if available, otherwise use course-specific default
+          emailAction = nextLesson.frontmatter.email_action || defaultActionByCourse(course.slug, nextLessonTitle);
         } else {
           // No next lesson (course completed)
           emailTakeaway = `You've completed ${course.title}! Great work.`;
