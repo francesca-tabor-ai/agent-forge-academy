@@ -159,7 +159,7 @@ export function VoiceControls({
       }
     };
 
-    if (typeof navigator !== 'undefined' && navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    if (typeof navigator !== 'undefined' && navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function') {
       checkMicrophonePermission().catch((error) => {
         console.error('Unexpected error checking microphone permission:', error);
         // Set a generic error but don't break the component
