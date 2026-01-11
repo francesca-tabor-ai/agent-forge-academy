@@ -9,9 +9,13 @@ interface SkillsInputProps {
   minSkills?: number;
 }
 
+const MAX_SKILL_LENGTH = 40;
+const MAX_SKILLS = 30;
+
 export function SkillsInput({ value, onChange, placeholder = 'Type a skill and press Enter', minSkills }: SkillsInputProps) {
   const [inputValue, setInputValue] = useState('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   // Common tech skills for autocomplete
   const commonSkills = [
@@ -24,15 +28,58 @@ export function SkillsInput({ value, onChange, placeholder = 'Type a skill and p
     'Testing', 'Agile', 'Scrum', 'DevOps', 'Linux', 'GitHub', 'GitLab'
   ];
 
+  // Check if skill already exists (case-insensitive)
+  const skillExists = (skill: string): boolean => {
+    return value.some(existing => existing.toLowerCase() === skill.toLowerCase());
+  };
+
+  // Normalize skill: trim, collapse multiple spaces, capitalize first letter
+  const normalizeSkill = (skill: string): string => {
+    return skill
+      .trim()
+      .replace(/\s+/g, ' ') // Collapse multiple spaces
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
+  };
+
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && inputValue.trim()) {
-      e.preventDefault();
-      const skill = inputValue.trim();
-      if (!value.includes(skill)) {
-        onChange([...value, skill]);
+    if (e.key === 'Enter') {
+      e.preventDefault(); // Always prevent form submission
+      
+      const trimmed = inputValue.trim();
+      if (!trimmed) {
+        return; // Ignore empty strings
       }
+
+      // Check max skills limit
+      if (value.length >= MAX_SKILLS) {
+        setError(`Maximum ${MAX_SKILLS} skills allowed`);
+        setTimeout(() => setError(null), 3000);
+        return;
+      }
+
+      // Check skill length
+      if (trimmed.length > MAX_SKILL_LENGTH) {
+        setError(`Skill must be ${MAX_SKILL_LENGTH} characters or less`);
+        setTimeout(() => setError(null), 3000);
+        return;
+      }
+
+      // Normalize and check for duplicates (case-insensitive)
+      const normalized = normalizeSkill(trimmed);
+      if (skillExists(normalized)) {
+        setError('This skill is already added');
+        setTimeout(() => setError(null), 2000);
+        setInputValue('');
+        return;
+      }
+
+      // Add the skill
+      onChange([...value, normalized]);
       setInputValue('');
       setSuggestions([]);
+      setError(null);
     } else if (e.key === 'Backspace' && !inputValue && value.length > 0) {
       onChange(value.slice(0, -1));
     }
@@ -41,12 +88,13 @@ export function SkillsInput({ value, onChange, placeholder = 'Type a skill and p
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setInputValue(val);
+    setError(null); // Clear error on input change
     
     if (val.trim()) {
       const filtered = commonSkills
         .filter(skill => 
           skill.toLowerCase().includes(val.toLowerCase()) && 
-          !value.includes(skill)
+          !skillExists(skill)
         )
         .slice(0, 5);
       setSuggestions(filtered);
@@ -56,15 +104,23 @@ export function SkillsInput({ value, onChange, placeholder = 'Type a skill and p
   };
 
   const handleSuggestionClick = (skill: string) => {
-    if (!value.includes(skill)) {
+    if (value.length >= MAX_SKILLS) {
+      setError(`Maximum ${MAX_SKILLS} skills allowed`);
+      setTimeout(() => setError(null), 3000);
+      return;
+    }
+
+    if (!skillExists(skill)) {
       onChange([...value, skill]);
     }
     setInputValue('');
     setSuggestions([]);
+    setError(null);
   };
 
   const removeSkill = (skillToRemove: string) => {
     onChange(value.filter(skill => skill !== skillToRemove));
+    setError(null);
   };
 
   const showWarning = minSkills !== undefined && value.length < minSkills;
@@ -72,7 +128,9 @@ export function SkillsInput({ value, onChange, placeholder = 'Type a skill and p
   return (
     <div className="space-y-2">
       <div className="relative">
-        <div className="flex flex-wrap gap-2 p-2 border border-gray-300 rounded-md min-h-[42px] focus-within:ring-2 focus-within:ring-brand-light focus-within:border-transparent bg-white">
+        <div className={`flex flex-wrap gap-2 p-2 border rounded-md min-h-[42px] focus-within:ring-2 focus-within:ring-brand-light focus-within:border-transparent bg-white ${
+          error ? 'border-red-300' : 'border-gray-300'
+        }`}>
           {value.map((skill, idx) => (
             <span
               key={idx}
@@ -96,6 +154,7 @@ export function SkillsInput({ value, onChange, placeholder = 'Type a skill and p
             onKeyDown={handleKeyDown}
             onBlur={() => setTimeout(() => setSuggestions([]), 200)}
             placeholder={value.length === 0 ? placeholder : ''}
+            maxLength={MAX_SKILL_LENGTH}
             className="flex-1 min-w-[120px] border-0 focus:outline-none focus:ring-0 text-sm"
           />
         </div>
@@ -114,13 +173,16 @@ export function SkillsInput({ value, onChange, placeholder = 'Type a skill and p
           </div>
         )}
       </div>
-      {showWarning && (
+      {error && (
+        <p className="text-xs text-red-600">{error}</p>
+      )}
+      {showWarning && !error && (
         <p className="text-xs text-orange-600">
           Recommended: Add at least {minSkills} skills
         </p>
       )}
       <p className="text-xs text-gray-500">
-        Type a skill and press Enter to add. Click × to remove.
+        Type any skill and press Enter to add. Click × to remove. ({value.length}/{MAX_SKILLS} skills)
       </p>
     </div>
   );
