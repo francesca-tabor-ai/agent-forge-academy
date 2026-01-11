@@ -3,6 +3,8 @@ title: "Module 4: Authentication & Identity Primitives"
 description: "Implement passwordless OTP, custom auth flows, and anonymous sign-ins"
 module: "4"
 order: 4
+email_takeaway: "Passwordless authentication improves UX and security—OTP and magic links eliminate password-related vulnerabilities."
+email_action: "Set up Supabase Auth in a test project—implement email-based OTP login in under 10 minutes."
 ---
 
 # Module 4: Authentication & Identity Primitives

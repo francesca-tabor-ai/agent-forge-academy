@@ -3,6 +3,8 @@ title: "Module 4: Containerization & Deployment"
 description: "Ship agent systems to production reliably with Docker and Kubernetes"
 module: "4"
 order: 4
+email_takeaway: "Containerization ensures your multi-agent system runs identically in development and production, eliminating 'works on my machine' issues."
+email_action: "Dockerize a simple Python script—create a Dockerfile and test it locally before deploying."
 ---
 
 # Module 4: Containerization and Deployment

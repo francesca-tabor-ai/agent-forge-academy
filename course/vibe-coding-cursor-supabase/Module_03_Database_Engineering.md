@@ -3,6 +3,8 @@ title: "Module 3: Database Engineering & Schema-First Thinking"
 description: "Set up local Supabase, manage migrations, and integrate with MCP for AI database introspection"
 module: "3"
 order: 3
+email_takeaway: "Schema-first development means designing your database structure before writing code—it prevents costly refactors later."
+email_action: "If you haven't already, install Supabase locally with Docker—run 'supabase start' and explore the dashboard."
 ---
 
 # Module 3: Database Engineering & Schema-First Thinking

@@ -3,6 +3,8 @@ title: "Module 1: Foundations of Multi-Agent Systems"
 description: "Understand how autonomous agents collaborate at scale"
 module: "1"
 order: 1
+email_takeaway: "Multi-agent systems divide complex tasks among specialized agents, enabling solutions that exceed single-agent capabilities."
+email_action: "Sketch a simple multi-agent workflow for a task you do manually today—identify 3 specialized roles."
 ---
 
 # Module 1: Foundations of Multi-Agent Systems

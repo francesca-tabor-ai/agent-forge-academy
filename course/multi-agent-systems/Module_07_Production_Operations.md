@@ -3,6 +3,8 @@ title: "Module 7: Production Operations"
 description: "Deploy and operate agent systems at scale with CI/CD and automation"
 module: "7"
 order: 7
+email_takeaway: "CI/CD pipelines automate testing and deployment, catching bugs before they reach production and enabling rapid iteration."
+email_action: "Set up a simple GitHub Action that runs tests on every push—start with a basic 'echo' command to verify it works."
 ---
 
 # Module 7: Production Operations

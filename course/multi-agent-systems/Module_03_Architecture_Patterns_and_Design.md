@@ -3,6 +3,8 @@ title: "Module 3: Architecture Patterns and Design"
 description: "Design scalable orchestration patterns for real-world agent systems"
 module: "3"
 order: 3
+email_takeaway: "The right orchestration pattern (centralized, decentralized, or hierarchical) determines your system's scalability and fault tolerance."
+email_action: "Draw a simple diagram of your current project's architecture—identify where a coordinator-worker pattern could help."
 ---
 
 # Module 3: Architecture Patterns and Design

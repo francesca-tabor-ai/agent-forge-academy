@@ -3,6 +3,8 @@ title: "Module 5: Security & Row Level Security (RLS)"
 description: "Move security logic to the database with Postgres RLS policies"
 module: "5"
 order: 5
+email_takeaway: "Row Level Security enforces access control at the database level, preventing data leaks even if application code has bugs."
+email_action: "Write your first RLS policy—create a simple policy that lets users only see their own records in a test table."
 ---
 
 # Module 5: Security & Row Level Security (RLS)

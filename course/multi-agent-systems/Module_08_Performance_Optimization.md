@@ -3,6 +3,8 @@ title: "Module 8: Performance Optimization"
 description: "Optimize agent performance and reduce costs through smart strategies"
 module: "8"
 order: 8
+email_takeaway: "Caching agent responses and batching API calls can reduce costs by 70% while improving response times."
+email_action: "Identify one expensive API call in your project—add a simple in-memory cache with a 5-minute TTL."
 ---
 
 # Module 8: Performance Optimization

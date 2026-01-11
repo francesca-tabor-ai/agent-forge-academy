@@ -3,6 +3,8 @@ title: "Module 1: The Core Methodology & Intent-Driven Development"
 description: "Learn the philosophy of Intent-Driven Development and how to work with AI as a collaborator"
 module: "1"
 order: 1
+email_takeaway: "Intent-Driven Development transforms plain-English instructions into production code, letting you focus on what to build, not how."
+email_action: "Write a 3-sentence intent for a feature you've been putting off—describe what it should do, not how to code it."
 ---
 
 # Module 1: The Core Methodology & Intent-Driven Development

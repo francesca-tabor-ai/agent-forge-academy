@@ -3,6 +3,8 @@ title: "Module 8: Deployment & the Iteration Loop"
 description: "Deploy to Supabase Cloud and master rapid iteration with AI-powered debugging"
 module: "8"
 order: 8
+email_takeaway: "Rapid iteration means deploying small changes frequently—each deployment is a learning opportunity, not a risk."
+email_action: "Deploy your project to Supabase Cloud—push your local database schema and test it in production."
 ---
 
 # Module 8: Deployment & the Iteration Loop

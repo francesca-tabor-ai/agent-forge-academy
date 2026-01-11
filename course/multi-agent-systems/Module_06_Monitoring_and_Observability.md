@@ -3,6 +3,8 @@ title: "Module 6: Monitoring & Observability"
 description: "Monitor and debug distributed agent systems effectively"
 module: "6"
 order: 6
+email_takeaway: "Without proper observability, debugging multi-agent systems is like finding a needle in a haystack—structured logging and tracing are essential."
+email_action: "Add structured logging to one function in your current project—include timestamp, function name, and key variables."
 ---
 
 # Module 6: Monitoring and Observability

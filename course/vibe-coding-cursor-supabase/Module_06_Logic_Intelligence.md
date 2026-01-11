@@ -3,6 +3,8 @@ title: "Module 6: Logic, Intelligence, & Side Effects"
 description: "Build Edge Functions, event-driven architectures, and realtime-first UIs"
 module: "6"
 order: 6
+email_takeaway: "Edge Functions run serverless code at the edge, reducing latency and enabling real-time features without managing infrastructure."
+email_action: "Create a simple Supabase Edge Function—deploy a 'hello world' function and call it from your frontend."
 ---
 
 # Module 6: Logic, Intelligence, & Side Effects

@@ -3,6 +3,8 @@ title: "Module 9: Advanced Topics"
 description: "Build advanced agent capabilities for production environments"
 module: "9"
 order: 9
+email_takeaway: "Advanced agent capabilities like self-healing and adaptive learning transform systems from static tools into intelligent partners."
+email_action: "Design a simple self-healing mechanism—write a 3-step plan for how an agent could recover from a common failure."
 ---
 
 # Module 9: Advanced Topics

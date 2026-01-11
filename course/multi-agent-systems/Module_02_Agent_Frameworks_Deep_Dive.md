@@ -3,6 +3,8 @@ title: "Module 2: Agent Frameworks Deep Dive"
 description: "Compare LangGraph, CrewAI, and AutoGen to choose the right framework"
 module: "2"
 order: 2
+email_takeaway: "LangGraph excels at complex workflows, CrewAI simplifies role-based collaboration, and AutoGen enables conversational multi-agent systems."
+email_action: "Pick one framework (LangGraph, CrewAI, or AutoGen) and install it—run their 'hello world' example in 5 minutes."
 ---
 
 # Module 2: Agent Frameworks Deep Dive

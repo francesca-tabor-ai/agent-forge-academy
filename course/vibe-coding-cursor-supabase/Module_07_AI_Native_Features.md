@@ -3,6 +3,8 @@ title: "Module 7: AI-Native Features (Vector & RAG)"
 description: "Implement semantic search, RAG pipelines, and AI-driven dashboards"
 module: "7"
 order: 7
+email_takeaway: "RAG (Retrieval-Augmented Generation) combines vector search with LLMs, enabling AI that answers questions from your own data."
+email_action: "Create a vector embedding for one document—use OpenAI's embedding API to convert text into a vector."
 ---
 
 # Module 7: AI-Native Features (Vector & RAG)

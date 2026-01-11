@@ -3,6 +3,8 @@ title: "Module 5: Security & Governance"
 description: "Secure agent systems with enterprise-grade controls and compliance"
 module: "5"
 order: 5
+email_takeaway: "Security in multi-agent systems requires controlling what each agent can access—principle of least privilege prevents unauthorized actions."
+email_action: "Review your current project—list 3 resources that should have restricted access but don't yet."
 ---
 
 # Module 5: Security and Governance

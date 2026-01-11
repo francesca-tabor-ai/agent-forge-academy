@@ -3,6 +3,8 @@ title: "Module 10: Real-World Use Cases & Projects"
 description: "Build production-ready multi-agent systems from case studies"
 module: "10"
 order: 10
+email_takeaway: "Real-world case studies reveal patterns you can adapt—customer support, research automation, and content generation are proven use cases."
+email_action: "Pick one use case from this module and sketch a 3-agent system architecture for your own version."
 ---
 
 # Module 10: Real-World Use Cases and Projects

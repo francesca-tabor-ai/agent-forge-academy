@@ -3,6 +3,8 @@ title: "Module 2: Scaffolding with Cursor Agent"
 description: "Master Cursor Agent Mode to execute build plans and generate modular components"
 module: "2"
 order: 2
+email_takeaway: "Build plans act as blueprints for AI agents—describe architecture and structure, not implementation details."
+email_action: "Open Cursor, press Cmd+I, and ask it to scaffold a simple React component—watch it generate the full structure."
 ---
 
 # Module 2: Scaffolding with Cursor Agent
