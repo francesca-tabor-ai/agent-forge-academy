@@ -235,7 +235,7 @@ export function renderWeeklyJobsEmailHTML(payload: WeeklyJobsEmailPayload): stri
           
           ${job.skills_missing.length > 0 ? `
           <p style="margin: ${isFirst ? '8px' : '4px'} 0 0 0; font-size: ${isFirst ? '12px' : '11px'}; color: #6b7280;">
-            Missing: ${job.skills_missing.slice(0, ${isFirst ? '3' : '2'}).join(', ')}${job.skills_missing.length > ${isFirst ? '3' : '2'} ? '...' : ''}
+            Missing: ${job.skills_missing.slice(0, isFirst ? 3 : 2).join(', ')}${job.skills_missing.length > (isFirst ? 3 : 2) ? '...' : ''}
           </p>
           ` : ''}
           
