@@ -1,5 +1,5 @@
--- Seed content: courses from course metadata
--- This seeds all courses defined in lib/course-metadata.ts
+-- Seed content: courses
+-- No dependencies - can be seeded independently
 
 BEGIN;
 

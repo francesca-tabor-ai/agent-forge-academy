@@ -85,8 +85,8 @@ if [ "$RESET" = true ]; then
     echo ""
 fi
 
-# Run seed files in order
-run_seed "$SEED_DIR/01_seed_core.sql" "Seed Core Data"
+# Run seed files in dependency order
+run_seed "$SEED_DIR/01_seed_core.sql" "Seed Core Data (Subscription Plans)"
 echo ""
 
 run_seed "$SEED_DIR/02_seed_content.sql" "Seed Content (Courses)"
@@ -96,6 +96,9 @@ run_seed "$SEED_DIR/03_seed_events.sql" "Seed Events"
 echo ""
 
 run_seed "$SEED_DIR/04_seed_jobs_offers.sql" "Seed Jobs & Offers"
+echo ""
+
+run_seed "$SEED_DIR/05_seed_user_dependent.sql" "Seed User-Dependent Data (Examples)"
 echo ""
 
 # Verification

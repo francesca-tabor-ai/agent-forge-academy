@@ -1,5 +1,6 @@
 -- Seed events: demo days, workshops, networking events
--- This creates sample events with presentations and attendance
+-- No dependencies - can be seeded independently
+-- Note: event_presentations and event_attendance require existing profiles/student_profiles
 
 BEGIN;
 
@@ -44,13 +45,12 @@ VALUES
   )
 ON CONFLICT DO NOTHING;
 
--- Note: event_presentations and event_attendance require actual profile IDs
--- These would be populated when:
--- 1. Students enroll and create profiles
--- 2. Students submit projects for demo day
--- 3. Users RSVP to events
+-- Note: To seed event_presentations and event_attendance, you need existing:
+-- - profiles (from auth.users)
+-- - student_profiles (linked to profiles)
+-- - portfolio_projects (linked to student_profiles)
 --
--- Example queries to add presentations (run after students exist):
+-- Example queries (run after profiles exist):
 -- INSERT INTO event_presentations (event_id, student_profile_id, portfolio_project_id, presentation_title, presentation_order)
 -- SELECT 
 --   (SELECT id FROM events WHERE title = 'Q1 2025 Demo Day' LIMIT 1),
@@ -63,7 +63,6 @@ ON CONFLICT DO NOTHING;
 -- WHERE pp.visibility IN ('public', 'recruiters_only')
 -- LIMIT 10;
 --
--- Example queries to add attendance (run after profiles exist):
 -- INSERT INTO event_attendance (event_id, profile_id, rsvp_status)
 -- SELECT 
 --   e.id,

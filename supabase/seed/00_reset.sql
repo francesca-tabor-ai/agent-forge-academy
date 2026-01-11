@@ -12,19 +12,23 @@ BEGIN;
 
 -- Truncate tables in reverse dependency order
 -- Start with tables that have foreign keys pointing to them
+-- Order matches seed script dependencies (seed in reverse order)
 
--- Clear event-related data
+-- Clear user-dependent data (tables that depend on profiles/auth.users)
+TRUNCATE TABLE contact_requests CASCADE;
 TRUNCATE TABLE event_attendance CASCADE;
 TRUNCATE TABLE event_presentations CASCADE;
-TRUNCATE TABLE events CASCADE;
+TRUNCATE TABLE answers CASCADE;
+TRUNCATE TABLE questions CASCADE;
+TRUNCATE TABLE course_enrollments CASCADE;
+TRUNCATE TABLE portfolio_projects CASCADE;
+-- Note: student_profiles, recruiter_profiles, profiles depend on auth.users - not truncated
 
--- Clear job and offer related data
+-- Clear independent seed data (no dependencies)
 TRUNCATE TABLE saved_offers CASCADE;
 TRUNCATE TABLE offers CASCADE;
 TRUNCATE TABLE jobs CASCADE;
-
--- Clear course-related data
-TRUNCATE TABLE course_enrollments CASCADE;
+TRUNCATE TABLE events CASCADE;
 TRUNCATE TABLE courses CASCADE;
 
 -- Clear portfolio and student data (be careful - this deletes user data!)

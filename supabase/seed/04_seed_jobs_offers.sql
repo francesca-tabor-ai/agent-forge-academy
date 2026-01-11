@@ -1,5 +1,5 @@
 -- Seed jobs and offers: sample job listings and tool discounts
--- This creates realistic job opportunities and offers for students
+-- No dependencies - can be seeded independently
 
 BEGIN;
 
