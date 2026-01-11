@@ -14,6 +14,7 @@ interface SendEmailOptions {
   html: string;
   text?: string;
   unsubscribeToken?: string;
+  emailType?: 'weekly_learning' | 'weekly_jobs'; // Required for type-specific unsubscribe links
   utmSource?: string;
   utmCampaign?: string;
   utmMedium?: string;
@@ -58,38 +59,79 @@ function addUtmParams(url: string, source?: string, campaign?: string, medium?: 
 }
 
 /**
- * Inject unsubscribe link and UTM tracking into HTML content
+ * Get company information for email footer
+ * Can be overridden via environment variables for compliance
+ */
+function getCompanyInfo() {
+  return {
+    name: process.env.COMPANY_NAME || 'Agent Forge Academy',
+    address: process.env.COMPANY_ADDRESS || 'London, UK',
+    // Full address can be set via COMPANY_ADDRESS env var for compliance
+  };
+}
+
+/**
+ * Inject unsubscribe link, preferences link, company info, and UTM tracking into HTML content
  */
 function processEmailContent(
   html: string,
   unsubscribeToken?: string,
+  emailType?: 'weekly_learning' | 'weekly_jobs',
   utmSource?: string,
   utmCampaign?: string,
   utmMedium?: string
 ): string {
   let processedHtml = html;
 
-  // Add unsubscribe and preferences links if token provided
+  // Build required footer content
+  const companyInfo = getCompanyInfo();
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://your-domain.com';
+  
+  // Build type-specific unsubscribe URL
+  let unsubscribeUrl = '';
+  let unsubscribeText = 'Unsubscribe';
   if (unsubscribeToken) {
-    const unsubscribeUrl = buildUnsubscribeUrl(unsubscribeToken);
-    const preferencesUrl = buildPreferencesUrl(unsubscribeToken);
-    const emailFooter = `
-      <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb; text-align: center; font-size: 12px; color: #6b7280;">
-        <p style="margin: 0 0 8px 0;">
-          <a href="${preferencesUrl}" style="color: #3b82f6; text-decoration: underline;">Manage email preferences</a>
-        </p>
-        <p style="margin: 0;">
-          Don't want to receive these emails? 
-          <a href="${unsubscribeUrl}" style="color: #6b7280; text-decoration: underline;">Unsubscribe</a>
-        </p>
-      </div>
-    `;
-    // Try to insert before </body>, otherwise append to end
-    if (processedHtml.includes('</body>')) {
-      processedHtml = processedHtml.replace('</body>', `${emailFooter}</body>`);
+    if (emailType === 'weekly_learning') {
+      unsubscribeUrl = `${baseUrl}/api/email/unsubscribe?token=${encodeURIComponent(unsubscribeToken)}&type=learning`;
+      unsubscribeText = 'Unsubscribe from learning emails';
+    } else if (emailType === 'weekly_jobs') {
+      unsubscribeUrl = `${baseUrl}/api/email/unsubscribe?token=${encodeURIComponent(unsubscribeToken)}&type=jobs`;
+      unsubscribeText = 'Unsubscribe from job emails';
     } else {
-      processedHtml = processedHtml + emailFooter;
+      unsubscribeUrl = `${baseUrl}/api/email/unsubscribe?token=${encodeURIComponent(unsubscribeToken)}&type=all`;
     }
+  }
+
+  // Build preferences URL
+  const preferencesUrl = unsubscribeToken
+    ? `${baseUrl}/student/settings/notifications?token=${encodeURIComponent(unsubscribeToken)}`
+    : `${baseUrl}/student/settings/notifications`;
+
+  // Build email footer with required content
+  const emailFooter = `
+    <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb; text-align: center; font-size: 12px; color: #6b7280;">
+      ${unsubscribeToken ? `
+      <p style="margin: 0 0 8px 0;">
+        <a href="${preferencesUrl}" style="color: #3b82f6; text-decoration: underline;">Manage email preferences</a>
+      </p>
+      ` : ''}
+      ${unsubscribeUrl ? `
+      <p style="margin: 0 0 12px 0;">
+        <a href="${unsubscribeUrl}" style="color: #6b7280; text-decoration: underline;">${unsubscribeText}</a>
+      </p>
+      ` : ''}
+      <p style="margin: 0; font-size: 11px; color: #9ca3af;">
+        ${companyInfo.name}<br>
+        ${companyInfo.address}
+      </p>
+    </div>
+  `;
+
+  // Try to insert before </body>, otherwise append to end
+  if (processedHtml.includes('</body>')) {
+    processedHtml = processedHtml.replace('</body>', `${emailFooter}</body>`);
+  } else {
+    processedHtml = processedHtml + emailFooter;
   }
 
   // Add UTM parameters to all links in HTML
@@ -119,7 +161,7 @@ function processEmailContent(
  * - NEXT_PUBLIC_APP_URL: Base URL for unsubscribe links
  */
 export async function sendEmail(options: SendEmailOptions): Promise<SendEmailResult> {
-  const { to, subject, html, text, unsubscribeToken, utmSource, utmCampaign, utmMedium } = options;
+  const { to, subject, html, text, unsubscribeToken, emailType, utmSource, utmCampaign, utmMedium } = options;
 
   // Check for required environment variables
   const resendApiKey = process.env.RESEND_API_KEY;
@@ -142,16 +184,34 @@ export async function sendEmail(options: SendEmailOptions): Promise<SendEmailRes
   }
 
   try {
-    // Process HTML content (add unsubscribe link and UTM tracking)
-    const processedHtml = processEmailContent(html, unsubscribeToken, utmSource, utmCampaign, utmMedium);
+    // Process HTML content (add unsubscribe link, preferences link, company info, and UTM tracking)
+    const processedHtml = processEmailContent(html, unsubscribeToken, emailType, utmSource, utmCampaign, utmMedium);
 
-    // Process text content (add unsubscribe and preferences links)
-    let processedText = text;
-    if (processedText && unsubscribeToken) {
-      const unsubscribeUrl = buildUnsubscribeUrl(unsubscribeToken);
-      const preferencesUrl = buildPreferencesUrl(unsubscribeToken);
-      processedText += `\n\n---\nManage email preferences: ${preferencesUrl}\nDon't want to receive these emails? Unsubscribe: ${unsubscribeUrl}`;
+    // Process text content (add unsubscribe, preferences links, and company info)
+    let processedText = text || '';
+    const companyInfo = getCompanyInfo();
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://your-domain.com';
+    
+    if (unsubscribeToken) {
+      const preferencesUrl = `${baseUrl}/student/settings/notifications?token=${encodeURIComponent(unsubscribeToken)}`;
+      let unsubscribeUrl = '';
+      let unsubscribeText = 'Unsubscribe';
+      
+      if (emailType === 'weekly_learning') {
+        unsubscribeUrl = `${baseUrl}/api/email/unsubscribe?token=${encodeURIComponent(unsubscribeToken)}&type=learning`;
+        unsubscribeText = 'Unsubscribe from learning emails';
+      } else if (emailType === 'weekly_jobs') {
+        unsubscribeUrl = `${baseUrl}/api/email/unsubscribe?token=${encodeURIComponent(unsubscribeToken)}&type=jobs`;
+        unsubscribeText = 'Unsubscribe from job emails';
+      } else {
+        unsubscribeUrl = `${baseUrl}/api/email/unsubscribe?token=${encodeURIComponent(unsubscribeToken)}&type=all`;
+      }
+      
+      processedText += `\n\n---\nManage email preferences: ${preferencesUrl}\n${unsubscribeText}: ${unsubscribeUrl}`;
     }
+    
+    // Add company info to plain text
+    processedText += `\n\n${companyInfo.name}\n${companyInfo.address}`;
 
     // Send email via Resend API
     const response = await fetch('https://api.resend.com/emails', {

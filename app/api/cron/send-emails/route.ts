@@ -170,6 +170,7 @@ export async function GET(request: NextRequest) {
           html,
           text,
           unsubscribeToken,
+          emailType: email.email_type as 'weekly_learning' | 'weekly_jobs', // Pass email type for type-specific unsubscribe links
           utmSource: 'weekly_email',
           utmCampaign: email.email_type === 'weekly_learning' ? 'learning_update' : 'jobs_update',
           utmMedium: 'email',
