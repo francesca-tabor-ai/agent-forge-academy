@@ -106,7 +106,8 @@ create table if not exists public.payments (
 create index if not exists payments_user_id_idx on public.payments(user_id);
 
 -- 5) Convenience: current entitlement view
--- Only create view if user_id and stripe_price_id columns exist (new Stripe-based structure)
+-- Only create view if user_id column exists
+-- Handle both old enum status ('trial') and new text status ('trialing')
 DO $$
 BEGIN
   IF EXISTS (
@@ -114,22 +115,39 @@ BEGIN
     WHERE table_schema = 'public' 
     AND table_name = 'subscriptions' 
     AND column_name = 'user_id'
-  ) AND EXISTS (
-    SELECT 1 FROM information_schema.columns 
-    WHERE table_schema = 'public' 
-    AND table_name = 'subscriptions' 
-    AND column_name = 'stripe_price_id'
   ) THEN
-    EXECUTE $view$
-      CREATE OR REPLACE VIEW public.user_entitlements AS
-      SELECT
-        s.user_id,
-        s.status,
-        s.stripe_price_id,
-        s.current_period_end,
-        (s.status IN ('active','trialing')) AS is_active
-      FROM public.subscriptions s
-      WHERE s.current_period_end IS NULL OR s.current_period_end > now()
-    $view$;
+    -- Check if stripe_price_id exists (new structure) or not (old structure)
+    IF EXISTS (
+      SELECT 1 FROM information_schema.columns 
+      WHERE table_schema = 'public' 
+      AND table_name = 'subscriptions' 
+      AND column_name = 'stripe_price_id'
+    ) THEN
+      -- New Stripe-based structure with text status
+      EXECUTE $view$
+        CREATE OR REPLACE VIEW public.user_entitlements AS
+        SELECT
+          s.user_id,
+          s.status::text AS status,
+          s.stripe_price_id,
+          s.current_period_end,
+          (s.status::text IN ('active','trialing','trial')) AS is_active
+        FROM public.subscriptions s
+        WHERE s.current_period_end IS NULL OR s.current_period_end > now()
+      $view$;
+    ELSE
+      -- Old structure with enum status, but user_id was added
+      EXECUTE $view$
+        CREATE OR REPLACE VIEW public.user_entitlements AS
+        SELECT
+          s.user_id,
+          s.status::text AS status,
+          NULL::text AS stripe_price_id,
+          s.current_period_end,
+          (s.status::text IN ('active','trial')) AS is_active
+        FROM public.subscriptions s
+        WHERE s.current_period_end IS NULL OR s.current_period_end > now()
+      $view$;
+    END IF;
   END IF;
 END $$;
