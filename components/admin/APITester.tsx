@@ -1,12 +1,19 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface TestResult {
   status: number;
   body: any;
   latency: number;
   headers?: Record<string, string>;
+}
+
+interface User {
+  user_id: string;
+  email: string | null;
+  full_name: string | null;
+  role: string | null;
 }
 
 export function APITester() {
@@ -16,6 +23,69 @@ export function APITester() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<TestResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+  
+  // User selection state
+  const [userSearch, setUserSearch] = useState('');
+  const [userSuggestions, setUserSuggestions] = useState<User[]>([]);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const suggestionsRef = useRef<HTMLDivElement>(null);
+
+  // Search users for autocomplete
+  useEffect(() => {
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+
+    if (userSearch.length < 2) {
+      setUserSuggestions([]);
+      setShowSuggestions(false);
+      return;
+    }
+
+    searchTimeoutRef.current = setTimeout(async () => {
+      try {
+        const response = await fetch(`/api/admin/users/search?q=${encodeURIComponent(userSearch)}&limit=10`);
+        const data = await response.json();
+        setUserSuggestions(data.users || []);
+        setShowSuggestions(true);
+      } catch (err) {
+        console.error('Error searching users:', err);
+        setUserSuggestions([]);
+      }
+    }, 300);
+
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+    };
+  }, [userSearch]);
+
+  // Close suggestions when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (suggestionsRef.current && !suggestionsRef.current.contains(event.target as Node)) {
+        setShowSuggestions(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleUserSelect = (user: User) => {
+    setSelectedUser(user);
+    setUserSearch(user.email || user.user_id);
+    setShowSuggestions(false);
+  };
+
+  const handleClearUser = () => {
+    setSelectedUser(null);
+    setUserSearch('');
+    setUserSuggestions([]);
+  };
 
   const handleExecute = async () => {
     // Validate path
@@ -48,6 +118,7 @@ export function APITester() {
           method,
           path,
           body: body.trim() || undefined,
+          user_id: selectedUser?.user_id || undefined,
         }),
       });
 
@@ -88,6 +159,76 @@ export function APITester() {
       <div className="bg-white rounded-lg shadow p-6 space-y-4">
         <h2 className="text-xl font-semibold mb-4">Request Configuration</h2>
         
+        {/* Act as User */}
+        <div>
+          <label className="block text-sm font-medium text-ca-neutral-700 mb-2">
+            Act as User (Optional)
+          </label>
+          <div className="relative" ref={suggestionsRef}>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={userSearch}
+                onChange={(e) => {
+                  setUserSearch(e.target.value);
+                  if (selectedUser) {
+                    setSelectedUser(null);
+                  }
+                }}
+                onFocus={() => {
+                  if (userSuggestions.length > 0) {
+                    setShowSuggestions(true);
+                  }
+                }}
+                placeholder="Search by email..."
+                className="flex-1 px-3 py-2 border rounded-lg"
+                style={{ borderColor: 'var(--ca-neutral-300)' }}
+              />
+              {selectedUser && (
+                <button
+                  onClick={handleClearUser}
+                  className="px-3 py-2 text-sm text-ca-neutral-500 hover:text-ca-text"
+                  title="Clear user selection"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+            
+            {/* Autocomplete suggestions */}
+            {showSuggestions && userSuggestions.length > 0 && (
+              <div className="absolute z-10 w-full mt-1 bg-white border rounded-lg shadow-lg max-h-60 overflow-auto"
+                   style={{ borderColor: 'var(--ca-neutral-300)' }}>
+                {userSuggestions.map((user) => (
+                  <button
+                    key={user.user_id}
+                    onClick={() => handleUserSelect(user)}
+                    className="w-full text-left px-4 py-2 hover:bg-gray-50 border-b last:border-b-0"
+                    style={{ borderColor: 'var(--ca-neutral-300)' }}
+                  >
+                    <div className="font-medium text-sm">{user.email}</div>
+                    {user.full_name && (
+                      <div className="text-xs text-ca-neutral-500">{user.full_name}</div>
+                    )}
+                    {user.role && (
+                      <div className="text-xs text-ca-neutral-500">Role: {user.role}</div>
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+          {selectedUser && (
+            <div className="mt-2 p-2 bg-blue-50 border border-blue-200 rounded text-sm">
+              <span className="font-medium">Acting as:</span> {selectedUser.email}
+              {selectedUser.full_name && ` (${selectedUser.full_name})`}
+            </div>
+          )}
+          <p className="text-xs text-ca-neutral-500 mt-1">
+            Select a user to test API endpoints as that user. Admin users cannot be impersonated.
+          </p>
+        </div>
+
         {/* Method and Path */}
         <div className="flex gap-4">
           <div className="w-32">

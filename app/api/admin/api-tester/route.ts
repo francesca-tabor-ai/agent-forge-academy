@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { requireAdmin } from '@/lib/supabase/server';
+import { createServerSupabaseClient, requireAdmin } from '@/lib/supabase/server';
 
 // Force dynamic rendering (uses cookies)
 export const dynamic = 'force-dynamic';
@@ -9,12 +9,14 @@ export const dynamic = 'force-dynamic';
  * 
  * Proxies an internal API request for testing purposes.
  * Requires admin role.
+ * Supports "Act as user" impersonation for debugging.
  * 
  * Body:
  * {
  *   method: string (GET, POST, PUT, DELETE, etc.)
  *   path: string (must start with /api/)
  *   body?: string (JSON string for request body)
+ *   user_id?: string (optional) - User ID to impersonate (for debugging)
  * }
  * 
  * Returns:
@@ -32,9 +34,11 @@ export async function POST(request: NextRequest) {
       return adminResult; // Returns 401 or 403
     }
 
+    const adminUser = adminResult; // User object from requireAdmin
+
     // Parse request body
     const body = await request.json();
-    const { method, path, body: requestBody } = body;
+    const { method, path, body: requestBody, user_id: targetUserId } = body;
 
     // Validate method
     if (!method || typeof method !== 'string') {
@@ -66,6 +70,75 @@ export async function POST(request: NextRequest) {
         { error: 'Cannot test the api-tester endpoint itself' },
         { status: 400 }
       );
+    }
+
+    // Handle impersonation if user_id is provided
+    let impersonatedUserId: string | null = null;
+    if (targetUserId) {
+      // Validate user_id format (UUID)
+      if (typeof targetUserId !== 'string' || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(targetUserId)) {
+        return NextResponse.json(
+          { error: 'Invalid user_id format' },
+          { status: 400 }
+        );
+      }
+
+      // Prevent privilege escalation: admin cannot impersonate another admin
+      const supabase = createServerSupabaseClient();
+      const { data: targetProfile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('user_id', targetUserId)
+        .single();
+
+      if (targetProfile?.role === 'admin') {
+        return NextResponse.json(
+          { error: 'Cannot impersonate admin users (privilege escalation prevention)' },
+          { status: 403 }
+        );
+      }
+
+      // Verify user exists
+      const { data: targetUser } = await supabase.auth.admin.getUserById(targetUserId);
+      if (!targetUser?.user) {
+        return NextResponse.json(
+          { error: 'Target user not found' },
+          { status: 404 }
+        );
+      }
+
+      impersonatedUserId = targetUserId;
+
+      // Log impersonation action for audit trail
+      // Note: Using service role client to bypass RLS for audit logging
+      try {
+        const ipAddress = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+                         request.headers.get('x-real-ip') ||
+                         null;
+        const userAgent = request.headers.get('user-agent') || null;
+
+        const { error: auditError } = await supabase
+          .from('admin_audit_log')
+          .insert({
+            admin_user_id: adminUser.id,
+            action_type: 'api_impersonation',
+            resource_type: 'user',
+            resource_id: targetUserId,
+            metadata: {
+              api_path: path,
+              api_method: method,
+              ip_address: ipAddress,
+              user_agent: userAgent,
+            },
+          });
+
+        if (auditError) {
+          console.error('Failed to log impersonation audit:', auditError);
+        }
+      } catch (auditError) {
+        // Log error but don't fail the request
+        console.error('Failed to log impersonation audit:', auditError);
+      }
     }
 
     // Get base URL for internal request
@@ -103,6 +176,12 @@ export async function POST(request: NextRequest) {
     const cookies = request.headers.get('cookie');
     if (cookies) {
       headers['Cookie'] = cookies;
+    }
+
+    // Inject impersonation header if user_id is provided
+    // API routes can check this header to act as the specified user
+    if (impersonatedUserId) {
+      headers['X-Debug-User-Id'] = impersonatedUserId;
     }
 
     // Measure latency
