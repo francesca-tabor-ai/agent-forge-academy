@@ -26,7 +26,7 @@ export default async function ProfileEditPage() {
   // Get student profile
   const { data: studentProfile } = await supabase
     .from('student_profiles')
-    .select('id, headline, bio, skills, location, linkedin_url, github_url, website_url')
+    .select('id, headline, bio, skills, location, linkedin_url, github_url, website_url, headshot_image_url')
     .eq('profile_id', profile.id)
     .single();
 
@@ -42,6 +42,7 @@ export default async function ProfileEditPage() {
           linkedin_url: studentProfile?.linkedin_url || '',
           github_url: studentProfile?.github_url || '',
           website_url: studentProfile?.website_url || '',
+          headshot_image_url: studentProfile?.headshot_image_url || null,
         }}
       />
     </div>

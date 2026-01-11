@@ -40,6 +40,7 @@ export default async function RecruiterDirectoryPage({
       id,
       visibility,
       bio,
+      headshot_image_url,
       profiles!inner (
         id,
         user_id

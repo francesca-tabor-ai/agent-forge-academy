@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { RichTextEditor } from './RichTextEditor';
 import { SkillsInput } from './SkillsInput';
+import { HeadshotUpload } from './HeadshotUpload';
 
 interface ProfileEditFormProps {
   initialData: {
@@ -14,6 +15,7 @@ interface ProfileEditFormProps {
     linkedin_url: string;
     github_url: string;
     website_url: string;
+    headshot_image_url?: string | null;
   };
 }
 
@@ -22,7 +24,10 @@ export function ProfileEditForm({ initialData }: ProfileEditFormProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved'>('idle');
-  const [formData, setFormData] = useState(initialData);
+  const [formData, setFormData] = useState({
+    ...initialData,
+    headshot_image_url: initialData.headshot_image_url || null,
+  });
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
 
   const validate = () => {
@@ -120,6 +125,12 @@ export function ProfileEditForm({ initialData }: ProfileEditFormProps) {
           <p className="text-sm text-green-800">Profile saved successfully</p>
         </div>
       )}
+
+      {/* Headshot Upload */}
+      <HeadshotUpload
+        currentImageUrl={formData.headshot_image_url}
+        onImageChange={(imageUrl) => setFormData({ ...formData, headshot_image_url: imageUrl })}
+      />
 
       {/* Professional Headline */}
       <div>

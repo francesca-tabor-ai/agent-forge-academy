@@ -3,11 +3,13 @@
 import { useState, useTransition } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface StudentProfile {
   id: string;
   visibility: 'private' | 'recruiters_only' | 'public';
   bio: string | null;
+  headshot_image_url?: string | null;
   profiles: Array<{
     id: string;
     user_id: string;
@@ -99,16 +101,31 @@ export function StudentDirectory({
               className="bg-white border border-gray-200 rounded-lg p-6"
             >
               <div className="flex items-start justify-between mb-4">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <h3 className="text-base font-medium text-gray-900">Student Profile</h3>
-                    <span className="text-xs text-gray-500 capitalize">
-                      {student.visibility.replace('_', ' ')}
-                    </span>
-                  </div>
-                  {student.bio && (
-                    <p className="text-sm text-gray-700 leading-relaxed">{student.bio}</p>
+                <div className="flex items-start gap-4 flex-1">
+                  {student.headshot_image_url && (
+                    <div className="flex-shrink-0">
+                      <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-gray-200 bg-gray-100">
+                        <Image
+                          src={student.headshot_image_url}
+                          alt="Student headshot"
+                          width={64}
+                          height={64}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    </div>
                   )}
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <h3 className="text-base font-medium text-gray-900">Student Profile</h3>
+                      <span className="text-xs text-gray-500 capitalize">
+                        {student.visibility.replace('_', ' ')}
+                      </span>
+                    </div>
+                    {student.bio && (
+                      <p className="text-sm text-gray-700 leading-relaxed">{student.bio}</p>
+                    )}
+                  </div>
                 </div>
               </div>
               <div className="flex items-center gap-3 pt-4 border-t border-gray-100">

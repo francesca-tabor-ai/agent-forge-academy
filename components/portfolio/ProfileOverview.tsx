@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
 
 interface ProfileOverviewProps {
@@ -9,13 +10,14 @@ interface ProfileOverviewProps {
   bio?: string | null;
   primaryRoles?: string[];
   coreSkills?: string[];
+  headshotImageUrl?: string | null;
 }
 
-export function ProfileOverview({ headline, bio, primaryRoles = [], coreSkills = [] }: ProfileOverviewProps) {
+export function ProfileOverview({ headline, bio, primaryRoles = [], coreSkills = [], headshotImageUrl }: ProfileOverviewProps) {
   const [isBioExpanded, setIsBioExpanded] = useState(false);
   const [showAllSkills, setShowAllSkills] = useState(false);
   
-  const hasData = headline || bio || primaryRoles.length > 0 || coreSkills.length > 0;
+  const hasData = headline || bio || primaryRoles.length > 0 || coreSkills.length > 0 || headshotImageUrl;
   
   // Calculate completion status
   const missingFields: string[] = [];
@@ -64,11 +66,27 @@ export function ProfileOverview({ headline, bio, primaryRoles = [], coreSkills =
       </div>
 
       <div className="space-y-4">
-        {headline && (
-          <div>
-            <h3 className="text-xl font-semibold text-gray-900">{headline}</h3>
-          </div>
-        )}
+        {/* Headshot and Headline */}
+        <div className="flex items-start gap-4">
+          {headshotImageUrl && (
+            <div className="flex-shrink-0">
+              <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-gray-200 bg-gray-100">
+                <Image
+                  src={headshotImageUrl}
+                  alt="Profile headshot"
+                  width={96}
+                  height={96}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+          )}
+          {headline && (
+            <div className="flex-1">
+              <h3 className="text-xl font-semibold text-gray-900">{headline}</h3>
+            </div>
+          )}
+        </div>
 
         {bio && (
           <div>

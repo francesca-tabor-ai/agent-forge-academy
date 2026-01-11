@@ -13,7 +13,7 @@ export default async function PublicPortfolioPage({ params }: PublicPortfolioPag
   // RLS will enforce visibility rules
   const { data: studentProfile } = await supabase
     .from('student_profiles')
-    .select('id, visibility, bio, profile_id')
+    .select('id, visibility, bio, profile_id, headshot_image_url')
     .eq('id', studentId)
     .single();
 
