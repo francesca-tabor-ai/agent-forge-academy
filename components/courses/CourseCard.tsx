@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { CourseMetadata } from '@/lib/course-metadata';
 import { UpgradeModal } from './UpgradeModal';
 import { isCourseLocked } from '@/lib/utils/course-access-frontend';
-import type { SubscriptionTier } from '@/lib/utils/subscription-access';
+import type { SubscriptionTier } from '@/lib/utils/subscription-types';
 import { Lock } from 'lucide-react';
 
 interface CourseCardProps {

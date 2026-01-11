@@ -12,7 +12,7 @@ import {
   getCourseLockReason,
   getUpgradeMessage,
 } from '@/lib/utils/course-access-frontend';
-import { ESSENTIAL_TIER_COURSES } from '@/lib/utils/subscription-access';
+import { ESSENTIAL_TIER_COURSES } from '@/lib/utils/subscription-types';
 
 describe('Subscription Access Control - Unit Tests', () => {
   describe('isCourseAccessible', () => {

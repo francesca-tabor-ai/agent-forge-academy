@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { CourseCard } from './CourseCard';
 import { CourseFilters } from './CourseFilters';
 import { CourseMetadata } from '@/lib/course-metadata';
-import type { SubscriptionTier } from '@/lib/utils/subscription-access';
+import type { SubscriptionTier } from '@/lib/utils/subscription-types';
 
 interface Course {
   id: string | null;

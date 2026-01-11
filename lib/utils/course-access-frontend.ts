@@ -6,7 +6,7 @@
  * and do not replace server-side access control.
  */
 
-import { ESSENTIAL_TIER_COURSES, type SubscriptionTier } from './subscription-access';
+import { ESSENTIAL_TIER_COURSES, type SubscriptionTier } from './subscription-types';
 
 /**
  * Checks if a course is accessible based on subscription tier

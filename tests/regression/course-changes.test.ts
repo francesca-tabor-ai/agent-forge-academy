@@ -6,7 +6,7 @@
  */
 
 import { describe, it, expect, beforeEach } from 'vitest';
-import { ESSENTIAL_TIER_COURSES } from '@/lib/utils/subscription-access';
+import { ESSENTIAL_TIER_COURSES } from '@/lib/utils/subscription-types';
 import {
   isCourseAccessible,
   isCourseLocked,

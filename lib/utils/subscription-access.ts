@@ -12,28 +12,11 @@
 import 'server-only';
 
 import { createUserSupabaseClient } from '@/lib/supabase/server';
+import { ESSENTIAL_TIER_COURSES, type SubscriptionTier, type SubscriptionStatus } from './subscription-types';
 
-/**
- * Subscription tier types
- */
-export type SubscriptionTier = 'essential' | 'professional';
-
-/**
- * Subscription status types
- */
-export type SubscriptionStatus = 'active' | 'trial' | 'paused' | 'canceled' | 'expired';
-
-/**
- * List of course slugs available to ESSENTIAL tier subscribers
- * These are the 5 courses included in Essential Access (£39/month)
- */
-export const ESSENTIAL_TIER_COURSES = [
-  'prompt-engineering',
-  'ai-content-pipelines',
-  'reddit-ai-visibility',
-  'seo-to-aeo',
-  'ai-governance-eu-ai-act',
-] as const;
+// Re-export types for backward compatibility (server-side only)
+export type { SubscriptionTier, SubscriptionStatus };
+export { ESSENTIAL_TIER_COURSES };
 
 /**
  * Interface for subscription data retrieved from database
