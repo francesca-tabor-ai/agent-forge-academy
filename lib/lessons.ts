@@ -10,6 +10,8 @@ export interface LessonFrontmatter {
   order?: number;
   description?: string;
   course?: string; // Course slug this lesson belongs to
+  email_takeaway?: string; // Short takeaway for weekly emails
+  email_action?: string; // Optional action item for weekly emails
   [key: string]: unknown;
 }
 

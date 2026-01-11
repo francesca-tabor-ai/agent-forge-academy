@@ -170,6 +170,7 @@ export async function GET(request: NextRequest) {
         const lastLessonSlug = lastSeenLesson?.lesson_slug;
 
         // Compute next lesson
+        let nextLesson: typeof sortedLessons[0] | null = null;
         let nextLessonSlug: string | null = null;
         let nextLessonTitle: string | null = null;
 
@@ -185,16 +186,16 @@ export async function GET(request: NextRequest) {
           
           // Get the next lesson after the last completed one
           if (lastCompletedIndex >= 0 && lastCompletedIndex < sortedLessons.length - 1) {
-            const nextLesson = sortedLessons[lastCompletedIndex + 1];
+            nextLesson = sortedLessons[lastCompletedIndex + 1];
             nextLessonSlug = nextLesson.slug;
             nextLessonTitle = nextLesson.frontmatter.title || nextLesson.slug;
           }
-          // If all lessons are completed, nextLessonSlug remains null
+          // If all lessons are completed, nextLesson remains null
         } else {
           // No completed lessons, use first lesson
-          const firstLesson = sortedLessons[0];
-          nextLessonSlug = firstLesson.slug;
-          nextLessonTitle = firstLesson.frontmatter.title || firstLesson.slug;
+          nextLesson = sortedLessons[0];
+          nextLessonSlug = nextLesson.slug;
+          nextLessonTitle = nextLesson.frontmatter.title || nextLesson.slug;
         }
 
         // Get last lesson title if available
@@ -203,10 +204,26 @@ export async function GET(request: NextRequest) {
           : null;
         const lastLessonTitle = lastLesson?.frontmatter.title || lastLessonSlug || null;
 
-        // Build "one action" - suggest next step
-        const oneAction = nextLessonSlug
-          ? `Continue with "${nextLessonTitle}"`
-          : 'Explore your courses';
+        // Extract email_takeaway and email_action from next lesson with fallbacks
+        let emailTakeaway: string | null = null;
+        let emailAction: string | null = null;
+
+        if (nextLesson) {
+          // Use email_takeaway if available, otherwise fallback to description
+          emailTakeaway = nextLesson.frontmatter.email_takeaway || nextLesson.frontmatter.description || null;
+          
+          // Use email_action if available, otherwise use generic template
+          if (nextLesson.frontmatter.email_action) {
+            emailAction = nextLesson.frontmatter.email_action;
+          } else {
+            // Generic action template based on course category or default
+            emailAction = `Continue with "${nextLessonTitle}"`;
+          }
+        } else {
+          // No next lesson (course completed)
+          emailTakeaway = `You've completed ${course.title}! Great work.`;
+          emailAction = 'Explore your other courses';
+        }
 
         // Build payload
         const payload = {
@@ -217,7 +234,8 @@ export async function GET(request: NextRequest) {
           lastLessonSlug: lastLessonSlug,
           nextLesson: nextLessonTitle,
           nextLessonSlug: nextLessonSlug,
-          oneAction,
+          emailTakeaway,
+          emailAction,
           progressPercentage: enrollment.progress_percentage || 0,
         };
 
