@@ -225,6 +225,30 @@ export async function GET(request: NextRequest) {
           emailAction = 'Explore your other courses';
         }
 
+        // Get user email for sending
+        const userEmail = user?.email;
+        if (!userEmail) {
+          // Skip if no email address
+          continue;
+        }
+
+        // Get unsubscribe token
+        const { data: studentProfileWithToken } = await supabase
+          .from('student_profiles')
+          .select('unsubscribe_token')
+          .eq('id', studentProfile.id)
+          .single();
+
+        const unsubscribeToken = studentProfileWithToken?.unsubscribe_token;
+        if (!unsubscribeToken) {
+          console.warn(`No unsubscribe token for student ${studentProfile.id}`);
+        }
+
+        // Build email subject
+        const subject = nextLessonTitle
+          ? `Continue learning: ${nextLessonTitle}`
+          : `Your progress in ${course.title}`;
+
         // Build payload
         const payload = {
           name: studentName,
@@ -237,17 +261,31 @@ export async function GET(request: NextRequest) {
           emailTakeaway,
           emailAction,
           progressPercentage: enrollment.progress_percentage || 0,
+          unsubscribeToken,
         };
 
-        // Enqueue to email_outbox
+        // Generate dedupe_key: email_type:YYYY-MM-DD:student_profile_id
+        const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+        const dedupeKey = `weekly_learning:${today}:${studentProfile.id}`;
+
+        // Enqueue to email_outbox with new structure
         // Note: Using service role client (createServerSupabaseClient) bypasses RLS
+        // Use upsert to handle duplicate dedupe_key gracefully (ON CONFLICT DO NOTHING)
         const { error: insertError } = await supabase
           .from('email_outbox')
-          .insert({
+          .upsert({
             student_profile_id: studentProfile.id,
-            template_key: 'weekly_next_lesson',
+            email_type: 'weekly_learning',
+            dedupe_key: dedupeKey,
+            to_email: userEmail,
+            subject,
             payload,
             status: 'queued',
+            attempt_count: 0,
+            next_attempt_at: new Date().toISOString(),
+          }, {
+            onConflict: 'dedupe_key',
+            ignoreDuplicates: true,
           });
 
         if (insertError) {
