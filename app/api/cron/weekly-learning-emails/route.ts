@@ -174,16 +174,22 @@ export async function GET(request: NextRequest) {
         let nextLessonTitle: string | null = null;
 
         if (completedLessons.length > 0) {
-          // Find the next lesson after the last completed one
-          const lastCompletedIndex = sortedLessons.findIndex(
-            lesson => completedLessons.includes(lesson.slug)
-          );
+          // Find the last completed lesson (highest order)
+          let lastCompletedIndex = -1;
+          for (let i = sortedLessons.length - 1; i >= 0; i--) {
+            if (completedLessons.includes(sortedLessons[i].slug)) {
+              lastCompletedIndex = i;
+              break;
+            }
+          }
           
+          // Get the next lesson after the last completed one
           if (lastCompletedIndex >= 0 && lastCompletedIndex < sortedLessons.length - 1) {
             const nextLesson = sortedLessons[lastCompletedIndex + 1];
             nextLessonSlug = nextLesson.slug;
             nextLessonTitle = nextLesson.frontmatter.title || nextLesson.slug;
           }
+          // If all lessons are completed, nextLessonSlug remains null
         } else {
           // No completed lessons, use first lesson
           const firstLesson = sortedLessons[0];
