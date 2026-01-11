@@ -34,6 +34,14 @@ function buildUnsubscribeUrl(token: string, type: 'learning' | 'jobs' | 'all' = 
 }
 
 /**
+ * Build manage preferences URL
+ */
+function buildPreferencesUrl(token: string): string {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://your-domain.com';
+  return `${baseUrl}/student/settings/notifications?token=${encodeURIComponent(token)}`;
+}
+
+/**
  * Add UTM parameters to a URL
  */
 function addUtmParams(url: string, source?: string, campaign?: string, medium?: string): string {
@@ -61,22 +69,26 @@ function processEmailContent(
 ): string {
   let processedHtml = html;
 
-  // Add unsubscribe link if token provided
+  // Add unsubscribe and preferences links if token provided
   if (unsubscribeToken) {
     const unsubscribeUrl = buildUnsubscribeUrl(unsubscribeToken);
-    const unsubscribeLink = `
+    const preferencesUrl = buildPreferencesUrl(unsubscribeToken);
+    const emailFooter = `
       <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb; text-align: center; font-size: 12px; color: #6b7280;">
+        <p style="margin: 0 0 8px 0;">
+          <a href="${preferencesUrl}" style="color: #3b82f6; text-decoration: underline;">Manage email preferences</a>
+        </p>
         <p style="margin: 0;">
           Don't want to receive these emails? 
-          <a href="${unsubscribeUrl}" style="color: #3b82f6; text-decoration: underline;">Unsubscribe</a>
+          <a href="${unsubscribeUrl}" style="color: #6b7280; text-decoration: underline;">Unsubscribe</a>
         </p>
       </div>
     `;
     // Try to insert before </body>, otherwise append to end
     if (processedHtml.includes('</body>')) {
-      processedHtml = processedHtml.replace('</body>', `${unsubscribeLink}</body>`);
+      processedHtml = processedHtml.replace('</body>', `${emailFooter}</body>`);
     } else {
-      processedHtml = processedHtml + unsubscribeLink;
+      processedHtml = processedHtml + emailFooter;
     }
   }
 
@@ -133,11 +145,12 @@ export async function sendEmail(options: SendEmailOptions): Promise<SendEmailRes
     // Process HTML content (add unsubscribe link and UTM tracking)
     const processedHtml = processEmailContent(html, unsubscribeToken, utmSource, utmCampaign, utmMedium);
 
-    // Process text content (add unsubscribe link)
+    // Process text content (add unsubscribe and preferences links)
     let processedText = text;
     if (processedText && unsubscribeToken) {
       const unsubscribeUrl = buildUnsubscribeUrl(unsubscribeToken);
-      processedText += `\n\n---\nDon't want to receive these emails? Unsubscribe: ${unsubscribeUrl}`;
+      const preferencesUrl = buildPreferencesUrl(unsubscribeToken);
+      processedText += `\n\n---\nManage email preferences: ${preferencesUrl}\nDon't want to receive these emails? Unsubscribe: ${unsubscribeUrl}`;
     }
 
     // Send email via Resend API
