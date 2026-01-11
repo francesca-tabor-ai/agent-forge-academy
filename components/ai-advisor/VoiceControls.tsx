@@ -27,6 +27,24 @@ function isSpeechRecognitionSupported(): boolean {
   }
 }
 
+// Check if running in secure context (HTTPS required for voice)
+function isSecureContext(): boolean {
+  if (typeof window === 'undefined') return false;
+  try {
+    // Check isSecureContext API (modern browsers)
+    if ('isSecureContext' in window) {
+      return window.isSecureContext;
+    }
+    // Fallback: check protocol
+    return window.location.protocol === 'https:' || 
+           window.location.hostname === 'localhost' ||
+           window.location.hostname === '127.0.0.1';
+  } catch (error) {
+    console.warn('Error checking secure context:', error);
+    return false;
+  }
+}
+
 function isSpeechSynthesisSupported(): boolean {
   if (typeof window === 'undefined') return false;
   try {
@@ -59,12 +77,15 @@ export function checkVoiceCapabilities(): {
   speechRecognition: boolean;
   speechSynthesis: boolean;
   mediaDevices: boolean;
+  isSecureContext: boolean;
   isFullySupported: boolean;
   browserInfo: string;
+  unsupportedReason?: string;
 } {
   const speechRecognition = isSpeechRecognitionSupported();
   const speechSynthesis = isSpeechSynthesisSupported();
   const mediaDevices = isMediaDevicesSupported();
+  const secureContext = isSecureContext();
   
   // Detect browser
   let browserInfo = 'Unknown';
@@ -81,12 +102,24 @@ export function checkVoiceCapabilities(): {
     }
   }
 
+  // Determine why voice might not be supported
+  let unsupportedReason: string | undefined;
+  if (!secureContext) {
+    unsupportedReason = 'Voice requires HTTPS. Please use a secure connection.';
+  } else if (!speechRecognition) {
+    unsupportedReason = 'Voice input isn\'t supported in this browser.';
+  } else if (!mediaDevices) {
+    unsupportedReason = 'Microphone access isn\'t supported in this browser.';
+  }
+
   return {
     speechRecognition,
     speechSynthesis,
     mediaDevices,
-    isFullySupported: speechRecognition && speechSynthesis && mediaDevices,
+    isSecureContext: secureContext,
+    isFullySupported: speechRecognition && speechSynthesis && mediaDevices && secureContext,
     browserInfo,
+    unsupportedReason,
   };
 }
 
@@ -112,6 +145,8 @@ export function VoiceControls({
   const [permissionError, setPermissionError] = useState<string | null>(null);
   const [isSupported, setIsSupported] = useState(false);
   const [recordingDuration, setRecordingDuration] = useState(0);
+  const [voiceUnavailableReason, setVoiceUnavailableReason] = useState<string | null>(null);
+  const [isOffline, setIsOffline] = useState(false);
 
   const recognitionRef = useRef<any>(null);
   const synthesisRef = useRef<SpeechSynthesisUtterance | null>(null);
@@ -121,6 +156,51 @@ export function VoiceControls({
   const recordingIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const transcriptInputRef = useRef<HTMLTextAreaElement>(null);
   const isEditingTranscriptRef = useRef(false);
+  const lastErrorAtRef = useRef<number>(0);
+  const restartBackoffRef = useRef<number>(1000); // Start with 1s backoff
+  const lastErrorTypeRef = useRef<string | null>(null);
+  const networkErrorLoggedRef = useRef<boolean>(false);
+  const networkErrorLoggedAtRef = useRef<number>(0);
+  const restartTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Offline/online detection
+  useEffect(() => {
+    const handleOffline = () => {
+      setIsOffline(true);
+      // Stop listening if offline
+      if (recognitionRef.current && isListening) {
+        try {
+          recognitionRef.current.stop();
+        } catch (e) {
+          // Ignore stop errors
+        }
+      }
+      setVoiceUnavailableReason('offline');
+      setError('You appear offline — voice input is unavailable.');
+    };
+
+    const handleOnline = () => {
+      setIsOffline(false);
+      // Clear offline error, but don't auto-restart (require user action)
+      if (voiceUnavailableReason === 'offline') {
+        setVoiceUnavailableReason(null);
+        setError(null);
+      }
+    };
+
+    // Check initial online status
+    if (typeof navigator !== 'undefined' && 'onLine' in navigator) {
+      setIsOffline(!navigator.onLine);
+    }
+
+    window.addEventListener('offline', handleOffline);
+    window.addEventListener('online', handleOnline);
+
+    return () => {
+      window.removeEventListener('offline', handleOffline);
+      window.removeEventListener('online', handleOnline);
+    };
+  }, [isListening]);
 
   // Check microphone permission on mount with error handling
   useEffect(() => {
@@ -145,7 +225,7 @@ export function VoiceControls({
       } catch (err: any) {
         // Handle specific permission errors
         if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
-          setPermissionError('Microphone permission denied. Please enable microphone access in your browser settings.');
+          setPermissionError('Microphone permission is blocked. Enable it in your browser settings.');
         } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
           setPermissionError('No microphone found. Please connect a microphone and try again.');
         } else if (err.name === 'NotReadableError' || err.name === 'TrackStartError') {
@@ -176,6 +256,16 @@ export function VoiceControls({
 
       if (!capabilities.isFullySupported) {
         console.warn('Voice capabilities not fully supported:', capabilities);
+        if (capabilities.unsupportedReason) {
+          setError(capabilities.unsupportedReason);
+        }
+        return;
+      }
+
+      // Additional check: secure context required
+      if (!capabilities.isSecureContext) {
+        setIsSupported(false);
+        setError('Voice requires HTTPS. Please use a secure connection.');
         return;
       }
 
@@ -254,6 +344,14 @@ export function VoiceControls({
               setPartialTranscript('');
               setRecognitionState('processing');
               
+              // Reset backoff on successful result
+              restartBackoffRef.current = 1000;
+              // Clear network error state on success
+              if (voiceUnavailableReason === 'network') {
+                setVoiceUnavailableReason(null);
+                networkErrorLoggedRef.current = false;
+              }
+              
               // Reset silence timer
               if (silenceTimerRef.current) {
                 clearTimeout(silenceTimerRef.current);
@@ -302,7 +400,11 @@ export function VoiceControls({
         };
 
         recognition.onerror = (event: any) => {
-          console.error('Speech recognition error:', event.error);
+          const errorType = event.error;
+          const now = Date.now();
+          const timeSinceLastError = now - lastErrorAtRef.current;
+          
+          // Stop recognition cleanly
           setRecognitionState('error');
           setIsListening(false);
           
@@ -313,33 +415,95 @@ export function VoiceControls({
           }
           setRecordingDuration(0);
           
-          if (event.error === 'no-speech') {
-            setError('No speech detected. Please try again.');
-            // No speech detected, try to restart if in hands-free mode
+          // Handle network errors with deduplication
+          if (errorType === 'network') {
+            // Only log once per 30 seconds to prevent spam
+            const timeSinceLastNetworkLog = now - networkErrorLoggedAtRef.current;
+            if (!networkErrorLoggedRef.current || timeSinceLastNetworkLog > 30000) {
+              console.warn('Speech recognition network error - voice service temporarily unavailable');
+              networkErrorLoggedRef.current = true;
+              networkErrorLoggedAtRef.current = now;
+            }
+            
+            setVoiceUnavailableReason('network');
+            setError('Voice service is temporarily unavailable. Try again, or keep typing.');
+            lastErrorTypeRef.current = 'network';
+            lastErrorAtRef.current = now;
+            
+            // Abort recognition cleanly (don't just stop)
+            try {
+              if (recognitionRef.current) {
+                recognitionRef.current.abort();
+              }
+            } catch (e) {
+              // Ignore abort errors
+            }
+            
+            // Stop listening and prevent auto-restart
+            stopListening();
+            
+            // Clear any pending restart timeouts
+            if (restartTimeoutRef.current) {
+              clearTimeout(restartTimeoutRef.current);
+              restartTimeoutRef.current = null;
+            }
+            
+            // Disable hands-free mode automatically if active
             if (mode === 'hands-free') {
+              setMode('push-to-talk');
+            }
+            
+            // Reset backoff on network error (require manual retry)
+            restartBackoffRef.current = 1000;
+            return;
+          }
+          
+          // Reset network error flag for non-network errors
+          if (errorType !== 'network') {
+            networkErrorLoggedRef.current = false;
+          }
+          
+          // Log other errors (but not repeatedly)
+          if (timeSinceLastError > 2000 || lastErrorTypeRef.current !== errorType) {
+            if (errorType === 'aborted') {
+              // Aborted is expected, don't log
+            } else {
+              console.warn(`Speech recognition error: ${errorType}`);
+            }
+          }
+          
+          lastErrorTypeRef.current = errorType;
+          lastErrorAtRef.current = now;
+          
+          if (errorType === 'no-speech') {
+            setError('No speech detected. Please try again.');
+            setVoiceUnavailableReason(null);
+            // Only restart if not in network error state and in hands-free mode
+            if (mode === 'hands-free' && !voiceUnavailableReason) {
+              // Use exponential backoff
               setTimeout(() => {
-                if (!disabled) {
+                if (!disabled && !voiceUnavailableReason) {
                   startListening();
                 }
-              }, 1000);
+              }, restartBackoffRef.current);
+              // Increase backoff for next time (max 30s)
+              restartBackoffRef.current = Math.min(restartBackoffRef.current * 2, 30000);
             }
-          } else if (event.error === 'audio-capture') {
+          } else if (errorType === 'audio-capture') {
             setError('Microphone not found or not accessible');
             setPermissionError('Please check that your microphone is connected and try again.');
-          } else if (event.error === 'not-allowed') {
+            setVoiceUnavailableReason('audio-capture');
+          } else if (errorType === 'not-allowed' || errorType === 'service-not-allowed') {
             setError('Microphone permission denied');
             setPermissionError('Microphone access is required. Please enable microphone permissions in your browser settings and refresh the page.');
-          } else if (event.error === 'network') {
-            setError('Voice input isn\'t available right now. You can still type your message.');
-            // Don't console.error repeatedly - just set the error state
-            // The error boundary and UI will handle displaying it gracefully
-            // Stop listening to prevent repeated errors
-            stopListening();
-          } else if (event.error === 'aborted') {
+            setVoiceUnavailableReason('permission');
+          } else if (errorType === 'aborted') {
             // User or system aborted, don't show error
             setError(null);
+            setVoiceUnavailableReason(null);
           } else {
-            setError(`Recognition error: ${event.error}`);
+            setError(`Recognition error: ${errorType}`);
+            setVoiceUnavailableReason(null);
           }
         };
 
@@ -353,11 +517,46 @@ export function VoiceControls({
             recordingIntervalRef.current = null;
           }
           
-          // Auto-restart in hands-free mode if not manually stopped and not editing
-          if (mode === 'hands-free' && !disabled && !isEditingTranscriptRef.current) {
-            setTimeout(() => {
-              startListening();
-            }, 500);
+          // Auto-restart in hands-free mode ONLY if:
+          // - Not disabled
+          // - Not editing transcript
+          // - No network error (require manual retry)
+          // - Last error was not network
+          // - Not offline
+          // - Backoff delay has passed
+          if (
+            mode === 'hands-free' && 
+            !disabled && 
+            !isEditingTranscriptRef.current &&
+            !voiceUnavailableReason &&
+            lastErrorTypeRef.current !== 'network' &&
+            !isOffline
+          ) {
+            // Clear any existing restart timeout
+            if (restartTimeoutRef.current) {
+              clearTimeout(restartTimeoutRef.current);
+            }
+            
+            // Use exponential backoff
+            restartTimeoutRef.current = setTimeout(() => {
+              // Double-check conditions before restarting
+              if (
+                !disabled && 
+                !voiceUnavailableReason && 
+                lastErrorTypeRef.current !== 'network' &&
+                !isOffline &&
+                mode === 'hands-free'
+              ) {
+                startListening();
+              }
+              restartTimeoutRef.current = null;
+            }, restartBackoffRef.current);
+            
+            // Increase backoff for next time (max 30s)
+            restartBackoffRef.current = Math.min(restartBackoffRef.current * 2, 30000);
+          } else {
+            // Reset backoff if conditions not met
+            restartBackoffRef.current = 1000;
           }
         };
 
@@ -375,15 +574,35 @@ export function VoiceControls({
 
   const startListening = useCallback(() => {
     if (!recognitionRef.current || disabled || isListening) return;
+    
+    // Check if offline
+    if (isOffline) {
+      setError('You appear offline — voice input is unavailable.');
+      setVoiceUnavailableReason('offline');
+      return;
+    }
 
     try {
       setPartialTranscript('');
       setFinalTranscript('');
       setError(null);
       
-      // Additional safety check before starting
+      // Clear network error state when user manually retries
+      if (voiceUnavailableReason === 'network' || voiceUnavailableReason === 'offline') {
+        setVoiceUnavailableReason(null);
+        networkErrorLoggedRef.current = false;
+        lastErrorTypeRef.current = null;
+        restartBackoffRef.current = 1000; // Reset backoff on manual retry
+      }
+      
+      // Additional safety checks before starting
       if (!isSpeechRecognitionSupported()) {
         setError('Speech Recognition is not supported in this browser');
+        return;
+      }
+      
+      if (!isSecureContext()) {
+        setError('Voice requires HTTPS. Please use a secure connection.');
         return;
       }
 
@@ -410,7 +629,7 @@ export function VoiceControls({
         setError('Failed to start voice recognition. Text input is still available.');
       }
     }
-  }, [disabled, isListening]);
+  }, [disabled, isListening, voiceUnavailableReason, isOffline]);
 
   const stopListening = useCallback(() => {
     if (recognitionRef.current) {
@@ -478,22 +697,22 @@ export function VoiceControls({
       clearTimeout(silenceTimerRef.current);
     }
 
-    if (mode === 'hands-free' && isListening) {
+    if (mode === 'hands-free' && isListening && !isOffline && !voiceUnavailableReason) {
       silenceTimerRef.current = setTimeout(() => {
         const timeSinceLastSpeech = Date.now() - lastSpeechTimeRef.current;
         // Auto-stop after 3 seconds of silence
         if (timeSinceLastSpeech > 3000) {
           stopListening();
-          // Restart after a brief pause
+          // Restart after a brief pause ONLY if conditions are still met
           setTimeout(() => {
-            if (!disabled) {
+            if (!disabled && !isOffline && !voiceUnavailableReason && mode === 'hands-free') {
               startListening();
             }
           }, 1000);
         }
       }, 3000);
     }
-  }, [mode, isListening, disabled, stopListening, startListening]);
+  }, [mode, isListening, disabled, stopListening, startListening, isOffline, voiceUnavailableReason]);
 
   // Update silence timer when partial transcript changes
   useEffect(() => {
@@ -621,16 +840,22 @@ export function VoiceControls({
       if (recordingIntervalRef.current) {
         clearInterval(recordingIntervalRef.current);
       }
+      if (restartTimeoutRef.current) {
+        clearTimeout(restartTimeoutRef.current);
+      }
     };
   }, [stopListening, stopSpeaking]);
 
   // Fallback UI for unsupported browsers
   if (!isSupported) {
+    const capabilities = checkVoiceCapabilities();
+    const reason = capabilities.unsupportedReason || 'Voice input isn\'t supported in this browser.';
+    
     return (
       <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 text-sm text-yellow-800">
-        <p className="font-medium mb-1">Voice controls not supported</p>
+        <p className="font-medium mb-1">Voice controls not available</p>
         <p className="text-xs">
-          Voice input/output requires Chrome or Edge browser. Please use text input instead.
+          {reason} Please use text input instead.
         </p>
       </div>
     );
@@ -709,12 +934,12 @@ export function VoiceControls({
               }
             }
           }}
-          disabled={disabled || !!permissionError}
+          disabled={disabled || !!permissionError || voiceUnavailableReason === 'network' || voiceUnavailableReason === 'offline' || isOffline}
           className={`relative flex items-center justify-center w-12 h-12 rounded-full transition-all ${
             isListening
               ? 'bg-red-500 hover:bg-red-600 shadow-lg shadow-red-500/50'
               : 'bg-blue-600 hover:bg-blue-700'
-          } ${disabled || permissionError ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'} ${
+          } ${disabled || permissionError || voiceUnavailableReason === 'network' || voiceUnavailableReason === 'offline' || isOffline ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'} ${
             isListening ? 'ring-2 ring-red-300 ring-offset-2' : ''
           }`}
           title={mode === 'push-to-talk' ? 'Hold to speak' : isListening ? 'Stop listening' : 'Start listening'}
@@ -957,9 +1182,41 @@ export function VoiceControls({
                 d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
-            <div>
+            <div className="flex-1">
               <p className="font-medium mb-1">Error</p>
-              <p>{error}</p>
+              <p className="mb-2">{error}</p>
+              {(voiceUnavailableReason === 'network' || voiceUnavailableReason === 'offline') && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setError(null);
+                    setVoiceUnavailableReason(null);
+                    networkErrorLoggedRef.current = false;
+                    lastErrorTypeRef.current = null;
+                    restartBackoffRef.current = 1000;
+                    // Clear any pending restart timeouts
+                    if (restartTimeoutRef.current) {
+                      clearTimeout(restartTimeoutRef.current);
+                      restartTimeoutRef.current = null;
+                    }
+                    // Re-run feature detection and reinitialize
+                    if (recognitionRef.current) {
+                      try {
+                        recognitionRef.current.abort();
+                      } catch (e) {
+                        // Ignore abort errors
+                      }
+                    }
+                    // Small delay before retry to allow cleanup
+                    setTimeout(() => {
+                      startListening();
+                    }, 300);
+                  }}
+                  className="mt-2 px-3 py-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-xs font-medium"
+                >
+                  Try again
+                </button>
+              )}
             </div>
           </div>
         </div>
