@@ -1,6 +1,10 @@
 -- Create Stripe integration tables
 -- This migration creates tables for mapping users to Stripe customers,
 -- storing subscription plans, subscriptions, payments, and a convenience view
+-- 
+-- NOTE: If an old subscriptions table exists (with student_profile_id), 
+-- this migration will add user_id column and Stripe fields to it.
+-- The old and new subscription systems can coexist.
 
 -- 1) Map app users -> Stripe customers
 create table if not exists public.stripe_customers (
@@ -21,25 +25,70 @@ create table if not exists public.subscription_plans (
 );
 
 -- 3) Stripe subscriptions (source of truth for entitlements)
-create table if not exists public.subscriptions (
-  id text primary key, -- Stripe subscription id: sub_...
-  user_id uuid not null references auth.users(id) on delete cascade,
-  stripe_customer_id text not null,
-  stripe_price_id text not null,
-  status text not null,
-  cancel_at_period_end boolean not null default false,
-  current_period_start timestamptz,
-  current_period_end timestamptz,
-  trial_start timestamptz,
-  trial_end timestamptz,
-  canceled_at timestamptz,
-  ended_at timestamptz,
-  created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now()
-);
+-- Handle both old and new table structures
+DO $$
+BEGIN
+  -- Check if subscriptions table exists with old structure (student_profile_id)
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns 
+    WHERE table_schema = 'public' 
+    AND table_name = 'subscriptions' 
+    AND column_name = 'student_profile_id'
+  ) THEN
+    -- Old table exists - add Stripe-specific columns if they don't exist
+    IF NOT EXISTS (
+      SELECT 1 FROM information_schema.columns 
+      WHERE table_schema = 'public' 
+      AND table_name = 'subscriptions' 
+      AND column_name = 'user_id'
+    ) THEN
+      -- Add user_id column (nullable, can be populated from student_profiles later)
+      ALTER TABLE public.subscriptions 
+      ADD COLUMN user_id uuid REFERENCES auth.users(id) ON DELETE CASCADE;
+    END IF;
+    
+    -- Add Stripe-specific columns
+    ALTER TABLE public.subscriptions 
+    ADD COLUMN IF NOT EXISTS stripe_customer_id text,
+    ADD COLUMN IF NOT EXISTS stripe_price_id text,
+    ADD COLUMN IF NOT EXISTS cancel_at_period_end boolean NOT NULL DEFAULT false,
+    ADD COLUMN IF NOT EXISTS trial_start timestamptz,
+    ADD COLUMN IF NOT EXISTS trial_end timestamptz,
+    ADD COLUMN IF NOT EXISTS ended_at timestamptz;
+  ELSE
+    -- Old table doesn't exist, create new Stripe-based subscriptions table
+    CREATE TABLE IF NOT EXISTS public.subscriptions (
+      id text primary key, -- Stripe subscription id: sub_...
+      user_id uuid not null references auth.users(id) on delete cascade,
+      stripe_customer_id text not null,
+      stripe_price_id text not null,
+      status text not null,
+      cancel_at_period_end boolean not null default false,
+      current_period_start timestamptz,
+      current_period_end timestamptz,
+      trial_start timestamptz,
+      trial_end timestamptz,
+      canceled_at timestamptz,
+      ended_at timestamptz,
+      created_at timestamptz not null default now(),
+      updated_at timestamptz not null default now()
+    );
+  END IF;
+END $$;
 
-create index if not exists subscriptions_user_id_idx on public.subscriptions(user_id);
-create index if not exists subscriptions_status_idx on public.subscriptions(status);
+-- Create indexes only if user_id column exists
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns 
+    WHERE table_schema = 'public' 
+    AND table_name = 'subscriptions' 
+    AND column_name = 'user_id'
+  ) THEN
+    EXECUTE 'CREATE INDEX IF NOT EXISTS subscriptions_user_id_idx ON public.subscriptions(user_id)';
+    EXECUTE 'CREATE INDEX IF NOT EXISTS subscriptions_status_idx ON public.subscriptions(status)';
+  END IF;
+END $$;
 
 -- 4) Payments ledger (optional but recommended for "who paid what")
 create table if not exists public.payments (
@@ -57,12 +106,30 @@ create table if not exists public.payments (
 create index if not exists payments_user_id_idx on public.payments(user_id);
 
 -- 5) Convenience: current entitlement view
-create or replace view public.user_entitlements as
-select
-  s.user_id,
-  s.status,
-  s.stripe_price_id,
-  s.current_period_end,
-  (s.status in ('active','trialing')) as is_active
-from public.subscriptions s
-where s.current_period_end is null or s.current_period_end > now();
+-- Only create view if user_id and stripe_price_id columns exist (new Stripe-based structure)
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns 
+    WHERE table_schema = 'public' 
+    AND table_name = 'subscriptions' 
+    AND column_name = 'user_id'
+  ) AND EXISTS (
+    SELECT 1 FROM information_schema.columns 
+    WHERE table_schema = 'public' 
+    AND table_name = 'subscriptions' 
+    AND column_name = 'stripe_price_id'
+  ) THEN
+    EXECUTE $view$
+      CREATE OR REPLACE VIEW public.user_entitlements AS
+      SELECT
+        s.user_id,
+        s.status,
+        s.stripe_price_id,
+        s.current_period_end,
+        (s.status IN ('active','trialing')) AS is_active
+      FROM public.subscriptions s
+      WHERE s.current_period_end IS NULL OR s.current_period_end > now()
+    $view$;
+  END IF;
+END $$;
