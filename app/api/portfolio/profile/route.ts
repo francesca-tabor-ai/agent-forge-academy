@@ -1,11 +1,16 @@
 import { createUserSupabaseClient } from '@/lib/supabase/server';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { logRequest, getUserIdFromRequest, getIpAddress, getUserAgent } from '@/lib/utils/request-logger';
 
 /**
  * GET /api/portfolio/profile
  * Get or create student profile for the authenticated user
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const requestId = `req-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+  const startTime = Date.now();
+  let status = 200;
+
   try {
     const supabase = await createUserSupabaseClient();
     const {
@@ -61,6 +66,20 @@ export async function GET() {
 
       if (createError) {
         console.error('[Profile GET] Failed to create student profile:', createError);
+        status = 500;
+        const duration = Date.now() - startTime;
+        await logRequest({
+          requestId,
+          userId: user.id,
+          path: '/api/portfolio/profile',
+          method: 'GET',
+          status,
+          duration,
+          errorStack: createError.stack || null,
+          errorMessage: createError.message,
+          ipAddress: getIpAddress(request),
+          userAgent: getUserAgent(request),
+        });
         return NextResponse.json(
           { ok: false, error: { code: 'CREATE_FAILED', message: createError.message } },
           { status: 500 }
@@ -70,12 +89,40 @@ export async function GET() {
       studentProfile = newProfile;
     }
 
+    const duration = Date.now() - startTime;
+    await logRequest({
+      requestId,
+      userId: user.id,
+      path: '/api/portfolio/profile',
+      method: 'GET',
+      status,
+      duration,
+      ipAddress: getIpAddress(request),
+      userAgent: getUserAgent(request),
+    });
+
     return NextResponse.json({
       ok: true,
       profile: studentProfile,
     });
   } catch (error) {
+    const duration = Date.now() - startTime;
+    status = 500;
     console.error('[Profile GET] Unexpected error:', error);
+    
+    await logRequest({
+      requestId,
+      userId: await getUserIdFromRequest(request),
+      path: '/api/portfolio/profile',
+      method: 'GET',
+      status,
+      duration,
+      errorStack: error instanceof Error ? error.stack || null : null,
+      errorMessage: error instanceof Error ? error.message : 'Internal server error',
+      ipAddress: getIpAddress(request),
+      userAgent: getUserAgent(request),
+    });
+
     return NextResponse.json(
       {
         ok: false,
@@ -93,7 +140,11 @@ export async function GET() {
  * PATCH /api/portfolio/profile
  * Update student profile for the authenticated user
  */
-export async function PATCH(request: Request) {
+export async function PATCH(request: NextRequest) {
+  const requestId = `req-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+  const startTime = Date.now();
+  let status = 200;
+
   try {
     const supabase = await createUserSupabaseClient();
     const {
@@ -101,6 +152,18 @@ export async function PATCH(request: Request) {
     } = await supabase.auth.getUser();
 
     if (!user) {
+      status = 401;
+      const duration = Date.now() - startTime;
+      await logRequest({
+        requestId,
+        userId: null,
+        path: '/api/portfolio/profile',
+        method: 'PATCH',
+        status,
+        duration,
+        ipAddress: getIpAddress(request),
+        userAgent: getUserAgent(request),
+      });
       return NextResponse.json(
         { ok: false, error: { code: 'UNAUTHORIZED', message: 'Unauthorized' } },
         { status: 401 }
@@ -150,6 +213,19 @@ export async function PATCH(request: Request) {
 
     // Return validation errors if any
     if (Object.keys(fieldErrors).length > 0) {
+      status = 400;
+      const duration = Date.now() - startTime;
+      await logRequest({
+        requestId,
+        userId: user.id,
+        path: '/api/portfolio/profile',
+        method: 'PATCH',
+        status,
+        duration,
+        errorMessage: 'Validation failed',
+        ipAddress: getIpAddress(request),
+        userAgent: getUserAgent(request),
+      });
       return NextResponse.json(
         { 
           ok: false, 
@@ -175,6 +251,19 @@ export async function PATCH(request: Request) {
     };
 
     if (linkedin_url && !isValidUrl(linkedin_url)) {
+      status = 400;
+      const duration = Date.now() - startTime;
+      await logRequest({
+        requestId,
+        userId: user.id,
+        path: '/api/portfolio/profile',
+        method: 'PATCH',
+        status,
+        duration,
+        errorMessage: 'Invalid LinkedIn URL format',
+        ipAddress: getIpAddress(request),
+        userAgent: getUserAgent(request),
+      });
       return NextResponse.json(
         { 
           ok: false, 
@@ -189,6 +278,19 @@ export async function PATCH(request: Request) {
     }
 
     if (github_url && !isValidUrl(github_url)) {
+      status = 400;
+      const duration = Date.now() - startTime;
+      await logRequest({
+        requestId,
+        userId: user.id,
+        path: '/api/portfolio/profile',
+        method: 'PATCH',
+        status,
+        duration,
+        errorMessage: 'Invalid GitHub URL format',
+        ipAddress: getIpAddress(request),
+        userAgent: getUserAgent(request),
+      });
       return NextResponse.json(
         { 
           ok: false, 
@@ -203,6 +305,19 @@ export async function PATCH(request: Request) {
     }
 
     if (website_url && !isValidUrl(website_url)) {
+      status = 400;
+      const duration = Date.now() - startTime;
+      await logRequest({
+        requestId,
+        userId: user.id,
+        path: '/api/portfolio/profile',
+        method: 'PATCH',
+        status,
+        duration,
+        errorMessage: 'Invalid website URL format',
+        ipAddress: getIpAddress(request),
+        userAgent: getUserAgent(request),
+      });
       return NextResponse.json(
         { 
           ok: false, 
@@ -261,11 +376,37 @@ export async function PATCH(request: Request) {
 
       if (createError) {
         console.error('[Profile PATCH] Failed to create student profile:', createError);
+        status = 400;
+        const duration = Date.now() - startTime;
+        await logRequest({
+          requestId,
+          userId: user.id,
+          path: '/api/portfolio/profile',
+          method: 'PATCH',
+          status,
+          duration,
+          errorStack: createError.stack || null,
+          errorMessage: createError.message,
+          ipAddress: getIpAddress(request),
+          userAgent: getUserAgent(request),
+        });
         return NextResponse.json(
           { ok: false, error: { code: 'CREATE_FAILED', message: createError.message } },
           { status: 400 }
         );
       }
+
+      const duration = Date.now() - startTime;
+      await logRequest({
+        requestId,
+        userId: user.id,
+        path: '/api/portfolio/profile',
+        method: 'PATCH',
+        status,
+        duration,
+        ipAddress: getIpAddress(request),
+        userAgent: getUserAgent(request),
+      });
 
       return NextResponse.json({
         ok: true,
@@ -292,18 +433,60 @@ export async function PATCH(request: Request) {
 
     if (error) {
       console.error('[Profile PATCH] Update error:', error);
+      status = 400;
+      const duration = Date.now() - startTime;
+      await logRequest({
+        requestId,
+        userId: user.id,
+        path: '/api/portfolio/profile',
+        method: 'PATCH',
+        status,
+        duration,
+        errorStack: error.stack || null,
+        errorMessage: error.message,
+        ipAddress: getIpAddress(request),
+        userAgent: getUserAgent(request),
+      });
       return NextResponse.json(
         { ok: false, error: { code: 'UPDATE_FAILED', message: error.message } },
         { status: 400 }
       );
     }
 
+    const duration = Date.now() - startTime;
+    await logRequest({
+      requestId,
+      userId: user.id,
+      path: '/api/portfolio/profile',
+      method: 'PATCH',
+      status,
+      duration,
+      ipAddress: getIpAddress(request),
+      userAgent: getUserAgent(request),
+    });
+
     return NextResponse.json({
       ok: true,
       profile: updatedProfile,
     });
   } catch (error) {
+    const duration = Date.now() - startTime;
+    status = 500;
     console.error('[Profile PATCH] Unexpected error:', error);
+    
+    await logRequest({
+      requestId,
+      userId: await getUserIdFromRequest(request),
+      path: '/api/portfolio/profile',
+      method: 'PATCH',
+      status,
+      duration,
+      errorStack: error instanceof Error ? error.stack || null : null,
+      errorMessage: error instanceof Error ? error.message : 'Internal server error',
+      ipAddress: getIpAddress(request),
+      userAgent: getUserAgent(request),
+    });
+
     return NextResponse.json(
       {
         ok: false,

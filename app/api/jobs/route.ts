@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { calculateJobMatch, type Job } from '@/lib/jobs/matching';
 import { getStudentDataForMatching, StudentProfileNotFoundError } from '@/lib/jobs/student-data-cache';
 import { safeLogger } from '@/lib/utils/redactPII';
+import { logRequest, getUserIdFromRequest, getIpAddress, getUserAgent } from '@/lib/utils/request-logger';
 
 // Force dynamic rendering (uses cookies)
 export const dynamic = 'force-dynamic';
@@ -628,6 +629,22 @@ export async function GET(request: NextRequest) {
       matchingTime: `${matchingTime}ms`,
     });
 
+    const totalTime = Date.now() - startTime;
+    const status = 200;
+    
+    // Log successful request
+    const userId = await getUserIdFromRequest(request);
+    await logRequest({
+      requestId,
+      userId,
+      path: '/api/jobs',
+      method: 'GET',
+      status,
+      duration: totalTime,
+      ipAddress: getIpAddress(request),
+      userAgent: getUserAgent(request),
+    });
+
     return NextResponse.json({
       ok: true,
       jobs: jobsWithScores,
@@ -635,6 +652,8 @@ export async function GET(request: NextRequest) {
     });
   } catch (error: any) {
     const totalTime = Date.now() - startTime;
+    const status = 500;
+    
     safeLogger.error(`[${requestId}] GET /api/jobs - Unhandled error`, {
       error: error?.message || 'Unknown error',
       stack: error?.stack || new Error().stack,
@@ -643,6 +662,22 @@ export async function GET(request: NextRequest) {
       duration: `${totalTime}ms`,
       url: request.url,
     });
+
+    // Log error request
+    const userId = await getUserIdFromRequest(request);
+    await logRequest({
+      requestId,
+      userId,
+      path: '/api/jobs',
+      method: 'GET',
+      status,
+      duration: totalTime,
+      errorStack: error?.stack || null,
+      errorMessage: error?.message || 'Unknown error',
+      ipAddress: getIpAddress(request),
+      userAgent: getUserAgent(request),
+    });
+
     return NextResponse.json(
       {
         ok: false,

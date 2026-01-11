@@ -6,6 +6,7 @@ import { classifyIntent, getToolsForIntent, type AdvisorIntent, type IntentClass
 import { getTopJobMatches, formatJobMatchesForLLM } from '@/lib/jobs/advisor-tools';
 import { generateNextActions, type NextAction } from '@/lib/ai/nextActions';
 import { redactPII, safeLogger } from '@/lib/utils/redactPII';
+import { logRequest, getUserIdFromRequest, getIpAddress, getUserAgent } from '@/lib/utils/request-logger';
 
 interface ChatRequest {
   message: string;
@@ -637,6 +638,18 @@ export async function POST(request: NextRequest) {
     let { message, context, studentProfileId, conversationHistory, intent, conversationId } = body;
 
     if (!message || !message.trim()) {
+      const duration = Date.now() - startTime;
+      await logRequest({
+        requestId,
+        userId: user.id,
+        path: '/api/ai-advisor/chat',
+        method: 'POST',
+        status: 400,
+        duration,
+        errorMessage: 'Message is required',
+        ipAddress: getIpAddress(request),
+        userAgent: getUserAgent(request),
+      });
       return NextResponse.json(
         { 
           ok: false,
@@ -659,6 +672,18 @@ export async function POST(request: NextRequest) {
 
     // Check for sensitive information
     if (containsSensitiveInfo(message)) {
+      const duration = Date.now() - startTime;
+      await logRequest({
+        requestId,
+        userId: user.id,
+        path: '/api/ai-advisor/chat',
+        method: 'POST',
+        status: 200,
+        duration,
+        errorMessage: 'Sensitive information detected',
+        ipAddress: getIpAddress(request),
+        userAgent: getUserAgent(request),
+      });
       return NextResponse.json({
         ok: true,
         response: `⚠️ **Security Warning:** I noticed you may have shared sensitive information (like passwords or API keys). Please redact any secrets before continuing. I can still help you, but make sure to remove any credentials from your message.\n\n**Next Steps:**\n1. Remove any passwords, API keys, or secrets from your question\n2. Rephrase your question without sensitive data\n3. If you need help with authentication, describe the problem without sharing actual credentials`,
@@ -1191,6 +1216,18 @@ export async function POST(request: NextRequest) {
       const totalLatency = Date.now() - startTime;
       safeLogger.info('AI Advisor: Request completed', { requestId, totalLatency });
 
+      // Log successful request
+      await logRequest({
+        requestId,
+        userId: user.id,
+        path: '/api/ai-advisor/chat',
+        method: 'POST',
+        status: 200,
+        duration: totalLatency,
+        ipAddress: getIpAddress(request),
+        userAgent: getUserAgent(request),
+      });
+
       return NextResponse.json({
         ok: true,
         response: responseContent,
@@ -1213,6 +1250,20 @@ export async function POST(request: NextRequest) {
         ? 'TIMEOUT'
         : 'UPSTREAM_ERROR';
       
+      // Log error request
+      await logRequest({
+        requestId,
+        userId: user.id,
+        path: '/api/ai-advisor/chat',
+        method: 'POST',
+        status: 500,
+        duration: elapsed,
+        errorStack: error?.stack || null,
+        errorMessage: error?.message || 'Failed to generate response',
+        ipAddress: getIpAddress(request),
+        userAgent: getUserAgent(request),
+      });
+      
       return NextResponse.json(
         { 
           ok: false,
@@ -1233,6 +1284,21 @@ export async function POST(request: NextRequest) {
       stack: error?.stack,
       elapsed 
     });
+
+    // Log error request
+    await logRequest({
+      requestId,
+      userId: await getUserIdFromRequest(request),
+      path: '/api/ai-advisor/chat',
+      method: 'POST',
+      status: 500,
+      duration: elapsed,
+      errorStack: error?.stack || null,
+      errorMessage: error?.message || 'Failed to process request',
+      ipAddress: getIpAddress(request),
+      userAgent: getUserAgent(request),
+    });
+
     return NextResponse.json(
       { 
         ok: false,
