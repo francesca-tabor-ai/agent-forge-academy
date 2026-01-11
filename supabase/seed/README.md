@@ -173,8 +173,22 @@ psql "$SUPABASE_DB_URL" -f supabase/seed/99_verify.sql
   - Skills arrays and course recommendations linked to actual courses
   - Some jobs marked as featured
   - Uses hardcoded UUIDs for easy reference in dependent seed scripts
-- **offers**: 5 sample tool discounts
-  - Supabase, OpenAI, Vercel, Pinecone, LangSmith offers
+- **offers**: Comprehensive collection of 20 tool discounts and offers
+  - **Database & API** (3): Supabase Pro, Neon Serverless Postgres, Anthropic Claude API
+  - **Vector Databases** (3): Pinecone Starter, Weaviate Cloud, Qdrant Cloud
+  - **Hosting & Infrastructure** (3): Vercel Pro, Railway, Render
+  - **Monitoring & Observability** (3): LangSmith Monitoring, Sentry, Datadog
+  - **ML Tools** (2): Hugging Face Pro, Replicate
+  - **Analytics** (2): PostHog, Mixpanel
+  - **Services & Tools** (3): GitHub Copilot, Cursor Pro, Stripe
+  - Mix of discount types: percentage, fixed_amount, free_credits, extended_trial, tier_upgrade
+  - Mix of categories: database, vector_database, hosting, monitoring, observability, ml_tools, analytics, tools, services, ai_llm
+  - Various eligibility requirements: New users only, Students only, Requires student email
+  - Course recommendations linked to actual courses
+  - Realistic pricing, features, and expiration dates
+  - Some offers marked as recommended
+  - Usage limits and max_usage tracking
+  - Uses hardcoded UUIDs for easy reference in dependent seed scripts
 
 ### Advisor Context (`07_seed_advisor_context.sql`)
 - **advisor_context**: Active context for students (course/project/job)
@@ -439,7 +453,7 @@ Each table type uses a distinct UUID prefix for easy identification:
 - **Jobs**: `c1b2c3d4-e5f6-4789-a012-3456789abc01` through `c1b2c3d4-e5f6-4789-a012-3456789abc25` (25 jobs)
   - Example: AI Engineer - TechCorp AI = `c1b2c3d4-e5f6-4789-a012-3456789abc01`
   
-- **Offers**: `d1b2c3d4-e5f6-4789-a012-3456789abc01` through `d1b2c3d4-e5f6-4789-a012-3456789abc05`
+- **Offers**: `d1b2c3d4-e5f6-4789-a012-3456789abc01` through `d1b2c3d4-e5f6-4789-a012-3456789abc20` (20 offers)
   - Example: Supabase Pro offer = `d1b2c3d4-e5f6-4789-a012-3456789abc01`
 
 ### Referencing Parent Records
@@ -509,4 +523,4 @@ After running seeds, check the output of `99_verify.sql` to ensure:
 - Courses are seeded (20 expected)
 - Events are seeded (15 expected)
 - Jobs are seeded (25 expected)
-- Offers are seeded (5 expected)
+- Offers are seeded (20 expected)
