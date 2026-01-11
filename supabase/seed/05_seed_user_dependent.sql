@@ -1,30 +1,15 @@
 -- Seed user-dependent data
 -- NOTE: These tables require existing profiles, student_profiles, etc. from auth.users
 -- This script provides example queries that can be run AFTER users have signed up
--- Uses deterministic UUIDs to reference parent records (courses, events, etc.)
+-- Uses hardcoded UUIDs to reference parent records (courses, events, etc.)
 
 BEGIN;
 
--- Helper function to generate deterministic UUID from string
--- Same function as used in other seed scripts
-CREATE OR REPLACE FUNCTION deterministic_uuid(input_text TEXT)
-RETURNS UUID AS $$
-BEGIN
-  RETURN uuid_generate_v5('6ba7b813-9dad-11d1-80b4-00c04fd430c8'::uuid, input_text);
-EXCEPTION
-  WHEN OTHERS THEN
-    RETURN ('00000000-0000-0000-0000-' || substr(md5(input_text), 1, 12))::uuid;
-END;
-$$ LANGUAGE plpgsql;
-
--- Ensure uuid extension is available
-DO $$ 
-BEGIN
-  CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-EXCEPTION
-  WHEN OTHERS THEN
-    NULL;
-END $$;
+-- Reference UUIDs from other seed scripts:
+-- Courses: Use 'a1b2c3d4-e5f6-4789-a012-3456789abc01' through 'a1b2c3d4-e5f6-4789-a012-3456789abc14'
+-- Events: Use 'b1b2c3d4-e5f6-4789-a012-3456789abc01' through 'b1b2c3d4-e5f6-4789-a012-3456789abc04'
+-- Jobs: Use 'c1b2c3d4-e5f6-4789-a012-3456789abc01' through 'c1b2c3d4-e5f6-4789-a012-3456789abc06'
+-- Offers: Use 'd1b2c3d4-e5f6-4789-a012-3456789abc01' through 'd1b2c3d4-e5f6-4789-a012-3456789abc05'
 
 -- Dependencies:
 -- - profiles (depends on auth.users - cannot be seeded)
@@ -43,19 +28,15 @@ END $$;
 BEGIN;
 
 -- Example: Seed course enrollments (requires courses + student_profiles)
--- Uses deterministic UUIDs to reference courses
+-- Uses hardcoded UUIDs to reference courses
 -- Uncomment and modify when you have student profiles:
 /*
 DO $$
 DECLARE
-  course_id_var UUID;
+  -- Reference course by hardcoded UUID (Multi-Agent Systems)
+  course_id_var UUID := 'a1b2c3d4-e5f6-4789-a012-3456789abc06'::uuid;
 BEGIN
-  -- Reference course by deterministic UUID
-  SELECT id INTO course_id_var 
-  FROM courses 
-  WHERE id = deterministic_uuid('course:multi-agent-systems');
-  
-  -- Insert enrollments using the captured course ID
+  -- Insert enrollments using the hardcoded course ID
   INSERT INTO course_enrollments (course_id, student_profile_id, progress_percentage)
   SELECT 
     course_id_var,
@@ -105,19 +86,15 @@ ON CONFLICT DO NOTHING;
 */
 
 -- Example: Seed event presentations (requires events + student_profiles + portfolio_projects)
--- Uses deterministic UUIDs to reference events
+-- Uses hardcoded UUIDs to reference events
 -- Uncomment and modify when you have the required data:
 /*
 DO $$
 DECLARE
-  event_id_var UUID;
+  -- Reference event by hardcoded UUID (Q1 2025 Demo Day)
+  event_id_var UUID := 'b1b2c3d4-e5f6-4789-a012-3456789abc01'::uuid;
 BEGIN
-  -- Reference event by deterministic UUID
-  SELECT id INTO event_id_var 
-  FROM events 
-  WHERE id = deterministic_uuid('event:Q1 2025 Demo Day');
-  
-  -- Insert presentations using the captured event ID
+  -- Insert presentations using the hardcoded event ID
   INSERT INTO event_presentations (event_id, student_profile_id, portfolio_project_id, presentation_title, presentation_order)
   SELECT 
     event_id_var,

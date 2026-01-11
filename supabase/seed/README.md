@@ -137,35 +137,46 @@ order by tc.table_name;
 "
 ```
 
-## Seed Strategy: Deterministic UUIDs
+## Seed Strategy: Hardcoded Deterministic UUIDs
 
-All seed scripts use **deterministic UUIDs** based on unique identifiers (slug, title, etc.). This ensures:
+All seed scripts use **hardcoded UUID strings** for deterministic IDs. This ensures:
 
 - ✅ **Consistent IDs**: Same records always get the same UUID across runs
-- ✅ **Easy References**: Other scripts can reference parent records by deterministic UUID
+- ✅ **Easy References**: Other scripts can reference parent records by hardcoded UUID
 - ✅ **Idempotent**: Safe to re-run - `ON CONFLICT` handles updates gracefully
-- ✅ **Works in Supabase**: Compatible with Supabase's PostgreSQL environment
+- ✅ **Works in Supabase**: No dependencies on extensions - works everywhere
+- ✅ **Simple**: No helper functions needed - just use the UUID string directly
 
-### How It Works
+### UUID Ranges
 
-1. **Helper Function**: Each script creates a `deterministic_uuid(input_text)` function
-   - Uses UUID v5 generation (if `uuid-ossp` extension available)
-   - Falls back to MD5-based UUID if extension unavailable
-   - Different namespace UUIDs for different table types
+Each table type uses a distinct UUID prefix for easy identification:
 
-2. **Deterministic IDs**:
-   - Courses: `deterministic_uuid('course:slug')` → e.g., `deterministic_uuid('course:multi-agent-systems')`
-   - Events: `deterministic_uuid('event:title')` → e.g., `deterministic_uuid('event:Q1 2025 Demo Day')`
-   - Jobs: `deterministic_uuid('job:title:company')` → e.g., `deterministic_uuid('job:AI Engineer:TechCorp AI')`
-   - Offers: `deterministic_uuid('offer:title')` → e.g., `deterministic_uuid('offer:Supabase Pro - 50% off')`
+- **Courses**: `a1b2c3d4-e5f6-4789-a012-3456789abc01` through `a1b2c3d4-e5f6-4789-a012-3456789abc14`
+  - Example: Multi-Agent Systems = `a1b2c3d4-e5f6-4789-a012-3456789abc06`
+  
+- **Events**: `b1b2c3d4-e5f6-4789-a012-3456789abc01` through `b1b2c3d4-e5f6-4789-a012-3456789abc04`
+  - Example: Q1 2025 Demo Day = `b1b2c3d4-e5f6-4789-a012-3456789abc01`
+  
+- **Jobs**: `c1b2c3d4-e5f6-4789-a012-3456789abc01` through `c1b2c3d4-e5f6-4789-a012-3456789abc06`
+  - Example: AI Engineer - TechCorp AI = `c1b2c3d4-e5f6-4789-a012-3456789abc01`
+  
+- **Offers**: `d1b2c3d4-e5f6-4789-a012-3456789abc01` through `d1b2c3d4-e5f6-4789-a012-3456789abc05`
+  - Example: Supabase Pro offer = `d1b2c3d4-e5f6-4789-a012-3456789abc01`
 
-3. **Referencing Parent Records**:
-   ```sql
-   -- In user-dependent seed scripts, reference courses/events by deterministic UUID:
-   SELECT id INTO course_id_var 
-   FROM courses 
-   WHERE id = deterministic_uuid('course:multi-agent-systems');
-   ```
+### Referencing Parent Records
+
+```sql
+-- In user-dependent seed scripts, reference courses/events by hardcoded UUID:
+DO $$
+DECLARE
+  course_id_var UUID := 'a1b2c3d4-e5f6-4789-a012-3456789abc06'::uuid; -- Multi-Agent Systems
+BEGIN
+  INSERT INTO course_enrollments (course_id, student_profile_id, progress_percentage)
+  SELECT course_id_var, sp.id, 0
+  FROM student_profiles sp
+  LIMIT 10;
+END $$;
+```
 
 ## Important Notes
 

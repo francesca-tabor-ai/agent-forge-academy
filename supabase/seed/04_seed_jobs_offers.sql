@@ -1,30 +1,10 @@
 -- Seed jobs and offers: sample job listings and tool discounts
 -- No dependencies - can be seeded independently
--- Uses deterministic UUIDs based on title+company for easy reference
+-- Uses hardcoded UUIDs for easy reference and consistency
 
 BEGIN;
 
--- Helper function to generate deterministic UUID from string
-CREATE OR REPLACE FUNCTION deterministic_uuid(input_text TEXT)
-RETURNS UUID AS $$
-BEGIN
-  RETURN uuid_generate_v5('6ba7b812-9dad-11d1-80b4-00c04fd430c8'::uuid, input_text);
-EXCEPTION
-  WHEN OTHERS THEN
-    RETURN ('00000000-0000-0000-0000-' || substr(md5(input_text), 1, 12))::uuid;
-END;
-$$ LANGUAGE plpgsql;
-
--- Ensure uuid extension is available
-DO $$ 
-BEGIN
-  CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-EXCEPTION
-  WHEN OTHERS THEN
-    NULL;
-END $$;
-
--- Insert sample jobs with deterministic UUIDs
+-- Insert sample jobs with hardcoded deterministic UUIDs
 INSERT INTO jobs (
   id, title, company, description, job_type, experience_level, location, is_remote,
   salary_range, status, matching_score, skills, skills_missing, recommended_for_courses, 
@@ -32,7 +12,7 @@ INSERT INTO jobs (
 )
 VALUES
   (
-    deterministic_uuid('job:AI Engineer - Multi-Agent Systems:TechCorp AI'),
+    'c1b2c3d4-e5f6-4789-a012-3456789abc01'::uuid,
     'AI Engineer - Multi-Agent Systems',
     'TechCorp AI',
     'We are looking for an AI Engineer to build and deploy production-ready multi-agent systems. You will work with LangGraph, CrewAI, and Kubernetes to scale agent infrastructure.',
@@ -51,7 +31,7 @@ VALUES
     true
   ),
   (
-    deterministic_uuid('job:Full-Stack Developer - AI-Native Applications:StartupXYZ'),
+    'c1b2c3d4-e5f6-4789-a012-3456789abc02'::uuid,
     'Full-Stack Developer - AI-Native Applications',
     'StartupXYZ',
     'Join our team building AI-native applications using Cursor, Supabase, and modern web technologies. You will work on fast-moving projects with iterative development.',
@@ -70,7 +50,7 @@ VALUES
     false
   ),
   (
-    deterministic_uuid('job:Senior AI Visibility Specialist:Digital Marketing Agency'),
+    'c1b2c3d4-e5f6-4789-a012-3456789abc03'::uuid,
     'Senior AI Visibility Specialist',
     'Digital Marketing Agency',
     'Lead AI visibility optimization for enterprise clients. You will implement llms.txt, structured data, and content engineering strategies to improve AI Overview visibility.',
@@ -89,7 +69,7 @@ VALUES
     true
   ),
   (
-    deterministic_uuid('job:E-commerce AI Engineer:EcomTech Solutions'),
+    'c1b2c3d4-e5f6-4789-a012-3456789abc04'::uuid,
     'E-commerce AI Engineer',
     'EcomTech Solutions',
     'Build AI-driven e-commerce features including recommender systems, conversational commerce, and 3D product experiences.',
@@ -108,7 +88,7 @@ VALUES
     false
   ),
   (
-    deterministic_uuid('job:AI Governance Consultant:ComplianceTech'),
+    'c1b2c3d4-e5f6-4789-a012-3456789abc05'::uuid,
     'AI Governance Consultant',
     'ComplianceTech',
     'Help clients navigate EU AI Act compliance and implement governance frameworks for AI systems.',
@@ -127,7 +107,7 @@ VALUES
     false
   ),
   (
-    deterministic_uuid('job:Lead AI Architect:Enterprise AI Corp'),
+    'c1b2c3d4-e5f6-4789-a012-3456789abc06'::uuid,
     'Stretch Role: Lead AI Architect',
     'Enterprise AI Corp',
     'Lead architecture for enterprise AI systems. Requires deep experience with multi-agent systems, RAG, and production deployment.',
@@ -164,7 +144,7 @@ ON CONFLICT (id) DO UPDATE SET
   is_featured = EXCLUDED.is_featured,
   updated_at = NOW();
 
--- Insert sample offers with deterministic UUIDs
+-- Insert sample offers with hardcoded deterministic UUIDs
 INSERT INTO offers (
   id, title, provider, description, category, discount_text, discount_type, discount_value,
   discount_code, external_url, eligibility, recommended_for_courses, original_price,
@@ -172,7 +152,7 @@ INSERT INTO offers (
 )
 VALUES
   (
-    deterministic_uuid('offer:Supabase Pro - 50% off first 3 months'),
+    'd1b2c3d4-e5f6-4789-a012-3456789abc01'::uuid,
     'Supabase Pro - 50% off first 3 months',
     'Supabase',
     'Get 50% off Supabase Pro plan for the first 3 months. Perfect for building full-stack apps with auth, database, and storage.',
@@ -193,7 +173,7 @@ VALUES
     100
   ),
   (
-    deterministic_uuid('offer:OpenAI API Credits - $100 free'),
+    'd1b2c3d4-e5f6-4789-a012-3456789abc02'::uuid,
     'OpenAI API Credits - $100 free',
     'OpenAI',
     'Get $100 in free OpenAI API credits to build AI features. Perfect for experimenting with GPT-4, Whisper, and DALL-E.',
@@ -214,7 +194,7 @@ VALUES
     50
   ),
   (
-    deterministic_uuid('offer:Vercel Pro - Extended Trial'),
+    'd1b2c3d4-e5f6-4789-a012-3456789abc03'::uuid,
     'Vercel Pro - Extended Trial',
     'Vercel',
     'Get 30 days free trial of Vercel Pro (normally 14 days). Deploy Next.js apps with zero configuration.',
@@ -234,7 +214,7 @@ VALUES
     NULL
   ),
   (
-    deterministic_uuid('offer:Pinecone Starter - 20% off'),
+    'd1b2c3d4-e5f6-4789-a012-3456789abc04'::uuid,
     'Pinecone Starter - 20% off',
     'Pinecone',
     'Get 20% off Pinecone Starter plan for vector database needs. Perfect for RAG applications.',
@@ -255,7 +235,7 @@ VALUES
     200
   ),
   (
-    deterministic_uuid('offer:LangSmith Monitoring - Free Tier Upgrade'),
+    'd1b2c3d4-e5f6-4789-a012-3456789abc05'::uuid,
     'LangSmith Monitoring - Free Tier Upgrade',
     'LangChain',
     'Upgrade to LangSmith Pro features for free. Monitor and debug LangGraph applications.',
