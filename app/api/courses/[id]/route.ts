@@ -1,22 +1,50 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createUserSupabaseClient } from '@/lib/supabase/server';
+import { guardCourseAccessViaDB } from '@/lib/middleware/course-access-guard';
 
-// GET: Fetch course details by ID
+/**
+ * GET /api/courses/:courseId
+ * 
+ * Fetches course details by ID with subscription access control.
+ * 
+ * Access Control:
+ * - Requires authentication (401 if not logged in)
+ * - Requires active subscription (403 if no subscription or insufficient tier)
+ * - Returns 200 if access is allowed
+ * - Returns 403 if access is denied
+ * - Returns 404 if course not found
+ */
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
     const supabase = await createUserSupabaseClient();
+    
+    // Step 1: Authenticate user
     const {
       data: { user },
     } = await supabase.auth.getUser();
 
     if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        { error: 'Unauthorized. Please log in to access this course.' },
+        { status: 401 }
+      );
     }
 
-    // Fetch course
+    // Step 2: Guard course access (authenticates, checks subscription, verifies permissions)
+    const guardResult = await guardCourseAccessViaDB(user.id, params.id);
+
+    // If access is denied, return the guard's response
+    if (!guardResult.allowed) {
+      return NextResponse.json(
+        { error: guardResult.error },
+        { status: guardResult.status }
+      );
+    }
+
+    // Step 3: Fetch course details (access is granted)
     const { data: course, error } = await supabase
       .from('courses')
       .select('*')
