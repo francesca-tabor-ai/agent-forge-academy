@@ -3,6 +3,7 @@ import { redirect, notFound } from 'next/navigation';
 import Link from 'next/link';
 import { loadLessonBySlug, getAllLessonSlugs } from '@/lib/lessons';
 import LessonContent from '@/components/lessons/LessonContent';
+import { LessonProgressTracker } from '@/components/lessons/LessonProgressTracker';
 
 interface LessonPageProps {
   params: Promise<{ slug: string }>;
@@ -26,6 +27,17 @@ export default async function LessonPage({ params, searchParams }: LessonPagePro
 
   if (!lesson) {
     notFound();
+  }
+
+  // Get course info if courseSlug is provided
+  let courseId: string | null = null;
+  if (courseSlug) {
+    const { data: course } = await supabase
+      .from('courses')
+      .select('id')
+      .eq('slug', courseSlug)
+      .single();
+    courseId = course?.id || null;
   }
 
   return (
@@ -81,6 +93,7 @@ export default async function LessonPage({ params, searchParams }: LessonPagePro
           <div className="text-base" style={{ fontSize: '17px', lineHeight: '1.6' }}>
             <LessonContent content={lesson.content} />
           </div>
+          {courseId && <LessonProgressTracker courseId={courseId} lessonSlug={slug} />}
         </div>
       </div>
     </div>
