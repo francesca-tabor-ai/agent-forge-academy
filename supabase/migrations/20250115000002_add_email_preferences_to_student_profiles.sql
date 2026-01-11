@@ -1,6 +1,9 @@
 -- Add email preference fields to student_profiles
 -- Weekly learning emails with day/hour preferences and unsubscribe token
 
+-- Enable pgcrypto extension for gen_random_bytes()
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
 -- Add email preference columns
 ALTER TABLE student_profiles
   ADD COLUMN IF NOT EXISTS weekly_learning_emails_enabled BOOLEAN NOT NULL DEFAULT true,
