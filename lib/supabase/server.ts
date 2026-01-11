@@ -129,3 +129,50 @@ export async function hasAnyRole(
   return normalizedRoles.includes(role);
 }
 
+/**
+ * Requires admin role for API routes
+ * Returns 401 if unauthenticated, 403 if not admin
+ * Returns the user if authenticated and has admin role
+ * 
+ * Usage in API routes:
+ * ```ts
+ * const userResult = await requireAdmin();
+ * if (userResult instanceof NextResponse) {
+ *   return userResult; // Error response
+ * }
+ * const user = userResult; // User is authenticated and is admin
+ * ```
+ */
+export async function requireAdmin(): Promise<User | NextResponse> {
+  const supabase = await createUserSupabaseClient();
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
+
+  // Check authentication
+  if (authError || !user) {
+    return NextResponse.json(
+      { error: 'Unauthorized. Authentication required.' },
+      { status: 401 }
+    );
+  }
+
+  // Check admin role
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('user_id', user.id)
+    .single();
+
+  const role = profile?.role as string;
+
+  if (role !== 'admin') {
+    return NextResponse.json(
+      { error: 'Forbidden. Admin role required.' },
+      { status: 403 }
+    );
+  }
+
+  return user;
+}
