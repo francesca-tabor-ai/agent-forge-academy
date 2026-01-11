@@ -30,7 +30,7 @@ export function ContextSelectorModal({
     currentContext.job?.id || null
   );
 
-  const handleApply = () => {
+  const handleApply = async () => {
     const newContext: ActiveContext = {};
     
     if (selectedCourse) {
@@ -46,6 +46,24 @@ export function ContextSelectorModal({
     if (selectedJob) {
       const job = activeJobs.find((j) => j.id === selectedJob);
       if (job) newContext.job = job;
+    }
+    
+    // Persist to database
+    try {
+      await fetch('/api/advisor/context', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          activeCourseId: selectedCourse || null,
+          activeProjectId: selectedProject || null,
+          activeJobId: selectedJob || null,
+        }),
+      });
+    } catch (error) {
+      console.error('Error persisting context:', error);
+      // Continue anyway - context will still be set in UI
     }
     
     onSelectContext(newContext);

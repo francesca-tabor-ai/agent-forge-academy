@@ -1,6 +1,6 @@
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
-import { JobOpportunitiesSection } from '@/components/dashboard/JobOpportunitiesSection';
+import { JobOpportunitiesPage } from '@/components/jobs/JobOpportunitiesPage';
 
 export default async function JobsPage() {
   const supabase = await createUserSupabaseClient();
@@ -36,9 +36,13 @@ export default async function JobsPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-gray-900">Job Opportunities</h1>
-      {/* Job Opportunities Section */}
-      <JobOpportunitiesSection studentProfileId={studentProfileId} />
+      <div>
+        <h1 className="text-3xl font-bold text-gray-900">Job Opportunities</h1>
+        <p className="text-sm text-gray-600 mt-1">
+          Roles matched to your skills, projects, and progress
+        </p>
+      </div>
+      <JobOpportunitiesPage studentProfileId={studentProfileId} />
     </div>
   );
 }

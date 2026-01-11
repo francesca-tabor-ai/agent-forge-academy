@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { RichTextEditor } from './RichTextEditor';
+import { RichTextEditor } from './RichTextEditor';
 
 export function NewProjectForm() {
   const router = useRouter();
@@ -112,17 +114,16 @@ export function NewProjectForm() {
           <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
             Description
           </label>
-          <textarea
-            id="description"
+          <RichTextEditor
             value={formData.description}
-            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-            rows={10}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ca-gold focus:border-transparent font-mono text-sm"
+            onChange={(value) => setFormData({ ...formData, description: value })}
             placeholder={`• **Problem:** What did you build and why?
 • **Users:** Who is it for?
 • **Approach:** How does it work (high level)?
 • **AI/ML:** What models or techniques did you use (RAG, fine-tuning, agents, CV, etc.)?
 • **Results:** Metrics, learnings, or impact (latency, cost, accuracy, qualitative feedback).`}
+            minHeight="300px"
+            maxLength={5000}
           />
           <p className="mt-1 text-xs text-gray-500">Markdown supported. Include the 5 bullets above for best results.</p>
         </div>

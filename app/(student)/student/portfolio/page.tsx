@@ -5,7 +5,7 @@ import { ProfileOverview } from '@/components/portfolio/ProfileOverview';
 import { CVResumeSection } from '@/components/portfolio/CVResumeSection';
 import { RecruiterVisibilitySection } from '@/components/portfolio/RecruiterVisibilitySection';
 import { PortfolioAdvisorSection } from '@/components/portfolio/PortfolioAdvisorSection';
-import { ProjectCard } from '@/components/portfolio/ProjectCard';
+import { ProjectsView } from '@/components/portfolio/ProjectsView';
 
 export default async function PortfolioPage() {
   const supabase = await createUserSupabaseClient();
@@ -31,14 +31,14 @@ export default async function PortfolioPage() {
   // Get student profile
   const { data: studentProfile } = await supabase
     .from('student_profiles')
-    .select('id, visibility, bio')
+    .select('id, visibility, bio, headline, skills, location, linkedin_url, github_url, website_url')
     .eq('profile_id', profile.id)
     .single();
 
   // Get portfolio projects
   const { data: projects } = await supabase
     .from('portfolio_projects')
-    .select('id, title, description, github_url, demo_url, visibility, created_at')
+    .select('id, title, description, github_url, demo_url, visibility, cover_image_url, images, created_at')
     .eq('student_profile_id', studentProfile?.id)
     .order('created_at', { ascending: false });
 
@@ -58,15 +58,24 @@ export default async function PortfolioPage() {
   const hasVisibleProjects = projects && projects.some(p => p.visibility !== 'private');
   if (hasVisibleProjects) completionScore += 25;
 
-  // Mock profile data (will be replaced with actual database fields)
-  const headline = null; // TODO: Add headline field to student_profiles
-  const primaryRoles: string[] = []; // TODO: Add primary_roles field to student_profiles
-  const coreSkills: string[] = []; // TODO: Add core_skills field to student_profiles
+  // Get profile data
+  const headline = studentProfile?.headline || null;
+  const primaryRoles: string[] = []; // Can be derived from skills or separate field in future
+  const coreSkills = (studentProfile?.skills as string[]) || [];
 
-  // Mock CV data (will be replaced with actual CV table)
-  const cvFileName = null;
-  const cvLastUpdated = null;
-  const cvVisibility = null;
+  // Get CV data
+  const { data: cv } = await supabase
+    .from('student_cvs')
+    .select('file_name, uploaded_at, visibility')
+    .eq('student_profile_id', studentProfile?.id)
+    .order('uploaded_at', { ascending: false })
+    .limit(1)
+    .single();
+
+  const hasCV = !!cv;
+  const cvFileName = cv?.file_name || null;
+  const cvLastUpdated = cv?.uploaded_at || null;
+  const cvVisibility = cv?.visibility || null;
 
   // Calculate visible project count
   const visibleProjectCount = projects ? projects.filter(p => p.visibility !== 'private').length : 0;
@@ -114,75 +123,7 @@ export default async function PortfolioPage() {
         </div>
       </div>
 
-      {/* Profile Overview */}
-      <ProfileOverview
-        headline={headline}
-        bio={studentProfile?.bio || null}
-        primaryRoles={primaryRoles}
-        coreSkills={coreSkills}
-      />
-
-      {/* CV & Resume */}
-      <CVResumeSection
-        cvFileName={cvFileName}
-        cvLastUpdated={cvLastUpdated}
-        cvVisibility={cvVisibility}
-        hasCV={hasCV}
-      />
-
-      {/* Projects */}
-      <section>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-medium text-gray-900">Projects</h2>
-          <Link
-            href="/student/portfolio/new"
-            className="btn-primary text-sm"
-          >
-            Add Project
-          </Link>
-        </div>
-
-        {projects && projects.length > 0 ? (
-          <div className="space-y-4">
-            {projects.map((project) => {
-              // Extract tech stack from description (mock - will be replaced with actual field)
-              const techStack: string[] = [];
-              // Extract outcome from description (mock - will be replaced with actual field)
-              const outcome = null;
-
-              return (
-                <ProjectCard
-                  key={project.id}
-                  id={project.id}
-                  title={project.title}
-                  description={project.description}
-                  github_url={project.github_url}
-                  demo_url={project.demo_url}
-                  visibility={project.visibility}
-                  techStack={techStack}
-                  outcome={outcome}
-                />
-              );
-            })}
-          </div>
-        ) : (
-          <div className="bg-white border border-gray-200 rounded-lg p-12 text-center">
-            <div className="text-4xl mb-4">📁</div>
-            <p className="text-gray-600 mb-2 font-medium">No projects yet</p>
-            <p className="text-sm text-gray-500 mb-6">
-              Recruiters expect 2–4 strong projects
-            </p>
-            <Link
-              href="/student/portfolio/new"
-              className="btn-primary text-sm inline-block"
-            >
-              Add Project
-            </Link>
-          </div>
-        )}
-      </section>
-
-      {/* Recruiter Visibility */}
+      {/* Recruiter Visibility - Moved to top */}
       {studentProfile && (
         <RecruiterVisibilitySection
           currentVisibility={studentProfile.visibility}
@@ -193,8 +134,32 @@ export default async function PortfolioPage() {
         />
       )}
 
+      {/* Profile Overview */}
+      <ProfileOverview
+        headline={headline}
+        bio={studentProfile?.bio || null}
+        primaryRoles={primaryRoles}
+        coreSkills={coreSkills}
+      />
+
+      {/* CV & Resume */}
+      {studentProfile && (
+        <CVResumeSection
+          studentProfileId={studentProfile.id}
+          cvFileName={cvFileName}
+          cvLastUpdated={cvLastUpdated}
+          cvVisibility={cvVisibility}
+          hasCV={hasCV}
+        />
+      )}
+
+      {/* Projects */}
+      <section>
+        <ProjectsView projects={projects || []} />
+      </section>
+
       {/* Portfolio Advisor */}
-      <PortfolioAdvisorSection />
+      <PortfolioAdvisorSection latestProjectId={projects && projects.length > 0 ? projects[0].id : undefined} />
     </div>
   );
 }

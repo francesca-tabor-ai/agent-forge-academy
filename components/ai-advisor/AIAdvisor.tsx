@@ -55,18 +55,70 @@ export function AIAdvisor({
   const [conversationAttempts, setConversationAttempts] = useState(0);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
-  // Auto-detect context on mount
+  // Load context from database on mount
   useEffect(() => {
-    if (activeCourses.length > 0 && !activeContext.course) {
-      setActiveContext({ course: activeCourses[0] });
-    }
-    if (activeProjects.length > 0 && !activeContext.project) {
-      setActiveContext((prev) => ({ ...prev, project: activeProjects[0] }));
-    }
-    if (activeJobs.length > 0 && !activeContext.job) {
-      setActiveContext((prev) => ({ ...prev, job: activeJobs[0] }));
-    }
-  }, [activeCourses, activeProjects, activeJobs]);
+    const loadContext = async () => {
+      try {
+        const response = await fetch('/api/advisor/context');
+        if (response.ok) {
+          const data = await response.json();
+          const loadedContext: ActiveContext = {};
+          
+          if (data.activeCourseId) {
+            const course = activeCourses.find((c) => c.id === data.activeCourseId);
+            if (course) loadedContext.course = course;
+          }
+          
+          if (data.activeProjectId) {
+            const project = activeProjects.find((p) => p.id === data.activeProjectId);
+            if (project) loadedContext.project = project;
+          }
+          
+          if (data.activeJobId) {
+            const job = activeJobs.find((j) => j.id === data.activeJobId);
+            if (job) loadedContext.job = job;
+          }
+          
+          if (Object.keys(loadedContext).length > 0) {
+            setActiveContext(loadedContext);
+          } else {
+            // Fallback: auto-detect context if none persisted
+            const fallbackContext: ActiveContext = {};
+            if (activeCourses.length > 0) {
+              fallbackContext.course = activeCourses[0];
+            }
+            if (activeProjects.length > 0) {
+              fallbackContext.project = activeProjects[0];
+            }
+            if (activeJobs.length > 0) {
+              fallbackContext.job = activeJobs[0];
+            }
+            if (Object.keys(fallbackContext).length > 0) {
+              setActiveContext(fallbackContext);
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error loading context:', error);
+        // Fallback: auto-detect context on error
+        const fallbackContext: ActiveContext = {};
+        if (activeCourses.length > 0) {
+          fallbackContext.course = activeCourses[0];
+        }
+        if (activeProjects.length > 0) {
+          fallbackContext.project = activeProjects[0];
+        }
+        if (activeJobs.length > 0) {
+          fallbackContext.job = activeJobs[0];
+        }
+        if (Object.keys(fallbackContext).length > 0) {
+          setActiveContext(fallbackContext);
+        }
+      }
+    };
+    
+    loadContext();
+  }, []); // Only run on mount
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {

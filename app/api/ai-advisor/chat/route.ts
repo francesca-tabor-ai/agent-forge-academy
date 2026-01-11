@@ -15,25 +15,183 @@ interface ChatRequest {
     content: string;
     timestamp: Date;
   }>;
+  intent?: string; // For quick actions: 'architecture_review', 'risks_and_improvements', 'rewrite_description', etc.
+  conversationId?: string; // For conversation persistence
+}
+
+// Fetch real data for context
+async function fetchContextData(
+  context: ChatRequest['context'],
+  supabase: any
+): Promise<{
+  courseData: any;
+  projectData: any;
+  jobData: any;
+  userProfile: any;
+}> {
+  const courseData = context?.course?.id
+    ? await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/courses/${context.course.id}`)
+        .then((r) => r.ok ? r.json() : null)
+        .catch(() => null)
+    : null;
+
+  const projectData = context?.project?.id
+    ? await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/projects/${context.project.id}`)
+        .then((r) => r.ok ? r.json() : null)
+        .catch(() => null)
+    : null;
+
+  const jobData = context?.job?.id
+    ? await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/jobs/${context.job.id}`)
+        .then((r) => r.ok ? r.json() : null)
+        .catch(() => null)
+    : null;
+
+  // Get user profile summary
+  let userProfile = null;
+  if (context?.project?.id) {
+    const { data: project } = await supabase
+      .from('portfolio_projects')
+      .select('student_profile_id')
+      .eq('id', context.project.id)
+      .single();
+    
+    if (project) {
+      const { data: studentProfile } = await supabase
+        .from('student_profiles')
+        .select('headline, bio, skills')
+        .eq('id', project.student_profile_id)
+        .single();
+      
+      if (studentProfile) {
+        const { count: projectCount } = await supabase
+          .from('portfolio_projects')
+          .select('*', { count: 'exact', head: true })
+          .eq('student_profile_id', project.student_profile_id)
+          .eq('visibility', 'public');
+        
+        userProfile = {
+          headline: studentProfile.headline,
+          hasBio: !!studentProfile.bio,
+          skills: studentProfile.skills || [],
+          publicProjectsCount: projectCount || 0,
+        };
+      }
+    }
+  }
+
+  return { courseData, projectData, jobData, userProfile };
 }
 
 // Mock AI advisor response generator
 // In production, this would call an actual LLM API (OpenAI, Anthropic, etc.)
-function generateAIResponse(
+async function generateAIResponse(
   message: string,
   context: ChatRequest['context'],
-  conversationHistory: ChatRequest['conversationHistory']
-): string {
+  conversationHistory: ChatRequest['conversationHistory'],
+  intent?: string,
+  contextData?: { courseData: any; projectData: any; jobData: any; userProfile: any }
+): Promise<string> {
   const lowerMessage = message.toLowerCase();
   
-  // Context-aware responses
+  // Context-aware responses with real data
   let response = '';
   let nextSteps: string[] = [];
+
+  // Handle structured intents from quick actions
+  if (intent === 'architecture_review' && contextData?.projectData) {
+    const project = contextData.projectData;
+    response = `## Architecture Review: ${project.title}\n\n`;
+    response += `### Strengths\n`;
+    response += `- Your project uses a solid tech stack: ${(project.techStack || []).join(', ') || 'modern technologies'}\n`;
+    if (project.githubUrl) {
+      response += `- Good practice: GitHub repository is available\n`;
+    }
+    if (project.demoUrl) {
+      response += `- Excellent: Live demo available for recruiters\n`;
+    }
+    response += `\n### Risks & Missing Pieces\n`;
+    if (!project.githubUrl) {
+      response += `- ⚠️ **Missing GitHub URL**: Recruiters expect to see your code\n`;
+    }
+    if (!project.demoUrl) {
+      response += `- ⚠️ **Missing Demo URL**: A live demo significantly increases visibility\n`;
+    }
+    if (!project.description || project.description.length < 100) {
+      response += `- ⚠️ **Description too brief**: Expand to explain architecture, challenges, and outcomes\n`;
+    }
+    response += `- Consider adding: Security considerations, observability/monitoring, testing strategy\n`;
+    response += `\n### Next Steps Checklist\n`;
+    response += `1. Add comprehensive project description\n`;
+    if (!project.githubUrl) response += `2. Link your GitHub repository\n`;
+    if (!project.demoUrl) response += `3. Deploy and link a live demo\n`;
+    response += `4. Document your architecture decisions\n`;
+    response += `5. Add screenshots/images to showcase the project\n`;
+    return response;
+  }
+
+  if (intent === 'risks_and_improvements' && contextData?.projectData) {
+    const project = contextData.projectData;
+    response = `## Risks & Improvements: ${project.title}\n\n`;
+    response += `### Top 5 Risks\n\n`;
+    response += `1. **Low Visibility** (High)\n`;
+    response += `   - Missing GitHub/demo links reduce recruiter engagement\n`;
+    response += `   - Mitigation: Add both links and ensure they're working\n\n`;
+    response += `2. **Incomplete Description** (Medium)\n`;
+    response += `   - Brief descriptions don't showcase your skills\n`;
+    response += `   - Mitigation: Expand to 200+ words with technical details\n\n`;
+    response += `3. **No Visual Proof** (Medium)\n`;
+    response += `   - Missing images make it hard to understand the project\n`;
+    response += `   - Mitigation: Add cover image and project screenshots\n\n`;
+    response += `4. **Tech Stack Not Highlighted** (Low)\n`;
+    response += `   - Skills aren't clearly visible\n`;
+    response += `   - Mitigation: List technologies used in description\n\n`;
+    response += `5. **No Metrics/Outcomes** (Low)\n`;
+    response += `   - Missing quantifiable results\n`;
+    response += `   - Mitigation: Add performance metrics, user stats, etc.\n\n`;
+    response += `### Suggested Refactors\n`;
+    response += `- Rewrite description to lead with impact\n`;
+    response += `- Add a "What I Learned" section\n`;
+    response += `- Include challenges faced and how you solved them\n`;
+    return response;
+  }
+
+  if (intent === 'rewrite_description' && contextData?.projectData) {
+    const project = contextData.projectData;
+    response = `## Project Description: ${project.title}\n\n`;
+    response += `### Recruiter-Optimized Description\n\n`;
+    response += `**${project.title}** is a ${project.techStack?.length ? project.techStack.join(', ') : 'modern'} application that ${project.description ? project.description.substring(0, 100) + '...' : 'demonstrates technical skills and problem-solving abilities'}.\n\n`;
+    response += `**Key Features:**\n`;
+    response += `- Built with ${(project.techStack || ['modern technologies']).join(', ')}\n`;
+    if (project.githubUrl) {
+      response += `- Source code available on [GitHub](${project.githubUrl})\n`;
+    }
+    if (project.demoUrl) {
+      response += `- Live demo: [View Project](${project.demoUrl})\n`;
+    }
+    response += `\n**Technical Highlights:**\n`;
+    response += `- Clean architecture and best practices\n`;
+    response += `- Responsive design and user experience focus\n`;
+    response += `- Performance optimization and scalability considerations\n\n`;
+    response += `### Technical Description (Optional)\n\n`;
+    response += `${project.description || 'Add detailed technical implementation details here, including architecture decisions, data flow, and key technical challenges overcome.'}\n\n`;
+    response += `### TL;DR\n`;
+    response += `${project.title}: A ${project.techStack?.length ? project.techStack[0] : 'full-stack'} project showcasing ${project.description ? 'real-world application' : 'technical skills'}. ${project.githubUrl ? 'Code available on GitHub.' : ''} ${project.demoUrl ? 'Live demo available.' : ''}\n`;
+    return response;
+  }
 
   // Course-related queries
   if (context?.course || lowerMessage.includes('course') || lowerMessage.includes('lesson') || lowerMessage.includes('module')) {
     const courseName = context?.course?.title || 'the course';
-    response = `I can help you with ${courseName}. `;
+    const courseInfo = contextData?.courseData;
+    response = `I can help you with **${courseName}**. `;
+    if (courseInfo) {
+      response += `This is a ${courseInfo.difficultyLevel || 'intermediate'}-level course`;
+      if (courseInfo.durationWeeks) {
+        response += ` spanning ${courseInfo.durationWeeks} weeks`;
+      }
+      response += `. `;
+    }
     
     if (lowerMessage.includes('explain') || lowerMessage.includes('understand')) {
       response += `Let me break this down in simpler terms. `;

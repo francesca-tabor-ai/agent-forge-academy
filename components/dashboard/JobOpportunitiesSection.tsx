@@ -97,14 +97,6 @@ export function JobOpportunitiesSection({ studentProfileId }: JobOpportunitiesSe
   if (loading) {
     return (
       <section className="space-y-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-2xl font-semibold text-gray-900">Job Opportunities</h2>
-            <p className="text-sm text-gray-600 mt-1">
-              Roles matched to your skills, projects, and progress
-            </p>
-          </div>
-        </div>
         <div className="bg-white border border-gray-200 rounded-lg p-6">
           <p className="text-sm text-gray-500">Loading opportunities...</p>
         </div>
@@ -114,20 +106,14 @@ export function JobOpportunitiesSection({ studentProfileId }: JobOpportunitiesSe
 
   return (
     <section className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-semibold text-gray-900">Job Opportunities</h2>
-          <p className="text-sm text-gray-600 mt-1">
-            Roles matched to your skills, projects, and progress
-          </p>
-        </div>
-        {newOpportunitiesCount > 0 && (
+      {/* Header - Only show new count badge, title removed to avoid duplication */}
+      {newOpportunitiesCount > 0 && (
+        <div className="flex justify-end">
           <span className="px-3 py-1 bg-green-100 text-green-700 text-sm font-medium rounded-full">
             {newOpportunitiesCount} new since last login
           </span>
-        )}
-      </div>
+        </div>
+      )}
 
       <div className="bg-white border border-gray-200 rounded-lg p-6">
         {/* Recommended Jobs */}

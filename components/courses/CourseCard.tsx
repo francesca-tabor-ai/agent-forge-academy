@@ -106,11 +106,9 @@ export function CourseCard({ course, metadata, enrollment }: CourseCardProps) {
                 {displayTime}
               </span>
             )}
-            {course.difficulty_level && (
-              <span className="capitalize px-2 py-0.5 bg-gray-100 rounded">
-                {course.difficulty_level}
-              </span>
-            )}
+            <span className="capitalize px-2 py-0.5 bg-gray-100 rounded">
+              {course.difficulty_level || 'Not specified'}
+            </span>
           </div>
 
           {isEnrolled ? (

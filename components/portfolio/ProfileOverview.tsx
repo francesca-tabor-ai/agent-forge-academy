@@ -1,6 +1,8 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
+import ReactMarkdown from 'react-markdown';
 
 interface ProfileOverviewProps {
   headline?: string | null;
@@ -10,7 +12,24 @@ interface ProfileOverviewProps {
 }
 
 export function ProfileOverview({ headline, bio, primaryRoles = [], coreSkills = [] }: ProfileOverviewProps) {
+  const [isBioExpanded, setIsBioExpanded] = useState(false);
+  const [showAllSkills, setShowAllSkills] = useState(false);
+  
   const hasData = headline || bio || primaryRoles.length > 0 || coreSkills.length > 0;
+  
+  // Calculate completion status
+  const missingFields: string[] = [];
+  if (!headline || headline.trim().length < 5) missingFields.push('Professional headline');
+  if (!bio || bio.trim().length < 50) missingFields.push('Bio (recommended)');
+  if (coreSkills.length < 3) missingFields.push('At least 3 skills (recommended)');
+
+  // Skills display logic: show top 10, then "+X more"
+  const SKILLS_TO_SHOW = 10;
+  const displayedSkills = showAllSkills ? coreSkills : coreSkills.slice(0, SKILLS_TO_SHOW);
+  const remainingSkillsCount = coreSkills.length - SKILLS_TO_SHOW;
+
+  // Check if bio needs expansion (roughly 3-4 lines = ~200-300 chars)
+  const bioNeedsExpansion = bio && bio.length > 200;
 
   if (!hasData) {
     return (
@@ -47,13 +66,48 @@ export function ProfileOverview({ headline, bio, primaryRoles = [], coreSkills =
       <div className="space-y-4">
         {headline && (
           <div>
-            <h3 className="text-base font-semibold text-gray-900">{headline}</h3>
+            <h3 className="text-xl font-semibold text-gray-900">{headline}</h3>
           </div>
         )}
 
         {bio && (
           <div>
-            <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-line">{bio}</p>
+            <div className={`prose prose-sm max-w-none transition-all duration-300 ${
+              !isBioExpanded && bioNeedsExpansion ? 'line-clamp-4' : ''
+            }`} style={!isBioExpanded && bioNeedsExpansion ? { WebkitLineClamp: 4 } : undefined}>
+              <ReactMarkdown
+                components={{
+                  p: ({ children }) => <p className="mb-2 text-sm text-gray-700 leading-relaxed">{children}</p>,
+                  h1: ({ children }) => <h1 className="text-base font-bold mb-2 text-gray-900">{children}</h1>,
+                  h2: ({ children }) => <h2 className="text-sm font-semibold mb-2 text-gray-900">{children}</h2>,
+                  h3: ({ children }) => <h3 className="text-xs font-semibold mb-1 text-gray-900">{children}</h3>,
+                  ul: ({ children }) => <ul className="list-disc list-inside mb-2 space-y-1 text-sm">{children}</ul>,
+                  ol: ({ children }) => <ol className="list-decimal list-inside mb-2 space-y-1 text-sm">{children}</ol>,
+                  li: ({ children }) => <li className="text-sm text-gray-700">{children}</li>,
+                  strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
+                  em: ({ children }) => <em className="italic">{children}</em>,
+                  a: ({ href, children }) => (
+                    <a href={href} className="text-brand-light hover:underline" target="_blank" rel="noopener noreferrer">
+                      {children}
+                    </a>
+                  ),
+                  code: ({ children }) => (
+                    <code className="bg-gray-200 px-1 py-0.5 rounded text-xs font-mono">{children}</code>
+                  ),
+                }}
+              >
+                {bio}
+              </ReactMarkdown>
+            </div>
+            {bioNeedsExpansion && (
+              <button
+                type="button"
+                onClick={() => setIsBioExpanded(!isBioExpanded)}
+                className="mt-2 text-xs font-medium text-brand-light hover:text-brand-light/90 focus:outline-none transition-colors"
+              >
+                {isBioExpanded ? 'Show less' : 'Read more'}
+              </button>
+            )}
           </div>
         )}
 
@@ -75,9 +129,9 @@ export function ProfileOverview({ headline, bio, primaryRoles = [], coreSkills =
 
         {coreSkills.length > 0 && (
           <div>
-            <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Core Skills</h4>
+            <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Skills</h4>
             <div className="flex flex-wrap gap-2">
-              {coreSkills.map((skill, idx) => (
+              {displayedSkills.map((skill, idx) => (
                 <span
                   key={idx}
                   className="px-3 py-1 bg-gray-100 text-gray-700 text-sm font-medium rounded-full border border-gray-200"
@@ -85,6 +139,24 @@ export function ProfileOverview({ headline, bio, primaryRoles = [], coreSkills =
                   {skill}
                 </span>
               ))}
+              {remainingSkillsCount > 0 && !showAllSkills && (
+                <button
+                  type="button"
+                  onClick={() => setShowAllSkills(true)}
+                  className="px-3 py-1 bg-gray-100 text-gray-700 text-sm font-medium rounded-full border border-gray-200 hover:bg-gray-200 transition-colors"
+                >
+                  +{remainingSkillsCount} more
+                </button>
+              )}
+              {showAllSkills && remainingSkillsCount > 0 && (
+                <button
+                  type="button"
+                  onClick={() => setShowAllSkills(false)}
+                  className="px-3 py-1 bg-gray-100 text-gray-700 text-sm font-medium rounded-full border border-gray-200 hover:bg-gray-200 transition-colors"
+                >
+                  Show less
+                </button>
+              )}
             </div>
           </div>
         )}

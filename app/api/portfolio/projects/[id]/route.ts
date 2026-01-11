@@ -18,7 +18,7 @@ export async function PATCH(request: Request, { params }: RouteParams) {
     }
 
     const body = await request.json();
-    const { title, description, github_url, demo_url, visibility } = body;
+    const { title, description, github_url, demo_url, visibility, cover_image_url, images } = body;
 
     // Update project (RLS will enforce ownership)
     const { data: project, error } = await supabase
@@ -29,6 +29,8 @@ export async function PATCH(request: Request, { params }: RouteParams) {
         github_url,
         demo_url,
         visibility,
+        cover_image_url: cover_image_url || null,
+        images: images || [],
       })
       .eq('id', id)
       .select()

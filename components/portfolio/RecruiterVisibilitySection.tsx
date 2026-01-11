@@ -35,30 +35,41 @@ export function RecruiterVisibilitySection({
     public: 'bg-green-100 text-green-700',
   };
 
-  const missingItems: string[] = [];
-  if (!hasBio) missingItems.push('Bio');
-  if (!hasCV) missingItems.push('CV');
-  if (projectCount < 2) missingItems.push(`${2 - projectCount} more project${2 - projectCount > 1 ? 's' : ''}`);
-  if (visibleProjectCount === 0) missingItems.push('At least 1 visible project');
+  // Checklist items with fix actions
+  const checklistItems = [
+    {
+      label: 'Bio present',
+      completed: hasBio,
+      fixLink: '/student/portfolio/profile/edit',
+      fixAction: 'Add bio',
+    },
+    {
+      label: 'CV uploaded',
+      completed: hasCV,
+      fixLink: '/student/portfolio#cv-section',
+      fixAction: 'Upload CV',
+    },
+    {
+      label: '≥1 Public project',
+      completed: visibleProjectCount >= 1,
+      fixLink: '/student/portfolio/new',
+      fixAction: 'Add project',
+    },
+  ];
 
-  const recruiterCanSee: string[] = [];
-  if (currentVisibility !== 'private') {
-    recruiterCanSee.push('Your profile');
-    if (hasBio) recruiterCanSee.push('Your bio');
-    if (hasCV) recruiterCanSee.push('Your CV');
-    if (visibleProjectCount > 0) recruiterCanSee.push(`${visibleProjectCount} project${visibleProjectCount > 1 ? 's' : ''}`);
-  }
+  const missingItems = checklistItems.filter(item => !item.completed);
+  const isComplete = missingItems.length === 0 && currentVisibility !== 'private';
 
   return (
     <section className="bg-white border border-gray-200 rounded-lg p-6">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-medium text-gray-900">Recruiter Visibility</h2>
-        {missingItems.length > 0 && (
+        {!isComplete && (
           <Link
-            href="/student/portfolio"
-            className="text-sm font-medium text-brand-light hover:text-brand-light/90"
+            href="/student/portfolio/profile/edit"
+            className="btn-primary text-sm"
           >
-            Improve Visibility →
+            Make me discoverable
           </Link>
         )}
       </div>
@@ -80,35 +91,36 @@ export function RecruiterVisibilitySection({
           </div>
         </div>
 
-        {currentVisibility !== 'private' && recruiterCanSee.length > 0 && (
-          <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-            <h3 className="text-sm font-medium text-blue-900 mb-2">What recruiters can see:</h3>
-            <ul className="space-y-1">
-              {recruiterCanSee.map((item, idx) => (
-                <li key={idx} className="text-sm text-blue-700 flex items-center gap-2">
-                  <span className="text-blue-500">✓</span>
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+        {/* Checklist */}
+        <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg">
+          <h3 className="text-sm font-medium text-gray-900 mb-3">Discoverability Checklist</h3>
+          <ul className="space-y-2">
+            {checklistItems.map((item, idx) => (
+              <li key={idx} className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  {item.completed ? (
+                    <span className="text-green-600 text-lg">✓</span>
+                  ) : (
+                    <span className="text-gray-400 text-lg">○</span>
+                  )}
+                  <span className={`text-sm ${item.completed ? 'text-gray-700' : 'text-gray-500'}`}>
+                    {item.label}
+                  </span>
+                </div>
+                {!item.completed && (
+                  <Link
+                    href={item.fixLink}
+                    className="text-xs font-medium text-brand-light hover:text-brand-light/90"
+                  >
+                    {item.fixAction} →
+                  </Link>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
 
-        {missingItems.length > 0 && (
-          <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-            <h3 className="text-sm font-medium text-yellow-900 mb-2">What's missing to be discoverable:</h3>
-            <ul className="space-y-1">
-              {missingItems.map((item, idx) => (
-                <li key={idx} className="text-sm text-yellow-700 flex items-center gap-2">
-                  <span className="text-yellow-600">○</span>
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {missingItems.length === 0 && currentVisibility !== 'private' && (
+        {isComplete && (
           <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
             <p className="text-sm text-green-800">
               ✨ Your profile is complete and discoverable by recruiters!

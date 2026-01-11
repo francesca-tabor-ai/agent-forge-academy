@@ -2,7 +2,7 @@ import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import { getAllCourseSlugs, loadAllLessons } from '@/lib/lessons';
 import { courseMetadata } from '@/lib/course-metadata';
-import { CourseCard } from '@/components/courses/CourseCard';
+import { CoursesPageClient } from '@/components/courses/CoursesPageClient';
 
 export default async function CoursesPage() {
   const supabase = await createUserSupabaseClient();
@@ -110,76 +110,5 @@ export default async function CoursesPage() {
     }
   }
 
-  // Sort courses by category for better organization
-  const categoryOrder = [
-    'Vibe Engineering',
-    'Agentic Systems',
-    'AI Search & Viability',
-    'Shopping & E-Commerce',
-    'Media & Content Ops',
-    'Trust & Regulation',
-  ];
-
-  allCourses.sort((a, b) => {
-    const categoryA = a.metadata?.category || '';
-    const categoryB = b.metadata?.category || '';
-    const indexA = categoryOrder.indexOf(categoryA);
-    const indexB = categoryOrder.indexOf(categoryB);
-    
-    if (indexA !== -1 && indexB !== -1) {
-      return indexA - indexB;
-    }
-    if (indexA !== -1) return -1;
-    if (indexB !== -1) return 1;
-    return (a.title || '').localeCompare(b.title || '');
-  });
-
-  return (
-    <div>
-      <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-gray-900">Courses</h1>
-        <p className="text-sm text-gray-600 mt-2">
-          Browse and enroll in available courses
-        </p>
-      </div>
-
-      {allCourses.length === 0 ? (
-        <div className="bg-white border border-gray-200 rounded-lg p-8 text-center">
-          <p className="text-gray-600">No courses available at this time.</p>
-        </div>
-      ) : (
-        <div className="space-y-8">
-          {/* Group courses by category */}
-          {Object.entries(
-            allCourses.reduce((acc, course) => {
-              const category = course.metadata?.category;
-              // Only include courses with valid metadata categories
-              if (category) {
-                if (!acc[category]) acc[category] = [];
-                acc[category].push(course);
-              }
-              return acc;
-            }, {} as Record<string, typeof allCourses>)
-          ).map(([category, categoryCourses]) => (
-            <div key={category}>
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">{category}</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {categoryCourses.map((course) => {
-                  const enrollment = course.id ? enrollments[course.id] : null;
-                  return (
-                    <CourseCard
-                      key={course.slug}
-                      course={course}
-                      metadata={course.metadata}
-                      enrollment={enrollment || null}
-                    />
-                  );
-                })}
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
+  return <CoursesPageClient courses={allCourses} enrollments={enrollments} />;
 }

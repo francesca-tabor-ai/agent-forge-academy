@@ -42,7 +42,7 @@ export default async function EditProjectPage({ params }: EditProjectPageProps) 
   // Get project (verify ownership via RLS)
   const { data: project } = await supabase
     .from('portfolio_projects')
-    .select('id, title, description, github_url, demo_url, visibility')
+    .select('id, title, description, github_url, demo_url, visibility, cover_image_url, images')
     .eq('id', id)
     .eq('student_profile_id', studentProfile.id)
     .single();

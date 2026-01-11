@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { RichTextEditor } from './RichTextEditor';
+import { ProjectImageUpload } from './ProjectImageUpload';
 
 interface Project {
   id: string;
@@ -10,6 +12,8 @@ interface Project {
   github_url: string | null;
   demo_url: string | null;
   visibility: 'private' | 'recruiters_only' | 'public';
+  cover_image_url?: string | null;
+  images?: string[] | null;
 }
 
 interface EditProjectFormProps {
@@ -27,6 +31,8 @@ export function EditProjectForm({ project }: EditProjectFormProps) {
     github_url: project.github_url || '',
     demo_url: project.demo_url || '',
     visibility: project.visibility,
+    cover_image_url: project.cover_image_url || '',
+    images: (project.images as string[]) || [],
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -39,7 +45,15 @@ export function EditProjectForm({ project }: EditProjectFormProps) {
       const response = await fetch(`/api/portfolio/projects/${project.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          title: formData.title,
+          description: formData.description,
+          github_url: formData.github_url,
+          demo_url: formData.demo_url,
+          visibility: formData.visibility,
+          cover_image_url: formData.cover_image_url || null,
+          images: formData.images,
+        }),
       });
 
       if (!response.ok) {
@@ -94,15 +108,13 @@ export function EditProjectForm({ project }: EditProjectFormProps) {
           <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
             Description
           </label>
-          <textarea
-            id="description"
+          <RichTextEditor
             value={formData.description}
-            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-            rows={8}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ca-gold focus:border-transparent font-mono text-sm"
+            onChange={(value) => setFormData({ ...formData, description: value })}
             placeholder="Describe your project. Use markdown for formatting."
+            minHeight="250px"
+            maxLength={5000}
           />
-          <p className="mt-1 text-xs text-gray-500">Markdown supported</p>
         </div>
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
@@ -133,6 +145,25 @@ export function EditProjectForm({ project }: EditProjectFormProps) {
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ca-gold focus:border-transparent"
             />
           </div>
+        </div>
+
+        {/* Project Images */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Project Images
+          </label>
+          <ProjectImageUpload
+            projectId={project.id}
+            coverImageUrl={formData.cover_image_url}
+            images={formData.images}
+            onImagesChange={(coverUrl, images) => {
+              setFormData({
+                ...formData,
+                cover_image_url: coverUrl || '',
+                images,
+              });
+            }}
+          />
         </div>
 
         <div>
