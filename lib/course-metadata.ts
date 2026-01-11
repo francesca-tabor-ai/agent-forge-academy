@@ -181,6 +181,15 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     bestFor: 'Engineers and architects building scalable agent systems.',
     time: '~12 weeks',
   },
+  'problem-shooting-change-drift-failure-multi-agent-systems': {
+    slug: 'problem-shooting-change-drift-failure-multi-agent-systems',
+    title: 'Problem-Shooting Change, Drift, and Failure in Multi-Agent Systems',
+    category: 'Agentic Systems',
+    outcome: 'Design, deploy, and maintain autonomous multi-agent systems that continue to function as their environment, tools, models, and assumptions change.',
+    build: 'Production-first course on failure-tolerant agent systems with drift detection, tool contracts, replay systems, cost optimization, and resumable state management.',
+    bestFor: 'Engineers and architects building production-ready multi-agent systems that must handle change, drift, and failure gracefully.',
+    time: '~12 weeks',
+  },
 };
 
 // Get category groups for organizing courses
