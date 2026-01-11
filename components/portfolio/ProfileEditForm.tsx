@@ -97,7 +97,15 @@ export function ProfileEditForm({ initialData }: ProfileEditFormProps) {
 
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.error || 'Failed to update profile');
+        const errorMessage = data.error?.message || data.error || 'Failed to update profile';
+        
+        // Handle specific error codes
+        if (response.status === 401) {
+          router.push('/login');
+          return;
+        }
+        
+        throw new Error(errorMessage);
       }
 
       setSaveState('saved');

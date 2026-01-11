@@ -30,13 +30,13 @@ export function HeadshotUpload({ currentImageUrl, onImageChange }: HeadshotUploa
 
     // Validate file type
     if (!ALLOWED_TYPES.includes(file.type)) {
-      setError('Only JPG, PNG, and WEBP images are allowed');
+      setError('Unsupported format — use JPG, PNG, or WEBP');
       return;
     }
 
     // Validate file size
     if (file.size > MAX_SIZE) {
-      setError(`Image size must be less than ${MAX_SIZE / (1024 * 1024)}MB`);
+      setError('File too large (max 5MB)');
       return;
     }
 
@@ -60,15 +60,44 @@ export function HeadshotUpload({ currentImageUrl, onImageChange }: HeadshotUploa
       });
 
       if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || 'Upload failed');
+        const data = await response.json().catch(() => ({}));
+        const errorMessage = data.error?.message || data.error || 'Unable to upload image.';
+        
+        // Handle specific error codes
+        if (response.status === 401) {
+          setError('Session expired. Please log in again.');
+          return;
+        }
+        
+        if (response.status === 404) {
+          setError('Upload service is unavailable (missing endpoint).');
+          return;
+        }
+        
+        // Provide more specific error messages
+        if (errorMessage.includes('5MB') || errorMessage.includes('size') || errorMessage.includes('FILE_TOO_LARGE')) {
+          throw new Error('File too large (max 5MB)');
+        } else if (errorMessage.includes('JPG') || errorMessage.includes('PNG') || errorMessage.includes('WEBP') || errorMessage.includes('format') || errorMessage.includes('INVALID_FILE_TYPE')) {
+          throw new Error('Unsupported format — use JPG, PNG, or WEBP');
+        } else if (errorMessage.includes('not found') || errorMessage.includes('Profile') || errorMessage.includes('PROFILE_NOT_FOUND')) {
+          throw new Error("We couldn't save your profile yet — please try again");
+        } else {
+          throw new Error(errorMessage);
+        }
       }
 
-      const { imageUrl } = await response.json();
+      const result = await response.json();
+      const imageUrl = result.imageUrl || result.profile?.headshot_image_url;
+      
+      if (!imageUrl) {
+        throw new Error('Upload succeeded but no image URL returned');
+      }
       onImageChange(imageUrl);
       setPreviewUrl(imageUrl);
+      setError(null); // Clear any previous errors on success
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Upload failed');
+      const errorMessage = err instanceof Error ? err.message : 'Unable to upload image.';
+      setError(errorMessage);
       setPreviewUrl(currentImageUrl || null);
     } finally {
       setUploading(false);
@@ -94,17 +123,26 @@ export function HeadshotUpload({ currentImageUrl, onImageChange }: HeadshotUploa
       });
 
       if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || 'Failed to remove headshot');
+        const data = await response.json().catch(() => ({}));
+        const errorMessage = data.error?.message || data.error || "We couldn't remove the image — please try again";
+        
+        // Handle specific error codes
+        if (response.status === 401) {
+          setError('Session expired. Please log in again.');
+          return;
+        }
+        
+        throw new Error(errorMessage);
       }
 
       setPreviewUrl(null);
       onImageChange(null);
+      setError(null); // Clear any previous errors on success
       if (inputRef.current) {
         inputRef.current.value = '';
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to remove headshot');
+      setError(err instanceof Error ? err.message : "We couldn't remove the image — please try again");
     } finally {
       setUploading(false);
     }
@@ -176,7 +214,9 @@ export function HeadshotUpload({ currentImageUrl, onImageChange }: HeadshotUploa
           </div>
 
           {error && (
-            <div className="text-sm text-red-600">{error}</div>
+            <div className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-md p-2">
+              {error}
+            </div>
           )}
 
           <p className="text-xs text-gray-500">
