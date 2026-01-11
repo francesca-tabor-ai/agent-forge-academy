@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import Stripe from 'stripe';
 import { createUserSupabaseClient } from '@/lib/supabase/server';
-import { stripe } from '@/lib/stripe';
+import { getStripeClient } from '@/lib/stripe';
 
 /**
  * POST /api/stripe/create-checkout-session
@@ -101,11 +100,14 @@ export async function POST(request: NextRequest) {
       customerId = existingSubscription?.stripe_customer_id;
     }
 
+    // Get Stripe client
+    const stripe = getStripeClient();
+
     // Create or retrieve Stripe customer
-    let stripeCustomer: Stripe.Customer;
+    let stripeCustomer: any;
     
     if (customerId) {
-      stripeCustomer = await stripe.customers.retrieve(customerId) as Stripe.Customer;
+      stripeCustomer = await stripe.customers.retrieve(customerId);
     } else {
       stripeCustomer = await stripe.customers.create({
         email: profile.email,

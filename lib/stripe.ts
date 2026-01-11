@@ -1,9 +1,35 @@
 import Stripe from 'stripe';
 
 /**
- * Stripe client instance
+ * Get Stripe client instance (lazy initialization)
  * 
  * Centralized Stripe client for use across the application.
- * Uses the default API version for the installed Stripe SDK version.
+ * Uses lazy initialization to avoid top-level code execution during build.
+ * 
+ * @returns Stripe client instance
+ * @throws Error if STRIPE_SECRET_KEY is not set
  */
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+let stripeInstance: Stripe | null = null;
+
+export function getStripeClient(): Stripe {
+  if (!stripeInstance) {
+    const secretKey = process.env.STRIPE_SECRET_KEY;
+    if (!secretKey) {
+      throw new Error('STRIPE_SECRET_KEY environment variable is not set');
+    }
+    stripeInstance = new Stripe(secretKey, {
+      apiVersion: '2024-06-20',
+    });
+  }
+  return stripeInstance;
+}
+
+/**
+ * @deprecated Use getStripeClient() instead to avoid build-time errors
+ * This export is kept for backward compatibility but will throw at runtime if env var is missing
+ */
+export const stripe = new Proxy({} as Stripe, {
+  get(_target, prop) {
+    return getStripeClient()[prop as keyof Stripe];
+  },
+});

@@ -1,12 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import Stripe from 'stripe';
-import { createClient } from '@supabase/supabase-js';
-import { stripe } from '@/lib/stripe';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+// Runtime config - ensure Node.js runtime and force dynamic rendering
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 
 /**
  * POST /api/stripe/webhook
@@ -21,12 +17,39 @@ const supabase = createClient(
  * - invoice.payment_failed
  * - customer.subscription.trial_will_end
  * 
- * Route Config:
- * - Disables body parsing to ensure raw body is available for signature verification
+ * Uses lazy imports to avoid build-time errors when env vars are not set.
  */
-export const runtime = 'nodejs'; // Ensure Node.js runtime for webhook processing
-
 export async function POST(request: NextRequest) {
+  // Lazy import Stripe to avoid top-level code execution during build
+  const Stripe = (await import('stripe')).default;
+  const { createClient } = await import('@supabase/supabase-js');
+
+  // Validate environment variables
+  const secretKey = process.env.STRIPE_SECRET_KEY;
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!secretKey || !webhookSecret) {
+    console.error('Missing Stripe environment variables');
+    return NextResponse.json(
+      { error: 'Missing STRIPE_SECRET_KEY or STRIPE_WEBHOOK_SECRET' },
+      { status: 500 }
+    );
+  }
+
+  if (!supabaseUrl || !supabaseServiceKey) {
+    console.error('Missing Supabase environment variables');
+    return NextResponse.json(
+      { error: 'Missing Supabase configuration' },
+      { status: 500 }
+    );
+  }
+
+  // Initialize clients inside handler (not at module scope)
+  const stripe = new Stripe(secretKey, { apiVersion: '2024-06-20' });
+  const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
   const body = await request.text();
   const signature = request.headers.get('stripe-signature');
 
@@ -37,15 +60,11 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  let event: Stripe.Event;
+  let event: any;
 
   try {
     // Verify webhook signature
-    event = stripe.webhooks.constructEvent(
-      body,
-      signature,
-      process.env.STRIPE_WEBHOOK_SECRET!
-    );
+    event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
   } catch (err: any) {
     console.error('Webhook signature verification failed:', err.message);
     return NextResponse.json(
@@ -58,27 +77,27 @@ export async function POST(request: NextRequest) {
     // Handle the event
     switch (event.type) {
       case 'customer.subscription.created':
-        await handleSubscriptionCreated(event.data.object as Stripe.Subscription);
+        await handleSubscriptionCreated(event.data.object, stripe, supabase);
         break;
 
       case 'customer.subscription.updated':
-        await handleSubscriptionUpdated(event.data.object as Stripe.Subscription);
+        await handleSubscriptionUpdated(event.data.object, stripe, supabase);
         break;
 
       case 'customer.subscription.deleted':
-        await handleSubscriptionDeleted(event.data.object as Stripe.Subscription);
+        await handleSubscriptionDeleted(event.data.object, supabase);
         break;
 
       case 'invoice.payment_succeeded':
-        await handlePaymentSucceeded(event.data.object as Stripe.Invoice);
+        await handlePaymentSucceeded(event.data.object, supabase);
         break;
 
       case 'invoice.payment_failed':
-        await handlePaymentFailed(event.data.object as Stripe.Invoice);
+        await handlePaymentFailed(event.data.object, supabase);
         break;
 
       case 'customer.subscription.trial_will_end':
-        await handleTrialWillEnd(event.data.object as Stripe.Subscription);
+        await handleTrialWillEnd(event.data.object);
         break;
 
       default:
@@ -99,7 +118,11 @@ export async function POST(request: NextRequest) {
 /**
  * Handle subscription created event
  */
-async function handleSubscriptionCreated(subscription: Stripe.Subscription) {
+async function handleSubscriptionCreated(
+  subscription: any,
+  stripe: any,
+  supabase: any
+) {
   const customerId = subscription.customer as string;
   const subscriptionId = subscription.id;
   const priceId = subscription.items.data[0]?.price.id;
@@ -192,7 +215,11 @@ async function handleSubscriptionCreated(subscription: Stripe.Subscription) {
 /**
  * Handle subscription updated event
  */
-async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
+async function handleSubscriptionUpdated(
+  subscription: any,
+  stripe: any,
+  supabase: any
+) {
   const subscriptionId = subscription.id;
   const priceId = subscription.items.data[0]?.price.id;
 
@@ -275,7 +302,10 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
 /**
  * Handle subscription deleted event
  */
-async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
+async function handleSubscriptionDeleted(
+  subscription: any,
+  supabase: any
+) {
   const subscriptionId = subscription.id;
 
   const { error } = await supabase
@@ -298,7 +328,10 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
 /**
  * Handle payment succeeded event
  */
-async function handlePaymentSucceeded(invoice: Stripe.Invoice) {
+async function handlePaymentSucceeded(
+  invoice: any,
+  supabase: any
+) {
   const subscriptionId = invoice.subscription as string;
 
   if (!subscriptionId) {
@@ -331,7 +364,10 @@ async function handlePaymentSucceeded(invoice: Stripe.Invoice) {
 /**
  * Handle payment failed event
  */
-async function handlePaymentFailed(invoice: Stripe.Invoice) {
+async function handlePaymentFailed(
+  invoice: any,
+  supabase: any
+) {
   const subscriptionId = invoice.subscription as string;
 
   if (!subscriptionId) {
@@ -359,7 +395,7 @@ async function handlePaymentFailed(invoice: Stripe.Invoice) {
 /**
  * Handle trial will end event
  */
-async function handleTrialWillEnd(subscription: Stripe.Subscription) {
+async function handleTrialWillEnd(subscription: any) {
   // This is a notification event - we can log it or send email
   // The UI should check trial_end_at and show banner
   console.log('Trial ending soon for subscription:', subscription.id);

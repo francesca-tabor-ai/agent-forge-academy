@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import Stripe from 'stripe';
 import { createUserSupabaseClient } from '@/lib/supabase/server';
-import { stripe } from '@/lib/stripe';
+import { getStripeClient } from '@/lib/stripe';
 
 /**
  * POST /api/stripe/create-portal-session
@@ -69,6 +68,9 @@ export async function POST(request: NextRequest) {
         { status: 404 }
       );
     }
+
+    // Get Stripe client
+    const stripe = getStripeClient();
 
     // Create portal session
     const session = await stripe.billingPortal.sessions.create({
