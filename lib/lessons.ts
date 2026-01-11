@@ -2,6 +2,13 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 
+// Type definitions for video chapter metadata
+export interface VideoChapter {
+  label: string;
+  start_seconds: number;
+  end_seconds?: number;
+}
+
 // Type definitions for lesson metadata
 export interface LessonFrontmatter {
   title: string;
@@ -12,6 +19,9 @@ export interface LessonFrontmatter {
   course?: string; // Course slug this lesson belongs to
   email_takeaway?: string; // Short takeaway for weekly emails
   email_action?: string; // Optional action item for weekly emails
+  video_youtube_ids?: string[]; // Array of YouTube video IDs
+  video_primary_youtube_id?: string; // Primary YouTube video ID
+  video_chapters?: VideoChapter[]; // Array of video chapters with timestamps
   [key: string]: unknown;
 }
 
@@ -24,6 +34,82 @@ export interface Lesson {
 
 // Default content directory (can be overridden)
 const DEFAULT_CONTENT_DIR = path.join(process.cwd(), 'course');
+
+/**
+ * Validates and normalizes lesson frontmatter data
+ * Ensures video fields are properly typed and validated
+ * @param data - Raw frontmatter data from gray-matter
+ * @returns Validated and normalized LessonFrontmatter
+ */
+function validateAndNormalizeFrontmatter(data: Record<string, unknown>): LessonFrontmatter {
+  const frontmatter: LessonFrontmatter = {
+    title: typeof data.title === 'string' ? data.title : '',
+    ...(typeof data.module === 'string' && { module: data.module }),
+    ...(typeof data.week === 'number' && { week: data.week }),
+    ...(typeof data.order === 'number' && { order: data.order }),
+    ...(typeof data.description === 'string' && { description: data.description }),
+    ...(typeof data.course === 'string' && { course: data.course }),
+    ...(typeof data.email_takeaway === 'string' && { email_takeaway: data.email_takeaway }),
+    ...(typeof data.email_action === 'string' && { email_action: data.email_action }),
+  };
+
+  // Validate video_youtube_ids: must be an array of strings
+  if (data.video_youtube_ids !== undefined) {
+    if (Array.isArray(data.video_youtube_ids)) {
+      const validIds = data.video_youtube_ids.filter(
+        (id): id is string => typeof id === 'string' && id.length > 0
+      );
+      if (validIds.length > 0) {
+        frontmatter.video_youtube_ids = validIds;
+      }
+    }
+  }
+
+  // Validate video_primary_youtube_id: must be a non-empty string
+  if (data.video_primary_youtube_id !== undefined) {
+    if (typeof data.video_primary_youtube_id === 'string' && data.video_primary_youtube_id.length > 0) {
+      frontmatter.video_primary_youtube_id = data.video_primary_youtube_id;
+    }
+  }
+
+  // Validate video_chapters: must be an array of objects with label and start_seconds
+  if (data.video_chapters !== undefined) {
+    if (Array.isArray(data.video_chapters)) {
+      const validChapters: VideoChapter[] = [];
+      for (const chapter of data.video_chapters) {
+        if (
+          typeof chapter === 'object' &&
+          chapter !== null &&
+          typeof (chapter as Record<string, unknown>).label === 'string' &&
+          typeof (chapter as Record<string, unknown>).start_seconds === 'number'
+        ) {
+          const chapterObj = chapter as Record<string, unknown>;
+          const validChapter: VideoChapter = {
+            label: chapterObj.label as string,
+            start_seconds: chapterObj.start_seconds as number,
+          };
+          // Optional end_seconds
+          if (typeof chapterObj.end_seconds === 'number') {
+            validChapter.end_seconds = chapterObj.end_seconds;
+          }
+          validChapters.push(validChapter);
+        }
+      }
+      if (validChapters.length > 0) {
+        frontmatter.video_chapters = validChapters;
+      }
+    }
+  }
+
+  // Preserve any other unknown fields
+  for (const [key, value] of Object.entries(data)) {
+    if (!(key in frontmatter)) {
+      (frontmatter as Record<string, unknown>)[key] = value;
+    }
+  }
+
+  return frontmatter;
+}
 
 /**
  * Gets all course slugs by detecting subdirectories in the course directory
@@ -73,11 +159,12 @@ export function loadAllLessons(
         const { data, content } = matter(fileContents);
 
         const slug = file.replace(/\.md$/, '');
+        const validatedFrontmatter = validateAndNormalizeFrontmatter({ ...data, course: courseSlug });
 
         lessons.push({
           slug,
           courseSlug,
-          frontmatter: { ...data, course: courseSlug } as LessonFrontmatter,
+          frontmatter: validatedFrontmatter,
           content,
         });
       }
@@ -103,11 +190,12 @@ export function loadAllLessons(
         const { data, content } = matter(fileContents);
 
         const slug = file.replace(/\.md$/, '');
+        const validatedFrontmatter = validateAndNormalizeFrontmatter({ ...data, course: courseDir.name });
 
         lessons.push({
           slug,
           courseSlug: courseDir.name,
-          frontmatter: { ...data, course: courseDir.name } as LessonFrontmatter,
+          frontmatter: validatedFrontmatter,
           content,
         });
       }
@@ -121,10 +209,11 @@ export function loadAllLessons(
       const { data, content } = matter(fileContents);
 
       const slug = file.name.replace(/\.md$/, '');
+      const validatedFrontmatter = validateAndNormalizeFrontmatter(data);
 
       lessons.push({
         slug,
-        frontmatter: data as LessonFrontmatter,
+        frontmatter: validatedFrontmatter,
         content,
       });
     }
@@ -163,11 +252,12 @@ export function loadLessonBySlug(
     if (fs.existsSync(filePath)) {
       const fileContents = fs.readFileSync(filePath, 'utf8');
       const { data, content } = matter(fileContents);
+      const validatedFrontmatter = validateAndNormalizeFrontmatter({ ...data, course: courseSlug });
 
       return {
         slug,
         courseSlug,
-        frontmatter: { ...data, course: courseSlug } as LessonFrontmatter,
+        frontmatter: validatedFrontmatter,
         content,
       };
     }
@@ -186,11 +276,12 @@ export function loadLessonBySlug(
     if (fs.existsSync(filePath)) {
       const fileContents = fs.readFileSync(filePath, 'utf8');
       const { data, content } = matter(fileContents);
+      const validatedFrontmatter = validateAndNormalizeFrontmatter({ ...data, course: courseDir.name });
 
       return {
         slug,
         courseSlug: courseDir.name,
-        frontmatter: { ...data, course: courseDir.name } as LessonFrontmatter,
+        frontmatter: validatedFrontmatter,
         content,
       };
     }
@@ -201,10 +292,11 @@ export function loadLessonBySlug(
   if (fs.existsSync(filePath)) {
     const fileContents = fs.readFileSync(filePath, 'utf8');
     const { data, content } = matter(fileContents);
+    const validatedFrontmatter = validateAndNormalizeFrontmatter(data);
 
     return {
       slug,
-      frontmatter: data as LessonFrontmatter,
+      frontmatter: validatedFrontmatter,
       content,
     };
   }

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { MatchExplanationModal } from './MatchExplanationModal';
 import { ApplyWithAIModal } from './ApplyWithAIModal';
-import type { JobOpportunity } from '@/lib/types/job-opportunity';
+import type { JobOpportunity, NormalizedJobOpportunity } from '@/lib/types/job-opportunity';
 import { normalizeJobOpportunity } from '@/lib/types/job-opportunity';
 
 interface JobOpportunitiesPageProps {
@@ -24,7 +24,7 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
   const [selectedJob, setSelectedJob] = useState<JobOpportunity | null>(null);
   const [showMatchExplanation, setShowMatchExplanation] = useState(false);
   const [showApplyModal, setShowApplyModal] = useState(false);
-  const [applyJob, setApplyJob] = useState<JobOpportunity | null>(null);
+  const [applyJob, setApplyJob] = useState<NormalizedJobOpportunity | null>(null);
 
   // Filter and sort state from URL params
   const searchQuery = searchParams.get('search') || '';

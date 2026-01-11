@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import type { JobOpportunity } from '@/lib/types/job-opportunity';
+import type { NormalizedJobOpportunity } from '@/lib/types/job-opportunity';
 
 interface ApplyWithAIModalProps {
-  job: JobOpportunity | null;
+  job: NormalizedJobOpportunity | null;
   studentProfileId: string | null;
   onClose: () => void;
 }
@@ -18,7 +18,7 @@ export function ApplyWithAIModal({
   onClose,
 }: ApplyWithAIModalProps) {
   const [currentStep, setCurrentStep] = useState<Step>(job ? 'cv' : 'job-select');
-  const [selectedJob, setSelectedJob] = useState<JobOpportunity | null>(job);
+  const [selectedJob, setSelectedJob] = useState<NormalizedJobOpportunity | null>(job);
   const [cvOption, setCvOption] = useState<'uploaded' | 'generate'>('generate');
   const [cvContent, setCvContent] = useState('');
   const [coverLetterContent, setCoverLetterContent] = useState('');
@@ -138,7 +138,7 @@ export function ApplyWithAIModal({
                   onChange={(e) => {
                     // TODO: Fetch job from API
                     if (e.target.value) {
-                      // Mock job selection
+                      // Mock job selection - ensure matchingScore and skillsMissing are set
                       setSelectedJob({
                         id: e.target.value,
                         title: 'Selected Job',
@@ -147,6 +147,8 @@ export function ApplyWithAIModal({
                         status: 'unlocked',
                         skills: [],
                         skills_missing: [],
+                        matchingScore: 75,
+                        skillsMissing: [],
                       });
                     }
                   }}

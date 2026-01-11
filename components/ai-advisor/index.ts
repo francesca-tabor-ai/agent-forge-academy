@@ -5,3 +5,4 @@ export { ChatPanel } from './ChatPanel';
 export { QuickActions } from './QuickActions';
 export { ContextSelectorModal } from './ContextSelectorModal';
 export { HumanEscalationModal } from './HumanEscalationModal';
+export { VoiceControls } from './VoiceControls';

@@ -1,5 +1,8 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import { GoogleAnalytics } from '@/components/analytics/GoogleAnalytics';
+import { Suspense } from 'react';
+import { ReferralTracking } from '@/components/analytics/ReferralTracking';
 
 export const metadata: Metadata = {
   title: 'AI Growth Hub',
@@ -13,7 +16,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <GoogleAnalytics />
+        <Suspense fallback={null}>
+          <ReferralTracking />
+        </Suspense>
+        {children}
+      </body>
     </html>
   );
 }

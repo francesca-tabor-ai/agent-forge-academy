@@ -35,10 +35,21 @@ export type JobOpportunity = {
 };
 
 /**
- * Normalizes a JobOpportunity to ensure matchingScore is always a number.
- * Use this when passing a job to components that require matchingScore.
+ * Normalized JobOpportunity type with required matchingScore and skillsMissing.
+ * Use this type for components that require these fields to be guaranteed.
  */
-export function normalizeJobOpportunity(job: JobOpportunity | null): JobOpportunity | null {
+export type NormalizedJobOpportunity = Omit<JobOpportunity, 'matchingScore' | 'skillsMissing'> & {
+  matchingScore: number; // Required, always set
+  skillsMissing: string[]; // Required, always set
+};
+
+/**
+ * Normalizes a JobOpportunity to ensure matchingScore and skillsMissing are always set.
+ * Use this when passing a job to components that require these fields.
+ * 
+ * @returns NormalizedJobOpportunity with guaranteed matchingScore and skillsMissing, or null
+ */
+export function normalizeJobOpportunity(job: JobOpportunity | null): NormalizedJobOpportunity | null {
   if (!job) return null;
   
   return {

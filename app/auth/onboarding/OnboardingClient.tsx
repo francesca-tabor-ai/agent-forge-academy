@@ -88,6 +88,20 @@ export default function OnboardingClient() {
         return;
       }
 
+      // Apply referral attribution from cookies (if present)
+      try {
+        await fetch('/api/profile/attribution', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        // Attribution is applied silently - don't fail onboarding if it fails
+      } catch (attributionError) {
+        console.warn('Failed to apply referral attribution:', attributionError);
+        // Continue with onboarding even if attribution fails
+      }
+
       // Create role-specific profile if needed
       if (selectedRole === 'student') {
         const { data: profile } = await supabase
