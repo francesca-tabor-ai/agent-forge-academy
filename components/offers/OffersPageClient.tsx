@@ -94,6 +94,16 @@ export function OffersPageClient({
   const [savedOffers, setSavedOffers] = useState<Set<string>>(new Set(savedOfferIds));
   const [reminderDays, setReminderDays] = useState<Record<string, number>>({});
 
+  // Get days until expiration
+  const getDaysUntilExpiration = (dateString: string | null): number | null => {
+    if (!dateString) return null;
+    const expiration = new Date(dateString);
+    const now = new Date();
+    const diffTime = expiration.getTime() - now.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays > 0 ? diffDays : null;
+  };
+
   // Determine offer badges and properties
   const getOfferProperties = (offer: Offer) => {
     const badges: string[] = [];
@@ -222,16 +232,6 @@ export function OffersPageClient({
     };
     
     return categoryBestFor[offer.category] || 'building AI projects';
-  };
-
-  // Get days until expiration
-  const getDaysUntilExpiration = (dateString: string | null): number | null => {
-    if (!dateString) return null;
-    const expiration = new Date(dateString);
-    const now = new Date();
-    const diffTime = expiration.getTime() - now.getTime();
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays > 0 ? diffDays : null;
   };
 
   // Filter and sort offers
