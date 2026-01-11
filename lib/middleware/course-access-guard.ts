@@ -25,6 +25,15 @@
 import { NextResponse } from 'next/server';
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { canUserAccessCourse } from '@/lib/utils/subscription-access';
+import {
+  getSubscriptionStatusError,
+  getExpiredPeriodError,
+  getInsufficientTierError,
+  getCourseNotFoundError,
+  getCourseUnpublishedError,
+  SUBSCRIPTION_ERROR_MESSAGES,
+  type AccessErrorDetails,
+} from '@/lib/utils/subscription-error-messages';
 
 /**
  * Result of course access guard check
@@ -38,10 +47,12 @@ export interface CourseAccessGuardResult {
   /**
    * HTTP status code to return
    * - 200: Access allowed
+   * - 301: Course redirected (renamed)
    * - 401: User not authenticated
    * - 403: Access denied (no subscription or insufficient tier)
    * - 404: Course not found
    * - 500: Internal server error
+   * - 503: Service unavailable
    */
   status: number;
   
@@ -49,6 +60,11 @@ export interface CourseAccessGuardResult {
    * Error message if access is denied
    */
   error?: string;
+  
+  /**
+   * Warning message if access allowed but with warning
+   */
+  warning?: string;
   
   /**
    * User ID (if authenticated)
@@ -59,6 +75,21 @@ export interface CourseAccessGuardResult {
    * Course ID (if found)
    */
   courseId?: string;
+  
+  /**
+   * Redirect URL (for course redirects)
+   */
+  redirectTo?: string;
+  
+  /**
+   * Action required from user
+   */
+  actionRequired?: string;
+  
+  /**
+   * Retry after seconds (for 503 errors)
+   */
+  retryAfter?: number;
 }
 
 /**
@@ -125,20 +156,42 @@ export async function guardCourseAccess(
       .single();
 
     if (courseError || !course) {
+      // Check if course was renamed (redirect)
+      const { data: redirect } = await supabase.rpc('get_course_redirect', {
+        p_course_id: courseId,
+      });
+
+      if (redirect) {
+        // Course was renamed - return redirect
+        const errorDetails = SUBSCRIPTION_ERROR_MESSAGES.COURSE_RENAMED;
+        return {
+          allowed: false,
+          status: 301,
+          error: errorDetails.message,
+          redirectTo: `/student/courses/${redirect}`,
+          userId,
+        };
+      }
+
+      // Course not found
+      const errorDetails = getCourseNotFoundError();
       return {
         allowed: false,
-        status: 404,
-        error: 'Course not found',
+        status: errorDetails.status,
+        error: errorDetails.message,
+        redirectTo: errorDetails.redirectTo,
         userId,
       };
     }
 
     // Check if course is published
     if (!course.is_published) {
+      const errorDetails = getCourseUnpublishedError();
       return {
         allowed: false,
-        status: 403,
-        error: 'Course is not available',
+        status: errorDetails.status,
+        error: errorDetails.message,
+        redirectTo: errorDetails.redirectTo,
         userId,
         courseId,
       };
@@ -173,23 +226,64 @@ export async function guardCourseAccess(
 
           // Check if user has no subscription
           if (!subscription) {
+            const errorDetails = SUBSCRIPTION_ERROR_MESSAGES.NO_SUBSCRIPTION;
             return {
               allowed: false,
-              status: 403,
-              error: 'Access denied. A subscription is required to access this course.',
+              status: errorDetails.status,
+              error: errorDetails.message,
+              actionRequired: errorDetails.actionRequired,
+              redirectTo: errorDetails.redirectTo,
               userId,
               courseId,
             };
           }
 
-          // Check if subscription is inactive or expired
+          // Check subscription status
           const now = new Date();
           const periodEnd = new Date(subscription.current_period_end);
-          if (subscription.status !== 'active' || periodEnd <= now) {
+          const trialEnd = subscription.trial_end_at ? new Date(subscription.trial_end_at) : null;
+
+          // Check if period expired
+          if (periodEnd <= now) {
+            const errorDetails = getExpiredPeriodError(periodEnd);
             return {
               allowed: false,
-              status: 403,
-              error: 'Access denied. Your subscription is not active or has expired.',
+              status: errorDetails.status,
+              error: errorDetails.message,
+              actionRequired: errorDetails.actionRequired,
+              redirectTo: errorDetails.redirectTo,
+              userId,
+              courseId,
+            };
+          }
+
+          // Check subscription status for specific errors
+          const statusError = getSubscriptionStatusError(
+            subscription.status as 'active' | 'trial' | 'paused' | 'canceled' | 'expired',
+            periodEnd,
+            trialEnd || undefined
+          );
+
+          if (statusError) {
+            // For canceled/trial with grace period, allow access but show warning
+            if (statusError.status === 200 && subscription.status === 'canceled') {
+              return {
+                allowed: true,
+                status: 200,
+                warning: statusError.message,
+                actionRequired: statusError.actionRequired,
+                userId,
+                courseId,
+              };
+            }
+
+            // Otherwise deny access
+            return {
+              allowed: false,
+              status: statusError.status,
+              error: statusError.message,
+              actionRequired: statusError.actionRequired,
+              redirectTo: statusError.redirectTo,
               userId,
               courseId,
             };
@@ -197,10 +291,13 @@ export async function guardCourseAccess(
 
           // User has Essential tier but course is not in allowed list
           if (subscription.tier === 'essential') {
+            const errorDetails = getInsufficientTierError();
             return {
               allowed: false,
-              status: 403,
-              error: 'Access denied. This course requires Professional Access. Please upgrade your subscription.',
+              status: errorDetails.status,
+              error: errorDetails.message,
+              actionRequired: errorDetails.actionRequired,
+              redirectTo: errorDetails.redirectTo,
               userId,
               courseId,
             };
@@ -226,13 +323,27 @@ export async function guardCourseAccess(
       courseId,
     };
 
-  } catch (error) {
+  } catch (error: any) {
     // Handle unexpected errors
     console.error('[guardCourseAccess] Unexpected error:', error);
+
+    // Check if it's a database connection error
+    if (error?.code === 'ECONNREFUSED' || error?.code === 'ETIMEDOUT') {
+      const errorDetails = SUBSCRIPTION_ERROR_MESSAGES.DATABASE_ERROR;
+      return {
+        allowed: false,
+        status: errorDetails.status,
+        error: errorDetails.message,
+        retryAfter: errorDetails.retryAfter,
+      };
+    }
+
+    // Generic error
+    const errorDetails = SUBSCRIPTION_ERROR_MESSAGES.UNEXPECTED_ERROR;
     return {
       allowed: false,
-      status: 500,
-      error: 'Internal server error. Please try again later.',
+      status: errorDetails.status,
+      error: errorDetails.message,
     };
   }
 }
@@ -260,23 +371,49 @@ export async function guardCourseAccessViaDB(
       .single();
 
     if (courseError || !course) {
+      // Check if course was renamed (redirect)
+      const { data: redirect } = await supabase.rpc('get_course_redirect', {
+        p_course_id: courseId,
+      });
+
+      if (redirect) {
+        const errorDetails = SUBSCRIPTION_ERROR_MESSAGES.COURSE_RENAMED;
+        return {
+          allowed: false,
+          status: 301,
+          error: errorDetails.message,
+          redirectTo: `/student/courses/${redirect}`,
+          userId,
+        };
+      }
+
+      const errorDetails = getCourseNotFoundError();
       return {
         allowed: false,
-        status: 404,
-        error: 'Course not found',
+        status: errorDetails.status,
+        error: errorDetails.message,
+        redirectTo: errorDetails.redirectTo,
         userId,
       };
     }
 
     if (!course.is_published) {
+      const errorDetails = getCourseUnpublishedError();
       return {
         allowed: false,
-        status: 403,
-        error: 'Course is not available',
+        status: errorDetails.status,
+        error: errorDetails.message,
+        redirectTo: errorDetails.redirectTo,
         userId,
         courseId,
       };
     }
+
+    // Get detailed subscription status for better error messages
+    const { data: subscriptionStatus } = await supabase.rpc(
+      'get_subscription_access_status',
+      { p_user_id: userId }
+    );
 
     // Use database function for access check
     const { data: hasAccess, error: accessError } = await supabase.rpc(
@@ -289,16 +426,105 @@ export async function guardCourseAccessViaDB(
 
     if (accessError) {
       console.error('[guardCourseAccessViaDB] Database function error:', accessError);
+      
+      // Check if it's a connection error
+      if (accessError.code === 'ECONNREFUSED' || accessError.code === 'ETIMEDOUT') {
+        const errorDetails = SUBSCRIPTION_ERROR_MESSAGES.DATABASE_ERROR;
+        return {
+          allowed: false,
+          status: errorDetails.status,
+          error: errorDetails.message,
+          retryAfter: errorDetails.retryAfter,
+          userId,
+          courseId,
+        };
+      }
+
+      const errorDetails = SUBSCRIPTION_ERROR_MESSAGES.UNEXPECTED_ERROR;
       return {
         allowed: false,
-        status: 500,
-        error: 'Failed to verify course access',
+        status: errorDetails.status,
+        error: errorDetails.message,
         userId,
         courseId,
       };
     }
 
     if (!hasAccess) {
+      // Use subscription status to provide better error message
+      if (subscriptionStatus) {
+        const reason = subscriptionStatus.reason;
+        
+        if (reason === 'no_subscription') {
+          const errorDetails = SUBSCRIPTION_ERROR_MESSAGES.NO_SUBSCRIPTION;
+          return {
+            allowed: false,
+            status: errorDetails.status,
+            error: errorDetails.message,
+            actionRequired: errorDetails.actionRequired,
+            redirectTo: errorDetails.redirectTo,
+            userId,
+            courseId,
+          };
+        }
+
+        if (reason === 'expired') {
+          const errorDetails = getExpiredPeriodError(
+            new Date(subscriptionStatus.period_end)
+          );
+          return {
+            allowed: false,
+            status: errorDetails.status,
+            error: errorDetails.message,
+            actionRequired: errorDetails.actionRequired,
+            redirectTo: errorDetails.redirectTo,
+            userId,
+            courseId,
+          };
+        }
+
+        if (reason === 'paused') {
+          const errorDetails = SUBSCRIPTION_ERROR_MESSAGES.PAUSED_SUBSCRIPTION;
+          return {
+            allowed: false,
+            status: errorDetails.status,
+            error: errorDetails.message,
+            actionRequired: errorDetails.actionRequired,
+            redirectTo: errorDetails.redirectTo,
+            userId,
+            courseId,
+          };
+        }
+
+        if (reason === 'canceled') {
+          const errorDetails = SUBSCRIPTION_ERROR_MESSAGES.CANCELED_SUBSCRIPTION;
+          return {
+            allowed: false,
+            status: errorDetails.status,
+            error: errorDetails.message,
+            actionRequired: errorDetails.actionRequired,
+            redirectTo: errorDetails.redirectTo,
+            userId,
+            courseId,
+          };
+        }
+      }
+
+      // Check if it's an insufficient tier issue
+      if (subscriptionStatus?.tier === 'essential') {
+        const errorDetails = getInsufficientTierError();
+        return {
+          allowed: false,
+          status: errorDetails.status,
+          error: errorDetails.message,
+          actionRequired: errorDetails.actionRequired,
+          redirectTo: errorDetails.redirectTo,
+          userId,
+          courseId,
+        };
+      }
+
+      // Generic access denied
       return {
         allowed: false,
         status: 403,
@@ -315,12 +541,25 @@ export async function guardCourseAccessViaDB(
       courseId,
     };
 
-  } catch (error) {
+  } catch (error: any) {
     console.error('[guardCourseAccessViaDB] Unexpected error:', error);
+
+    // Check if it's a database connection error
+    if (error?.code === 'ECONNREFUSED' || error?.code === 'ETIMEDOUT') {
+      const errorDetails = SUBSCRIPTION_ERROR_MESSAGES.DATABASE_ERROR;
+      return {
+        allowed: false,
+        status: errorDetails.status,
+        error: errorDetails.message,
+        retryAfter: errorDetails.retryAfter,
+      };
+    }
+
+    const errorDetails = SUBSCRIPTION_ERROR_MESSAGES.UNEXPECTED_ERROR;
     return {
       allowed: false,
-      status: 500,
-      error: 'Internal server error. Please try again later.',
+      status: errorDetails.status,
+      error: errorDetails.message,
     };
   }
 }

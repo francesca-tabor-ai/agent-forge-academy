@@ -36,12 +36,48 @@ export async function GET(
     // Step 2: Guard course access (authenticates, checks subscription, verifies permissions)
     const guardResult = await guardCourseAccessViaDB(user.id, params.id);
 
-    // If access is denied, return the guard's response
+    // Handle redirects (course renamed)
+    if (guardResult.status === 301 && guardResult.redirectTo) {
+      return NextResponse.redirect(new URL(guardResult.redirectTo, request.url));
+    }
+
+    // If access is denied, return the guard's response with error details
     if (!guardResult.allowed) {
+      const responseBody: any = { error: guardResult.error };
+      
+      // Add action required if provided
+      if (guardResult.actionRequired) {
+        responseBody.actionRequired = guardResult.actionRequired;
+      }
+      
+      // Add redirect suggestion if provided
+      if (guardResult.redirectTo) {
+        responseBody.redirectTo = guardResult.redirectTo;
+      }
+      
+      // Add retry after for 503 errors
+      if (guardResult.retryAfter) {
+        return NextResponse.json(
+          responseBody,
+          { 
+            status: guardResult.status,
+            headers: {
+              'Retry-After': guardResult.retryAfter.toString(),
+            },
+          }
+        );
+      }
+
       return NextResponse.json(
-        { error: guardResult.error },
+        responseBody,
         { status: guardResult.status }
       );
+    }
+
+    // If access allowed but with warning (e.g., canceled subscription in grace period)
+    if (guardResult.warning) {
+      // Still return course data, but include warning
+      // This will be handled by the frontend to show warning banner
     }
 
     // Step 3: Fetch course details (access is granted)
