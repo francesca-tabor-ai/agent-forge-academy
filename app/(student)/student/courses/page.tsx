@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import { getAllCourseSlugs, loadAllLessons } from '@/lib/lessons';
 import { courseMetadata } from '@/lib/course-metadata';
 import { CoursesPageClient } from '@/components/courses/CoursesPageClient';
+import { getUserSubscriptionTier } from '@/lib/utils/subscription-access';
 
 export default async function CoursesPage() {
   const supabase = await createUserSupabaseClient();
@@ -110,5 +111,14 @@ export default async function CoursesPage() {
     }
   }
 
-  return <CoursesPageClient courses={allCourses} enrollments={enrollments} />;
+  // Get user's subscription tier
+  const subscriptionTier = await getUserSubscriptionTier(user.id);
+
+  return (
+    <CoursesPageClient
+      courses={allCourses}
+      enrollments={enrollments}
+      subscriptionTier={subscriptionTier}
+    />
+  );
 }

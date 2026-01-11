@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { CourseCard } from './CourseCard';
 import { CourseFilters } from './CourseFilters';
 import { CourseMetadata } from '@/lib/course-metadata';
+import type { SubscriptionTier } from '@/lib/utils/subscription-access';
 
 interface Course {
   id: string | null;
@@ -28,9 +29,10 @@ interface Enrollment {
 interface CoursesPageClientProps {
   courses: Course[];
   enrollments: Record<string, Enrollment>;
+  subscriptionTier?: SubscriptionTier | null;
 }
 
-export function CoursesPageClient({ courses, enrollments }: CoursesPageClientProps) {
+export function CoursesPageClient({ courses, enrollments, subscriptionTier }: CoursesPageClientProps) {
   const [filteredCourses, setFilteredCourses] = useState<Course[]>(courses);
 
   // Group filtered courses by category
@@ -91,6 +93,7 @@ export function CoursesPageClient({ courses, enrollments }: CoursesPageClientPro
                           course={course}
                           metadata={course.metadata}
                           enrollment={enrollment || null}
+                          subscriptionTier={subscriptionTier}
                         />
                       );
                     })}
