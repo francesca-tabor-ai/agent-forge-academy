@@ -83,10 +83,10 @@ export async function GET(request: NextRequest) {
     // Process each email
     for (const email of queuedEmails) {
       try {
-        // Get student profile to fetch unsubscribe token
+        // Get student profile to fetch unsubscribe token and check preferences
         const { data: studentProfile, error: profileError } = await supabase
           .from('student_profiles')
-          .select('unsubscribe_token')
+          .select('unsubscribe_token, weekly_learning_emails_enabled, weekly_jobs_emails_enabled')
           .eq('id', email.student_profile_id)
           .single();
 
@@ -103,6 +103,34 @@ export async function GET(request: NextRequest) {
             })
             .eq('id', email.id);
           failed++;
+          continue;
+        }
+
+        // Safety check: Verify email preferences before sending
+        // If user unsubscribed after email was queued, skip sending
+        if (email.email_type === 'weekly_learning' && !studentProfile.weekly_learning_emails_enabled) {
+          console.log(`Skipping learning email ${email.id}: user has disabled learning emails`);
+          // Mark as sent (not failed) to prevent retries, but don't actually send
+          await supabase
+            .from('email_outbox')
+            .update({
+              status: 'sent',
+              sent_at: new Date().toISOString(),
+            })
+            .eq('id', email.id);
+          continue;
+        }
+
+        if (email.email_type === 'weekly_jobs' && !studentProfile.weekly_jobs_emails_enabled) {
+          console.log(`Skipping jobs email ${email.id}: user has disabled jobs emails`);
+          // Mark as sent (not failed) to prevent retries, but don't actually send
+          await supabase
+            .from('email_outbox')
+            .update({
+              status: 'sent',
+              sent_at: new Date().toISOString(),
+            })
+            .eq('id', email.id);
           continue;
         }
 
