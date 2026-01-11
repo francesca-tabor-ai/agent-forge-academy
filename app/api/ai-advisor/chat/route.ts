@@ -226,10 +226,30 @@ async function generateAIResponse(
   // Project-related queries
   else if (context?.project || lowerMessage.includes('project') || lowerMessage.includes('architecture') || lowerMessage.includes('code')) {
     const projectName = context?.project?.title || 'your project';
-    response = `Let me help you with ${projectName}. `;
+    const project = contextData?.projectData;
+    response = `Let me help you with **${projectName}**. `;
+    
+    if (project) {
+      if (project.description) {
+        response += `I can see your current description: "${project.description.substring(0, 150)}${project.description.length > 150 ? '...' : ''}"\n\n`;
+      }
+      if (!project.githubUrl) {
+        response += `⚠️ **Note**: Your project doesn't have a GitHub URL linked. Adding one will significantly improve recruiter engagement.\n\n`;
+      }
+      if (!project.demoUrl) {
+        response += `⚠️ **Note**: Consider adding a live demo URL to showcase your work.\n\n`;
+      }
+    }
     
     if (lowerMessage.includes('review') || lowerMessage.includes('architecture')) {
       response += `Here's my review of your approach: `;
+      if (project) {
+        response += `\n\n**Current Status:**\n`;
+        response += `- Title: ${project.title}\n`;
+        response += `- Tech Stack: ${(project.techStack || []).join(', ') || 'Not specified'}\n`;
+        response += `- GitHub: ${project.githubUrl ? '✅ Linked' : '❌ Missing'}\n`;
+        response += `- Demo: ${project.demoUrl ? '✅ Linked' : '❌ Missing'}\n`;
+      }
       nextSteps = [
         'Consider the feedback I provide',
         'Refactor based on best practices',
@@ -237,6 +257,18 @@ async function generateAIResponse(
       ];
     } else if (lowerMessage.includes('improve') || lowerMessage.includes('risk')) {
       response += `Here are some improvements and potential risks to consider: `;
+      if (project) {
+        response += `\n\n**For ${project.title}:**\n`;
+        if (!project.description || project.description.length < 100) {
+          response += `- Expand your description to at least 200 words\n`;
+        }
+        if (!project.githubUrl) {
+          response += `- Add your GitHub repository link\n`;
+        }
+        if (!project.demoUrl) {
+          response += `- Deploy and link a live demo\n`;
+        }
+      }
       nextSteps = [
         'Prioritize the most critical improvements',
         'Address potential risks early',
@@ -244,6 +276,10 @@ async function generateAIResponse(
       ];
     } else if (lowerMessage.includes('description') || lowerMessage.includes('write')) {
       response += `Here's a compelling project description: `;
+      if (project && project.description) {
+        response += `\n\n**Current Description:**\n${project.description}\n\n`;
+        response += `**Suggested Improvement:**\n`;
+      }
       nextSteps = [
         'Review and customize the description',
         'Add specific technical details',
