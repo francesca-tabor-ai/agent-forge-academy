@@ -629,7 +629,6 @@ export async function GET(request: NextRequest) {
       matchingTime: `${matchingTime}ms`,
     });
 
-    const totalTime = Date.now() - startTime;
     const status = 200;
     
     // Log successful request
