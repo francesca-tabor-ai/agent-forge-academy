@@ -6,7 +6,15 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "vitest run",
+    "test:unit": "vitest run tests/unit",
+    "test:integration": "vitest run tests/integration",
+    "test:regression": "vitest run tests/regression",
+    "test:e2e": "playwright test",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:all": "npm run test:unit && npm run test:integration && npm run test:regression && npm run test:e2e"
   },
   "dependencies": {
     "next": "^14.0.0",
