@@ -1,12 +1,13 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { ContextBar } from './ContextBar';
 import { ChatPanel } from './ChatPanel';
 import { QuickActions } from './QuickActions';
 import { ContextSelectorModal } from './ContextSelectorModal';
 import { HumanEscalationModal } from './HumanEscalationModal';
+import { VoiceControls } from './VoiceControls';
 
 export interface Message {
   id: string;
@@ -54,7 +55,16 @@ export function AIAdvisor({
   const [showContextSelector, setShowContextSelector] = useState(false);
   const [showHumanEscalation, setShowHumanEscalation] = useState(false);
   const [conversationAttempts, setConversationAttempts] = useState(0);
+  const [voiceOutputEnabled, setVoiceOutputEnabled] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
+
+  // Load voice preference from localStorage
+  useEffect(() => {
+    const savedVoicePreference = localStorage.getItem('voiceEnabled');
+    if (savedVoicePreference === 'true') {
+      setVoiceOutputEnabled(true);
+    }
+  }, []);
 
   // Load context and conversation history from database on mount
   useEffect(() => {
@@ -156,6 +166,41 @@ export function AIAdvisor({
 
   const [conversationId, setConversationId] = useState<string | null>(null);
 
+  const speakResponse = useCallback((text: string) => {
+    if (!voiceOutputEnabled) return;
+    
+    // Remove markdown formatting for cleaner speech
+    const cleanText = text
+      .replace(/#{1,6}\s+/g, '') // Remove headers
+      .replace(/\*\*(.*?)\*\*/g, '$1') // Remove bold
+      .replace(/\*(.*?)\*/g, '$1') // Remove italic
+      .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1') // Remove links, keep text
+      .replace(/`([^`]+)`/g, '$1') // Remove code blocks
+      .replace(/\n+/g, '. ') // Replace newlines with pauses
+      .trim();
+
+    if (cleanText && window.speechSynthesis) {
+      // Cancel any ongoing speech
+      window.speechSynthesis.cancel();
+
+      const utterance = new SpeechSynthesisUtterance(cleanText);
+      utterance.rate = 1.0;
+      utterance.pitch = 1.0;
+      utterance.volume = 1.0;
+
+      // Try to use a natural-sounding voice
+      const voices = window.speechSynthesis.getVoices();
+      const preferredVoice = voices.find(
+        (voice) => voice.name.includes('Google') || voice.name.includes('Samantha') || voice.name.includes('Alex')
+      );
+      if (preferredVoice) {
+        utterance.voice = preferredVoice;
+      }
+
+      window.speechSynthesis.speak(utterance);
+    }
+  }, [voiceOutputEnabled]);
+
   const handleSendMessage = async (messageText: string, isQuickAction = false, intent?: string) => {
     if (!messageText.trim() || isLoading) return;
 
@@ -172,43 +217,150 @@ export function AIAdvisor({
     setIsLoading(true);
     setConversationAttempts((prev) => prev + 1);
 
+    // Check if streaming is enabled (can be controlled via localStorage or feature flag)
+    const enableStreaming = localStorage.getItem('aiAdvisorStreaming') !== 'false'; // Default to true
+
     try {
-      const response = await fetch('/api/ai-advisor/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          message: messageText,
+      if (enableStreaming) {
+        // Use streaming (SSE)
+        const response = await fetch('/api/ai-advisor/chat?stream=true', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'text/event-stream',
+          },
+          body: JSON.stringify({
+            message: messageText,
+            context: activeContext,
+            studentProfileId,
+            conversationHistory: messages.slice(-10), // Last 10 messages for context
+            intent,
+            conversationId,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to get response');
+        }
+
+        // Create placeholder assistant message
+        const assistantMessageId = (Date.now() + 1).toString();
+        const assistantMessage: Message = {
+          id: assistantMessageId,
+          role: 'assistant',
+          content: '',
+          timestamp: new Date(),
           context: activeContext,
-          studentProfileId,
-          conversationHistory: messages.slice(-10), // Last 10 messages for context
           intent,
-          conversationId,
-        }),
-      });
+        };
+        setMessages((prev) => [...prev, assistantMessage]);
 
-      if (!response.ok) {
-        throw new Error('Failed to get response');
+        // Read streaming response
+        const reader = response.body?.getReader();
+        if (!reader) {
+          throw new Error('Failed to get response reader');
+        }
+
+        const decoder = new TextDecoder();
+        let buffer = '';
+        let fullContent = '';
+
+        try {
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split('\n');
+            buffer = lines.pop() || '';
+
+            for (const line of lines) {
+              if (line.startsWith('data: ')) {
+                const data = line.slice(6);
+                try {
+                  const parsed = JSON.parse(data);
+                  
+                  if (parsed.error) {
+                    throw new Error(parsed.error);
+                  }
+
+                  if (parsed.content !== undefined) {
+                    fullContent += parsed.content;
+                    // Update message content in real-time
+                    setMessages((prev) =>
+                      prev.map((msg) =>
+                        msg.id === assistantMessageId
+                          ? { ...msg, content: fullContent }
+                          : msg
+                      )
+                    );
+                  }
+
+                  if (parsed.done) {
+                    if (parsed.conversationId) {
+                      setConversationId(parsed.conversationId);
+                    }
+                    setIsLoading(false);
+                    // Speak the response if voice output is enabled
+                    if (voiceOutputEnabled && fullContent) {
+                      speakResponse(fullContent);
+                    }
+                    return;
+                  }
+                } catch (e) {
+                  // Skip invalid JSON
+                }
+              }
+            }
+          }
+        } finally {
+          reader.releaseLock();
+          setIsLoading(false);
+        }
+      } else {
+        // Non-streaming fallback
+        const response = await fetch('/api/ai-advisor/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            message: messageText,
+            context: activeContext,
+            studentProfileId,
+            conversationHistory: messages.slice(-10), // Last 10 messages for context
+            intent,
+            conversationId,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to get response');
+        }
+
+        const data = await response.json();
+        
+        // Update conversation ID if provided
+        if (data.conversationId) {
+          setConversationId(data.conversationId);
+        }
+        
+        const assistantMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          role: 'assistant',
+          content: data.response,
+          timestamp: new Date(),
+          context: activeContext,
+          intent, // Store intent for writeback actions
+        };
+
+        setMessages((prev) => [...prev, assistantMessage]);
+        
+        // Speak the response if voice output is enabled
+        if (voiceOutputEnabled && data.response) {
+          speakResponse(data.response);
+        }
       }
-
-      const data = await response.json();
-      
-      // Update conversation ID if provided
-      if (data.conversationId) {
-        setConversationId(data.conversationId);
-      }
-      
-      const assistantMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: data.response,
-        timestamp: new Date(),
-        context: activeContext,
-        intent, // Store intent for writeback actions
-      };
-
-      setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
       console.error('Error sending message:', error);
       const errorMessage: Message = {
@@ -230,6 +382,16 @@ export function AIAdvisor({
 
   const handleQuickAction = (prompt: string, intent?: string) => {
     handleSendMessage(prompt, true, intent);
+  };
+
+  const handleVoiceOutputToggle = (enabled: boolean) => {
+    setVoiceOutputEnabled(enabled);
+    localStorage.setItem('voiceEnabled', enabled ? 'true' : 'false');
+    
+    // If disabling, cancel any ongoing speech
+    if (!enabled && window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+    }
   };
 
   const handleEscalateToHuman = () => {
@@ -352,6 +514,17 @@ export function AIAdvisor({
 
         {/* Composer */}
         <div className="border-t border-gray-200 p-4">
+          {/* Voice Controls */}
+          <VoiceControls
+            onTranscript={(text) => {
+              setInputMessage(text);
+              handleSendMessage(text);
+            }}
+            disabled={isLoading}
+            voiceOutputEnabled={voiceOutputEnabled}
+            onVoiceOutputToggle={handleVoiceOutputToggle}
+          />
+          
           <form onSubmit={handleSubmit} className="flex gap-2">
             <input
               type="text"
