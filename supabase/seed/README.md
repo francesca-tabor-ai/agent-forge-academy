@@ -134,7 +134,19 @@ psql "$SUPABASE_DB_URL" -f supabase/seed/99_verify.sql
   - All courses are published by default
 
 ### Events (`03_seed_events.sql`)
-- **events**: Sample demo days, workshops, and networking events
+- **events**: Comprehensive collection of demo days, workshops, networking events, and other events
+  - 15 events total with hardcoded deterministic UUIDs
+  - Mix of past and future events:
+    - **Future Demo Days**: Q1 2025, Q2 2025 (2 events)
+    - **Past Demo Days**: Q4 2024, Q3 2024 (2 events, with recording URLs)
+    - **Future Workshops**: AI Agent Architecture, LangChain & Vector DBs, Supabase & Next.js, Resume & Portfolio Review (4 events)
+    - **Past Workshops**: Python for AI Development (1 event, with recording URL)
+    - **Future Networking**: Recruiter Networking, Alumni Networking, Tech Industry Panel (3 events)
+    - **Past Networking**: Holiday Networking Social (1 event)
+    - **Other Events**: Platform Launch Celebration, Community Q&A Session (2 events)
+  - All events include realistic titles, descriptions, locations, and timestamps
+  - Past events may include recording URLs
+  - Uses hardcoded UUIDs for easy reference in dependent seed scripts
   - Note: `event_presentations` and `event_attendance` require actual profile IDs
   - These are populated when students enroll and RSVP
 
@@ -342,7 +354,7 @@ Each table type uses a distinct UUID prefix for easy identification:
 - **Courses**: `a1b2c3d4-e5f6-4789-a012-3456789abc01` through `a1b2c3d4-e5f6-4789-a012-3456789abc14`
   - Example: Multi-Agent Systems = `a1b2c3d4-e5f6-4789-a012-3456789abc06`
   
-- **Events**: `b1b2c3d4-e5f6-4789-a012-3456789abc01` through `b1b2c3d4-e5f6-4789-a012-3456789abc04`
+- **Events**: `b1b2c3d4-e5f6-4789-a012-3456789abc01` through `b1b2c3d4-e5f6-4789-a012-3456789abc15` (15 events)
   - Example: Q1 2025 Demo Day = `b1b2c3d4-e5f6-4789-a012-3456789abc01`
   
 - **Jobs**: `c1b2c3d4-e5f6-4789-a012-3456789abc01` through `c1b2c3d4-e5f6-4789-a012-3456789abc06`
@@ -416,6 +428,6 @@ If you need to use the Supabase API (not recommended for seeding), you could use
 After running seeds, check the output of `99_verify.sql` to ensure:
 - Subscription plans are seeded
 - Courses are seeded (20 expected)
-- Events are seeded (4 expected)
+- Events are seeded (15 expected)
 - Jobs are seeded (6 expected)
 - Offers are seeded (5 expected)
