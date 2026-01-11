@@ -180,7 +180,7 @@ export function CourseCard({ course, metadata, enrollment, subscriptionTier }: C
         isOpen={showUpgradeModal}
         onClose={() => setShowUpgradeModal(false)}
         courseTitle={displayTitle}
-        currentTier={subscriptionTier || null}
+        currentTier={subscriptionTier === 'essential' ? 'essential' : null}
       />
     </>
   );
