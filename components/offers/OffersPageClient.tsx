@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { courseMetadata } from '@/lib/course-metadata';
+import { AddOfferToProjectModal } from './AddOfferToProjectModal';
 
 interface Offer {
   id: string;
@@ -40,6 +41,7 @@ interface OffersPageClientProps {
   projects: Project[];
   savedOfferIds: string[];
   claimedOfferIds: Record<string, 'claimed' | 'not_claimed' | 'requires_verification'>;
+  linkedOffers: Record<string, { projectId: string; projectTitle: string }[]>;
   studentProfileId: string;
 }
 
@@ -82,6 +84,7 @@ export function OffersPageClient({
   projects,
   savedOfferIds,
   claimedOfferIds,
+  linkedOffers: initialLinkedOffers,
   studentProfileId,
 }: OffersPageClientProps) {
   const [viewFilter, setViewFilter] = useState<ViewFilter>('all');
@@ -93,6 +96,10 @@ export function OffersPageClient({
   const [expandedOffers, setExpandedOffers] = useState<Set<string>>(new Set());
   const [savedOffers, setSavedOffers] = useState<Set<string>>(new Set(savedOfferIds));
   const [reminderDays, setReminderDays] = useState<Record<string, number>>({});
+  const [linkedOffers, setLinkedOffers] = useState<Record<string, { projectId: string; projectTitle: string }[]>>(initialLinkedOffers);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedOffer, setSelectedOffer] = useState<{ id: string; title: string } | null>(null);
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
   // Get days until expiration
   const getDaysUntilExpiration = (dateString: string | null): number | null => {
@@ -380,10 +387,77 @@ export function OffersPageClient({
     setExpandedOffers(newExpanded);
   };
 
+  // Handle "Add to project" button click
+  const handleAddToProject = (offer: Offer) => {
+    setSelectedOffer({ id: offer.id, title: offer.title });
+    setModalOpen(true);
+  };
+
+  // Handle offer added to project
+  const handleOfferAdded = (projectId: string, projectTitle: string) => {
+    if (!selectedOffer) return;
+
+    // Update linked offers state
+    const newLinkedOffers = { ...linkedOffers };
+    if (!newLinkedOffers[selectedOffer.id]) {
+      newLinkedOffers[selectedOffer.id] = [];
+    }
+    // Check if already linked to avoid duplicates
+    const alreadyLinked = newLinkedOffers[selectedOffer.id].some(
+      link => link.projectId === projectId
+    );
+    if (!alreadyLinked) {
+      newLinkedOffers[selectedOffer.id].push({ projectId, projectTitle });
+    }
+    setLinkedOffers(newLinkedOffers);
+
+    // Show toast
+    setToast({ message: `Added to ${projectTitle}`, type: 'success' });
+    setTimeout(() => setToast(null), 3000);
+  };
+
+  // Show toast notification
+  const showToast = (message: string, type: 'success' | 'error' = 'success') => {
+    setToast({ message, type });
+    setTimeout(() => setToast(null), 3000);
+  };
+
   const categories = Array.from(new Set(offers.map(o => o.category)));
 
   return (
     <div>
+      {/* Toast Notification */}
+      {toast && (
+        <div
+          className={`fixed top-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg flex items-center gap-2 ${
+            toast.type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+          }`}
+        >
+          <span>{toast.message}</span>
+          <button
+            onClick={() => setToast(null)}
+            className="ml-2 text-white hover:text-gray-200"
+          >
+            ×
+          </button>
+        </div>
+      )}
+
+      {/* Add Offer to Project Modal */}
+      {selectedOffer && (
+        <AddOfferToProjectModal
+          open={modalOpen}
+          onOpenChange={(open) => {
+            setModalOpen(open);
+            if (!open) {
+              setSelectedOffer(null);
+            }
+          }}
+          offer={selectedOffer}
+          onAdded={handleOfferAdded}
+          linkedProjectIds={linkedOffers[selectedOffer.id]?.map(link => link.projectId) || []}
+        />
+      )}
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-2xl font-semibold text-gray-900">Offers</h1>
@@ -724,6 +798,20 @@ export function OffersPageClient({
                   </div>
                 )}
 
+                {/* Linked Projects */}
+                {linkedOffers[offer.id] && linkedOffers[offer.id].length > 0 && (
+                  <div className="mb-3 p-2 bg-blue-50 border border-blue-200 rounded text-xs">
+                    <div className="font-medium text-blue-900 mb-1">Added to:</div>
+                    <div className="space-y-1">
+                      {linkedOffers[offer.id].map((link, idx) => (
+                        <div key={idx} className="text-blue-800">
+                          • {link.projectTitle}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 {/* Actions */}
                 <div className="pt-3 border-t border-gray-200 space-y-2">
                   <Link
@@ -740,16 +828,16 @@ export function OffersPageClient({
                       Setup Guide
                     </Link>
                     <button
-                      className="flex-1 px-3 py-1.5 bg-gray-100 text-gray-700 text-xs font-medium rounded hover:bg-gray-200 transition-colors"
-                      onClick={async () => {
-                        // Add to project functionality
-                        if (projects.length > 0) {
-                          // In a real implementation, this would open a modal to select a project
-                          alert('Add to project functionality - would open project selector');
-                        }
-                      }}
+                      className="flex-1 px-3 py-1.5 bg-gray-100 text-gray-700 text-xs font-medium rounded hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      onClick={() => handleAddToProject(offer)}
+                      disabled={linkedOffers[offer.id]?.length > 0 && projects.length === linkedOffers[offer.id].length}
+                      title={
+                        linkedOffers[offer.id]?.length > 0 && projects.length === linkedOffers[offer.id].length
+                          ? 'Already added to all projects'
+                          : 'Add to project'
+                      }
                     >
-                      Add to project
+                      {linkedOffers[offer.id]?.length > 0 ? 'Add to another project' : 'Add to project'}
                     </button>
                   </div>
                 </div>

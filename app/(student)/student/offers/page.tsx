@@ -131,6 +131,33 @@ export default async function OffersPage() {
     claimedOfferIds[claim.offer_id] = claim.status as 'claimed' | 'not_claimed' | 'requires_verification';
   });
 
+  // Get linked offers (offers linked to projects)
+  let linkedOffers: Record<string, { projectId: string; projectTitle: string }[]> = {};
+  
+  if (portfolioProjects.length > 0) {
+    const { data: projectOffers } = await supabase
+      .from('project_offers')
+      .select(`
+        offer_id,
+        project_id,
+        portfolio_projects!inner(id, title)
+      `)
+      .in('project_id', portfolioProjects.map(p => p.id));
+
+    // Create a map of offer_id to project info
+    (projectOffers || []).forEach(po => {
+      const offerId = po.offer_id;
+      const project = (po.portfolio_projects as any);
+      if (!linkedOffers[offerId]) {
+        linkedOffers[offerId] = [];
+      }
+      linkedOffers[offerId].push({
+        projectId: project.id,
+        projectTitle: project.title,
+      });
+    });
+  }
+
   return (
     <OffersPageClient
       offers={allOffers}
@@ -138,6 +165,7 @@ export default async function OffersPage() {
       projects={portfolioProjects}
       savedOfferIds={savedOfferIds}
       claimedOfferIds={claimedOfferIds}
+      linkedOffers={linkedOffers}
       studentProfileId={studentProfileId}
     />
   );
