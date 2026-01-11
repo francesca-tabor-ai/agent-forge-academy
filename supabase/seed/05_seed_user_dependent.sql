@@ -1,7 +1,31 @@
 -- Seed user-dependent data
 -- NOTE: These tables require existing profiles, student_profiles, etc. from auth.users
 -- This script provides example queries that can be run AFTER users have signed up
--- 
+-- Uses deterministic UUIDs to reference parent records (courses, events, etc.)
+
+BEGIN;
+
+-- Helper function to generate deterministic UUID from string
+-- Same function as used in other seed scripts
+CREATE OR REPLACE FUNCTION deterministic_uuid(input_text TEXT)
+RETURNS UUID AS $$
+BEGIN
+  RETURN uuid_generate_v5('6ba7b813-9dad-11d1-80b4-00c04fd430c8'::uuid, input_text);
+EXCEPTION
+  WHEN OTHERS THEN
+    RETURN ('00000000-0000-0000-0000-' || substr(md5(input_text), 1, 12))::uuid;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Ensure uuid extension is available
+DO $$ 
+BEGIN
+  CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+EXCEPTION
+  WHEN OTHERS THEN
+    NULL;
+END $$;
+
 -- Dependencies:
 -- - profiles (depends on auth.users - cannot be seeded)
 -- - student_profiles (depends on profiles)
@@ -19,18 +43,28 @@
 BEGIN;
 
 -- Example: Seed course enrollments (requires courses + student_profiles)
+-- Uses deterministic UUIDs to reference courses
 -- Uncomment and modify when you have student profiles:
 /*
-INSERT INTO course_enrollments (course_id, student_profile_id, progress_percentage)
-SELECT 
-  c.id,
-  sp.id,
-  FLOOR(RANDOM() * 100)::INTEGER
-FROM courses c
-CROSS JOIN student_profiles sp
-WHERE c.is_published = true
-LIMIT 50
-ON CONFLICT (course_id, student_profile_id) DO NOTHING;
+DO $$
+DECLARE
+  course_id_var UUID;
+BEGIN
+  -- Reference course by deterministic UUID
+  SELECT id INTO course_id_var 
+  FROM courses 
+  WHERE id = deterministic_uuid('course:multi-agent-systems');
+  
+  -- Insert enrollments using the captured course ID
+  INSERT INTO course_enrollments (course_id, student_profile_id, progress_percentage)
+  SELECT 
+    course_id_var,
+    sp.id,
+    FLOOR(RANDOM() * 100)::INTEGER
+  FROM student_profiles sp
+  LIMIT 10
+  ON CONFLICT (course_id, student_profile_id) DO NOTHING;
+END $$;
 */
 
 -- Example: Seed portfolio projects (requires student_profiles)
@@ -71,23 +105,32 @@ ON CONFLICT DO NOTHING;
 */
 
 -- Example: Seed event presentations (requires events + student_profiles + portfolio_projects)
+-- Uses deterministic UUIDs to reference events
 -- Uncomment and modify when you have the required data:
 /*
-INSERT INTO event_presentations (event_id, student_profile_id, portfolio_project_id, presentation_title, presentation_order)
-SELECT 
-  e.id,
-  sp.id,
-  pp.id,
-  pp.title,
-  ROW_NUMBER() OVER (PARTITION BY e.id ORDER BY pp.created_at)
-FROM events e
-CROSS JOIN student_profiles sp
-JOIN portfolio_projects pp ON pp.student_profile_id = sp.id
-WHERE e.event_type = 'demo_day'
-  AND e.start_time > NOW()
-  AND pp.visibility IN ('public', 'recruiters_only')
-LIMIT 10
-ON CONFLICT DO NOTHING;
+DO $$
+DECLARE
+  event_id_var UUID;
+BEGIN
+  -- Reference event by deterministic UUID
+  SELECT id INTO event_id_var 
+  FROM events 
+  WHERE id = deterministic_uuid('event:Q1 2025 Demo Day');
+  
+  -- Insert presentations using the captured event ID
+  INSERT INTO event_presentations (event_id, student_profile_id, portfolio_project_id, presentation_title, presentation_order)
+  SELECT 
+    event_id_var,
+    sp.id,
+    pp.id,
+    pp.title,
+    ROW_NUMBER() OVER (ORDER BY pp.created_at)
+  FROM student_profiles sp
+  JOIN portfolio_projects pp ON pp.student_profile_id = sp.id
+  WHERE pp.visibility IN ('public', 'recruiters_only')
+  LIMIT 10
+  ON CONFLICT DO NOTHING;
+END $$;
 */
 
 -- Example: Seed event attendance (requires events + profiles)
@@ -127,7 +170,8 @@ FROM recruiter_profiles rp
 CROSS JOIN student_profiles sp
 WHERE sp.visibility IN ('public', 'recruiters_only')
 LIMIT 10
-ON CONFLICT DO NOTHING;
+  ON CONFLICT DO NOTHING;
+END $$;
 */
 
 COMMIT;

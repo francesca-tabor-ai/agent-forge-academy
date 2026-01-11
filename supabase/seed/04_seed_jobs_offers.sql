@@ -1,16 +1,38 @@
 -- Seed jobs and offers: sample job listings and tool discounts
 -- No dependencies - can be seeded independently
+-- Uses deterministic UUIDs based on title+company for easy reference
 
 BEGIN;
 
--- Insert sample jobs
+-- Helper function to generate deterministic UUID from string
+CREATE OR REPLACE FUNCTION deterministic_uuid(input_text TEXT)
+RETURNS UUID AS $$
+BEGIN
+  RETURN uuid_generate_v5('6ba7b812-9dad-11d1-80b4-00c04fd430c8'::uuid, input_text);
+EXCEPTION
+  WHEN OTHERS THEN
+    RETURN ('00000000-0000-0000-0000-' || substr(md5(input_text), 1, 12))::uuid;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Ensure uuid extension is available
+DO $$ 
+BEGIN
+  CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+EXCEPTION
+  WHEN OTHERS THEN
+    NULL;
+END $$;
+
+-- Insert sample jobs with deterministic UUIDs
 INSERT INTO jobs (
-  title, company, description, job_type, experience_level, location, is_remote,
+  id, title, company, description, job_type, experience_level, location, is_remote,
   salary_range, status, matching_score, skills, skills_missing, recommended_for_courses, 
   external_url, is_active, is_featured
 )
 VALUES
   (
+    deterministic_uuid('job:AI Engineer - Multi-Agent Systems:TechCorp AI'),
     'AI Engineer - Multi-Agent Systems',
     'TechCorp AI',
     'We are looking for an AI Engineer to build and deploy production-ready multi-agent systems. You will work with LangGraph, CrewAI, and Kubernetes to scale agent infrastructure.',
@@ -29,6 +51,7 @@ VALUES
     true
   ),
   (
+    deterministic_uuid('job:Full-Stack Developer - AI-Native Applications:StartupXYZ'),
     'Full-Stack Developer - AI-Native Applications',
     'StartupXYZ',
     'Join our team building AI-native applications using Cursor, Supabase, and modern web technologies. You will work on fast-moving projects with iterative development.',
@@ -47,6 +70,7 @@ VALUES
     false
   ),
   (
+    deterministic_uuid('job:Senior AI Visibility Specialist:Digital Marketing Agency'),
     'Senior AI Visibility Specialist',
     'Digital Marketing Agency',
     'Lead AI visibility optimization for enterprise clients. You will implement llms.txt, structured data, and content engineering strategies to improve AI Overview visibility.',
@@ -65,6 +89,7 @@ VALUES
     true
   ),
   (
+    deterministic_uuid('job:E-commerce AI Engineer:EcomTech Solutions'),
     'E-commerce AI Engineer',
     'EcomTech Solutions',
     'Build AI-driven e-commerce features including recommender systems, conversational commerce, and 3D product experiences.',
@@ -83,6 +108,7 @@ VALUES
     false
   ),
   (
+    deterministic_uuid('job:AI Governance Consultant:ComplianceTech'),
     'AI Governance Consultant',
     'ComplianceTech',
     'Help clients navigate EU AI Act compliance and implement governance frameworks for AI systems.',
@@ -101,6 +127,7 @@ VALUES
     false
   ),
   (
+    deterministic_uuid('job:Lead AI Architect:Enterprise AI Corp'),
     'Stretch Role: Lead AI Architect',
     'Enterprise AI Corp',
     'Lead architecture for enterprise AI systems. Requires deep experience with multi-agent systems, RAG, and production deployment.',
@@ -118,16 +145,34 @@ VALUES
     true,
     false
   )
-ON CONFLICT DO NOTHING;
+ON CONFLICT (id) DO UPDATE SET
+  title = EXCLUDED.title,
+  company = EXCLUDED.company,
+  description = EXCLUDED.description,
+  job_type = EXCLUDED.job_type,
+  experience_level = EXCLUDED.experience_level,
+  location = EXCLUDED.location,
+  is_remote = EXCLUDED.is_remote,
+  salary_range = EXCLUDED.salary_range,
+  status = EXCLUDED.status,
+  matching_score = EXCLUDED.matching_score,
+  skills = EXCLUDED.skills,
+  skills_missing = EXCLUDED.skills_missing,
+  recommended_for_courses = EXCLUDED.recommended_for_courses,
+  external_url = EXCLUDED.external_url,
+  is_active = EXCLUDED.is_active,
+  is_featured = EXCLUDED.is_featured,
+  updated_at = NOW();
 
--- Insert sample offers (tool discounts)
+-- Insert sample offers with deterministic UUIDs
 INSERT INTO offers (
-  title, provider, description, category, discount_text, discount_type, discount_value,
+  id, title, provider, description, category, discount_text, discount_type, discount_value,
   discount_code, external_url, eligibility, recommended_for_courses, original_price,
   discounted_price, features, is_active, is_recommended, expiration_date, max_usage
 )
 VALUES
   (
+    deterministic_uuid('offer:Supabase Pro - 50% off first 3 months'),
     'Supabase Pro - 50% off first 3 months',
     'Supabase',
     'Get 50% off Supabase Pro plan for the first 3 months. Perfect for building full-stack apps with auth, database, and storage.',
@@ -148,6 +193,7 @@ VALUES
     100
   ),
   (
+    deterministic_uuid('offer:OpenAI API Credits - $100 free'),
     'OpenAI API Credits - $100 free',
     'OpenAI',
     'Get $100 in free OpenAI API credits to build AI features. Perfect for experimenting with GPT-4, Whisper, and DALL-E.',
@@ -168,6 +214,7 @@ VALUES
     50
   ),
   (
+    deterministic_uuid('offer:Vercel Pro - Extended Trial'),
     'Vercel Pro - Extended Trial',
     'Vercel',
     'Get 30 days free trial of Vercel Pro (normally 14 days). Deploy Next.js apps with zero configuration.',
@@ -187,6 +234,7 @@ VALUES
     NULL
   ),
   (
+    deterministic_uuid('offer:Pinecone Starter - 20% off'),
     'Pinecone Starter - 20% off',
     'Pinecone',
     'Get 20% off Pinecone Starter plan for vector database needs. Perfect for RAG applications.',
@@ -207,6 +255,7 @@ VALUES
     200
   ),
   (
+    deterministic_uuid('offer:LangSmith Monitoring - Free Tier Upgrade'),
     'LangSmith Monitoring - Free Tier Upgrade',
     'LangChain',
     'Upgrade to LangSmith Pro features for free. Monitor and debug LangGraph applications.',
@@ -225,6 +274,25 @@ VALUES
     NOW() + INTERVAL '90 days',
     50
   )
-ON CONFLICT DO NOTHING;
+ON CONFLICT (id) DO UPDATE SET
+  title = EXCLUDED.title,
+  provider = EXCLUDED.provider,
+  description = EXCLUDED.description,
+  category = EXCLUDED.category,
+  discount_text = EXCLUDED.discount_text,
+  discount_type = EXCLUDED.discount_type,
+  discount_value = EXCLUDED.discount_value,
+  discount_code = EXCLUDED.discount_code,
+  external_url = EXCLUDED.external_url,
+  eligibility = EXCLUDED.eligibility,
+  recommended_for_courses = EXCLUDED.recommended_for_courses,
+  original_price = EXCLUDED.original_price,
+  discounted_price = EXCLUDED.discounted_price,
+  features = EXCLUDED.features,
+  is_active = EXCLUDED.is_active,
+  is_recommended = EXCLUDED.is_recommended,
+  expiration_date = EXCLUDED.expiration_date,
+  max_usage = EXCLUDED.max_usage,
+  updated_at = NOW();
 
 COMMIT;

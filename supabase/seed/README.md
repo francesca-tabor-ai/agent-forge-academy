@@ -137,6 +137,36 @@ order by tc.table_name;
 "
 ```
 
+## Seed Strategy: Deterministic UUIDs
+
+All seed scripts use **deterministic UUIDs** based on unique identifiers (slug, title, etc.). This ensures:
+
+- ✅ **Consistent IDs**: Same records always get the same UUID across runs
+- ✅ **Easy References**: Other scripts can reference parent records by deterministic UUID
+- ✅ **Idempotent**: Safe to re-run - `ON CONFLICT` handles updates gracefully
+- ✅ **Works in Supabase**: Compatible with Supabase's PostgreSQL environment
+
+### How It Works
+
+1. **Helper Function**: Each script creates a `deterministic_uuid(input_text)` function
+   - Uses UUID v5 generation (if `uuid-ossp` extension available)
+   - Falls back to MD5-based UUID if extension unavailable
+   - Different namespace UUIDs for different table types
+
+2. **Deterministic IDs**:
+   - Courses: `deterministic_uuid('course:slug')` → e.g., `deterministic_uuid('course:multi-agent-systems')`
+   - Events: `deterministic_uuid('event:title')` → e.g., `deterministic_uuid('event:Q1 2025 Demo Day')`
+   - Jobs: `deterministic_uuid('job:title:company')` → e.g., `deterministic_uuid('job:AI Engineer:TechCorp AI')`
+   - Offers: `deterministic_uuid('offer:title')` → e.g., `deterministic_uuid('offer:Supabase Pro - 50% off')`
+
+3. **Referencing Parent Records**:
+   ```sql
+   -- In user-dependent seed scripts, reference courses/events by deterministic UUID:
+   SELECT id INTO course_id_var 
+   FROM courses 
+   WHERE id = deterministic_uuid('course:multi-agent-systems');
+   ```
+
 ## Important Notes
 
 1. **Stripe Integration**: Update `01_seed_core.sql` with your actual Stripe product and price IDs
@@ -144,6 +174,7 @@ order by tc.table_name;
 3. **Idempotent**: Scripts use `ON CONFLICT` clauses to be safely re-runnable
 4. **Reset Warning**: `00_reset.sql` will delete seed data - use with caution!
 5. **Schema Accuracy**: Seed scripts are based on migration files. Use schema discovery to verify column names and types match your database.
+6. **Deterministic UUIDs**: All parent records use deterministic UUIDs for easy reference in dependent seed scripts
 
 ## Verification
 
