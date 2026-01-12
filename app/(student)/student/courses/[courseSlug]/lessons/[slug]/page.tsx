@@ -1,9 +1,10 @@
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { redirect, notFound } from 'next/navigation';
 import Link from 'next/link';
-import { loadLessonBySlug } from '@/lib/lessons';
+import { loadLessonBySlug, getLessonNavigation } from '@/lib/lessons';
 import LessonContent from '@/components/lessons/LessonContent';
 import { LessonCompletionButton } from '@/components/lessons/LessonCompletionButton';
+import { NextLessonNavigation } from '@/components/lessons/NextLessonNavigation';
 
 interface CourseLessonPageProps {
   params: Promise<{ courseSlug: string; slug: string }>;
@@ -39,18 +40,30 @@ export default async function CourseLessonPage({ params }: CourseLessonPageProps
     notFound();
   }
 
+  // Get navigation info for next lesson
+  const navigation = getLessonNavigation(slug, courseSlug);
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Constrained width container */}
       <div className="max-w-[900px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header section - above the fold */}
         <div className="mb-8">
-          <Link
-            href={`/student/courses/${courseSlug}`}
-            className="text-sm text-brand-light hover:text-brand-light/90 mb-6 inline-block"
-          >
-            ← Back to {courseTitle}
-          </Link>
+          <div className="flex items-start justify-between mb-6">
+            <Link
+              href={`/student/courses/${courseSlug}`}
+              className="text-sm text-brand-light hover:text-brand-light/90 inline-block"
+            >
+              ← Back to {courseTitle}
+            </Link>
+            {/* Top navigation button */}
+            <NextLessonNavigation
+              nextLesson={navigation.nextLesson}
+              isLastLesson={navigation.isLastLesson}
+              courseSlug={courseSlug}
+              variant="top"
+            />
+          </div>
           
           {/* Module title (H1) */}
           <h1 className="text-3xl font-semibold text-gray-900 mb-4">
@@ -80,6 +93,13 @@ export default async function CourseLessonPage({ params }: CourseLessonPageProps
             <LessonContent content={lesson.content} />
           </div>
           <LessonCompletionButton lessonId={slug} />
+          {/* Bottom navigation button */}
+          <NextLessonNavigation
+            nextLesson={navigation.nextLesson}
+            isLastLesson={navigation.isLastLesson}
+            courseSlug={courseSlug}
+            variant="bottom"
+          />
         </div>
       </div>
     </div>

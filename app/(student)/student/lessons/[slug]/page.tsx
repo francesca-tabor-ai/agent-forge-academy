@@ -1,9 +1,10 @@
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { redirect, notFound } from 'next/navigation';
 import Link from 'next/link';
-import { loadLessonBySlug, getAllLessonSlugs } from '@/lib/lessons';
+import { loadLessonBySlug, getAllLessonSlugs, getLessonNavigation } from '@/lib/lessons';
 import LessonContent from '@/components/lessons/LessonContent';
 import { LessonCompletionButton } from '@/components/lessons/LessonCompletionButton';
+import { NextLessonNavigation } from '@/components/lessons/NextLessonNavigation';
 
 interface LessonPageProps {
   params: Promise<{ slug: string }>;
@@ -40,27 +41,40 @@ export default async function LessonPage({ params, searchParams }: LessonPagePro
     courseId = course?.id || null;
   }
 
+  // Get navigation info for next lesson
+  const effectiveCourseSlug = courseSlug || lesson.courseSlug;
+  const navigation = getLessonNavigation(slug, effectiveCourseSlug);
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Constrained width container */}
       <div className="max-w-[900px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header section - above the fold */}
         <div className="mb-8">
-          {lesson.courseSlug ? (
-            <Link
-              href={`/student/courses/${lesson.courseSlug}`}
-              className="text-sm text-brand-light hover:text-brand-light/90 mb-6 inline-block"
-            >
-              ← Back to Course
-            </Link>
-          ) : (
-            <Link
-              href="/student/lessons"
-              className="text-sm text-brand-light hover:text-brand-light/90 mb-6 inline-block"
-            >
-              ← Back to Lessons
-            </Link>
-          )}
+          <div className="flex items-start justify-between mb-6">
+            {lesson.courseSlug ? (
+              <Link
+                href={`/student/courses/${lesson.courseSlug}`}
+                className="text-sm text-brand-light hover:text-brand-light/90 inline-block"
+              >
+                ← Back to Course
+              </Link>
+            ) : (
+              <Link
+                href="/student/lessons"
+                className="text-sm text-brand-light hover:text-brand-light/90 inline-block"
+              >
+                ← Back to Lessons
+              </Link>
+            )}
+            {/* Top navigation button */}
+            <NextLessonNavigation
+              nextLesson={navigation.nextLesson}
+              isLastLesson={navigation.isLastLesson}
+              courseSlug={effectiveCourseSlug}
+              variant="top"
+            />
+          </div>
           
           {/* Module title (H1) */}
           <h1 className="text-3xl font-semibold text-gray-900 mb-4">
@@ -94,6 +108,13 @@ export default async function LessonPage({ params, searchParams }: LessonPagePro
             <LessonContent content={lesson.content} />
           </div>
           <LessonCompletionButton lessonId={slug} />
+          {/* Bottom navigation button */}
+          <NextLessonNavigation
+            nextLesson={navigation.nextLesson}
+            isLastLesson={navigation.isLastLesson}
+            courseSlug={effectiveCourseSlug}
+            variant="bottom"
+          />
         </div>
       </div>
     </div>
