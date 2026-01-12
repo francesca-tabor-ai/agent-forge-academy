@@ -25,6 +25,8 @@ export interface WebRTCRealtimeProps {
   onFinalAssistantTranscript?: (text: string) => void; // Finalize assistant message into chat history
   // Context for tool calling
   context?: ActiveContext; // Current active context (course/project/job)
+  // Fallback callback - called when WebRTC fails and should fallback to standard voice
+  onFallback?: () => void; // Callback to trigger fallback to standard voice
 }
 
 interface RealtimeSession {
@@ -57,6 +59,7 @@ export function WebRTCRealtime({
   onFinalUserTranscript,
   onFinalAssistantTranscript,
   context,
+  onFallback,
 }: WebRTCRealtimeProps) {
   const [isConnected, setIsConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
@@ -66,6 +69,8 @@ export function WebRTCRealtime({
   const [voiceMode, setVoiceMode] = useState<VoiceMode>(defaultMode);
   const [isHoldingMic, setIsHoldingMic] = useState(false);
   const [voiceOutputEnabled, setVoiceOutputEnabled] = useState(true); // Voice output toggle (default: on)
+  const [hasFailed, setHasFailed] = useState(false); // Track if WebRTC has failed
+  const [showFallbackMessage, setShowFallbackMessage] = useState(false); // Show fallback message
   
   // Track partial transcripts for real-time display
   const [partialUserTranscript, setPartialUserTranscript] = useState('');
@@ -76,13 +81,19 @@ export function WebRTCRealtime({
   const localStreamRef = useRef<MediaStream | null>(null);
   const audioElementRef = useRef<HTMLAudioElement | null>(null);
   const sessionRef = useRef<RealtimeSession | null>(null);
+  
+  // Timeout detection: track last event time
+  const lastEventTimeRef = useRef<number>(Date.now());
+  const timeoutCheckIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const TIMEOUT_DURATION = 30000; // 30 seconds without events = timeout
 
-  // Cleanup on unmount
+  // Cleanup on unmount - stop tracks, close peer connection
   useEffect(() => {
     return () => {
+      console.log('WebRTCRealtime unmounting - cleaning up');
       disconnect();
     };
-  }, []);
+  }, [disconnect]);
 
   /**
    * Get ephemeral session credentials from backend
@@ -225,6 +236,9 @@ export function WebRTCRealtime({
    * Use DataChannel messages to show partial and final transcripts
    */
   const handleRealtimeMessage = useCallback((message: any) => {
+    // Update last event time for timeout detection
+    lastEventTimeRef.current = Date.now();
+    
     // Handle different message types from OpenAI Realtime API
     // Based on OpenAI's Realtime API event structure
     
@@ -378,6 +392,8 @@ export function WebRTCRealtime({
 
       dataChannel.onopen = () => {
         console.log('Data channel opened');
+        // Update last event time
+        lastEventTimeRef.current = Date.now();
         // Send system/config event on session start with context and tools
         sendSystemConfig();
       };
@@ -405,8 +421,21 @@ export function WebRTCRealtime({
 
       dataChannel.onerror = (event) => {
         console.error('Data channel error:', event);
-        setError('Data channel error occurred');
-        if (onError) onError('Data channel error');
+        const errorMsg = 'Data channel error occurred';
+        setError(errorMsg);
+        if (onError) onError(errorMsg);
+        
+        // Trigger fallback on data channel error
+        triggerFallback();
+      };
+      
+      dataChannel.onclose = () => {
+        console.log('Data channel closed');
+        if (isConnected) {
+          // Unexpected close - trigger fallback
+          setError('Data channel closed unexpectedly');
+          triggerFallback();
+        }
       };
 
       // Step 4: Add microphone track to PeerConnection
@@ -444,8 +473,14 @@ export function WebRTCRealtime({
           }
         } else if (state === 'disconnected' || state === 'failed') {
           setIsConnected(false);
-          setError('Connection lost');
-          if (onError) onError('Connection lost');
+          const errorMsg = state === 'failed' ? 'Connection failed' : 'Connection lost';
+          setError(errorMsg);
+          if (onError) onError(errorMsg);
+          
+          // Trigger fallback on connection failure
+          if (state === 'failed') {
+            triggerFallback();
+          }
         }
       };
 
@@ -486,6 +521,9 @@ export function WebRTCRealtime({
 
       // Connection will be established via ICE
       // System config will be sent when data channel opens (handled in onopen above)
+      
+      // Start timeout detection after connection attempt
+      startTimeoutDetection();
     } catch (err) {
       console.error('Error connecting to Realtime API:', err);
       const errorMessage = err instanceof Error ? err.message : 'Failed to connect';
@@ -493,10 +531,51 @@ export function WebRTCRealtime({
       setIsConnecting(false);
       if (onError) onError(errorMessage);
       
-      // Cleanup on error
-      disconnect();
+      // Trigger fallback on connection failure
+      triggerFallback();
     }
-  }, [disabled, isConnecting, isConnected, getSessionCredentials, onError, sendSystemConfig, handleToolCall, handleRealtimeMessage, voiceMode, voiceOutputEnabled]);
+  }, [disabled, isConnecting, isConnected, getSessionCredentials, onError, sendSystemConfig, handleToolCall, handleRealtimeMessage, voiceMode, voiceOutputEnabled, triggerFallback]);
+
+  /**
+   * Start timeout detection - check if no events received for N seconds
+   */
+  const startTimeoutDetection = useCallback(() => {
+    // Clear existing timeout check
+    if (timeoutCheckIntervalRef.current) {
+      clearInterval(timeoutCheckIntervalRef.current);
+    }
+
+    // Check every 5 seconds if we've received events
+    timeoutCheckIntervalRef.current = setInterval(() => {
+      if (!isConnected || !peerConnectionRef.current) {
+        return; // Not connected, don't check
+      }
+
+      const timeSinceLastEvent = Date.now() - lastEventTimeRef.current;
+      
+      if (timeSinceLastEvent > TIMEOUT_DURATION) {
+        console.warn('WebRTC timeout: No events received for', timeSinceLastEvent, 'ms');
+        setError('Connection timeout - no response from server');
+        triggerFallback();
+      }
+    }, 5000); // Check every 5 seconds
+  }, [isConnected, triggerFallback]);
+
+  /**
+   * Reconnect to WebRTC
+   */
+  const reconnect = useCallback(() => {
+    console.log('Reconnecting WebRTC...');
+    setHasFailed(false);
+    setShowFallbackMessage(false);
+    setError(null);
+    disconnect();
+    
+    // Small delay before reconnecting
+    setTimeout(() => {
+      connect();
+    }, 500);
+  }, [connect, disconnect]);
 
   /**
    * Commit user turn (end of speech) - for push-to-talk mode
@@ -591,6 +670,12 @@ export function WebRTCRealtime({
    * Disconnect and cleanup
    */
   const disconnect = useCallback(() => {
+    // Stop timeout check
+    if (timeoutCheckIntervalRef.current) {
+      clearInterval(timeoutCheckIntervalRef.current);
+      timeoutCheckIntervalRef.current = null;
+    }
+
     // Stop local stream
     if (localStreamRef.current) {
       localStreamRef.current.getTracks().forEach((track) => {
@@ -601,26 +686,55 @@ export function WebRTCRealtime({
 
     // Close data channel
     if (dataChannelRef.current) {
-      dataChannelRef.current.close();
+      try {
+        dataChannelRef.current.close();
+      } catch (e) {
+        console.warn('Error closing data channel:', e);
+      }
       dataChannelRef.current = null;
     }
 
     // Close peer connection
     if (peerConnectionRef.current) {
-      peerConnectionRef.current.close();
+      try {
+        peerConnectionRef.current.close();
+      } catch (e) {
+        console.warn('Error closing peer connection:', e);
+      }
       peerConnectionRef.current = null;
     }
 
     // Cleanup audio element
     if (audioElementRef.current) {
-      audioElementRef.current.srcObject = null;
+      try {
+        audioElementRef.current.srcObject = null;
+        audioElementRef.current.pause();
+      } catch (e) {
+        console.warn('Error cleaning up audio element:', e);
+      }
       audioElementRef.current = null;
     }
 
     setIsConnected(false);
     setIsConnecting(false);
     setCurrentTranscript('');
+    lastEventTimeRef.current = Date.now(); // Reset timeout timer
   }, []);
+
+  /**
+   * Trigger fallback to standard voice
+   */
+  const triggerFallback = useCallback(() => {
+    console.log('WebRTC failed, triggering fallback to standard voice');
+    setHasFailed(true);
+    setShowFallbackMessage(true);
+    disconnect();
+    
+    // Call fallback callback if provided
+    if (onFallback) {
+      onFallback();
+    }
+  }, [onFallback, disconnect]);
 
   // Auto-connect on mount - establish connection on page load
   // Keep connection open until user navigates away or explicitly disconnects
@@ -655,6 +769,25 @@ export function WebRTCRealtime({
 
   return (
     <div className="space-y-3">
+      {/* Fallback Message */}
+      {showFallbackMessage && (
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+          <div className="flex items-start gap-2">
+            <div className="text-yellow-600 text-sm font-medium">
+              ⚠️ Realtime unavailable, switching to standard voice
+            </div>
+            <button
+              type="button"
+              onClick={() => setShowFallbackMessage(false)}
+              className="ml-auto text-yellow-600 hover:text-yellow-800"
+              aria-label="Dismiss"
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Connection Status */}
       <div className="flex items-center gap-2">
         <div
@@ -663,6 +796,8 @@ export function WebRTCRealtime({
               ? 'bg-green-500 animate-pulse'
               : isConnecting
               ? 'bg-yellow-500 animate-pulse'
+              : hasFailed
+              ? 'bg-red-500'
               : 'bg-gray-400'
           }`}
         />
@@ -671,9 +806,28 @@ export function WebRTCRealtime({
             ? 'Connected'
             : isConnecting
             ? 'Connecting...'
+            : hasFailed
+            ? 'Connection Failed'
             : 'Disconnected'}
         </span>
+        {/* Reconnect Button */}
+        {hasFailed && !isConnecting && (
+          <button
+            type="button"
+            onClick={reconnect}
+            className="ml-2 px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+          >
+            Reconnect
+          </button>
+        )}
       </div>
+      
+      {/* Error Display */}
+      {error && !showFallbackMessage && (
+        <div className="text-xs text-red-600 bg-red-50 border border-red-200 rounded p-2">
+          {error}
+        </div>
+      )}
 
       {/* Mode Selection */}
       <div className="flex items-center gap-2 mb-3">

@@ -744,6 +744,11 @@ export function AIAdvisor({
           >
             <div className={useWebRTCRealtime ? '' : 'hidden'}>
               <WebRTCRealtime
+                // Fallback callback - switch to standard voice when WebRTC fails
+                onFallback={() => {
+                  console.log('WebRTC fallback triggered, switching to standard voice');
+                  setUseWebRTCRealtime(false);
+                }}
                 // Context for tool calling
                 context={activeContext}
                 // Partial transcripts (optional) - show while speaking
