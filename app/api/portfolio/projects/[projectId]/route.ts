@@ -2,12 +2,12 @@ import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 
 interface RouteParams {
-  params: Promise<{ id: string }>;
+  params: Promise<{ projectId: string }>;
 }
 
 export async function PATCH(request: Request, { params }: RouteParams) {
   try {
-    const { id } = await params;
+    const { projectId } = await params;
     const supabase = await createUserSupabaseClient();
     const {
       data: { user },
@@ -31,7 +31,7 @@ export async function PATCH(request: Request, { params }: RouteParams) {
         demo_url,
         visibility,
       })
-      .eq('id', id)
+      .eq('id', projectId)
       .select()
       .single();
 
@@ -51,4 +51,3 @@ export async function PATCH(request: Request, { params }: RouteParams) {
     );
   }
 }
-
