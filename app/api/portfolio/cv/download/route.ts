@@ -43,7 +43,7 @@ export async function GET(request: Request) {
     // Get CV record
     const { data: cv } = await supabase
       .from('student_cvs')
-      .select('file_path, file_name, mime_type')
+      .select('file_path, file_name, mime_type, visibility')
       .eq('student_profile_id', studentProfileId)
       .order('uploaded_at', { ascending: false })
       .limit(1)
@@ -53,24 +53,42 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'CV not found' }, { status: 404 });
     }
 
-    // Download file from storage
-    const { data: fileData, error: downloadError } = await supabase.storage
-      .from('portfolio-files')
-      .download(cv.file_path);
+    // For private CVs, use signed URL; for public, use direct download
+    if (cv.visibility === 'private') {
+      // Generate signed URL for private CVs (expires in 1 hour)
+      const { data: signedUrl, error: urlError } = await supabase.storage
+        .from('portfolio-files')
+        .createSignedUrl(cv.file_path, 3600);
 
-    if (downloadError || !fileData) {
-      return NextResponse.json({ error: 'Failed to download file' }, { status: 500 });
+      if (urlError || !signedUrl) {
+        return NextResponse.json(
+          { error: 'Failed to generate download URL' },
+          { status: 500 }
+        );
+      }
+
+      // Redirect to signed URL
+      return NextResponse.redirect(signedUrl.signedUrl);
+    } else {
+      // For public CVs, download directly
+      const { data: fileData, error: downloadError } = await supabase.storage
+        .from('portfolio-files')
+        .download(cv.file_path);
+
+      if (downloadError || !fileData) {
+        return NextResponse.json({ error: 'Failed to download file' }, { status: 500 });
+      }
+
+      // Convert blob to array buffer
+      const arrayBuffer = await fileData.arrayBuffer();
+
+      return new NextResponse(arrayBuffer, {
+        headers: {
+          'Content-Type': cv.mime_type,
+          'Content-Disposition': `attachment; filename="${cv.file_name}"`,
+        },
+      });
     }
-
-    // Convert blob to array buffer
-    const arrayBuffer = await fileData.arrayBuffer();
-
-    return new NextResponse(arrayBuffer, {
-      headers: {
-        'Content-Type': cv.mime_type,
-        'Content-Disposition': `attachment; filename="${cv.file_name}"`,
-      },
-    });
   } catch (error) {
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Internal server error' },

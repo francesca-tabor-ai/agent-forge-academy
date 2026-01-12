@@ -1,5 +1,6 @@
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { extractTextFromCV } from '@/lib/cv/extractText';
 import { detectMimeTypeFromBuffer, isValidCVFileType } from '@/lib/utils/detectFileType';
 import { safeLogger, redactPII } from '@/lib/utils/redactPII';
@@ -131,6 +132,7 @@ export async function POST(request: Request) {
     }
 
     // UPSERT database record (one CV per student)
+    // CRITICAL: DB write must succeed for upload to be considered successful
     const uploadedAt = new Date().toISOString();
     
     const { data: cvRecord, error: dbError } = await supabase
@@ -150,14 +152,42 @@ export async function POST(request: Request) {
       .select()
       .single();
 
-    if (dbError) {
-      // Clean up uploaded file on database error
-      await supabase.storage
-        .from('portfolio-files')
-        .remove([filePath]);
+    if (dbError || !cvRecord) {
+      // Log DB write failure with context
+      safeLogger.error('CV upload: Database write failed', {
+        error: dbError?.message,
+        userId: user.id,
+        studentProfileId,
+        filePath,
+        fileName: file.name,
+      });
 
-      return NextResponse.json({ error: dbError.message }, { status: 500 });
+      // Clean up uploaded file on database error
+      try {
+        await supabase.storage
+          .from('portfolio-files')
+          .remove([filePath]);
+      } catch (cleanupError) {
+        safeLogger.error('CV upload: Failed to cleanup file after DB error', {
+          filePath,
+          cleanupError,
+        });
+      }
+
+      return NextResponse.json(
+        { error: 'Failed to save CV record. Please try again.' },
+        { status: 500 }
+      );
     }
+
+    // Log successful DB write
+    safeLogger.info('CV upload: Database record created', {
+      cvId: cvRecord.id,
+      userId: user.id,
+      studentProfileId,
+      fileName: file.name,
+      fileSize: file.size,
+    });
 
     // Clean up old file from storage if it exists and is different
     if (existingCV && existingCV.file_path !== filePath) {
@@ -183,13 +213,18 @@ export async function POST(request: Request) {
       }
     }
 
+    // Revalidate portfolio page cache to ensure fresh data on next load
+    revalidatePath('/student/portfolio');
+    revalidatePath('/student/portfolio', 'page');
+
     // Return response in the exact format requested
+    // Only return success if DB write succeeded (cvRecord exists)
     return NextResponse.json({
       ok: true,
       resume: {
         url: publicUrl,
         fileName: file.name,
-        uploadedAt: uploadedAt,
+        uploadedAt: cvRecord.uploaded_at || uploadedAt,
         fileSize: file.size,
       },
     });
