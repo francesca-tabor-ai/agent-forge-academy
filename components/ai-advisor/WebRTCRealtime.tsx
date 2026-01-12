@@ -427,6 +427,13 @@ export function WebRTCRealtime({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Empty deps - only run on mount/unmount
 
+  // Sync audio element muted state with voice output toggle
+  useEffect(() => {
+    if (audioElementRef.current) {
+      audioElementRef.current.muted = !voiceOutputEnabled;
+    }
+  }, [voiceOutputEnabled]);
+
   return (
     <div className="space-y-3">
       {/* Connection Status */}
