@@ -44,7 +44,7 @@ export function QuestionCard({ question, showAnswerForm = false }: QuestionCardP
   const otherAnswers = question.answers.filter((a) => !a.is_accepted);
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
+    <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6 card-interactive">
       <div className="mb-4">
         <div className="flex items-start justify-between mb-2">
           <h3 className="text-lg font-medium text-gray-900">{question.title}</h3>

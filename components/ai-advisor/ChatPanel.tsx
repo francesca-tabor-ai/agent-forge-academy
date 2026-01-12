@@ -178,13 +178,13 @@ export function ChatPanel({ messages, isLoading, chatEndRef, activeContext, onAp
                 <button
                   onClick={() => handleApplyDescription(msg.id, extractProjectDescription(msg.content)!)}
                   disabled={applying === msg.id}
-                  className="px-3 py-1.5 text-xs bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-3 py-1.5 text-xs bg-blue-600 text-white rounded-lg hover:bg-blue-700 hover:scale-105 active:scale-95 hover:shadow-lg transition-all duration-200 ease-out disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                 >
                   {applying === msg.id ? 'Applying...' : 'Apply to Project Description'}
                 </button>
                 <button
                   onClick={() => handleCopy(extractProjectDescription(msg.content)!)}
-                  className="px-3 py-1.5 text-xs bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="px-3 py-1.5 text-xs bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 hover:scale-105 active:scale-95 hover:shadow-sm transition-all duration-200 ease-out"
                 >
                   Copy
                 </button>
@@ -198,7 +198,7 @@ export function ChatPanel({ messages, isLoading, chatEndRef, activeContext, onAp
                   <Link
                     key={idx}
                     href={action.deepLink}
-                    className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium inline-flex items-center gap-2"
+                    className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 hover:scale-105 active:scale-95 hover:shadow-lg transition-all duration-200 ease-out font-medium inline-flex items-center gap-2"
                   >
                     {getActionIcon(action.type)}
                     {action.label}

@@ -18,7 +18,7 @@ export default async function Home() {
   return (
     <>
       {/* Hero Section - Full-page image */}
-      <section className="relative min-h-screen w-full flex items-center">
+      <section className="relative min-h-screen w-full flex items-center animate-fade-in">
         {/* Background Image */}
         <Image
           src="/hero-bg.png"
@@ -47,7 +47,7 @@ export default async function Home() {
                 Practical, continuously updated AI education to future-proof your career.
                 Learn the skills that matter as AI reshapes work, commerce, and software — from fundamentals to advanced agentic systems.
               </p>
-              <div className="pt-2">
+              <div className="pt-2 animate-slide-up">
                 <Link 
                   href="/auth/signup"
                   className="btn-primary inline-block focus:outline-none focus:ring-2 focus:ring-brand-yellow focus:ring-offset-2 focus:ring-offset-brand-dark focus-visible:outline-none"
@@ -136,19 +136,19 @@ export default async function Home() {
           </p>
 
           <div className="grid md:grid-cols-3 gap-8 mb-16">
-            <div className="bg-white p-6 rounded-lg shadow-sm">
+            <div className="bg-white p-6 rounded-lg shadow-sm card-interactive">
               <h3 className="text-xl font-bold text-brand-dark mb-3 font-playfair">Foundations & Literacy</h3>
               <p className="text-gray-700">
                 Understand how AI works, how it's governed, and how to use it responsibly and effectively.
               </p>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm">
+            <div className="bg-white p-6 rounded-lg shadow-sm card-interactive">
               <h3 className="text-xl font-bold text-brand-dark mb-3 font-playfair">Applied Systems & Workflows</h3>
               <p className="text-gray-700">
                 Learn how AI is actually used in production — across software, content, commerce, and marketing.
               </p>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm">
+            <div className="bg-white p-6 rounded-lg shadow-sm card-interactive">
               <h3 className="text-xl font-bold text-brand-dark mb-3 font-playfair">Agentic & Advanced AI</h3>
               <p className="text-gray-700">
                 Design, deploy, and reason about autonomous systems that represent the future of work.
@@ -178,7 +178,7 @@ export default async function Home() {
                 '3D for E-commerce',
                 'Vibe Coding with Cursor & Supabase',
               ].map((course) => (
-                <div key={course} className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                <div key={course} className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 card-interactive">
                   <p className="text-gray-700">{course}</p>
                 </div>
               ))}
@@ -208,7 +208,7 @@ export default async function Home() {
 
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             {/* Essential Access */}
-            <div className="bg-white rounded-lg p-8 shadow-lg">
+            <div className="bg-white rounded-lg p-8 shadow-lg card-interactive">
               <div className="mb-6">
                 <span className="inline-block bg-green-100 text-green-800 text-sm font-semibold px-3 py-1 rounded-full mb-4">
                   Essential Access
@@ -238,7 +238,7 @@ export default async function Home() {
             </div>
 
             {/* Professional Access */}
-            <div className="bg-white rounded-lg p-8 shadow-lg border-2 border-brand-light relative">
+            <div className="bg-white rounded-lg p-8 shadow-lg border-2 border-brand-light relative card-interactive">
               <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
                 <span className="bg-brand-light text-white text-sm font-semibold px-4 py-1 rounded-full">
                   Most Popular
@@ -297,19 +297,19 @@ export default async function Home() {
             Trusted by professionals adapting to the AI shift
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-gray-50 p-6 rounded-lg">
+            <div className="bg-gray-50 p-6 rounded-lg card-interactive">
               <p className="text-gray-700 italic mb-4">
                 "This isn't another AI course — it's a way to keep my skills relevant as my role changes."
               </p>
               <p className="text-sm text-gray-600 font-medium">— Product Manager</p>
             </div>
-            <div className="bg-gray-50 p-6 rounded-lg">
+            <div className="bg-gray-50 p-6 rounded-lg card-interactive">
               <p className="text-gray-700 italic mb-4">
                 "AI Growth Hub helped me move from curiosity to confidently applying AI in real client work."
               </p>
               <p className="text-sm text-gray-600 font-medium">— Consultant</p>
             </div>
-            <div className="bg-gray-50 p-6 rounded-lg">
+            <div className="bg-gray-50 p-6 rounded-lg card-interactive">
               <p className="text-gray-700 italic mb-4">
                 "The agentic systems content alone paid for the subscription."
               </p>
@@ -363,7 +363,7 @@ export default async function Home() {
           </p>
           <Link 
             href="/auth/signup"
-            className="btn-primary inline-block focus:outline-none focus:ring-2 focus:ring-brand-yellow focus:ring-offset-2 focus:ring-offset-brand-dark focus-visible:outline-none"
+            className="btn-primary inline-block focus:outline-none focus:ring-2 focus:ring-brand-yellow focus:ring-offset-2 focus:ring-offset-brand-dark focus-visible:outline-none animate-bounce-subtle"
           >
             Start learning now
           </Link>

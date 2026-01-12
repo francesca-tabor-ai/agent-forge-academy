@@ -70,14 +70,17 @@ export default function Sidebar({ role }: SidebarProps) {
             <Link
               key={item.href}
               href={item.href}
-              className={`block px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+              className={`block px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ease-out relative ${
                 isActive
-                  ? 'text-ca-text'
-                  : 'text-ca-neutral-500 hover:text-ca-text'
+                  ? 'text-ca-text scale-105'
+                  : 'text-ca-neutral-500 hover:text-ca-text hover:scale-105 hover:bg-gray-50'
               }`}
               style={isActive ? { backgroundColor: 'var(--ca-bg-warm)' } : {}}
             >
               {item.label}
+              {isActive && (
+                <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-ca-gold rounded-r-full" />
+              )}
             </Link>
           );
         })}
@@ -86,7 +89,7 @@ export default function Sidebar({ role }: SidebarProps) {
       <div className="p-4 border-t" style={{ borderColor: 'var(--ca-neutral-300)' }}>
         <button
           onClick={handleSignOut}
-          className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-ca-neutral-500 hover:text-ca-text transition-colors"
+          className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-ca-neutral-500 hover:text-ca-text transition-all duration-200 ease-out hover:scale-105 hover:bg-gray-50 active:scale-95"
         >
           Sign Out
         </button>

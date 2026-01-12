@@ -224,7 +224,7 @@ export function AIAdvisorSection({ studentProfileId, activeCourses }: AIAdvisorS
             <button
               type="submit"
               disabled={isLoading || !message.trim()}
-              className="px-6 py-2 bg-brand-light text-white rounded-lg hover:bg-brand-light/90 transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+              className="px-6 py-2 bg-brand-light text-white rounded-lg hover:bg-brand-light/90 hover:scale-105 active:scale-95 hover:shadow-lg transition-all duration-200 ease-out text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 whitespace-nowrap"
             >
               {isLoading ? 'Sending...' : 'Send'}
             </button>

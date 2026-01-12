@@ -31,7 +31,7 @@ export function UpgradeModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center animate-fade-in">
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/50 backdrop-blur-sm"
@@ -39,7 +39,7 @@ export function UpgradeModal({
       />
 
       {/* Modal */}
-      <div className="relative bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6 z-10">
+      <div className="relative bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6 z-10 animate-scale-in">
         {/* Close Button */}
         <button
           onClick={onClose}
@@ -148,13 +148,13 @@ export function UpgradeModal({
         <div className="flex flex-col gap-3">
           <button
             onClick={handleUpgrade}
-            className="w-full bg-brand-light text-white py-3 px-4 rounded-lg font-medium hover:bg-brand-light/90 transition-colors"
+            className="w-full bg-brand-light text-white py-3 px-4 rounded-lg font-medium hover:bg-brand-light/90 hover:scale-105 active:scale-95 hover:shadow-lg transition-all duration-200 ease-out"
           >
             Upgrade to Professional Access
           </button>
           <button
             onClick={onClose}
-            className="w-full bg-gray-100 text-gray-700 py-3 px-4 rounded-lg font-medium hover:bg-gray-200 transition-colors"
+            className="w-full bg-gray-100 text-gray-700 py-3 px-4 rounded-lg font-medium hover:bg-gray-200 hover:scale-105 active:scale-95 transition-all duration-200 ease-out"
           >
             Maybe Later
           </button>

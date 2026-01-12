@@ -46,10 +46,10 @@ export function CourseCard({ course, metadata, enrollment, subscriptionTier }: C
     }
   };
 
-  const cardClassName = `block bg-white border rounded-lg p-6 transition-all h-full ${
+  const cardClassName = `block bg-white border rounded-lg p-6 h-full ${
     isLocked
       ? 'border-gray-300 opacity-75 cursor-not-allowed'
-      : 'border-gray-200 hover:border-brand-light hover:shadow-lg cursor-pointer'
+      : 'border-gray-200 hover:border-brand-light cursor-pointer card-interactive'
   }`;
 
   const CourseContent = (

@@ -68,7 +68,7 @@ export function ProjectCard({
 
   if (viewMode === 'card') {
     return (
-      <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-gray-300 transition-colors flex flex-col">
+      <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-gray-300 card-interactive flex flex-col">
         {coverImageUrl ? (
           <div className="w-full h-48 overflow-hidden">
             <img
@@ -132,7 +132,7 @@ export function ProjectCard({
   }
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-6 hover:border-gray-300 transition-colors">
+    <div className="bg-white border border-gray-200 rounded-lg p-6 hover:border-gray-300 card-interactive">
       <div className="flex items-start justify-between mb-3">
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-2">

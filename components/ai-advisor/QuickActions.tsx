@@ -99,7 +99,7 @@ export function QuickActions({ activeContext, onAction }: QuickActionsProps) {
             <button
               key={idx}
               onClick={() => onAction(action.prompt, (action as any).intent)}
-              className="px-3 py-1.5 text-xs bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+              className="px-3 py-1.5 text-xs bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 hover:scale-105 active:scale-95 hover:shadow-sm transition-all duration-200 ease-out"
             >
               {action.label}
             </button>
@@ -108,7 +108,7 @@ export function QuickActions({ activeContext, onAction }: QuickActionsProps) {
             <button
               key={idx}
               onClick={() => onAction(action.prompt, action.intent)}
-              className="px-3 py-1.5 text-xs bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+              className="px-3 py-1.5 text-xs bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 hover:scale-105 active:scale-95 hover:shadow-sm transition-all duration-200 ease-out"
             >
               {action.label}
             </button>
@@ -117,7 +117,7 @@ export function QuickActions({ activeContext, onAction }: QuickActionsProps) {
             <button
               key={idx}
               onClick={() => onAction(action.prompt, action.intent)}
-              className="px-3 py-1.5 text-xs bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+              className="px-3 py-1.5 text-xs bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 hover:scale-105 active:scale-95 hover:shadow-sm transition-all duration-200 ease-out"
             >
               {action.label}
             </button>
@@ -137,7 +137,7 @@ export function QuickActions({ activeContext, onAction }: QuickActionsProps) {
               <button
                 key={idx}
                 onClick={() => onAction(action.prompt, (action as any).intent)}
-                className="px-3 py-1.5 text-xs bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                className="px-3 py-1.5 text-xs bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 hover:scale-105 active:scale-95 hover:shadow-sm transition-all duration-200 ease-out"
               >
                 {action.label}
               </button>
@@ -154,7 +154,7 @@ export function QuickActions({ activeContext, onAction }: QuickActionsProps) {
               <button
                 key={idx}
                 onClick={() => onAction(action.prompt, action.intent)}
-                className="px-3 py-1.5 text-xs bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                className="px-3 py-1.5 text-xs bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 hover:scale-105 active:scale-95 hover:shadow-sm transition-all duration-200 ease-out"
               >
                 {action.label}
               </button>
@@ -171,7 +171,7 @@ export function QuickActions({ activeContext, onAction }: QuickActionsProps) {
               <button
                 key={idx}
                 onClick={() => onAction(action.prompt, action.intent)}
-                className="px-3 py-1.5 text-xs bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                className="px-3 py-1.5 text-xs bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 hover:scale-105 active:scale-95 hover:shadow-sm transition-all duration-200 ease-out"
               >
                 {action.label}
               </button>

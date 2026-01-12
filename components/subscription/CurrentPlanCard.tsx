@@ -134,7 +134,7 @@ export function CurrentPlanCard({
   };
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-6">
+    <div className="bg-white border border-gray-200 rounded-lg p-6 card-interactive">
       <h2 className="text-lg font-semibold text-gray-900 mb-4">Current Plan</h2>
 
       <div className="space-y-4">
@@ -227,7 +227,7 @@ export function CurrentPlanCard({
           {hasHigherTier() && plan.status === 'active' && (
             <button
               onClick={onUpgrade}
-              className="px-4 py-2 bg-brand-light text-white text-sm font-medium rounded-lg hover:opacity-90 transition-colors"
+              className="px-4 py-2 bg-brand-light text-white text-sm font-medium rounded-lg hover:opacity-90 hover:scale-105 active:scale-95 hover:shadow-lg transition-all duration-200 ease-out"
             >
               Upgrade Plan
             </button>
@@ -235,7 +235,7 @@ export function CurrentPlanCard({
           {plan.status === 'active' && (
             <button
               onClick={onManagePlan}
-              className="px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors"
+              className="px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 hover:scale-105 active:scale-95 hover:shadow-sm transition-all duration-200 ease-out"
             >
               Manage Plan
             </button>

@@ -19,7 +19,7 @@ export default function TestimonialCard({ testimonial }: TestimonialCardProps) {
   };
 
   return (
-    <div className="flex-shrink-0 w-[300px] sm:w-[340px] bg-brand-dark/40 rounded-lg p-6 sm:p-8">
+    <div className="flex-shrink-0 w-[300px] sm:w-[340px] bg-brand-dark/40 rounded-lg p-6 sm:p-8 card-interactive">
       <div className="flex items-start gap-4 mb-5">
         <div className="relative w-14 h-14 rounded-full overflow-hidden flex-shrink-0">
           <Image
