@@ -555,7 +555,7 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
 
   if (loading && jobs.length === 0) {
     return (
-      <div>
+      <div className="max-w-6xl mx-auto px-4 md:px-6 py-6">
         <div className="bg-white border border-gray-200 rounded-lg p-6">
           <p className="text-sm text-gray-500">Loading opportunities...</p>
         </div>
@@ -565,7 +565,7 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
 
   if (error && jobs.length === 0) {
     return (
-      <div>
+      <div className="max-w-6xl mx-auto px-4 md:px-6 py-6">
         <div className="bg-white border border-red-200 rounded-lg p-6">
           <div className="flex flex-col items-center justify-center text-center space-y-4">
             <div className="text-red-600">
@@ -614,151 +614,122 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
   }
 
   return (
-    <div>
-      {/* Sticky Control Bar */}
-      <div className="sticky top-0 z-10 bg-white border-b border-gray-200 py-4 mb-8 shadow-sm">
-        <div className="space-y-4">
+    <div className="max-w-6xl mx-auto px-4 md:px-6 py-6">
+      {/* Title Block */}
+      <div className="mb-8">
+        <h1 className="text-3xl font-semibold text-gray-900 mb-2">Job Opportunities</h1>
+        <p className="text-base text-gray-600">
+          Roles matched to your skills, projects, and progress
+        </p>
+      </div>
+
+      {/* Filters and Results Summary */}
+      <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
+        <div className="space-y-6">
           {/* Search */}
-          <div className="flex items-center gap-4">
-            <div className="flex-1">
-              <input
-                type="text"
-                placeholder="Search jobs, companies, skills..."
-                value={searchQuery}
-                onChange={(e) => handleSearchChange(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light"
-              />
-            </div>
+          <div>
+            <input
+              type="text"
+              placeholder="Search jobs, companies, skills..."
+              value={searchQuery}
+              onChange={(e) => handleSearchChange(e.target.value)}
+              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent text-sm"
+            />
           </div>
 
           {/* Filters Row */}
-          {/* Desktop: Single horizontal row with all filters aligned on one baseline */}
-          {/* Mobile: 2-row layout (Status+Sort, Match+Skills) */}
-          <div className="grid grid-cols-1 grid-rows-2 lg:flex lg:flex-row lg:items-center gap-4 lg:gap-6">
-            {/* Row 1 on mobile: Status + Sort */}
-            <div className="flex flex-wrap items-center gap-4 lg:contents">
-              {/* Status Filter */}
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-medium text-gray-700 whitespace-nowrap">Status:</span>
-                <div className="flex items-center gap-1.5 flex-wrap">
-                  {['new', 'recommended', 'unlocked', 'locked', 'stretch'].map((status) => (
-                    <button
-                      key={status}
-                      onClick={() => handleStatusToggle(status)}
-                      className={`h-10 px-3 text-xs font-medium rounded-full transition-colors whitespace-nowrap ${
-                        statusFilter.includes(status)
-                          ? 'bg-brand-light text-white'
-                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                      }`}
-                    >
-                      {status.charAt(0).toUpperCase() + status.slice(1)}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Sort */}
-              <div className="flex items-center gap-2 lg:ml-auto">
-                <span className="text-sm font-medium text-gray-700 whitespace-nowrap">Sort:</span>
-                <select
-                  value={sortBy}
-                  onChange={(e) => handleSortChange(e.target.value as SortOption)}
-                  className="h-10 px-3 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light"
-                >
-                  <option value="best-match">Best Match</option>
-                  <option value="newest">Newest</option>
-                  <option value="least-missing">Least Missing Skills</option>
-                  <option value="company-az">Company A-Z</option>
-                </select>
+          <div className="flex flex-wrap items-center gap-4 lg:gap-6">
+            {/* Status Filter */}
+            <div className="flex items-center gap-3">
+              <label className="text-sm font-medium text-gray-700 whitespace-nowrap">Status</label>
+              <div className="flex items-center gap-2 flex-wrap">
+                {['new', 'recommended', 'unlocked', 'locked', 'stretch'].map((status) => (
+                  <button
+                    key={status}
+                    onClick={() => handleStatusToggle(status)}
+                    className={`px-3 py-1.5 text-xs font-medium rounded-full transition-all whitespace-nowrap ${
+                      statusFilter.includes(status)
+                        ? 'bg-brand-light text-white shadow-sm'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    {status.charAt(0).toUpperCase() + status.slice(1)}
+                  </button>
+                ))}
               </div>
             </div>
 
-            {/* Row 2 on mobile: Match + Skills */}
-            <div className="flex flex-wrap items-center gap-4 lg:contents">
-              {/* Match % Range */}
+            {/* Match Score Range */}
+            <div className="flex items-center gap-3">
+              <label className="text-sm font-medium text-gray-700 whitespace-nowrap">Match score</label>
               <div className="flex items-center gap-2">
-                <span className="text-sm font-medium text-gray-700 whitespace-nowrap">Match:</span>
-                <div className="flex items-center gap-1.5 whitespace-nowrap">
-                  <input
-                    type="number"
-                    min="0"
-                    max="100"
-                    value={matchMin}
-                    onChange={(e) => {
-                      const val = Math.max(0, Math.min(100, parseInt(e.target.value) || 0));
-                      handleMatchRangeChange(val, matchMax);
+                <input
+                  type="number"
+                  min="0"
+                  max="100"
+                  value={matchMin}
+                  onChange={(e) => {
+                    const val = Math.max(0, Math.min(100, parseInt(e.target.value) || 0));
+                    handleMatchRangeChange(val, matchMax);
+                  }}
+                  className="w-16 px-2 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent text-center"
+                />
+                <span className="text-sm text-gray-400">to</span>
+                <input
+                  type="number"
+                  min="0"
+                  max="100"
+                  value={matchMax}
+                  onChange={(e) => {
+                    const val = Math.max(0, Math.min(100, parseInt(e.target.value) || 100));
+                    handleMatchRangeChange(matchMin, val);
+                  }}
+                  className="w-16 px-2 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent text-center"
+                />
+                <span className="text-sm text-gray-500">%</span>
+              </div>
+            </div>
+
+            {/* Skills Filter */}
+            {allSkills.length > 0 && (
+              <div className="flex items-center gap-3 flex-1 min-w-0">
+                <label className="text-sm font-medium text-gray-700 whitespace-nowrap">Skills</label>
+                <div className="flex-1 min-w-0">
+                  <SearchableSkillSelector
+                    allSkills={allSkills}
+                    selectedSkills={skillFilter}
+                    onToggleSkill={handleSkillToggle}
+                    onRemoveSkill={(skill) => {
+                      const newSkills = skillFilter.filter(s => s !== skill);
+                      updateURLParams({ skills: newSkills.length > 0 ? newSkills.join(',') : null });
                     }}
-                    className="h-10 w-[72px] px-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light text-center"
                   />
-                  <span className="text-sm text-gray-400">–</span>
-                  <input
-                    type="number"
-                    min="0"
-                    max="100"
-                    value={matchMax}
-                    onChange={(e) => {
-                      const val = Math.max(0, Math.min(100, parseInt(e.target.value) || 100));
-                      handleMatchRangeChange(matchMin, val);
-                    }}
-                    className="h-10 w-[72px] px-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light text-center"
-                  />
-                  <span className="text-sm text-gray-600">%</span>
                 </div>
               </div>
+            )}
 
-              {/* Skills Filter */}
-              {allSkills.length > 0 && (
-                <div className="flex items-center gap-2 flex-1 min-w-0 w-full lg:w-auto">
-                  <span className="text-sm font-medium text-gray-700 whitespace-nowrap">Skills:</span>
-                  <div className="flex items-center gap-2 flex-1 min-w-0">
-                    {skillFilter.length > 0 && (
-                      <div className="flex items-center gap-1.5 flex-wrap">
-                        {skillFilter.map((skill) => (
-                          <span
-                            key={skill}
-                            className="inline-flex items-center gap-1 h-10 px-2.5 bg-brand-light/10 text-brand-light text-xs font-medium rounded-full"
-                          >
-                            {skill}
-                            <button
-                              onClick={() => {
-                                const newSkills = skillFilter.filter(s => s !== skill);
-                                updateURLParams({ skills: newSkills.length > 0 ? newSkills.join(',') : null });
-                              }}
-                              className="hover:text-brand-light/70 text-base leading-none"
-                              aria-label={`Remove ${skill}`}
-                            >
-                              ×
-                            </button>
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                    <select
-                      value=""
-                      onChange={(e) => {
-                        if (e.target.value && !skillFilter.includes(e.target.value)) {
-                          updateURLParams({ skills: [...skillFilter, e.target.value].join(',') });
-                          e.target.value = '';
-                        }
-                      }}
-                      className="h-10 px-3 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light min-w-[140px]"
-                    >
-                      <option value="">Add skill...</option>
-                      {allSkills.filter(skill => !skillFilter.includes(skill)).map((skill) => (
-                        <option key={skill} value={skill}>
-                          {skill}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-              )}
+            {/* Sort */}
+            <div className="flex items-center gap-3 lg:ml-auto">
+              <label className="text-sm font-medium text-gray-700 whitespace-nowrap">Sort by</label>
+              <select
+                value={sortBy}
+                onChange={(e) => handleSortChange(e.target.value as SortOption)}
+                className="px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent bg-white"
+              >
+                <option value="best-match">Best Match</option>
+                <option value="newest">Newest</option>
+                <option value="least-missing">Least Missing Skills</option>
+                <option value="company-az">Company A-Z</option>
+              </select>
             </div>
           </div>
 
           {/* Results Count */}
-          <div className="text-sm text-gray-600">
-            Showing {filteredAndSortedJobs.length} of {jobs.length} jobs
+          <div className="pt-4 border-t border-gray-200">
+            <p className="text-sm font-medium text-gray-900">
+              Showing <span className="text-brand-light">{filteredAndSortedJobs.length}</span> of{' '}
+              <span className="text-gray-600">{jobs.length}</span> jobs
+            </p>
           </div>
         </div>
       </div>

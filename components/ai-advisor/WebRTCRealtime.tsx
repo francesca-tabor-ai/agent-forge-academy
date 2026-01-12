@@ -2,12 +2,15 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 
+export type VoiceMode = 'push-to-talk' | 'hands-free';
+
 export interface WebRTCRealtimeProps {
   onTranscript?: (text: string) => void;
   onResponse?: (text: string) => void;
   onError?: (error: string) => void;
   disabled?: boolean;
   studentProfileId?: string | null;
+  defaultMode?: VoiceMode;
 }
 
 interface RealtimeSession {
@@ -33,12 +36,15 @@ export function WebRTCRealtime({
   onError,
   disabled = false,
   studentProfileId,
+  defaultMode = 'push-to-talk',
 }: WebRTCRealtimeProps) {
   const [isConnected, setIsConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [currentTranscript, setCurrentTranscript] = useState('');
-  const [isMuted, setIsMuted] = useState(false);
+  const [isMuted, setIsMuted] = useState(true); // Start muted (push-to-talk default)
+  const [voiceMode, setVoiceMode] = useState<VoiceMode>(defaultMode);
+  const [isHoldingMic, setIsHoldingMic] = useState(false);
 
   const peerConnectionRef = useRef<RTCPeerConnection | null>(null);
   const dataChannelRef = useRef<RTCDataChannel | null>(null);
@@ -136,18 +142,22 @@ export function WebRTCRealtime({
         if (onError) onError('Data channel error');
       };
 
-      // Step 4: Add microphone track to PeerConnection (initially muted)
+      // Step 4: Add microphone track to PeerConnection
+      // Request mic permission once - keep track attached but disabled by default
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       localStreamRef.current = stream;
 
-      // Add audio tracks, but initially disable them (muted)
+      // Add audio tracks - disabled by default (for push-to-talk)
+      // In hands-free mode, we'll enable it after connection
       stream.getAudioTracks().forEach((track) => {
-        track.enabled = false; // Initially muted
+        track.enabled = false; // Disabled by default (push-to-talk mode)
         pc.addTrack(track, stream);
       });
       
-      // Set initial mute state
-      setIsMuted(true);
+      // Set initial mute state based on mode
+      // Push-to-talk: muted (user must hold to speak)
+      // Hands-free: will be enabled after connection
+      setIsMuted(voiceMode === 'push-to-talk');
 
       // Handle ICE connection state
       pc.oniceconnectionstatechange = () => {
@@ -157,6 +167,14 @@ export function WebRTCRealtime({
         if (state === 'connected' || state === 'completed') {
           setIsConnected(true);
           setIsConnecting(false);
+          
+          // Enable mic for hands-free mode after connection
+          if (voiceMode === 'hands-free' && localStreamRef.current) {
+            localStreamRef.current.getAudioTracks().forEach((track) => {
+              track.enabled = true;
+            });
+            setIsMuted(false);
+          }
         } else if (state === 'disconnected' || state === 'failed') {
           setIsConnected(false);
           setError('Connection lost');
@@ -242,40 +260,98 @@ export function WebRTCRealtime({
   }, [onTranscript, onResponse, onError]);
 
   /**
-   * Send message to OpenAI via DataChannel
+   * Send event to OpenAI via DataChannel
    */
-  const sendMessage = useCallback((text: string) => {
+  const sendEvent = useCallback((event: any) => {
     if (!dataChannelRef.current || dataChannelRef.current.readyState !== 'open') {
       console.warn('Data channel not open');
-      return;
+      return false;
     }
 
-    // Send message in OpenAI Realtime API format
-    const message = {
-      type: 'conversation.item.create',
-      item: {
-        type: 'message',
-        role: 'user',
-        content: text,
-      },
-    };
-
-    dataChannelRef.current.send(JSON.stringify(message));
+    try {
+      dataChannelRef.current.send(JSON.stringify(event));
+      return true;
+    } catch (error) {
+      console.error('Failed to send event:', error);
+      return false;
+    }
   }, []);
 
   /**
-   * Toggle mute/unmute microphone
+   * Commit user turn (end of speech) - for push-to-talk mode
    */
-  const toggleMute = useCallback(() => {
-    if (!localStreamRef.current) return;
+  const commitTurn = useCallback(() => {
+    // Send commit event to indicate end of user speech
+    // OpenAI Realtime API expects this to process the audio
+    const commitEvent = {
+      type: 'input_audio_buffer.commit',
+    };
+    
+    return sendEvent(commitEvent);
+  }, [sendEvent]);
 
-    const audioTracks = localStreamRef.current.getAudioTracks();
-    audioTracks.forEach((track) => {
-      track.enabled = isMuted;
+  /**
+   * Request response from model (if needed)
+   */
+  const requestResponse = useCallback(() => {
+    // Request the model to respond
+    const responseEvent = {
+      type: 'response.create',
+    };
+    
+    return sendEvent(responseEvent);
+  }, [sendEvent]);
+
+  /**
+   * Push-to-Talk: Hold mic button
+   */
+  const handleHoldMic = useCallback(() => {
+    if (!localStreamRef.current || !isConnected) return;
+
+    // Enable microphone track
+    localStreamRef.current.getAudioTracks().forEach((track) => {
+      track.enabled = true;
     });
 
-    setIsMuted(!isMuted);
-  }, [isMuted]);
+    setIsHoldingMic(true);
+    setIsMuted(false);
+  }, [isConnected]);
+
+  /**
+   * Push-to-Talk: Release mic button
+   */
+  const handleReleaseMic = useCallback(() => {
+    if (!localStreamRef.current || !isConnected) return;
+
+    // Disable microphone track
+    localStreamRef.current.getAudioTracks().forEach((track) => {
+      track.enabled = false;
+    });
+
+    setIsHoldingMic(false);
+    setIsMuted(true);
+
+    // Commit the user turn and optionally request response
+    commitTurn();
+    // Request response if model expects explicit "respond" event
+    requestResponse();
+  }, [isConnected, commitTurn, requestResponse]);
+
+  /**
+   * Toggle mute/unmute microphone (for hands-free mode)
+   */
+  const toggleMute = useCallback(() => {
+    if (!localStreamRef.current || voiceMode !== 'hands-free') return;
+
+    const audioTracks = localStreamRef.current.getAudioTracks();
+    const newMutedState = !isMuted;
+    
+    audioTracks.forEach((track) => {
+      track.enabled = !newMutedState;
+    });
+
+    setIsMuted(newMutedState);
+  }, [isMuted, voiceMode]);
 
   /**
    * Disconnect and cleanup
@@ -351,33 +427,104 @@ export function WebRTCRealtime({
         </span>
       </div>
 
-      {/* Controls */}
-      <div className="flex items-center gap-2">
+      {/* Mode Selection */}
+      <div className="flex items-center gap-2 mb-3">
+        <label className="text-xs text-gray-600">Mode:</label>
         <button
           type="button"
-          onClick={isConnected ? disconnect : connect}
-          disabled={disabled || isConnecting}
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-            isConnected
-              ? 'bg-red-600 hover:bg-red-700 text-white'
-              : 'bg-blue-600 hover:bg-blue-700 text-white'
-          } ${disabled || isConnecting ? 'opacity-50 cursor-not-allowed' : ''}`}
+          onClick={() => {
+            setVoiceMode('push-to-talk');
+            // Disable mic when switching to push-to-talk
+            if (localStreamRef.current) {
+              localStreamRef.current.getAudioTracks().forEach((track) => {
+                track.enabled = false;
+              });
+            }
+            setIsMuted(true);
+            setIsHoldingMic(false);
+          }}
+          className={`px-2 py-1 text-xs rounded transition-colors ${
+            voiceMode === 'push-to-talk'
+              ? 'bg-blue-600 text-white'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+          }`}
         >
-          {isConnected ? 'Disconnect' : 'Connect'}
+          Push-to-Talk
         </button>
+        <button
+          type="button"
+          onClick={() => {
+            setVoiceMode('hands-free');
+            // Enable mic when switching to hands-free (if connected)
+            if (localStreamRef.current && isConnected) {
+              localStreamRef.current.getAudioTracks().forEach((track) => {
+                track.enabled = true;
+              });
+            }
+            setIsMuted(false);
+          }}
+          className={`px-2 py-1 text-xs rounded transition-colors ${
+            voiceMode === 'hands-free'
+              ? 'bg-blue-600 text-white'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+          }`}
+        >
+          Hands-Free
+        </button>
+      </div>
 
-        {isConnected && (
-          <button
-            type="button"
-            onClick={toggleMute}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              isMuted
-                ? 'bg-gray-600 hover:bg-gray-700 text-white'
-                : 'bg-green-600 hover:bg-green-700 text-white'
-            }`}
-          >
-            {isMuted ? 'Unmute' : 'Mute'}
-          </button>
+      {/* Controls */}
+      <div className="flex items-center gap-2">
+        {voiceMode === 'push-to-talk' && isConnected ? (
+          <>
+            {/* Push-to-Talk: Hold to speak button */}
+            <button
+              type="button"
+              onMouseDown={handleHoldMic}
+              onMouseUp={handleReleaseMic}
+              onMouseLeave={handleReleaseMic} // Release if mouse leaves button
+              onTouchStart={handleHoldMic}
+              onTouchEnd={handleReleaseMic}
+              disabled={disabled}
+              className={`px-6 py-3 rounded-lg text-sm font-medium transition-all ${
+                isHoldingMic
+                  ? 'bg-red-600 hover:bg-red-700 text-white shadow-lg'
+                  : 'bg-blue-600 hover:bg-blue-700 text-white'
+              } ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+            >
+              {isHoldingMic ? '🎤 Speaking...' : '🎤 Hold to Speak'}
+            </button>
+          </>
+        ) : (
+          <>
+            <button
+              type="button"
+              onClick={isConnected ? disconnect : connect}
+              disabled={disabled || isConnecting}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                isConnected
+                  ? 'bg-red-600 hover:bg-red-700 text-white'
+                  : 'bg-blue-600 hover:bg-blue-700 text-white'
+              } ${disabled || isConnecting ? 'opacity-50 cursor-not-allowed' : ''}`}
+            >
+              {isConnected ? 'Disconnect' : 'Connect'}
+            </button>
+
+            {/* Hands-Free: Mute/Unmute toggle */}
+            {isConnected && voiceMode === 'hands-free' && (
+              <button
+                type="button"
+                onClick={toggleMute}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  isMuted
+                    ? 'bg-gray-600 hover:bg-gray-700 text-white'
+                    : 'bg-green-600 hover:bg-green-700 text-white'
+                }`}
+              >
+                {isMuted ? '🔇 Muted' : '🔊 Unmuted'}
+              </button>
+            )}
+          </>
         )}
       </div>
 
@@ -402,9 +549,19 @@ export function WebRTCRealtime({
         <p>
           WebRTC Realtime provides a persistent voice connection. The connection is established on page load and stays open until you navigate away.
         </p>
-        {isMuted && isConnected && (
+        {voiceMode === 'push-to-talk' && isConnected && (
+          <p className="mt-1 text-blue-600">
+            Hold the microphone button to speak. Release to send your message.
+          </p>
+        )}
+        {voiceMode === 'hands-free' && isConnected && (
+          <p className="mt-1 text-green-600">
+            Hands-free mode: Speak naturally. The AI will detect when you finish speaking.
+          </p>
+        )}
+        {isMuted && isConnected && voiceMode === 'hands-free' && (
           <p className="mt-1 text-amber-600">
-            Microphone is muted. Click "Unmute" to start speaking.
+            Microphone is muted. Click "Unmuted" to start speaking.
           </p>
         )}
       </div>

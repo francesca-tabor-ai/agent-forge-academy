@@ -165,6 +165,7 @@ export async function getSubscriptionData(): Promise<SubscriptionPageData | null
 
     // If no subscription, return empty state
     if (!subscription) {
+      const availablePlans = await getAvailablePlans(supabase);
       return {
         plan: null,
         billing: {
@@ -176,6 +177,7 @@ export async function getSubscriptionData(): Promise<SubscriptionPageData | null
         },
         nextInvoice: null,
         invoices: [],
+        availablePlans,
       };
     }
 

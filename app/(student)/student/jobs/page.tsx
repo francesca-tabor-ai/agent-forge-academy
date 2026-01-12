@@ -34,15 +34,5 @@ export default async function JobsPage() {
     studentProfileId = studentProfile?.id || null;
   }
 
-  return (
-    <div className="px-4 py-5 md:px-[40px] md:py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Job Opportunities</h1>
-        <p className="text-sm text-gray-600 mt-1">
-          Roles matched to your skills, projects, and progress
-        </p>
-      </div>
-      <JobOpportunitiesPage studentProfileId={studentProfileId} />
-    </div>
-  );
+  return <JobOpportunitiesPage studentProfileId={studentProfileId} />;
 }
