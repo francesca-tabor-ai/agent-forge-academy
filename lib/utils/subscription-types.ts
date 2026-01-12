@@ -25,4 +25,5 @@ export const ESSENTIAL_TIER_COURSES = [
   'reddit-ai-visibility',
   'seo-to-aeo',
   'ai-governance-eu-ai-act',
+  'creative-automation-templatization',
 ] as const;

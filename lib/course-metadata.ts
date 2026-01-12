@@ -163,6 +163,15 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     bestFor: 'Teams producing content weekly at volume.',
     time: '~4–10 hours',
   },
+  'creative-automation-templatization': {
+    slug: 'creative-automation-templatization',
+    title: 'Creative Automation & Templatization',
+    category: 'Media & Content Ops',
+    outcome: 'Scale marketing creative production while maintaining brand consistency and quality at 70-95% cost reduction.',
+    build: 'Complete creative automation system with modular templates, data-driven personalization, workflow integration, quality control, and performance optimization.',
+    bestFor: 'Marketing operations teams, designers, and creative operations professionals scaling creative production.',
+    time: '~12 weeks',
+  },
   'ai-governance-eu-ai-act': {
     slug: 'ai-governance-eu-ai-act',
     title: 'AI Governance & the EU AI Act',
