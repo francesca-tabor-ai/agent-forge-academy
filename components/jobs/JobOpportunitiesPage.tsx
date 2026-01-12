@@ -194,7 +194,9 @@ function SearchableSkillSelector({
                   {filteredSkills.map((skill, index) => (
                     <button
                       key={skill}
-                      ref={(el) => (itemRefs.current[index] = el)}
+                      ref={(el) => {
+                        itemRefs.current[index] = el;
+                      }}
                       type="button"
                       onClick={() => handleSelectSkill(skill)}
                       onMouseEnter={() => setHighlightedIndex(index)}

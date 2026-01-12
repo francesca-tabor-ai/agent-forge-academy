@@ -29,16 +29,17 @@ function isSpeechRecognitionSupported(): boolean {
 
 // Check if running in secure context (HTTPS required for voice)
 function isSecureContext(): boolean {
-  if (typeof window === 'undefined') return false;
+  const w = typeof globalThis !== 'undefined' ? (globalThis.window as Window | undefined) : undefined;
+  if (!w) return false; // SSR / build-time
 
   // Prefer the built-in flag if present
-  if (typeof window.isSecureContext === 'boolean') {
-    return window.isSecureContext;
+  if (typeof w.isSecureContext === 'boolean') {
+    return w.isSecureContext;
   }
 
   // Fallback: protocol/host check
   try {
-    const { protocol, hostname } = window.location;
+    const { protocol, hostname } = w.location;
     return protocol === 'https:' || hostname === 'localhost' || hostname === '127.0.0.1';
   } catch (error) {
     console.warn('Error checking secure context:', error);

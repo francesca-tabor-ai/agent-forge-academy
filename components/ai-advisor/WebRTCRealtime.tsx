@@ -93,6 +93,68 @@ export function WebRTCRealtime({
   const silenceTimeoutIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const SILENCE_TIMEOUT_DURATION = 5 * 60 * 1000; // 5 minutes without speech = close session
 
+  /**
+   * Disconnect and cleanup
+   * Declared early so it can be used in useEffect cleanup functions
+   */
+  const disconnect = useCallback(() => {
+    // Stop timeout check
+    if (timeoutCheckIntervalRef.current) {
+      clearInterval(timeoutCheckIntervalRef.current);
+      timeoutCheckIntervalRef.current = null;
+    }
+
+    // Stop silence timeout check
+    if (silenceTimeoutIntervalRef.current) {
+      clearInterval(silenceTimeoutIntervalRef.current);
+      silenceTimeoutIntervalRef.current = null;
+    }
+
+    // Stop local stream
+    if (localStreamRef.current) {
+      localStreamRef.current.getTracks().forEach((track) => {
+        track.stop();
+      });
+      localStreamRef.current = null;
+    }
+
+    // Close data channel
+    if (dataChannelRef.current) {
+      try {
+        dataChannelRef.current.close();
+      } catch (e) {
+        console.warn('Error closing data channel:', e);
+      }
+      dataChannelRef.current = null;
+    }
+
+    // Close peer connection
+    if (peerConnectionRef.current) {
+      try {
+        peerConnectionRef.current.close();
+      } catch (e) {
+        console.warn('Error closing peer connection:', e);
+      }
+      peerConnectionRef.current = null;
+    }
+
+    // Cleanup audio element
+    if (audioElementRef.current) {
+      try {
+        audioElementRef.current.srcObject = null;
+        audioElementRef.current.pause();
+      } catch (e) {
+        console.warn('Error cleaning up audio element:', e);
+      }
+      audioElementRef.current = null;
+    }
+
+    setIsConnected(false);
+    setIsConnecting(false);
+    setCurrentTranscript('');
+    lastEventTimeRef.current = Date.now(); // Reset timeout timer
+  }, []);
+
   // Cleanup on unmount - stop tracks, close peer connection
   useEffect(() => {
     return () => {
@@ -765,67 +827,6 @@ export function WebRTCRealtime({
       audioElementRef.current.muted = !newVoiceOutputState;
     }
   }, [voiceOutputEnabled]);
-
-  /**
-   * Disconnect and cleanup
-   */
-  const disconnect = useCallback(() => {
-    // Stop timeout check
-    if (timeoutCheckIntervalRef.current) {
-      clearInterval(timeoutCheckIntervalRef.current);
-      timeoutCheckIntervalRef.current = null;
-    }
-
-    // Stop silence timeout check
-    if (silenceTimeoutIntervalRef.current) {
-      clearInterval(silenceTimeoutIntervalRef.current);
-      silenceTimeoutIntervalRef.current = null;
-    }
-
-    // Stop local stream
-    if (localStreamRef.current) {
-      localStreamRef.current.getTracks().forEach((track) => {
-        track.stop();
-      });
-      localStreamRef.current = null;
-    }
-
-    // Close data channel
-    if (dataChannelRef.current) {
-      try {
-        dataChannelRef.current.close();
-      } catch (e) {
-        console.warn('Error closing data channel:', e);
-      }
-      dataChannelRef.current = null;
-    }
-
-    // Close peer connection
-    if (peerConnectionRef.current) {
-      try {
-        peerConnectionRef.current.close();
-      } catch (e) {
-        console.warn('Error closing peer connection:', e);
-      }
-      peerConnectionRef.current = null;
-    }
-
-    // Cleanup audio element
-    if (audioElementRef.current) {
-      try {
-        audioElementRef.current.srcObject = null;
-        audioElementRef.current.pause();
-      } catch (e) {
-        console.warn('Error cleaning up audio element:', e);
-      }
-      audioElementRef.current = null;
-    }
-
-    setIsConnected(false);
-    setIsConnecting(false);
-    setCurrentTranscript('');
-    lastEventTimeRef.current = Date.now(); // Reset timeout timer
-  }, []);
 
   /**
    * Trigger fallback to standard voice
