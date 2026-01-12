@@ -74,6 +74,13 @@ export function WebRTCRealtime({
 
   /**
    * Establish WebRTC connection to OpenAI Realtime API
+   * 
+   * Flow:
+   * 1. Call /api/realtime/session to get ephemeral credentials
+   * 2. Create RTCPeerConnection
+   * 3. Create DataChannel "oai-events"
+   * 4. Add microphone track (initially muted)
+   * 5. Do SDP offer/answer exchange
    */
   const connect = useCallback(async () => {
     if (disabled || isConnecting || isConnected) return;
@@ -82,11 +89,11 @@ export function WebRTCRealtime({
       setIsConnecting(true);
       setError(null);
 
-      // Get ephemeral session credentials
+      // Step 1: Call /api/realtime/session to get ephemeral credentials
       const session = await getSessionCredentials();
       sessionRef.current = session;
 
-      // Create RTCPeerConnection
+      // Step 2: Create RTCPeerConnection
       const pc = new RTCPeerConnection({
         iceServers: [
           { urls: 'stun:stun.l.google.com:19302' },
@@ -94,16 +101,7 @@ export function WebRTCRealtime({
       });
       peerConnectionRef.current = pc;
 
-      // Get user media (microphone)
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      localStreamRef.current = stream;
-
-      // Add audio track to peer connection
-      stream.getTracks().forEach((track) => {
-        pc.addTrack(track, stream);
-      });
-
-      // Create audio element for playback
+      // Create audio element for playback (set up early)
       const audioElement = document.createElement('audio');
       audioElement.autoplay = true;
       audioElementRef.current = audioElement;
@@ -115,7 +113,7 @@ export function WebRTCRealtime({
         }
       };
 
-      // Create data channel for transcripts and events
+      // Step 3: Create DataChannel "oai-events"
       const dataChannel = pc.createDataChannel('oai-events');
       dataChannelRef.current = dataChannel;
 
@@ -138,6 +136,19 @@ export function WebRTCRealtime({
         if (onError) onError('Data channel error');
       };
 
+      // Step 4: Add microphone track to PeerConnection (initially muted)
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      localStreamRef.current = stream;
+
+      // Add audio tracks, but initially disable them (muted)
+      stream.getAudioTracks().forEach((track) => {
+        track.enabled = false; // Initially muted
+        pc.addTrack(track, stream);
+      });
+      
+      // Set initial mute state
+      setIsMuted(true);
+
       // Handle ICE connection state
       pc.oniceconnectionstatechange = () => {
         const state = pc.iceConnectionState;
@@ -153,6 +164,7 @@ export function WebRTCRealtime({
         }
       };
 
+      // Step 5: Do SDP offer/answer exchange with OpenAI Realtime endpoint
       // Create SDP offer
       const offer = await pc.createOffer();
       await pc.setLocalDescription(offer);
@@ -300,12 +312,22 @@ export function WebRTCRealtime({
     setCurrentTranscript('');
   }, []);
 
-  // Auto-connect on mount (if not disabled)
+  // Auto-connect on mount - establish connection on page load
+  // Keep connection open until user navigates away or explicitly disconnects
   useEffect(() => {
-    if (!disabled && !isConnected && !isConnecting) {
+    // Only connect once on mount, not on every render
+    if (!disabled && !isConnected && !isConnecting && !peerConnectionRef.current) {
       connect();
     }
-  }, [disabled, isConnected, isConnecting, connect]);
+
+    // Cleanup on unmount (when user navigates away)
+    return () => {
+      if (peerConnectionRef.current) {
+        disconnect();
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Empty deps - only run on mount/unmount
 
   return (
     <div className="space-y-3">
@@ -378,8 +400,13 @@ export function WebRTCRealtime({
       {/* Help Text */}
       <div className="text-xs text-gray-500">
         <p>
-          WebRTC Realtime provides a persistent voice connection. Speak naturally and the AI will respond in real-time.
+          WebRTC Realtime provides a persistent voice connection. The connection is established on page load and stays open until you navigate away.
         </p>
+        {isMuted && isConnected && (
+          <p className="mt-1 text-amber-600">
+            Microphone is muted. Click "Unmute" to start speaking.
+          </p>
+        )}
       </div>
     </div>
   );

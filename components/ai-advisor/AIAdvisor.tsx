@@ -732,13 +732,13 @@ export function AIAdvisor({
             </button>
           </div>
 
-          {/* Voice Controls - Standard or WebRTC Realtime */}
-          {useWebRTCRealtime ? (
-            <VoiceErrorBoundary
-              onError={(error, errorInfo) => {
-                console.error('WebRTCRealtime error caught by boundary:', error, errorInfo);
-              }}
-            >
+          {/* WebRTC Realtime Connection - Always established on page load */}
+          <VoiceErrorBoundary
+            onError={(error, errorInfo) => {
+              console.error('WebRTCRealtime error caught by boundary:', error, errorInfo);
+            }}
+          >
+            <div className={useWebRTCRealtime ? '' : 'hidden'}>
               <WebRTCRealtime
                 onTranscript={(text) => {
                   try {
@@ -761,11 +761,14 @@ export function AIAdvisor({
                 onError={(error) => {
                   console.error('WebRTC Realtime error:', error);
                 }}
-                disabled={isLoading}
+                disabled={false} // Always enabled - connection established on page load
                 studentProfileId={studentProfileId}
               />
-            </VoiceErrorBoundary>
-          ) : (
+            </div>
+          </VoiceErrorBoundary>
+
+          {/* Voice Controls - Standard Mode */}
+          {!useWebRTCRealtime && (
             <VoiceErrorBoundary
               onError={(error, errorInfo) => {
                 console.error('VoiceControls error caught by boundary:', error, errorInfo);
