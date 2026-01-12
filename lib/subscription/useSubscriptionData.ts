@@ -31,6 +31,7 @@
 
 import { useState, useEffect } from 'react';
 import type { SubscriptionPageData } from './getSubscriptionData';
+import type useSWRType from 'swr';
 
 const API_ENDPOINT = '/api/student/subscription';
 
@@ -69,7 +70,8 @@ async function fetchSubscriptionData(): Promise<SubscriptionPageData> {
  */
 export function useSubscriptionDataSWR() {
   // Dynamic import to avoid bundling SWR if not used
-  const useSWR = require('swr').default;
+  // Type assertion ensures TypeScript can accept generic type arguments
+  const useSWR = require('swr').default as typeof useSWRType;
   return useSWR<SubscriptionPageData>(API_ENDPOINT, fetchSubscriptionData, {
     revalidateOnFocus: false,
     revalidateOnReconnect: true,
