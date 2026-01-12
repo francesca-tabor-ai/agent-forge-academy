@@ -22,18 +22,26 @@ export async function detectMimeTypeFromBuffer(
   }
   
   // DOCX: PK\x03\x04 (ZIP file signature, DOCX is a ZIP archive)
+  // DOCX files start with ZIP signature and contain [Content_Types].xml with wordprocessingml
   if (buf.length >= 4) {
     const header = buf.subarray(0, 4);
     if (header[0] === 0x50 && header[1] === 0x4B && header[2] === 0x03 && header[3] === 0x04) {
-      // Check if it's actually a DOCX by looking for word/ in the ZIP
-      // This is a simplified check - in production you might want to parse the ZIP
+      // Check if it's actually a DOCX by looking for DOCX-specific markers in the ZIP
+      // DOCX files contain [Content_Types].xml with wordprocessingml.document.main+xml
       try {
-        const headerStr = buf.subarray(0, 100).toString('utf-8', 0, 100);
-        if (headerStr.includes('word/') || headerStr.includes('WordDocument')) {
+        // Read more of the file to find DOCX markers (usually within first 2KB)
+        const searchBuffer = buf.subarray(0, Math.min(2048, buf.length));
+        const bufferStr = searchBuffer.toString('binary');
+        
+        // Look for DOCX-specific markers
+        if (bufferStr.includes('[Content_Types].xml') || 
+            bufferStr.includes('word/') ||
+            bufferStr.includes('wordprocessingml') ||
+            bufferStr.includes('application/vnd.openxmlformats-officedocument.wordprocessingml')) {
           return 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
         }
       } catch {
-        // If we can't read as UTF-8, fall back to extension check
+        // If we can't read, fall back to extension check
       }
       
       // If it's a ZIP but we can't confirm it's DOCX, check extension

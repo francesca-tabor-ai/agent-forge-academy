@@ -8,7 +8,7 @@ import { ApplyWithAIModal } from './ApplyWithAIModal';
 import type { JobOpportunity, NormalizedJobOpportunity } from '@/lib/types/job-opportunity';
 import { normalizeJobOpportunity } from '@/lib/types/job-opportunity';
 
-// Searchable Skill Selector Component
+// Searchable Skill Selector Component (Combobox)
 function SearchableSkillSelector({
   allSkills,
   selectedSkills,
@@ -22,7 +22,11 @@ function SearchableSkillSelector({
 }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [isOpen, setIsOpen] = useState(false);
+  const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const containerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
+  const itemRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   const filteredSkills = useMemo(() => {
     if (!searchQuery) return allSkills.filter(skill => !selectedSkills.includes(skill));
@@ -32,22 +36,92 @@ function SearchableSkillSelector({
     );
   }, [allSkills, selectedSkills, searchQuery]);
 
+  // Reset highlighted index when filtered skills change
+  useEffect(() => {
+    setHighlightedIndex(-1);
+  }, [filteredSkills.length, searchQuery]);
+
+  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
         setIsOpen(false);
         setSearchQuery('');
+        setHighlightedIndex(-1);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Keyboard navigation
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (!isOpen && (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown')) {
+      e.preventDefault();
+      setIsOpen(true);
+      return;
+    }
+
+    if (!isOpen) return;
+
+    switch (e.key) {
+      case 'ArrowDown':
+        e.preventDefault();
+        setHighlightedIndex((prev) => {
+          const next = prev < filteredSkills.length - 1 ? prev + 1 : 0;
+          // Scroll into view
+          setTimeout(() => {
+            itemRefs.current[next]?.scrollIntoView({ block: 'nearest' });
+          }, 0);
+          return next;
+        });
+        break;
+      case 'ArrowUp':
+        e.preventDefault();
+        setHighlightedIndex((prev) => {
+          const next = prev > 0 ? prev - 1 : filteredSkills.length - 1;
+          setTimeout(() => {
+            itemRefs.current[next]?.scrollIntoView({ block: 'nearest' });
+          }, 0);
+          return next;
+        });
+        break;
+      case 'Enter':
+        e.preventDefault();
+        if (highlightedIndex >= 0 && highlightedIndex < filteredSkills.length) {
+          onToggleSkill(filteredSkills[highlightedIndex]);
+          setSearchQuery('');
+          setHighlightedIndex(-1);
+        }
+        break;
+      case 'Escape':
+        e.preventDefault();
+        setIsOpen(false);
+        setSearchQuery('');
+        setHighlightedIndex(-1);
+        inputRef.current?.blur();
+        break;
+    }
+  };
+
+  const handleInputFocus = () => {
+    setIsOpen(true);
+  };
+
+  const handleSelectSkill = (skill: string) => {
+    onToggleSkill(skill);
+    setSearchQuery('');
+    setHighlightedIndex(-1);
+    // Keep dropdown open for multiple selections
+    inputRef.current?.focus();
+  };
+
   if (allSkills.length === 0) return null;
 
   return (
     <div className="relative w-full" ref={containerRef}>
       <div className="flex flex-col gap-2">
+        {/* Selected Skills Chips */}
         {selectedSkills.length > 0 && (
           <div className="flex items-center gap-1.5 flex-wrap">
             {selectedSkills.map((skill) => (
@@ -58,8 +132,9 @@ function SearchableSkillSelector({
                 {skill}
                 <button
                   onClick={() => onRemoveSkill(skill)}
-                  className="hover:text-brand-light/70 text-base leading-none focus:outline-none"
+                  className="hover:text-brand-light/70 text-base leading-none focus:outline-none transition-colors"
                   aria-label={`Remove ${skill}`}
+                  tabIndex={-1}
                 >
                   ×
                 </button>
@@ -67,53 +142,79 @@ function SearchableSkillSelector({
             ))}
           </div>
         )}
+        
+        {/* Combobox Input */}
         <div className="relative">
-          <button
-            type="button"
-            onClick={() => setIsOpen(!isOpen)}
-            className="w-full h-10 px-4 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent bg-white hover:border-gray-400 transition-colors text-left flex items-center justify-between"
-          >
-            <span className="text-gray-500">Add skills...</span>
-            <svg
-              className={`w-4 h-4 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+          <div className="relative">
+            <input
+              ref={inputRef}
+              type="text"
+              placeholder={selectedSkills.length > 0 ? `Add more skills... (${selectedSkills.length} selected)` : 'Type to search skills...'}
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setIsOpen(true);
+              }}
+              onFocus={handleInputFocus}
+              onKeyDown={handleKeyDown}
+              className="w-full h-10 px-4 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent pr-10"
+            />
+            <button
+              type="button"
+              onClick={() => {
+                setIsOpen(!isOpen);
+                if (!isOpen) {
+                  inputRef.current?.focus();
+                }
+              }}
+              className="absolute right-2 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-100 rounded transition-colors"
+              aria-label={isOpen ? 'Close dropdown' : 'Open dropdown'}
+              tabIndex={-1}
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
-          </button>
+              <svg
+                className={`w-4 h-4 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+          </div>
+
+          {/* Dropdown List */}
           {isOpen && (
-            <div className="absolute z-20 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-auto">
-              <div className="p-2 border-b border-gray-200">
-                <input
-                  type="text"
-                  placeholder="Search skills..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-brand-light"
-                  autoFocus
-                />
-              </div>
-              <div className="py-1">
-                {filteredSkills.length > 0 ? (
-                  filteredSkills.map((skill) => (
+            <div
+              ref={listRef}
+              className="absolute z-20 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-auto"
+              role="listbox"
+            >
+              {filteredSkills.length > 0 ? (
+                <div className="py-1">
+                  {filteredSkills.map((skill, index) => (
                     <button
                       key={skill}
+                      ref={(el) => (itemRefs.current[index] = el)}
                       type="button"
-                      onClick={() => {
-                        onToggleSkill(skill);
-                        setSearchQuery('');
-                      }}
-                      className="w-full px-3 py-2 text-sm text-left hover:bg-gray-50 focus:outline-none focus:bg-gray-50"
+                      onClick={() => handleSelectSkill(skill)}
+                      onMouseEnter={() => setHighlightedIndex(index)}
+                      className={`w-full px-3 py-2 text-sm text-left transition-colors ${
+                        highlightedIndex === index
+                          ? 'bg-brand-light/10 text-brand-light'
+                          : 'hover:bg-gray-50 text-gray-900'
+                      } focus:outline-none focus:bg-brand-light/10`}
+                      role="option"
+                      aria-selected={highlightedIndex === index}
                     >
                       {skill}
                     </button>
-                  ))
-                ) : (
-                  <div className="px-3 py-2 text-sm text-gray-500">No skills found</div>
-                )}
-              </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="px-3 py-4 text-sm text-gray-500 text-center">
+                  {searchQuery ? 'No skills found' : 'Start typing to search skills...'}
+                </div>
+              )}
             </div>
           )}
         </div>
