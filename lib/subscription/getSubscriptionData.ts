@@ -418,9 +418,9 @@ async function getAvailablePlans(supabase: any): Promise<Array<{
 
   for (const tierConfig of tierConfigs) {
     // Find matching plans for this tier
-    const tierPlans = plans?.filter(p => 
+    const tierPlans = plans?.filter((p: { id: string; name?: string; interval?: string; stripe_price_id?: string; features?: unknown }) => 
       p.id.startsWith(tierConfig.tier + '_')
-    ) || [];
+    ) ?? [];
 
     for (const plan of tierPlans) {
       const priceInPennies = Math.round((tierConfig.price_monthly || 0) * 100);
