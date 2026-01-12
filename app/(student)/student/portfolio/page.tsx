@@ -48,13 +48,28 @@ export default async function PortfolioPage() {
   // Get CV data
   const { data: cv } = await supabase
     .from('student_cvs')
-    .select('file_name, uploaded_at, visibility')
+    .select('file_name, uploaded_at, visibility, url, file_path')
     .eq('student_profile_id', studentProfile?.id)
     .order('uploaded_at', { ascending: false })
     .limit(1)
-    .single();
+    .maybeSingle();
 
   const hasCV = !!cv;
+
+  // Generate download URL - use signed URL if private, otherwise use public URL
+  let cvDownloadUrl: string | null = null;
+  if (cv) {
+    if (cv.visibility === 'private') {
+      // Generate signed URL for private CVs (expires in 1 hour)
+      const { data: signedUrl } = await supabase.storage
+        .from('portfolio-files')
+        .createSignedUrl(cv.file_path, 3600);
+      cvDownloadUrl = signedUrl?.signedUrl || null;
+    } else {
+      // Use public URL for non-private CVs
+      cvDownloadUrl = cv.url || null;
+    }
+  }
 
   // Calculate portfolio completion percentage
   // Scoring: Profile (25%), CV (25%), Projects (25%), Visibility (25%)

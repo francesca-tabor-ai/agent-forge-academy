@@ -927,87 +927,117 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
 
       {/* Job Cards */}
       {filteredAndSortedJobs.length > 0 ? (
-        <div className="space-y-4 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
           {filteredAndSortedJobs.map((job) => {
             const statusBadge = getStatusBadge(job.status);
-            const displayedSkills = job.skills.slice(0, 3);
-            const remainingSkills = job.skills.length - 3;
+            const matchingScore = job.matching_score ?? job.matchingScore ?? 0;
+            const missingSkills = job.skills_missing ?? job.skillsMissing ?? [];
+            const isLocked = job.status === 'locked';
+            const isStretch = job.status === 'stretch';
+            const canApply = !isLocked && !isStretch;
 
             return (
               <div
                 key={job.id}
-                className="bg-white border border-gray-200 rounded-lg p-6 hover:border-brand-light transition-colors"
+                className="bg-white border border-gray-200 rounded-lg p-6 hover:border-brand-light hover:shadow-md transition-all flex flex-col"
               >
-                {/* Card Content */}
-                <div className="space-y-4">
-                  {/* Row 1: Role Title + Company */}
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-1">{job.title}</h3>
-                    <p className="text-sm text-gray-600">{job.company}</p>
-                  </div>
+                {/* Card Header: Company + Role Title */}
+                <div className="mb-4">
+                  <p className="text-sm font-medium text-brand-light mb-1">{job.company}</p>
+                  <h3 className="text-xl font-semibold text-gray-900 leading-tight">{job.title}</h3>
+                </div>
 
-                  {/* Row 2: Match % + Status Badge */}
-                  <div className="flex items-center gap-3">
-                    <button
-                      onClick={() => {
-                        setSelectedJob(job);
-                        setShowMatchExplanation(true);
-                      }}
-                      className={`px-4 py-2 rounded-lg border ${getMatchingColor(job.matching_score ?? job.matchingScore ?? 0)} ${getMatchingBadgeSize(job.matching_score ?? job.matchingScore ?? 0)} hover:opacity-90 transition-opacity cursor-pointer`}
-                    >
-                      {job.matching_score ?? job.matchingScore ?? 0}% Match
-                    </button>
-                    {statusBadge && (
-                      <span className={`px-3 py-1 text-xs font-medium rounded-full ${statusBadge.className}`}>
-                        {statusBadge.label}
-                        {job.status === 'unlocked' && (
-                          <span
-                            className="ml-1 cursor-help"
-                            title="Unlocked because your skills/projects match this role"
-                          >
-                            ℹ️
-                          </span>
-                        )}
-                      </span>
-                    )}
-                  </div>
+                {/* Match % + Status Badges */}
+                <div className="flex items-center gap-2 mb-4 flex-wrap">
+                  <button
+                    onClick={() => {
+                      setSelectedJob(job);
+                      setShowMatchExplanation(true);
+                    }}
+                    className={`px-3 py-1.5 rounded-lg border font-semibold text-sm ${getMatchingColor(matchingScore)} hover:opacity-90 transition-opacity cursor-pointer`}
+                  >
+                    {matchingScore}% Match
+                  </button>
+                  {statusBadge && (
+                    <span className={`px-3 py-1.5 text-xs font-medium rounded-full ${statusBadge.className}`}>
+                      {statusBadge.label}
+                    </span>
+                  )}
+                </div>
 
-                  {/* Row 3: Skill Tags */}
-                  <div className="flex flex-wrap items-center gap-2">
-                    {displayedSkills.map((skill, idx) => (
-                      <span
-                        key={idx}
-                        className="px-2.5 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded"
+                {/* Missing Skills Chips */}
+                {missingSkills.length > 0 && (
+                  <div className="mb-4">
+                    <p className="text-xs font-medium text-gray-600 mb-2">
+                      {isLocked ? '🔒 Missing skills:' : isStretch ? '🎯 Close match - complete:' : 'Missing skills:'}
+                    </p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {missingSkills.slice(0, 4).map((skill, idx) => (
+                        <span
+                          key={idx}
+                          className="px-2 py-1 bg-yellow-50 text-yellow-800 text-xs font-medium rounded border border-yellow-200"
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                      {missingSkills.length > 4 && (
+                        <span className="px-2 py-1 text-yellow-700 text-xs">
+                          +{missingSkills.length - 4} more
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Required Skills (if not locked/stretch) */}
+                {missingSkills.length === 0 && job.skills.length > 0 && (
+                  <div className="mb-4">
+                    <div className="flex flex-wrap gap-1.5">
+                      {job.skills.slice(0, 5).map((skill, idx) => (
+                        <span
+                          key={idx}
+                          className="px-2 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded"
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                      {job.skills.length > 5 && (
+                        <span className="px-2 py-1 text-gray-500 text-xs">
+                          +{job.skills.length - 5} more
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Primary Action Button */}
+                <div className="mt-auto pt-4 border-t border-gray-100">
+                  {canApply ? (
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={() => {
+                          setApplyJob(normalizeJobOpportunity(job));
+                          setShowApplyModal(true);
+                        }}
+                        className="flex-1 px-4 py-2.5 bg-brand-light text-white rounded-lg hover:bg-brand-light/90 transition-colors font-medium text-sm"
                       >
-                        {skill}
-                      </span>
-                    ))}
-                    {remainingSkills > 0 && (
-                      <span className="px-2.5 py-1 text-gray-500 text-xs">
-                        +{remainingSkills} more
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Row 4: Primary CTA */}
-                  <div className="flex items-center gap-3 pt-2 border-t border-gray-100">
-                    <button
-                      onClick={() => {
-                        // Normalize job to ensure matchingScore is always a number
-                        setApplyJob(normalizeJobOpportunity(job));
-                        setShowApplyModal(true);
-                      }}
-                      className="px-6 py-2 bg-brand-light text-white rounded-lg hover:bg-brand-light/90 transition-colors font-medium"
-                    >
-                      Apply with AI
-                    </button>
+                        Apply with AI
+                      </button>
+                      <Link
+                        href={`/student/jobs/${job.id}`}
+                        className="px-4 py-2.5 text-sm text-gray-700 hover:text-gray-900 transition-colors whitespace-nowrap"
+                      >
+                        View details →
+                      </Link>
+                    </div>
+                  ) : (
                     <Link
                       href={`/student/jobs/${job.id}`}
-                      className="px-4 py-2 text-sm text-gray-700 hover:text-gray-900 transition-colors"
+                      className="block w-full text-center px-4 py-2.5 bg-brand-light text-white rounded-lg hover:bg-brand-light/90 transition-colors font-medium text-sm"
                     >
-                      View details →
+                      {isLocked ? 'View & Unlock' : 'View Details'}
                     </Link>
-                  </div>
+                  )}
                 </div>
               </div>
             );

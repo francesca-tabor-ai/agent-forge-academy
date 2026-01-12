@@ -255,14 +255,8 @@ export function WebRTCRealtime({
         sdp: sdpData.sdp,
       });
 
-      // Wait for data channel to open before sending config
-      dataChannel.onopen = () => {
-        console.log('Data channel opened');
-        // Send system/config event on session start with context and tools
-        sendSystemConfig();
-      };
-
       // Connection will be established via ICE
+      // System config will be sent when data channel opens (handled in onopen above)
     } catch (err) {
       console.error('Error connecting to Realtime API:', err);
       const errorMessage = err instanceof Error ? err.message : 'Failed to connect';
@@ -350,16 +344,19 @@ export function WebRTCRealtime({
       if (onError) onError(errorMsg);
     }
     
-    // Tool call events
+    // Tool call events - OpenAI Realtime API sends tool calls in various formats
     else if (message.type === 'conversation.item.requires_action') {
       // Model is requesting a tool call
       const item = message.item;
-      if (item && item.type === 'function_call') {
+      if (item && (item.type === 'function_call' || item.function_call)) {
         handleToolCall(item);
       }
-    } else if (message.type === 'conversation.item.function_call') {
+    } else if (message.type === 'conversation.item.function_call' || message.type === 'function_call') {
       // Direct function call event
       handleToolCall(message.item || message);
+    } else if (message.item?.type === 'function_call') {
+      // Function call nested in item
+      handleToolCall(message.item);
     }
     
     // Connection events
@@ -421,21 +418,24 @@ export function WebRTCRealtime({
    * Handle tool call request from the model
    */
   const handleToolCall = useCallback(async (functionCall: any) => {
-    if (!functionCall || !functionCall.name || !functionCall.arguments) {
-      console.error('Invalid function call:', functionCall);
+    // Handle different function call formats from OpenAI Realtime API
+    const callId = functionCall.id || functionCall.call_id || functionCall.item_id;
+    const toolName = functionCall.name || functionCall.function?.name;
+    const argumentsStr = functionCall.arguments || functionCall.function?.arguments || '{}';
+    
+    if (!toolName) {
+      console.error('Invalid function call: missing name', functionCall);
       return;
     }
 
-    const toolName = functionCall.name;
     let parameters: any;
-
     try {
-      parameters = typeof functionCall.arguments === 'string'
-        ? JSON.parse(functionCall.arguments)
-        : functionCall.arguments;
+      parameters = typeof argumentsStr === 'string'
+        ? JSON.parse(argumentsStr)
+        : argumentsStr;
     } catch (e) {
       console.error('Failed to parse function arguments:', e);
-      return;
+      parameters = {};
     }
 
     // Execute tool on backend
@@ -459,11 +459,12 @@ export function WebRTCRealtime({
       const { result } = await response.json();
 
       // Send tool result back to model via DataChannel
+      // OpenAI Realtime API expects function_call_output item
       const toolResultEvent = {
         type: 'conversation.item.create',
         item: {
           type: 'function_call_output',
-          call_id: functionCall.id || functionCall.call_id,
+          call_id: callId,
           output: JSON.stringify(result),
         },
       };
@@ -477,7 +478,7 @@ export function WebRTCRealtime({
         type: 'conversation.item.create',
         item: {
           type: 'function_call_output',
-          call_id: functionCall.id || functionCall.call_id,
+          call_id: callId,
           output: JSON.stringify({
             success: false,
             error: error instanceof Error ? error.message : 'Tool execution failed',

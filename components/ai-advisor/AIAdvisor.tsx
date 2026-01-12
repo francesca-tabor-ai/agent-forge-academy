@@ -744,6 +744,8 @@ export function AIAdvisor({
           >
             <div className={useWebRTCRealtime ? '' : 'hidden'}>
               <WebRTCRealtime
+                // Context for tool calling
+                context={activeContext}
                 // Partial transcripts (optional) - show while speaking
                 onPartialUserTranscript={(text) => {
                   // Show partial user transcript while speaking
