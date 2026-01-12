@@ -32,6 +32,7 @@
 import { useState, useEffect } from 'react';
 import type { SubscriptionPageData } from './getSubscriptionData';
 import useSWR from 'swr';
+import { useQuery } from '@tanstack/react-query';
 
 const API_ENDPOINT = '/api/student/subscription';
 
@@ -90,8 +91,6 @@ export function useSubscriptionDataSWR() {
  * ```
  */
 export function useSubscriptionDataQuery() {
-  // Dynamic import to avoid bundling React Query if not used
-  const { useQuery } = require('@tanstack/react-query');
   return useQuery<SubscriptionPageData>({
     queryKey: ['subscription-data'],
     queryFn: fetchSubscriptionData,
