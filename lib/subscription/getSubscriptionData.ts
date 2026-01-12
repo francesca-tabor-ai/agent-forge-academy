@@ -192,7 +192,7 @@ export async function getSubscriptionData(): Promise<SubscriptionPageData | null
     }
 
     // Get plan details
-    let planData = null;
+    let planData: SubscriptionPageData['plan'] = null;
     
     if (subscription.plan_id) {
       // New structure with plan_id FK
@@ -207,16 +207,18 @@ export async function getSubscriptionData(): Promise<SubscriptionPageData | null
         const currency = plan.currency || 'GBP';
 
         planData = {
-          name: plan.name,
-          code: plan.code || plan.id.split('_')[0],
+          name: String(plan.name ?? ''),
+          code: String(plan.code ?? plan.id.split('_')[0]),
           status: mapSubscriptionStatus(subscription.status),
           price: formatCurrency(priceInPennies, currency),
           interval: normalizeInterval(plan.interval),
           renewsOn: subscription.current_period_end 
             ? new Date(subscription.current_period_end).toISOString()
             : null,
-          description: plan.description || null,
-          features: plan.features || null,
+          description: plan.description ? String(plan.description) : null,
+          features: (plan.features && typeof plan.features === 'object' && !Array.isArray(plan.features))
+            ? (plan.features as Record<string, unknown>)
+            : null,
         };
       }
     } else if (subscription.tier) {
@@ -232,15 +234,15 @@ export async function getSubscriptionData(): Promise<SubscriptionPageData | null
         const currency = tierConfig.currency || 'GBP';
 
         planData = {
-          name: tierConfig.name,
-          code: subscription.tier,
+          name: String(tierConfig.name ?? ''),
+          code: String(subscription.tier),
           status: mapSubscriptionStatus(subscription.status),
           price: formatCurrency(priceInPennies, currency),
-          interval: 'month', // Default for old structure
+          interval: 'month' as const, // Default for old structure
           renewsOn: subscription.current_period_end 
             ? new Date(subscription.current_period_end).toISOString()
             : null,
-          description: tierConfig.description || null,
+          description: tierConfig.description ? String(tierConfig.description) : null,
           features: null, // Old structure doesn't have features JSON
         };
       }
