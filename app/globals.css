@@ -276,3 +276,220 @@
   .stagger-item:nth-child(9) { animation-delay: 0.45s; }
   .stagger-item:nth-child(10) { animation-delay: 0.5s; }
 }
+
+/* Global Code Block Styling - GitHub dark theme for all markdown code blocks */
+/* This ensures all code blocks have dark background and light text */
+
+/* Block code */
+pre {
+  background-color: #0d1117; /* GitHub dark */
+  color: #e6edf3;
+  padding: 16px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 0.9rem;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+/* Inline code */
+code:not(pre code) {
+  background-color: rgba(110, 118, 129, 0.2);
+  color: #e6edf3;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+}
+
+/* Ensure syntax highlighter doesn't override */
+pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+}
+
+/* Ensure code blocks in prose classes also use dark theme */
+/* Override Tailwind Typography defaults for code blocks */
+.prose pre,
+.prose-sm pre,
+.prose-lg pre,
+.prose-xl pre,
+.prose-2xl pre,
+.prose-invert pre,
+.prose-invert-sm pre,
+.prose-invert-lg pre {
+  background-color: #0d1117 !important;
+  color: #e6edf3 !important;
+  border: none !important;
+  padding: 16px !important;
+  border-radius: 8px !important;
+  overflow-x: auto !important;
+}
+
+.prose pre code,
+.prose-sm pre code,
+.prose-lg pre code,
+.prose-xl pre code,
+.prose-2xl pre code,
+.prose-invert pre code,
+.prose-invert-sm pre code,
+.prose-invert-lg pre code {
+  background: transparent !important;
+  color: #e6edf3 !important;
+  padding: 0 !important;
+  font-size: inherit !important;
+}
+
+/* Override inline code in prose classes */
+.prose code:not(pre code),
+.prose-sm code:not(pre code),
+.prose-lg code:not(pre code),
+.prose-xl code:not(pre code),
+.prose-2xl code:not(pre code),
+.prose-invert code:not(pre code),
+.prose-invert-sm code:not(pre code),
+.prose-invert-lg code:not(pre code) {
+  background-color: rgba(110, 118, 129, 0.2) !important;
+  color: #e6edf3 !important;
+  padding: 2px 6px !important;
+  border-radius: 4px !important;
+  font-size: 0.875em !important;
+}
+
+/* Override any light theme code block styles */
+pre[class*="bg-"]:not([class*="bg-gray-900"]):not([class*="bg-black"]) {
+  background-color: #0d1117 !important;
+}
+
+pre[class*="text-"]:not([class*="text-gray-100"]):not([class*="text-white"]) {
+  color: #e6edf3 !important;
+}
+
+/* Prevent yellow/light text colors in code blocks */
+pre code[class*="text-yellow"],
+pre code[class*="text-light"],
+pre code[class*="text-gray-300"],
+pre code[class*="text-gray-400"],
+pre code[class*="text-gray-500"],
+pre code[class*="text-gray-600"],
+pre code[class*="text-gray-700"],
+pre code[class*="text-gray-800"],
+pre code[class*="text-gray-900"],
+pre[class*="text-yellow"],
+pre[class*="text-light"],
+pre[class*="text-gray-300"],
+pre[class*="text-gray-400"],
+pre[class*="text-gray-500"],
+pre[class*="text-gray-600"],
+pre[class*="text-gray-700"],
+pre[class*="text-gray-800"],
+pre[class*="text-gray-900"] {
+  color: #e6edf3 !important;
+}
+
+/* Ensure all text elements inside pre use light text (but allow syntax highlighting) */
+pre code,
+pre code span,
+pre code *:not([class*="hljs"]):not([class*="token"]) {
+  color: #e6edf3 !important;
+}
+
+/* Allow syntax highlighting colors but ensure minimum brightness for visibility */
+pre code .hljs-keyword,
+pre code .hljs-string,
+pre code .hljs-number,
+pre code .hljs-comment,
+pre code .token.keyword,
+pre code .token.string,
+pre code .token.number,
+pre code .token.comment {
+  /* Syntax highlighting colors are allowed, but ensure they're visible on dark background */
+  /* If color is too dark, it will be overridden by the rule above */
+}
+
+/* Defensive CSS for syntax highlighting libraries (if added in future) */
+/* 
+ * CURRENT STATUS: No syntax highlighting library is currently installed.
+ * The codebase uses react-markdown without syntax highlighting plugins.
+ * 
+ * IF ADDING SYNTAX HIGHLIGHTING IN THE FUTURE:
+ * - Prism.js: Use theme "prism-tomorrow" or "prism-okaidia" (dark themes)
+ * - Highlight.js: Use theme "github-dark" or "atom-one-dark" (dark themes)
+ * - Shiki: Use theme "dark-plus" or "github-dark" (dark themes)
+ * 
+ * IMPORTANT: Only load ONE theme to avoid conflicts.
+ * The CSS below ensures dark theme colors are applied regardless of library.
+ */
+/* Prism.js dark theme overrides */
+pre[class*="language-"],
+code[class*="language-"],
+.hljs,
+.hljs-code,
+.hljs-comment,
+.hljs-keyword,
+.hljs-string,
+.hljs-number,
+.hljs-function,
+.hljs-variable,
+.hljs-title,
+.hljs-attr,
+.hljs-selector-tag,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-selector-attr,
+.hljs-selector-pseudo,
+.hljs-built_in,
+.hljs-literal,
+.hljs-type,
+.hljs-addition,
+.hljs-deletion,
+.hljs-meta,
+.hljs-doctag,
+.hljs-quote,
+.hljs-emphasis,
+.hljs-strong {
+  background-color: #0d1117 !important;
+  color: #e6edf3 !important;
+}
+
+/* Ensure syntax highlighting spans inside code blocks use light text */
+pre code span,
+pre code .hljs,
+pre code [class*="language-"] {
+  color: #e6edf3 !important;
+}
+
+/* Prism.js specific - ensure tokens use light colors */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata,
+.token.punctuation,
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted,
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted,
+.token.operator,
+.token.entity,
+.token.url,
+.token.variable,
+.token.atrule,
+.token.attr-value,
+.token.function,
+.token.class-name,
+.token.keyword,
+.token.regex,
+.token.important {
+  color: #e6edf3 !important;
+  background: transparent !important;
+}

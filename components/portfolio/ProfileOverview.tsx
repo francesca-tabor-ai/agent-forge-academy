@@ -113,9 +113,28 @@ export function ProfileOverview({ fullName, headline, bio, primaryRoles = [], co
                       {children}
                     </a>
                   ),
-                  code: ({ children }) => (
-                    <code className="bg-gray-200 px-1 py-0.5 rounded text-xs font-mono">{children}</code>
+                  // Code blocks - dark theme
+                  pre: ({ children, ...props }: any) => (
+                    <pre {...props} className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto mb-4 font-mono text-sm">
+                      {children}
+                    </pre>
                   ),
+                  code: ({ children, className, ...props }: any) => {
+                    const isInline = !className;
+                    if (isInline) {
+                      return (
+                        <code {...props} className="bg-gray-200 px-1 py-0.5 rounded text-xs font-mono">
+                          {children}
+                        </code>
+                      );
+                    }
+                    // Code block (inside pre)
+                    return (
+                      <code {...props} className={`${className || ''} bg-transparent text-gray-100`}>
+                        {children}
+                      </code>
+                    );
+                  },
                 }}
               >
                 {bio}

@@ -18,7 +18,37 @@ export function ChatPanel({ messages, isLoading, chatEndRef, activeContext, onAp
 
   const formatMessage = (content: string) => {
     // Convert markdown to JSX with proper formatting
-    return <ReactMarkdown>{content}</ReactMarkdown>;
+    return (
+      <ReactMarkdown
+        components={{
+          // Code blocks - dark theme
+          pre: ({ children, ...props }: any) => (
+            <pre {...props} className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto mb-4 font-mono text-sm">
+              {children}
+            </pre>
+          ),
+          // Code inside pre blocks
+          code: ({ children, className, ...props }: any) => {
+            const isInline = !className;
+            if (isInline) {
+              return (
+                <code {...props} className="bg-gray-100 text-gray-900 px-1.5 py-0.5 rounded text-xs font-mono">
+                  {children}
+                </code>
+              );
+            }
+            // Code block (inside pre)
+            return (
+              <code {...props} className={`${className || ''} bg-transparent text-gray-100`}>
+                {children}
+              </code>
+            );
+          },
+        }}
+      >
+        {content}
+      </ReactMarkdown>
+    );
   };
 
   // Extract project description from message content

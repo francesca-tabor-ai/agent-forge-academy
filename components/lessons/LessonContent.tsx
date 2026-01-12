@@ -178,19 +178,20 @@ const markdownComponents: Components = {
     const isInline = !className;
     if (isInline) {
       return (
-        <code {...props} className="bg-gray-100 text-brand-light px-1.5 py-0.5 rounded text-sm font-mono">
+        <code {...props} className="bg-gray-100 text-gray-900 px-1.5 py-0.5 rounded text-sm font-mono">
           {children}
         </code>
       );
     }
+    // Code inside pre blocks - inherit dark theme
     return (
-      <code {...props} className={className}>
+      <code {...props} className={`${className || ''} bg-transparent text-gray-100`}>
         {children}
       </code>
     );
   },
   pre: ({ children, ...props }: ComponentPropsWithoutRef<'pre'>) => (
-    <pre {...props} className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto mb-4">
+    <pre {...props} className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto mb-4 font-mono text-sm">
       {children}
     </pre>
   ),
