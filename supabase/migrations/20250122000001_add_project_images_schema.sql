@@ -40,43 +40,65 @@ ALTER TABLE project_images ENABLE ROW LEVEL SECURITY;
 
 -- SELECT: Users can see images for projects they own
 DROP POLICY IF EXISTS "Users can view their own project images" ON project_images;
-CREATE POLICY "Users can view their own project images"
-ON project_images
-FOR SELECT
-USING (
-  owner_id = auth.uid()
-);
+DO $$
+BEGIN
+  EXECUTE 'CREATE POLICY "Users can view their own project images"
+    ON project_images
+    FOR SELECT
+    USING (owner_id = auth.uid())';
+EXCEPTION
+  WHEN duplicate_object THEN
+    NULL;
+END $$;
 
 -- INSERT: Users can only insert images for their own projects
 DROP POLICY IF EXISTS "Users can insert images for their own projects" ON project_images;
-CREATE POLICY "Users can insert images for their own projects"
-ON project_images
-FOR INSERT
-WITH CHECK (
-  owner_id = auth.uid() AND
-  EXISTS (
-    SELECT 1 FROM portfolio_projects pp
-    JOIN student_profiles sp ON pp.student_profile_id = sp.id
-    JOIN profiles p ON sp.profile_id = p.id
-    WHERE pp.id = project_images.project_id
-    AND p.user_id = auth.uid()
-  )
-);
+DO $$
+BEGIN
+  EXECUTE 'CREATE POLICY "Users can insert images for their own projects"
+    ON project_images
+    FOR INSERT
+    WITH CHECK (
+      owner_id = auth.uid() AND
+      EXISTS (
+        SELECT 1 FROM portfolio_projects pp
+        JOIN student_profiles sp ON pp.student_profile_id = sp.id
+        JOIN profiles p ON sp.profile_id = p.id
+        WHERE pp.id = project_images.project_id
+        AND p.user_id = auth.uid()
+      )
+    )';
+EXCEPTION
+  WHEN duplicate_object THEN
+    NULL;
+END $$;
 
 -- UPDATE: Users can update their own project images
 DROP POLICY IF EXISTS "Users can update their own project images" ON project_images;
-CREATE POLICY "Users can update their own project images"
-ON project_images
-FOR UPDATE
-USING (owner_id = auth.uid())
-WITH CHECK (owner_id = auth.uid());
+DO $$
+BEGIN
+  EXECUTE 'CREATE POLICY "Users can update their own project images"
+    ON project_images
+    FOR UPDATE
+    USING (owner_id = auth.uid())
+    WITH CHECK (owner_id = auth.uid())';
+EXCEPTION
+  WHEN duplicate_object THEN
+    NULL;
+END $$;
 
 -- DELETE: Users can delete their own project images
 DROP POLICY IF EXISTS "Users can delete their own project images" ON project_images;
-CREATE POLICY "Users can delete their own project images"
-ON project_images
-FOR DELETE
-USING (owner_id = auth.uid());
+DO $$
+BEGIN
+  EXECUTE 'CREATE POLICY "Users can delete their own project images"
+    ON project_images
+    FOR DELETE
+    USING (owner_id = auth.uid())';
+EXCEPTION
+  WHEN duplicate_object THEN
+    NULL;
+END $$;
 
 -- ============================================
 -- STEP 5: Create storage bucket (if not exists)
@@ -100,36 +122,54 @@ ON CONFLICT (id) DO NOTHING;
 -- INSERT: Users can upload only to their own user-scoped paths
 -- Path format: userId/projectId/filename
 DROP POLICY IF EXISTS "Users can upload to their own project images" ON storage.objects;
-CREATE POLICY "Users can upload to their own project images"
-ON storage.objects
-FOR INSERT
-TO authenticated
-WITH CHECK (
-  bucket_id = 'project-images' AND
-  (storage.foldername(name))[1] = auth.uid()::text
-);
+DO $$
+BEGIN
+  EXECUTE 'CREATE POLICY "Users can upload to their own project images"
+    ON storage.objects
+    FOR INSERT
+    TO authenticated
+    WITH CHECK (
+      bucket_id = ''project-images'' AND
+      (storage.foldername(name))[1] = auth.uid()::text
+    )';
+EXCEPTION
+  WHEN duplicate_object THEN
+    NULL;
+END $$;
 
 -- SELECT: Users can read their own project images
 DROP POLICY IF EXISTS "Users can read their own project images" ON storage.objects;
-CREATE POLICY "Users can read their own project images"
-ON storage.objects
-FOR SELECT
-TO authenticated
-USING (
-  bucket_id = 'project-images' AND
-  (storage.foldername(name))[1] = auth.uid()::text
-);
+DO $$
+BEGIN
+  EXECUTE 'CREATE POLICY "Users can read their own project images"
+    ON storage.objects
+    FOR SELECT
+    TO authenticated
+    USING (
+      bucket_id = ''project-images'' AND
+      (storage.foldername(name))[1] = auth.uid()::text
+    )';
+EXCEPTION
+  WHEN duplicate_object THEN
+    NULL;
+END $$;
 
 -- DELETE: Users can delete their own project images
 DROP POLICY IF EXISTS "Users can delete their own project images" ON storage.objects;
-CREATE POLICY "Users can delete their own project images"
-ON storage.objects
-FOR DELETE
-TO authenticated
-USING (
-  bucket_id = 'project-images' AND
-  (storage.foldername(name))[1] = auth.uid()::text
-);
+DO $$
+BEGIN
+  EXECUTE 'CREATE POLICY "Users can delete their own project images"
+    ON storage.objects
+    FOR DELETE
+    TO authenticated
+    USING (
+      bucket_id = ''project-images'' AND
+      (storage.foldername(name))[1] = auth.uid()::text
+    )';
+EXCEPTION
+  WHEN duplicate_object THEN
+    NULL;
+END $$;
 
 -- ============================================
 -- STEP 7: Helper function to get user_id from project_id

@@ -63,12 +63,20 @@ END $$;
 DO $$
 BEGIN
   IF NOT EXISTS (
-    SELECT 1 FROM pg_constraint 
-    WHERE conname = 'email_outbox_dedupe_key_unique'
+    SELECT 1 
+    FROM pg_constraint c
+    JOIN pg_namespace n ON n.oid = c.connamespace
+    WHERE n.nspname = 'public'
+      AND c.conname = 'email_outbox_dedupe_key_unique'
+      AND c.conrelid = 'public.email_outbox'::regclass
   ) THEN
     ALTER TABLE email_outbox
       ADD CONSTRAINT email_outbox_dedupe_key_unique UNIQUE (dedupe_key);
   END IF;
+EXCEPTION
+  WHEN duplicate_object THEN
+    -- Constraint already exists, ignore
+    NULL;
 END $$;
 
 -- Create index on dedupe_key for quick lookups
