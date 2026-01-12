@@ -151,11 +151,20 @@ export function createSystemConfigEvent(
 ): any {
   const formattedContext = formatContextForRealtime(context);
 
+  // OpenAI Realtime API session.update event format
+  // Note: The actual format may vary - this is based on OpenAI's Realtime API patterns
   return {
     type: 'session.update',
     session: {
       modalities: ['text', 'audio'],
-      instructions: `You are an AI advisor for an online learning platform. Help students with course explanations, project guidance, and job application support. Use the available tools to fetch detailed information when needed.`,
+      instructions: `You are an AI advisor for an online learning platform. Help students with course explanations, project guidance, and job application support. Use the available tools to fetch detailed information when needed.
+
+Current Context:
+${formattedContext.course ? `- Course: ${formattedContext.course.title} (${formattedContext.course.slug})` : ''}
+${formattedContext.project ? `- Project: ${formattedContext.project.title}` : ''}
+${formattedContext.job ? `- Job: ${formattedContext.job.title} at ${formattedContext.job.company}` : ''}
+
+Keep context minimal - use tools to fetch large content when needed.`,
       voice: 'alloy',
       input_audio_format: 'pcm16',
       output_audio_format: 'pcm16',
@@ -177,8 +186,6 @@ export function createSystemConfigEvent(
       tool_choice: 'auto',
       temperature: 0.7,
       max_response_output_tokens: 4096,
-      // Context information (minimal - IDs + summaries)
-      context: formattedContext,
     },
   };
 }
