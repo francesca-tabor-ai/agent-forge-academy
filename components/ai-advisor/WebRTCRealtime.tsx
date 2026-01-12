@@ -164,6 +164,22 @@ export function WebRTCRealtime({
   }, [disconnect]);
 
   /**
+   * Trigger fallback to standard voice
+   * Declared early so it can be used in connect and other callbacks
+   */
+  const triggerFallback = useCallback(() => {
+    console.log('WebRTC failed, triggering fallback to standard voice');
+    setHasFailed(true);
+    setShowFallbackMessage(true);
+    disconnect();
+    
+    // Call fallback callback if provided
+    if (onFallback) {
+      onFallback();
+    }
+  }, [onFallback, disconnect]);
+
+  /**
    * Get ephemeral session credentials from backend
    */
   const getSessionCredentials = useCallback(async (): Promise<RealtimeSession> => {
@@ -827,21 +843,6 @@ export function WebRTCRealtime({
       audioElementRef.current.muted = !newVoiceOutputState;
     }
   }, [voiceOutputEnabled]);
-
-  /**
-   * Trigger fallback to standard voice
-   */
-  const triggerFallback = useCallback(() => {
-    console.log('WebRTC failed, triggering fallback to standard voice');
-    setHasFailed(true);
-    setShowFallbackMessage(true);
-    disconnect();
-    
-    // Call fallback callback if provided
-    if (onFallback) {
-      onFallback();
-    }
-  }, [onFallback, disconnect]);
 
   // Auto-connect on mount - establish connection on page load
   // Keep connection open until user navigates away or explicitly disconnects
