@@ -500,10 +500,20 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
   };
 
   const handleStatusToggle = (status: string) => {
-    const newStatus = statusFilter.includes(status)
-      ? statusFilter.filter(s => s !== status)
-      : [...statusFilter, status];
+    // Single-select: if clicking the same status, clear it; otherwise, replace with new status
+    const newStatus = statusFilter.includes(status) ? [] : [status];
     updateURLParams({ status: newStatus.length > 0 ? newStatus.join(',') : null });
+  };
+
+  const handleResetFilters = () => {
+    updateURLParams({
+      search: null,
+      status: null,
+      matchMin: null,
+      matchMax: null,
+      skills: null,
+      sort: null,
+    });
   };
 
   const handleMatchRangeChange = (min: number, max: number) => {
@@ -648,7 +658,17 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
 
             {/* Status Filter */}
             <div className="col-span-12 md:col-span-7">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
+              <div className="flex items-center justify-between mb-2">
+                <label className="block text-sm font-medium text-gray-700">Status</label>
+                {(statusFilter.length > 0 || searchQuery || skillFilter.length > 0 || matchMin !== 60 || matchMax !== 100) && (
+                  <button
+                    onClick={handleResetFilters}
+                    className="text-xs text-gray-500 hover:text-gray-700 underline transition-colors"
+                  >
+                    Reset filters
+                  </button>
+                )}
+              </div>
               <div className="flex items-center gap-2 flex-wrap">
                 {['new', 'recommended', 'unlocked', 'locked', 'stretch'].map((status) => (
                   <button
@@ -656,8 +676,8 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
                     onClick={() => handleStatusToggle(status)}
                     className={`px-3 py-1.5 text-xs font-medium rounded-full transition-all whitespace-nowrap ${
                       statusFilter.includes(status)
-                        ? 'bg-brand-light text-white shadow-sm'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        ? 'bg-brand-light text-white shadow-sm border border-brand-light'
+                        : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 hover:border-gray-400'
                     }`}
                   >
                     {status.charAt(0).toUpperCase() + status.slice(1)}

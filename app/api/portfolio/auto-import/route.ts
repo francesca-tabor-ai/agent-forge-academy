@@ -248,6 +248,12 @@ export async function POST(request: Request) {
           });
 
         if (!uploadError) {
+          // Get public URL
+          const { data: urlData } = supabase.storage
+            .from('portfolio-files')
+            .getPublicUrl(filePath);
+          const publicUrl = urlData.publicUrl;
+
           // Delete old CV if exists
           const { data: oldCVs } = await supabase
             .from('student_cvs')
@@ -273,6 +279,7 @@ export async function POST(request: Request) {
               student_profile_id: studentProfileId,
               file_name: cvFile.name,
               file_path: filePath,
+              url: publicUrl, // Store public URL for convenience
               file_size: cvFile.size,
               mime_type: cvFile.type,
               visibility: 'private',

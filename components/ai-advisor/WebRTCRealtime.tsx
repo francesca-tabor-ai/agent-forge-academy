@@ -11,6 +11,11 @@ export interface WebRTCRealtimeProps {
   disabled?: boolean;
   studentProfileId?: string | null;
   defaultMode?: VoiceMode;
+  // Transcript callbacks for chat UI integration
+  onPartialUserTranscript?: (text: string) => void; // Optional: show partial user transcript while speaking
+  onPartialAssistantTranscript?: (text: string) => void; // Optional: show partial assistant transcript while speaking
+  onFinalUserTranscript?: (text: string) => void; // Finalize user message into chat history
+  onFinalAssistantTranscript?: (text: string) => void; // Finalize assistant message into chat history
 }
 
 interface RealtimeSession {
