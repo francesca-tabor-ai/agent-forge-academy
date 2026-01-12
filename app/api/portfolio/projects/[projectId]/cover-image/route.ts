@@ -43,10 +43,89 @@ export async function POST(request: Request, { params }: RouteParams) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }
 
-    // Parse form data
-    const formData = await request.formData();
-    const file = formData.get('file') as File;
+    // Support both form data (file upload) and JSON (URL input)
+    const contentType = request.headers.get('content-type') || '';
+    let imageUrl: string | null = null;
+    let file: File | null = null;
 
+    if (contentType.includes('application/json')) {
+      // JSON request with URL
+      const body = await request.json();
+      imageUrl = body.imageUrl || body.url || body.cover_image_url || null;
+
+      if (!imageUrl) {
+        return NextResponse.json({ error: 'No image URL provided' }, { status: 400 });
+      }
+
+      // Validate URL format
+      try {
+        const url = new URL(imageUrl);
+        if (!['http:', 'https:'].includes(url.protocol)) {
+          return NextResponse.json(
+            { error: 'Invalid URL protocol' },
+            { status: 400 }
+          );
+        }
+      } catch {
+        return NextResponse.json(
+          { error: 'Invalid URL format' },
+          { status: 400 }
+        );
+      }
+    } else {
+      // Form data with file upload
+      const formData = await request.formData();
+      file = formData.get('file') as File;
+      imageUrl = formData.get('imageUrl') as string | null;
+
+      if (!file && !imageUrl) {
+        return NextResponse.json(
+          { error: 'No file or image URL provided' },
+          { status: 400 }
+        );
+      }
+    }
+
+    // If URL is provided, use it directly (skip file upload)
+    if (imageUrl && !file) {
+      // Store external URL with "external:" prefix (similar to gallery images)
+      const externalPath = `external:${imageUrl}`;
+      
+      // Delete old cover image from storage if it exists
+      if (project.cover_image_path && !project.cover_image_path.startsWith('external:')) {
+        try {
+          await supabase.storage
+            .from('project-images')
+            .remove([project.cover_image_path]);
+        } catch (err) {
+          console.warn('Failed to delete old cover image:', err);
+        }
+      }
+
+      // Update project with the external URL
+      const { error: updateError } = await supabase
+        .from('portfolio_projects')
+        .update({
+          cover_image_path: externalPath,
+          cover_image_updated_at: new Date().toISOString(),
+        })
+        .eq('id', projectId);
+
+      if (updateError) {
+        return NextResponse.json(
+          { error: `Failed to update project: ${updateError.message}` },
+          { status: 500 }
+        );
+      }
+
+      return NextResponse.json({
+        ok: true,
+        cover_image_path: externalPath,
+        cover_image_url: imageUrl,
+      });
+    }
+
+    // File upload path
     if (!file) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 });
     }

@@ -12,9 +12,140 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const formData = await request.formData();
-    const file = formData.get('file') as File;
+    // Support both form data (file upload) and JSON (URL input)
+    const contentType = request.headers.get('content-type') || '';
+    let imageUrl: string | null = null;
+    let file: File | null = null;
 
+    if (contentType.includes('application/json')) {
+      // JSON request with URL
+      const body = await request.json();
+      imageUrl = body.imageUrl || body.url || null;
+
+      if (!imageUrl) {
+        return NextResponse.json(
+          { ok: false, error: { code: 'NO_URL', message: 'No image URL provided' } },
+          { status: 400 }
+        );
+      }
+
+      // Validate URL format
+      try {
+        const url = new URL(imageUrl);
+        if (!['http:', 'https:'].includes(url.protocol)) {
+          return NextResponse.json(
+            { ok: false, error: { code: 'INVALID_URL', message: 'Invalid URL protocol' } },
+            { status: 400 }
+          );
+        }
+      } catch {
+        return NextResponse.json(
+          { ok: false, error: { code: 'INVALID_URL', message: 'Invalid URL format' } },
+          { status: 400 }
+        );
+      }
+    } else {
+      // Form data with file upload
+      const formData = await request.formData();
+      file = formData.get('file') as File;
+      imageUrl = formData.get('imageUrl') as string | null;
+
+      if (!file && !imageUrl) {
+        return NextResponse.json(
+          { ok: false, error: { code: 'NO_FILE_OR_URL', message: 'No file or image URL provided' } },
+          { status: 400 }
+        );
+      }
+    }
+
+    // If URL is provided, use it directly (skip file upload)
+    if (imageUrl && !file) {
+      // Get user's profile
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('id, user_id')
+        .eq('user_id', user.id)
+        .single();
+
+      if (!profile) {
+        return NextResponse.json(
+          { ok: false, error: { code: 'PROFILE_NOT_FOUND', message: 'Profile not found' } },
+          { status: 404 }
+        );
+      }
+
+      // Get or create student profile
+      let { data: studentProfile } = await supabase
+        .from('student_profiles')
+        .select('id, headshot_image_url')
+        .eq('profile_id', profile.id)
+        .single();
+
+      if (!studentProfile) {
+        const { data: newProfile, error: createError } = await supabase
+          .from('student_profiles')
+          .insert({
+            profile_id: profile.id,
+            headline: '',
+            bio: null,
+            skills: [],
+            location: null,
+            linkedin_url: null,
+            github_url: null,
+            website_url: null,
+            headshot_image_url: null,
+          })
+          .select('id, headshot_image_url')
+          .single();
+
+        if (createError) {
+          return NextResponse.json(
+            { error: `We couldn't save your profile yet — please try again` },
+            { status: 500 }
+          );
+        }
+
+        studentProfile = newProfile;
+      }
+
+      // Delete old headshot from storage if it exists and is in our bucket
+      if (studentProfile.headshot_image_url) {
+        const oldUrl = studentProfile.headshot_image_url;
+        if (oldUrl.includes('/profile-headshots/')) {
+          const urlParts = oldUrl.split('/profile-headshots/');
+          if (urlParts.length > 1) {
+            const storagePath = urlParts[1];
+            await supabase.storage
+              .from('profile-headshots')
+              .remove([storagePath]);
+          }
+        }
+      }
+
+      // Update profile with the provided URL
+      const { error: updateError } = await supabase
+        .from('student_profiles')
+        .update({ headshot_image_url: imageUrl })
+        .eq('id', studentProfile.id);
+
+      if (updateError) {
+        return NextResponse.json(
+          { error: `Failed to update profile: ${updateError.message}` },
+          { status: 500 }
+        );
+      }
+
+      return NextResponse.json({
+        ok: true,
+        success: true,
+        imageUrl: imageUrl,
+        profile: {
+          headshot_image_url: imageUrl,
+        },
+      });
+    }
+
+    // File upload path
     if (!file) {
       return NextResponse.json(
         { ok: false, error: { code: 'NO_FILE', message: 'No file provided' } },
@@ -103,33 +234,45 @@ export async function POST(request: Request) {
       console.log('[Headshot Upload] Created student profile:', studentProfile.id);
     }
 
-    // Delete old headshot if it exists
+    // Delete old headshot if it exists (check both old and new bucket paths)
     if (studentProfile.headshot_image_url) {
-      // Extract the path from the URL (format: .../portfolio-files/headshots/...)
-      const urlParts = studentProfile.headshot_image_url.split('/portfolio-files/');
-      if (urlParts.length > 1) {
-        const storagePath = urlParts[1]; // This already includes 'headshots/...'
-        await supabase.storage
-          .from('portfolio-files')
-          .remove([storagePath]);
+      const oldUrl = studentProfile.headshot_image_url;
+      // Check for old portfolio-files bucket
+      if (oldUrl.includes('/portfolio-files/')) {
+        const urlParts = oldUrl.split('/portfolio-files/');
+        if (urlParts.length > 1) {
+          const storagePath = urlParts[1];
+          await supabase.storage
+            .from('portfolio-files')
+            .remove([storagePath]);
+        }
+      }
+      // Check for new profile-headshots bucket
+      if (oldUrl.includes('/profile-headshots/')) {
+        const urlParts = oldUrl.split('/profile-headshots/');
+        if (urlParts.length > 1) {
+          const storagePath = urlParts[1];
+          await supabase.storage
+            .from('profile-headshots')
+            .remove([storagePath]);
+        }
       }
     }
 
-    // Upload to Supabase Storage
+    // Upload to Supabase Storage (using new profile-headshots bucket)
     const fileExt = file.name.split('.').pop()?.toLowerCase() || 'jpg';
     const timestamp = Date.now();
-    const fileName = `${studentProfile.id}/headshot-${timestamp}.${fileExt}`;
-    const filePath = `headshots/${fileName}`;
+    const storagePath = `${user.id}/headshot-${timestamp}.${fileExt}`;
 
     console.log('[Headshot Upload] Uploading to storage:', {
-      bucket: 'portfolio-files',
-      path: filePath,
+      bucket: 'profile-headshots',
+      path: storagePath,
       contentType: file.type,
     });
 
     const { data: uploadData, error: uploadError } = await supabase.storage
-      .from('portfolio-files')
-      .upload(filePath, file, {
+      .from('profile-headshots')
+      .upload(storagePath, file, {
         contentType: file.type,
         upsert: true,
       });
@@ -146,8 +289,8 @@ export async function POST(request: Request) {
 
     // Get public URL
     const { data: urlData } = supabase.storage
-      .from('portfolio-files')
-      .getPublicUrl(filePath);
+      .from('profile-headshots')
+      .getPublicUrl(storagePath);
 
     console.log('[Headshot Upload] Public URL:', urlData.publicUrl);
 
@@ -232,15 +375,28 @@ export async function DELETE(request: Request) {
       );
     }
 
-    // Delete headshot from storage if it exists
+    // Delete headshot from storage if it exists (check both old and new bucket paths)
     if (studentProfile.headshot_image_url) {
-      // Extract the path from the URL (format: .../portfolio-files/headshots/...)
-      const urlParts = studentProfile.headshot_image_url.split('/portfolio-files/');
-      if (urlParts.length > 1) {
-        const storagePath = urlParts[1]; // This already includes 'headshots/...'
-        await supabase.storage
-          .from('portfolio-files')
-          .remove([storagePath]);
+      const oldUrl = studentProfile.headshot_image_url;
+      // Check for old portfolio-files bucket
+      if (oldUrl.includes('/portfolio-files/')) {
+        const urlParts = oldUrl.split('/portfolio-files/');
+        if (urlParts.length > 1) {
+          const storagePath = urlParts[1];
+          await supabase.storage
+            .from('portfolio-files')
+            .remove([storagePath]);
+        }
+      }
+      // Check for new profile-headshots bucket
+      if (oldUrl.includes('/profile-headshots/')) {
+        const urlParts = oldUrl.split('/profile-headshots/');
+        if (urlParts.length > 1) {
+          const storagePath = urlParts[1];
+          await supabase.storage
+            .from('profile-headshots')
+            .remove([storagePath]);
+        }
       }
     }
 

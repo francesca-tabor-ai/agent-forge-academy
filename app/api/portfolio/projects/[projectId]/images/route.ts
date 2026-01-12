@@ -51,14 +51,23 @@ export async function GET(request: Request, { params }: RouteParams) {
     // Get cover image URL if exists
     let cover = null;
     if (project.cover_image_path) {
-      const { data: coverUrlData } = await supabase.storage
-        .from('project-images')
-        .createSignedUrl(project.cover_image_path, 3600); // 1 hour
+      // Check if it's an external URL (stored as "external:https://...")
+      if (project.cover_image_path.startsWith('external:')) {
+        const externalUrl = project.cover_image_path.replace('external:', '');
+        cover = {
+          path: project.cover_image_path,
+          url: externalUrl,
+        };
+      } else {
+        const { data: coverUrlData } = await supabase.storage
+          .from('project-images')
+          .createSignedUrl(project.cover_image_path, 3600); // 1 hour
 
-      cover = {
-        path: project.cover_image_path,
-        url: coverUrlData?.signedUrl || null,
-      };
+        cover = {
+          path: project.cover_image_path,
+          url: coverUrlData?.signedUrl || null,
+        };
+      }
     }
 
     // Get gallery images
@@ -72,9 +81,21 @@ export async function GET(request: Request, { params }: RouteParams) {
       console.error('Error fetching gallery images:', galleryError);
     }
 
-    // Generate signed URLs for gallery images
+    // Generate signed URLs for gallery images (or use external URLs)
     const gallery = await Promise.all(
       (galleryImages || []).map(async (img) => {
+        // Check if it's an external URL
+        if (img.image_path.startsWith('external:')) {
+          const externalUrl = img.image_path.replace('external:', '');
+          return {
+            id: img.id,
+            path: img.image_path,
+            url: externalUrl,
+            sort_order: img.sort_order,
+          };
+        }
+
+        // Generate signed URL for storage images
         const { data: urlData } = await supabase.storage
           .from('project-images')
           .createSignedUrl(img.image_path, 3600); // 1 hour
