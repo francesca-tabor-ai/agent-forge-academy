@@ -98,6 +98,16 @@ function mapSubscriptionStatus(
 }
 
 /**
+ * Normalize billing interval to 'month' | 'year'
+ * Safely handles string values from database/API
+ */
+function normalizeInterval(value: unknown): 'month' | 'year' {
+  if (value === 'month' || value === 'year') return value;
+  // Default to 'month' for any other value
+  return 'month';
+}
+
+/**
  * Get subscription data for the current authenticated user
  * 
  * @returns SubscriptionPageData or null if user not authenticated
@@ -193,7 +203,6 @@ export async function getSubscriptionData(): Promise<SubscriptionPageData | null
         .single();
 
       if (plan) {
-        const interval = plan.interval === 'year' ? 'year' : 'month';
         const priceInPennies = plan.price_monthly || 0;
         const currency = plan.currency || 'GBP';
 
@@ -202,7 +211,7 @@ export async function getSubscriptionData(): Promise<SubscriptionPageData | null
           code: plan.code || plan.id.split('_')[0],
           status: mapSubscriptionStatus(subscription.status),
           price: formatCurrency(priceInPennies, currency),
-          interval,
+          interval: normalizeInterval(plan.interval),
           renewsOn: subscription.current_period_end 
             ? new Date(subscription.current_period_end).toISOString()
             : null,
