@@ -1,8 +1,15 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { createSystemConfigEvent, REALTIME_TOOLS } from '@/lib/ai/realtime-tools';
 
 export type VoiceMode = 'push-to-talk' | 'hands-free';
+
+export interface ActiveContext {
+  course?: { id: string; slug: string; title: string };
+  project?: { id: string; title: string };
+  job?: { id: string; title: string; company: string };
+}
 
 export interface WebRTCRealtimeProps {
   onTranscript?: (text: string) => void;
@@ -16,6 +23,8 @@ export interface WebRTCRealtimeProps {
   onPartialAssistantTranscript?: (text: string) => void; // Optional: show partial assistant transcript while speaking
   onFinalUserTranscript?: (text: string) => void; // Finalize user message into chat history
   onFinalAssistantTranscript?: (text: string) => void; // Finalize assistant message into chat history
+  // Context for tool calling
+  context?: ActiveContext; // Current active context (course/project/job)
 }
 
 interface RealtimeSession {
@@ -47,6 +56,7 @@ export function WebRTCRealtime({
   onPartialAssistantTranscript,
   onFinalUserTranscript,
   onFinalAssistantTranscript,
+  context,
 }: WebRTCRealtimeProps) {
   const [isConnected, setIsConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
@@ -145,13 +155,19 @@ export function WebRTCRealtime({
       const dataChannel = pc.createDataChannel('oai-events');
       dataChannelRef.current = dataChannel;
 
-      dataChannel.onopen = () => {
-        console.log('Data channel opened');
-      };
+      // Note: onopen handler moved below to send system config after connection
 
       dataChannel.onmessage = (event) => {
         try {
           const message = JSON.parse(event.data);
+          
+          // Handle tool calls from the model
+          if (message.type === 'conversation.item.input_audio_transcription.completed' && message.item?.type === 'function_call') {
+            handleToolCall(message.item);
+            return;
+          }
+          
+          // Handle other messages
           handleRealtimeMessage(message);
         } catch (e) {
           console.error('Failed to parse data channel message:', e);
@@ -238,6 +254,13 @@ export function WebRTCRealtime({
         type: 'answer',
         sdp: sdpData.sdp,
       });
+
+      // Wait for data channel to open before sending config
+      dataChannel.onopen = () => {
+        console.log('Data channel opened');
+        // Send system/config event on session start with context and tools
+        sendSystemConfig();
+      };
 
       // Connection will be established via ICE
     } catch (err) {
@@ -327,6 +350,18 @@ export function WebRTCRealtime({
       if (onError) onError(errorMsg);
     }
     
+    // Tool call events
+    else if (message.type === 'conversation.item.requires_action') {
+      // Model is requesting a tool call
+      const item = message.item;
+      if (item && item.type === 'function_call') {
+        handleToolCall(item);
+      }
+    } else if (message.type === 'conversation.item.function_call') {
+      // Direct function call event
+      handleToolCall(message.item || message);
+    }
+    
     // Connection events
     else if (message.type === 'session.updated') {
       // Session updated - could contain turn detection status, etc.
@@ -342,6 +377,7 @@ export function WebRTCRealtime({
     onTranscript,
     onResponse,
     onError,
+    handleToolCall,
   ]);
 
   /**
@@ -361,6 +397,97 @@ export function WebRTCRealtime({
       return false;
     }
   }, []);
+
+  /**
+   * Send system/config event with context and tools
+   * Called on session start or context change
+   */
+  const sendSystemConfig = useCallback(() => {
+    if (!dataChannelRef.current || dataChannelRef.current.readyState !== 'open') {
+      console.warn('Data channel not open, cannot send system config');
+      return;
+    }
+
+    // Create system/config event with context and tools
+    const configEvent = createSystemConfigEvent(
+      context || {},
+      REALTIME_TOOLS
+    );
+
+    sendEvent(configEvent);
+  }, [context, sendEvent]);
+
+  /**
+   * Handle tool call request from the model
+   */
+  const handleToolCall = useCallback(async (functionCall: any) => {
+    if (!functionCall || !functionCall.name || !functionCall.arguments) {
+      console.error('Invalid function call:', functionCall);
+      return;
+    }
+
+    const toolName = functionCall.name;
+    let parameters: any;
+
+    try {
+      parameters = typeof functionCall.arguments === 'string'
+        ? JSON.parse(functionCall.arguments)
+        : functionCall.arguments;
+    } catch (e) {
+      console.error('Failed to parse function arguments:', e);
+      return;
+    }
+
+    // Execute tool on backend
+    try {
+      const response = await fetch('/api/realtime/tool', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          toolName,
+          parameters,
+          studentProfileId,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Tool execution failed: ${response.status}`);
+      }
+
+      const { result } = await response.json();
+
+      // Send tool result back to model via DataChannel
+      const toolResultEvent = {
+        type: 'conversation.item.create',
+        item: {
+          type: 'function_call_output',
+          call_id: functionCall.id || functionCall.call_id,
+          output: JSON.stringify(result),
+        },
+      };
+
+      sendEvent(toolResultEvent);
+    } catch (error) {
+      console.error('Error executing tool:', error);
+      
+      // Send error result back to model
+      const errorResultEvent = {
+        type: 'conversation.item.create',
+        item: {
+          type: 'function_call_output',
+          call_id: functionCall.id || functionCall.call_id,
+          output: JSON.stringify({
+            success: false,
+            error: error instanceof Error ? error.message : 'Tool execution failed',
+          }),
+        },
+      };
+
+      sendEvent(errorResultEvent);
+    }
+  }, [studentProfileId, sendEvent]);
 
   /**
    * Commit user turn (end of speech) - for push-to-talk mode
@@ -509,6 +636,13 @@ export function WebRTCRealtime({
       audioElementRef.current.muted = !voiceOutputEnabled;
     }
   }, [voiceOutputEnabled]);
+
+  // Send system/config event when context changes (if connected)
+  useEffect(() => {
+    if (isConnected && dataChannelRef.current?.readyState === 'open') {
+      sendSystemConfig();
+    }
+  }, [context, isConnected, sendSystemConfig]);
 
   return (
     <div className="space-y-3">

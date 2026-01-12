@@ -852,12 +852,77 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
         </div>
       </div>
 
-      {/* Results Summary */}
-      <div className="mb-6">
-        <p className="text-sm font-medium text-gray-900">
-          Showing <span className="text-brand-light">{filteredAndSortedJobs.length}</span> of{' '}
-          <span className="text-gray-600">{jobs.length}</span> jobs
-        </p>
+      {/* Results Header */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6 pb-4 border-b border-gray-200">
+        <div>
+          <h2 className="text-lg font-semibold text-gray-900 mb-1">Results</h2>
+          <p className="text-sm text-gray-600">
+            Showing <span className="font-medium text-gray-900">{filteredAndSortedJobs.length}</span> of{' '}
+            <span className="text-gray-600">{jobs.length}</span> jobs
+          </p>
+        </div>
+        
+        {/* Active Filters Summary */}
+        {(searchQuery || statusFilter.length > 0 || skillFilter.length > 0 || matchMin !== 60 || matchMax !== 100) && (
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+            <div className="flex items-center gap-2 flex-wrap">
+              {searchQuery && (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded-full border border-gray-300">
+                  Search: "{searchQuery}"
+                  <button
+                    onClick={() => updateURLParams({ search: null })}
+                    className="hover:text-gray-900 text-base leading-none focus:outline-none"
+                    aria-label="Remove search"
+                  >
+                    ×
+                  </button>
+                </span>
+              )}
+              {statusFilter.length > 0 && (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-brand-light/10 text-brand-light text-xs font-medium rounded-full border border-brand-light/20">
+                  Status: {statusFilter[0].charAt(0).toUpperCase() + statusFilter[0].slice(1)}
+                  <button
+                    onClick={() => updateURLParams({ status: null })}
+                    className="hover:text-brand-light/70 text-base leading-none focus:outline-none"
+                    aria-label="Remove status filter"
+                  >
+                    ×
+                  </button>
+                </span>
+              )}
+              {skillFilter.length > 0 && (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-brand-light/10 text-brand-light text-xs font-medium rounded-full border border-brand-light/20">
+                  {skillFilter.length} skill{skillFilter.length > 1 ? 's' : ''}
+                  <button
+                    onClick={() => updateURLParams({ skills: null })}
+                    className="hover:text-brand-light/70 text-base leading-none focus:outline-none"
+                    aria-label="Remove skills filter"
+                  >
+                    ×
+                  </button>
+                </span>
+              )}
+              {(matchMin !== 60 || matchMax !== 100) && (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded-full border border-gray-300">
+                  Match: {matchMin}%–{matchMax}%
+                  <button
+                    onClick={() => updateURLParams({ matchMin: null, matchMax: null })}
+                    className="hover:text-gray-900 text-base leading-none focus:outline-none"
+                    aria-label="Remove match range filter"
+                  >
+                    ×
+                  </button>
+                </span>
+              )}
+            </div>
+            <button
+              onClick={handleResetFilters}
+              className="px-3 py-1.5 text-xs font-medium text-gray-600 hover:text-gray-900 underline transition-colors whitespace-nowrap"
+            >
+              Clear all
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Job Cards */}
@@ -976,13 +1041,13 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
               <div className="flex items-center justify-center gap-4">
                 <Link
                   href="/student/profile"
-                  className="px-6 py-2 bg-brand-light text-white rounded-lg hover:bg-brand-light/90 transition-colors text-sm font-medium"
+                  className="btn-primary text-sm font-medium"
                 >
                   Edit Profile
                 </Link>
                 <Link
                   href="/student/portfolio"
-                  className="px-6 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                  className="btn-secondary text-sm font-medium"
                 >
                   Add a Project
                 </Link>
@@ -990,22 +1055,25 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
             </>
           ) : (
             <>
-              <p className="text-sm text-gray-500 mb-4">
-                {searchQuery || statusFilter.length > 0 || skillFilter.length > 0
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                No jobs to show yet
+              </h3>
+              <p className="text-sm text-gray-600 mb-6">
+                {searchQuery || statusFilter.length > 0 || skillFilter.length > 0 || matchMin !== 60 || matchMax !== 100
                   ? 'No jobs match your filters. Try adjusting your search criteria.'
                   : "We'll recommend jobs once you complete a course or add a project."}
               </p>
-              {!searchQuery && statusFilter.length === 0 && skillFilter.length === 0 && (
-                <div className="flex items-center justify-center gap-4 mt-6">
+              {!searchQuery && statusFilter.length === 0 && skillFilter.length === 0 && matchMin === 60 && matchMax === 100 && (
+                <div className="flex items-center justify-center gap-4">
                   <Link
                     href="/student/courses"
-                    className="px-4 py-2 bg-brand-light text-white rounded-lg hover:bg-brand-light/90 transition-colors text-sm font-medium"
+                    className="btn-primary text-sm font-medium"
                   >
                     Browse Courses
                   </Link>
                   <Link
                     href="/student/portfolio"
-                    className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                    className="btn-secondary text-sm font-medium"
                   >
                     Add a Project
                   </Link>

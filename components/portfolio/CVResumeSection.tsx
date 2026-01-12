@@ -81,7 +81,6 @@ export function CVResumeSection({ studentProfileId, cvFileName, cvLastUpdated, c
           </p>
           <div className="flex flex-col items-center gap-3">
             <CVUpload
-              studentProfileId={studentProfileId}
               onUploadSuccess={() => router.refresh()}
             />
             <button
@@ -116,7 +115,6 @@ export function CVResumeSection({ studentProfileId, cvFileName, cvLastUpdated, c
       {showReplace ? (
         <div className="space-y-4">
           <CVUpload
-            studentProfileId={studentProfileId}
             onUploadSuccess={() => {
               setShowReplace(false);
               router.refresh();
