@@ -19,6 +19,7 @@ interface RealtimeSession {
   session_id?: string;
   model: string;
   voice: string;
+  turn_detection?: boolean;
 }
 
 /**
@@ -68,6 +69,10 @@ export function WebRTCRealtime({
       headers: {
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify({
+        // Enable turn detection for hands-free mode (server-side)
+        enableTurnDetection: voiceMode === 'hands-free',
+      }),
     });
 
     if (!response.ok) {
@@ -76,7 +81,7 @@ export function WebRTCRealtime({
     }
 
     return await response.json();
-  }, []);
+  }, [voiceMode]);
 
   /**
    * Establish WebRTC connection to OpenAI Realtime API

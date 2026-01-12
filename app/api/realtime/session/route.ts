@@ -26,6 +26,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    // Optional: Get turn detection preference from request body
+    const body = await request.json().catch(() => ({}));
+    const enableTurnDetection = body.enableTurnDetection ?? false; // For hands-free mode
+
     // Get OpenAI API key from environment
     const OPENAI_API_KEY = process.env.OPENAI_API_KEY || process.env.LLM_API_KEY;
     if (!OPENAI_API_KEY) {
@@ -73,9 +77,7 @@ export async function POST(request: NextRequest) {
       expires_at: expiresAt,
       model: 'gpt-4o-realtime-preview-2024-12-17',
       voice: 'alloy', // Options: alloy, echo, fable, onyx, nova, shimmer, ash, ballad, coral, sage, verse, marin, cedar
-      // Include the server's API key encrypted/signed for the client to use
-      // Actually, we should NOT include the API key - the client should use the ephemeral token
-      // The ephemeral token should be validated by our server when the client makes requests
+      turn_detection: enableTurnDetection, // Enable server-side turn detection for hands-free mode
     });
   } catch (error) {
     safeLogger.error('Error creating Realtime session', error);
