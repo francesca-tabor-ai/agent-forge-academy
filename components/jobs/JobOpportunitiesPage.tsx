@@ -71,7 +71,7 @@ function SearchableSkillSelector({
           <button
             type="button"
             onClick={() => setIsOpen(!isOpen)}
-            className="w-full h-10 px-3 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light bg-white hover:border-gray-400 transition-colors text-left flex items-center justify-between"
+            className="w-full h-10 px-4 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent bg-white hover:border-gray-400 transition-colors text-left flex items-center justify-between"
           >
             <span className="text-gray-500">Add skills...</span>
             <svg
@@ -652,7 +652,7 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
                 placeholder="Search jobs, companies, skills..."
                 value={searchQuery}
                 onChange={(e) => handleSearchChange(e.target.value)}
-                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent text-sm"
+                className="w-full h-10 px-4 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent"
               />
             </div>
 
@@ -693,7 +693,7 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
               <select
                 value={sortBy}
                 onChange={(e) => handleSortChange(e.target.value as SortOption)}
-                className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent bg-white"
+                className="w-full h-10 px-4 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent bg-white"
               >
                 <option value="best-match">Best Match</option>
                 <option value="newest">Newest</option>
@@ -703,8 +703,8 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
             </div>
 
             {/* Match Score Range */}
-            <div className="col-span-6 md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Match min</label>
+            <div className="col-span-12 md:col-span-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">Match range (%)</label>
               <div className="flex items-center gap-2">
                 <input
                   type="number"
@@ -715,15 +715,9 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
                     const val = Math.max(0, Math.min(100, parseInt(e.target.value) || 0));
                     handleMatchRangeChange(val, matchMax);
                   }}
-                  className="w-full px-2 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent text-center"
+                  className="w-20 h-10 px-3 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent text-center"
                 />
-                <span className="text-sm text-gray-500">%</span>
-              </div>
-            </div>
-
-            <div className="col-span-6 md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Match max</label>
-              <div className="flex items-center gap-2">
+                <span className="text-sm text-gray-400">to</span>
                 <input
                   type="number"
                   min="0"
@@ -733,9 +727,8 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
                     const val = Math.max(0, Math.min(100, parseInt(e.target.value) || 100));
                     handleMatchRangeChange(matchMin, val);
                   }}
-                  className="w-full px-2 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent text-center"
+                  className="w-20 h-10 px-3 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent text-center"
                 />
-                <span className="text-sm text-gray-500">%</span>
               </div>
             </div>
 

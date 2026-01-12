@@ -43,6 +43,10 @@ export function WebRTCRealtime({
   disabled = false,
   studentProfileId,
   defaultMode = 'push-to-talk',
+  onPartialUserTranscript,
+  onPartialAssistantTranscript,
+  onFinalUserTranscript,
+  onFinalAssistantTranscript,
 }: WebRTCRealtimeProps) {
   const [isConnected, setIsConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
@@ -52,6 +56,10 @@ export function WebRTCRealtime({
   const [voiceMode, setVoiceMode] = useState<VoiceMode>(defaultMode);
   const [isHoldingMic, setIsHoldingMic] = useState(false);
   const [voiceOutputEnabled, setVoiceOutputEnabled] = useState(true); // Voice output toggle (default: on)
+  
+  // Track partial transcripts for real-time display
+  const [partialUserTranscript, setPartialUserTranscript] = useState('');
+  const [partialAssistantTranscript, setPartialAssistantTranscript] = useState('');
 
   const peerConnectionRef = useRef<RTCPeerConnection | null>(null);
   const dataChannelRef = useRef<RTCDataChannel | null>(null);
@@ -246,32 +254,95 @@ export function WebRTCRealtime({
 
   /**
    * Handle messages from OpenAI Realtime API via DataChannel
+   * Use DataChannel messages to show partial and final transcripts
    */
   const handleRealtimeMessage = useCallback((message: any) => {
     // Handle different message types from OpenAI Realtime API
     // Based on OpenAI's Realtime API event structure
-    if (message.type === 'conversation.item.input_audio_transcription.completed') {
-      const transcript = message.transcript || '';
-      setCurrentTranscript(transcript);
-      if (onTranscript) onTranscript(transcript);
-    } else if (message.type === 'conversation.item.output_audio_transcription.completed') {
-      const response = message.transcript || '';
-      if (onResponse) onResponse(response);
-    } else if (message.type === 'response.audio_transcript.delta') {
-      // Streaming transcript updates
+    
+    // User transcript events
+    if (message.type === 'conversation.item.input_audio_transcription.delta') {
+      // Partial user transcript while speaking (optional)
       const delta = message.delta || '';
-      setCurrentTranscript((prev) => prev + delta);
-    } else if (message.type === 'response.audio_transcript.done') {
-      // Final transcript
+      const newPartial = (partialUserTranscript + delta).trim();
+      setPartialUserTranscript(newPartial);
+      if (onPartialUserTranscript) {
+        onPartialUserTranscript(newPartial);
+      }
+    } else if (message.type === 'conversation.item.input_audio_transcription.completed') {
+      // Final user transcript - turn completed
       const transcript = message.transcript || '';
+      setPartialUserTranscript(''); // Clear partial
       setCurrentTranscript(transcript);
+      
+      // Finalize user message into chat history
+      if (onFinalUserTranscript) {
+        onFinalUserTranscript(transcript);
+      }
+      // Legacy callback for backward compatibility
+      if (onTranscript) onTranscript(transcript);
+    } else if (message.type === 'conversation.item.input_audio_transcription.failed') {
+      // User transcription failed
+      setPartialUserTranscript('');
+      const errorMsg = message.error?.message || 'Failed to transcribe user audio';
+      setError(errorMsg);
+      if (onError) onError(errorMsg);
+    }
+    
+    // Assistant transcript events
+    else if (message.type === 'response.audio_transcript.delta' || message.type === 'response.content.delta') {
+      // Partial assistant transcript while speaking (optional)
+      const delta = message.delta || message.content || '';
+      const newPartial = (partialAssistantTranscript + delta).trim();
+      setPartialAssistantTranscript(newPartial);
+      if (onPartialAssistantTranscript) {
+        onPartialAssistantTranscript(newPartial);
+      }
+    } else if (message.type === 'response.audio_transcript.done' || message.type === 'response.done') {
+      // Final assistant transcript - response completed
+      const transcript = message.transcript || message.content || '';
+      setPartialAssistantTranscript(''); // Clear partial
+      setCurrentTranscript(transcript);
+      
+      // Finalize assistant message into chat history
+      if (onFinalAssistantTranscript) {
+        onFinalAssistantTranscript(transcript);
+      }
+      // Legacy callback for backward compatibility
       if (onResponse) onResponse(transcript);
-    } else if (message.type === 'error') {
+    } else if (message.type === 'conversation.item.output_audio_transcription.completed') {
+      // Legacy: completed output transcription
+      const response = message.transcript || '';
+      setPartialAssistantTranscript('');
+      if (onFinalAssistantTranscript) {
+        onFinalAssistantTranscript(response);
+      }
+      if (onResponse) onResponse(response);
+    }
+    
+    // Error handling
+    else if (message.type === 'error') {
       const errorMsg = message.error?.message || 'Unknown error from OpenAI';
       setError(errorMsg);
       if (onError) onError(errorMsg);
     }
-  }, [onTranscript, onResponse, onError]);
+    
+    // Connection events
+    else if (message.type === 'session.updated') {
+      // Session updated - could contain turn detection status, etc.
+      console.log('Session updated:', message);
+    }
+  }, [
+    partialUserTranscript,
+    partialAssistantTranscript,
+    onPartialUserTranscript,
+    onPartialAssistantTranscript,
+    onFinalUserTranscript,
+    onFinalAssistantTranscript,
+    onTranscript,
+    onResponse,
+    onError,
+  ]);
 
   /**
    * Send event to OpenAI via DataChannel

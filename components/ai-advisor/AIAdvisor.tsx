@@ -70,6 +70,10 @@ export function AIAdvisor({
   const [voiceOutputEnabled, setVoiceOutputEnabled] = useState(false);
   const [useWebRTCRealtime, setUseWebRTCRealtime] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
+  
+  // Track partial transcripts for real-time display (WebRTC Realtime)
+  const partialUserMessageIdRef = useRef<string | null>(null);
+  const partialAssistantMessageIdRef = useRef<string | null>(null);
 
   // Load voice preference from localStorage
   useEffect(() => {
@@ -740,23 +744,135 @@ export function AIAdvisor({
           >
             <div className={useWebRTCRealtime ? '' : 'hidden'}>
               <WebRTCRealtime
-                onTranscript={(text) => {
-                  try {
-                    handleSendMessage(text);
-                  } catch (error) {
-                    console.error('Error sending WebRTC transcript:', error);
-                  }
+                // Partial transcripts (optional) - show while speaking
+                onPartialUserTranscript={(text) => {
+                  // Show partial user transcript while speaking
+                  if (!text.trim()) return;
+                  
+                  const messageId = partialUserMessageIdRef.current || `partial-user-${Date.now()}`;
+                  partialUserMessageIdRef.current = messageId;
+                  
+                  // Update or create partial message
+                  setMessages((prev) => {
+                    const existingIndex = prev.findIndex((msg) => msg.id === messageId);
+                    const partialMessage: Message = {
+                      id: messageId,
+                      role: 'user',
+                      content: text,
+                      timestamp: new Date(),
+                      context: activeContext,
+                    };
+                    
+                    if (existingIndex >= 0) {
+                      // Update existing partial message
+                      const updated = [...prev];
+                      updated[existingIndex] = partialMessage;
+                      return updated;
+                    } else {
+                      // Add new partial message
+                      return [...prev, partialMessage];
+                    }
+                  });
                 }}
-                onResponse={(text) => {
-                  // Add assistant response to messages
-                  const assistantMessage: Message = {
-                    id: Date.now().toString(),
+                onPartialAssistantTranscript={(text) => {
+                  // Show partial assistant transcript while speaking
+                  if (!text.trim()) return;
+                  
+                  const messageId = partialAssistantMessageIdRef.current || `partial-assistant-${Date.now()}`;
+                  partialAssistantMessageIdRef.current = messageId;
+                  
+                  // Update or create partial message
+                  setMessages((prev) => {
+                    const existingIndex = prev.findIndex((msg) => msg.id === messageId);
+                    const partialMessage: Message = {
+                      id: messageId,
+                      role: 'assistant',
+                      content: text,
+                      timestamp: new Date(),
+                      context: activeContext,
+                    };
+                    
+                    if (existingIndex >= 0) {
+                      // Update existing partial message
+                      const updated = [...prev];
+                      updated[existingIndex] = partialMessage;
+                      return updated;
+                    } else {
+                      // Add new partial message
+                      return [...prev, partialMessage];
+                    }
+                  });
+                }}
+                // Final transcripts - finalize messages into chat history
+                onFinalUserTranscript={(text) => {
+                  // Finalize user message into chat history
+                  if (!text.trim()) return;
+                  
+                  const messageId = partialUserMessageIdRef.current || `user-${Date.now()}`;
+                  partialUserMessageIdRef.current = null; // Clear partial ref
+                  
+                  const finalMessage: Message = {
+                    id: messageId,
+                    role: 'user',
+                    content: text,
+                    timestamp: new Date(),
+                    context: activeContext,
+                  };
+                  
+                  // Replace partial message with final message, or add if new
+                  setMessages((prev) => {
+                    const existingIndex = prev.findIndex((msg) => msg.id === messageId);
+                    if (existingIndex >= 0) {
+                      // Replace partial with final
+                      const updated = [...prev];
+                      updated[existingIndex] = finalMessage;
+                      return updated;
+                    } else {
+                      // Add final message
+                      return [...prev, finalMessage];
+                    }
+                  });
+                  
+                  // Note: In WebRTC mode, the conversation happens through the WebRTC connection
+                  // We don't need to call handleSendMessage as the AI response will come via WebRTC
+                }}
+                onFinalAssistantTranscript={(text) => {
+                  // Finalize assistant message into chat history
+                  if (!text.trim()) return;
+                  
+                  const messageId = partialAssistantMessageIdRef.current || `assistant-${Date.now()}`;
+                  partialAssistantMessageIdRef.current = null; // Clear partial ref
+                  
+                  const finalMessage: Message = {
+                    id: messageId,
                     role: 'assistant',
                     content: text,
                     timestamp: new Date(),
                     context: activeContext,
                   };
-                  setMessages((prev) => [...prev, assistantMessage]);
+                  
+                  // Replace partial message with final message, or add if new
+                  setMessages((prev) => {
+                    const existingIndex = prev.findIndex((msg) => msg.id === messageId);
+                    if (existingIndex >= 0) {
+                      // Replace partial with final
+                      const updated = [...prev];
+                      updated[existingIndex] = finalMessage;
+                      return updated;
+                    } else {
+                      // Add final message
+                      return [...prev, finalMessage];
+                    }
+                  });
+                }}
+                // Legacy callbacks for backward compatibility (kept for fallback)
+                onTranscript={(text) => {
+                  // Fallback: if onFinalUserTranscript wasn't called, use this
+                  // This should rarely be needed as we handle final transcripts above
+                }}
+                onResponse={(text) => {
+                  // Fallback: if onFinalAssistantTranscript wasn't called, use this
+                  // This should rarely be needed as we handle final transcripts above
                 }}
                 onError={(error) => {
                   console.error('WebRTC Realtime error:', error);
@@ -769,35 +885,35 @@ export function AIAdvisor({
 
           {/* Voice Controls - Standard Mode */}
           {!useWebRTCRealtime && (
-            <VoiceErrorBoundary
-              onError={(error, errorInfo) => {
-                console.error('VoiceControls error caught by boundary:', error, errorInfo);
-                // Don't break text chat - error boundary handles the UI
+          <VoiceErrorBoundary
+            onError={(error, errorInfo) => {
+              console.error('VoiceControls error caught by boundary:', error, errorInfo);
+              // Don't break text chat - error boundary handles the UI
+            }}
+          >
+            <VoiceControls
+              onTranscript={(text) => {
+                // On transcript finalization, call the existing send handler
+                // Wrap in try-catch to ensure text chat still works if voice fails
+                try {
+                  handleSendMessage(text);
+                } catch (error) {
+                  console.error('Error sending voice transcript:', error);
+                  // Text input is still available, so user can retry
+                }
               }}
-            >
-              <VoiceControls
-                onTranscript={(text) => {
-                  // On transcript finalization, call the existing send handler
-                  // Wrap in try-catch to ensure text chat still works if voice fails
-                  try {
-                    handleSendMessage(text);
-                  } catch (error) {
-                    console.error('Error sending voice transcript:', error);
-                    // Text input is still available, so user can retry
-                  }
-                }}
-                onSpeak={(text) => {
-                  // Called when speech starts
-                }}
-                onStopSpeaking={() => {
-                  // Called when speech stops
-                }}
-                disabled={isLoading}
-                autoSpeak={voiceOutputEnabled}
-                voiceOutputEnabled={voiceOutputEnabled}
-                onVoiceOutputToggle={handleVoiceOutputToggle}
-              />
-            </VoiceErrorBoundary>
+              onSpeak={(text) => {
+                // Called when speech starts
+              }}
+              onStopSpeaking={() => {
+                // Called when speech stops
+              }}
+              disabled={isLoading}
+              autoSpeak={voiceOutputEnabled}
+              voiceOutputEnabled={voiceOutputEnabled}
+              onVoiceOutputToggle={handleVoiceOutputToggle}
+            />
+          </VoiceErrorBoundary>
           )}
           
           <form onSubmit={handleSubmit} className="flex gap-2 mt-3">
