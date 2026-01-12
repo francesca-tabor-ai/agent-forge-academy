@@ -9,7 +9,7 @@ interface Plan {
   billingCycle: 'monthly' | 'annual';
   price: number;
   currency: string;
-  renewalDate: string;
+  renewalDate: string | null;
 }
 
 interface AvailablePlan {
@@ -20,7 +20,7 @@ interface AvailablePlan {
 }
 
 interface ChangePlanModalProps {
-  currentPlan: Plan;
+  currentPlan: Plan | null;
   availablePlans: AvailablePlan[];
   onConfirm: (newPlanTier: string) => void;
   onClose: () => void;
@@ -42,11 +42,13 @@ export function ChangePlanModal({
     }).format(amount);
   };
 
-  const otherPlans = availablePlans.filter((p) => p.tier !== currentPlan.tier);
+  const otherPlans = currentPlan 
+    ? availablePlans.filter((p) => p.tier !== currentPlan.tier)
+    : availablePlans;
   const selectedPlanData = availablePlans.find((p) => p.tier === selectedPlan);
 
   const calculatePriceDifference = () => {
-    if (!selectedPlanData) return 0;
+    if (!selectedPlanData || !currentPlan) return 0;
     return selectedPlanData.price - currentPlan.price;
   };
 
@@ -132,12 +134,14 @@ export function ChangePlanModal({
         {selectedPlanData && (
           <div className="space-y-3">
             <div className="p-4 bg-gray-50 rounded-lg space-y-2">
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Current Plan:</span>
-                <span className="font-medium text-gray-900">
-                  {currentPlan.name} ({formatCurrency(currentPlan.price)}/{currentPlan.billingCycle})
-                </span>
-              </div>
+              {currentPlan && (
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-600">Current Plan:</span>
+                  <span className="font-medium text-gray-900">
+                    {currentPlan.name} ({formatCurrency(currentPlan.price)}/{currentPlan.billingCycle})
+                  </span>
+                </div>
+              )}
               <div className="flex justify-between text-sm">
                 <span className="text-gray-600">New Plan:</span>
                 <span className="font-medium text-gray-900">

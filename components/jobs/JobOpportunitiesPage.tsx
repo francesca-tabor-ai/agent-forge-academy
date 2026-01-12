@@ -8,6 +8,120 @@ import { ApplyWithAIModal } from './ApplyWithAIModal';
 import type { JobOpportunity, NormalizedJobOpportunity } from '@/lib/types/job-opportunity';
 import { normalizeJobOpportunity } from '@/lib/types/job-opportunity';
 
+// Searchable Skill Selector Component
+function SearchableSkillSelector({
+  allSkills,
+  selectedSkills,
+  onToggleSkill,
+  onRemoveSkill,
+}: {
+  allSkills: string[];
+  selectedSkills: string[];
+  onToggleSkill: (skill: string) => void;
+  onRemoveSkill: (skill: string) => void;
+}) {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const filteredSkills = useMemo(() => {
+    if (!searchQuery) return allSkills.filter(skill => !selectedSkills.includes(skill));
+    const query = searchQuery.toLowerCase();
+    return allSkills.filter(
+      skill => !selectedSkills.includes(skill) && skill.toLowerCase().includes(query)
+    );
+  }, [allSkills, selectedSkills, searchQuery]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+        setSearchQuery('');
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  if (allSkills.length === 0) return null;
+
+  return (
+    <div className="relative" ref={containerRef}>
+      <div className="flex items-center gap-2 flex-wrap">
+        {selectedSkills.length > 0 && (
+          <div className="flex items-center gap-1.5 flex-wrap">
+            {selectedSkills.map((skill) => (
+              <span
+                key={skill}
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-brand-light/10 text-brand-light text-xs font-medium rounded-full border border-brand-light/20"
+              >
+                {skill}
+                <button
+                  onClick={() => onRemoveSkill(skill)}
+                  className="hover:text-brand-light/70 text-base leading-none focus:outline-none"
+                  aria-label={`Remove ${skill}`}
+                >
+                  ×
+                </button>
+              </span>
+            ))}
+          </div>
+        )}
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => setIsOpen(!isOpen)}
+            className="h-10 px-3 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light bg-white hover:border-gray-400 transition-colors min-w-[140px] text-left flex items-center justify-between"
+          >
+            <span className="text-gray-500">Add skills...</span>
+            <svg
+              className={`w-4 h-4 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          {isOpen && (
+            <div className="absolute z-20 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-auto">
+              <div className="p-2 border-b border-gray-200">
+                <input
+                  type="text"
+                  placeholder="Search skills..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-brand-light"
+                  autoFocus
+                />
+              </div>
+              <div className="py-1">
+                {filteredSkills.length > 0 ? (
+                  filteredSkills.map((skill) => (
+                    <button
+                      key={skill}
+                      type="button"
+                      onClick={() => {
+                        onToggleSkill(skill);
+                        setSearchQuery('');
+                      }}
+                      className="w-full px-3 py-2 text-sm text-left hover:bg-gray-50 focus:outline-none focus:bg-gray-50"
+                    >
+                      {skill}
+                    </button>
+                  ))
+                ) : (
+                  <div className="px-3 py-2 text-sm text-gray-500">No skills found</div>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 interface JobOpportunitiesPageProps {
   studentProfileId: string | null;
 }

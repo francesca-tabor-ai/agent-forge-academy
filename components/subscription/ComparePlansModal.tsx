@@ -18,33 +18,22 @@ interface ComparePlansModalProps {
   onSelectPlan?: (tier: string) => void;
 }
 
-const planFeatures: Record<string, string[]> = {
-  starter: [
-    'Course access: All courses',
-    'Projects: 5 projects',
-    'Portfolios: 1 portfolio',
-    'Job opportunities: Access enabled',
-    'AI Advisor: Unlimited',
-    'Tool discounts: ❌ Not included',
-  ],
-  pro: [
-    'Course access: All courses',
-    'Projects: Unlimited',
-    'Portfolios: Unlimited',
-    'Job opportunities: Access enabled',
-    'AI Advisor: Unlimited + Priority',
-    'Tool discounts: ✔ Included',
-  ],
-  career: [
-    'Course access: All courses',
-    'Projects: Unlimited',
-    'Portfolios: Unlimited',
-    'Job opportunities: Access enabled',
-    'AI Advisor: Unlimited + Priority',
-    'Tool discounts: ✔ Included',
-    'Team management: ✔ Included',
-  ],
-};
+/**
+ * Generate plan features from plan data
+ * Falls back to default features if plan data not available
+ */
+function getPlanFeatures(plan: Plan | null): string[] {
+  if (!plan) return [];
+  
+  // Try to get features from plan.features if available
+  // This would need to be passed from availablePlans
+  // For now, generate from tier name as fallback
+  const features: string[] = [];
+  
+  // This is a fallback - ideally features would come from plan.features JSON
+  // In production, features should be passed from subscription data
+  return features;
+}
 
 export function ComparePlansModal({
   currentPlanTier,
@@ -61,7 +50,10 @@ export function ComparePlansModal({
     }).format(amount);
   };
 
-  const allTiers = ['starter', 'pro', 'career'];
+  // Get tiers from available plans (dynamic, not hard-coded)
+  const allTiers = Array.from(new Set(availablePlans.map(p => p.tier)));
+  // Generate feature list from available plans
+  // In production, this should come from plan.features JSON
   const allFeatures = [
     'Course access',
     'Projects',
@@ -69,8 +61,13 @@ export function ComparePlansModal({
     'Job opportunities',
     'AI Advisor',
     'Tool discounts',
-    'Team management',
   ];
+
+  // Build planFeatures object from availablePlans
+  const planFeatures: Record<string, string[]> = {};
+  availablePlans.forEach(plan => {
+    planFeatures[plan.tier] = plan.features || [];
+  });
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">

@@ -35,6 +35,7 @@ export function InvoicesList({ invoices }: InvoicesListProps) {
   };
 
   const formatDate = (dateString: string) => {
+    // Format: "D MMMM YYYY" (e.g., "15 February 2024")
     return new Date(dateString).toLocaleDateString('en-GB', {
       day: 'numeric',
       month: 'long',
@@ -89,12 +90,18 @@ export function InvoicesList({ invoices }: InvoicesListProps) {
                   className={`px-2 py-1 text-xs font-medium rounded ${
                     invoice.status === 'paid'
                       ? 'bg-green-100 text-green-700'
-                      : invoice.status === 'pending'
+                      : invoice.status === 'open' || invoice.status === 'pending'
                         ? 'bg-yellow-100 text-yellow-700'
-                        : 'bg-red-100 text-red-700'
+                        : invoice.status === 'void'
+                          ? 'bg-gray-100 text-gray-700'
+                          : invoice.status === 'uncollectible'
+                            ? 'bg-red-100 text-red-700'
+                            : invoice.status === 'draft'
+                              ? 'bg-blue-100 text-blue-700'
+                              : 'bg-gray-100 text-gray-700'
                   }`}
                 >
-                  {invoice.status}
+                  {invoice.status.charAt(0).toUpperCase() + invoice.status.slice(1)}
                 </span>
                 {(invoice.url || invoice.downloadUrl) && (
                   <Link

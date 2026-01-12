@@ -36,42 +36,54 @@ export async function POST(request: NextRequest) {
     const { returnUrl } = body;
 
     // Get user's subscription to find Stripe customer ID
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('id')
-      .eq('user_id', user.id)
-      .single();
-
-    if (!profile) {
-      return NextResponse.json(
-        { error: 'Profile not found' },
-        { status: 404 }
-      );
-    }
-
-    const { data: studentProfile } = await supabase
-      .from('student_profiles')
-      .select('id')
-      .eq('profile_id', profile.id)
-      .single();
-
-    if (!studentProfile) {
-      return NextResponse.json(
-        { error: 'Student profile not found' },
-        { status: 404 }
-      );
-    }
-
-    const { data: subscription } = await supabase
+    // Try new structure (user_id) first, then fall back to old structure (student_profile_id)
+    let subscription = null;
+    let studentProfileId: string | undefined;
+    
+    // Try new structure with user_id
+    const { data: subByUserId } = await supabase
       .from('subscriptions')
       .select('stripe_customer_id')
-      .eq('student_profile_id', studentProfile.id)
-      .single();
+      .eq('user_id', user.id)
+      .not('stripe_customer_id', 'is', null)
+      .limit(1)
+      .maybeSingle();
+    
+    if (subByUserId) {
+      subscription = subByUserId;
+    } else {
+      // Fall back to old structure with student_profile_id
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('user_id', user.id)
+        .single();
+
+      if (profile) {
+        const { data: studentProfile } = await supabase
+          .from('student_profiles')
+          .select('id')
+          .eq('profile_id', profile.id)
+          .single();
+
+        if (studentProfile) {
+          studentProfileId = studentProfile.id;
+          const { data: subByStudentProfile } = await supabase
+            .from('subscriptions')
+            .select('stripe_customer_id')
+            .eq('student_profile_id', studentProfile.id)
+            .not('stripe_customer_id', 'is', null)
+            .single();
+          
+          subscription = subByStudentProfile;
+        }
+      }
+    }
 
     if (!subscription || !subscription.stripe_customer_id) {
       console.error('No Stripe customer ID found', {
         userId,
-        studentProfileId: studentProfile.id,
+        studentProfileId: studentProfileId || 'N/A',
         requestId,
       });
       return NextResponse.json(

@@ -7,7 +7,7 @@ interface Plan {
   billingCycle: 'monthly' | 'annual';
   price: number;
   currency: string;
-  renewalDate: string;
+  renewalDate: string | null;
   trialEndDate: string | null;
   trialDaysRemaining: number | null;
   valueSummary?: string;
@@ -60,6 +60,7 @@ export function CurrentPlanCard({
   };
 
   const formatDate = (dateString: string) => {
+    // Format: "D MMMM YYYY" (e.g., "15 February 2024")
     return new Date(dateString).toLocaleDateString('en-GB', {
       day: 'numeric',
       month: 'long',
@@ -99,27 +100,27 @@ export function CurrentPlanCard({
   };
 
   const hasHigherTier = () => {
-    const tierOrder = ['starter', 'pro', 'career'];
-    const currentIndex = tierOrder.indexOf(plan.tier);
-    return currentIndex < tierOrder.length - 1;
+    // Check if there are any plans with higher tier than current
+    // This should ideally come from availablePlans, but for now we check if current tier is not the highest
+    // In a real implementation, this would compare plan prices or tier levels from availablePlans
+    return availablePlans.some((p) => {
+      // Simple check: if there are plans with different tier, assume upgrade is possible
+      // This is a fallback - ideally tier hierarchy would come from plan data
+      return p.tier !== plan.tier;
+    });
   };
 
   const getNextBillingDate = () => {
     if (plan.status === 'trial' && plan.trialEndDate) {
       return formatDate(plan.trialEndDate);
     }
-    return formatDate(plan.renewalDate);
+    return plan.renewalDate ? formatDate(plan.renewalDate) : 'N/A';
   };
 
   const getValueSummary = () => {
-    if (plan.valueSummary) return plan.valueSummary;
-    // Default value summaries based on tier
-    const summaries: Record<string, string> = {
-      starter: 'Best for builders actively shipping AI projects and applying for roles.',
-      pro: 'Best for professionals building portfolios and advancing their careers.',
-      career: 'Best for teams and organizations scaling AI talent.',
-    };
-    return summaries[plan.tier] || 'Your current subscription plan.';
+    // Use plan description if available, otherwise use valueSummary, otherwise generic message
+    // Note: plan.description comes from subscription_tier_config or subscription_plans
+    return plan.valueSummary || 'Your current subscription plan.';
   };
 
   const getUsagePercentage = (used: number, limit: number) => {

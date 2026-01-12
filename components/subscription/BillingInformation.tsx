@@ -7,8 +7,8 @@ interface PaymentMethod {
   type: string;
   brand: string;
   last4: string;
-  expiryMonth: number;
-  expiryYear: number;
+  expiryMonth: number | null;
+  expiryYear: number | null;
 }
 
 interface Invoice {
@@ -21,10 +21,10 @@ interface Invoice {
 
 interface BillingInformationProps {
   billing: {
-    paymentMethod: PaymentMethod;
+    paymentMethod: PaymentMethod | null;
     billingEmail: string;
-    nextInvoiceAmount: number;
-    nextInvoiceDate?: string;
+    nextInvoiceAmount: number | null;
+    nextInvoiceDate?: string | null;
     taxNote?: string;
   };
   invoices: Invoice[];
@@ -43,6 +43,7 @@ export function BillingInformation({ billing, invoices, userEmail }: BillingInfo
   };
 
   const formatDate = (dateString: string) => {
+    // Format: "D MMMM YYYY" (e.g., "15 February 2024")
     return new Date(dateString).toLocaleDateString('en-GB', {
       day: 'numeric',
       month: 'long',
@@ -84,6 +85,42 @@ export function BillingInformation({ billing, invoices, userEmail }: BillingInfo
           ? 'No active subscription found. Please contact support.'
           : 'We couldn\'t open billing settings. Please try again.'
       );
+      setIsLoading(false);
+    }
+  };
+
+  const handleUpdateEmail = async () => {
+    const newEmail = prompt('Enter new billing email:', billing.billingEmail || userEmail);
+    
+    if (!newEmail || newEmail === billing.billingEmail) {
+      return; // User cancelled or email unchanged
+    }
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch('/api/subscription/update-billing-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          billingEmail: newEmail,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to update billing email');
+      }
+
+      // Revalidate and reload page to show updated data
+      window.location.reload();
+    } catch (err: any) {
+      console.error('Error updating billing email:', err);
+      setError(err.message || 'Failed to update billing email. Please try again.');
       setIsLoading(false);
     }
   };
@@ -137,12 +174,20 @@ export function BillingInformation({ billing, invoices, userEmail }: BillingInfo
           </button>
         </div>
         <div className="p-4 bg-gray-50 rounded-lg">
-          <p className="text-sm text-gray-900">
-            {billing.paymentMethod.brand} •••• {billing.paymentMethod.last4}
-          </p>
-          <p className="text-xs text-gray-500 mt-1">
-            Expires {billing.paymentMethod.expiryMonth}/{billing.paymentMethod.expiryYear}
-          </p>
+          {billing.paymentMethod ? (
+            <>
+              <p className="text-sm text-gray-900">
+                {billing.paymentMethod.brand} •••• {billing.paymentMethod.last4}
+              </p>
+              {billing.paymentMethod.expiryMonth && billing.paymentMethod.expiryYear && (
+                <p className="text-xs text-gray-500 mt-1">
+                  Expires {String(billing.paymentMethod.expiryMonth).padStart(2, '0')}/{billing.paymentMethod.expiryYear}
+                </p>
+              )}
+            </>
+          ) : (
+            <p className="text-sm text-gray-500 italic">No payment method on file</p>
+          )}
         </div>
       </div>
 
@@ -151,11 +196,11 @@ export function BillingInformation({ billing, invoices, userEmail }: BillingInfo
         <div className="flex items-center justify-between mb-2">
           <h3 className="text-sm font-medium text-gray-900">Billing Email</h3>
           <button
-            onClick={handleOpenBillingPortal}
+            onClick={handleUpdateEmail}
             disabled={isLoading}
             className="text-sm font-medium text-brand-light hover:text-brand-light/90 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isLoading ? 'Opening billing portal...' : 'Update Email'}
+            {isLoading ? 'Updating...' : 'Update Email'}
           </button>
         </div>
         <div className="p-4 bg-gray-50 rounded-lg">
@@ -167,13 +212,19 @@ export function BillingInformation({ billing, invoices, userEmail }: BillingInfo
       <div>
         <h3 className="text-sm font-medium text-gray-900 mb-2">Next Invoice</h3>
         <div className="p-4 bg-gray-50 rounded-lg space-y-2">
-          <p className="text-sm font-semibold text-gray-900">
-            {formatCurrency(billing.nextInvoiceAmount)}
-          </p>
-          {billing.nextInvoiceDate && (
-            <p className="text-xs text-gray-600">
-              You will not be charged until {formatDate(billing.nextInvoiceDate)}
-            </p>
+          {billing.nextInvoiceAmount !== null ? (
+            <>
+              <p className="text-sm font-semibold text-gray-900">
+                {formatCurrency(billing.nextInvoiceAmount)}
+              </p>
+              {billing.nextInvoiceDate && (
+                <p className="text-xs text-gray-600">
+                  You will not be charged until {formatDate(billing.nextInvoiceDate)}
+                </p>
+              )}
+            </>
+          ) : (
+            <p className="text-sm text-gray-500 italic">No upcoming invoice</p>
           )}
           {billing.taxNote && (
             <p className="text-xs text-gray-500 italic">{billing.taxNote}</p>
@@ -210,12 +261,18 @@ export function BillingInformation({ billing, invoices, userEmail }: BillingInfo
                   className={`px-2 py-0.5 text-xs font-medium rounded ${
                     invoice.status === 'paid'
                       ? 'bg-green-100 text-green-700'
-                      : invoice.status === 'pending'
+                      : invoice.status === 'open' || invoice.status === 'pending'
                         ? 'bg-yellow-100 text-yellow-700'
-                        : 'bg-red-100 text-red-700'
+                        : invoice.status === 'void'
+                          ? 'bg-gray-100 text-gray-700'
+                          : invoice.status === 'uncollectible'
+                            ? 'bg-red-100 text-red-700'
+                            : invoice.status === 'draft'
+                              ? 'bg-blue-100 text-blue-700'
+                              : 'bg-gray-100 text-gray-700'
                   }`}
                 >
-                  {invoice.status}
+                  {invoice.status.charAt(0).toUpperCase() + invoice.status.slice(1)}
                 </span>
                 {invoice.url && (
                   <Link

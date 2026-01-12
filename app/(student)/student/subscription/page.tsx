@@ -1,9 +1,14 @@
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
-import { SubscriptionPageContent } from '@/components/subscription/SubscriptionPageContent';
-import type { SubscriptionData } from '@/lib/types/subscription';
+import { SubscriptionPage } from '@/components/subscription/SubscriptionPage';
+import { getSubscriptionData } from '@/lib/subscription/getSubscriptionData';
 
-export default async function SubscriptionPage() {
+interface SubscriptionPageProps {
+  searchParams: Promise<{ success?: string; canceled?: string }>;
+}
+
+export default async function SubscriptionPageServer(props: SubscriptionPageProps) {
+  const searchParams = await props.searchParams;
   const supabase = await createUserSupabaseClient();
   const {
     data: { user },
@@ -24,50 +29,27 @@ export default async function SubscriptionPage() {
     redirect('/');
   }
 
-  // TODO: Fetch actual subscription data from database
-  // For now, using mock data structure that matches requirements
-  const subscriptionData: SubscriptionData = {
-    plan: {
-      name: 'Starter',
-      tier: 'starter', // starter, pro, career
-      status: 'active', // active, trial, paused, canceled
-      billingCycle: 'monthly', // monthly, annual
-      price: 29,
-      currency: 'GBP',
-      renewalDate: '2024-02-15',
-      trialEndDate: null,
-      trialDaysRemaining: null,
-    },
-    benefits: {
-      courseAccess: 'All courses',
-      projectLimit: 5,
-      portfolioLimit: 1,
-      jobOpportunitiesAccess: true,
-      aiAdvisorUsage: 'Unlimited',
-      toolDiscountEligibility: false,
-    },
-    billing: {
-      paymentMethod: {
-        type: 'card',
-        brand: 'Visa',
-        last4: '4242',
-        expiryMonth: 12,
-        expiryYear: 2025,
-      },
-      billingEmail: user.email || '',
-      nextInvoiceAmount: 29,
-    },
-    invoices: [
-      { id: 'INV-001', date: '2024-01-15', amount: 29, status: 'paid', url: '#' },
-      { id: 'INV-002', date: '2023-12-15', amount: 29, status: 'paid', url: '#' },
-      { id: 'INV-003', date: '2023-11-15', amount: 29, status: 'paid', url: '#' },
-    ],
-    availablePlans: [
-      { name: 'Starter', tier: 'starter', price: 29, billingCycle: 'monthly' },
-      { name: 'Pro', tier: 'pro', price: 79, billingCycle: 'monthly' },
-      { name: 'Career', tier: 'career', price: 149, billingCycle: 'monthly' },
-    ],
-  };
+  // Fetch subscription data server-side (direct DB fetch - preferred approach)
+  // This provides best performance and SEO compared to client-side API calls
+  // Errors will be caught by error.tsx boundary
+  const subscriptionData = await getSubscriptionData();
 
-  return <SubscriptionPageContent subscriptionData={subscriptionData} userEmail={user.email || ''} />;
+  if (!subscriptionData) {
+    // User not authenticated (shouldn't happen due to redirect above)
+    redirect('/auth/login');
+  }
+
+  // Check for success/cancel query params from Stripe redirects
+  const showSuccess = searchParams.success === 'true';
+  const showCanceled = searchParams.canceled === 'true';
+
+  // Pass data to client component
+  return (
+    <SubscriptionPage 
+      subscriptionData={subscriptionData}
+      userEmail={user.email || ''}
+      showSuccess={showSuccess}
+      showCanceled={showCanceled}
+    />
+  );
 }

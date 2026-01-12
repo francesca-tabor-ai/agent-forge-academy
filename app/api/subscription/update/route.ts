@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { getStripeClient } from '@/lib/stripe';
 
@@ -110,6 +111,9 @@ export async function POST(request: NextRequest) {
         plan_id: plan_id,
       },
     });
+
+    // Revalidate the subscription page
+    revalidatePath('/student/subscription');
 
     // Webhook will update the database automatically
     // Return success immediately

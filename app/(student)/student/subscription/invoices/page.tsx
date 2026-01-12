@@ -1,6 +1,7 @@
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import { InvoicesList } from '@/components/subscription/InvoicesList';
+import { getSubscriptionData } from '@/lib/subscription/getSubscriptionData';
 
 export default async function InvoicesPage() {
   const supabase = await createUserSupabaseClient();
@@ -23,14 +24,22 @@ export default async function InvoicesPage() {
     redirect('/');
   }
 
-  // TODO: Fetch actual invoices from database
-  const invoices = [
-    { id: 'INV-001', date: '2024-01-15', amount: 29, status: 'paid', url: '#' },
-    { id: 'INV-002', date: '2023-12-15', amount: 29, status: 'paid', url: '#' },
-    { id: 'INV-003', date: '2023-11-15', amount: 29, status: 'paid', url: '#' },
-    { id: 'INV-004', date: '2023-10-15', amount: 29, status: 'paid', url: '#' },
-    { id: 'INV-005', date: '2023-09-15', amount: 29, status: 'paid', url: '#' },
-  ];
+  // Fetch subscription data to get invoices
+  const subscriptionData = await getSubscriptionData();
+
+  if (!subscriptionData) {
+    redirect('/auth/login');
+  }
+
+  // Convert invoices to format expected by InvoicesList component
+  const invoices = subscriptionData.invoices.map((inv) => ({
+    id: inv.invoiceNumber,
+    date: new Date(inv.invoiceDate).toISOString().split('T')[0],
+    amount: parseFloat(inv.amount.replace(/[£$€,\s]/g, '')), // Extract number from formatted string
+    status: inv.status,
+    url: inv.downloadUrl || '#',
+    downloadUrl: inv.downloadUrl || undefined,
+  }));
 
   return (
     <div className="space-y-8 authenticated-app">
