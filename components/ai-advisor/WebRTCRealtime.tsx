@@ -180,6 +180,65 @@ export function WebRTCRealtime({
   }, [onFallback, disconnect]);
 
   /**
+   * Start timeout detection - check if no events received for N seconds
+   * Declared early so it can be used in connect callback
+   */
+  const startTimeoutDetection = useCallback(() => {
+    // Clear existing timeout check
+    if (timeoutCheckIntervalRef.current) {
+      clearInterval(timeoutCheckIntervalRef.current);
+    }
+
+    // Check every 5 seconds if we've received events
+    timeoutCheckIntervalRef.current = setInterval(() => {
+      if (!isConnected || !peerConnectionRef.current) {
+        return; // Not connected, don't check
+      }
+
+      const timeSinceLastEvent = Date.now() - lastEventTimeRef.current;
+      
+      if (timeSinceLastEvent > TIMEOUT_DURATION) {
+        console.warn('WebRTC timeout: No events received for', timeSinceLastEvent, 'ms');
+        setError('Connection timeout - no response from server');
+        triggerFallback();
+      }
+    }, 5000); // Check every 5 seconds
+  }, [isConnected, triggerFallback]);
+
+  /**
+   * Start silence timeout detection - close session if no speech for X minutes
+   * Declared early so it can be used in connect callback
+   */
+  const startSilenceTimeoutDetection = useCallback(() => {
+    // Clear existing silence timeout check
+    if (silenceTimeoutIntervalRef.current) {
+      clearInterval(silenceTimeoutIntervalRef.current);
+    }
+
+    // Check every minute if there's been any speech activity
+    silenceTimeoutIntervalRef.current = setInterval(() => {
+      if (!isConnected || !peerConnectionRef.current) {
+        return; // Not connected, don't check
+      }
+
+      const timeSinceLastSpeech = Date.now() - lastSpeechTimeRef.current;
+      
+      if (timeSinceLastSpeech > SILENCE_TIMEOUT_DURATION) {
+        console.log('Silence timeout: No speech activity for', Math.round(timeSinceLastSpeech / 1000 / 60), 'minutes');
+        // Log silence timeout (without storing raw audio)
+        safeLogger.info('Realtime session closed due to silence timeout', {
+          durationMinutes: Math.round(timeSinceLastSpeech / 1000 / 60),
+          timestamp: new Date().toISOString(),
+        });
+        
+        // Close session gracefully
+        setError('Session closed due to inactivity');
+        disconnect();
+      }
+    }, 60 * 1000); // Check every minute
+  }, [isConnected, disconnect]);
+
+  /**
    * Get ephemeral session credentials from backend
    */
   const getSessionCredentials = useCallback(async (): Promise<RealtimeSession> => {
@@ -664,63 +723,6 @@ export function WebRTCRealtime({
       triggerFallback();
     }
   }, [disabled, isConnecting, isConnected, getSessionCredentials, onError, sendSystemConfig, handleToolCall, handleRealtimeMessage, voiceMode, voiceOutputEnabled, triggerFallback, startTimeoutDetection, startSilenceTimeoutDetection]);
-
-  /**
-   * Start timeout detection - check if no events received for N seconds
-   */
-  const startTimeoutDetection = useCallback(() => {
-    // Clear existing timeout check
-    if (timeoutCheckIntervalRef.current) {
-      clearInterval(timeoutCheckIntervalRef.current);
-    }
-
-    // Check every 5 seconds if we've received events
-    timeoutCheckIntervalRef.current = setInterval(() => {
-      if (!isConnected || !peerConnectionRef.current) {
-        return; // Not connected, don't check
-      }
-
-      const timeSinceLastEvent = Date.now() - lastEventTimeRef.current;
-      
-      if (timeSinceLastEvent > TIMEOUT_DURATION) {
-        console.warn('WebRTC timeout: No events received for', timeSinceLastEvent, 'ms');
-        setError('Connection timeout - no response from server');
-        triggerFallback();
-      }
-    }, 5000); // Check every 5 seconds
-  }, [isConnected, triggerFallback]);
-
-  /**
-   * Start silence timeout detection - close session if no speech for X minutes
-   */
-  const startSilenceTimeoutDetection = useCallback(() => {
-    // Clear existing silence timeout check
-    if (silenceTimeoutIntervalRef.current) {
-      clearInterval(silenceTimeoutIntervalRef.current);
-    }
-
-    // Check every minute if there's been any speech activity
-    silenceTimeoutIntervalRef.current = setInterval(() => {
-      if (!isConnected || !peerConnectionRef.current) {
-        return; // Not connected, don't check
-      }
-
-      const timeSinceLastSpeech = Date.now() - lastSpeechTimeRef.current;
-      
-      if (timeSinceLastSpeech > SILENCE_TIMEOUT_DURATION) {
-        console.log('Silence timeout: No speech activity for', Math.round(timeSinceLastSpeech / 1000 / 60), 'minutes');
-        // Log silence timeout (without storing raw audio)
-        safeLogger.info('Realtime session closed due to silence timeout', {
-          durationMinutes: Math.round(timeSinceLastSpeech / 1000 / 60),
-          timestamp: new Date().toISOString(),
-        });
-        
-        // Close session gracefully
-        setError('Session closed due to inactivity');
-        disconnect();
-      }
-    }, 60 * 1000); // Check every minute
-  }, [isConnected, disconnect]);
 
   /**
    * Reconnect to WebRTC
