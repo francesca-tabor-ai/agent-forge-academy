@@ -46,8 +46,8 @@ function SearchableSkillSelector({
   if (allSkills.length === 0) return null;
 
   return (
-    <div className="relative" ref={containerRef}>
-      <div className="flex items-center gap-2 flex-wrap">
+    <div className="relative w-full" ref={containerRef}>
+      <div className="flex flex-col gap-2">
         {selectedSkills.length > 0 && (
           <div className="flex items-center gap-1.5 flex-wrap">
             {selectedSkills.map((skill) => (
@@ -71,7 +71,7 @@ function SearchableSkillSelector({
           <button
             type="button"
             onClick={() => setIsOpen(!isOpen)}
-            className="h-10 px-3 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light bg-white hover:border-gray-400 transition-colors min-w-[140px] text-left flex items-center justify-between"
+            className="w-full h-10 px-3 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light bg-white hover:border-gray-400 transition-colors text-left flex items-center justify-between"
           >
             <span className="text-gray-500">Add skills...</span>
             <svg
@@ -623,25 +623,32 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
         </p>
       </div>
 
-      {/* Filters and Results Summary */}
-      <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
-        <div className="space-y-6">
-          {/* Search */}
-          <div>
-            <input
-              type="text"
-              placeholder="Search jobs, companies, skills..."
-              value={searchQuery}
-              onChange={(e) => handleSearchChange(e.target.value)}
-              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent text-sm"
-            />
-          </div>
+      {/* Filters Card */}
+      <div className="bg-white border border-gray-200 rounded-lg mb-6">
+        {/* Card Header */}
+        <div className="px-6 py-4 border-b border-gray-200">
+          <h2 className="text-lg font-semibold text-gray-900">Filters</h2>
+        </div>
 
-          {/* Filters Row */}
-          <div className="flex flex-wrap items-center gap-4 lg:gap-6">
+        {/* Card Content */}
+        <div className="p-6">
+          <div className="grid grid-cols-12 gap-4">
+            {/* Row 1: Search + Status */}
+            {/* Search */}
+            <div className="col-span-12 md:col-span-5">
+              <label className="block text-sm font-medium text-gray-700 mb-2">Search</label>
+              <input
+                type="text"
+                placeholder="Search jobs, companies, skills..."
+                value={searchQuery}
+                onChange={(e) => handleSearchChange(e.target.value)}
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent text-sm"
+              />
+            </div>
+
             {/* Status Filter */}
-            <div className="flex items-center gap-3">
-              <label className="text-sm font-medium text-gray-700 whitespace-nowrap">Status</label>
+            <div className="col-span-12 md:col-span-7">
+              <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
               <div className="flex items-center gap-2 flex-wrap">
                 {['new', 'recommended', 'unlocked', 'locked', 'stretch'].map((status) => (
                   <button
@@ -659,9 +666,25 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
               </div>
             </div>
 
+            {/* Row 2: Sort + Match Range + Skills */}
+            {/* Sort */}
+            <div className="col-span-12 md:col-span-3">
+              <label className="block text-sm font-medium text-gray-700 mb-2">Sort by</label>
+              <select
+                value={sortBy}
+                onChange={(e) => handleSortChange(e.target.value as SortOption)}
+                className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent bg-white"
+              >
+                <option value="best-match">Best Match</option>
+                <option value="newest">Newest</option>
+                <option value="least-missing">Least Missing Skills</option>
+                <option value="company-az">Company A-Z</option>
+              </select>
+            </div>
+
             {/* Match Score Range */}
-            <div className="flex items-center gap-3">
-              <label className="text-sm font-medium text-gray-700 whitespace-nowrap">Match score</label>
+            <div className="col-span-6 md:col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">Match min</label>
               <div className="flex items-center gap-2">
                 <input
                   type="number"
@@ -672,9 +695,15 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
                     const val = Math.max(0, Math.min(100, parseInt(e.target.value) || 0));
                     handleMatchRangeChange(val, matchMax);
                   }}
-                  className="w-16 px-2 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent text-center"
+                  className="w-full px-2 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent text-center"
                 />
-                <span className="text-sm text-gray-400">to</span>
+                <span className="text-sm text-gray-500">%</span>
+              </div>
+            </div>
+
+            <div className="col-span-6 md:col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">Match max</label>
+              <div className="flex items-center gap-2">
                 <input
                   type="number"
                   min="0"
@@ -684,7 +713,7 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
                     const val = Math.max(0, Math.min(100, parseInt(e.target.value) || 100));
                     handleMatchRangeChange(matchMin, val);
                   }}
-                  className="w-16 px-2 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent text-center"
+                  className="w-full px-2 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent text-center"
                 />
                 <span className="text-sm text-gray-500">%</span>
               </div>
@@ -692,46 +721,29 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
 
             {/* Skills Filter */}
             {allSkills.length > 0 && (
-              <div className="flex items-center gap-3 flex-1 min-w-0">
-                <label className="text-sm font-medium text-gray-700 whitespace-nowrap">Skills</label>
-                <div className="flex-1 min-w-0">
-                  <SearchableSkillSelector
-                    allSkills={allSkills}
-                    selectedSkills={skillFilter}
-                    onToggleSkill={handleSkillToggle}
-                    onRemoveSkill={(skill) => {
-                      const newSkills = skillFilter.filter(s => s !== skill);
-                      updateURLParams({ skills: newSkills.length > 0 ? newSkills.join(',') : null });
-                    }}
-                  />
-                </div>
+              <div className="col-span-12 md:col-span-5">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Skills</label>
+                <SearchableSkillSelector
+                  allSkills={allSkills}
+                  selectedSkills={skillFilter}
+                  onToggleSkill={handleSkillToggle}
+                  onRemoveSkill={(skill) => {
+                    const newSkills = skillFilter.filter(s => s !== skill);
+                    updateURLParams({ skills: newSkills.length > 0 ? newSkills.join(',') : null });
+                  }}
+                />
               </div>
             )}
-
-            {/* Sort */}
-            <div className="flex items-center gap-3 lg:ml-auto">
-              <label className="text-sm font-medium text-gray-700 whitespace-nowrap">Sort by</label>
-              <select
-                value={sortBy}
-                onChange={(e) => handleSortChange(e.target.value as SortOption)}
-                className="px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent bg-white"
-              >
-                <option value="best-match">Best Match</option>
-                <option value="newest">Newest</option>
-                <option value="least-missing">Least Missing Skills</option>
-                <option value="company-az">Company A-Z</option>
-              </select>
-            </div>
-          </div>
-
-          {/* Results Count */}
-          <div className="pt-4 border-t border-gray-200">
-            <p className="text-sm font-medium text-gray-900">
-              Showing <span className="text-brand-light">{filteredAndSortedJobs.length}</span> of{' '}
-              <span className="text-gray-600">{jobs.length}</span> jobs
-            </p>
           </div>
         </div>
+      </div>
+
+      {/* Results Summary */}
+      <div className="mb-6">
+        <p className="text-sm font-medium text-gray-900">
+          Showing <span className="text-brand-light">{filteredAndSortedJobs.length}</span> of{' '}
+          <span className="text-gray-600">{jobs.length}</span> jobs
+        </p>
       </div>
 
       {/* Job Cards */}

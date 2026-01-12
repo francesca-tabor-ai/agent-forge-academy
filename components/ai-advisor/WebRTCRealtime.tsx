@@ -46,6 +46,7 @@ export function WebRTCRealtime({
   const [isMuted, setIsMuted] = useState(true); // Start muted (push-to-talk default)
   const [voiceMode, setVoiceMode] = useState<VoiceMode>(defaultMode);
   const [isHoldingMic, setIsHoldingMic] = useState(false);
+  const [voiceOutputEnabled, setVoiceOutputEnabled] = useState(true); // Voice output toggle (default: on)
 
   const peerConnectionRef = useRef<RTCPeerConnection | null>(null);
   const dataChannelRef = useRef<RTCDataChannel | null>(null);
@@ -113,12 +114,15 @@ export function WebRTCRealtime({
       peerConnectionRef.current = pc;
 
       // Create audio element for playback (set up early)
+      // When remote audio track arrives from PeerConnection, attach it to <audio autoplay> element
       const audioElement = document.createElement('audio');
       audioElement.autoplay = true;
+      audioElement.muted = !voiceOutputEnabled; // Mute if voice output is disabled
       audioElementRef.current = audioElement;
 
-      // Handle incoming audio track
+      // Handle incoming audio track from PeerConnection
       pc.ontrack = (event) => {
+        // Attach remote audio stream to audio element
         if (audioElement.srcObject !== event.streams[0]) {
           audioElement.srcObject = event.streams[0];
         }
@@ -359,6 +363,19 @@ export function WebRTCRealtime({
   }, [isMuted, voiceMode]);
 
   /**
+   * Toggle voice output (model audio playback)
+   */
+  const toggleVoiceOutput = useCallback(() => {
+    const newVoiceOutputState = !voiceOutputEnabled;
+    setVoiceOutputEnabled(newVoiceOutputState);
+
+    // Mute/unmute the audio element
+    if (audioElementRef.current) {
+      audioElementRef.current.muted = !newVoiceOutputState;
+    }
+  }, [voiceOutputEnabled]);
+
+  /**
    * Disconnect and cleanup
    */
   const disconnect = useCallback(() => {
@@ -531,6 +548,22 @@ export function WebRTCRealtime({
             )}
           </>
         )}
+
+        {/* Voice Output Toggle - Control model audio playback */}
+        {isConnected && (
+          <button
+            type="button"
+            onClick={toggleVoiceOutput}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              voiceOutputEnabled
+                ? 'bg-purple-600 hover:bg-purple-700 text-white'
+                : 'bg-gray-400 hover:bg-gray-500 text-white'
+            }`}
+            title={voiceOutputEnabled ? 'Voice output enabled' : 'Voice output disabled'}
+          >
+            {voiceOutputEnabled ? '🔊 Voice Output' : '🔇 Voice Output'}
+          </button>
+        )}
       </div>
 
       {/* Current Transcript */}
@@ -567,6 +600,11 @@ export function WebRTCRealtime({
         {isMuted && isConnected && voiceMode === 'hands-free' && (
           <p className="mt-1 text-amber-600">
             Microphone is muted. Click "Unmuted" to start speaking.
+          </p>
+        )}
+        {!voiceOutputEnabled && isConnected && (
+          <p className="mt-1 text-purple-600">
+            Voice output is disabled. Model audio is muted.
           </p>
         )}
       </div>
