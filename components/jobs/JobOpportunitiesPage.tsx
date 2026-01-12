@@ -167,7 +167,7 @@ function SearchableSkillSelector({
                   inputRef.current?.focus();
                 }
               }}
-              className="absolute right-2 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-100 rounded transition-colors"
+              className="absolute right-2 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-100 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-1"
               aria-label={isOpen ? 'Close dropdown' : 'Open dropdown'}
               tabIndex={-1}
             >
@@ -712,7 +712,7 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
               {error.retryable && (
                 <button
                   onClick={handleRetry}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                  className="h-10 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                 >
                   Retry
                 </button>
@@ -725,9 +725,9 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 md:px-6 py-6">
+    <div className="max-w-6xl mx-auto px-4 md:px-6 py-6 space-y-6">
       {/* Title Block */}
-      <div className="mb-8">
+      <div>
         <h1 className="text-3xl font-semibold text-gray-900 mb-2">Job Opportunities</h1>
         <p className="text-base text-gray-600">
           Roles matched to your skills, projects, and progress
@@ -735,7 +735,7 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
       </div>
 
       {/* Filters Card */}
-      <div className="bg-white border border-gray-200 rounded-lg mb-6">
+      <div className="bg-white border border-gray-200 rounded-lg">
         {/* Card Header */}
         <div className="px-6 py-4 border-b border-gray-200">
           <h2 className="text-lg font-semibold text-gray-900">Filters</h2>
@@ -762,12 +762,12 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
               <div className="flex items-center justify-between mb-2">
                 <label className="block text-sm font-medium text-gray-700">Status</label>
                 {(statusFilter.length > 0 || searchQuery || skillFilter.length > 0 || matchMin !== 60 || matchMax !== 100) && (
-                  <button
-                    onClick={handleResetFilters}
-                    className="text-xs text-gray-500 hover:text-gray-700 underline transition-colors"
-                  >
-                    Reset filters
-                  </button>
+                    <button
+                      onClick={handleResetFilters}
+                      className="h-10 px-3 text-xs text-gray-500 hover:text-gray-700 underline transition-colors focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-1 rounded"
+                    >
+                      Reset filters
+                    </button>
                 )}
               </div>
               <div className="flex items-center gap-2 flex-wrap">
@@ -775,7 +775,7 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
                   <button
                     key={status}
                     onClick={() => handleStatusToggle(status)}
-                    className={`px-3 py-1.5 text-xs font-medium rounded-full transition-all whitespace-nowrap ${
+                    className={`h-10 px-3 text-xs font-medium rounded-full transition-all whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-1 ${
                       statusFilter.includes(status)
                         ? 'bg-brand-light text-white shadow-sm border border-brand-light'
                         : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 hover:border-gray-400'
@@ -794,7 +794,14 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
               <select
                 value={sortBy}
                 onChange={(e) => handleSortChange(e.target.value as SortOption)}
-                className="w-full h-10 px-4 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent bg-white"
+                className="w-full h-10 px-4 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent bg-white appearance-none cursor-pointer"
+                style={{
+                  backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
+                  backgroundPosition: 'right 0.5rem center',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundSize: '1.5em 1.5em',
+                  paddingRight: '2.5rem',
+                }}
               >
                 <option value="best-match">Best Match</option>
                 <option value="newest">Newest</option>
@@ -816,7 +823,7 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
                     const val = Math.max(0, Math.min(100, parseInt(e.target.value) || 0));
                     handleMatchRangeChange(val, matchMax);
                   }}
-                  className="w-20 h-10 px-3 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent text-center"
+                  className="w-20 h-10 px-3 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent text-center appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                 />
                 <span className="text-sm text-gray-400">to</span>
                 <input
@@ -828,7 +835,7 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
                     const val = Math.max(0, Math.min(100, parseInt(e.target.value) || 100));
                     handleMatchRangeChange(matchMin, val);
                   }}
-                  className="w-20 h-10 px-3 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent text-center"
+                  className="w-20 h-10 px-3 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent text-center appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                 />
               </div>
             </div>
@@ -853,7 +860,7 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
       </div>
 
       {/* Results Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6 pb-4 border-b border-gray-200">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-4 border-b border-gray-200">
         <div>
           <h2 className="text-lg font-semibold text-gray-900 mb-1">Results</h2>
           <p className="text-sm text-gray-600">
@@ -871,7 +878,7 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
                   Search: "{searchQuery}"
                   <button
                     onClick={() => updateURLParams({ search: null })}
-                    className="hover:text-gray-900 text-base leading-none focus:outline-none"
+                    className="hover:text-gray-900 text-base leading-none focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-1 rounded"
                     aria-label="Remove search"
                   >
                     ×
@@ -883,7 +890,7 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
                   Status: {statusFilter[0].charAt(0).toUpperCase() + statusFilter[0].slice(1)}
                   <button
                     onClick={() => updateURLParams({ status: null })}
-                    className="hover:text-brand-light/70 text-base leading-none focus:outline-none"
+                    className="hover:text-brand-light/70 text-base leading-none focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-1 rounded"
                     aria-label="Remove status filter"
                   >
                     ×
@@ -895,7 +902,7 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
                   {skillFilter.length} skill{skillFilter.length > 1 ? 's' : ''}
                   <button
                     onClick={() => updateURLParams({ skills: null })}
-                    className="hover:text-brand-light/70 text-base leading-none focus:outline-none"
+                    className="hover:text-brand-light/70 text-base leading-none focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-1 rounded"
                     aria-label="Remove skills filter"
                   >
                     ×
@@ -907,7 +914,7 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
                   Match: {matchMin}%–{matchMax}%
                   <button
                     onClick={() => updateURLParams({ matchMin: null, matchMax: null })}
-                    className="hover:text-gray-900 text-base leading-none focus:outline-none"
+                    className="hover:text-gray-900 text-base leading-none focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-1 rounded"
                     aria-label="Remove match range filter"
                   >
                     ×
@@ -917,7 +924,7 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
             </div>
             <button
               onClick={handleResetFilters}
-              className="px-3 py-1.5 text-xs font-medium text-gray-600 hover:text-gray-900 underline transition-colors whitespace-nowrap"
+              className="h-10 px-3 text-xs font-medium text-gray-600 hover:text-gray-900 underline transition-colors whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-1 rounded"
             >
               Clear all
             </button>
@@ -954,7 +961,7 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
                       setSelectedJob(job);
                       setShowMatchExplanation(true);
                     }}
-                    className={`px-3 py-1.5 rounded-lg border font-semibold text-sm ${getMatchingColor(matchingScore)} hover:opacity-90 transition-opacity cursor-pointer`}
+                    className={`h-10 px-3 rounded-lg border font-semibold text-sm ${getMatchingColor(matchingScore)} hover:opacity-90 transition-opacity cursor-pointer focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-1`}
                   >
                     {matchingScore}% Match
                   </button>
@@ -1019,13 +1026,13 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
                           setApplyJob(normalizeJobOpportunity(job));
                           setShowApplyModal(true);
                         }}
-                        className="flex-1 px-4 py-2.5 bg-brand-light text-white rounded-lg hover:bg-brand-light/90 transition-colors font-medium text-sm"
+                        className="flex-1 h-10 px-4 bg-brand-light text-white rounded-lg hover:bg-brand-light/90 transition-colors font-medium text-sm focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-2"
                       >
                         Apply with AI
                       </button>
                       <Link
                         href={`/student/jobs/${job.id}`}
-                        className="px-4 py-2.5 text-sm text-gray-700 hover:text-gray-900 transition-colors whitespace-nowrap"
+                        className="h-10 px-4 flex items-center text-sm text-gray-700 hover:text-gray-900 transition-colors whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-2 rounded"
                       >
                         View details →
                       </Link>
@@ -1033,7 +1040,7 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
                   ) : (
                     <Link
                       href={`/student/jobs/${job.id}`}
-                      className="block w-full text-center px-4 py-2.5 bg-brand-light text-white rounded-lg hover:bg-brand-light/90 transition-colors font-medium text-sm"
+                      className="block w-full h-10 text-center px-4 bg-brand-light text-white rounded-lg hover:bg-brand-light/90 transition-colors font-medium text-sm focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-2 flex items-center justify-center"
                     >
                       {isLocked ? 'View & Unlock' : 'View Details'}
                     </Link>
@@ -1116,13 +1123,13 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
 
       {/* Unified Bottom CTA */}
       {filteredAndSortedJobs.length > 0 && (
-        <div className="bg-white border border-gray-200 rounded-lg p-6 text-center mt-8">
+        <div className="bg-white border border-gray-200 rounded-lg p-6 text-center">
           <button
             onClick={() => {
               setApplyJob(null);
               setShowApplyModal(true);
             }}
-            className="px-6 py-3 bg-brand-light text-white rounded-lg hover:bg-brand-light/90 transition-colors font-medium"
+            className="h-10 px-6 bg-brand-light text-white rounded-lg hover:bg-brand-light/90 transition-colors font-medium text-sm focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-2"
           >
             Prepare My Application Pack
           </button>

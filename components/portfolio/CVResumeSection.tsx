@@ -9,10 +9,11 @@ interface CVResumeSectionProps {
   cvFileName?: string | null;
   cvLastUpdated?: string | null;
   cvVisibility?: 'private' | 'recruiters_only' | 'public' | null;
+  cvDownloadUrl?: string | null;
   hasCV: boolean;
 }
 
-export function CVResumeSection({ studentProfileId, cvFileName, cvLastUpdated, cvVisibility, hasCV }: CVResumeSectionProps) {
+export function CVResumeSection({ studentProfileId, cvFileName, cvLastUpdated, cvVisibility, cvDownloadUrl, hasCV }: CVResumeSectionProps) {
   const router = useRouter();
   const [showReplace, setShowReplace] = useState(false);
   const [loadingPreview, setLoadingPreview] = useState(false);
@@ -47,6 +48,19 @@ export function CVResumeSection({ studentProfileId, cvFileName, cvLastUpdated, c
   };
 
   const handleDownload = async () => {
+    // If we have a direct download URL (signed URL for private or public URL), use it
+    if (cvDownloadUrl) {
+      const a = document.createElement('a');
+      a.href = cvDownloadUrl;
+      a.download = cvFileName || 'CV.pdf';
+      a.target = '_blank';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      return;
+    }
+
+    // Fallback to API endpoint if no direct URL available
     try {
       const response = await fetch(`/api/portfolio/cv/download?studentProfileId=${studentProfileId}`);
       if (response.ok) {
@@ -137,7 +151,11 @@ export function CVResumeSection({ studentProfileId, cvFileName, cvLastUpdated, c
                   <p className="text-sm font-medium text-gray-900">{cvFileName || 'CV.pdf'}</p>
                   {cvLastUpdated && (
                     <p className="text-xs text-gray-500">
-                      Uploaded: {new Date(cvLastUpdated).toLocaleDateString()}
+                      Uploaded: {new Date(cvLastUpdated).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                      })}
                     </p>
                   )}
                 </div>

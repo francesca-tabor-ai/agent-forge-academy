@@ -180,6 +180,7 @@ export default async function PortfolioPage() {
           cvFileName={cvFileName}
           cvLastUpdated={cvLastUpdated}
           cvVisibility={cvVisibility}
+          cvDownloadUrl={cvDownloadUrl}
           hasCV={hasCV}
         />
       )}

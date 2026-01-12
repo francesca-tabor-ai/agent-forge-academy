@@ -108,6 +108,227 @@ export function WebRTCRealtime({
   }, [voiceMode]);
 
   /**
+   * Send event to OpenAI via DataChannel
+   */
+  const sendEvent = useCallback((event: any) => {
+    if (!dataChannelRef.current || dataChannelRef.current.readyState !== 'open') {
+      console.warn('Data channel not open');
+      return false;
+    }
+
+    try {
+      dataChannelRef.current.send(JSON.stringify(event));
+      return true;
+    } catch (error) {
+      console.error('Failed to send event:', error);
+      return false;
+    }
+  }, []);
+
+  /**
+   * Handle tool call request from the model
+   */
+  const handleToolCall = useCallback(async (functionCall: any) => {
+    // Handle different function call formats from OpenAI Realtime API
+    const callId = functionCall.id || functionCall.call_id || functionCall.item_id;
+    const toolName = functionCall.name || functionCall.function?.name;
+    const argumentsStr = functionCall.arguments || functionCall.function?.arguments || '{}';
+    
+    if (!toolName) {
+      console.error('Invalid function call: missing name', functionCall);
+      return;
+    }
+
+    let parameters: any;
+    try {
+      parameters = typeof argumentsStr === 'string'
+        ? JSON.parse(argumentsStr)
+        : argumentsStr;
+    } catch (e) {
+      console.error('Failed to parse function arguments:', e);
+      parameters = {};
+    }
+
+    // Execute tool on backend
+    try {
+      const response = await fetch('/api/realtime/tool', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          toolName,
+          parameters,
+          studentProfileId,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Tool execution failed: ${response.status}`);
+      }
+
+      const { result } = await response.json();
+
+      // Send tool result back to model via DataChannel
+      // OpenAI Realtime API expects function_call_output item
+      const toolResultEvent = {
+        type: 'conversation.item.create',
+        item: {
+          type: 'function_call_output',
+          call_id: callId,
+          output: JSON.stringify(result),
+        },
+      };
+
+      sendEvent(toolResultEvent);
+    } catch (error) {
+      console.error('Error executing tool:', error);
+      
+      // Send error result back to model
+      const errorResultEvent = {
+        type: 'conversation.item.create',
+        item: {
+          type: 'function_call_output',
+          call_id: callId,
+          output: JSON.stringify({
+            success: false,
+            error: error instanceof Error ? error.message : 'Tool execution failed',
+          }),
+        },
+      };
+
+      sendEvent(errorResultEvent);
+    }
+  }, [studentProfileId, sendEvent]);
+
+  /**
+   * Send system/config event with context and tools
+   * Called on session start or context change
+   */
+  const sendSystemConfig = useCallback(() => {
+    if (!dataChannelRef.current || dataChannelRef.current.readyState !== 'open') {
+      console.warn('Data channel not open, cannot send system config');
+      return;
+    }
+
+    // Create system/config event with context and tools
+    const configEvent = createSystemConfigEvent(
+      context || {},
+      REALTIME_TOOLS
+    );
+
+    sendEvent(configEvent);
+  }, [context, sendEvent]);
+
+  /**
+   * Handle messages from OpenAI Realtime API via DataChannel
+   * Use DataChannel messages to show partial and final transcripts
+   */
+  const handleRealtimeMessage = useCallback((message: any) => {
+    // Handle different message types from OpenAI Realtime API
+    // Based on OpenAI's Realtime API event structure
+    
+    // User transcript events
+    if (message.type === 'conversation.item.input_audio_transcription.delta') {
+      // Partial user transcript while speaking (optional)
+      const delta = message.delta || '';
+      const newPartial = (partialUserTranscript + delta).trim();
+      setPartialUserTranscript(newPartial);
+      if (onPartialUserTranscript) {
+        onPartialUserTranscript(newPartial);
+      }
+    } else if (message.type === 'conversation.item.input_audio_transcription.completed') {
+      // Final user transcript - turn completed
+      const transcript = message.transcript || '';
+      setPartialUserTranscript(''); // Clear partial
+      setCurrentTranscript(transcript);
+      
+      // Finalize user message into chat history
+      if (onFinalUserTranscript) {
+        onFinalUserTranscript(transcript);
+      }
+      // Legacy callback for backward compatibility
+      if (onTranscript) onTranscript(transcript);
+    } else if (message.type === 'conversation.item.input_audio_transcription.failed') {
+      // User transcription failed
+      setPartialUserTranscript('');
+      const errorMsg = message.error?.message || 'Failed to transcribe user audio';
+      setError(errorMsg);
+      if (onError) onError(errorMsg);
+    }
+    
+    // Assistant transcript events
+    else if (message.type === 'response.audio_transcript.delta' || message.type === 'response.content.delta') {
+      // Partial assistant transcript while speaking (optional)
+      const delta = message.delta || message.content || '';
+      const newPartial = (partialAssistantTranscript + delta).trim();
+      setPartialAssistantTranscript(newPartial);
+      if (onPartialAssistantTranscript) {
+        onPartialAssistantTranscript(newPartial);
+      }
+    } else if (message.type === 'response.audio_transcript.done' || message.type === 'response.done') {
+      // Final assistant transcript - response completed
+      const transcript = message.transcript || message.content || '';
+      setPartialAssistantTranscript(''); // Clear partial
+      setCurrentTranscript(transcript);
+      
+      // Finalize assistant message into chat history
+      if (onFinalAssistantTranscript) {
+        onFinalAssistantTranscript(transcript);
+      }
+      // Legacy callback for backward compatibility
+      if (onResponse) onResponse(transcript);
+    } else if (message.type === 'conversation.item.output_audio_transcription.completed') {
+      // Legacy: completed output transcription
+      const response = message.transcript || '';
+      setPartialAssistantTranscript('');
+      if (onFinalAssistantTranscript) {
+        onFinalAssistantTranscript(response);
+      }
+      if (onResponse) onResponse(response);
+    }
+    
+    // Tool call events - OpenAI Realtime API sends tool calls in various formats
+    else if (message.type === 'conversation.item.requires_action') {
+      // Model is requesting a tool call
+      const item = message.item;
+      if (item && (item.type === 'function_call' || item.function_call)) {
+        handleToolCall(item);
+      }
+    } else if (message.type === 'conversation.item.function_call' || message.type === 'function_call') {
+      // Direct function call event
+      handleToolCall(message.item || message);
+    } else if (message.item?.type === 'function_call') {
+      // Function call nested in item
+      handleToolCall(message.item);
+    }
+    
+    // Error handling
+    else if (message.type === 'error') {
+      const errorMsg = message.error?.message || 'Unknown error from OpenAI';
+      setError(errorMsg);
+      if (onError) onError(errorMsg);
+    }
+    
+    // Connection events
+    else if (message.type === 'session.updated') {
+      // Session updated - could contain turn detection status, etc.
+      console.log('Session updated:', message);
+    }
+  }, [
+    partialUserTranscript,
+    partialAssistantTranscript,
+    onPartialUserTranscript,
+    onPartialAssistantTranscript,
+    onFinalUserTranscript,
+    onFinalAssistantTranscript,
+    onTranscript,
+    onResponse,
+    onError,
+    handleToolCall,
+  ]);
+
+  /**
    * Establish WebRTC connection to OpenAI Realtime API
    * 
    * Flow:
@@ -155,16 +376,24 @@ export function WebRTCRealtime({
       const dataChannel = pc.createDataChannel('oai-events');
       dataChannelRef.current = dataChannel;
 
-      // Note: onopen handler moved below to send system config after connection
+      dataChannel.onopen = () => {
+        console.log('Data channel opened');
+        // Send system/config event on session start with context and tools
+        sendSystemConfig();
+      };
 
       dataChannel.onmessage = (event) => {
         try {
           const message = JSON.parse(event.data);
           
           // Handle tool calls from the model
-          if (message.type === 'conversation.item.input_audio_transcription.completed' && message.item?.type === 'function_call') {
-            handleToolCall(message.item);
-            return;
+          if (message.type === 'conversation.item.requires_action' || 
+              (message.type === 'conversation.item.input_audio_transcription.completed' && message.item?.type === 'function_call')) {
+            const item = message.item || message;
+            if (item && (item.type === 'function_call' || item.function_call)) {
+              handleToolCall(item);
+              return;
+            }
           }
           
           // Handle other messages
@@ -267,7 +496,7 @@ export function WebRTCRealtime({
       // Cleanup on error
       disconnect();
     }
-  }, [disabled, isConnecting, isConnected, getSessionCredentials, onError]);
+  }, [disabled, isConnecting, isConnected, getSessionCredentials, onError, sendSystemConfig, handleToolCall, handleRealtimeMessage, voiceMode, voiceOutputEnabled]);
 
   /**
    * Handle messages from OpenAI Realtime API via DataChannel
@@ -377,118 +606,6 @@ export function WebRTCRealtime({
     handleToolCall,
   ]);
 
-  /**
-   * Send event to OpenAI via DataChannel
-   */
-  const sendEvent = useCallback((event: any) => {
-    if (!dataChannelRef.current || dataChannelRef.current.readyState !== 'open') {
-      console.warn('Data channel not open');
-      return false;
-    }
-
-    try {
-      dataChannelRef.current.send(JSON.stringify(event));
-      return true;
-    } catch (error) {
-      console.error('Failed to send event:', error);
-      return false;
-    }
-  }, []);
-
-  /**
-   * Send system/config event with context and tools
-   * Called on session start or context change
-   */
-  const sendSystemConfig = useCallback(() => {
-    if (!dataChannelRef.current || dataChannelRef.current.readyState !== 'open') {
-      console.warn('Data channel not open, cannot send system config');
-      return;
-    }
-
-    // Create system/config event with context and tools
-    const configEvent = createSystemConfigEvent(
-      context || {},
-      REALTIME_TOOLS
-    );
-
-    sendEvent(configEvent);
-  }, [context, sendEvent]);
-
-  /**
-   * Handle tool call request from the model
-   */
-  const handleToolCall = useCallback(async (functionCall: any) => {
-    // Handle different function call formats from OpenAI Realtime API
-    const callId = functionCall.id || functionCall.call_id || functionCall.item_id;
-    const toolName = functionCall.name || functionCall.function?.name;
-    const argumentsStr = functionCall.arguments || functionCall.function?.arguments || '{}';
-    
-    if (!toolName) {
-      console.error('Invalid function call: missing name', functionCall);
-      return;
-    }
-
-    let parameters: any;
-    try {
-      parameters = typeof argumentsStr === 'string'
-        ? JSON.parse(argumentsStr)
-        : argumentsStr;
-    } catch (e) {
-      console.error('Failed to parse function arguments:', e);
-      parameters = {};
-    }
-
-    // Execute tool on backend
-    try {
-      const response = await fetch('/api/realtime/tool', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          toolName,
-          parameters,
-          studentProfileId,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Tool execution failed: ${response.status}`);
-      }
-
-      const { result } = await response.json();
-
-      // Send tool result back to model via DataChannel
-      // OpenAI Realtime API expects function_call_output item
-      const toolResultEvent = {
-        type: 'conversation.item.create',
-        item: {
-          type: 'function_call_output',
-          call_id: callId,
-          output: JSON.stringify(result),
-        },
-      };
-
-      sendEvent(toolResultEvent);
-    } catch (error) {
-      console.error('Error executing tool:', error);
-      
-      // Send error result back to model
-      const errorResultEvent = {
-        type: 'conversation.item.create',
-        item: {
-          type: 'function_call_output',
-          call_id: callId,
-          output: JSON.stringify({
-            success: false,
-            error: error instanceof Error ? error.message : 'Tool execution failed',
-          }),
-        },
-      };
-
-      sendEvent(errorResultEvent);
-    }
-  }, [studentProfileId, sendEvent]);
 
   /**
    * Commit user turn (end of speech) - for push-to-talk mode
