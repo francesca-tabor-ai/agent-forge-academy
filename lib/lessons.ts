@@ -366,3 +366,63 @@ export function getAllLessonSlugs(
   return slugs;
 }
 
+/**
+ * Gets the next lesson in the course/module sequence
+ * @param currentLessonSlug - The slug of the current lesson
+ * @param courseSlug - Optional course slug to filter lessons within a course
+ * @returns Next lesson object or null if no next lesson exists
+ */
+export function getNextLesson(
+  currentLessonSlug: string,
+  courseSlug?: string
+): Lesson | null {
+  const allLessons = loadAllLessons(undefined, courseSlug);
+  
+  // Find current lesson index
+  const currentIndex = allLessons.findIndex(
+    (lesson) => lesson.slug === currentLessonSlug
+  );
+  
+  if (currentIndex === -1) {
+    return null; // Current lesson not found
+  }
+  
+  // Check if there's a next lesson
+  if (currentIndex < allLessons.length - 1) {
+    return allLessons[currentIndex + 1];
+  }
+  
+  return null; // No next lesson (last lesson in course)
+}
+
+/**
+ * Gets lesson navigation info (current index, total, next lesson)
+ * @param currentLessonSlug - The slug of the current lesson
+ * @param courseSlug - Optional course slug to filter lessons within a course
+ * @returns Navigation info object
+ */
+export function getLessonNavigation(
+  currentLessonSlug: string,
+  courseSlug?: string
+): {
+  currentIndex: number;
+  totalLessons: number;
+  nextLesson: Lesson | null;
+  isLastLesson: boolean;
+} {
+  const allLessons = loadAllLessons(undefined, courseSlug);
+  const currentIndex = allLessons.findIndex(
+    (lesson) => lesson.slug === currentLessonSlug
+  );
+  
+  const nextLesson = currentIndex >= 0 && currentIndex < allLessons.length - 1
+    ? allLessons[currentIndex + 1]
+    : null;
+  
+  return {
+    currentIndex: currentIndex >= 0 ? currentIndex : -1,
+    totalLessons: allLessons.length,
+    nextLesson,
+    isLastLesson: currentIndex === allLessons.length - 1,
+  };
+}

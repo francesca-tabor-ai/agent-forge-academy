@@ -49,6 +49,7 @@ export async function POST(request: NextRequest) {
       safeLogger.warn('Rate limit exceeded for Realtime session', {
         userId: user.id,
         resetAt: new Date(rateLimitResult.resetAt).toISOString(),
+        hasAudio: false, // Never log raw audio
       });
       return NextResponse.json(
         {
