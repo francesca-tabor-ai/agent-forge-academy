@@ -185,13 +185,13 @@ const markdownComponents: Components = {
     }
     // Code inside pre blocks - inherit dark theme
     return (
-      <code {...props} className={`${className || ''} bg-transparent text-gray-100`}>
+      <code {...props} className={`${className || ''} bg-transparent text-white`}>
         {children}
       </code>
     );
   },
   pre: ({ children, ...props }: ComponentPropsWithoutRef<'pre'>) => (
-    <pre {...props} className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto mb-4 font-mono text-sm">
+    <pre {...props} className="bg-black text-white p-4 rounded-lg overflow-x-auto mb-4 font-mono text-sm">
       {children}
     </pre>
   ),

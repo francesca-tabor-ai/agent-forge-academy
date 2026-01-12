@@ -309,7 +309,7 @@ pre code {
   padding: 0;
 }
 
-/* Ensure code blocks in prose classes also use dark theme */
+/* Ensure code blocks in prose classes also use true black background */
 /* Override Tailwind Typography defaults for code blocks */
 .prose pre,
 .prose-sm pre,
@@ -319,8 +319,8 @@ pre code {
 .prose-invert pre,
 .prose-invert-sm pre,
 .prose-invert-lg pre {
-  background-color: #0d1117 !important;
-  color: #e6edf3 !important;
+  background-color: #000000 !important; /* true black */
+  color: #ffffff !important; /* white */
   border: none !important;
   padding: 16px !important;
   border-radius: 8px !important;
@@ -336,7 +336,7 @@ pre code {
 .prose-invert-sm pre code,
 .prose-invert-lg pre code {
   background: transparent !important;
-  color: #e6edf3 !important;
+  color: #ffffff !important; /* white */
   padding: 0 !important;
   font-size: inherit !important;
 }
@@ -350,8 +350,8 @@ pre code {
 .prose-invert code:not(pre code),
 .prose-invert-sm code:not(pre code),
 .prose-invert-lg code:not(pre code) {
-  background-color: rgba(110, 118, 129, 0.2) !important;
-  color: #e6edf3 !important;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff !important; /* white */
   padding: 2px 6px !important;
   border-radius: 4px !important;
   font-size: 0.875em !important;
@@ -359,11 +359,11 @@ pre code {
 
 /* Override any light theme code block styles */
 pre[class*="bg-"]:not([class*="bg-gray-900"]):not([class*="bg-black"]) {
-  background-color: #0d1117 !important;
+  background-color: #000000 !important; /* true black */
 }
 
 pre[class*="text-"]:not([class*="text-gray-100"]):not([class*="text-white"]) {
-  color: #e6edf3 !important;
+  color: #ffffff !important; /* white */
 }
 
 /* Prevent yellow/light text colors in code blocks */
@@ -385,14 +385,14 @@ pre[class*="text-gray-600"],
 pre[class*="text-gray-700"],
 pre[class*="text-gray-800"],
 pre[class*="text-gray-900"] {
-  color: #e6edf3 !important;
+  color: #ffffff !important; /* white */
 }
 
-/* Ensure all text elements inside pre use light text (but allow syntax highlighting) */
+/* Ensure all text elements inside pre use white text (but allow syntax highlighting) */
 pre code,
 pre code span,
 pre code *:not([class*="hljs"]):not([class*="token"]) {
-  color: #e6edf3 !important;
+  color: #ffffff !important; /* white */
 }
 
 /* Allow syntax highlighting colors but ensure minimum brightness for visibility */
@@ -449,18 +449,18 @@ code[class*="language-"],
 .hljs-quote,
 .hljs-emphasis,
 .hljs-strong {
-  background-color: #0d1117 !important;
-  color: #e6edf3 !important;
+  background-color: #000000 !important; /* true black */
+  color: #ffffff !important; /* white */
 }
 
-/* Ensure syntax highlighting spans inside code blocks use light text */
+/* Ensure syntax highlighting spans inside code blocks use white text */
 pre code span,
 pre code .hljs,
 pre code [class*="language-"] {
-  color: #e6edf3 !important;
+  color: #ffffff !important; /* white */
 }
 
-/* Prism.js specific - ensure tokens use light colors */
+/* Prism.js specific - ensure tokens use white colors for readability on black background */
 .token.comment,
 .token.prolog,
 .token.doctype,
@@ -490,6 +490,6 @@ pre code [class*="language-"] {
 .token.keyword,
 .token.regex,
 .token.important {
-  color: #e6edf3 !important;
+  color: #ffffff !important; /* white */
   background: transparent !important;
 }

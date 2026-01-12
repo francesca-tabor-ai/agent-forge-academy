@@ -87,9 +87,9 @@ export function RichTextEditor({
                           {children}
                         </a>
                       ),
-                      // Code blocks - dark theme
+                      // Code blocks - true black background with white text
                       pre: ({ children, ...props }: any) => (
-                        <pre {...props} className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto mb-4 font-mono text-sm">
+                        <pre {...props} className="bg-black text-white p-4 rounded-lg overflow-x-auto mb-4 font-mono text-sm">
                           {children}
                         </pre>
                       ),
@@ -104,7 +104,7 @@ export function RichTextEditor({
                         }
                         // Code block (inside pre)
                         return (
-                          <code {...props} className={`${className || ''} bg-transparent text-gray-100`}>
+                          <code {...props} className={`${className || ''} bg-transparent text-white`}>
                             {children}
                           </code>
                         );
