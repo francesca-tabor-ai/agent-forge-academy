@@ -9,6 +9,7 @@ import { ContextSelectorModal } from './ContextSelectorModal';
 import { HumanEscalationModal } from './HumanEscalationModal';
 import { VoiceControls, triggerVoiceSpeak } from './VoiceControls';
 import { VoiceErrorBoundary } from './VoiceErrorBoundary';
+import { WebRTCRealtime } from './WebRTCRealtime';
 
 export interface NextAction {
   type: 'start_course' | 'open_course' | 'open_lesson' | 'open_job' | 'view_portfolio' | 'add_project' | 'browse_jobs' | 'unlock_plan';
@@ -67,6 +68,7 @@ export function AIAdvisor({
   const [showHumanEscalation, setShowHumanEscalation] = useState(false);
   const [conversationAttempts, setConversationAttempts] = useState(0);
   const [voiceOutputEnabled, setVoiceOutputEnabled] = useState(false);
+  const [useWebRTCRealtime, setUseWebRTCRealtime] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   // Load voice preference from localStorage
@@ -703,36 +705,97 @@ export function AIAdvisor({
 
         {/* Composer */}
         <div className="border-t border-gray-200 p-4">
-          {/* Voice Controls - positioned above input, wrapped in error boundary */}
-          <VoiceErrorBoundary
-            onError={(error, errorInfo) => {
-              console.error('VoiceControls error caught by boundary:', error, errorInfo);
-              // Don't break text chat - error boundary handles the UI
-            }}
-          >
-            <VoiceControls
-              onTranscript={(text) => {
-                // On transcript finalization, call the existing send handler
-                // Wrap in try-catch to ensure text chat still works if voice fails
-                try {
-                  handleSendMessage(text);
-                } catch (error) {
-                  console.error('Error sending voice transcript:', error);
-                  // Text input is still available, so user can retry
-                }
+          {/* Voice Mode Toggle */}
+          <div className="mb-3 flex items-center gap-2">
+            <label className="text-xs text-gray-600">Voice Mode:</label>
+            <button
+              type="button"
+              onClick={() => setUseWebRTCRealtime(false)}
+              className={`px-2 py-1 text-xs rounded transition-colors ${
+                !useWebRTCRealtime
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              Standard
+            </button>
+            <button
+              type="button"
+              onClick={() => setUseWebRTCRealtime(true)}
+              className={`px-2 py-1 text-xs rounded transition-colors ${
+                useWebRTCRealtime
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              WebRTC Realtime
+            </button>
+          </div>
+
+          {/* Voice Controls - Standard or WebRTC Realtime */}
+          {useWebRTCRealtime ? (
+            <VoiceErrorBoundary
+              onError={(error, errorInfo) => {
+                console.error('WebRTCRealtime error caught by boundary:', error, errorInfo);
               }}
-              onSpeak={(text) => {
-                // Called when speech starts
+            >
+              <WebRTCRealtime
+                onTranscript={(text) => {
+                  try {
+                    handleSendMessage(text);
+                  } catch (error) {
+                    console.error('Error sending WebRTC transcript:', error);
+                  }
+                }}
+                onResponse={(text) => {
+                  // Add assistant response to messages
+                  const assistantMessage: Message = {
+                    id: Date.now().toString(),
+                    role: 'assistant',
+                    content: text,
+                    timestamp: new Date(),
+                    context: activeContext,
+                  };
+                  setMessages((prev) => [...prev, assistantMessage]);
+                }}
+                onError={(error) => {
+                  console.error('WebRTC Realtime error:', error);
+                }}
+                disabled={isLoading}
+                studentProfileId={studentProfileId}
+              />
+            </VoiceErrorBoundary>
+          ) : (
+            <VoiceErrorBoundary
+              onError={(error, errorInfo) => {
+                console.error('VoiceControls error caught by boundary:', error, errorInfo);
+                // Don't break text chat - error boundary handles the UI
               }}
-              onStopSpeaking={() => {
-                // Called when speech stops
-              }}
-              disabled={isLoading}
-              autoSpeak={voiceOutputEnabled}
-              voiceOutputEnabled={voiceOutputEnabled}
-              onVoiceOutputToggle={handleVoiceOutputToggle}
-            />
-          </VoiceErrorBoundary>
+            >
+              <VoiceControls
+                onTranscript={(text) => {
+                  // On transcript finalization, call the existing send handler
+                  // Wrap in try-catch to ensure text chat still works if voice fails
+                  try {
+                    handleSendMessage(text);
+                  } catch (error) {
+                    console.error('Error sending voice transcript:', error);
+                    // Text input is still available, so user can retry
+                  }
+                }}
+                onSpeak={(text) => {
+                  // Called when speech starts
+                }}
+                onStopSpeaking={() => {
+                  // Called when speech stops
+                }}
+                disabled={isLoading}
+                autoSpeak={voiceOutputEnabled}
+                voiceOutputEnabled={voiceOutputEnabled}
+                onVoiceOutputToggle={handleVoiceOutputToggle}
+              />
+            </VoiceErrorBoundary>
+          )}
           
           <form onSubmit={handleSubmit} className="flex gap-2 mt-3">
             <input
