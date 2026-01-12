@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { createSystemConfigEvent, REALTIME_TOOLS } from '@/lib/ai/realtime-tools';
+import { safeLogger } from '@/lib/utils/redactPII';
 
 export type VoiceMode = 'push-to-talk' | 'hands-free';
 
@@ -86,6 +87,11 @@ export function WebRTCRealtime({
   const lastEventTimeRef = useRef<number>(Date.now());
   const timeoutCheckIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const TIMEOUT_DURATION = 30000; // 30 seconds without events = timeout
+  
+  // Silence timeout: track last speech time (user or assistant)
+  const lastSpeechTimeRef = useRef<number>(Date.now());
+  const silenceTimeoutIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const SILENCE_TIMEOUT_DURATION = 5 * 60 * 1000; // 5 minutes without speech = close session
 
   // Cleanup on unmount - stop tracks, close peer connection
   useEffect(() => {
@@ -238,6 +244,30 @@ export function WebRTCRealtime({
   const handleRealtimeMessage = useCallback((message: any) => {
     // Update last event time for timeout detection
     lastEventTimeRef.current = Date.now();
+    
+    // Update last speech time when we detect speech activity
+    // Track both user and assistant speech
+    const isSpeechEvent = 
+      message.type === 'conversation.item.input_audio_transcription.delta' ||
+      message.type === 'conversation.item.input_audio_transcription.completed' ||
+      message.type === 'response.audio_transcript.delta' ||
+      message.type === 'response.audio_transcript.done' ||
+      message.type === 'response.content.delta' ||
+      message.type === 'response.content.done';
+    
+    if (isSpeechEvent) {
+      lastSpeechTimeRef.current = Date.now();
+    }
+    
+    // Log events (without storing raw audio)
+    // Only log event types, not audio data
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[WebRTC] Event received:', {
+        type: message.type,
+        timestamp: new Date().toISOString(),
+        hasAudio: false, // Never log raw audio
+      });
+    }
     
     // Handle different message types from OpenAI Realtime API
     // Based on OpenAI's Realtime API event structure
@@ -394,6 +424,14 @@ export function WebRTCRealtime({
         console.log('Data channel opened');
         // Update last event time
         lastEventTimeRef.current = Date.now();
+        lastSpeechTimeRef.current = Date.now(); // Initialize speech time
+        
+        // Log data channel opened (without storing raw audio)
+        safeLogger.info('WebRTC data channel opened', {
+          timestamp: new Date().toISOString(),
+          hasAudio: false, // Never log raw audio
+        });
+        
         // Send system/config event on session start with context and tools
         sendSystemConfig();
       };
@@ -464,12 +502,22 @@ export function WebRTCRealtime({
           setIsConnected(true);
           setIsConnecting(false);
           
+          // Log connection success (without storing raw audio)
+          safeLogger.info('WebRTC connection established', {
+            timestamp: new Date().toISOString(),
+            voiceMode,
+            hasAudio: false, // Never log raw audio
+          });
+          
           // Enable mic for hands-free mode after connection
           if (voiceMode === 'hands-free' && localStreamRef.current) {
             localStreamRef.current.getAudioTracks().forEach((track) => {
               track.enabled = true;
             });
             setIsMuted(false);
+            
+            // Update last speech time for hands-free mode
+            lastSpeechTimeRef.current = Date.now();
           }
         } else if (state === 'disconnected' || state === 'failed') {
           setIsConnected(false);
@@ -524,6 +572,9 @@ export function WebRTCRealtime({
       
       // Start timeout detection after connection attempt
       startTimeoutDetection();
+      
+      // Start silence timeout detection
+      startSilenceTimeoutDetection();
     } catch (err) {
       console.error('Error connecting to Realtime API:', err);
       const errorMessage = err instanceof Error ? err.message : 'Failed to connect';
@@ -534,7 +585,7 @@ export function WebRTCRealtime({
       // Trigger fallback on connection failure
       triggerFallback();
     }
-  }, [disabled, isConnecting, isConnected, getSessionCredentials, onError, sendSystemConfig, handleToolCall, handleRealtimeMessage, voiceMode, voiceOutputEnabled, triggerFallback]);
+  }, [disabled, isConnecting, isConnected, getSessionCredentials, onError, sendSystemConfig, handleToolCall, handleRealtimeMessage, voiceMode, voiceOutputEnabled, triggerFallback, startTimeoutDetection, startSilenceTimeoutDetection]);
 
   /**
    * Start timeout detection - check if no events received for N seconds
@@ -562,10 +613,49 @@ export function WebRTCRealtime({
   }, [isConnected, triggerFallback]);
 
   /**
+   * Start silence timeout detection - close session if no speech for X minutes
+   */
+  const startSilenceTimeoutDetection = useCallback(() => {
+    // Clear existing silence timeout check
+    if (silenceTimeoutIntervalRef.current) {
+      clearInterval(silenceTimeoutIntervalRef.current);
+    }
+
+    // Check every minute if there's been any speech activity
+    silenceTimeoutIntervalRef.current = setInterval(() => {
+      if (!isConnected || !peerConnectionRef.current) {
+        return; // Not connected, don't check
+      }
+
+      const timeSinceLastSpeech = Date.now() - lastSpeechTimeRef.current;
+      
+      if (timeSinceLastSpeech > SILENCE_TIMEOUT_DURATION) {
+        console.log('Silence timeout: No speech activity for', Math.round(timeSinceLastSpeech / 1000 / 60), 'minutes');
+        // Log silence timeout (without storing raw audio)
+        safeLogger.info('Realtime session closed due to silence timeout', {
+          durationMinutes: Math.round(timeSinceLastSpeech / 1000 / 60),
+          timestamp: new Date().toISOString(),
+        });
+        
+        // Close session gracefully
+        setError('Session closed due to inactivity');
+        disconnect();
+      }
+    }, 60 * 1000); // Check every minute
+  }, [isConnected, disconnect]);
+
+  /**
    * Reconnect to WebRTC
    */
   const reconnect = useCallback(() => {
     console.log('Reconnecting WebRTC...');
+    
+    // Log reconnection attempt (without storing raw audio)
+    safeLogger.info('WebRTC reconnection attempted', {
+      timestamp: new Date().toISOString(),
+      hasAudio: false, // Never log raw audio
+    });
+    
     setHasFailed(false);
     setShowFallbackMessage(false);
     setError(null);
@@ -615,6 +705,16 @@ export function WebRTCRealtime({
 
     setIsHoldingMic(true);
     setIsMuted(false);
+    
+    // Update last speech time when user starts speaking
+    lastSpeechTimeRef.current = Date.now();
+    
+    // Log user speech start (without storing raw audio)
+    safeLogger.info('User speech started', {
+      mode: 'push-to-talk',
+      timestamp: new Date().toISOString(),
+      hasAudio: false, // Never log raw audio
+    });
   }, [isConnected]);
 
   /**
@@ -674,6 +774,12 @@ export function WebRTCRealtime({
     if (timeoutCheckIntervalRef.current) {
       clearInterval(timeoutCheckIntervalRef.current);
       timeoutCheckIntervalRef.current = null;
+    }
+
+    // Stop silence timeout check
+    if (silenceTimeoutIntervalRef.current) {
+      clearInterval(silenceTimeoutIntervalRef.current);
+      silenceTimeoutIntervalRef.current = null;
     }
 
     // Stop local stream

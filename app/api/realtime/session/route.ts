@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { safeLogger } from '@/lib/utils/redactPII';
+import { checkRateLimit } from '@/lib/utils/rateLimit';
 
 /**
  * POST /api/realtime/session
@@ -40,19 +41,48 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Optional: Check rate limits (simple in-memory cache or use Redis in production)
-    // For now, we'll skip rate limiting but add a TODO
+    // Per-user rate limits on session mint
+    // Limit: 5 sessions per hour per user
+    const rateLimitResult = checkRateLimit(user.id, 5, 60 * 60 * 1000); // 5 requests per hour
+    
+    if (!rateLimitResult.allowed) {
+      safeLogger.warn('Rate limit exceeded for Realtime session', {
+        userId: user.id,
+        resetAt: new Date(rateLimitResult.resetAt).toISOString(),
+      });
+      return NextResponse.json(
+        {
+          error: 'Rate limit exceeded',
+          message: 'Too many session requests. Please try again later.',
+          resetAt: new Date(rateLimitResult.resetAt).toISOString(),
+        },
+        {
+          status: 429,
+          headers: {
+            'X-RateLimit-Limit': '5',
+            'X-RateLimit-Remaining': '0',
+            'X-RateLimit-Reset': rateLimitResult.resetAt.toString(),
+            'Retry-After': Math.ceil((rateLimitResult.resetAt - Date.now()) / 1000).toString(),
+          },
+        }
+      );
+    }
+
+    // Log session creation (without storing raw audio)
+    safeLogger.info('Realtime session created', {
+      userId: user.id,
+      enableTurnDetection,
+      remaining: rateLimitResult.remaining,
+      resetAt: new Date(rateLimitResult.resetAt).toISOString(),
+    });
 
     // Generate ephemeral token for OpenAI Realtime API
     // Note: OpenAI Realtime API uses ephemeral tokens for client authentication
-    // We generate a token that expires in 1 hour and can be used by the client
-    // to authenticate with OpenAI's Realtime API endpoints
+    // We generate a token with short TTL for security
     
-    // For now, we'll create a simple ephemeral token structure
-    // In production, you might want to use OpenAI's actual token generation API
-    // or implement a more secure token generation mechanism
-    
-    const expiresIn = 3600; // 1 hour
+    // Short TTL: 15 minutes (900 seconds) for ephemeral tokens
+    // This reduces the window of exposure if a token is compromised
+    const expiresIn = 900; // 15 minutes (reduced from 1 hour for security)
     const expiresAt = new Date(Date.now() + expiresIn * 1000).toISOString();
     
     // Generate a secure ephemeral token
