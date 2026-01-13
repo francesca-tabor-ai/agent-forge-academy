@@ -201,7 +201,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
   },
   'multi-agent-sales-system': {
     slug: 'multi-agent-sales-system',
-    title: 'Building the Last Sales Team You'll Ever Train',
+    title: 'Building the Last Sales Team You\'ll Ever Train',
     category: 'Agentic Systems',
     outcome: 'Design, orchestrate, and scale an AI-agent sales organization that eliminates hiring cycles and enables autonomous sales execution.',
     build: 'Complete autonomous sales organization with CSO agent, multichannel outreach teams, self-healing RevOps, research agents, self-updating enablement, and governance framework.',
