@@ -199,6 +199,15 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     bestFor: 'Engineers and architects building production-ready multi-agent systems that must handle change, drift, and failure gracefully.',
     time: '~12 weeks',
   },
+  'multi-agent-sales-system': {
+    slug: 'multi-agent-sales-system',
+    title: 'Building the Last Sales Team You'll Ever Train',
+    category: 'Agentic Systems',
+    outcome: 'Design, orchestrate, and scale an AI-agent sales organization that eliminates hiring cycles and enables autonomous sales execution.',
+    build: 'Complete autonomous sales organization with CSO agent, multichannel outreach teams, self-healing RevOps, research agents, self-updating enablement, and governance framework.',
+    bestFor: 'Sales leaders done with hiring cycles, RevOps and GTM operators, founders scaling without headcount, and AI builders designing real business systems.',
+    time: '~8 weeks',
+  },
 };
 
 // Get category groups for organizing courses

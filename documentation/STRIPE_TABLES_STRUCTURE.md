@@ -1,5 +1,72 @@
 # Stripe Tables Structure
 
+<style>
+/* Architecture/Flow/Diagram/Code Block Styling - White Text on Black Background */
+pre, code, pre code {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  border: 1px solid #333333;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+}
+
+/* Ensure all code blocks maintain black background */
+pre {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  padding: 1rem;
+  border-radius: 4px;
+  overflow-x: auto;
+}
+
+code {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+}
+
+/* Selection state - dark background, white text */
+pre::selection, code::selection, pre code::selection {
+  background-color: #333333 !important;
+  color: #FFFFFF !important;
+}
+
+pre ::selection, code ::selection {
+  background-color: #333333 !important;
+  color: #FFFFFF !important;
+}
+
+/* Highlight/Mark state - dark accent, white text */
+pre mark, code mark, pre code mark {
+  background-color: #444444 !important;
+  color: #FFFFFF !important;
+}
+
+/* Hover state - stay black */
+pre:hover, code:hover {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+}
+
+/* Focus state - stay black with subtle outline */
+pre:focus, code:focus {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  outline: 1px solid #666666;
+}
+
+/* Nested elements inherit white text */
+pre *, code *, pre code * {
+  color: #FFFFFF !important;
+}
+
+/* Prevent theme overrides */
+pre.prose, code.prose {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+}
+</style>
+
 This document explains the new Stripe integration tables and how they fit into the Supabase project.
 
 ## Overview
