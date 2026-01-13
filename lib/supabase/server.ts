@@ -15,10 +15,6 @@ export function createServerSupabaseClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-  // Runtime sanity check - visible in server logs
-  console.log('[Server] SUPABASE_URL:', supabaseUrl);
-  console.log('[Server] SUPABASE_SERVICE_ROLE_KEY exists:', !!supabaseServiceKey);
-
   if (!supabaseUrl || !supabaseServiceKey) {
     throw new Error('Missing Supabase environment variables');
   }
@@ -39,10 +35,6 @@ export async function createUserSupabaseClient() {
   const cookieStore = await cookies();
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-  // Runtime sanity check - visible in server logs
-  console.log('[Server] SUPABASE_URL:', supabaseUrl);
-  console.log('[Server] SUPABASE_ANON_KEY exists:', !!supabaseAnonKey);
 
   if (!supabaseUrl || !supabaseAnonKey) {
     throw new Error('Missing Supabase environment variables');

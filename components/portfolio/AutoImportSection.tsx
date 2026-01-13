@@ -16,7 +16,15 @@ export function AutoImportSection({ studentProfileId, hasExistingData }: AutoImp
     !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   if (!supabaseReady) {
-    throw new Error('Supabase env vars missing at runtime');
+    return (
+      <section className="bg-white border border-gray-200 rounded-lg p-6">
+        <div className="bg-yellow-50 border border-yellow-200 rounded-md p-4">
+          <p className="text-sm text-yellow-800">
+            CV upload temporarily unavailable. Please try again later.
+          </p>
+        </div>
+      </section>
+    );
   }
   const router = useRouter();
   const [loading, setLoading] = useState(false);

@@ -20,7 +20,13 @@ export function CVUpload({ onUploadSuccess }: CVUploadProps) {
     !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   if (!supabaseReady) {
-    throw new Error('Supabase env vars missing at runtime');
+    return (
+      <div className="bg-yellow-50 border border-yellow-200 rounded-md p-4">
+        <p className="text-sm text-yellow-800">
+          CV upload temporarily unavailable. Please try again later.
+        </p>
+      </div>
+    );
   }
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
