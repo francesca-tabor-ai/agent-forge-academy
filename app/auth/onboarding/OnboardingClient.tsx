@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 
-type Role = 'student' | 'instructor' | 'recruiter';
+type Role = 'student' | 'recruiter';
 
 export default function OnboardingClient() {
   const router = useRouter();
@@ -151,8 +151,6 @@ export default function OnboardingClient() {
       // Redirect to appropriate dashboard
       if (selectedRole === 'student') {
         router.push('/student/dashboard');
-      } else if (selectedRole === 'instructor') {
-        router.push('/tutor/dashboard');
       } else if (selectedRole === 'recruiter') {
         router.push('/recruiter/directory');
       } else {
@@ -224,33 +222,6 @@ export default function OnboardingClient() {
                 <div style={{ fontWeight: '600', marginBottom: '0.25rem' }}>Student</div>
                 <div style={{ fontSize: '0.9rem', color: '#666' }}>
                   Learn, build projects, create portfolio, ask questions
-                </div>
-              </div>
-            </label>
-
-            <label
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                padding: '1rem',
-                border: selectedRole === 'instructor' ? '2px solid #0070f3' : '1px solid #ddd',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                backgroundColor: selectedRole === 'instructor' ? '#f0f7ff' : 'white',
-              }}
-            >
-              <input
-                type="radio"
-                name="role"
-                value="instructor"
-                checked={selectedRole === 'instructor'}
-                onChange={(e) => setSelectedRole(e.target.value as Role)}
-                style={{ marginRight: '0.75rem', width: '20px', height: '20px' }}
-              />
-              <div>
-                <div style={{ fontWeight: '600', marginBottom: '0.25rem' }}>Instructor</div>
-                <div style={{ fontSize: '0.9rem', color: '#666' }}>
-                  Answer student questions, host office hours, mark accepted answers
                 </div>
               </div>
             </label>

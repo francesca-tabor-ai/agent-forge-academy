@@ -26,8 +26,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
     }
 
-    // Only students and tutors can answer
-    if (profile.role !== 'student' && profile.role !== 'tutor') {
+    // Only students and admins can answer
+    if (profile.role !== 'student' && profile.role !== 'admin') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }
 

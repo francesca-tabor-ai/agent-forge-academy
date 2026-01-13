@@ -9,7 +9,7 @@ interface RouteParams {
  * POST /api/courses/[id]/thumbnail
  * Upload or set a course thumbnail image
  * Supports both file upload and URL input
- * Requires admin or instructor role
+ * Requires admin role
  */
 export async function POST(request: Request, { params }: RouteParams) {
   try {
@@ -23,15 +23,15 @@ export async function POST(request: Request, { params }: RouteParams) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Check if user is admin or instructor
+    // Check if user is admin
     const { data: profile } = await supabase
       .from('profiles')
       .select('role')
       .eq('user_id', user.id)
       .single();
 
-    if (!profile || !['admin', 'instructor'].includes(profile.role)) {
-      return NextResponse.json({ error: 'Forbidden - Admin or instructor role required' }, { status: 403 });
+    if (!profile || profile.role !== 'admin') {
+      return NextResponse.json({ error: 'Forbidden - Admin role required' }, { status: 403 });
     }
 
     // Verify course exists
@@ -210,7 +210,7 @@ export async function POST(request: Request, { params }: RouteParams) {
 /**
  * DELETE /api/courses/[id]/thumbnail
  * Remove a course thumbnail image
- * Requires admin or instructor role
+ * Requires admin role
  */
 export async function DELETE(request: Request, { params }: RouteParams) {
   try {
@@ -224,15 +224,15 @@ export async function DELETE(request: Request, { params }: RouteParams) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Check if user is admin or instructor
+    // Check if user is admin
     const { data: profile } = await supabase
       .from('profiles')
       .select('role')
       .eq('user_id', user.id)
       .single();
 
-    if (!profile || !['admin', 'instructor'].includes(profile.role)) {
-      return NextResponse.json({ error: 'Forbidden - Admin or instructor role required' }, { status: 403 });
+    if (!profile || profile.role !== 'admin') {
+      return NextResponse.json({ error: 'Forbidden - Admin role required' }, { status: 403 });
     }
 
     // Get course

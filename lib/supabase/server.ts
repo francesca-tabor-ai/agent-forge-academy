@@ -70,7 +70,7 @@ export async function createUserSupabaseClient() {
 /**
  * Gets the current user's role from Supabase
  * Returns null if not authenticated
- * Maps 'tutor' to 'instructor' for consistency (database supports both for backward compatibility)
+ * Simplified role model: student, recruiter, admin
  */
 export async function getUserRole(): Promise<UserRole | null> {
   const supabase = await createUserSupabaseClient();
@@ -90,9 +90,9 @@ export async function getUserRole(): Promise<UserRole | null> {
 
   const role = profile?.role as string;
   
-  // Map 'tutor' to 'instructor' for consistency (database may have 'tutor' for backward compatibility)
+  // Map deprecated tutor/instructor roles to admin (migrated in database)
   if (role === 'tutor' || role === 'instructor') {
-    return 'instructor';
+    return 'admin';
   }
   
   return (role as UserRole) || null;
@@ -100,33 +100,27 @@ export async function getUserRole(): Promise<UserRole | null> {
 
 /**
  * Checks if user has the required role
- * Accepts 'tutor' for backward compatibility (maps to 'instructor')
+ * Simplified role model: student, recruiter, admin
  */
 export async function hasRole(
-  requiredRole: UserRole | 'tutor'
+  requiredRole: UserRole
 ): Promise<boolean> {
   const role = await getUserRole();
-  // Handle 'tutor' for backward compatibility (maps to 'instructor')
-  if (requiredRole === 'tutor' || requiredRole === 'instructor') {
-    return role === 'instructor';
-  }
   return role === requiredRole;
 }
 
 /**
  * Checks if user has any of the required roles
- * Accepts 'tutor' in the array for backward compatibility (maps to 'instructor')
+ * Simplified role model: student, recruiter, admin
  */
 export async function hasAnyRole(
-  requiredRoles: Array<UserRole | 'tutor'>
+  requiredRoles: Array<UserRole>
 ): Promise<boolean> {
   const role = await getUserRole();
   if (role === null) {
     return false;
   }
-  // Map 'tutor' to 'instructor' in the required roles array for comparison
-  const normalizedRoles = requiredRoles.map(r => r === 'tutor' ? 'instructor' : r) as UserRole[];
-  return normalizedRoles.includes(role);
+  return requiredRoles.includes(role);
 }
 
 /**
