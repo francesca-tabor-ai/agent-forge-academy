@@ -67,9 +67,7 @@ CREATE POLICY "Admins can mark answers as accepted"
     )
   )
   WITH CHECK (
-    -- Body must remain unchanged (admins cannot edit answer content)
-    body = OLD.body
-    AND EXISTS (
+    EXISTS (
       SELECT 1 FROM profiles
       WHERE profiles.id = answers.profile_id
       AND profiles.user_id = auth.uid()
