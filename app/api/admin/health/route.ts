@@ -23,7 +23,61 @@ export async function GET(request: NextRequest) {
 
     const checks: Array<{ name: string; status: 'pass' | 'fail'; message: string }> = [];
 
-    // 1. DB Connectivity Check
+    // 1. Supabase Environment Variables Check
+    try {
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+      const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+      const missingVars: string[] = [];
+      if (!supabaseUrl) missingVars.push('NEXT_PUBLIC_SUPABASE_URL');
+      if (!supabaseAnonKey) missingVars.push('NEXT_PUBLIC_SUPABASE_ANON_KEY');
+      if (!supabaseServiceKey) missingVars.push('SUPABASE_SERVICE_ROLE_KEY');
+
+      if (missingVars.length > 0) {
+        checks.push({
+          name: 'Supabase Environment Variables',
+          status: 'fail',
+          message: `Missing required env vars: ${missingVars.join(', ')}`,
+        });
+      } else {
+        // Check for trailing spaces (common issue)
+        const urlHasTrailingSpace = supabaseUrl.trim() !== supabaseUrl;
+        const keyHasTrailingSpace = supabaseAnonKey.trim() !== supabaseAnonKey;
+        
+        if (urlHasTrailingSpace || keyHasTrailingSpace) {
+          checks.push({
+            name: 'Supabase Environment Variables',
+            status: 'fail',
+            message: 'Env vars have trailing spaces. Remove them in Vercel settings.',
+          });
+        } else {
+          // Validate URL format
+          try {
+            new URL(supabaseUrl);
+            checks.push({
+              name: 'Supabase Environment Variables',
+              status: 'pass',
+              message: 'All required Supabase env vars are present and valid',
+            });
+          } catch {
+            checks.push({
+              name: 'Supabase Environment Variables',
+              status: 'fail',
+              message: 'NEXT_PUBLIC_SUPABASE_URL is not a valid URL',
+            });
+          }
+        }
+      }
+    } catch (error) {
+      checks.push({
+        name: 'Supabase Environment Variables',
+        status: 'fail',
+        message: `Env var check error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      });
+    }
+
+    // 2. DB Connectivity Check
     try {
       const supabase = createServerSupabaseClient();
       const { data, error } = await supabase
@@ -52,7 +106,7 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    // 2. Storage Access Check
+    // 3. Storage Access Check
     try {
       const supabase = createServerSupabaseClient();
       // Try to list buckets to check storage access
@@ -89,7 +143,7 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    // 3. Stripe Configuration Check
+    // 4. Stripe Configuration Check
     try {
       const stripeKey = process.env.STRIPE_SECRET_KEY || process.env.STRIPE_SECRET_KEY_TEST;
       if (!stripeKey) {
@@ -117,7 +171,7 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    // 4. AI Provider Configuration Check
+    // 5. AI Provider Configuration Check
     try {
       const llmApiKey = process.env.LLM_API_KEY;
       const llmProvider = process.env.LLM_PROVIDER || 'openai';
