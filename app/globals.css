@@ -280,6 +280,22 @@
 /* Global Code Block Styling - True black background with white text for maximum readability */
 /* This ensures all code blocks have black background and white text with high contrast */
 
+/* Global selection fallback - prevent white-on-white anywhere */
+/* This ensures that even if specific selectors don't match, we never get white-on-white */
+/* Note: Dark background elements (pre, code) will override this with more specific rules */
+body::selection,
+body *::selection {
+  /* Default safe selection colors for light backgrounds */
+  background-color: #cbd5e0; /* light blue-gray */
+  color: #1a202c; /* dark text */
+}
+
+body::-moz-selection,
+body *::-moz-selection {
+  background-color: #cbd5e0;
+  color: #1a202c;
+}
+
 /* Block code */
 pre {
   background-color: #000000; /* true black */
