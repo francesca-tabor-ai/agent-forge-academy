@@ -143,19 +143,21 @@ export async function extractTextFromCV(
  * Extract text from a CV file stored in Supabase Storage
  * 
  * @param supabase - Supabase client
- * @param filePath - Path to the file in storage (e.g., 'cvs/user-id/timestamp.pdf')
- * @param bucket - Storage bucket name (default: 'portfolio-files')
+ * @param filePath - Path to the file in storage (e.g., 'user-id/resume-timestamp.pdf')
+ * @param bucket - Storage bucket name (defaults to env var or 'resumes')
  * @returns Extraction result with text and metadata
  */
 export async function extractTextFromStoredCV(
   supabase: any,
   filePath: string,
-  bucket: string = 'portfolio-files'
+  bucket?: string
 ): Promise<ExtractionResult> {
+  // Use provided bucket or get from env var
+  const bucketName = bucket || (await import('@/lib/utils/storage')).getResumeBucketName();
   try {
     // Download file from storage
     const { data, error } = await supabase.storage
-      .from(bucket)
+      .from(bucketName)
       .download(filePath);
 
     if (error) {

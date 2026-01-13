@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
 interface HeadshotUploadProps {
@@ -9,6 +10,7 @@ interface HeadshotUploadProps {
 }
 
 export function HeadshotUpload({ currentImageUrl, onImageChange }: HeadshotUploadProps) {
+  const router = useRouter();
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(currentImageUrl || null);
@@ -24,19 +26,33 @@ export function HeadshotUpload({ currentImageUrl, onImageChange }: HeadshotUploa
 
   const handleImageSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (!file) return;
+    if (!file) {
+      // Clear input if no file selected
+      if (inputRef.current) {
+        inputRef.current.value = '';
+      }
+      return;
+    }
 
     setError(null);
 
     // Validate file type
     if (!ALLOWED_TYPES.includes(file.type)) {
       setError('Unsupported format — use JPG, PNG, or WEBP');
+      // Clear input on validation error
+      if (inputRef.current) {
+        inputRef.current.value = '';
+      }
       return;
     }
 
     // Validate file size
     if (file.size > MAX_SIZE) {
       setError('File too large (max 5MB)');
+      // Clear input on validation error
+      if (inputRef.current) {
+        inputRef.current.value = '';
+      }
       return;
     }
 
@@ -61,44 +77,72 @@ export function HeadshotUpload({ currentImageUrl, onImageChange }: HeadshotUploa
 
       if (!response.ok) {
         const data = await response.json().catch(() => ({}));
+        const errorCode = data.error?.code;
         const errorMessage = data.error?.message || data.error || 'Unable to upload image.';
         
         // Handle specific error codes
         if (response.status === 401) {
           setError('Session expired. Please log in again.');
+          if (inputRef.current) {
+            inputRef.current.value = '';
+          }
           return;
         }
         
-        if (response.status === 404) {
-          setError('Upload service is unavailable (missing endpoint).');
-          return;
-        }
-        
-        // Provide more specific error messages
-        if (errorMessage.includes('5MB') || errorMessage.includes('size') || errorMessage.includes('FILE_TOO_LARGE')) {
-          throw new Error('File too large (max 5MB)');
-        } else if (errorMessage.includes('JPG') || errorMessage.includes('PNG') || errorMessage.includes('WEBP') || errorMessage.includes('format') || errorMessage.includes('INVALID_FILE_TYPE')) {
-          throw new Error('Unsupported format — use JPG, PNG, or WEBP');
-        } else if (errorMessage.includes('not found') || errorMessage.includes('Profile') || errorMessage.includes('PROFILE_NOT_FOUND')) {
-          throw new Error("We couldn't save your profile yet — please try again");
+        // Provide specific error messages based on error codes
+        if (errorCode === 'FILE_TOO_LARGE' || errorMessage.includes('5MB') || errorMessage.includes('size')) {
+          setError('File too large (max 5MB)');
+        } else if (errorCode === 'INVALID_FILE_TYPE' || errorMessage.includes('JPG') || errorMessage.includes('PNG') || errorMessage.includes('WEBP') || errorMessage.includes('format')) {
+          setError('Unsupported format — use JPG, PNG, or WEBP');
+        } else if (errorCode === 'PROFILE_NOT_FOUND' || errorCode === 'STUDENT_PROFILE_NOT_FOUND') {
+          setError('Profile not found. Please refresh the page and try again.');
+        } else if (errorCode === 'UPLOAD_FAILED') {
+          setError(`Upload failed: ${errorMessage}`);
         } else {
-          throw new Error(errorMessage);
+          setError(errorMessage);
         }
+        
+        // Clear input on error
+        if (inputRef.current) {
+          inputRef.current.value = '';
+        }
+        // Revert preview on error
+        setPreviewUrl(currentImageUrl || null);
+        return;
       }
 
       const result = await response.json();
       const imageUrl = result.imageUrl || result.profile?.headshot_image_url;
       
       if (!imageUrl) {
-        throw new Error('Upload succeeded but no image URL returned');
+        setError('Upload succeeded but no image URL returned');
+        if (inputRef.current) {
+          inputRef.current.value = '';
+        }
+        setPreviewUrl(currentImageUrl || null);
+        return;
       }
+      
+      // Success: update state and clear input
       onImageChange(imageUrl);
       setPreviewUrl(imageUrl);
-      setError(null); // Clear any previous errors on success
+      setError(null);
+      
+      // Clear the file input (uncontrolled input should be cleared via ref)
+      if (inputRef.current) {
+        inputRef.current.value = '';
+      }
+      
+      // Refresh the page data to ensure UI is up to date
+      router.refresh();
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unable to upload image.';
       setError(errorMessage);
       setPreviewUrl(currentImageUrl || null);
+      // Clear input on error
+      if (inputRef.current) {
+        inputRef.current.value = '';
+      }
     } finally {
       setUploading(false);
     }
@@ -141,6 +185,8 @@ export function HeadshotUpload({ currentImageUrl, onImageChange }: HeadshotUploa
       if (inputRef.current) {
         inputRef.current.value = '';
       }
+      // Refresh the page data to ensure UI is up to date
+      router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "We couldn't remove the image — please try again");
     } finally {
@@ -200,6 +246,7 @@ export function HeadshotUpload({ currentImageUrl, onImageChange }: HeadshotUploa
               disabled={uploading}
               className="hidden"
               id="headshot-upload"
+              // File inputs must be uncontrolled - never set value prop
             />
             <label
               htmlFor="headshot-upload"

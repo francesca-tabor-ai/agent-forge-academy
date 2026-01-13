@@ -77,35 +77,37 @@ export async function POST(request: NextRequest) {
       resetAt: new Date(rateLimitResult.resetAt).toISOString(),
     });
 
-    // Generate ephemeral token for OpenAI Realtime API
-    // Note: OpenAI Realtime API uses ephemeral tokens for client authentication
-    // We generate a token with short TTL for security
+    // Generate ephemeral session token for client
+    // Note: OpenAI Realtime API WebRTC connections are proxied through our backend
+    // to keep the API key secure. The ephemeral token is used for session tracking
+    // and rate limiting, not for direct OpenAI authentication.
     
     // Short TTL: 15 minutes (900 seconds) for ephemeral tokens
-    // This reduces the window of exposure if a token is compromised
-    const expiresIn = 900; // 15 minutes (reduced from 1 hour for security)
+    const expiresIn = 900; // 15 minutes
     const expiresAt = new Date(Date.now() + expiresIn * 1000).toISOString();
     
-    // Generate a secure ephemeral token
-    // In a real implementation, you might want to:
-    // 1. Use OpenAI's token generation API if available
-    // 2. Store tokens in a database with expiration
-    // 3. Implement proper token signing/verification
-    
-    // For this implementation, we'll return a structure that the client can use
-    // The client will use this token to authenticate with OpenAI's Realtime API
+    // Generate a secure ephemeral token for session tracking
+    // This token is used to identify the session on our backend, not for OpenAI auth
+    const sessionId = `session_${user.id}_${Date.now()}_${Math.random().toString(36).substring(7)}`;
     const ephemeralToken = Buffer.from(
-      `${user.id}:${Date.now()}:${Math.random().toString(36).substring(7)}`
+      `${sessionId}:${user.id}:${Date.now()}:${Math.random().toString(36).substring(7)}`
     ).toString('base64');
 
+    safeLogger.info('Realtime session created', {
+      userId: user.id,
+      sessionId,
+      expiresAt,
+      enableTurnDetection,
+      hasAudio: false, // Never log raw audio
+    });
+
     // Return ephemeral credentials to client
-    // The client_secret here is actually the ephemeral token the client will use
-    // to authenticate with OpenAI's Realtime API
-    // Note: In production, you should implement proper token generation that
-    // OpenAI's API can verify, or use OpenAI's token generation endpoint if available
+    // The client_secret is used for session tracking on our backend
+    // Actual OpenAI API calls are made server-side with the server's API key
     return NextResponse.json({
-      client_secret: ephemeralToken, // Ephemeral token for client to use
+      client_secret: ephemeralToken, // Ephemeral token for session tracking
       expires_at: expiresAt,
+      session_id: sessionId,
       model: 'gpt-4o-realtime-preview-2024-12-17',
       voice: 'alloy', // Options: alloy, echo, fable, onyx, nova, shimmer, ash, ballad, coral, sage, verse, marin, cedar
       turn_detection: enableTurnDetection, // Enable server-side turn detection for hands-free mode

@@ -308,9 +308,7 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
 
   // Filter and sort state from URL params
   const searchQuery = searchParams.get('search') || '';
-  const statusFilter = searchParams.get('status')?.split(',') || [];
-  const matchMin = parseInt(searchParams.get('matchMin') || '60');
-  const matchMax = parseInt(searchParams.get('matchMax') || '100');
+  const statusFilter = searchParams.get('status') || 'all';
   const roleTypeFilter = (searchParams.get('roleType') || 'all') as RoleType;
   const skillFilter = searchParams.get('skills')?.split(',') || [];
   const sortBy = (searchParams.get('sort') || 'best-match') as SortOption;
@@ -534,15 +532,9 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
     }
 
     // Status filter
-    if (statusFilter.length > 0) {
-      filtered = filtered.filter(job => job.status && statusFilter.includes(job.status));
+    if (statusFilter !== 'all') {
+      filtered = filtered.filter(job => job.status === statusFilter);
     }
-
-    // Match score filter (use computed matching_score from API)
-    filtered = filtered.filter(
-      job => (job.matching_score ?? job.matchingScore ?? 0) >= matchMin && 
-             (job.matching_score ?? job.matchingScore ?? 0) <= matchMax
-    );
 
     // Role type filter (simplified - would need jobType field in API)
     if (roleTypeFilter !== 'all') {
@@ -577,7 +569,7 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
     });
 
     return filtered;
-  }, [jobs, searchQuery, statusFilter, matchMin, matchMax, roleTypeFilter, skillFilter, sortBy]);
+  }, [jobs, searchQuery, statusFilter, roleTypeFilter, skillFilter, sortBy]);
 
   const updateURLParams = (updates: Record<string, string | null>) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -602,27 +594,16 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
     }, 300);
   };
 
-  const handleStatusToggle = (status: string) => {
-    // Single-select: if clicking the same status, clear it; otherwise, replace with new status
-    const newStatus = statusFilter.includes(status) ? [] : [status];
-    updateURLParams({ status: newStatus.length > 0 ? newStatus.join(',') : null });
+  const handleStatusChange = (status: string) => {
+    updateURLParams({ status: status !== 'all' ? status : null });
   };
 
   const handleResetFilters = () => {
     updateURLParams({
       search: null,
       status: null,
-      matchMin: null,
-      matchMax: null,
       skills: null,
       sort: null,
-    });
-  };
-
-  const handleMatchRangeChange = (min: number, max: number) => {
-    updateURLParams({
-      matchMin: min !== 60 ? min.toString() : null,
-      matchMax: max !== 100 ? max.toString() : null,
     });
   };
 
@@ -746,10 +727,19 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
         {/* Card Content */}
         <div className="p-6">
           <div className="grid grid-cols-12 gap-4">
-            {/* Row 1: Search + Status */}
-            {/* Search */}
-            <div className="col-span-12 md:col-span-5">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Search</label>
+            {/* Row 1: Search (full width) */}
+            <div className="col-span-12">
+              <div className="flex items-center justify-between mb-2">
+                <label className="block text-sm font-medium text-gray-700">Search</label>
+                {(statusFilter !== 'all' || searchQuery || skillFilter.length > 0) && (
+                    <button
+                      onClick={handleResetFilters}
+                      className="h-10 px-3 text-xs text-gray-500 hover:text-gray-700 underline transition-colors focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-1 rounded"
+                    >
+                      Reset filters
+                    </button>
+                )}
+              </div>
               <input
                 type="text"
                 placeholder="Search jobs, companies, skills..."
@@ -759,39 +749,33 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
               />
             </div>
 
+            {/* Row 2: Status + Sort + Skills */}
             {/* Status Filter */}
-            <div className="col-span-12 md:col-span-7">
-              <div className="flex items-center justify-between mb-2">
-                <label className="block text-sm font-medium text-gray-700">Status</label>
-                {(statusFilter.length > 0 || searchQuery || skillFilter.length > 0 || matchMin !== 60 || matchMax !== 100) && (
-                    <button
-                      onClick={handleResetFilters}
-                      className="h-10 px-3 text-xs text-gray-500 hover:text-gray-700 underline transition-colors focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-1 rounded"
-                    >
-                      Reset filters
-                    </button>
-                )}
-              </div>
-              <div className="flex items-center gap-2 flex-wrap">
-                {['new', 'recommended', 'unlocked', 'locked', 'stretch'].map((status) => (
-                  <button
-                    key={status}
-                    onClick={() => handleStatusToggle(status)}
-                    className={`h-10 px-3 text-xs font-medium rounded-full transition-all whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-1 ${
-                      statusFilter.includes(status)
-                        ? 'bg-brand-light text-white shadow-sm border border-brand-light'
-                        : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 hover:border-gray-400'
-                    }`}
-                  >
-                    {status.charAt(0).toUpperCase() + status.slice(1)}
-                  </button>
-                ))}
-              </div>
+            <div className="col-span-12 md:col-span-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
+              <select
+                value={statusFilter}
+                onChange={(e) => handleStatusChange(e.target.value)}
+                className="w-full h-10 px-4 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent bg-white appearance-none cursor-pointer"
+                style={{
+                  backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
+                  backgroundPosition: 'right 0.5rem center',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundSize: '1.5em 1.5em',
+                  paddingRight: '2.5rem',
+                }}
+              >
+                <option value="all">All statuses</option>
+                <option value="new">New</option>
+                <option value="recommended">Recommended</option>
+                <option value="unlocked">Unlocked</option>
+                <option value="locked">Locked</option>
+                <option value="stretch">Stretch</option>
+              </select>
             </div>
 
-            {/* Row 2: Sort + Match Range + Skills */}
             {/* Sort */}
-            <div className="col-span-12 md:col-span-3">
+            <div className="col-span-12 md:col-span-4">
               <label className="block text-sm font-medium text-gray-700 mb-2">Sort by</label>
               <select
                 value={sortBy}
@@ -812,39 +796,9 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
               </select>
             </div>
 
-            {/* Match Score Range */}
-            <div className="col-span-12 md:col-span-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Match range (%)</label>
-              <div className="flex items-center gap-2">
-                <input
-                  type="number"
-                  min="0"
-                  max="100"
-                  value={matchMin}
-                  onChange={(e) => {
-                    const val = Math.max(0, Math.min(100, parseInt(e.target.value) || 0));
-                    handleMatchRangeChange(val, matchMax);
-                  }}
-                  className="w-20 h-10 px-3 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent text-center appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-                />
-                <span className="text-sm text-gray-400">to</span>
-                <input
-                  type="number"
-                  min="0"
-                  max="100"
-                  value={matchMax}
-                  onChange={(e) => {
-                    const val = Math.max(0, Math.min(100, parseInt(e.target.value) || 100));
-                    handleMatchRangeChange(matchMin, val);
-                  }}
-                  className="w-20 h-10 px-3 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent text-center appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-                />
-              </div>
-            </div>
-
             {/* Skills Filter */}
             {allSkills.length > 0 && (
-              <div className="col-span-12 md:col-span-5">
+              <div className="col-span-12 md:col-span-4">
                 <label className="block text-sm font-medium text-gray-700 mb-2">Skills</label>
                 <SearchableSkillSelector
                   allSkills={allSkills}
@@ -872,7 +826,7 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
         </div>
         
         {/* Active Filters Summary */}
-        {(searchQuery || statusFilter.length > 0 || skillFilter.length > 0 || matchMin !== 60 || matchMax !== 100) && (
+        {(searchQuery || statusFilter !== 'all' || skillFilter.length > 0) && (
           <div className="flex flex-col sm:flex-row sm:items-center gap-3">
             <div className="flex items-center gap-2 flex-wrap">
               {searchQuery && (
@@ -887,9 +841,9 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
                   </button>
                 </span>
               )}
-              {statusFilter.length > 0 && (
+              {statusFilter !== 'all' && (
                 <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-brand-light/10 text-brand-light text-xs font-medium rounded-full border border-brand-light/20">
-                  Status: {statusFilter[0].charAt(0).toUpperCase() + statusFilter[0].slice(1)}
+                  Status: {statusFilter.charAt(0).toUpperCase() + statusFilter.slice(1)}
                   <button
                     onClick={() => updateURLParams({ status: null })}
                     className="hover:text-brand-light/70 text-base leading-none focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-1 rounded"
@@ -906,18 +860,6 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
                     onClick={() => updateURLParams({ skills: null })}
                     className="hover:text-brand-light/70 text-base leading-none focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-1 rounded"
                     aria-label="Remove skills filter"
-                  >
-                    ×
-                  </button>
-                </span>
-              )}
-              {(matchMin !== 60 || matchMax !== 100) && (
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded-full border border-gray-300">
-                  Match: {matchMin}%–{matchMax}%
-                  <button
-                    onClick={() => updateURLParams({ matchMin: null, matchMax: null })}
-                    className="hover:text-gray-900 text-base leading-none focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-1 rounded"
-                    aria-label="Remove match range filter"
                   >
                     ×
                   </button>
@@ -1098,11 +1040,11 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
                 No jobs to show yet
               </h3>
               <p className="text-sm text-gray-600 mb-6">
-                {searchQuery || statusFilter.length > 0 || skillFilter.length > 0 || matchMin !== 60 || matchMax !== 100
+                {searchQuery || statusFilter !== 'all' || skillFilter.length > 0
                   ? 'No jobs match your filters. Try adjusting your search criteria.'
                   : "We'll recommend jobs once you complete a course or add a project."}
               </p>
-              {!searchQuery && statusFilter.length === 0 && skillFilter.length === 0 && matchMin === 60 && matchMax === 100 && (
+              {!searchQuery && statusFilter === 'all' && skillFilter.length === 0 && (
                 <div className="flex items-center justify-center gap-4">
                   <Link
                     href="/student/courses"

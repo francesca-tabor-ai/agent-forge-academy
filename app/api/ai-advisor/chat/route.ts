@@ -863,17 +863,37 @@ export async function POST(request: NextRequest) {
                 llm = getLLMProvider();
               } catch (llmError: any) {
                 const errorMessage = llmError.message || 'LLM provider not configured';
-                safeLogger.error('AI Advisor: LLM provider error', { requestId, error: llmError });
+                
+                // Determine appropriate error code
+                let errorCode = 'UPSTREAM_ERROR';
+                if (errorMessage.includes('LLM_API_KEY') || errorMessage.includes('required')) {
+                  errorCode = 'SERVICE_UNAVAILABLE';
+                } else if (errorMessage.includes('401') || errorMessage.includes('Unauthorized')) {
+                  errorCode = 'UNAUTHORIZED';
+                } else if (errorMessage.includes('429') || errorMessage.includes('rate limit')) {
+                  errorCode = 'RATE_LIMIT_EXCEEDED';
+                }
+                
+                safeLogger.error('AI Advisor: LLM provider error', { 
+                  requestId,
+                  userId: user.id,
+                  route: '/api/ai-advisor/chat',
+                  model: process.env.OPENAI_MODEL || 'gpt-4-turbo-preview',
+                  error: errorMessage,
+                  stack: llmError.stack,
+                });
                 
                 // Send error to client
                 controller.enqueue(
                   encoder.encode(`data: ${JSON.stringify({ 
                     ok: false,
                     error: { 
-                      code: 'UPSTREAM_ERROR', 
-                      message: errorMessage.includes('LLM_API_KEY') 
-                        ? 'AI service is not configured. Please contact support.'
-                        : 'AI service error. Please try again.',
+                      code: errorCode, 
+                      message: process.env.NODE_ENV === 'development'
+                        ? errorMessage
+                        : (errorMessage.includes('LLM_API_KEY') 
+                            ? 'AI service is not configured. Please contact support.'
+                            : 'AI service error. Please try again.'),
                       requestId 
                     },
                     done: true 
@@ -1036,26 +1056,46 @@ export async function POST(request: NextRequest) {
               await Promise.race([streamPromise, timeoutPromise]);
             } catch (error: any) {
               const elapsed = Date.now() - startTime;
+              const errorMessage = error?.message || String(error);
+              
+              // Determine appropriate error code
+              let errorCode = 'UPSTREAM_ERROR';
+              if (errorMessage.includes('API key') || errorMessage.includes('LLM_API_KEY') || errorMessage.includes('required')) {
+                errorCode = 'SERVICE_UNAVAILABLE';
+              } else if (errorMessage.includes('401') || errorMessage.includes('Unauthorized')) {
+                errorCode = 'UNAUTHORIZED';
+              } else if (errorMessage.includes('429') || errorMessage.includes('rate limit')) {
+                errorCode = 'RATE_LIMIT_EXCEEDED';
+              } else if (errorMessage.includes('timeout') || errorMessage.includes('TIMEOUT')) {
+                errorCode = 'TIMEOUT';
+              }
+              
+              // Extract upstream status if available
+              const upstreamStatusMatch = errorMessage.match(/(\d{3})/);
+              const upstreamStatus = upstreamStatusMatch ? parseInt(upstreamStatusMatch[1]) : null;
+              
               safeLogger.error('AI Advisor: Error in streaming LLM response', { 
-                requestId, 
-                error: error?.message || String(error),
+                requestId,
+                userId: user.id,
+                route: '/api/ai-advisor/chat',
+                model: process.env.OPENAI_MODEL || 'gpt-4-turbo-preview',
+                upstreamStatus,
+                error: errorMessage,
                 stack: error?.stack,
                 elapsed 
               });
               
               try {
-                const errorCode = error?.message?.includes('API key') || error?.message?.includes('LLM_API_KEY')
-                  ? 'UPSTREAM_ERROR'
-                  : error?.message?.includes('timeout') || error?.message?.includes('TIMEOUT')
-                  ? 'TIMEOUT'
-                  : 'UPSTREAM_ERROR';
-                
                 controller.enqueue(
                   encoder.encode(`data: ${JSON.stringify({ 
                     ok: false,
                     error: { 
                       code: errorCode, 
-                      message: error?.message || 'Failed to generate response. Please try again.',
+                      message: process.env.NODE_ENV === 'development'
+                        ? errorMessage
+                        : (errorMessage.includes('API key') || errorMessage.includes('LLM_API_KEY')
+                            ? 'AI service is not configured. Please contact support.'
+                            : 'Failed to generate response. Please try again.'),
                       requestId 
                     },
                     done: true 
@@ -1088,19 +1128,47 @@ export async function POST(request: NextRequest) {
         llm = getLLMProvider();
       } catch (llmError: any) {
         const errorMessage = llmError.message || 'LLM provider not configured';
-        safeLogger.error('AI Advisor: LLM provider error', { requestId, error: llmError });
+        safeLogger.error('AI Advisor: LLM provider error', { 
+          requestId, 
+          userId: user.id,
+          error: llmError.message,
+          stack: llmError.stack,
+          route: '/api/ai-advisor/chat',
+          model: process.env.OPENAI_MODEL || 'gpt-4-turbo-preview',
+        });
+        
+        // Determine appropriate status code
+        let statusCode = 500;
+        let errorCode = 'UPSTREAM_ERROR';
+        
+        if (errorMessage.includes('LLM_API_KEY') || errorMessage.includes('required')) {
+          statusCode = 503; // Service Unavailable
+          errorCode = 'SERVICE_UNAVAILABLE';
+        } else if (errorMessage.includes('401') || errorMessage.includes('Unauthorized')) {
+          statusCode = 401;
+          errorCode = 'UNAUTHORIZED';
+        } else if (errorMessage.includes('429') || errorMessage.includes('rate limit')) {
+          statusCode = 429;
+          errorCode = 'RATE_LIMIT_EXCEEDED';
+        } else if (errorMessage.includes('400') || errorMessage.includes('Bad Request')) {
+          statusCode = 400;
+          errorCode = 'BAD_REQUEST';
+        }
+        
         return NextResponse.json(
           { 
             ok: false,
             error: { 
-              code: 'UPSTREAM_ERROR', 
-              message: errorMessage.includes('LLM_API_KEY') 
-                ? 'AI service is not configured. Please contact support.'
-                : 'AI service error. Please try again.',
+              code: errorCode, 
+              message: process.env.NODE_ENV === 'development' 
+                ? errorMessage
+                : (errorMessage.includes('LLM_API_KEY') 
+                    ? 'AI service is not configured. Please contact support.'
+                    : 'AI service error. Please try again.'),
               requestId 
             } 
           },
-          { status: 500 }
+          { status: statusCode }
         );
       }
 
@@ -1237,18 +1305,43 @@ export async function POST(request: NextRequest) {
       });
     } catch (error: any) {
       const elapsed = Date.now() - startTime;
+      const errorMessage = error?.message || String(error);
+      
+      // Determine appropriate status code and error code
+      let statusCode = 500;
+      let errorCode = 'UPSTREAM_ERROR';
+      
+      if (errorMessage.includes('API key') || errorMessage.includes('LLM_API_KEY') || errorMessage.includes('required')) {
+        statusCode = 503; // Service Unavailable
+        errorCode = 'SERVICE_UNAVAILABLE';
+      } else if (errorMessage.includes('401') || errorMessage.includes('Unauthorized')) {
+        statusCode = 401;
+        errorCode = 'UNAUTHORIZED';
+      } else if (errorMessage.includes('429') || errorMessage.includes('rate limit')) {
+        statusCode = 429;
+        errorCode = 'RATE_LIMIT_EXCEEDED';
+      } else if (errorMessage.includes('400') || errorMessage.includes('Bad Request')) {
+        statusCode = 400;
+        errorCode = 'BAD_REQUEST';
+      } else if (errorMessage.includes('timeout') || errorMessage.includes('TIMEOUT')) {
+        statusCode = 504; // Gateway Timeout
+        errorCode = 'TIMEOUT';
+      }
+      
+      // Extract upstream status if available
+      const upstreamStatusMatch = errorMessage.match(/(\d{3})/);
+      const upstreamStatus = upstreamStatusMatch ? parseInt(upstreamStatusMatch[1]) : null;
+      
       safeLogger.error('AI Advisor: Error generating LLM response', { 
-        requestId, 
-        error: error?.message || String(error),
+        requestId,
+        userId: user.id,
+        route: '/api/ai-advisor/chat',
+        model: process.env.OPENAI_MODEL || 'gpt-4-turbo-preview',
+        upstreamStatus,
+        error: errorMessage,
         stack: error?.stack,
         elapsed 
       });
-      
-      const errorCode = error?.message?.includes('API key') || error?.message?.includes('LLM_API_KEY')
-        ? 'UPSTREAM_ERROR'
-        : error?.message?.includes('timeout') || error?.message?.includes('TIMEOUT')
-        ? 'TIMEOUT'
-        : 'UPSTREAM_ERROR';
       
       // Log error request
       await logRequest({
@@ -1256,10 +1349,10 @@ export async function POST(request: NextRequest) {
         userId: user.id,
         path: '/api/ai-advisor/chat',
         method: 'POST',
-        status: 500,
+        status: statusCode,
         duration: elapsed,
         errorStack: error?.stack || null,
-        errorMessage: error?.message || 'Failed to generate response',
+        errorMessage: errorMessage,
         ipAddress: getIpAddress(request),
         userAgent: getUserAgent(request),
       });
@@ -1269,11 +1362,15 @@ export async function POST(request: NextRequest) {
           ok: false,
           error: { 
             code: errorCode, 
-            message: error?.message || 'Failed to generate response. Please try again.',
+            message: process.env.NODE_ENV === 'development'
+              ? errorMessage
+              : (errorMessage.includes('API key') || errorMessage.includes('LLM_API_KEY')
+                  ? 'AI service is not configured. Please contact support.'
+                  : 'Failed to generate response. Please try again.'),
             requestId 
           } 
         },
-        { status: 500 }
+        { status: statusCode }
       );
     }
   } catch (error: any) {

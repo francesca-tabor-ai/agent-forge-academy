@@ -236,12 +236,17 @@ export async function POST(request: Request) {
         
         // For now, we'll upload the CV and extract basic info
         // In production, use proper parsing libraries
+        const { createServerSupabaseClient } = await import('@/lib/supabase/server');
+        const { getResumeBucketName } = await import('@/lib/utils/storage');
+        const serverSupabase = createServerSupabaseClient();
+        const bucketName = getResumeBucketName();
+        
         const fileExt = cvFile.name.split('.').pop();
-        const fileName = `${user.id}/${Date.now()}.${fileExt}`;
-        const filePath = `cvs/${fileName}`;
+        const fileName = `${user.id}/resume-${Date.now()}.${fileExt}`;
+        const filePath = fileName; // Store directly in bucket root with user prefix
 
-        const { error: uploadError } = await supabase.storage
-          .from('portfolio-files')
+        const { error: uploadError } = await serverSupabase.storage
+          .from(bucketName)
           .upload(filePath, cvFile, {
             contentType: cvFile.type,
             upsert: false,
@@ -249,8 +254,8 @@ export async function POST(request: Request) {
 
         if (!uploadError) {
           // Get public URL
-          const { data: urlData } = supabase.storage
-            .from('portfolio-files')
+          const { data: urlData } = serverSupabase.storage
+            .from(bucketName)
             .getPublicUrl(filePath);
           const publicUrl = urlData.publicUrl;
 
@@ -262,8 +267,8 @@ export async function POST(request: Request) {
 
           if (oldCVs && oldCVs.length > 0) {
             for (const oldCV of oldCVs) {
-              await supabase.storage
-                .from('portfolio-files')
+              await serverSupabase.storage
+                .from(bucketName)
                 .remove([oldCV.file_path]);
             }
             await supabase

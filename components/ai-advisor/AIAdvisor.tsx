@@ -546,14 +546,21 @@ export function AIAdvisor({
         
         // Build user-friendly error message
         let errorContent = '';
+        const requestIdMatch = error.message?.match(/Request ID: ([^\\)]+)/);
+        const requestId = requestIdMatch?.[1] || 'N/A';
+        
         if (isTimeout) {
           errorContent = "⏱️ **Taking longer than expected** — The AI response is taking too long. This might be due to high demand or a temporary issue. Please try again in a moment. Your message has been restored in the input field above.";
         } else if (isNetworkError) {
           errorContent = "⚠️ **Connection issue** — I couldn't reach the server. Please check your connection and try again. Your message has been restored in the input field above. You can click Send again to retry.";
-        } else if (error.message?.includes('UPSTREAM_ERROR') || error.message?.includes('not configured')) {
-          errorContent = "⚠️ **Service unavailable** — The AI service is currently unavailable. Please contact support if this persists. " + (error.message.includes('Request ID') ? `\n\n**Request ID:** ${error.message.match(/Request ID: ([^\\)]+)/)?.[1] || 'N/A'}` : '');
+        } else if (error.message?.includes('SERVICE_UNAVAILABLE') || error.message?.includes('not configured') || error.message?.includes('LLM_API_KEY')) {
+          errorContent = "⚠️ **Service unavailable** — The AI service is currently unavailable. Please contact support if this persists." + (requestId !== 'N/A' ? `\n\n**Request ID:** ${requestId}` : '');
+        } else if (error.message?.includes('RATE_LIMIT_EXCEEDED') || error.message?.includes('429')) {
+          errorContent = "⚠️ **Rate limit exceeded** — Too many requests. Please wait a moment and try again." + (requestId !== 'N/A' ? `\n\n**Request ID:** ${requestId}` : '');
+        } else if (error.message?.includes('UNAUTHORIZED') || error.message?.includes('401')) {
+          errorContent = "⚠️ **Authentication error** — Your session may have expired. Please refresh the page and try again." + (requestId !== 'N/A' ? `\n\n**Request ID:** ${requestId}` : '');
         } else {
-          errorContent = `⚠️ **Error** — ${error.message || "I encountered an error. Please try again or connect with a human advisor for help."}`;
+          errorContent = `⚠️ **Error** — ${error.message || "I encountered an error. Please try again or connect with a human advisor for help."}` + (requestId !== 'N/A' ? `\n\n**Request ID:** ${requestId}` : '');
         }
         
         const errorMessage: Message = {

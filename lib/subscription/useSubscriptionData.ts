@@ -32,7 +32,7 @@
 import { useState, useEffect } from 'react';
 import type { SubscriptionPageData } from './getSubscriptionData';
 import useSWR from 'swr';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, type UseQueryResult } from '@tanstack/react-query';
 
 const API_ENDPOINT = '/api/student/subscription';
 
@@ -90,7 +90,7 @@ export function useSubscriptionDataSWR() {
  * }
  * ```
  */
-export function useSubscriptionDataQuery() {
+export function useSubscriptionDataQuery(): UseQueryResult<SubscriptionPageData> {
   return useQuery<SubscriptionPageData>({
     queryKey: ['subscription-data'],
     queryFn: fetchSubscriptionData,

@@ -1,4 +1,4 @@
-import { createUserSupabaseClient } from '@/lib/supabase/server';
+import { createUserSupabaseClient, createServerSupabaseClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { ProfileOverview } from '@/components/portfolio/ProfileOverview';
@@ -9,6 +9,7 @@ import { ProjectsView } from '@/components/portfolio/ProjectsView';
 import { AutoImportSection } from '@/components/portfolio/AutoImportSection';
 import { ProfileSavedToast } from '@/components/portfolio/ProfileSavedToast';
 import { Suspense } from 'react';
+import { getResumeBucketName } from '@/lib/utils/storage';
 
 export default async function PortfolioPage() {
   const supabase = await createUserSupabaseClient();
@@ -59,15 +60,21 @@ export default async function PortfolioPage() {
   // Generate download URL - use signed URL if private, otherwise use public URL
   let cvDownloadUrl: string | null = null;
   if (cv) {
+    const bucketName = getResumeBucketName();
+    const serverSupabase = createServerSupabaseClient();
+    
     if (cv.visibility === 'private') {
       // Generate signed URL for private CVs (expires in 1 hour)
-      const { data: signedUrl } = await supabase.storage
-        .from('portfolio-files')
+      const { data: signedUrl } = await serverSupabase.storage
+        .from(bucketName)
         .createSignedUrl(cv.file_path, 3600);
       cvDownloadUrl = signedUrl?.signedUrl || null;
     } else {
       // Use public URL for non-private CVs
-      cvDownloadUrl = cv.url || null;
+      const { data: urlData } = serverSupabase.storage
+        .from(bucketName)
+        .getPublicUrl(cv.file_path);
+      cvDownloadUrl = urlData.publicUrl || cv.url || null;
     }
   }
 

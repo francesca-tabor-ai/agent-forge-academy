@@ -1,9 +1,10 @@
-import { createUserSupabaseClient } from '@/lib/supabase/server';
+import { createUserSupabaseClient, createServerSupabaseClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import { extractTextFromCV } from '@/lib/cv/extractText';
 import { detectMimeTypeFromBuffer, isValidCVFileType } from '@/lib/utils/detectFileType';
 import { safeLogger, redactPII } from '@/lib/utils/redactPII';
+import { getResumeBucketName } from '@/lib/utils/storage';
 
 /**
  * POST /api/portfolio/cv
@@ -85,28 +86,57 @@ export async function POST(request: Request) {
 
     const studentProfileId = studentProfile.id;
 
+    // Get bucket name from environment variable
+    const bucketName = getResumeBucketName();
+    const isDev = process.env.NODE_ENV === 'development';
+
+    // Use service role client for uploads (bypasses RLS and is more reliable)
+    const serverSupabase = createServerSupabaseClient();
+
     // Upload to Supabase Storage
     const fileExt = file.name.split('.').pop() || 'pdf';
-    const fileName = `${user.id}/${Date.now()}.${fileExt}`;
-    const filePath = `cvs/${fileName}`;
+    const fileName = `${user.id}/resume-${Date.now()}.${fileExt}`;
+    const filePath = fileName; // Store directly in bucket root with user prefix
 
-    const { error: uploadError } = await supabase.storage
-      .from('portfolio-files')
+    const { error: uploadError } = await serverSupabase.storage
+      .from(bucketName)
       .upload(filePath, buffer, {
         contentType: detectedMimeType,
         upsert: false,
       });
 
     if (uploadError) {
+      // Provide better error messages
+      const errorMessage = uploadError.message.toLowerCase();
+      let userFriendlyError = 'Upload failed. Please try again.';
+      
+      if (errorMessage.includes('bucket') || errorMessage.includes('not found')) {
+        userFriendlyError = isDev
+          ? `Upload configuration error: Bucket "${bucketName}" not found. Please create the bucket in Supabase Storage or set NEXT_PUBLIC_SUPABASE_RESUME_BUCKET env var.`
+          : 'Upload configuration error (bucket missing). Please contact support.';
+      } else if (errorMessage.includes('duplicate') || errorMessage.includes('already exists')) {
+        userFriendlyError = 'A file with this name already exists. Please try again.';
+      } else if (errorMessage.includes('size') || errorMessage.includes('too large')) {
+        userFriendlyError = 'File is too large. Maximum size is 10MB.';
+      }
+
+      safeLogger.error('CV upload: Storage upload failed', {
+        error: uploadError.message,
+        bucketName,
+        filePath,
+        userId: user.id,
+        fileName: file.name,
+      });
+
       return NextResponse.json(
-        { error: `Upload failed: ${uploadError.message}` },
+        { error: userFriendlyError },
         { status: 500 }
       );
     }
 
-    // Get public URL
-    const { data: urlData } = supabase.storage
-      .from('portfolio-files')
+    // Get public URL (or signed URL for private buckets)
+    const { data: urlData } = serverSupabase.storage
+      .from(bucketName)
       .getPublicUrl(filePath);
 
     const publicUrl = urlData.publicUrl;
@@ -164,12 +194,13 @@ export async function POST(request: Request) {
 
       // Clean up uploaded file on database error
       try {
-        await supabase.storage
-          .from('portfolio-files')
+        await serverSupabase.storage
+          .from(bucketName)
           .remove([filePath]);
       } catch (cleanupError) {
         safeLogger.error('CV upload: Failed to cleanup file after DB error', {
           filePath,
+          bucketName,
           cleanupError,
         });
       }
@@ -192,12 +223,17 @@ export async function POST(request: Request) {
     // Clean up old file from storage if it exists and is different
     if (existingCV && existingCV.file_path !== filePath) {
       try {
-        await supabase.storage
-          .from('portfolio-files')
+        // Try to determine the old bucket (might be different if migrated)
+        const oldBucketName = getResumeBucketName(); // Use current bucket name
+        await serverSupabase.storage
+          .from(oldBucketName)
           .remove([existingCV.file_path]);
       } catch (cleanupError) {
         // Log but don't fail - old file cleanup is best effort
-        safeLogger.warn('Failed to cleanup old CV file', cleanupError);
+        safeLogger.warn('Failed to cleanup old CV file', {
+          filePath: existingCV.file_path,
+          error: cleanupError,
+        });
       }
     }
 

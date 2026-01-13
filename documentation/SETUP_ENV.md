@@ -65,9 +65,33 @@ psql "$SUPABASE_DB_URL" -f supabase/seed/01_seed_core.sql
 psql "postgresql://postgres:[PASSWORD]@[PROJECT-REF].supabase.co:5432/postgres" -f supabase/seed/01_seed_core.sql
 ```
 
+## Required Environment Variables for Next.js App
+
+For the Next.js application, you need these environment variables in `.env.local`:
+
+```bash
+# Supabase Configuration
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+
+# Storage Bucket Configuration (Optional)
+# Defaults to 'resumes' if not set
+NEXT_PUBLIC_SUPABASE_RESUME_BUCKET=resumes
+```
+
+### Storage Bucket Setup
+
+1. Go to Supabase Dashboard → Storage
+2. Create a bucket named `resumes` (or your custom name)
+3. Set bucket to **Private** (recommended for CVs)
+4. Set the `NEXT_PUBLIC_SUPABASE_RESUME_BUCKET` env var to match
+
+**Important:** The bucket name must match between your Supabase project and the environment variable, or uploads will fail with "Bucket not found".
+
 ## Security Note
 
-⚠️ **Never commit your `.env` file to git!** It contains sensitive credentials.
+⚠️ **Never commit your `.env` or `.env.local` file to git!** It contains sensitive credentials.
 
 The `.env` file should already be in `.gitignore`. Verify:
 ```bash

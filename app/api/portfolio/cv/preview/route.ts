@@ -1,5 +1,6 @@
-import { createUserSupabaseClient } from '@/lib/supabase/server';
+import { createUserSupabaseClient, createServerSupabaseClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
+import { getResumeBucketName } from '@/lib/utils/storage';
 
 export async function GET(request: Request) {
   try {
@@ -53,9 +54,13 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'CV not found' }, { status: 404 });
     }
 
+    // Use service role client for storage operations
+    const serverSupabase = createServerSupabaseClient();
+    const bucketName = getResumeBucketName();
+
     // Get signed URL for preview (expires in 1 hour)
-    const { data: signedUrl, error: urlError } = await supabase.storage
-      .from('portfolio-files')
+    const { data: signedUrl, error: urlError } = await serverSupabase.storage
+      .from(bucketName)
       .createSignedUrl(cv.file_path, 3600);
 
     if (urlError || !signedUrl) {

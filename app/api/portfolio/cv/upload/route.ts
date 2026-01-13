@@ -1,7 +1,8 @@
-import { createUserSupabaseClient } from '@/lib/supabase/server';
+import { createUserSupabaseClient, createServerSupabaseClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 import { extractTextFromCV } from '@/lib/cv/extractText';
 import { safeLogger, redactPII } from '@/lib/utils/redactPII';
+import { getResumeBucketName } from '@/lib/utils/storage';
 
 export async function POST(request: Request) {
   try {
@@ -59,30 +60,57 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }
 
+    // Get bucket name from environment variable
+    const bucketName = getResumeBucketName();
+    const isDev = process.env.NODE_ENV === 'development';
+
+    // Use service role client for uploads (bypasses RLS and is more reliable)
+    const serverSupabase = createServerSupabaseClient();
+
     // Upload to Supabase Storage
     const fileExt = file.name.split('.').pop();
-    const fileName = `${user.id}/${Date.now()}.${fileExt}`;
-    const filePath = `cvs/${fileName}`;
+    const fileName = `${user.id}/resume-${Date.now()}.${fileExt}`;
+    const filePath = fileName; // Store directly in bucket root with user prefix
 
-    const { data: uploadData, error: uploadError } = await supabase.storage
-      .from('portfolio-files')
+    const { data: uploadData, error: uploadError } = await serverSupabase.storage
+      .from(bucketName)
       .upload(filePath, file, {
         contentType: file.type,
         upsert: false,
       });
 
     if (uploadError) {
-      // If bucket doesn't exist, we'll need to create it or use a different approach
-      // For now, return error
+      // Provide better error messages
+      const errorMessage = uploadError.message.toLowerCase();
+      let userFriendlyError = 'Upload failed. Please try again.';
+      
+      if (errorMessage.includes('bucket') || errorMessage.includes('not found')) {
+        userFriendlyError = isDev
+          ? `Upload configuration error: Bucket "${bucketName}" not found. Please create the bucket in Supabase Storage or set NEXT_PUBLIC_SUPABASE_RESUME_BUCKET env var.`
+          : 'Upload configuration error (bucket missing). Please contact support.';
+      } else if (errorMessage.includes('duplicate') || errorMessage.includes('already exists')) {
+        userFriendlyError = 'A file with this name already exists. Please try again.';
+      } else if (errorMessage.includes('size') || errorMessage.includes('too large')) {
+        userFriendlyError = 'File is too large. Maximum size is 10MB.';
+      }
+
+      safeLogger.error('CV upload: Storage upload failed', {
+        error: uploadError.message,
+        bucketName,
+        filePath,
+        userId: user.id,
+        fileName: file.name,
+      });
+
       return NextResponse.json(
-        { error: `Upload failed: ${uploadError.message}` },
+        { error: userFriendlyError },
         { status: 500 }
       );
     }
 
     // Get public URL
-    const { data: urlData } = supabase.storage
-      .from('portfolio-files')
+    const { data: urlData } = serverSupabase.storage
+      .from(bucketName)
       .getPublicUrl(filePath);
 
     const publicUrl = urlData.publicUrl;
@@ -96,8 +124,8 @@ export async function POST(request: Request) {
     if (oldCVs && oldCVs.length > 0) {
       // Delete old files from storage
       for (const oldCV of oldCVs) {
-        await supabase.storage
-          .from('portfolio-files')
+        await serverSupabase.storage
+          .from(bucketName)
           .remove([oldCV.file_path]);
       }
 
@@ -144,8 +172,8 @@ export async function POST(request: Request) {
 
     if (dbError) {
       // Clean up uploaded file
-      await supabase.storage
-        .from('portfolio-files')
+      await serverSupabase.storage
+        .from(bucketName)
         .remove([filePath]);
 
       return NextResponse.json({ error: dbError.message }, { status: 500 });

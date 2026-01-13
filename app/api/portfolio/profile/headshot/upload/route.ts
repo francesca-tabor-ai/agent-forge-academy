@@ -1,7 +1,12 @@
 import { createUserSupabaseClient } from '@/lib/supabase/server';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { logRequest, getUserIdFromRequest, getIpAddress, getUserAgent } from '@/lib/utils/request-logger';
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
+  const requestId = `req-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+  const startTime = Date.now();
+  let status = 200;
+
   try {
     const supabase = await createUserSupabaseClient();
     const {
@@ -9,7 +14,23 @@ export async function POST(request: Request) {
     } = await supabase.auth.getUser();
 
     if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      status = 401;
+      const duration = Date.now() - startTime;
+      await logRequest({
+        requestId,
+        userId: null,
+        path: '/api/portfolio/profile/headshot/upload',
+        method: 'POST',
+        status,
+        duration,
+        errorMessage: 'Unauthorized',
+        ipAddress: getIpAddress(request),
+        userAgent: getUserAgent(request),
+      });
+      return NextResponse.json(
+        { ok: false, error: { code: 'UNAUTHORIZED', message: 'Unauthorized' }, requestId },
+        { status: 401 }
+      );
     }
 
     // Support both form data (file upload) and JSON (URL input)
@@ -23,8 +44,21 @@ export async function POST(request: Request) {
       imageUrl = body.imageUrl || body.url || null;
 
       if (!imageUrl) {
+        status = 400;
+        const duration = Date.now() - startTime;
+        await logRequest({
+          requestId,
+          userId: user.id,
+          path: '/api/portfolio/profile/headshot/upload',
+          method: 'POST',
+          status,
+          duration,
+          errorMessage: 'No image URL provided',
+          ipAddress: getIpAddress(request),
+          userAgent: getUserAgent(request),
+        });
         return NextResponse.json(
-          { ok: false, error: { code: 'NO_URL', message: 'No image URL provided' } },
+          { ok: false, error: { code: 'NO_URL', message: 'No image URL provided' }, requestId },
           { status: 400 }
         );
       }
@@ -68,8 +102,21 @@ export async function POST(request: Request) {
         .single();
 
       if (!profile) {
+        status = 404;
+        const duration = Date.now() - startTime;
+        await logRequest({
+          requestId,
+          userId: user.id,
+          path: '/api/portfolio/profile/headshot/upload',
+          method: 'POST',
+          status,
+          duration,
+          errorMessage: 'Profile not found',
+          ipAddress: getIpAddress(request),
+          userAgent: getUserAgent(request),
+        });
         return NextResponse.json(
-          { ok: false, error: { code: 'PROFILE_NOT_FOUND', message: 'Profile not found' } },
+          { ok: false, error: { code: 'PROFILE_NOT_FOUND', message: 'Profile not found' }, requestId },
           { status: 404 }
         );
       }
@@ -99,8 +146,22 @@ export async function POST(request: Request) {
           .single();
 
         if (createError) {
+          status = 500;
+          const duration = Date.now() - startTime;
+          await logRequest({
+            requestId,
+            userId: user.id,
+            path: '/api/portfolio/profile/headshot/upload',
+            method: 'POST',
+            status,
+            duration,
+            errorStack: createError.stack || null,
+            errorMessage: createError.message,
+            ipAddress: getIpAddress(request),
+            userAgent: getUserAgent(request),
+          });
           return NextResponse.json(
-            { error: `We couldn't save your profile yet — please try again` },
+            { ok: false, error: { code: 'CREATE_FAILED', message: `Failed to create profile: ${createError.message}` }, requestId },
             { status: 500 }
           );
         }
@@ -129,26 +190,68 @@ export async function POST(request: Request) {
         .eq('id', studentProfile.id);
 
       if (updateError) {
+        status = 500;
+        const duration = Date.now() - startTime;
+        await logRequest({
+          requestId,
+          userId: user.id,
+          path: '/api/portfolio/profile/headshot/upload',
+          method: 'POST',
+          status,
+          duration,
+          errorStack: updateError.stack || null,
+          errorMessage: updateError.message,
+          ipAddress: getIpAddress(request),
+          userAgent: getUserAgent(request),
+        });
         return NextResponse.json(
-          { error: `Failed to update profile: ${updateError.message}` },
+          { ok: false, error: { code: 'UPDATE_FAILED', message: `Failed to update profile: ${updateError.message}` }, requestId },
           { status: 500 }
         );
       }
+
+      const duration = Date.now() - startTime;
+      await logRequest({
+        requestId,
+        userId: user.id,
+        path: '/api/portfolio/profile/headshot/upload',
+        method: 'POST',
+        status,
+        duration,
+        ipAddress: getIpAddress(request),
+        userAgent: getUserAgent(request),
+      });
 
       return NextResponse.json({
         ok: true,
         success: true,
         imageUrl: imageUrl,
+        avatarPath: imageUrl,
+        avatarUrl: imageUrl,
         profile: {
           headshot_image_url: imageUrl,
         },
+        requestId,
       });
     }
 
     // File upload path
     if (!file) {
+      status = 400;
+      const duration = Date.now() - startTime;
+      await logRequest({
+        requestId,
+        userId: user.id,
+        path: '/api/portfolio/profile/headshot/upload',
+        method: 'POST',
+        status,
+        duration,
+        errorMessage: 'No file provided',
+        ipAddress: getIpAddress(request),
+        userAgent: getUserAgent(request),
+      });
       return NextResponse.json(
-        { ok: false, error: { code: 'NO_FILE', message: 'No file provided' } },
+        { ok: false, error: { code: 'NO_FILE', message: 'No file provided' }, requestId },
         { status: 400 }
       );
     }
@@ -165,8 +268,21 @@ export async function POST(request: Request) {
     const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
     if (!allowedTypes.includes(file.type)) {
       console.log('[Headshot Upload] Invalid file type:', file.type);
+      status = 400;
+      const duration = Date.now() - startTime;
+      await logRequest({
+        requestId,
+        userId: user.id,
+        path: '/api/portfolio/profile/headshot/upload',
+        method: 'POST',
+        status,
+        duration,
+        errorMessage: `Invalid file type: ${file.type}`,
+        ipAddress: getIpAddress(request),
+        userAgent: getUserAgent(request),
+      });
       return NextResponse.json(
-        { ok: false, error: { code: 'INVALID_FILE_TYPE', message: 'Unsupported format — use JPG, PNG, or WEBP' } },
+        { ok: false, error: { code: 'INVALID_FILE_TYPE', message: 'Unsupported format — use JPG, PNG, or WEBP' }, requestId },
         { status: 400 }
       );
     }
@@ -175,8 +291,21 @@ export async function POST(request: Request) {
     const MAX_SIZE = 5 * 1024 * 1024;
     if (file.size > MAX_SIZE) {
       console.log('[Headshot Upload] File too large:', file.size);
+      status = 400;
+      const duration = Date.now() - startTime;
+      await logRequest({
+        requestId,
+        userId: user.id,
+        path: '/api/portfolio/profile/headshot/upload',
+        method: 'POST',
+        status,
+        duration,
+        errorMessage: `File too large: ${file.size} bytes`,
+        ipAddress: getIpAddress(request),
+        userAgent: getUserAgent(request),
+      });
       return NextResponse.json(
-        { ok: false, error: { code: 'FILE_TOO_LARGE', message: 'File too large (max 5MB)' } },
+        { ok: false, error: { code: 'FILE_TOO_LARGE', message: 'File too large (max 5MB)' }, requestId },
         { status: 400 }
       );
     }
@@ -190,8 +319,21 @@ export async function POST(request: Request) {
 
     if (!profile) {
       console.log('[Headshot Upload] Profile not found for user:', user.id);
+      status = 404;
+      const duration = Date.now() - startTime;
+      await logRequest({
+        requestId,
+        userId: user.id,
+        path: '/api/portfolio/profile/headshot/upload',
+        method: 'POST',
+        status,
+        duration,
+        errorMessage: 'Profile not found',
+        ipAddress: getIpAddress(request),
+        userAgent: getUserAgent(request),
+      });
       return NextResponse.json(
-        { ok: false, error: { code: 'PROFILE_NOT_FOUND', message: 'Profile not found' } },
+        { ok: false, error: { code: 'PROFILE_NOT_FOUND', message: 'Profile not found' }, requestId },
         { status: 404 }
       );
     }
@@ -224,8 +366,22 @@ export async function POST(request: Request) {
 
       if (createError) {
         console.error('[Headshot Upload] Failed to create student profile:', createError);
+        status = 500;
+        const duration = Date.now() - startTime;
+        await logRequest({
+          requestId,
+          userId: user.id,
+          path: '/api/portfolio/profile/headshot/upload',
+          method: 'POST',
+          status,
+          duration,
+          errorStack: createError.stack || null,
+          errorMessage: createError.message,
+          ipAddress: getIpAddress(request),
+          userAgent: getUserAgent(request),
+        });
         return NextResponse.json(
-          { error: `We couldn't save your profile yet — please try again` },
+          { ok: false, error: { code: 'CREATE_FAILED', message: `Failed to create profile: ${createError.message}` }, requestId },
           { status: 500 }
         );
       }
@@ -279,8 +435,22 @@ export async function POST(request: Request) {
 
     if (uploadError) {
       console.error('[Headshot Upload] Storage upload error:', uploadError);
+      status = 500;
+      const duration = Date.now() - startTime;
+      await logRequest({
+        requestId,
+        userId: user.id,
+        path: '/api/portfolio/profile/headshot/upload',
+        method: 'POST',
+        status,
+        duration,
+        errorStack: uploadError.stack || null,
+        errorMessage: uploadError.message,
+        ipAddress: getIpAddress(request),
+        userAgent: getUserAgent(request),
+      });
       return NextResponse.json(
-        { ok: false, error: { code: 'UPLOAD_FAILED', message: `Upload failed: ${uploadError.message}` } },
+        { ok: false, error: { code: 'UPLOAD_FAILED', message: `Upload failed: ${uploadError.message}` }, requestId },
         { status: 500 }
       );
     }
@@ -302,24 +472,69 @@ export async function POST(request: Request) {
 
     if (updateError) {
       console.error('[Headshot Upload] Profile update error:', updateError);
+      status = 500;
+      const duration = Date.now() - startTime;
+      await logRequest({
+        requestId,
+        userId: user.id,
+        path: '/api/portfolio/profile/headshot/upload',
+        method: 'POST',
+        status,
+        duration,
+        errorStack: updateError.stack || null,
+        errorMessage: updateError.message,
+        ipAddress: getIpAddress(request),
+        userAgent: getUserAgent(request),
+      });
       return NextResponse.json(
-        { error: `Failed to update profile: ${updateError.message}` },
+        { ok: false, error: { code: 'UPDATE_FAILED', message: `Failed to update profile: ${updateError.message}` }, requestId },
         { status: 500 }
       );
     }
 
     console.log('[Headshot Upload] Profile updated successfully');
 
+    const duration = Date.now() - startTime;
+    await logRequest({
+      requestId,
+      userId: user.id,
+      path: '/api/portfolio/profile/headshot/upload',
+      method: 'POST',
+      status,
+      duration,
+      ipAddress: getIpAddress(request),
+      userAgent: getUserAgent(request),
+    });
+
     return NextResponse.json({
       ok: true,
       success: true,
       imageUrl: urlData.publicUrl,
+      avatarPath: storagePath,
+      avatarUrl: urlData.publicUrl,
       profile: {
         headshot_image_url: urlData.publicUrl,
       },
+      requestId,
     });
   } catch (error) {
+    const duration = Date.now() - startTime;
+    status = 500;
     console.error('[Headshot Upload] Unexpected error:', error);
+    
+    await logRequest({
+      requestId,
+      userId: await getUserIdFromRequest(request),
+      path: '/api/portfolio/profile/headshot/upload',
+      method: 'POST',
+      status,
+      duration,
+      errorStack: error instanceof Error ? error.stack || null : null,
+      errorMessage: error instanceof Error ? error.message : 'Internal server error',
+      ipAddress: getIpAddress(request),
+      userAgent: getUserAgent(request),
+    });
+
     return NextResponse.json(
       {
         ok: false,
@@ -327,13 +542,18 @@ export async function POST(request: Request) {
           code: 'INTERNAL_ERROR',
           message: error instanceof Error ? error.message : 'Internal server error',
         },
+        requestId,
       },
       { status: 500 }
     );
   }
 }
 
-export async function DELETE(request: Request) {
+export async function DELETE(request: NextRequest) {
+  const requestId = `req-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+  const startTime = Date.now();
+  let status = 200;
+
   try {
     const supabase = await createUserSupabaseClient();
     const {
@@ -341,8 +561,21 @@ export async function DELETE(request: Request) {
     } = await supabase.auth.getUser();
 
     if (!user) {
+      status = 401;
+      const duration = Date.now() - startTime;
+      await logRequest({
+        requestId,
+        userId: null,
+        path: '/api/portfolio/profile/headshot/upload',
+        method: 'DELETE',
+        status,
+        duration,
+        errorMessage: 'Unauthorized',
+        ipAddress: getIpAddress(request),
+        userAgent: getUserAgent(request),
+      });
       return NextResponse.json(
-        { ok: false, error: { code: 'UNAUTHORIZED', message: 'Unauthorized' } },
+        { ok: false, error: { code: 'UNAUTHORIZED', message: 'Unauthorized' }, requestId },
         { status: 401 }
       );
     }
@@ -355,8 +588,21 @@ export async function DELETE(request: Request) {
       .single();
 
     if (!profile) {
+      status = 404;
+      const duration = Date.now() - startTime;
+      await logRequest({
+        requestId,
+        userId: user.id,
+        path: '/api/portfolio/profile/headshot/upload',
+        method: 'DELETE',
+        status,
+        duration,
+        errorMessage: 'Profile not found',
+        ipAddress: getIpAddress(request),
+        userAgent: getUserAgent(request),
+      });
       return NextResponse.json(
-        { ok: false, error: { code: 'PROFILE_NOT_FOUND', message: 'Profile not found' } },
+        { ok: false, error: { code: 'PROFILE_NOT_FOUND', message: 'Profile not found' }, requestId },
         { status: 404 }
       );
     }
@@ -369,8 +615,21 @@ export async function DELETE(request: Request) {
       .single();
 
     if (!studentProfile) {
+      status = 404;
+      const duration = Date.now() - startTime;
+      await logRequest({
+        requestId,
+        userId: user.id,
+        path: '/api/portfolio/profile/headshot/upload',
+        method: 'DELETE',
+        status,
+        duration,
+        errorMessage: 'Student profile not found',
+        ipAddress: getIpAddress(request),
+        userAgent: getUserAgent(request),
+      });
       return NextResponse.json(
-        { ok: false, error: { code: 'STUDENT_PROFILE_NOT_FOUND', message: 'Student profile not found' } },
+        { ok: false, error: { code: 'STUDENT_PROFILE_NOT_FOUND', message: 'Student profile not found' }, requestId },
         { status: 404 }
       );
     }
@@ -407,17 +666,61 @@ export async function DELETE(request: Request) {
       .eq('id', studentProfile.id);
 
     if (updateError) {
+      status = 500;
+      const duration = Date.now() - startTime;
+      await logRequest({
+        requestId,
+        userId: user.id,
+        path: '/api/portfolio/profile/headshot/upload',
+        method: 'DELETE',
+        status,
+        duration,
+        errorStack: updateError.stack || null,
+        errorMessage: updateError.message,
+        ipAddress: getIpAddress(request),
+        userAgent: getUserAgent(request),
+      });
       return NextResponse.json(
-        { ok: false, error: { code: 'UPDATE_FAILED', message: `Failed to update profile: ${updateError.message}` } },
+        { ok: false, error: { code: 'UPDATE_FAILED', message: `Failed to update profile: ${updateError.message}` }, requestId },
         { status: 500 }
       );
     }
 
+    const duration = Date.now() - startTime;
+    await logRequest({
+      requestId,
+      userId: user.id,
+      path: '/api/portfolio/profile/headshot/upload',
+      method: 'DELETE',
+      status,
+      duration,
+      ipAddress: getIpAddress(request),
+      userAgent: getUserAgent(request),
+    });
+
     return NextResponse.json({
       ok: true,
       success: true,
+      requestId,
     });
   } catch (error) {
+    const duration = Date.now() - startTime;
+    status = 500;
+    console.error('[Headshot Delete] Unexpected error:', error);
+    
+    await logRequest({
+      requestId,
+      userId: await getUserIdFromRequest(request),
+      path: '/api/portfolio/profile/headshot/upload',
+      method: 'DELETE',
+      status,
+      duration,
+      errorStack: error instanceof Error ? error.stack || null : null,
+      errorMessage: error instanceof Error ? error.message : 'Internal server error',
+      ipAddress: getIpAddress(request),
+      userAgent: getUserAgent(request),
+    });
+
     return NextResponse.json(
       {
         ok: false,
@@ -425,6 +728,7 @@ export async function DELETE(request: Request) {
           code: 'INTERNAL_ERROR',
           message: error instanceof Error ? error.message : 'Internal server error',
         },
+        requestId,
       },
       { status: 500 }
     );

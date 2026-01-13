@@ -96,6 +96,7 @@ export function CVUpload({ onUploadSuccess }: CVUploadProps) {
           } else {
             try {
               const errorData = JSON.parse(xhr.responseText);
+              // Use the error message from the server (which includes helpful dev info)
               reject(new Error(errorData.error || 'Upload failed'));
             } catch {
               reject(new Error(`Upload failed with status ${xhr.status}`));

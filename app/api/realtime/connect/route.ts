@@ -50,35 +50,98 @@ export async function POST(request: NextRequest) {
     // For now, we'll skip token validation but add a TODO
 
     // Forward SDP offer to OpenAI Realtime API
-    // OpenAI Realtime API endpoint: https://api.openai.com/v1/realtime/calls
-    const response = await fetch('https://api.openai.com/v1/realtime/calls', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${OPENAI_API_KEY}`,
-        'Content-Type': 'application/sdp',
-      },
-      body: sdp,
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      safeLogger.error('Failed to connect to OpenAI Realtime API', {
-        status: response.status,
-        error: errorText,
+    // OpenAI Realtime API WebRTC endpoint
+    // Note: The exact endpoint may vary - check OpenAI's latest documentation
+    const REALTIME_ENDPOINT = 'https://api.openai.com/v1/realtime/calls';
+    
+    try {
+      const response = await fetch(REALTIME_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${OPENAI_API_KEY}`, // Use server's API key
+          'Content-Type': 'application/sdp',
+          // Include session info if available
+          ...(session_token && { 'X-Session-Token': session_token }),
+        },
+        body: sdp, // Send SDP offer as plain text
       });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        let errorMessage = 'Failed to connect to OpenAI Realtime API';
+        
+        // Try to parse error JSON
+        try {
+          const errorJson = JSON.parse(errorText);
+          errorMessage = errorJson.error?.message || errorJson.error || errorMessage;
+        } catch {
+          // If not JSON, use text as-is
+          errorMessage = errorText || errorMessage;
+        }
+        
+        safeLogger.error('Failed to connect to OpenAI Realtime API', {
+          status: response.status,
+          statusText: response.statusText,
+          error: errorMessage,
+          userId: user.id,
+          hasSdp: !!sdp,
+          sdpLength: sdp?.length || 0,
+        });
+        
+        return NextResponse.json(
+          { 
+            error: 'Failed to connect to OpenAI Realtime API',
+            message: process.env.NODE_ENV === 'development'
+              ? `${response.status}: ${errorMessage}`
+              : 'Realtime connection failed. Please try again.',
+            details: process.env.NODE_ENV === 'development' ? errorMessage : undefined,
+          },
+          { status: response.status || 500 }
+        );
+      }
+
+      // Get SDP answer from OpenAI
+      // OpenAI returns SDP answer as plain text
+      const sdpAnswer = await response.text();
+      
+      if (!sdpAnswer || !sdpAnswer.trim()) {
+        safeLogger.error('Empty SDP answer from OpenAI', {
+          userId: user.id,
+          status: response.status,
+        });
+        return NextResponse.json(
+          { error: 'Empty SDP answer from OpenAI' },
+          { status: 500 }
+        );
+      }
+
+      safeLogger.info('WebRTC SDP exchange successful', {
+        userId: user.id,
+        sdpAnswerLength: sdpAnswer.length,
+        hasAudio: false, // Never log raw audio
+      });
+
+      // Return SDP answer to client
+      return NextResponse.json({
+        sdp: sdpAnswer,
+      });
+    } catch (error: any) {
+      safeLogger.error('Error connecting to OpenAI Realtime API', {
+        error: error.message,
+        stack: error.stack,
+        userId: user.id,
+      });
+      
       return NextResponse.json(
-        { error: 'Failed to connect to OpenAI Realtime API' },
-        { status: response.status }
+        { 
+          error: 'Failed to connect to OpenAI Realtime API',
+          message: process.env.NODE_ENV === 'development'
+            ? error.message
+            : 'Realtime connection error. Please try again.',
+        },
+        { status: 500 }
       );
     }
-
-    // Get SDP answer from OpenAI
-    const sdpAnswer = await response.text();
-
-    // Return SDP answer to client
-    return NextResponse.json({
-      sdp: sdpAnswer,
-    });
   } catch (error) {
     safeLogger.error('Error connecting to OpenAI Realtime API', error);
     return NextResponse.json(

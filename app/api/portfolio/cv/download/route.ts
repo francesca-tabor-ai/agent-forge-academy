@@ -1,5 +1,6 @@
-import { createUserSupabaseClient } from '@/lib/supabase/server';
+import { createUserSupabaseClient, createServerSupabaseClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
+import { getResumeBucketName } from '@/lib/utils/storage';
 
 export async function GET(request: Request) {
   try {
@@ -53,11 +54,15 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'CV not found' }, { status: 404 });
     }
 
+    // Use service role client for storage operations
+    const serverSupabase = createServerSupabaseClient();
+    const bucketName = getResumeBucketName();
+
     // For private CVs, use signed URL; for public, use direct download
     if (cv.visibility === 'private') {
       // Generate signed URL for private CVs (expires in 1 hour)
-      const { data: signedUrl, error: urlError } = await supabase.storage
-        .from('portfolio-files')
+      const { data: signedUrl, error: urlError } = await serverSupabase.storage
+        .from(bucketName)
         .createSignedUrl(cv.file_path, 3600);
 
       if (urlError || !signedUrl) {
@@ -71,8 +76,8 @@ export async function GET(request: Request) {
       return NextResponse.redirect(signedUrl.signedUrl);
     } else {
       // For public CVs, download directly
-      const { data: fileData, error: downloadError } = await supabase.storage
-        .from('portfolio-files')
+      const { data: fileData, error: downloadError } = await serverSupabase.storage
+        .from(bucketName)
         .download(cv.file_path);
 
       if (downloadError || !fileData) {

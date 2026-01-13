@@ -674,9 +674,8 @@ export function WebRTCRealtime({
       const offer = await pc.createOffer();
       await pc.setLocalDescription(offer);
 
-      // Send offer to OpenAI Realtime API via our backend proxy
-      // This ensures the API key is never exposed to the client
-      // The backend will forward the offer to OpenAI using the server's API key
+      // Send offer to our backend proxy which will forward to OpenAI
+      // The backend uses the server's API key to authenticate with OpenAI
       const sdpResponse = await fetch('/api/realtime/connect', {
         method: 'POST',
         headers: {
@@ -685,12 +684,44 @@ export function WebRTCRealtime({
         body: JSON.stringify({
           sdp: offer.sdp,
           session_token: session.client_secret, // Ephemeral token for session tracking
+          session_id: session.session_id, // Session ID if available
         }),
       });
 
       if (!sdpResponse.ok) {
-        const errorText = await sdpResponse.text();
-        throw new Error(`Failed to connect to OpenAI: ${sdpResponse.status} ${errorText}`);
+        let errorText = 'Unknown error';
+        let errorDetails: any = {};
+        try {
+          const errorData = await sdpResponse.json();
+          errorText = errorData.error || errorData.message || errorText;
+          errorDetails = errorData;
+        } catch {
+          errorText = await sdpResponse.text().catch(() => errorText);
+        }
+        
+        console.error('Failed to connect to OpenAI Realtime:', sdpResponse.status, errorText);
+        
+        // Provide more specific error messages
+        let userFriendlyError = `Failed to connect to OpenAI Realtime API`;
+        if (sdpResponse.status === 400) {
+          userFriendlyError = `Invalid connection request. Please try reconnecting.`;
+        } else if (sdpResponse.status === 401) {
+          userFriendlyError = `Authentication failed. Please refresh the page and try again.`;
+        } else if (sdpResponse.status === 429) {
+          userFriendlyError = `Rate limit exceeded. Please wait a moment and try again.`;
+        } else if (sdpResponse.status === 503) {
+          userFriendlyError = `Realtime service is temporarily unavailable. Please try again later.`;
+        }
+        
+        safeLogger.error('WebRTC connection failed', {
+          status: sdpResponse.status,
+          error: errorText,
+          details: errorDetails,
+          hasSession: !!session,
+          sessionId: session.session_id,
+        });
+        
+        throw new Error(`${userFriendlyError} (${sdpResponse.status})`);
       }
 
       // Get SDP answer from our backend

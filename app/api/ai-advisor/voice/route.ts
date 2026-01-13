@@ -452,10 +452,17 @@ async function buildLLMMessages(
 }
 
 export async function POST(request: NextRequest) {
+  const requestId = `voice_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+  
   // Check feature flag
   if (!isVoiceAPIEnabled()) {
+    safeLogger.warn('Voice API disabled', { requestId });
     return NextResponse.json(
-      { error: 'Voice API is not enabled' },
+      { 
+        error: 'Voice API is not enabled',
+        message: 'Voice features are currently disabled. Please use text chat instead.',
+        requestId,
+      },
       { status: 403 }
     );
   }
@@ -690,12 +697,45 @@ export async function POST(request: NextRequest) {
       ...(responseAudio && { responseAudio }), // Only include if generated
       conversationId: convId,
     });
-  } catch (error) {
+  } catch (error: any) {
     // Note: transcription.transcript is never logged - it contains PII
-    safeLogger.error('Error in voice API', error);
+    const errorMessage = error instanceof Error ? error.message : 'Failed to process voice request';
+    
+    // Determine appropriate status code
+    let statusCode = 500;
+    if (errorMessage.includes('not enabled') || errorMessage.includes('ENABLE_VOICE_API')) {
+      statusCode = 403;
+    } else if (errorMessage.includes('Unauthorized') || errorMessage.includes('401')) {
+      statusCode = 401;
+    } else if (errorMessage.includes('Transcription failed') || errorMessage.includes('Whisper')) {
+      statusCode = 502; // Bad Gateway - upstream service issue
+    } else if (errorMessage.includes('No speech detected')) {
+      statusCode = 400;
+    }
+    
+    safeLogger.error('Error in voice API', {
+      requestId,
+      error: errorMessage,
+      stack: error?.stack,
+      step: errorMessage.includes('Transcription') ? 'STT' : 
+            errorMessage.includes('LLM') || errorMessage.includes('generate') ? 'LLM' :
+            errorMessage.includes('TTS') || errorMessage.includes('audio') ? 'TTS' : 'unknown',
+    });
+    
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Failed to process voice request' },
-      { status: 500 }
+      { 
+        error: 'Voice service error',
+        message: process.env.NODE_ENV === 'development'
+          ? errorMessage
+          : (errorMessage.includes('Transcription') 
+              ? 'Speech recognition failed. Please try again or use text chat.'
+              : errorMessage.includes('No speech detected')
+              ? 'No speech detected in audio. Please try again.'
+              : 'Voice service is temporarily unavailable. Please try again or use text chat.'),
+        requestId,
+        details: process.env.NODE_ENV === 'development' ? errorMessage : undefined,
+      },
+      { status: statusCode }
     );
   }
 }
