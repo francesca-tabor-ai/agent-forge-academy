@@ -70,7 +70,7 @@ export async function createUserSupabaseClient() {
 /**
  * Gets the current user's role from Supabase
  * Returns null if not authenticated
- * Simplified role model: student, recruiter, admin
+ * Role model: student, recruiter, instructor, admin
  */
 export async function getUserRole(): Promise<UserRole | null> {
   const supabase = await createUserSupabaseClient();
@@ -90,9 +90,9 @@ export async function getUserRole(): Promise<UserRole | null> {
 
   const role = profile?.role as string;
   
-  // Map deprecated tutor/instructor roles to admin (migrated in database)
-  if (role === 'tutor' || role === 'instructor') {
-    return 'admin';
+  // Normalize 'tutor' to 'instructor' for consistency
+  if (role === 'tutor') {
+    return 'instructor';
   }
   
   return (role as UserRole) || null;
@@ -100,7 +100,7 @@ export async function getUserRole(): Promise<UserRole | null> {
 
 /**
  * Checks if user has the required role
- * Simplified role model: student, recruiter, admin
+ * Role model: student, recruiter, instructor, admin
  */
 export async function hasRole(
   requiredRole: UserRole
@@ -111,7 +111,7 @@ export async function hasRole(
 
 /**
  * Checks if user has any of the required roles
- * Simplified role model: student, recruiter, admin
+ * Role model: student, recruiter, instructor, admin
  */
 export async function hasAnyRole(
   requiredRoles: Array<UserRole>

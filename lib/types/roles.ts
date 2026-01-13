@@ -1,13 +1,14 @@
 /**
  * User role type definition
- * Simplified role model: student, recruiter, admin (optional)
- * Tutor and instructor roles have been removed and migrated to admin.
+ * Role model: student, recruiter, instructor, admin
+ * Note: 'tutor' is normalized to 'instructor' in middleware
  */
-export type UserRole = 'student' | 'recruiter' | 'admin';
+export type UserRole = 'student' | 'recruiter' | 'instructor' | 'admin';
 
 export const USER_ROLES = {
   STUDENT: 'student',
   RECRUITER: 'recruiter',
+  INSTRUCTOR: 'instructor',
   ADMIN: 'admin',
 } as const;
 
