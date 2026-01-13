@@ -13,6 +13,15 @@ interface UploadSuccessState {
 }
 
 export function CVUpload({ onUploadSuccess }: CVUploadProps) {
+  // Defensive UI guard: Check if Supabase env vars are available at runtime
+  // This error will only appear in misconfigured environments
+  const supabaseReady =
+    !!process.env.NEXT_PUBLIC_SUPABASE_URL &&
+    !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!supabaseReady) {
+    throw new Error('Supabase env vars missing at runtime');
+  }
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
