@@ -304,7 +304,7 @@ export default function LessonContent({ content }: LessonContentProps) {
   const { beforeTopics, topics, afterTopics } = parseTopics(content);
   
   return (
-    <div className="space-y-8">
+    <div className="lesson-content space-y-8">
       {/* Content before topics */}
       {beforeTopics.trim() && (
         <div className="space-y-6">

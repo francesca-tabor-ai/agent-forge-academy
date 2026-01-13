@@ -309,6 +309,136 @@ pre code {
   padding: 0;
 }
 
+/* Fix text selection in code blocks - prevent white-on-white */
+/* Selection styles for dark code blocks (black background, white text) */
+pre::selection,
+pre *::selection,
+pre code::selection,
+pre code *::selection {
+  background-color: #4a5568; /* medium gray - not white */
+  color: #ffffff; /* white text on gray selection */
+}
+
+/* Firefox selection styles */
+pre::-moz-selection,
+pre *::-moz-selection,
+pre code::-moz-selection,
+pre code *::-moz-selection {
+  background-color: #4a5568; /* medium gray - not white */
+  color: #ffffff; /* white text on gray selection */
+}
+
+/* Selection styles for inline code (light background) */
+code:not(pre code)::selection,
+code:not(pre code) *::selection {
+  background-color: #cbd5e0; /* light blue-gray */
+  color: #1a202c; /* dark text on light selection */
+}
+
+code:not(pre code)::-moz-selection,
+code:not(pre code) *::-moz-selection {
+  background-color: #cbd5e0; /* light blue-gray */
+  color: #1a202c; /* dark text on light selection */
+}
+
+/* Fix mark/highlight styles in code blocks */
+pre mark,
+pre code mark,
+.lesson-content pre mark,
+.lesson-content pre code mark {
+  background-color: #4a5568 !important; /* medium gray highlight on dark background */
+  color: #ffffff !important; /* white text */
+  padding: 2px 4px;
+  border-radius: 2px;
+}
+
+/* Mark/highlight styles in regular content (light background) */
+mark:not(pre mark):not(pre code mark):not(.lesson-content pre mark):not(.lesson-content pre code mark),
+.lesson-content mark:not(pre mark):not(pre code mark) {
+  background-color: #fef08a; /* light yellow highlight */
+  color: #1a202c; /* dark text */
+  padding: 2px 4px;
+  border-radius: 2px;
+}
+
+/* Prevent any white highlight backgrounds in dark areas */
+.lesson-content pre mark,
+.lesson-content pre code mark,
+.lesson-content [class*="bg-black"] mark,
+.lesson-content [class*="bg-gray-900"] mark,
+.lesson-content [class*="bg-gray-800"] mark {
+  background-color: #4a5568 !important; /* medium gray - never white */
+  color: #ffffff !important;
+}
+
+/* Additional selection styles for lesson content areas */
+/* Ensure proper selection contrast in all content areas */
+.lesson-content pre::selection,
+.lesson-content pre *::selection,
+.lesson-content pre code::selection,
+.lesson-content pre code *::selection {
+  background-color: #4a5568 !important; /* medium gray - not white */
+  color: #ffffff !important; /* white text on gray selection */
+}
+
+.lesson-content pre::-moz-selection,
+.lesson-content pre *::-moz-selection,
+.lesson-content pre code::-moz-selection,
+.lesson-content pre code *::-moz-selection {
+  background-color: #4a5568 !important; /* medium gray - not white */
+  color: #ffffff !important; /* white text on gray selection */
+}
+
+/* Comprehensive selection styles for all lesson content */
+/* Prevent white-on-white selection in any dark background areas */
+.lesson-content *::selection {
+  /* Default: light selection on light background */
+  background-color: #cbd5e0;
+  color: #1a202c;
+}
+
+.lesson-content *::-moz-selection {
+  background-color: #cbd5e0;
+  color: #1a202c;
+}
+
+/* Override for dark backgrounds (pre, code blocks, dark containers) */
+.lesson-content pre::selection,
+.lesson-content pre *::selection,
+.lesson-content code::selection,
+.lesson-content [class*="bg-black"]::selection,
+.lesson-content [class*="bg-gray-900"]::selection,
+.lesson-content [class*="bg-gray-800"]::selection {
+  background-color: #4a5568 !important; /* medium gray - not white */
+  color: #ffffff !important;
+}
+
+.lesson-content pre::-moz-selection,
+.lesson-content pre *::-moz-selection,
+.lesson-content code::-moz-selection,
+.lesson-content [class*="bg-black"]::-moz-selection,
+.lesson-content [class*="bg-gray-900"]::-moz-selection,
+.lesson-content [class*="bg-gray-800"]::-moz-selection {
+  background-color: #4a5568 !important;
+  color: #ffffff !important;
+}
+
+/* Ensure any indented text blocks (that might not be in pre/code) have proper selection */
+.lesson-content p::selection,
+.lesson-content div::selection,
+.lesson-content span::selection {
+  /* Inherit from parent, but ensure contrast */
+  background-color: #cbd5e0;
+  color: #1a202c;
+}
+
+.lesson-content p::-moz-selection,
+.lesson-content div::-moz-selection,
+.lesson-content span::-moz-selection {
+  background-color: #cbd5e0;
+  color: #1a202c;
+}
+
 /* Ensure code blocks in prose classes also use true black background */
 /* Override Tailwind Typography defaults for code blocks */
 .prose pre,
