@@ -208,6 +208,15 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     bestFor: 'Sales leaders done with hiring cycles, RevOps and GTM operators, founders scaling without headcount, and AI builders designing real business systems.',
     time: '~8 weeks',
   },
+  'building-automated-ecommerce-creative-at-scale': {
+    slug: 'building-automated-ecommerce-creative-at-scale',
+    title: 'Building Automated E-commerce Creative at Scale',
+    category: 'Media & Content Ops',
+    outcome: 'Design reusable AI creative systems, refresh entire product catalogs in hours, and generate consistent bundles, ads, and localized visuals at scale.',
+    build: 'Complete automated e-commerce creative system with creative intelligence layer, art direction system, product consistency engine, bundle logic, loop automation, and distribution-ready outputs.',
+    bestFor: 'E-commerce operators scaling creative production, marketing operations teams automating visual content, designers transitioning to creative systems, and brand managers maintaining consistency at scale.',
+    time: '~8 weeks',
+  },
 };
 
 // Get category groups for organizing courses
