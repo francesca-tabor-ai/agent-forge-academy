@@ -2,22 +2,10 @@
  * React Hook for client-side subscription data fetching
  * 
  * Use this if you need to fetch subscription data in a client component
- * with SWR or React Query for automatic refetching, caching, etc.
+ * with SWR for automatic refetching, caching, etc.
  * 
- * Example with SWR:
+ * Example:
  * ```tsx
- * import useSWR from 'swr';
- * import { useSubscriptionData } from '@/lib/subscription/useSubscriptionData';
- * 
- * function MyComponent() {
- *   const { data, error, isLoading } = useSubscriptionData();
- *   // ...
- * }
- * ```
- * 
- * Example with React Query:
- * ```tsx
- * import { useQuery } from '@tanstack/react-query';
  * import { useSubscriptionData } from '@/lib/subscription/useSubscriptionData';
  * 
  * function MyComponent() {
@@ -32,12 +20,11 @@
 import { useState, useEffect } from 'react';
 import type { SubscriptionPageData } from './getSubscriptionData';
 import useSWR from 'swr';
-import { useQuery, type UseQueryResult } from '@tanstack/react-query';
 
 const API_ENDPOINT = '/api/student/subscription';
 
 /**
- * Fetcher function for SWR/React Query
+ * Fetcher function for SWR
  */
 async function fetchSubscriptionData(): Promise<SubscriptionPageData> {
   const response = await fetch(API_ENDPOINT, {
@@ -57,19 +44,23 @@ async function fetchSubscriptionData(): Promise<SubscriptionPageData> {
 }
 
 /**
- * Hook for use with SWR
+ * Hook for fetching subscription data with SWR
  * 
  * @example
  * ```tsx
- * import useSWR from 'swr';
- * import { useSubscriptionDataSWR } from '@/lib/subscription/useSubscriptionData';
+ * import { useSubscriptionData } from '@/lib/subscription/useSubscriptionData';
  * 
  * function MyComponent() {
- *   const { data, error, isLoading } = useSubscriptionDataSWR();
+ *   const { data, error, isLoading } = useSubscriptionData();
+ *   
+ *   if (isLoading) return <div>Loading...</div>;
+ *   if (error) return <div>Error: {error.message}</div>;
+ *   
+ *   return <SubscriptionContent data={data} />;
  * }
  * ```
  */
-export function useSubscriptionDataSWR() {
+export function useSubscriptionData() {
   return useSWR<SubscriptionPageData>(API_ENDPOINT, fetchSubscriptionData, {
     revalidateOnFocus: false,
     revalidateOnReconnect: true,
@@ -78,33 +69,17 @@ export function useSubscriptionDataSWR() {
 }
 
 /**
- * Hook for use with React Query
- * 
- * @example
- * ```tsx
- * import { useQuery } from '@tanstack/react-query';
- * import { useSubscriptionDataQuery } from '@/lib/subscription/useSubscriptionData';
- * 
- * function MyComponent() {
- *   const { data, error, isLoading } = useSubscriptionDataQuery();
- * }
- * ```
+ * @deprecated Use `useSubscriptionData` instead. This function is kept for backwards compatibility.
  */
-export function useSubscriptionDataQuery(): UseQueryResult<SubscriptionPageData> {
-  return useQuery<SubscriptionPageData>({
-    queryKey: ['subscription-data'],
-    queryFn: fetchSubscriptionData,
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    gcTime: 10 * 60 * 1000, // 10 minutes (formerly cacheTime)
-  });
+export function useSubscriptionDataSWR() {
+  return useSubscriptionData();
 }
 
 /**
- * Manual fetch hook (fallback if SWR/React Query not available)
+ * Manual fetch hook (fallback if SWR not available)
  * 
  * @example
  * ```tsx
- * import { useState, useEffect } from 'react';
  * import { useSubscriptionDataManual } from '@/lib/subscription/useSubscriptionData';
  * 
  * function MyComponent() {
