@@ -79,11 +79,13 @@ export default async function CoursesPage() {
     created_at: string | null;
     updated_at: string | null;
     hasContent: boolean;
+    industries: string[];
     metadata?: typeof courseMetadata[string];
   };
 
   const allCourses: CourseWithMetadata[] = (courses || []).map((course) => ({
     ...course,
+    industries: course.industries || [],
     hasContent: courseSlugSet.has(course.slug),
     metadata: courseMetadata[course.slug],
   }));
@@ -106,6 +108,7 @@ export default async function CoursesPage() {
         created_at: null,
         updated_at: null,
         hasContent: lessons.length > 0,
+        industries: metadata?.industries || [],
         metadata,
       });
     }

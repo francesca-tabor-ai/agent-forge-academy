@@ -19,7 +19,7 @@ async function getDatabaseCourses(
 ): Promise<Map<string, CourseMetadata>> {
   const { data, error } = await supabase
     .from('courses')
-    .select('slug, title, description, thumbnail_url, duration_weeks, difficulty_level, is_published')
+    .select('slug, title, description, thumbnail_url, duration_weeks, difficulty_level, is_published, industries')
     .order('slug');
 
   if (error) {
@@ -43,13 +43,18 @@ function coursesAreDifferent(
   fileMetadata: CourseMetadata,
   dbMetadata: CourseMetadata
 ): boolean {
+  // Compare industries arrays (order doesn't matter)
+  const fileIndustries = (fileMetadata.industries || []).sort().join(',');
+  const dbIndustries = (dbMetadata.industries || []).sort().join(',');
+  
   return (
     fileMetadata.title !== dbMetadata.title ||
     fileMetadata.description !== dbMetadata.description ||
     fileMetadata.thumbnail_url !== dbMetadata.thumbnail_url ||
     fileMetadata.duration_weeks !== dbMetadata.duration_weeks ||
     fileMetadata.difficulty_level !== dbMetadata.difficulty_level ||
-    fileMetadata.is_published !== dbMetadata.is_published
+    fileMetadata.is_published !== dbMetadata.is_published ||
+    fileIndustries !== dbIndustries
   );
 }
 
@@ -126,6 +131,7 @@ export async function syncCoursesToDatabase(
             duration_weeks: fileMetadata.duration_weeks,
             difficulty_level: fileMetadata.difficulty_level,
             is_published: fileMetadata.is_published,
+            industries: fileMetadata.industries || [],
           });
 
         if (error) {
@@ -152,6 +158,7 @@ export async function syncCoursesToDatabase(
             duration_weeks: fileMetadata.duration_weeks,
             difficulty_level: fileMetadata.difficulty_level,
             is_published: fileMetadata.is_published,
+            industries: fileMetadata.industries || [],
             updated_at: new Date().toISOString(),
           })
           .eq('slug', fileMetadata.slug);

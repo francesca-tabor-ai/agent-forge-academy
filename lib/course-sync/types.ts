@@ -16,6 +16,7 @@ export interface CourseMetadata {
   duration_weeks: number | null;
   difficulty_level: DifficultyLevel | null;
   is_published: boolean;
+  industries: string[];
   // Optional fields for tracking
   category?: string; // Not in DB yet, but useful for metadata
 }

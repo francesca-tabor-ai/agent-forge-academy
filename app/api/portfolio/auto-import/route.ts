@@ -2,6 +2,7 @@ import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 import { extractTextFromCV } from '@/lib/cv/extractText';
 import { safeLogger } from '@/lib/utils/redactPII';
+import { filterGitHubRepos, type GitHubRepo } from '@/lib/portfolio/github-mapper';
 
 // Extract profile data from CV text
 function extractProfileFromCV(cvText: string): {
@@ -120,12 +121,16 @@ async function fetchGitHubRepos(githubUrl: string, token?: string): Promise<any[
       throw new Error(`GitHub API error: ${response.statusText}`);
     }
     
-    const repos = await response.json();
+    const repos: GitHubRepo[] = await response.json();
     
-    // Filter out forks and archived repos (optional)
-    return repos
-      .filter((repo: any) => !repo.fork && !repo.archived)
-      .map((repo: any) => ({
+    // Filter repos based on rules (exclude forks, archived, and empty repos)
+    const filteredRepos = filterGitHubRepos(repos, {
+      excludeForks: true,
+      excludeArchived: true,
+      excludeEmpty: true,
+    });
+    
+    return filteredRepos.map((repo: GitHubRepo) => ({
         name: repo.name,
         description: repo.description || '',
         url: repo.html_url,

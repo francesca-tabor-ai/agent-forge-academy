@@ -140,9 +140,13 @@ export function ProfileEditForm({ initialData }: ProfileEditFormProps) {
       setError(null);
       setValidationErrors({});
       
+      // Check if GitHub URL was saved to trigger sync status check
+      const hadGithubUrl = formData.github_url.trim() !== '';
+      const queryParam = hadGithubUrl ? 'profileSaved=1&githubUrlSaved=1' : 'profileSaved=1';
+      
       // Redirect with query param for toast notification
       setTimeout(() => {
-        router.push('/student/portfolio?profileSaved=1');
+        router.push(`/student/portfolio?${queryParam}`);
       }, 500);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');

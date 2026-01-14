@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { CourseMetadata } from '@/lib/course-metadata';
+import { INDUSTRIES } from '@/lib/utils/industries';
 
 type Course = {
   id: string | null;
@@ -16,6 +17,7 @@ type Course = {
   created_at: string | null;
   updated_at: string | null;
   hasContent: boolean;
+  industries: string[];
   metadata?: CourseMetadata;
 };
 
@@ -81,6 +83,9 @@ export function CourseFilters({ courses, onFilteredCoursesChange }: CourseFilter
   const [selectedBestFor, setSelectedBestFor] = useState<string[]>(
     searchParams.get('bestFor')?.split(',').filter(Boolean) || []
   );
+  const [selectedIndustries, setSelectedIndustries] = useState<string[]>(
+    searchParams.get('industries')?.split(',').filter(Boolean) || []
+  );
   const [sort, setSort] = useState(searchParams.get('sort') || 'recommended');
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -92,6 +97,7 @@ export function CourseFilters({ courses, onFilteredCoursesChange }: CourseFilter
     if (duration) params.set('duration', duration);
     if (difficulty) params.set('difficulty', difficulty);
     if (selectedBestFor.length > 0) params.set('bestFor', selectedBestFor.join(','));
+    if (selectedIndustries.length > 0) params.set('industries', selectedIndustries.join(','));
     if (sort && sort !== 'recommended') params.set('sort', sort);
 
     // Update URL without navigation
@@ -105,9 +111,10 @@ export function CourseFilters({ courses, onFilteredCoursesChange }: CourseFilter
       duration,
       difficulty,
       selectedBestFor,
+      selectedIndustries,
       sort,
     }));
-  }, [search, selectedTracks, duration, difficulty, selectedBestFor, sort]);
+  }, [search, selectedTracks, duration, difficulty, selectedBestFor, selectedIndustries, sort]);
 
   // Load from localStorage on mount
   useEffect(() => {
@@ -120,6 +127,7 @@ export function CourseFilters({ courses, onFilteredCoursesChange }: CourseFilter
         setDuration(parsed.duration || '');
         setDifficulty(parsed.difficulty || '');
         setSelectedBestFor(parsed.selectedBestFor || []);
+        setSelectedIndustries(parsed.selectedIndustries || []);
         setSort(parsed.sort || 'recommended');
       } catch (e) {
         // Ignore parse errors
@@ -189,6 +197,14 @@ export function CourseFilters({ courses, onFilteredCoursesChange }: CourseFilter
       });
     }
 
+    // Industry filter
+    if (selectedIndustries.length > 0) {
+      filtered = filtered.filter((course) => {
+        const courseIndustries = course.industries || course.metadata?.industries || [];
+        return courseIndustries.some((industry) => selectedIndustries.includes(industry));
+      });
+    }
+
     // Sort
     filtered.sort((a, b) => {
       if (sort === 'shortest') {
@@ -218,7 +234,7 @@ export function CourseFilters({ courses, onFilteredCoursesChange }: CourseFilter
     });
 
     return filtered;
-  }, [courses, search, selectedTracks, duration, difficulty, selectedBestFor, sort]);
+  }, [courses, search, selectedTracks, duration, difficulty, selectedBestFor, selectedIndustries, sort]);
 
   // Notify parent of filtered courses
   useEffect(() => {
@@ -237,42 +253,179 @@ export function CourseFilters({ courses, onFilteredCoursesChange }: CourseFilter
     );
   };
 
+  const toggleIndustry = (industry: string) => {
+    setSelectedIndustries((prev) =>
+      prev.includes(industry) ? prev.filter((i) => i !== industry) : [...prev, industry]
+    );
+  };
+
   const clearFilters = () => {
     setSearch('');
     setSelectedTracks([]);
     setDuration('');
     setDifficulty('');
     setSelectedBestFor([]);
+    setSelectedIndustries([]);
     setSort('recommended');
   };
 
   const hasActiveFilters =
-    search || selectedTracks.length > 0 || duration || difficulty || selectedBestFor.length > 0;
+    search || selectedTracks.length > 0 || duration || difficulty || selectedBestFor.length > 0 || selectedIndustries.length > 0;
+
+  // Calculate total active filter count
+  const activeFilterCount = 
+    (search ? 1 : 0) +
+    selectedTracks.length +
+    (duration ? 1 : 0) +
+    (difficulty ? 1 : 0) +
+    selectedBestFor.length +
+    selectedIndustries.length +
+    (sort !== 'recommended' ? 1 : 0);
+
+  // Build array of active filter chips
+  const activeFilterChips = useMemo(() => {
+    const chips: Array<{ label: string; onRemove: () => void }> = [];
+
+    // Search
+    if (search) {
+      chips.push({
+        label: `Search: "${search}"`,
+        onRemove: () => setSearch(''),
+      });
+    }
+
+    // Tracks
+    selectedTracks.forEach((track) => {
+      chips.push({
+        label: `Track: ${track}`,
+        onRemove: () => setSelectedTracks((prev) => prev.filter((t) => t !== track)),
+      });
+    });
+
+    // Duration
+    if (duration) {
+      const durationLabel = DURATION_OPTIONS.find((opt) => opt.value === duration)?.label || duration;
+      chips.push({
+        label: `Duration: ${durationLabel}`,
+        onRemove: () => setDuration(''),
+      });
+    }
+
+    // Difficulty
+    if (difficulty) {
+      const difficultyLabel = DIFFICULTY_OPTIONS.find((opt) => opt.value === difficulty)?.label || difficulty;
+      chips.push({
+        label: `Difficulty: ${difficultyLabel}`,
+        onRemove: () => setDifficulty(''),
+      });
+    }
+
+    // Best For
+    selectedBestFor.forEach((bestFor) => {
+      chips.push({
+        label: `Best For: ${bestFor}`,
+        onRemove: () => setSelectedBestFor((prev) => prev.filter((b) => b !== bestFor)),
+      });
+    });
+
+    // Industries
+    selectedIndustries.forEach((industry) => {
+      chips.push({
+        label: `Industry: ${industry}`,
+        onRemove: () => setSelectedIndustries((prev) => prev.filter((i) => i !== industry)),
+      });
+    });
+
+    // Sort
+    if (sort !== 'recommended') {
+      const sortLabel = SORT_OPTIONS.find((opt) => opt.value === sort)?.label || sort;
+      chips.push({
+        label: `Sort: ${sortLabel}`,
+        onRemove: () => setSort('recommended'),
+      });
+    }
+
+    return chips;
+  }, [search, selectedTracks, duration, difficulty, selectedBestFor, selectedIndustries, sort]);
 
   return (
     <div className="sticky top-0 z-10 bg-white border-b border-gray-200 shadow-sm">
       <div className="p-4 space-y-4">
-        {/* Search Bar */}
-        <div>
-          <input
-            type="text"
-            placeholder="Search courses by title, track, or 'Best For'..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent"
-          />
+        {/* Search Bar and Sort - Top Bar */}
+        <div className="flex items-center gap-3">
+          <div className="flex-1">
+            <input
+              type="text"
+              placeholder="Search courses by title, track, or 'Best For'..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent"
+            />
+          </div>
+          <div className="flex-shrink-0">
+            <label htmlFor="sort-select" className="sr-only">
+              Sort by
+            </label>
+            <select
+              id="sort-select"
+              value={sort}
+              onChange={(e) => setSort(e.target.value)}
+              className="px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent bg-white"
+            >
+              {SORT_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        {/* Active Filter Chips */}
+        {activeFilterChips.length > 0 && (
+          <div className="flex flex-wrap gap-2">
+            {activeFilterChips.map((chip, index) => (
+              <span
+                key={index}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-brand-light/10 text-brand-light text-xs font-medium rounded-full border border-brand-light/20"
+              >
+                {chip.label}
+                <button
+                  onClick={chip.onRemove}
+                  className="hover:text-brand-light/70 text-base leading-none focus:outline-none transition-colors ml-0.5"
+                  aria-label={`Remove ${chip.label}`}
+                  type="button"
+                >
+                  ×
+                </button>
+              </span>
+            ))}
+          </div>
+        )}
+
+        {/* Filters Header with Count and Clear All */}
+        <div className="flex items-center justify-between">
+          <button
+            type="button"
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-gray-900"
+          >
+            <span>Filters {activeFilterCount > 0 && `(${activeFilterCount})`}</span>
+            <span>{isExpanded ? '▲' : '▼'}</span>
+          </button>
+          {hasActiveFilters && (
+            <button
+              type="button"
+              onClick={clearFilters}
+              className="text-sm text-gray-600 hover:text-gray-900 underline"
+            >
+              Clear all
+            </button>
+          )}
         </div>
 
         {/* Expandable Filters */}
         <div>
-          <button
-            type="button"
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="flex items-center justify-between w-full text-sm font-medium text-gray-700 hover:text-gray-900"
-          >
-            <span>Filters & Sort</span>
-            <span>{isExpanded ? '▲' : '▼'}</span>
-          </button>
 
           {isExpanded && (
             <div className="mt-4 space-y-4 pt-4 border-t border-gray-200">
@@ -360,32 +513,26 @@ export function CourseFilters({ courses, onFilteredCoursesChange }: CourseFilter
                 </div>
               </div>
 
-              {/* Sort */}
+              {/* Industry (Multi-select) */}
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-2">Sort By</label>
-                <select
-                  value={sort}
-                  onChange={(e) => setSort(e.target.value)}
-                  className="px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent"
-                >
-                  {SORT_OPTIONS.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
+                <label className="block text-xs font-medium text-gray-700 mb-2">Industry</label>
+                <div className="flex flex-wrap gap-2">
+                  {INDUSTRIES.map((industry) => (
+                    <button
+                      key={industry}
+                      type="button"
+                      onClick={() => toggleIndustry(industry)}
+                      className={`px-3 py-1 text-xs rounded-full border transition-colors ${
+                        selectedIndustries.includes(industry)
+                          ? 'bg-brand-light text-white border-brand-light'
+                          : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
+                      }`}
+                    >
+                      {industry}
+                    </button>
                   ))}
-                </select>
+                </div>
               </div>
-
-              {/* Clear Filters */}
-              {hasActiveFilters && (
-                <button
-                  type="button"
-                  onClick={clearFilters}
-                  className="text-sm text-gray-600 hover:text-gray-900 underline"
-                >
-                  Clear all filters
-                </button>
-              )}
             </div>
           )}
         </div>

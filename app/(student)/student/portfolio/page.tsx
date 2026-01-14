@@ -8,6 +8,7 @@ import { PortfolioAdvisorSection } from '@/components/portfolio/PortfolioAdvisor
 import { ProjectsView } from '@/components/portfolio/ProjectsView';
 import { AutoImportSection } from '@/components/portfolio/AutoImportSection';
 import { ProfileSavedToast } from '@/components/portfolio/ProfileSavedToast';
+import { GitHubSyncStatus } from '@/components/portfolio/GitHubSyncStatus';
 import { Suspense } from 'react';
 import { getResumeBucketName } from '@/lib/utils/storage';
 
@@ -39,12 +40,14 @@ export default async function PortfolioPage() {
     .eq('profile_id', profile.id)
     .single();
 
-  // Get portfolio projects
-  const { data: projects } = await supabase
-    .from('portfolio_projects')
-    .select('id, title, description, github_url, demo_url, visibility, cover_image_url, images, created_at')
-    .eq('student_profile_id', studentProfile?.id)
-    .order('created_at', { ascending: false });
+  // Get portfolio projects (only if student profile exists)
+  const { data: projects } = studentProfile
+    ? await supabase
+        .from('portfolio_projects')
+        .select('id, title, description, github_url, demo_url, visibility, cover_image_url, images, created_at')
+        .eq('student_profile_id', studentProfile.id)
+        .order('created_at', { ascending: false })
+    : { data: null };
 
   // Get CV data
   const { data: cv } = await supabase
@@ -108,6 +111,11 @@ export default async function PortfolioPage() {
       {/* Toast Notification */}
       <Suspense fallback={null}>
         <ProfileSavedToast />
+      </Suspense>
+
+      {/* GitHub Sync Status - checks for new projects after sync */}
+      <Suspense fallback={null}>
+        <GitHubSyncStatus />
       </Suspense>
 
       {/* Page Header */}

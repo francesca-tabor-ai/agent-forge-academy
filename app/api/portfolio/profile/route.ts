@@ -1,6 +1,366 @@
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
 import { logRequest, getUserIdFromRequest, getIpAddress, getUserAgent } from '@/lib/utils/request-logger';
+import { safeLogger } from '@/lib/utils/redactPII';
+import { mapGitHubRepoToProject, validateProjectInput, filterGitHubRepos, type GitHubRepo } from '@/lib/portfolio/github-mapper';
+import { revalidatePath } from 'next/cache';
+
+/**
+ * Helper function to sync GitHub repositories and create portfolio projects
+ * Called automatically when a GitHub URL is saved in the profile
+ * 
+ * @returns Object with success status and details for logging
+ */
+async function syncGitHubRepos(
+  supabase: any,
+  studentProfileId: string,
+  githubUrl: string,
+  userId?: string
+): Promise<{ success: boolean; error?: string; details?: any }> {
+  const syncStartTime = Date.now();
+  let username: string | null = null;
+  
+  try {
+    // Extract username from GitHub URL
+    const urlMatch = githubUrl.match(/github\.com\/([^\/\?]+)/i);
+    if (!urlMatch) {
+      const error = 'Invalid GitHub URL format';
+      safeLogger.error('[GitHub Sync] Invalid GitHub URL format', {
+        userId,
+        studentProfileId,
+        githubUrl,
+        error,
+      });
+      return { success: false, error };
+    }
+
+    username = urlMatch[1];
+    
+    safeLogger.info('[GitHub Sync] Starting sync', {
+      userId,
+      studentProfileId,
+      username,
+      githubUrl,
+    });
+
+    // Fetch repositories from GitHub API
+    const headers: HeadersInit = {
+      'Accept': 'application/vnd.github.v3+json',
+    };
+
+    // Use GITHUB_TOKEN from environment if available (for higher rate limits)
+    const githubToken = process.env.GITHUB_TOKEN;
+    if (githubToken) {
+      headers['Authorization'] = `token ${githubToken}`;
+    }
+
+    const response = await fetch(
+      `https://api.github.com/users/${username}/repos?per_page=100&sort=updated`,
+      { headers }
+    );
+
+    if (!response.ok) {
+      let error: string;
+      if (response.status === 404) {
+        error = 'GitHub user not found';
+        safeLogger.error('[GitHub Sync] GitHub user not found', {
+          userId,
+          studentProfileId,
+          username,
+          status: response.status,
+        });
+        return { success: false, error: 'Couldn\'t connect to GitHub. Please check the URL or try again.' };
+      }
+      if (response.status === 403) {
+        error = 'Rate limit exceeded';
+        safeLogger.error('[GitHub Sync] Rate limit exceeded', {
+          userId,
+          studentProfileId,
+          username,
+          status: response.status,
+        });
+        return { success: false, error: 'GitHub API rate limit exceeded. Please try again later.' };
+      }
+      error = `GitHub API error: ${response.statusText}`;
+      safeLogger.error('[GitHub Sync] GitHub API error', {
+        userId,
+        studentProfileId,
+        username,
+        status: response.status,
+        statusText: response.statusText,
+      });
+      return { success: false, error: 'Couldn\'t connect to GitHub. Please check the URL or try again.' };
+    }
+
+    let repos: GitHubRepo[];
+    try {
+      repos = await response.json();
+    } catch (parseError) {
+      const error = 'Failed to parse GitHub API response';
+      safeLogger.error('[GitHub Sync] Failed to parse GitHub response', {
+        userId,
+        studentProfileId,
+        username,
+        error: parseError,
+      });
+      return { success: false, error: 'Couldn\'t connect to GitHub. Please check the URL or try again.' };
+    }
+
+    const totalReposFetched = repos.length;
+    
+    safeLogger.info('[GitHub Sync] Fetched repositories', {
+      userId,
+      studentProfileId,
+      username,
+      totalReposFetched,
+    });
+
+    // Filter repos based on rules (exclude forks, archived, and empty repos)
+    const filteredRepos = filterGitHubRepos(repos, {
+      excludeForks: true,
+      excludeArchived: true,
+      excludeEmpty: true,
+    }).slice(0, 10); // Limit to 10 most recent
+
+    const reposAfterFiltering = filteredRepos.length;
+    
+    safeLogger.info('[GitHub Sync] Filtered repositories', {
+      userId,
+      studentProfileId,
+      username,
+      totalReposFetched,
+      reposAfterFiltering,
+    });
+
+    let created = 0;
+    let updated = 0;
+    let skipped = 0;
+    let errors = 0;
+
+    for (const repo of filteredRepos) {
+      try {
+        // Map GitHub repo to portfolio project
+        const projectInput = mapGitHubRepoToProject(repo, {
+          defaultVisibility: 'private',
+          includeTopicsInDescription: true,
+        });
+
+        // Validate the mapped project
+        const validation = validateProjectInput(projectInput);
+        if (!validation.valid) {
+          safeLogger.error('[GitHub Sync] Invalid project input', {
+            repo: repo.name,
+            errors: validation.errors,
+          });
+          errors++;
+          continue;
+        }
+
+        // Check if project already exists (dedupe by source + source_id)
+        const { data: existing } = await supabase
+          .from('portfolio_projects')
+          .select('id, title, description, demo_url, github_url, source, source_id')
+          .eq('student_profile_id', studentProfileId)
+          .eq('source', 'github')
+          .eq('source_id', String(projectInput.source_id))
+          .single();
+
+        if (existing) {
+          // Project exists - perform smart update (preserve user edits)
+          const updateData: any = {};
+
+          // Only update demo_url if it changed (safe to update)
+          if (projectInput.demo_url !== existing.demo_url) {
+            updateData.demo_url = projectInput.demo_url;
+          }
+
+          // Only update github_url if it changed (shouldn't happen, but just in case)
+          if (projectInput.github_url !== existing.github_url) {
+            updateData.github_url = projectInput.github_url;
+          }
+
+          // Smart update: preserve user-edited fields
+          // Only update title/description if they differ AND existing values look auto-generated
+          // This prevents overwriting user edits while allowing updates when repo changes
+          
+          // Update title if it changed and existing looks auto-generated
+          if (existing.title !== projectInput.title) {
+            // Heuristic: if existing title matches repo name pattern (Title Case from kebab-case),
+            // it's likely auto-generated, so safe to update
+            const repoNameInTitleCase = repo.name
+              .replace(/-/g, ' ')
+              .replace(/_/g, ' ')
+              .replace(/\b\w/g, (l: string) => l.toUpperCase())
+              .trim();
+            
+            if (existing.title === repoNameInTitleCase || existing.title.toLowerCase() === repoNameInTitleCase.toLowerCase()) {
+              // Existing title matches auto-generated pattern, safe to update
+              updateData.title = projectInput.title;
+            }
+            // Otherwise, assume user edited it - preserve it
+          }
+
+          // Update description if it changed and existing looks auto-generated
+          if (existing.description !== projectInput.description) {
+            // Heuristic: check if existing description matches our auto-generated patterns
+            const descLooksAutoGenerated = 
+              existing.description.includes('(Topics:') || // Our format with topics
+              (existing.description.startsWith('A ') && existing.description.includes(' project')) || // Fallback format
+              existing.description === 'GitHub repository' || // Minimal fallback
+              existing.description === projectInput.description; // Matches what we'd generate
+            
+            if (descLooksAutoGenerated) {
+              // Existing description matches auto-generated pattern, safe to update
+              updateData.description = projectInput.description;
+            }
+            // Otherwise, assume user edited it - preserve it
+          }
+
+          // Perform update if there are changes
+          if (Object.keys(updateData).length > 0) {
+            const { error: updateError } = await supabase
+              .from('portfolio_projects')
+              .update(updateData)
+              .eq('id', existing.id);
+
+            if (updateError) {
+              safeLogger.error('[GitHub Sync] Failed to update project', {
+                userId,
+                studentProfileId,
+                username,
+                repo: repo.name,
+                projectId: existing.id,
+                sourceId: projectInput.source_id,
+                error: updateError.message,
+                errorCode: updateError.code,
+              });
+              errors++;
+            } else {
+              updated++;
+              safeLogger.info('[GitHub Sync] Updated project', {
+                userId,
+                studentProfileId,
+                username,
+                repo: repo.name,
+                projectId: existing.id,
+                sourceId: projectInput.source_id,
+                fieldsUpdated: Object.keys(updateData),
+              });
+            }
+          } else {
+            skipped++; // No changes needed
+          }
+        } else {
+          // New project - insert it
+          const { error: insertError } = await supabase
+            .from('portfolio_projects')
+            .insert({
+              student_profile_id: studentProfileId,
+              title: projectInput.title,
+              description: projectInput.description,
+              github_url: projectInput.github_url,
+              demo_url: projectInput.demo_url,
+              visibility: projectInput.visibility,
+              source: 'github',
+              source_id: String(projectInput.source_id), // Store as string for consistency
+            });
+
+          if (insertError) {
+            // If unique constraint violation, project was created between check and insert
+            if (insertError.code === '23505') {
+              skipped++;
+              safeLogger.info('[GitHub Sync] Project already exists (race condition)', {
+                userId,
+                studentProfileId,
+                username,
+                repo: repo.name,
+                sourceId: projectInput.source_id,
+              });
+            } else {
+              safeLogger.error('[GitHub Sync] Failed to create project', {
+                userId,
+                studentProfileId,
+                username,
+                repo: repo.name,
+                sourceId: projectInput.source_id,
+                error: insertError.message,
+                errorCode: insertError.code,
+              });
+              errors++;
+            }
+          } else {
+            created++;
+            safeLogger.info('[GitHub Sync] Created project', {
+              userId,
+              studentProfileId,
+              username,
+              repo: repo.name,
+              sourceId: projectInput.source_id,
+            });
+          }
+        }
+      } catch (error) {
+        safeLogger.error('[GitHub Sync] Error processing repo', {
+          repo: repo.name,
+          error,
+        });
+        errors++;
+      }
+    }
+
+    const syncDuration = Date.now() - syncStartTime;
+    
+    safeLogger.info('[GitHub Sync] Successfully synced repositories', {
+      userId,
+      studentProfileId,
+      username,
+      totalReposFetched,
+      reposAfterFiltering,
+      projectsCreated: created,
+      projectsUpdated: updated,
+      projectsSkipped: skipped,
+      errors,
+      durationMs: syncDuration,
+    });
+
+    // Revalidate portfolio page cache so new projects appear immediately
+    if (created > 0 || updated > 0) {
+      revalidatePath('/student/portfolio');
+      revalidatePath('/student/portfolio', 'page');
+    }
+
+    return {
+      success: true,
+      details: {
+        username,
+        totalReposFetched,
+        reposAfterFiltering,
+        projectsCreated: created,
+        projectsUpdated: updated,
+        projectsSkipped: skipped,
+        errors,
+        durationMs: syncDuration,
+      },
+    };
+  } catch (error) {
+    const syncDuration = Date.now() - syncStartTime;
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    
+    safeLogger.error('[GitHub Sync] Error syncing GitHub repos', {
+      userId,
+      studentProfileId,
+      username: username || 'unknown',
+      error: errorMessage,
+      errorStack: error instanceof Error ? error.stack : undefined,
+      durationMs: syncDuration,
+    });
+    
+    return {
+      success: false,
+      error: 'Couldn\'t connect to GitHub. Please check the URL or try again.',
+    };
+  }
+}
 
 /**
  * GET /api/portfolio/profile
@@ -348,7 +708,7 @@ export async function PATCH(request: NextRequest) {
     // Get or create student profile
     let { data: studentProfile } = await supabase
       .from('student_profiles')
-      .select('id')
+      .select('id, github_url')
       .eq('profile_id', profile.id)
       .single();
 
@@ -394,6 +754,41 @@ export async function PATCH(request: NextRequest) {
           { ok: false, error: { code: 'CREATE_FAILED', message: createError.message } },
           { status: 400 }
         );
+      }
+
+      // TEMPORARY: Log GitHub URL save confirmation
+      if (github_url) {
+        console.log('[Profile PATCH] GitHub URL saved successfully (new profile):', {
+          userId: user.id,
+          profileId: newProfile.id,
+          github_url: github_url,
+          savedTo: 'student_profiles.github_url'
+        });
+      }
+
+      // Trigger GitHub sync if github_url was provided
+      // Do this asynchronously so it doesn't block the response
+      if (github_url) {
+        syncGitHubRepos(supabase, newProfile.id, github_url, user.id)
+          .then((result) => {
+            if (!result.success) {
+              safeLogger.warn('[Profile PATCH] GitHub sync completed with errors (new profile)', {
+                userId: user.id,
+                studentProfileId: newProfile.id,
+                error: result.error,
+                details: result.details,
+              });
+            }
+          })
+          .catch((error) => {
+            // Log error but don't fail the profile creation
+            safeLogger.error('[Profile PATCH] GitHub sync failed (non-blocking)', {
+              userId: user.id,
+              studentProfileId: newProfile.id,
+              error: error instanceof Error ? error.message : 'Unknown error',
+              errorStack: error instanceof Error ? error.stack : undefined,
+            });
+          });
       }
 
       const duration = Date.now() - startTime;
@@ -451,6 +846,43 @@ export async function PATCH(request: NextRequest) {
         { ok: false, error: { code: 'UPDATE_FAILED', message: error.message } },
         { status: 400 }
       );
+    }
+
+    // TEMPORARY: Log GitHub URL save confirmation
+    if (github_url) {
+      console.log('[Profile PATCH] GitHub URL saved successfully:', {
+        userId: user.id,
+        profileId: studentProfile.id,
+        github_url: github_url,
+        savedTo: 'student_profiles.github_url'
+      });
+    }
+
+    // Trigger GitHub sync if github_url was provided and is new or changed
+    // Do this asynchronously so it doesn't block the response
+    const previousGithubUrl = studentProfile?.github_url;
+    const githubUrlChanged = github_url && github_url !== previousGithubUrl;
+    if (githubUrlChanged) {
+      syncGitHubRepos(supabase, studentProfile.id, github_url, user.id)
+        .then((result) => {
+          if (!result.success) {
+            safeLogger.warn('[Profile PATCH] GitHub sync completed with errors', {
+              userId: user.id,
+              studentProfileId: studentProfile.id,
+              error: result.error,
+              details: result.details,
+            });
+          }
+        })
+        .catch((error) => {
+          // Log error but don't fail the profile update
+          safeLogger.error('[Profile PATCH] GitHub sync failed (non-blocking)', {
+            userId: user.id,
+            studentProfileId: studentProfile.id,
+            error: error instanceof Error ? error.message : 'Unknown error',
+            errorStack: error instanceof Error ? error.stack : undefined,
+          });
+        });
     }
 
     const duration = Date.now() - startTime;

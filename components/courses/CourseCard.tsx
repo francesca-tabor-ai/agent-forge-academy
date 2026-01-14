@@ -19,6 +19,7 @@ interface CourseCardProps {
     difficulty_level: string | null;
     is_published: boolean;
     hasContent: boolean;
+    industries: string[];
   };
   metadata?: CourseMetadata;
   enrollment?: {
@@ -37,6 +38,7 @@ export function CourseCard({ course, metadata, enrollment, subscriptionTier }: C
   const displayTime = metadata?.time || (course.duration_weeks ? `${course.duration_weeks} weeks` : '');
   const displayBestFor = metadata?.bestFor || '';
   const displayBuild = metadata?.build || '';
+  const displayIndustries = course.industries || metadata?.industries || [];
 
   const handleCardClick = (e: React.MouseEvent) => {
     if (isLocked) {
@@ -54,14 +56,32 @@ export function CourseCard({ course, metadata, enrollment, subscriptionTier }: C
 
   const CourseContent = (
     <div className="flex flex-col h-full">
-      {/* Category Badge */}
-      {metadata?.category && (
-        <div className="mb-3">
+      {/* Category Badge and Industries */}
+      <div className="mb-3 flex items-center gap-2 flex-wrap">
+        {metadata?.category && (
           <span className="inline-block px-2.5 py-1 text-xs font-medium text-brand-light bg-brand-light/10 rounded-full">
             {metadata.category}
           </span>
-        </div>
-      )}
+        )}
+        {/* Industry Tags - Show up to 2, then "+N" */}
+        {displayIndustries.length > 0 && (
+          <>
+            {displayIndustries.slice(0, 2).map((industry, idx) => (
+              <span
+                key={idx}
+                className="inline-block px-2 py-0.5 text-xs font-medium text-gray-700 bg-gray-100 border border-gray-200 rounded-full"
+              >
+                {industry}
+              </span>
+            ))}
+            {displayIndustries.length > 2 && (
+              <span className="inline-block px-2 py-0.5 text-xs font-medium text-gray-600 bg-gray-50 border border-gray-200 rounded-full">
+                +{displayIndustries.length - 2}
+              </span>
+            )}
+          </>
+        )}
+      </div>
 
       {/* Locked Badge */}
       {isLocked && (
