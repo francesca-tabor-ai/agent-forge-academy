@@ -43,11 +43,10 @@ Executives want KPIs that are:
 - Comparable to other channels
 
 **Example:**
-```
+
 AI-Attributed Revenue: $2.5M/year
 Total Revenue: $50M/year
 AI Revenue Share: 5%
-```
 
 **Executive Question:** "How much revenue does AI drive?"
 **Answer:** "$2.5M, or 5% of total revenue"
@@ -62,11 +61,10 @@ AI Revenue Share: 5%
 - Comparable to other investments
 
 **Example:**
-```
+
 AI Investment: $500K/year
 AI Revenue: $2.5M/year
 AI ROI: 400%
-```
 
 **Executive Question:** "What's the return on AI investment?"
 **Answer:** "400% ROI, meaning $4 in revenue for every $1 invested"
@@ -81,11 +79,10 @@ AI ROI: 400%
 - Benchmarkable
 
 **Example:**
-```
+
 AI Cost per Qualified Lead: $100
 Paid Search Cost per Qualified Lead: $200
 AI Efficiency: 2x better
-```
 
 **Executive Question:** "Is AI efficient?"
 **Answer:** "AI is 2x more efficient than paid search"
@@ -100,11 +97,10 @@ AI Efficiency: 2x better
 - Comparable to other channels
 
 **Example:**
-```
+
 AI Pipeline: $10M/year
 Total Pipeline: $100M/year
 AI Pipeline Share: 10%
-```
 
 **Executive Question:** "What's AI's pipeline impact?"
 **Answer:** "$10M in pipeline, or 10% of total pipeline"
@@ -119,11 +115,10 @@ AI Pipeline Share: 10%
 - Financial impact
 
 **Example:**
-```
+
 AI User LTV: $850
 Non-AI User LTV: $600
 LTV Lift: $250 (42% increase)
-```
 
 **Executive Question:** "Are AI users valuable?"
 **Answer:** "AI users have 42% higher LTV than average"
@@ -212,7 +207,6 @@ LTV Lift: $250 (42% increase)
 ### Using Both Types
 
 **Dashboard Structure:**
-```
 Leading Indicators (Predict Future):
 - AI Visibility: 25% (↑ 5% this month)
 - Qualified Sessions: 1,000/month (↑ 20%)
@@ -222,7 +216,6 @@ Lagging Indicators (Confirm Past):
 - AI Revenue: $500K this quarter (↑ 25%)
 - AI ROI: 400% (↑ 50 points)
 - AI User LTV: $850 (↑ 10%)
-```
 
 **Executive Narrative:**
 - **Leading:** "Our leading indicators show strong momentum"
@@ -278,7 +271,7 @@ Lagging Indicators (Confirm Past):
 ### Quarterly Executive Updates
 
 **Q1: Foundation Quarter**
-```
+
 Key Message: "We're building AI attribution capability"
 
 Metrics:
@@ -287,10 +280,9 @@ Metrics:
 - Early ROI: 200%
 
 Story: "We've built the foundation and are seeing early results"
-```
 
 **Q2: Validation Quarter**
-```
+
 Key Message: "AI attribution is proving value"
 
 Metrics:
@@ -299,10 +291,9 @@ Metrics:
 - AI efficiency: 2x better than paid search
 
 Story: "AI is delivering strong results and efficiency"
-```
 
 **Q3: Growth Quarter**
-```
+
 Key Message: "AI is scaling as a growth channel"
 
 Metrics:
@@ -311,10 +302,9 @@ Metrics:
 - AI pipeline: $5M
 
 Story: "AI is becoming a core growth driver"
-```
 
 **Q4: Maturity Quarter**
-```
+
 Key Message: "AI is a proven, scalable channel"
 
 Metrics:
@@ -323,7 +313,6 @@ Metrics:
 - AI market share: 10%
 
 Story: "AI has become a core, high-performing channel"
-```
 
 ---
 
@@ -417,7 +406,7 @@ Vanity metrics look impressive but don't drive business outcomes:
 ### Building Value-Focused Dashboards
 
 **Executive Dashboard (Value Metrics):**
-```
+
 Revenue Metrics:
 - AI-Attributed Revenue: $2.5M
 - AI Revenue Share: 5%
@@ -437,7 +426,6 @@ Trends:
 - Revenue: ↑ 25% QoQ
 - ROI: ↑ 50 points QoQ
 - Efficiency: ↑ 15% QoQ
-```
 
 **Avoid:**
 - AI mentions

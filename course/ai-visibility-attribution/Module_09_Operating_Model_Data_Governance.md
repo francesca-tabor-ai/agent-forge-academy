@@ -47,12 +47,11 @@ AI attribution requires collaboration across:
 - Ensure data quality
 
 **Collaboration Model:**
-```
+
 Marketing → Defines Requirements
 Analytics → Implements Tracking
 Marketing → Validates Results
 Analytics → Provides Ongoing Support
-```
 
 **Key Success Factors:**
 - Clear requirements
@@ -75,13 +74,12 @@ Analytics → Provides Ongoing Support
 - Advanced analytics
 
 **Collaboration Model:**
-```
+
 Marketing → Defines Attribution Needs
 Data Science → Builds Models
 Marketing → Validates Business Logic
 Data Science → Optimizes Models
 Marketing → Uses Insights
-```
 
 **Key Success Factors:**
 - Clear attribution requirements
@@ -141,13 +139,12 @@ AI attribution data must flow into:
 - AI conversion data
 
 **How to Integrate:**
-```
+
 AI Attribution System → API → CRM
 - Lead source: "AI-Originated"
 - AI Platform: "ChatGPT"
 - AI Intent Level: "High"
 - AI Attribution Weight: 30%
-```
 
 **Benefits:**
 - Sales sees AI influence
@@ -164,13 +161,12 @@ AI Attribution System → API → CRM
 - AI campaign performance
 
 **How to Integrate:**
-```
+
 AI Attribution System → API → Marketing Automation
 - Segment: "AI-Originated Users"
 - Behavior: "AI High Intent"
 - Conversion: "AI-Influenced Purchase"
 - Campaign: "AI Visibility Campaign"
-```
 
 **Benefits:**
 - Target AI-originated users
@@ -187,13 +183,12 @@ AI Attribution System → API → Marketing Automation
 - AI revenue data
 
 **How to Integrate:**
-```
+
 AI Attribution System → Data Layer → Analytics Platform
 - Event: "ai_originated_session"
 - Dimension: "ai_platform"
 - Metric: "ai_attributed_revenue"
 - Segment: "ai_influenced_users"
-```
 
 **Benefits:**
 - Unified reporting

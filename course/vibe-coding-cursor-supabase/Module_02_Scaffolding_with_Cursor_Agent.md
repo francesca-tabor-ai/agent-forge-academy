@@ -64,7 +64,6 @@ Please create a detailed build plan that includes:
 
 A good build plan includes:
 
-```markdown
 # Build Plan: [Feature Name]
 
 ## Overview
@@ -86,7 +85,6 @@ Brief description of what we're building
 3. ...
 
 ## File Structure
-```
 src/
   components/
     FeatureName/

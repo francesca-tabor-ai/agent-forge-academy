@@ -855,7 +855,6 @@ A comprehensive risk register that includes:
 
 ### Example Risk Register Structure
 
-```markdown
 # Risk Register: [System Name]
 
 ## System Overview

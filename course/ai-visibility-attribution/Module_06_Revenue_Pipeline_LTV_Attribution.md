@@ -38,10 +38,9 @@ Attributing revenue to AI is complex because:
 - Simple but may overclaim
 
 **Example:**
-```
+
 Journey: AI → Search → Email → Conversion ($1,000)
 AI Attribution: $1,000 (100%)
-```
 
 **Pros:**
 - Simple to calculate
@@ -66,10 +65,9 @@ AI Attribution: $1,000 (100%)
 - More realistic than full credit
 
 **Example:**
-```
+
 Journey: AI (30%) → Search (40%) → Email (30%) → Conversion ($1,000)
 AI Attribution: $300 (30%)
-```
 
 **Pros:**
 - More realistic
@@ -94,11 +92,10 @@ AI Attribution: $300 (30%)
 - Most conservative approach
 
 **Example:**
-```
+
 AI-Influenced Conversion: $1,000
 Non-AI Conversion (baseline): $800
 AI Incremental Value: $200 (20%)
-```
 
 **Pros:**
 - Most conservative and credible
@@ -123,11 +120,10 @@ AI Incremental Value: $200 (20%)
 - Balances realism with value recognition
 
 **Example:**
-```
+
 Journey: AI (assist) → Search (primary) → Conversion ($1,000)
 AI Attribution: $200 (20% assist credit)
 Search Attribution: $800 (80% primary credit)
-```
 
 **Pros:**
 - Recognizes AI's assist role
@@ -147,17 +143,16 @@ Search Attribution: $800 (80% primary credit)
 ### Choosing the Right Model
 
 **Decision Framework:**
-```
-Use Case | Recommended Model
----------|------------------
-Internal Advocacy | Full Credit (aggressive)
-Standard Reporting | Proportional Credit (balanced)
-Executive Dashboard | Proportional Credit (balanced)
-Board Presentation | Incremental Credit (conservative)
-CFO Review | Incremental Credit (conservative)
-Early-Stage Programs | Full Credit (aggressive)
-Mature Programs | Proportional Credit (balanced)
-```
+
+| Use Case | Recommended Model |
+|----------|------------------|
+| Internal Advocacy | Full Credit (aggressive) |
+| Standard Reporting | Proportional Credit (balanced) |
+| Executive Dashboard | Proportional Credit (balanced) |
+| Board Presentation | Incremental Credit (conservative) |
+| CFO Review | Incremental Credit (conservative) |
+| Early-Stage Programs | Full Credit (aggressive) |
+| Mature Programs | Proportional Credit (balanced) |
 
 ---
 
@@ -178,79 +173,68 @@ B2B sales cycles are long and complex:
 **Definition:** New pipeline created from AI-originated leads
 
 **Calculation:**
-```
-AI Pipeline Created = 
-  Sum of all opportunities created from AI-originated leads
 
-Example:
+AI Pipeline Created = Sum of all opportunities created from AI-originated leads
+
+**Example:**
 Month 1: 50 AI-originated leads
 Average Deal Size: $50,000
 Pipeline Created: 50 × $50,000 = $2,500,000
-```
 
 #### Metric 2: Pipeline Velocity
 
 **Definition:** How quickly AI-originated deals move through pipeline
 
 **Calculation:**
-```
-AI Pipeline Velocity = 
-  Average days from lead to closed-won for AI-originated deals
 
-Example:
+AI Pipeline Velocity = Average days from lead to closed-won for AI-originated deals
+
+**Example:**
 Non-AI Deals: 90 days average
 AI-Originated Deals: 60 days average
 Velocity Improvement: 33% faster
-```
 
 #### Metric 3: Win Rate
 
 **Definition:** % of AI-originated opportunities that close
 
 **Calculation:**
-```
-AI Win Rate = 
-  Closed-Won AI Opportunities / 
-  Total AI Opportunities
 
-Example:
+AI Win Rate = Closed-Won AI Opportunities / Total AI Opportunities
+
+**Example:**
 AI Opportunities: 50
 Closed-Won: 20
 Win Rate: 40% (vs. 25% for non-AI)
-```
 
 #### Metric 4: Average Deal Size
 
 **Definition:** Average value of AI-originated deals
 
 **Calculation:**
-```
-AI Average Deal Size = 
-  Total Revenue from AI Deals / 
-  Number of AI Deals
 
-Example:
+AI Average Deal Size = Total Revenue from AI Deals / Number of AI Deals
+
+**Example:**
 Total AI Revenue: $1,000,000
 Number of Deals: 20
 Average Deal Size: $50,000 (vs. $40,000 for non-AI)
-```
 
 ### Pipeline Attribution Model
 
 **Multi-Stage Attribution:**
-```
-Stage | AI Attribution Weight | Rationale
-------|----------------------|----------
-Lead Creation | 40% | AI creates qualified demand
-Qualification | 20% | AI pre-qualifies
-Opportunity Creation | 20% | AI influences opportunity
-Closed-Won | 20% | AI supports closing
+
+| Stage | AI Attribution Weight | Rationale |
+|-------|----------------------|-----------|
+| Lead Creation | 40% | AI creates qualified demand |
+| Qualification | 20% | AI pre-qualifies |
+| Opportunity Creation | 20% | AI influences opportunity |
+| Closed-Won | 20% | AI supports closing |
 
 Total: 100% across pipeline stages
-```
 
 **Example:**
-```
+
 AI-Originated Deal: $100,000
 Lead Creation: $100,000 × 40% = $40,000
 Qualification: $100,000 × 20% = $20,000
@@ -258,7 +242,6 @@ Opportunity: $100,000 × 20% = $20,000
 Closed-Won: $100,000 × 20% = $20,000
 
 Total AI Attribution: $100,000 (100% across stages)
-```
 
 ### Real-World B2B Example
 
