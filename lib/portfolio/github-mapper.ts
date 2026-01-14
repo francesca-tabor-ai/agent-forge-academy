@@ -17,6 +17,7 @@ export interface GitHubRepo {
   fork: boolean;
   archived: boolean;
   size: number; // Repository size in KB
+  default_branch?: string; // Default branch name (e.g., 'main', 'master')
 }
 
 export interface PortfolioProjectInput {

@@ -130,6 +130,7 @@ export function normalizeCourseMetadata(
     duration_weeks: durationWeeks,
     difficulty_level: difficultyLevel,
     is_published: isPublished,
+    industries: Array.isArray(raw.industries) ? raw.industries.map(String) : [],
     category: raw.category ? String(raw.category).trim() : undefined,
   };
 }

@@ -125,6 +125,7 @@ export function extractCourseMetadata(
       duration_weeks: durationWeeks,
       difficulty_level: difficultyLevel,
       is_published: true, // Assume published if in legacy metadata
+      industries: legacyMetadata.industries || [],
       category: legacyMetadata.category,
     };
 
@@ -152,6 +153,7 @@ export function extractCourseMetadata(
       duration_weeks: null,
       difficulty_level: null,
       is_published: false, // Not published by default if no metadata
+      industries: [], // Default to empty array if no metadata found
     },
   };
 }

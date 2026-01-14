@@ -185,7 +185,7 @@ export async function GET(request: NextRequest) {
             status: 'fail',
             message: `Server client created but operation failed: ${error.message}`,
             details: {
-              errorCode: error.statusCode,
+              errorCode: 'statusCode' in error ? (error as { statusCode?: number }).statusCode : undefined,
             },
           });
         } else {

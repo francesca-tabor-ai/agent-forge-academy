@@ -29,19 +29,15 @@ export async function GET(request: NextRequest) {
       const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
       const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-      const missingVars: string[] = [];
-      if (!supabaseUrl) missingVars.push('NEXT_PUBLIC_SUPABASE_URL');
-      if (!supabaseAnonKey) missingVars.push('NEXT_PUBLIC_SUPABASE_ANON_KEY');
-      if (!supabaseServiceKey) missingVars.push('SUPABASE_SERVICE_ROLE_KEY');
-
-      if (missingVars.length > 0) {
+      // Runtime guard: ensure TypeScript knows these are strings
+      if (!supabaseUrl || !supabaseAnonKey) {
         checks.push({
           name: 'Supabase Environment Variables',
           status: 'fail',
-          message: `Missing required env vars: ${missingVars.join(', ')}`,
+          message: `Missing required env vars: ${!supabaseUrl ? 'NEXT_PUBLIC_SUPABASE_URL' : ''}${!supabaseUrl && !supabaseAnonKey ? ', ' : ''}${!supabaseAnonKey ? 'NEXT_PUBLIC_SUPABASE_ANON_KEY' : ''}`,
         });
       } else {
-        // Check for trailing spaces (common issue)
+        // Safe now: both are strings after the guard
         const urlHasTrailingSpace = supabaseUrl.trim() !== supabaseUrl;
         const keyHasTrailingSpace = supabaseAnonKey.trim() !== supabaseAnonKey;
         
@@ -55,11 +51,20 @@ export async function GET(request: NextRequest) {
           // Validate URL format
           try {
             new URL(supabaseUrl);
-            checks.push({
-              name: 'Supabase Environment Variables',
-              status: 'pass',
-              message: 'All required Supabase env vars are present and valid',
-            });
+            // Check if service key is also present
+            if (!supabaseServiceKey) {
+              checks.push({
+                name: 'Supabase Environment Variables',
+                status: 'fail',
+                message: 'Missing SUPABASE_SERVICE_ROLE_KEY',
+              });
+            } else {
+              checks.push({
+                name: 'Supabase Environment Variables',
+                status: 'pass',
+                message: 'All required Supabase env vars are present and valid',
+              });
+            }
           } catch {
             checks.push({
               name: 'Supabase Environment Variables',
