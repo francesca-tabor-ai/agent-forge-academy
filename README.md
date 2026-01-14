@@ -73,7 +73,13 @@ agentforge/
 
 ## 4. Content System (Lessons & Media)
 
-### 4.1 Lessons
+### 4.1 Content Authoring Guidelines
+
+**Important:** Before authoring content, read the [Content Authoring Guidelines](documentation/CONTENT_AUTHORING_GUIDELINES.md).
+
+**Core Rule:** "Code blocks are for code, not examples. If it's meant to be read, it must render."
+
+### 4.2 Lessons
 
 Lessons are written as Markdown files with frontmatter.
 
@@ -95,7 +101,7 @@ media_refs:
 
 Lessons are **not** stored in Supabase.
 
-### 4.2 Media Registry
+### 4.3 Media Registry
 
 All external content is registered centrally:
 
