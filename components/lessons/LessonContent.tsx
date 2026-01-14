@@ -9,6 +9,150 @@ interface LessonContentProps {
   content: string;
 }
 
+/**
+ * Determines if a code block contains real executable code vs conceptual content.
+ * 
+ * A code block is considered "real code" if it contains:
+ * - Executable code (TypeScript, JavaScript, Python, SQL, Bash, etc.)
+ * - Structured machine-readable data (JSON, YAML)
+ * - CLI commands
+ * 
+ * A code block is NOT real code if it contains:
+ * - Documentation examples
+ * - Spec templates
+ * - Planning outlines
+ * - Checklists
+ * - Conceptual models or prose
+ * - Workflow diagrams (arrows, flowcharts)
+ * - Conversational examples
+ */
+function isRealCode(content: string, language?: string): boolean {
+  const trimmed = content.trim();
+  if (!trimmed) return false;
+
+  // FIRST: Check for conceptual content patterns (NOT real code)
+  // These patterns override language tags - if it looks like conceptual content, it's not code
+  const conceptualPatterns = [
+    // Workflow diagrams with arrows
+    /→|↓|↑|←/,
+    // Conversational patterns
+    /^(Developer|User|AI|System|Marketing|Analytics|Data Science):\s*["']?/m,
+    // Question-answer patterns
+    /^(Question|Answer|Q|A):\s*/m,
+    // Simple numbered outlines (not code)
+    /^\s*\d+\.\s+[A-Z][^:]*$/m,
+    // Simple text with colons that looks like prose (not YAML/config)
+    /^[A-Z][a-z]+ [^:]+:\s*[^:\n]+$/m,
+  ];
+
+  const hasConceptualPattern = conceptualPatterns.some(pattern => pattern.test(trimmed));
+  if (hasConceptualPattern) {
+    return false;
+  }
+
+  // If language is explicitly specified and is a real programming language, trust it
+  // BUT only if it's not markdown (markdown examples should be checked more carefully)
+  const realCodeLanguages = [
+    'typescript', 'ts', 'javascript', 'js', 'jsx', 'tsx',
+    'python', 'py', 'sql', 'bash', 'sh', 'shell', 'zsh',
+    'json', 'yaml', 'yml', 'xml', 'html', 'css', 'scss',
+    'go', 'rust', 'java', 'cpp', 'c', 'csharp', 'cs',
+    'php', 'ruby', 'rb', 'swift', 'kotlin', 'dart',
+    'r', 'matlab', 'perl', 'lua', 'scala', 'clojure',
+    'dockerfile', 'makefile', 'ini', 'toml', 'graphql',
+  ];
+  
+  // For markdown, check if it's actually showing markdown syntax vs just content
+  if (language && (language.toLowerCase() === 'markdown' || language.toLowerCase() === 'md')) {
+    // If it contains markdown syntax markers (```, **, #, [], etc.), it's showing syntax
+    const hasMarkdownSyntax = /```|^\s*#{1,6}\s+|^\s*[-*+]\s+|^\s*\d+\.\s+|\[.*\]\(.*\)|\*\*.*\*\*|`[^`]+`/.test(trimmed);
+    if (hasMarkdownSyntax) {
+      return true; // It's showing markdown syntax, keep as code
+    }
+    // Otherwise it's just content in a markdown block, render as content
+    return false;
+  }
+  
+  if (language && realCodeLanguages.includes(language.toLowerCase())) {
+    return true;
+  }
+
+  // Check for JSON structure
+  if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
+    try {
+      JSON.parse(trimmed);
+      return true;
+    } catch {
+      // Not valid JSON, continue checking
+    }
+  }
+
+  // Check for YAML-like structure (key: value patterns)
+  if (trimmed.includes(':') && trimmed.split('\n').filter(l => l.includes(':')).length > 2) {
+    const yamlPattern = /^\s*[\w\-]+\s*:\s*.+$/m;
+    if (yamlPattern.test(trimmed)) {
+      return true;
+    }
+  }
+
+  // Check for code-like patterns
+  const codePatterns = [
+    // Function definitions
+    /\b(function|def|class|interface|type|const|let|var|export|import|from|require)\s+\w+/,
+    // Operators and expressions
+    /[=<>!+\-*/%&|]+\s*\w+|\w+\s*[=<>!+\-*/%&|]+/,
+    // Control structures
+    /\b(if|else|for|while|switch|case|try|catch|async|await|return|break|continue)\b/,
+    // SQL keywords
+    /\b(SELECT|INSERT|UPDATE|DELETE|CREATE|ALTER|DROP|FROM|WHERE|JOIN|INNER|OUTER)\b/i,
+    // Shell commands
+    /^\s*\$|^\s*#|^\s*>\s*\w+/,
+    // Type annotations
+    /:\s*(string|number|boolean|object|array|void|any|unknown)/,
+    // Method calls
+    /\w+\([^)]*\)/,
+    // Array/object access
+    /\[.*\]|\.\w+/,
+  ];
+
+  const hasCodePattern = codePatterns.some(pattern => pattern.test(trimmed));
+  if (hasCodePattern) {
+    return true;
+  }
+
+  // If content is very short and doesn't look like code, it's probably not code
+  if (trimmed.length < 20 && !trimmed.includes('{') && !trimmed.includes('(')) {
+    return false;
+  }
+
+  // Default: if we can't determine, assume it's NOT real code (safer to render as content)
+  return false;
+}
+
+/**
+ * Preprocesses markdown content to convert non-code code blocks to regular markdown.
+ * This ensures only real executable code appears in code blocks.
+ */
+function preprocessMarkdown(content: string): string {
+  // Match code blocks with optional language identifier
+  // Handles: ```lang\ncontent```, ```lang content```, ```\ncontent```, ```content```
+  const codeBlockRegex = /```(\w+)?\s*\n?([\s\S]*?)```/g;
+  
+  return content.replace(codeBlockRegex, (match, language, codeContent) => {
+    // Clean up the code content (remove leading/trailing whitespace)
+    const cleanedContent = codeContent.trim();
+    
+    if (isRealCode(cleanedContent, language)) {
+      // Keep as code block
+      return match;
+    } else {
+      // Convert to regular markdown (remove code fence, preserve content)
+      // The content will be rendered as regular markdown by ReactMarkdown
+      return cleanedContent;
+    }
+  });
+}
+
 interface TopicSection {
   title: string;
   architecture: string[];
@@ -235,12 +379,17 @@ function TopicCard({ topic }: { topic: TopicSection }) {
   const hasTwoColumns = hasArchitecture && hasResults;
   
   // Clean up architecture and results content
-  const architectureContent = topic.architecture
+  const rawArchitectureContent = topic.architecture
     .filter(l => l.trim())
     .join('\n');
+  const architectureContent = preprocessMarkdown(rawArchitectureContent);
+  
   const resultsLines = topic.results
     .filter(l => l.trim() && l.startsWith('-'))
     .map(l => l.substring(1).trim());
+  
+  const rawOtherContent = topic.otherContent.join('\n');
+  const otherContent = preprocessMarkdown(rawOtherContent);
   
   return (
     <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 mb-6">
@@ -290,7 +439,7 @@ function TopicCard({ topic }: { topic: TopicSection }) {
           {topic.otherContent.length > 0 && (
             <div className="text-gray-700 text-base" style={{ lineHeight: '1.6' }}>
               <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
-                {topic.otherContent.join('\n')}
+                {otherContent}
               </ReactMarkdown>
             </div>
           )}
@@ -301,7 +450,9 @@ function TopicCard({ topic }: { topic: TopicSection }) {
 }
 
 export default function LessonContent({ content }: LessonContentProps) {
-  const { beforeTopics, topics, afterTopics } = parseTopics(content);
+  // Preprocess content to convert non-code code blocks to regular markdown
+  const preprocessedContent = preprocessMarkdown(content);
+  const { beforeTopics, topics, afterTopics } = parseTopics(preprocessedContent);
   
   return (
     <div className="lesson-content space-y-8">
