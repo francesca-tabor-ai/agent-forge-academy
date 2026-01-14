@@ -2,6 +2,8 @@
 
 This document outlines the rules and best practices for authoring lesson content in the Agent Forge Academy.
 
+> **📋 Quick Link:** See [QA Checklist](QA_CHECKLIST.md) for a step-by-step verification checklist before publishing.
+
 ## Core Principle
 
 > **"Code blocks are for code, not examples. If it's meant to be read, it must render."**
@@ -146,6 +148,57 @@ def calculate_revenue(ai_revenue, total_revenue):
 ```
 ````
 
+## QA Checklist Before Publishing a Lesson
+
+**Use this checklist before publishing any lesson to ensure content quality:**
+
+### Code Block Verification
+
+- [ ] **No prose appears in monospaced blocks**
+  - Check: All code blocks contain only executable code or structured data
+  - Fix: Remove code fences from prose, examples, and conceptual content
+
+- [ ] **Headings are always rendered, never fenced**
+  - Check: No code blocks contain Markdown headings (`#`, `##`, `###`)
+  - Fix: Remove code fences and render headings as normal markdown
+
+- [ ] **Lists render as lists, not code**
+  - Check: Bullet points and numbered lists are not in code blocks
+  - Fix: Use markdown list syntax (`-` or `1.`) outside of code blocks
+
+- [ ] **Only executable or machine-readable content is fenced**
+  - Check: Every code block contains real code (TypeScript, Python, SQL, etc.) or structured data (JSON, YAML)
+  - Fix: Unfence any content that doesn't meet this criteria
+
+### Content Guard Verification
+
+- [ ] **Run automated content guard:**
+  ```bash
+  npm run lint:content
+  ```
+  - Must pass with exit code 0 (no violations)
+  - Fix any reported violations before publishing
+
+### Visual Review
+
+- [ ] **Conceptual content renders as readable Markdown**
+  - Preview the lesson and verify all prose, examples, and templates render correctly
+  - No content should appear in monospaced code blocks unless it's actual code
+
+- [ ] **Code blocks contain only real code**
+  - Verify all fenced blocks have appropriate language tags
+  - Verify all fenced blocks contain executable code or structured data
+
+- [ ] **No ` ```markdown ` blocks exist unless explicitly teaching Markdown syntax**
+  - Check: If lesson is not about Markdown, no ```markdown blocks should exist
+  - Fix: Remove ```markdown fences and render as normal markdown
+
+- [ ] **Lessons are visually scannable and readable**
+  - Headings are properly formatted and visible
+  - Lists are properly formatted
+  - Code examples are clearly distinguished from content
+  - Templates are clearly labeled
+
 ## Quick Checklist
 
 Before publishing content, ask:
@@ -171,3 +224,25 @@ If you're unsure whether something should be a code block:
 3. **If yes:** Use code block with appropriate language tag
 
 Remember: **If it's meant to be read, it must render.**
+
+## Definition of Done
+
+A lesson is ready to publish when:
+
+- ✅ **Conceptual content renders as readable Markdown**
+  - All prose, examples, and templates are rendered as normal markdown
+  - No conceptual content appears in code blocks
+
+- ✅ **Code blocks contain only real code**
+  - All fenced blocks contain executable code (TypeScript, Python, SQL, etc.) or structured data (JSON, YAML)
+  - All code blocks have appropriate language tags
+
+- ✅ **No ` ```markdown ` blocks exist unless explicitly teaching Markdown syntax**
+  - If the lesson is not about Markdown, no ```markdown blocks should exist
+  - Templates use Template callouts instead
+
+- ✅ **Lessons are visually scannable and readable**
+  - Headings are properly formatted and visible
+  - Lists render as lists, not code
+  - Code examples are clearly distinguished from content
+  - Content flows naturally and is easy to read
