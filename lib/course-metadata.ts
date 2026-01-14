@@ -1,3 +1,5 @@
+import { Industry } from './utils/industries';
+
 // Course metadata for dashboard course cards
 export interface CourseMetadata {
   slug: string;
@@ -7,6 +9,7 @@ export interface CourseMetadata {
   build: string;
   bestFor: string;
   time: string;
+  industries: Industry[];
 }
 
 export const courseMetadata: Record<string, CourseMetadata> = {
@@ -18,6 +21,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     build: 'A CI/CD pipeline with eval gates, prompt/version control, model routing, and rollout strategy.',
     bestFor: 'Engineers and tech leads owning reliability and release velocity.',
     time: '~4–6 hours',
+    industries: ['SaaS', 'DevTools'],
   },
   'spec-driven-development': {
     slug: 'spec-driven-development',
@@ -27,6 +31,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     build: 'A spec template + workflow (requirements → acceptance tests → tasks → implementation).',
     bestFor: 'PMs, engineers, founders who want fewer misunderstandings and faster iteration.',
     time: '~3–5 hours',
+    industries: ['SaaS', 'DevTools'],
   },
   'vibe-coding-cursor-supabase': {
     slug: 'vibe-coding-cursor-supabase',
@@ -36,6 +41,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     build: 'A Supabase-backed app (auth, DB, storage, edge functions) using Cursor for iterative coding.',
     bestFor: 'Builders shipping MVPs and internal tools.',
     time: '~4–8 hours',
+    industries: ['SaaS', 'DevTools'],
   },
   'prompt-engineering': {
     slug: 'prompt-engineering',
@@ -45,6 +51,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     build: 'A prompt library with patterns (role/task/context/output), test cases, and failure-mode checks.',
     bestFor: 'Anyone shipping LLM features into production.',
     time: '~2–4 hours',
+    industries: ['SaaS', 'DevTools'],
   },
   'agentic-rag': {
     slug: 'agentic-rag',
@@ -54,6 +61,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     build: 'Complete agentic RAG system with CRAG, Adaptive RAG, Graph-based RAG, specialized frameworks, evaluation metrics, security, and production deployment.',
     bestFor: 'AI engineers, ML engineers, and teams building enterprise knowledge assistants with autonomous reasoning capabilities.',
     time: '~7 weeks',
+    industries: ['SaaS', 'DevTools', 'Healthcare'],
   },
   'amazon-rufus-optimisation': {
     slug: 'amazon-rufus-optimisation',
@@ -63,6 +71,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     build: 'A listing optimisation checklist + experimentation loop (titles, bullets, A+ content, Q&A signals).',
     bestFor: 'E-commerce operators and growth teams on Amazon.',
     time: '~2–4 hours',
+    industries: ['E-commerce', 'Marketplaces', 'Retail / CPG'],
   },
   'reddit-ai-visibility': {
     slug: 'reddit-ai-visibility',
@@ -72,6 +81,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     build: 'A playbook for community-first visibility (topic mapping, contribution cadence, measurement).',
     bestFor: 'Founders and marketers targeting niche audiences.',
     time: '~2–4 hours',
+    industries: ['Media & Publishing', 'SaaS'],
   },
   'seo-to-aeo': {
     slug: 'seo-to-aeo',
@@ -81,6 +91,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     build: 'Content and structure patterns that improve citation/answer pickup (schema, Q&A blocks, entity coverage).',
     bestFor: 'Content, SEO, and product marketing teams.',
     time: '~3–6 hours',
+    industries: ['Media & Publishing', 'SaaS', 'E-commerce'],
   },
   'hyper-personalised-marketing-advertising': {
     slug: 'hyper-personalised-marketing-advertising',
@@ -90,6 +101,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     build: 'A segmentation + message matrix, plus guardrails for frequency, consent, and performance.',
     bestFor: 'Performance marketers and lifecycle teams.',
     time: '~3–6 hours',
+    industries: ['E-commerce', 'SaaS', 'Retail / CPG'],
   },
   'ai-visibility': {
     slug: 'ai-visibility',
@@ -99,6 +111,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     build: 'Complete AI visibility system with llms.txt, structured data, content engineering (Inverted Pyramid 2.0), entity authority, and hallucination defense.',
     bestFor: 'SEO specialists, content marketers, and technical SEOs transitioning to AI visibility optimization.',
     time: '~6–8 weeks',
+    industries: ['Media & Publishing', 'SaaS', 'E-commerce'],
   },
   'llm-first-websites': {
     slug: 'llm-first-websites',
@@ -108,6 +121,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     build: 'Complete RX system with ontology/taxonomy, intent-driven APIs, safety boundaries, observability, and governance frameworks.',
     bestFor: 'Web developers, product managers, and data architects building machine-first experiences.',
     time: '~6–7 weeks',
+    industries: ['SaaS', 'DevTools', 'Media & Publishing'],
   },
   'agentic-commerce': {
     slug: 'agentic-commerce',
@@ -117,6 +131,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     build: 'Complete agentic commerce implementation with ACP protocols, AEO optimization, trust frameworks, organizational design, compliance, and bias auditing.',
     bestFor: 'E-commerce leaders, product managers, marketing directors, CAOs, and strategists building agent-mediated commerce experiences.',
     time: '~7–8 weeks',
+    industries: ['E-commerce', 'Marketplaces', 'Retail / CPG'],
   },
   'conversational-commerce-intelligence': {
     slug: 'conversational-commerce-intelligence',
@@ -126,6 +141,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     build: 'An insight pipeline (intent → objections → product gaps → next best action → reporting).',
     bestFor: 'Sales, CX, and product teams.',
     time: '~4–8 hours',
+    industries: ['E-commerce', 'B2B Sales / RevOps', 'SaaS'],
   },
   'ai-recommender-systems': {
     slug: 'ai-recommender-systems',
@@ -135,6 +151,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     build: 'A recommender blueprint (signals, ranking, exploration, evaluation, cold start handling).',
     bestFor: 'Product, data, and growth teams.',
     time: '~6–12 hours',
+    industries: ['E-commerce', 'Marketplaces', 'Media & Publishing'],
   },
   '3d-for-ecommerce': {
     slug: '3d-for-ecommerce',
@@ -144,6 +161,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     build: 'Full-stack 3D commerce platform with MERN stack, Three.js, Amazon SP-API integration, video shopping infrastructure, and enterprise scaling.',
     bestFor: 'E-commerce developers, platform architects, Amazon sellers, and product managers building immersive commerce experiences.',
     time: '~6–8 weeks',
+    industries: ['E-commerce', 'Retail / CPG', 'Marketplaces'],
   },
   'ai-driven-video-synthetic-media': {
     slug: 'ai-driven-video-synthetic-media',
@@ -153,6 +171,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     build: 'A production pipeline (script → storyboard → generation → edit → QC → distribution).',
     bestFor: 'Content teams and marketers.',
     time: '~3–6 hours',
+    industries: ['Media & Publishing', 'E-commerce'],
   },
   'ai-content-pipelines': {
     slug: 'ai-content-pipelines',
@@ -162,6 +181,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     build: 'An end-to-end pipeline (brief → research → draft → review → publish → refresh) with QA gates and attribution.',
     bestFor: 'Teams producing content weekly at volume.',
     time: '~4–10 hours',
+    industries: ['Media & Publishing', 'SaaS'],
   },
   'creative-automation-templatization': {
     slug: 'creative-automation-templatization',
@@ -171,6 +191,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     build: 'Complete creative automation system with modular templates, data-driven personalization, workflow integration, quality control, and performance optimization.',
     bestFor: 'Marketing operations teams, designers, and creative operations professionals scaling creative production.',
     time: '~12 weeks',
+    industries: ['Media & Publishing', 'E-commerce', 'Retail / CPG'],
   },
   'ai-governance-eu-ai-act': {
     slug: 'ai-governance-eu-ai-act',
@@ -180,6 +201,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     build: 'A governance checklist (risk classification, documentation, human oversight, monitoring, incident response).',
     bestFor: 'Operators, compliance, product leaders in the EU orbit.',
     time: '~3–6 hours',
+    industries: ['Legal & Compliance', 'SaaS', 'Healthcare', 'Fintech'],
   },
   'multi-agent-systems': {
     slug: 'multi-agent-systems',
@@ -189,6 +211,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     build: 'Complete multi-agent system with LangGraph, CrewAI, AutoGen, Kubernetes deployment, security, and monitoring.',
     bestFor: 'Engineers and architects building scalable agent systems.',
     time: '~12 weeks',
+    industries: ['SaaS', 'DevTools'],
   },
   'problem-shooting-change-drift-failure-multi-agent-systems': {
     slug: 'problem-shooting-change-drift-failure-multi-agent-systems',
@@ -198,6 +221,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     build: 'Production-first course on failure-tolerant agent systems with drift detection, tool contracts, replay systems, cost optimization, and resumable state management.',
     bestFor: 'Engineers and architects building production-ready multi-agent systems that must handle change, drift, and failure gracefully.',
     time: '~12 weeks',
+    industries: ['SaaS', 'DevTools'],
   },
   'multi-agent-sales-system': {
     slug: 'multi-agent-sales-system',
@@ -207,6 +231,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     build: 'Complete autonomous sales organization with CSO agent, multichannel outreach teams, self-healing RevOps, research agents, self-updating enablement, and governance framework.',
     bestFor: 'Sales leaders done with hiring cycles, RevOps and GTM operators, founders scaling without headcount, and AI builders designing real business systems.',
     time: '~8 weeks',
+    industries: ['B2B Sales / RevOps', 'SaaS'],
   },
   'building-automated-ecommerce-creative-at-scale': {
     slug: 'building-automated-ecommerce-creative-at-scale',
@@ -216,6 +241,27 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     build: 'Complete automated e-commerce creative system with creative intelligence layer, art direction system, product consistency engine, bundle logic, loop automation, and distribution-ready outputs.',
     bestFor: 'E-commerce operators scaling creative production, marketing operations teams automating visual content, designers transitioning to creative systems, and brand managers maintaining consistency at scale.',
     time: '~8 weeks',
+    industries: ['E-commerce', 'Retail / CPG', 'Media & Publishing'],
+  },
+  'ai-native-go-to-market-systems': {
+    slug: 'ai-native-go-to-market-systems',
+    title: 'AI-Native Go-To-Market Systems, for GTM Engineers',
+    category: 'GTM & Revenue Operations',
+    outcome: 'Design, build, and iterate on AI-native GTM engines that support Sales, Marketing, and CS at scale.',
+    build: 'Complete AI-native GTM system with HubSpot automation, data enrichment, event-driven workflows, AI-powered classification and routing, outbound sequencing, analytics dashboards, and end-to-end monitoring.',
+    bestFor: 'Early-career operators (1–4 years) in RevOps, Sales Ops, Growth Ops, Marketing Ops, or Business Systems who want to become builders of modern GTM systems.',
+    time: '~8–10 weeks',
+    industries: ['B2B Sales / RevOps', 'SaaS'],
+  },
+  'healthcare-agentic-ai-voice-systems': {
+    slug: 'healthcare-agentic-ai-voice-systems',
+    title: 'Healthcare Agentic AI & Voice Systems',
+    category: 'Agentic Systems',
+    outcome: 'Design, build, operate, and defend agentic and voice-based AI systems that are safe, auditable, and trusted in real hospital environments.',
+    build: 'Complete production-grade healthcare AI system with safety-first architecture, clinical workflow integration, bounded autonomy agents, resilient voice pipelines, FMEA analysis, data governance, safe LLM architectures, comprehensive observability, and hospital deployment strategies.',
+    bestFor: 'Senior Software Engineers, AI Engineers, or Platform Engineers working (or preparing to work) in healthcare or other safety-critical, regulated environments.',
+    time: '~10–14 weeks',
+    industries: ['Healthcare', 'Legal & Compliance'],
   },
 };
 
