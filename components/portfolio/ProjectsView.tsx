@@ -59,7 +59,7 @@ export function ProjectsView({ projects, onFeaturedUpdate }: ProjectsViewProps) 
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-semibold text-gray-900">Experience</h2>
+        <h2 className="text-xl font-semibold text-gray-900">Projects & Experience</h2>
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1 border border-gray-300 rounded-md overflow-hidden">
             <button
@@ -113,7 +113,7 @@ export function ProjectsView({ projects, onFeaturedUpdate }: ProjectsViewProps) 
           ))}
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-3">
           {projects.map((project) => (
             <ProjectCard
               key={project.id}
