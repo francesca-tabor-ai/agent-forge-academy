@@ -181,7 +181,9 @@ email_action: "Conduct a production readiness review for an ML system with check
 - Review frequency
 
 **Example SLA:**
-```markdown
+
+> **Template: Service SLA**
+
 ## Fraud Detection Service SLA
 
 ### Availability
@@ -198,16 +200,14 @@ email_action: "Conduct a production readiness review for an ML system with check
 - Target: > 95% accuracy
 - Measurement: Weekly
 - Consequence: Model retraining required
-```
 
 ### Error Budgets
 
 **Definition:** Acceptable amount of unreliability.
 
 **Calculation:**
-```
+
 Error Budget = 100% - SLO
-```
 
 **Example:**
 - SLO: 99.9% availability
@@ -280,7 +280,8 @@ Error Budget = 100% - SLO
 
 ### Review Template
 
-```markdown
+> **Template: Production Readiness Review**
+
 # Production Readiness Review
 
 ## System Overview
@@ -336,7 +337,8 @@ Error Budget = 100% - SLO
 
 ### Runbook Template
 
-```markdown
+> **Template: Service Runbook**
+
 # [Service Name] Runbook
 
 ## Overview

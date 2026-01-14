@@ -72,7 +72,9 @@ The capstone is divided into **5 phases**, each building on the previous:
 - Key assumptions
 
 **Example Structure:**
-```markdown
+
+> **Template: Problem Definition**
+
 # Problem Definition: Customer Churn Prediction
 
 ## Business Context
@@ -93,7 +95,6 @@ Currently, we only know someone churned after they've left.
 - Data: 12 months of historical data
 - Timeline: 2 weeks for MVP
 - Resources: Single data scientist
-```
 
 #### 2. Data Exploration Report
 

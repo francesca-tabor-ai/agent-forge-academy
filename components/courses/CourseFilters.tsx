@@ -352,84 +352,83 @@ export function CourseFilters({ courses, onFilteredCoursesChange }: CourseFilter
 
   return (
     <div className="space-y-4">
-        {/* Search Bar and Sort - Top Bar */}
-        <div className="flex items-center gap-3">
-          <div className="flex-1">
-            <input
-              type="text"
-              placeholder="Search courses by title, track, or 'Best For'..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent"
-            />
-          </div>
-          <div className="flex-shrink-0">
-            <label htmlFor="sort-select" className="sr-only">
-              Sort by
-            </label>
-            <select
-              id="sort-select"
-              value={sort}
-              onChange={(e) => setSort(e.target.value)}
-              className="px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent bg-white"
-            >
-              {SORT_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
+      {/* Search Bar and Sort - Top Bar */}
+      <div className="flex items-center gap-3">
+        <div className="flex-1">
+          <input
+            type="text"
+            placeholder="Search courses by title, track, or 'Best For'..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent"
+          />
         </div>
-
-        {/* Active Filter Chips */}
-        {activeFilterChips.length > 0 && (
-          <div className="flex flex-wrap gap-2">
-            {activeFilterChips.map((chip, index) => (
-              <span
-                key={index}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-brand-light/10 text-brand-light text-xs font-medium rounded-full border border-brand-light/20"
-              >
-                {chip.label}
-                <button
-                  onClick={chip.onRemove}
-                  className="hover:text-brand-light/70 text-base leading-none focus:outline-none transition-colors ml-0.5"
-                  aria-label={`Remove ${chip.label}`}
-                  type="button"
-                >
-                  ×
-                </button>
-              </span>
+        <div className="flex-shrink-0">
+          <label htmlFor="sort-select" className="sr-only">
+            Sort by
+          </label>
+          <select
+            id="sort-select"
+            value={sort}
+            onChange={(e) => setSort(e.target.value)}
+            className="px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent bg-white"
+          >
+            {SORT_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
             ))}
-          </div>
-        )}
+          </select>
+        </div>
+      </div>
 
-        {/* Filters Header with Count and Clear All */}
-        <div className="flex items-center justify-between">
+      {/* Active Filter Chips */}
+      {activeFilterChips.length > 0 && (
+        <div className="flex flex-wrap gap-2">
+          {activeFilterChips.map((chip, index) => (
+            <span
+              key={index}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-brand-light/10 text-brand-light text-xs font-medium rounded-full border border-brand-light/20"
+            >
+              {chip.label}
+              <button
+                onClick={chip.onRemove}
+                className="hover:text-brand-light/70 text-base leading-none focus:outline-none transition-colors ml-0.5"
+                aria-label={`Remove ${chip.label}`}
+                type="button"
+              >
+                ×
+              </button>
+            </span>
+          ))}
+        </div>
+      )}
+
+      {/* Filters Header with Count and Clear All */}
+      <div className="flex items-center justify-between">
+        <button
+          type="button"
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-gray-900"
+        >
+          <span>Filters {activeFilterCount > 0 && `(${activeFilterCount})`}</span>
+          <span>{isExpanded ? '▲' : '▼'}</span>
+        </button>
+        {hasActiveFilters && (
           <button
             type="button"
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-gray-900"
+            onClick={clearFilters}
+            className="text-sm text-gray-600 hover:text-gray-900 underline"
           >
-            <span>Filters {activeFilterCount > 0 && `(${activeFilterCount})`}</span>
-            <span>{isExpanded ? '▲' : '▼'}</span>
+            Clear all
           </button>
-          {hasActiveFilters && (
-            <button
-              type="button"
-              onClick={clearFilters}
-              className="text-sm text-gray-600 hover:text-gray-900 underline"
-            >
-              Clear all
-            </button>
-          )}
-        </div>
+        )}
+      </div>
 
-        {/* Expandable Filters */}
-        <div>
-
-          {isExpanded && (
-            <div className="mt-4 space-y-4 pt-4 border-t border-gray-200">
+      {/* Expandable Filters */}
+      <div>
+        {isExpanded && (
+          <div className="mt-4 space-y-4 pt-4 border-t border-gray-200">
               {/* Tracks (Multi-select) */}
               <div>
                 <label className="block text-xs font-medium text-gray-700 mb-2">Track</label>
@@ -535,13 +534,12 @@ export function CourseFilters({ courses, onFilteredCoursesChange }: CourseFilter
                 </div>
               </div>
             </div>
-          )}
-        </div>
+        )}
+      </div>
 
-        {/* Results Count */}
-        <div className="text-sm text-gray-600">
-          Showing {filteredCourses.length} of {courses.length} courses
-        </div>
+      {/* Results Count */}
+      <div className="text-sm text-gray-600">
+        Showing {filteredCourses.length} of {courses.length} courses
       </div>
     </div>
   );

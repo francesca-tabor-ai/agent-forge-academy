@@ -426,7 +426,9 @@ def predict(features):
 - What processes do we need?
 
 **Example Postmortem:**
-```markdown
+
+> **Template: Incident Postmortem**
+
 # Incident: Model Performance Degradation
 
 ## Executive Summary

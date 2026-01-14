@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import Link from 'next/link';
-import ReactMarkdown from 'react-markdown';
+import { cleanBio, getBioPreview } from '@/lib/portfolio/cleanBio';
 
 interface AboutSectionProps {
   bio?: string | null;
@@ -11,9 +11,22 @@ interface AboutSectionProps {
 export function AboutSection({ bio }: AboutSectionProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   
-  const bioNeedsExpansion = bio && bio.length > 200;
+  // Clean and format the bio
+  const cleanedBio = useMemo(() => {
+    if (!bio) return null;
+    return cleanBio(bio);
+  }, [bio]);
 
-  if (!bio) {
+  // Get preview (2-4 lines)
+  const previewBio = useMemo(() => {
+    if (!cleanedBio) return null;
+    return getBioPreview(cleanedBio, 3);
+  }, [cleanedBio]);
+
+  // Check if bio needs expansion
+  const needsExpansion = cleanedBio && previewBio && cleanedBio.length > previewBio.length;
+
+  if (!bio || !cleanedBio) {
     return (
       <section className="bg-white border border-gray-200 rounded-lg p-6">
         <div className="flex items-center justify-between mb-4">
@@ -40,6 +53,9 @@ export function AboutSection({ bio }: AboutSectionProps) {
     );
   }
 
+  // Check if bio is in bullet format
+  const isBulletFormat = cleanedBio.includes('•') || cleanedBio.split('\n').some(line => /^[-•*]\s/.test(line));
+
   return (
     <section className="bg-white border border-gray-200 rounded-lg p-6">
       <div className="flex items-center justify-between mb-4">
@@ -51,57 +67,47 @@ export function AboutSection({ bio }: AboutSectionProps) {
           Edit
         </Link>
       </div>
-      <div className={`prose prose-sm max-w-none transition-all duration-300 ${
-        !isExpanded && bioNeedsExpansion ? 'line-clamp-4' : ''
-      }`} style={!isExpanded && bioNeedsExpansion ? { WebkitLineClamp: 4 } : undefined}>
-        <ReactMarkdown
-          components={{
-            p: ({ children }) => <p className="mb-3 text-sm text-gray-700 leading-relaxed">{children}</p>,
-            h1: ({ children }) => <h1 className="text-base font-bold mb-2 text-gray-900">{children}</h1>,
-            h2: ({ children }) => <h2 className="text-sm font-semibold mb-2 text-gray-900">{children}</h2>,
-            h3: ({ children }) => <h3 className="text-xs font-semibold mb-1 text-gray-900">{children}</h3>,
-            ul: ({ children }) => <ul className="list-disc list-inside mb-2 space-y-1 text-sm">{children}</ul>,
-            ol: ({ children }) => <ol className="list-decimal list-inside mb-2 space-y-1 text-sm">{children}</ol>,
-            li: ({ children }) => <li className="text-sm text-gray-700">{children}</li>,
-            strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
-            em: ({ children }) => <em className="italic">{children}</em>,
-            a: ({ href, children }) => (
-              <a href={href} className="text-brand-light hover:underline" target="_blank" rel="noopener noreferrer">
-                {children}
-              </a>
-            ),
-            pre: ({ children, ...props }: any) => (
-              <pre {...props} className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto mb-4 font-mono text-sm">
-                {children}
-              </pre>
-            ),
-            code: ({ children, className, ...props }: any) => {
-              const isInline = !className;
-              if (isInline) {
+      
+      <div className="text-sm text-gray-700 leading-relaxed">
+        {isBulletFormat ? (
+          // Bullet format
+          <ul className="space-y-2 list-none">
+            {(isExpanded ? cleanedBio : previewBio)
+              .split('\n')
+              .filter(line => line.trim().length > 0)
+              .map((line, index) => {
+                // Remove bullet markers if present
+                const cleanLine = line.replace(/^[-•*]\s+/, '').trim();
                 return (
-                  <code {...props} className="bg-gray-200 px-1 py-0.5 rounded text-xs font-mono">
-                    {children}
-                  </code>
+                  <li key={index} className="flex items-start gap-2">
+                    <span className="text-gray-400 mt-1.5 flex-shrink-0">•</span>
+                    <span>{cleanLine}</span>
+                  </li>
                 );
-              }
-              return (
-                <code {...props} className={`${className || ''} bg-transparent text-gray-100`}>
-                  {children}
-                </code>
-              );
-            },
-          }}
-        >
-          {bio}
-        </ReactMarkdown>
+              })}
+          </ul>
+        ) : (
+          // Paragraph format
+          <div className="space-y-3">
+            {(isExpanded ? cleanedBio : previewBio)
+              .split('\n\n')
+              .filter(para => para.trim().length > 0)
+              .map((paragraph, index) => (
+                <p key={index} className="leading-relaxed">
+                  {paragraph.trim()}
+                </p>
+              ))}
+          </div>
+        )}
       </div>
-      {bioNeedsExpansion && (
+
+      {needsExpansion && (
         <button
           type="button"
           onClick={() => setIsExpanded(!isExpanded)}
-          className="mt-2 text-sm font-medium text-gray-600 hover:text-gray-900 focus:outline-none transition-colors"
+          className="mt-3 text-sm font-medium text-gray-600 hover:text-gray-900 focus:outline-none transition-colors"
         >
-          {isExpanded ? 'Show less' : '...see more'}
+          {isExpanded ? 'Show less' : 'See more'}
         </button>
       )}
     </section>

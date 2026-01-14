@@ -185,7 +185,9 @@ Build a **production-ready ML system** that demonstrates:
 - Integration points
 
 **Example Structure:**
-```markdown
+
+> **Template: System Architecture**
+
 # System Architecture
 
 ## Overview
