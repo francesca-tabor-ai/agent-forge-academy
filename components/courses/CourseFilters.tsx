@@ -351,8 +351,7 @@ export function CourseFilters({ courses, onFilteredCoursesChange }: CourseFilter
   }, [search, selectedTracks, duration, difficulty, selectedBestFor, selectedIndustries, sort]);
 
   return (
-    <div className="sticky top-0 z-10 bg-white border-b border-gray-200 shadow-sm">
-      <div className="p-4 space-y-4">
+    <div className="space-y-4">
         {/* Search Bar and Sort - Top Bar */}
         <div className="flex items-center gap-3">
           <div className="flex-1">

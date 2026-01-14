@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { CourseCard } from './CourseCard';
 import { CourseFilters } from './CourseFilters';
 import { CourseMetadata } from '@/lib/course-metadata';
@@ -37,33 +38,11 @@ interface CoursesPageClientProps {
 
 export function CoursesPageClient({ courses, enrollments, subscriptionTier }: CoursesPageClientProps) {
   const [filteredCourses, setFilteredCourses] = useState<Course[]>(courses);
+  const router = useRouter();
 
-  // Group filtered courses by category
-  const categoryOrder = [
-    'Vibe Engineering',
-    'Agentic Systems',
-    'AI Search & Viability',
-    'Shopping & E-Commerce',
-    'Media & Content Ops',
-    'Trust & Regulation',
-  ];
-
-  const groupedCourses = filteredCourses.reduce((acc, course) => {
-    const category = course.metadata?.category || 'Other';
-    if (!acc[category]) acc[category] = [];
-    acc[category].push(course);
-    return acc;
-  }, {} as Record<string, Course[]>);
-
-  // Sort categories by order
-  const sortedCategories = Object.keys(groupedCourses).sort((a, b) => {
-    const indexA = categoryOrder.indexOf(a);
-    const indexB = categoryOrder.indexOf(b);
-    if (indexA !== -1 && indexB !== -1) return indexA - indexB;
-    if (indexA !== -1) return -1;
-    if (indexB !== -1) return 1;
-    return a.localeCompare(b);
-  });
+  const handleViewCourse = (courseSlug: string) => {
+    router.push(`/student/courses/${courseSlug}`);
+  };
 
   return (
     <div>
@@ -80,29 +59,29 @@ export function CoursesPageClient({ courses, enrollments, subscriptionTier }: Co
         </div>
       ) : (
         <>
-          <CourseFilters courses={courses} onFilteredCoursesChange={setFilteredCourses} />
+          {/* Sticky Search/Sort/Filters Bar */}
+          <div className="sticky top-0 z-20 bg-white/95 backdrop-blur-sm border-b border-gray-200 shadow-sm -mx-6 px-6 py-4">
+            <CourseFilters courses={courses} onFilteredCoursesChange={setFilteredCourses} />
+          </div>
           
-          <div className="space-y-8 mt-8">
-            {sortedCategories.length > 0 ? (
-              sortedCategories.map((category) => (
-                <div key={category}>
-                  <h2 className="text-xl font-semibold text-gray-900 mb-4">{category}</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {groupedCourses[category].map((course) => {
-                      const enrollment = course.id ? enrollments[course.id] : null;
-                      return (
-                        <CourseCard
-                          key={course.slug}
-                          course={course}
-                          metadata={course.metadata}
-                          enrollment={enrollment || null}
-                          subscriptionTier={subscriptionTier}
-                        />
-                      );
-                    })}
-                  </div>
-                </div>
-              ))
+          {/* Responsive Grid: 1 col mobile, 2 cols tablet, 3 cols desktop */}
+          <div className="mt-8">
+            {filteredCourses.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredCourses.map((course) => {
+                  const enrollment = course.id ? enrollments[course.id] : null;
+                  return (
+                    <CourseCard
+                      key={course.slug}
+                      course={course}
+                      metadata={course.metadata}
+                      enrollment={enrollment || null}
+                      subscriptionTier={subscriptionTier}
+                      onView={() => handleViewCourse(course.slug)}
+                    />
+                  );
+                })}
+              </div>
             ) : (
               <div className="bg-white border border-gray-200 rounded-lg p-8 text-center">
                 <p className="text-gray-600">No courses match your filters.</p>
