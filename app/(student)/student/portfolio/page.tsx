@@ -134,6 +134,9 @@ export default async function PortfolioPage() {
               linkedinUrl={studentProfile.linkedin_url}
               githubUrl={studentProfile.github_url}
               websiteUrl={studentProfile.website_url}
+              email={user.email}
+              visibility={studentProfile.visibility}
+              studentProfileId={studentProfile.id}
             />
           )}
 
