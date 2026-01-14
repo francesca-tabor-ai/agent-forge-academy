@@ -27,6 +27,14 @@ import { getResumeBucketName } from '@/lib/utils/storage';
  */
 export async function POST(request: Request) {
   try {
+    // Check for required server-side environment variables
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      return NextResponse.json(
+        { error: 'Server misconfigured: missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY' },
+        { status: 500 }
+      );
+    }
+
     // Auth required - reject if not logged in
     const supabase = await createUserSupabaseClient();
     const {
