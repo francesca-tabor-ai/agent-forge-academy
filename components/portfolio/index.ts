@@ -2,6 +2,7 @@ export { ProfileOverview } from './ProfileOverview';
 export { ProfileHeader } from './ProfileHeader';
 export { AboutSection } from './AboutSection';
 export { SkillsSection } from './SkillsSection';
+export { FeaturedProjects } from './FeaturedProjects';
 export { CVResumeSection } from './CVResumeSection';
 export { RecruiterVisibilitySection } from './RecruiterVisibilitySection';
 export { PortfolioAdvisorSection } from './PortfolioAdvisorSection';

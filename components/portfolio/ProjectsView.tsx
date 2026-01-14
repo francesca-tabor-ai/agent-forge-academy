@@ -13,13 +13,15 @@ interface Project {
   visibility: 'private' | 'recruiters_only' | 'public';
   cover_image_url?: string | null;
   images?: string[] | null;
+  featured?: boolean;
 }
 
 interface ProjectsViewProps {
   projects: Project[];
+  onFeaturedUpdate?: () => void;
 }
 
-export function ProjectsView({ projects }: ProjectsViewProps) {
+export function ProjectsView({ projects, onFeaturedUpdate }: ProjectsViewProps) {
   const [viewMode, setViewMode] = useState<'list' | 'card'>('list');
 
   // Load view preference from localStorage
@@ -105,6 +107,8 @@ export function ProjectsView({ projects }: ProjectsViewProps) {
               visibility={project.visibility}
               coverImageUrl={project.cover_image_url || null}
               viewMode="card"
+              featured={project.featured}
+              onFeaturedUpdate={onFeaturedUpdate}
             />
           ))}
         </div>
@@ -121,6 +125,8 @@ export function ProjectsView({ projects }: ProjectsViewProps) {
               visibility={project.visibility}
               coverImageUrl={project.cover_image_url || null}
               viewMode="list"
+              featured={project.featured}
+              onFeaturedUpdate={onFeaturedUpdate}
             />
           ))}
         </div>

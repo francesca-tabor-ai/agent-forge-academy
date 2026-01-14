@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { ExpandableDescription } from './ExpandableDescription';
 
@@ -15,6 +16,8 @@ interface ProjectCardProps {
   outcome?: string | null;
   coverImageUrl?: string | null;
   viewMode?: 'list' | 'card';
+  featured?: boolean;
+  onFeaturedUpdate?: () => void;
 }
 
 export function ProjectCard({
@@ -29,7 +32,43 @@ export function ProjectCard({
   outcome,
   coverImageUrl,
   viewMode = 'list',
+  featured = false,
+  onFeaturedUpdate,
 }: ProjectCardProps) {
+  const [loading, setLoading] = useState(false);
+  const [isFeatured, setIsFeatured] = useState(featured);
+
+  const handleToggleFeatured = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    setLoading(true);
+    try {
+      const response = await fetch('/api/portfolio/projects/featured', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          projectId: id,
+          featured: !isFeatured,
+        }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || 'Failed to update featured status');
+      }
+
+      setIsFeatured(!isFeatured);
+      if (onFeaturedUpdate) {
+        onFeaturedUpdate();
+      }
+    } catch (error) {
+      console.error('Error toggling featured:', error);
+      alert(error instanceof Error ? error.message : 'Failed to update featured status');
+    } finally {
+      setLoading(false);
+    }
+  };
   const visibilityLabels: Record<string, string> = {
     private: 'Private',
     recruiters_only: 'Recruiters Only',
@@ -85,6 +124,11 @@ export function ProjectCard({
         <div className="p-4 flex-1 flex flex-col">
           <div className="flex items-center gap-2 mb-2">
             <h3 className="text-base font-medium text-gray-900 flex-1">{title}</h3>
+            {isFeatured && (
+              <span className="text-yellow-500" title="Featured project">
+                ⭐
+              </span>
+            )}
             <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${visibilityColors[visibility]}`}>
               {visibilityIcons[visibility]}
             </span>
@@ -104,6 +148,7 @@ export function ProjectCard({
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-gray-700"
+                  onClick={(e) => e.stopPropagation()}
                 >
                   GitHub →
                 </a>
@@ -114,17 +159,32 @@ export function ProjectCard({
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-gray-700"
+                  onClick={(e) => e.stopPropagation()}
                 >
                   Demo →
                 </a>
               )}
             </div>
-            <Link
-              href={`/student/portfolio/${id}/edit`}
-              className="text-xs font-medium text-brand-light hover:text-brand-light/90"
-            >
-              Edit
-            </Link>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleToggleFeatured}
+                disabled={loading}
+                className={`text-xs px-2 py-1 rounded transition-colors ${
+                  isFeatured
+                    ? 'bg-yellow-50 text-yellow-700 hover:bg-yellow-100'
+                    : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+                } disabled:opacity-50`}
+                title={isFeatured ? 'Unfeature project' : 'Feature project'}
+              >
+                {loading ? '...' : isFeatured ? '⭐ Featured' : '⭐ Feature'}
+              </button>
+              <Link
+                href={`/student/portfolio/${id}/edit`}
+                className="text-xs font-medium text-brand-light hover:text-brand-light/90"
+              >
+                Edit
+              </Link>
+            </div>
           </div>
         </div>
       </div>
@@ -137,6 +197,11 @@ export function ProjectCard({
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-2">
             <h3 className="text-base font-medium text-gray-900">{title}</h3>
+            {isFeatured && (
+              <span className="text-yellow-500" title="Featured project">
+                ⭐
+              </span>
+            )}
             <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${visibilityColors[visibility]}`}>
               {visibilityIcons[visibility]}
             </span>
@@ -198,6 +263,7 @@ export function ProjectCard({
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-gray-700"
+                onClick={(e) => e.stopPropagation()}
               >
                 GitHub →
               </a>
@@ -208,18 +274,33 @@ export function ProjectCard({
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-gray-700"
+                onClick={(e) => e.stopPropagation()}
               >
                 Demo →
               </a>
             )}
           </div>
         </div>
-        <Link
-          href={`/student/portfolio/${id}/edit`}
-          className="ml-4 text-sm font-medium text-brand-light hover:text-brand-light/90"
-        >
-          Edit
-        </Link>
+        <div className="flex items-center gap-2 ml-4">
+          <button
+            onClick={handleToggleFeatured}
+            disabled={loading}
+            className={`text-xs px-2 py-1 rounded transition-colors ${
+              isFeatured
+                ? 'bg-yellow-50 text-yellow-700 hover:bg-yellow-100'
+                : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+            } disabled:opacity-50`}
+            title={isFeatured ? 'Unfeature project' : 'Feature project'}
+          >
+            {loading ? '...' : isFeatured ? '⭐ Featured' : '⭐ Feature'}
+          </button>
+          <Link
+            href={`/student/portfolio/${id}/edit`}
+            className="text-sm font-medium text-brand-light hover:text-brand-light/90"
+          >
+            Edit
+          </Link>
+        </div>
       </div>
     </div>
   );

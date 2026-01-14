@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState } from 'react';
 
 interface FeaturedProject {
   id: string;
@@ -16,48 +15,9 @@ interface FeaturedProject {
 interface FeaturedProjectsProps {
   projects: FeaturedProject[];
   studentProfileId: string;
-  onUpdate?: () => void;
 }
 
-export function FeaturedProjects({ projects, studentProfileId, onUpdate }: FeaturedProjectsProps) {
-  const [loading, setLoading] = useState<string | null>(null);
-
-  const handleToggleFeatured = async (projectId: string, currentlyFeatured: boolean) => {
-    // Count current featured projects
-    const currentFeaturedCount = projects.length;
-    
-    // If trying to add and already at max (4), show alert
-    if (!currentlyFeatured && currentFeaturedCount >= 4) {
-      alert('You can feature up to 4 projects. Please unfeature another project first.');
-      return;
-    }
-
-    setLoading(projectId);
-    try {
-      const response = await fetch('/api/portfolio/projects/featured', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          projectId,
-          featured: !currentlyFeatured,
-        }),
-      });
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || 'Failed to update featured status');
-      }
-
-      if (onUpdate) {
-        onUpdate();
-      }
-    } catch (error) {
-      console.error('Error toggling featured:', error);
-      alert(error instanceof Error ? error.message : 'Failed to update featured status');
-    } finally {
-      setLoading(null);
-    }
-  };
+export function FeaturedProjects({ projects, studentProfileId }: FeaturedProjectsProps) {
 
   if (projects.length === 0) {
     return (

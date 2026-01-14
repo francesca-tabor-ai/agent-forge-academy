@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { ProfileHeader } from '@/components/portfolio/ProfileHeader';
 import { AboutSection } from '@/components/portfolio/AboutSection';
 import { SkillsSection } from '@/components/portfolio/SkillsSection';
+import { FeaturedProjects } from '@/components/portfolio/FeaturedProjects';
 import { CVResumeSection } from '@/components/portfolio/CVResumeSection';
 import { RecruiterVisibilitySection } from '@/components/portfolio/RecruiterVisibilitySection';
 import { PortfolioAdvisorSection } from '@/components/portfolio/PortfolioAdvisorSection';
@@ -46,9 +47,20 @@ export default async function PortfolioPage() {
   const { data: projects } = studentProfile
     ? await supabase
         .from('portfolio_projects')
-        .select('id, title, description, github_url, demo_url, visibility, cover_image_url, images, created_at')
+        .select('id, title, description, github_url, demo_url, visibility, cover_image_url, images, created_at, featured')
         .eq('student_profile_id', studentProfile.id)
         .order('created_at', { ascending: false })
+    : { data: null };
+
+  // Get featured projects separately (for Featured section)
+  const { data: featuredProjects } = studentProfile
+    ? await supabase
+        .from('portfolio_projects')
+        .select('id, title, description, github_url, demo_url, cover_image_url')
+        .eq('student_profile_id', studentProfile.id)
+        .eq('featured', true)
+        .order('created_at', { ascending: false })
+        .limit(4)
     : { data: null };
 
   // Get CV data
@@ -142,6 +154,14 @@ export default async function PortfolioPage() {
 
           {/* About Section */}
           <AboutSection bio={studentProfile?.bio || null} />
+
+          {/* Featured Projects Section */}
+          {studentProfile && (
+            <FeaturedProjects
+              projects={featuredProjects || []}
+              studentProfileId={studentProfile.id}
+            />
+          )}
 
           {/* Experience / Projects Section */}
           <section className="bg-white border border-gray-200 rounded-lg p-6">
