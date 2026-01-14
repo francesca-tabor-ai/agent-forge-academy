@@ -169,7 +169,14 @@ export default async function PortfolioPage() {
           </section>
 
           {/* Skills Section */}
-          <SkillsSection skills={coreSkills} />
+          <SkillsSection 
+            skills={coreSkills} 
+            studentProfileId={studentProfile?.id}
+            onUpdate={() => {
+              // Refresh the page to show updated skills
+              window.location.reload();
+            }}
+          />
         </div>
 
         {/* Right Sidebar - Tools & Actions */}
