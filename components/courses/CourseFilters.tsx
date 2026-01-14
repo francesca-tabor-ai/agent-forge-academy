@@ -11,6 +11,7 @@ type Course = {
   title: string;
   description: string | null;
   thumbnail_url: string | null;
+  imageUrl?: string | null;
   duration_weeks: number | null;
   difficulty_level: string | null;
   is_published: boolean;
@@ -18,6 +19,7 @@ type Course = {
   updated_at: string | null;
   hasContent: boolean;
   industries: string[];
+  category?: string;
   metadata?: CourseMetadata;
 };
 

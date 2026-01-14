@@ -10,6 +10,7 @@ export interface CourseMetadata {
   bestFor: string;
   time: string;
   industries: Industry[];
+  imageUrl?: string; // Optional direct image URL
 }
 
 export const courseMetadata: Record<string, CourseMetadata> = {

@@ -19,6 +19,7 @@ export interface CourseMetadata {
   industries: string[];
   // Optional fields for tracking
   category?: string; // Not in DB yet, but useful for metadata
+  imageUrl?: string; // Optional direct image URL (takes precedence over thumbnail_url)
 }
 
 /**
@@ -30,6 +31,7 @@ export interface RawCourseMetadata {
   title?: string;
   description?: string;
   thumbnail_url?: string;
+  imageUrl?: string;
   duration_weeks?: number | string;
   difficulty_level?: string;
   is_published?: boolean | string;

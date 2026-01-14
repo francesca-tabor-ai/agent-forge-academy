@@ -69,6 +69,7 @@ export function extractCourseMetadata(
             duration_weeks: data.duration_weeks,
             is_published: data.is_published,
             thumbnail_url: data.thumbnail_url,
+            imageUrl: data.imageUrl,
             category: data.category,
           };
           const normalized = normalizeCourseMetadata(rawMetadata, courseSlug);
@@ -122,6 +123,7 @@ export function extractCourseMetadata(
       title: legacyMetadata.title,
       description: legacyMetadata.outcome || null,
       thumbnail_url: null,
+      imageUrl: legacyMetadata.imageUrl,
       duration_weeks: durationWeeks,
       difficulty_level: difficultyLevel,
       is_published: true, // Assume published if in legacy metadata
@@ -150,6 +152,7 @@ export function extractCourseMetadata(
       title,
       description: null,
       thumbnail_url: null,
+      imageUrl: undefined,
       duration_weeks: null,
       difficulty_level: null,
       is_published: false, // Not published by default if no metadata

@@ -127,6 +127,7 @@ export function normalizeCourseMetadata(
     title: String(raw.title || courseSlug).trim(),
     description: raw.description ? String(raw.description).trim() : null,
     thumbnail_url: raw.thumbnail_url ? String(raw.thumbnail_url).trim() : null,
+    imageUrl: raw.imageUrl ? String(raw.imageUrl).trim() : undefined,
     duration_weeks: durationWeeks,
     difficulty_level: difficultyLevel,
     is_published: isPublished,

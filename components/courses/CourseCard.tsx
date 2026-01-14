@@ -6,6 +6,7 @@ import { CourseMetadata } from '@/lib/course-metadata';
 import { UpgradeModal } from './UpgradeModal';
 import { isCourseLocked } from '@/lib/utils/course-access-frontend';
 import type { SubscriptionTier } from '@/lib/utils/subscription-types';
+import { resolveCourseImageUrl } from '@/lib/utils/course-image-resolver';
 import { Lock } from 'lucide-react';
 
 interface CourseCardProps {
@@ -15,11 +16,13 @@ interface CourseCardProps {
     title: string;
     description: string | null;
     thumbnail_url: string | null;
+    imageUrl?: string | null;
     duration_weeks: number | null;
     difficulty_level: string | null;
     is_published: boolean;
     hasContent: boolean;
     industries: string[];
+    category?: string;
   };
   metadata?: CourseMetadata;
   enrollment?: {
@@ -39,6 +42,14 @@ export function CourseCard({ course, metadata, enrollment, subscriptionTier }: C
   const displayBestFor = metadata?.bestFor || '';
   const displayBuild = metadata?.build || '';
   const displayIndustries = course.industries || metadata?.industries || [];
+  
+  // Resolve image URL with fallback logic
+  const imageUrl = resolveCourseImageUrl({
+    imageUrl: course.imageUrl,
+    thumbnail_url: course.thumbnail_url,
+    category: course.category || metadata?.category,
+    metadata,
+  });
 
   const handleCardClick = (e: React.MouseEvent) => {
     if (isLocked) {
@@ -91,23 +102,21 @@ export function CourseCard({ course, metadata, enrollment, subscriptionTier }: C
         </div>
       )}
 
-      {/* Thumbnail */}
-      {course.thumbnail_url && (
-        <div className={`mb-4 aspect-video bg-gray-100 rounded overflow-hidden relative ${
-          isLocked ? 'opacity-60' : ''
-        }`}>
-          <img
-            src={course.thumbnail_url}
-            alt={displayTitle}
-            className="w-full h-full object-cover"
-          />
-          {isLocked && (
-            <div className="absolute inset-0 bg-gray-900/40 flex items-center justify-center">
-              <Lock className="w-8 h-8 text-white" />
-            </div>
-          )}
-        </div>
-      )}
+      {/* Course Image */}
+      <div className={`mb-4 aspect-video bg-gray-100 rounded overflow-hidden relative ${
+        isLocked ? 'opacity-60' : ''
+      }`}>
+        <img
+          src={imageUrl}
+          alt={displayTitle}
+          className="w-full h-full object-cover"
+        />
+        {isLocked && (
+          <div className="absolute inset-0 bg-gray-900/40 flex items-center justify-center">
+            <Lock className="w-8 h-8 text-white" />
+          </div>
+        )}
+      </div>
 
       {/* Title */}
       <h3 className="text-lg font-semibold text-gray-900 mb-3">

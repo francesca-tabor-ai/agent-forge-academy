@@ -80,6 +80,7 @@ export default async function StudentDashboard() {
     title: string;
     description: string | null;
     thumbnail_url: string | null;
+    imageUrl?: string | null;
     duration_weeks: number | null;
     difficulty_level: string | null;
     is_published: boolean;
@@ -87,15 +88,21 @@ export default async function StudentDashboard() {
     updated_at: string | null;
     hasContent: boolean;
     industries: string[];
+    category?: string;
     metadata?: typeof courseMetadata[string];
   };
 
-  const allCourses: CourseWithMetadata[] = (courses || []).map((course) => ({
-    ...course,
-    industries: course.industries || [],
-    hasContent: courseSlugSet.has(course.slug),
-    metadata: courseMetadata[course.slug],
-  }));
+  const allCourses: CourseWithMetadata[] = (courses || []).map((course) => {
+    const metadata = courseMetadata[course.slug];
+    return {
+      ...course,
+      industries: course.industries || [],
+      hasContent: courseSlugSet.has(course.slug),
+      category: metadata?.category,
+      imageUrl: metadata?.imageUrl,
+      metadata,
+    };
+  });
 
   // Also include courses from file system that aren't in database yet
   for (const slug of courseSlugs) {
@@ -109,6 +116,7 @@ export default async function StudentDashboard() {
         title: metadata?.title || slug.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()),
         description: metadata?.outcome || null,
         thumbnail_url: null,
+        imageUrl: metadata?.imageUrl,
         duration_weeks: null,
         difficulty_level: null,
         is_published: false,
@@ -116,6 +124,7 @@ export default async function StudentDashboard() {
         updated_at: null,
         hasContent: lessons.length > 0,
         industries: metadata?.industries || [],
+        category: metadata?.category,
         metadata,
       });
     }
