@@ -263,6 +263,36 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     time: '~10–14 weeks',
     industries: ['Healthcare', 'Legal & Compliance'],
   },
+  'production-ml-os': {
+    slug: 'production-ml-os',
+    title: 'Production ML OS: Shipping Models at Scale',
+    category: 'ML Engineering',
+    outcome: 'Deploy, operate, and maintain ML systems that are reliable, scalable, observable, and resilient in production.',
+    build: 'Complete production ML system with serving patterns, feature stores, monitoring, CI/CD, failure handling, and production readiness frameworks.',
+    bestFor: 'Machine Learning Engineers, Software Engineers transitioning into ML, Senior Data Scientists moving toward production ownership, and Platform & Infrastructure engineers supporting ML.',
+    time: '~8–10 weeks',
+    industries: ['SaaS', 'DevTools', 'E-commerce'],
+  },
+  'platform-os': {
+    slug: 'platform-os',
+    title: 'Platform OS: Building the Data & ML Backbone',
+    category: 'Platform Engineering',
+    outcome: 'Design, build, and evolve durable, scalable data and ML platforms that reliably support analytics, experimentation, and production AI.',
+    build: 'Complete data and ML platform architecture with storage (warehouses/lakehouses), batch and streaming pipelines, feature stores, observability, governance, cost optimization, and platform operating models.',
+    bestFor: 'Data Platform Engineers, ML Platform Engineers, Senior Data Engineers, and Infrastructure and Analytics Platform Leads.',
+    time: '~8–10 weeks',
+    industries: ['SaaS', 'DevTools', 'E-commerce', 'B2B Sales / RevOps'],
+  },
+  'growth-os-data-science-revenue-scale': {
+    slug: 'growth-os-data-science-revenue-scale',
+    title: 'Growth OS: Data Science for Revenue & Scale',
+    category: 'GTM & Revenue Operations',
+    outcome: 'Design, evaluate, and scale data-driven growth strategies that deliver measurable revenue impact.',
+    build: 'Complete Growth & Revenue Operating System with funnel diagnostics, cohort and LTV modeling, marketing mix modeling, attribution analysis, pricing optimization, experimentation frameworks, and executive communication.',
+    bestFor: 'Growth Data Scientists, Marketing Data Scientists, Product Analysts focused on growth, and Analytics professionals partnering with marketing or finance.',
+    time: '~6–8 weeks',
+    industries: ['SaaS', 'E-commerce', 'B2B Sales / RevOps', 'Retail / CPG'],
+  },
 };
 
 // Get category groups for organizing courses
