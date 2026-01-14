@@ -11,12 +11,14 @@ interface CVResumeSectionProps {
   cvVisibility?: 'private' | 'recruiters_only' | 'public' | null;
   cvDownloadUrl?: string | null;
   hasCV: boolean;
+  isDefault?: boolean;
 }
 
-export function CVResumeSection({ studentProfileId, cvFileName, cvLastUpdated, cvVisibility, cvDownloadUrl, hasCV }: CVResumeSectionProps) {
+export function CVResumeSection({ studentProfileId, cvFileName, cvLastUpdated, cvVisibility, cvDownloadUrl, hasCV, isDefault = true }: CVResumeSectionProps) {
   const router = useRouter();
   const [showReplace, setShowReplace] = useState(false);
   const [loadingPreview, setLoadingPreview] = useState(false);
+  const [loadingDefault, setLoadingDefault] = useState(false);
 
   const visibilityLabels: Record<string, string> = {
     private: 'Private',
@@ -81,6 +83,31 @@ export function CVResumeSection({ studentProfileId, cvFileName, cvLastUpdated, c
     }
   };
 
+  const handleToggleDefault = async () => {
+    setLoadingDefault(true);
+    try {
+      const response = await fetch('/api/portfolio/cv/default', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          studentProfileId,
+          isDefault: !isDefault,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update default CV');
+      }
+
+      router.refresh();
+    } catch (error) {
+      console.error('Error toggling default CV:', error);
+      alert('Failed to update default CV');
+    } finally {
+      setLoadingDefault(false);
+    }
+  };
+
   if (!hasCV) {
     return (
       <section className="bg-white border border-gray-200 rounded-lg p-5">
@@ -104,14 +131,6 @@ export function CVResumeSection({ studentProfileId, cvFileName, cvLastUpdated, c
     <section className="bg-white border border-gray-200 rounded-lg p-5">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-base font-semibold text-gray-900">CV & Resume</h3>
-        {!showReplace && (
-          <button
-            onClick={() => setShowReplace(true)}
-            className="text-xs font-medium text-gray-600 hover:text-gray-900"
-          >
-            Replace
-          </button>
-        )}
       </div>
 
       {showReplace ? (
@@ -124,53 +143,102 @@ export function CVResumeSection({ studentProfileId, cvFileName, cvLastUpdated, c
           />
           <button
             onClick={() => setShowReplace(false)}
-            className="btn-secondary text-sm"
+            className="btn-secondary text-sm w-full"
           >
             Cancel
           </button>
         </div>
       ) : (
-        <div className="space-y-3">
-          <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
-            <span className="text-xl">📄</span>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-gray-900 truncate">{cvFileName || 'CV.pdf'}</p>
-              {cvLastUpdated && (
-                <p className="text-xs text-gray-500">
-                  {new Date(cvLastUpdated).toLocaleDateString('en-US', {
-                    month: 'short',
-                    day: 'numeric',
-                  })}
-                </p>
-              )}
+        <div className="space-y-4">
+          {/* Featured Document Card */}
+          <div className="border border-gray-200 rounded-lg p-4 hover:border-gray-300 transition-colors bg-white">
+            {/* Document Icon and Info */}
+            <div className="flex items-start gap-3 mb-3">
+              <div className="flex-shrink-0 w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center">
+                <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              </div>
+              
+              <div className="flex-1 min-w-0">
+                <h4 className="text-sm font-semibold text-gray-900 mb-1 truncate">
+                  {cvFileName || 'CV.pdf'}
+                </h4>
+                {cvLastUpdated && (
+                  <p className="text-xs text-gray-500 mb-2">
+                    Uploaded {new Date(cvLastUpdated).toLocaleDateString('en-US', {
+                      month: 'long',
+                      day: 'numeric',
+                      year: 'numeric',
+                    })}
+                  </p>
+                )}
+                
+                {/* Visibility Badge */}
+                {cvVisibility && (
+                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${visibilityColors[cvVisibility]}`}>
+                    {cvVisibility === 'private' && '🔒'}
+                    {cvVisibility === 'recruiters_only' && '👔'}
+                    {cvVisibility === 'public' && '🌐'}
+                    <span className="ml-1">{visibilityLabels[cvVisibility]}</span>
+                  </span>
+                )}
+              </div>
             </div>
-            {cvVisibility && (
-              <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${visibilityColors[cvVisibility]}`}>
-                {visibilityLabels[cvVisibility]}
-              </span>
-            )}
+
+            {/* Actions Row */}
+            <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handlePreview}
+                  disabled={loadingPreview}
+                  className="text-sm text-gray-700 hover:text-gray-900 flex items-center gap-1.5 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                  {loadingPreview ? 'Loading...' : 'Preview'}
+                </button>
+                <button
+                  onClick={handleDownload}
+                  className="text-sm text-gray-700 hover:text-gray-900 flex items-center gap-1.5 transition-colors"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  </svg>
+                  Download
+                </button>
+                <button
+                  onClick={() => setShowReplace(true)}
+                  className="text-sm text-gray-700 hover:text-gray-900 flex items-center gap-1.5 transition-colors"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                  Replace
+                </button>
+              </div>
+            </div>
           </div>
 
-          <div className="flex flex-wrap gap-2">
-            <button
-              onClick={handlePreview}
-              disabled={loadingPreview}
-              className="btn-secondary text-xs px-3 py-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loadingPreview ? 'Loading...' : 'Preview'}
-            </button>
-            <button
-              onClick={handleDownload}
-              className="btn-secondary text-xs px-3 py-1.5"
-            >
-              Download
-            </button>
-            <button
-              onClick={() => setShowReplace(true)}
-              className="text-xs text-gray-600 hover:text-gray-900 px-3 py-1.5"
-            >
-              Replace
-            </button>
+          {/* Default CV Toggle */}
+          <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+            <div className="flex-1">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={isDefault}
+                  onChange={handleToggleDefault}
+                  disabled={loadingDefault}
+                  className="w-4 h-4 text-brand-light border-gray-300 rounded focus:ring-brand-light"
+                />
+                <span className="text-sm font-medium text-gray-700">Set as default CV</span>
+              </label>
+              <p className="text-xs text-gray-500 mt-1 ml-6">
+                Public profile preview uses this CV
+              </p>
+            </div>
           </div>
         </div>
       )}

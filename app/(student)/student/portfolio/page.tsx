@@ -201,6 +201,7 @@ export default async function PortfolioPage() {
               cvVisibility={cvVisibility}
               cvDownloadUrl={cvDownloadUrl}
               hasCV={hasCV}
+              isDefault={true}
             />
           )}
 
