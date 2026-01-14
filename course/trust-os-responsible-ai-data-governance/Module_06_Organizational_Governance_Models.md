@@ -1282,6 +1282,8 @@ A comprehensive organizational governance blueprint that includes:
 
 ### Example Blueprint Structure
 
+> **Template: Organizational Governance Blueprint**
+
 # Organizational Governance Blueprint
 
 ## Executive Summary

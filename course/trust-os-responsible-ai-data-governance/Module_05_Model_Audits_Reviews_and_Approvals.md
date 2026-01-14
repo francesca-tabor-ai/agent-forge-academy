@@ -1113,6 +1113,8 @@ A comprehensive model governance and audit framework that includes:
 
 ### Example Framework Structure
 
+> **Template: Model Governance and Audit Framework**
+
 # Model Governance and Audit Framework
 
 ## Overview

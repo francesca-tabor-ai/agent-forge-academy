@@ -1064,6 +1064,8 @@ An operationalized Trust OS embedded into day-to-day workflows that includes:
 
 ### Example Integration Structure
 
+> **Template: Trust OS Integration**
+
 # Trust OS Integration: ML Delivery Pipeline
 
 ## Current Pipeline

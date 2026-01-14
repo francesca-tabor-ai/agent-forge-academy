@@ -102,6 +102,8 @@ src/
 
 ### Example: Build Plan for User Dashboard
 
+> **Template: Build Plan**
+
 # Build Plan: User Dashboard
 
 ## Overview
@@ -318,6 +320,8 @@ The `.cursorrules` file is where you define your guardrails. Place it in your pr
 
 #### Basic Structure
 
+> **Template: .cursorrules Basic Structure**
+
 # Tech Stack
 - Framework: Next.js 14+ (App Router)
 - Language: TypeScript (strict mode)
@@ -369,6 +373,8 @@ The `.cursorrules` file is where you define your guardrails. Place it in your pr
 - Use Tailwind for styling (no CSS modules)
 
 ### Example: Complete .cursorrules
+
+> **Template: Complete .cursorrules**
 
 # Project: AI-Native App with Cursor & Supabase
 
@@ -463,6 +469,8 @@ Avoid:
 
 #### Project-Specific Rules
 
+> **Template: Project-Specific Rules**
+
 # Design System
 - Use components from @/components/ui
 - Follow spacing scale: 4, 8, 12, 16, 24, 32
@@ -484,6 +492,8 @@ Avoid:
 - Enable RLS on all tables
 
 #### Team Conventions
+
+> **Template: Team Conventions**
 
 # Git Workflow
 - Branch naming: feature/[name], fix/[name]

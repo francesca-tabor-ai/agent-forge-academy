@@ -855,6 +855,8 @@ A comprehensive risk register that includes:
 
 ### Example Risk Register Structure
 
+> **Template: Risk Register**
+
 # Risk Register: [System Name]
 
 ## System Overview

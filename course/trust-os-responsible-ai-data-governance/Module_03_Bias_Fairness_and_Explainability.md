@@ -930,6 +930,8 @@ A comprehensive fairness and explainability report that includes:
 
 ### Example Report Structure
 
+> **Template: Fairness and Explainability Report**
+
 # Fairness and Explainability Report: [Model Name]
 
 ## Executive Summary

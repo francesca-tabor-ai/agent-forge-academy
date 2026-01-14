@@ -999,6 +999,8 @@ A comprehensive privacy impact assessment that includes:
 
 ### Example PIA Structure
 
+> **Template: Privacy Impact Assessment**
+
 # Privacy Impact Assessment: [System Name]
 
 ## Executive Summary
