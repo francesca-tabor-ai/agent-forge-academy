@@ -1282,7 +1282,6 @@ A comprehensive organizational governance blueprint that includes:
 
 ### Example Blueprint Structure
 
-```markdown
 # Organizational Governance Blueprint
 
 ## Executive Summary
@@ -1342,7 +1341,6 @@ A comprehensive organizational governance blueprint that includes:
 
 ## Implementation Plan
 [Phases, milestones, timeline, success criteria]
-```
 
 ---
 

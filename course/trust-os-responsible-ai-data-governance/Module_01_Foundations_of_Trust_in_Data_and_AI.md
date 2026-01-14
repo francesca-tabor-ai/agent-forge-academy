@@ -535,7 +535,6 @@ A comprehensive AI risk landscape document that includes:
 
 ### Example Structure
 
-```markdown
 # AI Risk Landscape: [Use Case Name]
 
 ## Use Case Overview

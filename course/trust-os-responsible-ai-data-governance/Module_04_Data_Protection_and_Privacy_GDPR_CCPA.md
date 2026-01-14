@@ -999,7 +999,6 @@ A comprehensive privacy impact assessment that includes:
 
 ### Example PIA Structure
 
-```markdown
 # Privacy Impact Assessment: [System Name]
 
 ## Executive Summary
@@ -1050,7 +1049,6 @@ A comprehensive privacy impact assessment that includes:
 
 ## Review Schedule
 [When PIA will be reviewed and updated]
-```
 
 ---
 

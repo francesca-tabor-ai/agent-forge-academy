@@ -1064,7 +1064,6 @@ An operationalized Trust OS embedded into day-to-day workflows that includes:
 
 ### Example Integration Structure
 
-```markdown
 # Trust OS Integration: ML Delivery Pipeline
 
 ## Current Pipeline
@@ -1091,7 +1090,6 @@ An operationalized Trust OS embedded into day-to-day workflows that includes:
 
 ## Documentation and Training
 [Documentation updates, training materials, communication plan]
-```
 
 ---
 

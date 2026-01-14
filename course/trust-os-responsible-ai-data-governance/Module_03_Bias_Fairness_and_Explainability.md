@@ -930,7 +930,6 @@ A comprehensive fairness and explainability report that includes:
 
 ### Example Report Structure
 
-```markdown
 # Fairness and Explainability Report: [Model Name]
 
 ## Executive Summary
@@ -981,7 +980,6 @@ A comprehensive fairness and explainability report that includes:
 
 ## Monitoring Plan
 [How to monitor bias and explainability going forward]
-```
 
 ---
 

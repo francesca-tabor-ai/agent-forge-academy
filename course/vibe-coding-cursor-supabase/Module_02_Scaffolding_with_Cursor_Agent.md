@@ -102,7 +102,6 @@ src/
 
 ### Example: Build Plan for User Dashboard
 
-```markdown
 # Build Plan: User Dashboard
 
 ## Overview
@@ -144,7 +143,6 @@ A dashboard that displays user profile, recent activity, and statistics.
 8. Style with Tailwind
 
 ## File Structure
-```
 app/
   dashboard/
     page.tsx
@@ -320,7 +318,6 @@ The `.cursorrules` file is where you define your guardrails. Place it in your pr
 
 #### Basic Structure
 
-```markdown
 # Tech Stack
 - Framework: Next.js 14+ (App Router)
 - Language: TypeScript (strict mode)
@@ -370,11 +367,9 @@ The `.cursorrules` file is where you define your guardrails. Place it in your pr
 - Use composition over configuration
 - Implement loading and error states
 - Use Tailwind for styling (no CSS modules)
-```
 
 ### Example: Complete .cursorrules
 
-```markdown
 # Project: AI-Native App with Cursor & Supabase
 
 ## Tech Stack
@@ -463,13 +458,11 @@ Avoid:
 - moment.js (use date-fns)
 - lodash (use native JS)
 - classnames (use clsx)
-```
 
 ### Advanced Guardrails
 
 #### Project-Specific Rules
 
-```markdown
 # Design System
 - Use components from @/components/ui
 - Follow spacing scale: 4, 8, 12, 16, 24, 32
@@ -489,11 +482,9 @@ Avoid:
 - Foreign keys reference auth.users(id)
 - Use timestamptz for all timestamps
 - Enable RLS on all tables
-```
 
 #### Team Conventions
 
-```markdown
 # Git Workflow
 - Branch naming: feature/[name], fix/[name]
 - Commit messages: Conventional Commits
@@ -503,7 +494,6 @@ Avoid:
 - JSDoc comments for public functions
 - README.md for each major feature
 - Update CHANGELOG.md for releases
-```
 
 ### Testing Your Guardrails
 
