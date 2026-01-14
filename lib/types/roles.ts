@@ -6,9 +6,9 @@
 export type UserRole = 'student' | 'recruiter' | 'instructor' | 'admin';
 
 export const USER_ROLES = {
-  STUDENT: 'student',
-  RECRUITER: 'recruiter',
-  INSTRUCTOR: 'instructor',
-  ADMIN: 'admin',
+  STUDENT: 'student' as UserRole,
+  RECRUITER: 'recruiter' as UserRole,
+  INSTRUCTOR: 'instructor' as UserRole,
+  ADMIN: 'admin' as UserRole,
 } as const;
 
