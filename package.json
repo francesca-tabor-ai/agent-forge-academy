@@ -17,7 +17,9 @@
     "test:all": "npm run test:unit && npm run test:integration && npm run test:regression && npm run test:e2e",
     "sync-courses": "tsx scripts/sync-courses.ts",
     "sync-courses:dry-run": "tsx scripts/sync-courses.ts --dry-run",
-    "generate-metadata": "tsx scripts/generate-metadata-files.ts"
+    "generate-metadata": "tsx scripts/generate-metadata-files.ts",
+    "lint:content": "tsx scripts/lint-content-guard.ts",
+    "lint:all": "npm run lint && npm run lint:content"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.0.0",
