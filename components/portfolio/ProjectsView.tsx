@@ -38,17 +38,17 @@ export function ProjectsView({ projects }: ProjectsViewProps) {
 
   if (projects.length === 0) {
     return (
-      <div className="bg-white border border-gray-200 rounded-lg p-12 text-center">
-        <div className="text-4xl mb-4">📁</div>
-        <p className="text-gray-600 mb-2 font-medium">No projects yet</p>
+      <div className="text-center py-12">
+        <div className="text-4xl mb-4">💼</div>
+        <p className="text-gray-600 mb-2 font-medium">No experience yet</p>
         <p className="text-sm text-gray-500 mb-6">
-          Recruiters expect 2–4 strong projects
+          Showcase your projects and work experience
         </p>
         <Link
           href="/student/portfolio/new"
-          className="btn-primary text-sm inline-block"
+          className="btn-secondary text-sm inline-block"
         >
-          Add Project
+          Add experience
         </Link>
       </div>
     );
@@ -56,8 +56,8 @@ export function ProjectsView({ projects }: ProjectsViewProps) {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-medium text-gray-900">Projects</h2>
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-xl font-semibold text-gray-900">Experience</h2>
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1 border border-gray-300 rounded-md overflow-hidden">
             <button
@@ -65,7 +65,7 @@ export function ProjectsView({ projects }: ProjectsViewProps) {
               onClick={() => handleViewModeChange('list')}
               className={`px-3 py-1.5 text-sm font-medium transition-colors ${
                 viewMode === 'list'
-                  ? 'bg-brand-light text-white'
+                  ? 'bg-gray-900 text-white'
                   : 'bg-white text-gray-700 hover:bg-gray-50'
               }`}
             >
@@ -76,7 +76,7 @@ export function ProjectsView({ projects }: ProjectsViewProps) {
               onClick={() => handleViewModeChange('card')}
               className={`px-3 py-1.5 text-sm font-medium transition-colors ${
                 viewMode === 'card'
-                  ? 'bg-brand-light text-white'
+                  ? 'bg-gray-900 text-white'
                   : 'bg-white text-gray-700 hover:bg-gray-50'
               }`}
             >
@@ -85,9 +85,9 @@ export function ProjectsView({ projects }: ProjectsViewProps) {
           </div>
           <Link
             href="/student/portfolio/new"
-            className="btn-primary text-sm"
+            className="btn-secondary text-sm"
           >
-            Add Project
+            + Add
           </Link>
         </div>
       </div>

@@ -1,7 +1,9 @@
 import { createUserSupabaseClient, createServerSupabaseClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { ProfileOverview } from '@/components/portfolio/ProfileOverview';
+import { ProfileHeader } from '@/components/portfolio/ProfileHeader';
+import { AboutSection } from '@/components/portfolio/AboutSection';
+import { SkillsSection } from '@/components/portfolio/SkillsSection';
 import { CVResumeSection } from '@/components/portfolio/CVResumeSection';
 import { RecruiterVisibilitySection } from '@/components/portfolio/RecruiterVisibilitySection';
 import { PortfolioAdvisorSection } from '@/components/portfolio/PortfolioAdvisorSection';
@@ -107,7 +109,7 @@ export default async function PortfolioPage() {
   const visibleProjectCount = projects ? projects.filter(p => p.visibility !== 'private').length : 0;
 
   return (
-    <div className="space-y-8">
+    <div className="max-w-7xl mx-auto">
       {/* Toast Notification */}
       <Suspense fallback={null}>
         <ProfileSavedToast />
@@ -118,95 +120,72 @@ export default async function PortfolioPage() {
         <GitHubSyncStatus />
       </Suspense>
 
-      {/* Page Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold text-gray-900">Portfolio</h1>
-          <p className="text-sm text-gray-600 mt-1">
-            Your professional profile for recruiters and hiring teams
-          </p>
+      {/* LinkedIn-style 2-column layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-[65%_35%] gap-6">
+        {/* Main Column - Profile Content */}
+        <div className="space-y-6">
+          {/* Profile Header - LinkedIn style */}
+          {studentProfile && (
+            <ProfileHeader
+              fullName={studentProfile.full_name}
+              headline={headline}
+              headshotImageUrl={studentProfile.headshot_image_url}
+              location={studentProfile.location}
+              linkedinUrl={studentProfile.linkedin_url}
+              githubUrl={studentProfile.github_url}
+              websiteUrl={studentProfile.website_url}
+            />
+          )}
+
+          {/* About Section */}
+          <AboutSection bio={studentProfile?.bio || null} />
+
+          {/* Experience / Projects Section */}
+          <section className="bg-white border border-gray-200 rounded-lg p-6">
+            <ProjectsView projects={projects || []} />
+          </section>
+
+          {/* Skills Section */}
+          <SkillsSection skills={coreSkills} />
         </div>
-        <div className="flex items-center gap-4">
-          <div className="text-right">
-            <div className="text-2xl font-bold text-gray-900">{completionScore}%</div>
-            <p className="text-xs text-gray-500">Complete</p>
-          </div>
-          <div className="w-16 h-16 relative">
-            <svg className="transform -rotate-90 w-16 h-16">
-              <circle
-                cx="32"
-                cy="32"
-                r="28"
-                stroke="currentColor"
-                strokeWidth="6"
-                fill="none"
-                className="text-gray-200"
-              />
-              <circle
-                cx="32"
-                cy="32"
-                r="28"
-                stroke="currentColor"
-                strokeWidth="6"
-                fill="none"
-                strokeDasharray={`${2 * Math.PI * 28}`}
-                strokeDashoffset={`${2 * Math.PI * 28 * (1 - completionScore / 100)}`}
-                className="text-brand-light transition-all duration-500"
-                strokeLinecap="round"
-              />
-            </svg>
-          </div>
+
+        {/* Right Sidebar - Tools & Actions */}
+        <div className="space-y-6">
+          {/* Recruiter Visibility */}
+          {studentProfile && (
+            <RecruiterVisibilitySection
+              currentVisibility={studentProfile.visibility}
+              hasBio={hasProfile}
+              hasCV={hasCV}
+              projectCount={projects?.length || 0}
+              visibleProjectCount={visibleProjectCount}
+            />
+          )}
+
+          {/* CV & Resume Card */}
+          {studentProfile && (
+            <CVResumeSection
+              studentProfileId={studentProfile.id}
+              cvFileName={cvFileName}
+              cvLastUpdated={cvLastUpdated}
+              cvVisibility={cvVisibility}
+              cvDownloadUrl={cvDownloadUrl}
+              hasCV={hasCV}
+            />
+          )}
+
+          {/* Auto-Import Section */}
+          {studentProfile && (
+            <AutoImportSection
+              studentProfileId={studentProfile.id}
+              hasExistingData={hasProfile || hasCV || (projects && projects.length > 0)}
+            />
+          )}
+
+          {/* Portfolio Advisor */}
+          <PortfolioAdvisorSection latestProjectId={projects && projects.length > 0 ? projects[0].id : undefined} />
         </div>
       </div>
-
-      {/* Recruiter Visibility - Moved to top */}
-      {studentProfile && (
-        <RecruiterVisibilitySection
-          currentVisibility={studentProfile.visibility}
-          hasBio={hasProfile}
-          hasCV={hasCV}
-          projectCount={projects?.length || 0}
-          visibleProjectCount={visibleProjectCount}
-        />
-      )}
-
-      {/* Auto-Import Section */}
-      {studentProfile && (
-        <AutoImportSection
-          studentProfileId={studentProfile.id}
-          hasExistingData={hasProfile || hasCV || (projects && projects.length > 0)}
-        />
-      )}
-
-      {/* Profile Overview */}
-      <ProfileOverview
-        fullName={studentProfile?.full_name || null}
-        headline={headline}
-        bio={studentProfile?.bio || null}
-        primaryRoles={primaryRoles}
-        coreSkills={coreSkills}
-        headshotImageUrl={studentProfile?.headshot_image_url || null}
-      />
-
-      {/* CV & Resume */}
-      {studentProfile && (
-        <CVResumeSection
-          studentProfileId={studentProfile.id}
-          cvFileName={cvFileName}
-          cvLastUpdated={cvLastUpdated}
-          cvVisibility={cvVisibility}
-          cvDownloadUrl={cvDownloadUrl}
-          hasCV={hasCV}
-        />
-      )}
-
-      {/* Projects */}
-      <section>
-        <ProjectsView projects={projects || []} />
-      </section>
-
-      {/* Portfolio Advisor */}
-      <PortfolioAdvisorSection latestProjectId={projects && projects.length > 0 ? projects[0].id : undefined} />
     </div>
   );
 }

@@ -69,42 +69,42 @@ export function PortfolioAdvisorSection({ suggestions = [], latestProjectId }: P
   };
 
   return (
-    <section className="bg-white border border-gray-200 rounded-lg p-6">
+    <section className="bg-white border border-gray-200 rounded-lg p-5">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-medium text-gray-900">Portfolio Advisor</h2>
+        <h3 className="text-base font-semibold text-gray-900">Advisor Tips</h3>
         <Link
           href="/student/ai-advisor"
-          className="text-sm font-medium text-brand-light hover:text-brand-light/90"
+          className="text-xs font-medium text-gray-600 hover:text-gray-900"
         >
-          Ask AI Advisor →
+          More →
         </Link>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-2">
         {displaySuggestions.map((suggestion, idx) => (
-          <div key={idx} className="flex items-start justify-between gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-            <div className="flex items-start gap-3 flex-1">
-              <span className="text-lg">💡</span>
-              <p className="text-sm text-gray-700 flex-1">{suggestion.text}</p>
+          <div key={idx} className="flex items-start justify-between gap-2 p-2.5 bg-gray-50 rounded hover:bg-gray-100 transition-colors">
+            <div className="flex items-start gap-2 flex-1">
+              <span className="text-sm">💡</span>
+              <p className="text-xs text-gray-700 flex-1">{suggestion.text}</p>
             </div>
             {suggestion.action && (
               <button
                 onClick={() => handleAction(suggestion.action)}
-                className="text-xs font-medium text-brand-light hover:text-brand-light/90 whitespace-nowrap"
+                className="text-xs text-brand-light hover:text-brand-light/90 whitespace-nowrap"
               >
-                Fix →
+                Fix
               </button>
             )}
           </div>
         ))}
       </div>
 
-      <div className="mt-4 pt-4 border-t border-gray-200">
+      <div className="mt-3 pt-3 border-t border-gray-200">
         <Link
           href="/student/ai-advisor"
-          className="btn-secondary text-sm w-full text-center block"
+          className="btn-secondary text-xs w-full text-center block py-2"
         >
-          Ask AI Advisor to review my portfolio
+          Ask AI Advisor
         </Link>
       </div>
     </section>

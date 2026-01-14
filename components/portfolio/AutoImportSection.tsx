@@ -141,39 +141,37 @@ export function AutoImportSection({ studentProfileId, hasExistingData }: AutoImp
 
   if (hasExistingData) {
     return (
-      <section className="bg-white border border-gray-200 rounded-lg p-6">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h2 className="text-lg font-medium text-gray-900">Auto-Import Profile</h2>
-            <p className="text-sm text-gray-600 mt-1">
-              Update your profile automatically from CV, LinkedIn, or GitHub
-            </p>
-          </div>
+      <section className="bg-white border border-gray-200 rounded-lg p-5">
+        <div className="mb-4">
+          <h3 className="text-base font-semibold text-gray-900 mb-1">Auto-Import</h3>
+          <p className="text-xs text-gray-600">
+            Update from CV, LinkedIn, or GitHub
+          </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-3">
           {error && (
-            <div className="bg-red-50 border border-red-200 rounded-md p-3">
-              <p className="text-sm text-red-800">{error}</p>
+            <div className="bg-red-50 border border-red-200 rounded-md p-2">
+              <p className="text-xs text-red-800">{error}</p>
             </div>
           )}
 
           {success && (
-            <div className="bg-green-50 border border-green-200 rounded-md p-3">
-              <p className="text-sm text-green-800">{success}</p>
+            <div className="bg-green-50 border border-green-200 rounded-md p-2">
+              <p className="text-xs text-green-800">{success}</p>
             </div>
           )}
 
           {progress && (
-            <div className="bg-blue-50 border border-blue-200 rounded-md p-3">
-              <p className="text-sm text-blue-800">{progress}</p>
+            <div className="bg-blue-50 border border-blue-200 rounded-md p-2">
+              <p className="text-xs text-blue-800">{progress}</p>
             </div>
           )}
 
           {/* CV Upload */}
           <div>
-            <label htmlFor="cv" className="block text-sm font-medium text-gray-700 mb-2">
-              Upload CV (PDF or DOCX)
+            <label htmlFor="cv" className="block text-xs font-medium text-gray-700 mb-1">
+              CV (PDF/DOCX)
             </label>
             <input
               ref={cvFileInputRef}
@@ -182,22 +180,14 @@ export function AutoImportSection({ studentProfileId, hasExistingData }: AutoImp
               accept=".pdf,.docx"
               onChange={handleCvSelect}
               disabled={loading}
-              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-brand-light file:text-white hover:file:bg-brand-light/90 disabled:opacity-50"
+              className="block w-full text-xs text-gray-500 file:mr-2 file:py-1.5 file:px-3 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200 disabled:opacity-50"
             />
-            {cvFile && (
-              <p className="mt-1 text-xs text-gray-500">
-                Selected: {cvFile.name} ({(cvFile.size / 1024).toFixed(1)} KB)
-              </p>
-            )}
-            <p className="mt-1 text-xs text-gray-500">
-              We'll extract your skills, experience, and bio from your CV
-            </p>
           </div>
 
           {/* LinkedIn URL */}
           <div>
-            <label htmlFor="linkedin" className="block text-sm font-medium text-gray-700 mb-2">
-              LinkedIn Profile URL
+            <label htmlFor="linkedin" className="block text-xs font-medium text-gray-700 mb-1">
+              LinkedIn URL
             </label>
             <input
               id="linkedin"
@@ -205,18 +195,15 @@ export function AutoImportSection({ studentProfileId, hasExistingData }: AutoImp
               value={linkedinUrl}
               onChange={(e) => setLinkedinUrl(e.target.value)}
               disabled={loading}
-              placeholder="https://linkedin.com/in/yourprofile"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent disabled:opacity-50"
+              placeholder="linkedin.com/in/..."
+              className="w-full px-2 py-1.5 text-xs border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-brand-light focus:border-transparent disabled:opacity-50"
             />
-            <p className="mt-1 text-xs text-gray-500">
-              We'll extract your professional information from LinkedIn
-            </p>
           </div>
 
           {/* GitHub URL */}
           <div>
-            <label htmlFor="github" className="block text-sm font-medium text-gray-700 mb-2">
-              GitHub Profile URL
+            <label htmlFor="github" className="block text-xs font-medium text-gray-700 mb-1">
+              GitHub URL
             </label>
             <input
               id="github"
@@ -224,19 +211,16 @@ export function AutoImportSection({ studentProfileId, hasExistingData }: AutoImp
               value={githubUrl}
               onChange={(e) => setGithubUrl(e.target.value)}
               disabled={loading}
-              placeholder="https://github.com/username"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent disabled:opacity-50"
+              placeholder="github.com/username"
+              className="w-full px-2 py-1.5 text-xs border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-brand-light focus:border-transparent disabled:opacity-50"
             />
-            <p className="mt-1 text-xs text-gray-500">
-              We'll automatically create portfolio projects from your GitHub repositories
-            </p>
           </div>
 
           {/* GitHub Token (Optional) */}
           {githubUrl && (
             <div>
-              <label htmlFor="githubToken" className="block text-sm font-medium text-gray-700 mb-2">
-                GitHub Personal Access Token (Optional)
+              <label htmlFor="githubToken" className="block text-xs font-medium text-gray-700 mb-1">
+                GitHub Token (Optional)
               </label>
               <input
                 id="githubToken"
@@ -244,29 +228,18 @@ export function AutoImportSection({ studentProfileId, hasExistingData }: AutoImp
                 value={githubToken}
                 onChange={(e) => setGithubToken(e.target.value)}
                 disabled={loading}
-                placeholder="ghp_xxxxxxxxxxxx"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent disabled:opacity-50"
+                placeholder="ghp_..."
+                className="w-full px-2 py-1.5 text-xs border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-brand-light focus:border-transparent disabled:opacity-50"
               />
-              <p className="mt-1 text-xs text-gray-500">
-                Required only for private repositories. Create one at{' '}
-                <a
-                  href="https://github.com/settings/tokens"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-brand-light hover:underline"
-                >
-                  github.com/settings/tokens
-                </a>
-              </p>
             </div>
           )}
 
           <button
             type="submit"
             disabled={loading || (!cvFile && !linkedinUrl && !githubUrl)}
-            className="w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full btn-secondary text-xs py-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? 'Importing...' : 'Import & Update Profile'}
+            {loading ? 'Importing...' : 'Import'}
           </button>
         </form>
       </section>
