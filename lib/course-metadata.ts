@@ -364,6 +364,16 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     time: '~8–10 weeks',
     industries: ['E-commerce', 'Marketplaces', 'Retail / CPG'],
   },
+  'vertical-specific-ai-visibility-playbooks': {
+    slug: 'vertical-specific-ai-visibility-playbooks',
+    title: 'Vertical-Specific AI Visibility Playbooks',
+    category: 'AI Search & Visibility',
+    outcome: 'Design, defend, and operationalise proprietary AI visibility playbooks tailored to specific industries with clear competitive and risk advantage.',
+    build: 'Complete vertical AI visibility program with industry-specific playbooks, risk registers, share of voice dashboards, executive briefings, and operational guidance for product, PR, and compliance teams.',
+    bestFor: 'Vertical AI Strategy Directors, Industry AI Visibility Leads, Executive AI Advisors, and senior leaders building proprietary AI strategy IP.',
+    time: '~8–10 weeks',
+    industries: ['Healthcare', 'Fintech', 'E-commerce', 'SaaS', 'Legal & Compliance'],
+  },
 };
 
 // Get category groups for organizing courses
