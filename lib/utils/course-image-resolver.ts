@@ -66,8 +66,7 @@ export function resolveCourseImageUrl(course: CourseWithImage): string {
     return trimmed.length > 0 && 
            trimmed !== 'image' && 
            trimmed !== 'placeholder' &&
-           !trimmed.startsWith('http://placeholder') &&
-           trimmed !== course.title; // Don't use course title as image source
+           !trimmed.startsWith('http://placeholder');
   };
 
   // Priority 1: Direct imageUrl (per-course override)
