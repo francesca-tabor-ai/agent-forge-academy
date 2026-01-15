@@ -4,10 +4,12 @@
 
 import type { CourseMetadata as CourseSyncMetadata } from '@/lib/course-sync/types';
 import type { CourseMetadata as DashboardMetadata } from '@/lib/course-metadata';
+import { getCoverFromIndustries, INDUSTRY_COVERS } from '@/lib/courseCovers';
 
 /**
  * Default image URLs by industry
  * Industry images take priority over track images
+ * @deprecated Use INDUSTRY_COVERS from @/lib/courseCovers instead
  */
 const INDUSTRY_DEFAULT_IMAGES: Record<string, string> = {
   'Finance': 'https://www.esri.com/about/newsroom/app/uploads/2022/03/is-spatial-finance-coming-to-your-company-wherenext-article-wide-1920x1080-1.jpg',
@@ -47,51 +49,59 @@ interface CourseWithImage {
 
 /**
  * Resolves the image URL for a course with fallback logic:
- * 1. course.imageUrl (if provided)
- * 2. course.thumbnail_url (if provided)
- * 3. Industry-based default image (based on industries array - takes priority over track)
- * 4. Track-based default image (based on category/track)
- * 5. Global fallback image
+ * 1. course.imageUrl (if provided and valid - per-course override)
+ * 2. Industry-based default image (primary source - all courses in same industry share same image)
+ * 3. Track-based default image (based on category/track)
+ * 4. Global fallback image
+ * 
+ * Note: Industry images are the default source. Course-specific imageUrl is only used as an override.
+ * The alt text remains the course title for accessibility.
  */
 export function resolveCourseImageUrl(course: CourseWithImage): string {
-  // Helper to validate URL is not empty or invalid
+  // Helper to validate URL is not empty, invalid, or a placeholder
   const isValidUrl = (url: string | null | undefined): url is string => {
-    return !!url && typeof url === 'string' && url.trim().length > 0;
+    if (!url || typeof url !== 'string') return false;
+    const trimmed = url.trim();
+    // Filter out common placeholder values
+    return trimmed.length > 0 && 
+           trimmed !== 'image' && 
+           trimmed !== 'placeholder' &&
+           !trimmed.startsWith('http://placeholder') &&
+           trimmed !== course.title; // Don't use course title as image source
   };
 
-  // Priority 1: Direct imageUrl
+  // Priority 1: Direct imageUrl (per-course override)
+  // Only use if it's a valid URL and not a placeholder
   if (isValidUrl(course.imageUrl)) {
     return course.imageUrl;
   }
 
-  // Priority 2: thumbnail_url from database
-  if (isValidUrl(course.thumbnail_url)) {
-    return course.thumbnail_url;
-  }
-
-  // Priority 3: Industry-based fallback (takes priority over track)
+  // Priority 2: Industry-based default image (primary source)
+  // All courses in the same industry share the same cover image
   const industries = course.industries || course.metadata?.industries || [];
-  for (const industry of industries) {
-    if (industry && INDUSTRY_DEFAULT_IMAGES[industry]) {
-      return INDUSTRY_DEFAULT_IMAGES[industry];
+  if (industries.length > 0) {
+    const industryCover = getCoverFromIndustries(industries);
+    if (industryCover && industryCover !== INDUSTRY_COVERS.Default) {
+      return industryCover;
     }
   }
 
-  // Priority 4: Track-based fallback
+  // Priority 3: Track-based fallback
   const track = course.category || course.metadata?.category;
   if (track && TRACK_DEFAULT_IMAGES[track]) {
     return TRACK_DEFAULT_IMAGES[track];
   }
 
-  // Priority 5: Global fallback
+  // Priority 4: Global fallback
   return DEFAULT_FALLBACK_IMAGE;
 }
 
 /**
  * Get default image URL for an industry
+ * @deprecated Use getIndustryCover from @/lib/courseCovers instead
  */
 export function getDefaultImageForIndustry(industry: string): string {
-  return INDUSTRY_DEFAULT_IMAGES[industry] || DEFAULT_FALLBACK_IMAGE;
+  return INDUSTRY_DEFAULT_IMAGES[industry] || INDUSTRY_COVERS[industry] || DEFAULT_FALLBACK_IMAGE;
 }
 
 /**
