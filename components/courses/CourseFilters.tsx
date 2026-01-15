@@ -31,7 +31,7 @@ interface CourseFiltersProps {
 const TRACKS = [
   'Vibe Engineering',
   'Agentic Systems',
-  'AI Search & Viability',
+  'AI Search & Visibility',
   'Shopping & E-Commerce',
   'Media & Content Ops',
   'Trust & Regulation',

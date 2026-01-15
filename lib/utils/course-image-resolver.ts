@@ -11,7 +11,7 @@ import type { CourseMetadata as DashboardMetadata } from '@/lib/course-metadata'
 const TRACK_DEFAULT_IMAGES: Record<string, string> = {
   'Vibe Engineering': '/images/tracks/vibe-engineering.jpg',
   'Agentic Systems': '/images/tracks/agentic-systems.jpg',
-  'AI Search & Viability': '/images/tracks/ai-search-viability.jpg',
+  'AI Search & Visibility': '/images/tracks/ai-search-viability.jpg',
   'Shopping & E-Commerce': '/images/tracks/shopping-ecommerce.jpg',
   'Media & Content Ops': '/images/tracks/media-content-ops.jpg',
   'Trust & Regulation': '/images/tracks/trust-regulation.jpg',

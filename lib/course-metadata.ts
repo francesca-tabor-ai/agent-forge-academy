@@ -67,7 +67,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
   'amazon-rufus-optimisation': {
     slug: 'amazon-rufus-optimisation',
     title: 'Amazon Rufus Optimisation',
-    category: 'AI Search & Viability',
+    category: 'AI Search & Visibility',
     outcome: "Make your listings win in Amazon's AI shopping experiences.",
     build: 'A listing optimisation checklist + experimentation loop (titles, bullets, A+ content, Q&A signals).',
     bestFor: 'E-commerce operators and growth teams on Amazon.',
@@ -77,7 +77,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
   'reddit-ai-visibility': {
     slug: 'reddit-ai-visibility',
     title: 'Reddit AI Visibility',
-    category: 'AI Search & Viability',
+    category: 'AI Search & Visibility',
     outcome: 'Earn visibility in AI-driven discovery where authenticity matters.',
     build: 'A playbook for community-first visibility (topic mapping, contribution cadence, measurement).',
     bestFor: 'Founders and marketers targeting niche audiences.',
@@ -87,7 +87,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
   'seo-to-aeo': {
     slug: 'seo-to-aeo',
     title: 'SEO → AEO (Search to Answer Engine Optimisation)',
-    category: 'AI Search & Viability',
+    category: 'AI Search & Visibility',
     outcome: 'Rank for answers, not just clicks.',
     build: 'Content and structure patterns that improve citation/answer pickup (schema, Q&A blocks, entity coverage).',
     bestFor: 'Content, SEO, and product marketing teams.',
@@ -97,7 +97,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
   'hyper-personalised-marketing-advertising': {
     slug: 'hyper-personalised-marketing-advertising',
     title: 'Hyper-Personalised Marketing & Advertising',
-    category: 'AI Search & Viability',
+    category: 'AI Search & Visibility',
     outcome: 'Personalise responsibly without creepy or chaotic automation.',
     build: 'A segmentation + message matrix, plus guardrails for frequency, consent, and performance.',
     bestFor: 'Performance marketers and lifecycle teams.',
@@ -107,7 +107,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
   'ai-visibility': {
     slug: 'ai-visibility',
     title: 'Mastering the AI Visibility Playbook',
-    category: 'AI Search & Viability',
+    category: 'AI Search & Visibility',
     outcome: 'Transform from traditional SEO to AI visibility architecture and achieve 40%+ visibility increases in AI Overviews.',
     build: 'Complete AI visibility system with llms.txt, structured data, content engineering (Inverted Pyramid 2.0), entity authority, and hallucination defense.',
     bestFor: 'SEO specialists, content marketers, and technical SEOs transitioning to AI visibility optimization.',
@@ -117,7 +117,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
   'llm-first-websites': {
     slug: 'llm-first-websites',
     title: 'Engineering for Machine Judgment (RX)',
-    category: 'AI Search & Viability',
+    category: 'AI Search & Visibility',
     outcome: 'Build LLM-first websites optimized for AI intermediaries that achieve higher visibility and citation recognition.',
     build: 'Complete RX system with ontology/taxonomy, intent-driven APIs, safety boundaries, observability, and governance frameworks.',
     bestFor: 'Web developers, product managers, and data architects building machine-first experiences.',

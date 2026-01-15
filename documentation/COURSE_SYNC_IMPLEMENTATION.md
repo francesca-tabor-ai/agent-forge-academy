@@ -95,7 +95,7 @@ npm run generate-metadata
      slug: ai-visibility
      title: Mastering the AI Visibility Playbook
      description: Transform from traditional SEO to AI visibility architecture
-     category: AI Search & Viability
+     category: AI Search & Visibility
      duration_weeks: 7
      difficulty_level: advanced
      is_published: true
