@@ -10,6 +10,7 @@ import type { CourseMetadata as DashboardMetadata } from '@/lib/course-metadata'
  * Industry images take priority over track images
  */
 const INDUSTRY_DEFAULT_IMAGES: Record<string, string> = {
+  'Finance': 'https://www.esri.com/about/newsroom/app/uploads/2022/03/is-spatial-finance-coming-to-your-company-wherenext-article-wide-1920x1080-1.jpg',
   'Healthcare': 'https://www.sutherlandglobal.com/wp-content/uploads/sites/2/AI-in-Healthcare-859x507-1.jpg',
 };
 
