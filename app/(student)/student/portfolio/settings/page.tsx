@@ -9,7 +9,7 @@ export default async function PortfolioSettingsPage() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect('/login');
+    redirect('/auth/login');
   }
 
   // Get user's profile
