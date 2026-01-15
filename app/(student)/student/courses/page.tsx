@@ -2,6 +2,7 @@ import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import { getAllCourseSlugs, loadAllLessons } from '@/lib/lessons';
 import { courseMetadata } from '@/lib/course-metadata';
+import { extractCourseMetadata } from '@/lib/course-sync/extract-metadata';
 import { CoursesPageClient } from '@/components/courses/CoursesPageClient';
 import { getUserSubscriptionTier } from '@/lib/utils/subscription-access';
 
@@ -86,14 +87,19 @@ export default async function CoursesPage() {
   };
 
   const allCourses: CourseWithMetadata[] = (courses || []).map((course) => {
-    const metadata = courseMetadata[course.slug];
+    // Try dynamic metadata extraction first (from _COURSE_METADATA.md)
+    const dynamicMetadata = extractCourseMetadata(course.slug);
+    // Fallback to static metadata if dynamic extraction fails
+    const staticMetadata = courseMetadata[course.slug];
+    const metadata = dynamicMetadata?.metadata || staticMetadata;
+    
     return {
       ...course,
-      industries: course.industries || [],
+      industries: course.industries || dynamicMetadata?.metadata?.industries || [],
       hasContent: courseSlugSet.has(course.slug),
-      category: metadata?.category,
-      imageUrl: metadata?.imageUrl,
-      metadata,
+      category: metadata?.category || dynamicMetadata?.metadata?.category,
+      imageUrl: dynamicMetadata?.metadata?.imageUrl || metadata?.imageUrl,
+      metadata: staticMetadata, // Keep static metadata for backward compatibility
     };
   });
 
@@ -102,23 +108,28 @@ export default async function CoursesPage() {
     if (!allCourses.find((c) => c.slug === slug)) {
       // Try to get lesson count
       const lessons = loadAllLessons(undefined, slug);
-      const metadata = courseMetadata[slug];
+      // Try dynamic metadata extraction first (from _COURSE_METADATA.md)
+      const dynamicMetadata = extractCourseMetadata(slug);
+      // Fallback to static metadata if dynamic extraction fails
+      const staticMetadata = courseMetadata[slug];
+      const metadata = dynamicMetadata?.metadata || staticMetadata;
+      
       allCourses.push({
         id: null, // Not in database yet
         slug,
-        title: metadata?.title || slug.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()),
-        description: metadata?.outcome || null,
-        thumbnail_url: null,
-        imageUrl: metadata?.imageUrl,
-        duration_weeks: null,
-        difficulty_level: null,
-        is_published: false,
+        title: dynamicMetadata?.metadata?.title || metadata?.title || slug.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()),
+        description: dynamicMetadata?.metadata?.description || metadata?.outcome || null,
+        thumbnail_url: dynamicMetadata?.metadata?.thumbnail_url || null,
+        imageUrl: dynamicMetadata?.metadata?.imageUrl || metadata?.imageUrl,
+        duration_weeks: dynamicMetadata?.metadata?.duration_weeks || null,
+        difficulty_level: dynamicMetadata?.metadata?.difficulty_level || null,
+        is_published: dynamicMetadata?.metadata?.is_published || false,
         created_at: null,
         updated_at: null,
         hasContent: lessons.length > 0,
-        industries: metadata?.industries || [],
-        category: metadata?.category,
-        metadata,
+        industries: dynamicMetadata?.metadata?.industries || metadata?.industries || [],
+        category: dynamicMetadata?.metadata?.category || metadata?.category,
+        metadata: staticMetadata, // Keep static metadata for backward compatibility
       });
     }
   }
