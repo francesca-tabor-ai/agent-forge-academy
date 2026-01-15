@@ -134,6 +134,16 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     time: '~6–7 weeks',
     industries: ['SaaS', 'DevTools', 'Media & Publishing'],
   },
+  'paid-ai-ads-readiness': {
+    slug: 'paid-ai-ads-readiness',
+    title: 'Paid AI Ads Readiness',
+    category: 'AI Search & Visibility',
+    outcome: 'Design, simulate, and operationalise AI-native media strategies ahead of paid AI ad inventory launches.',
+    build: 'Complete paid AI ads readiness plan with persona mapping, intent clusters, answer-level bidding strategy, trust signal optimization, inventory simulation, and 90-day launch playbook.',
+    bestFor: 'Senior media strategists, paid media directors, agency leads, and marketing executives preparing for paid AI ad platforms.',
+    time: '~6–8 weeks',
+    industries: ['E-commerce', 'SaaS', 'Media & Publishing', 'Retail / CPG'],
+  },
   'agentic-commerce': {
     slug: 'agentic-commerce',
     title: 'Mastering the Agentic Economy',
@@ -323,6 +333,16 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     bestFor: 'AI Product Managers, Product Managers working with ML or GenAI, Design and UX leaders collaborating on AI products, and Senior Data Scientists transitioning into product roles.',
     time: '~6–8 weeks',
     industries: ['SaaS', 'DevTools', 'E-commerce', 'Media & Publishing'],
+  },
+  'insight-os-from-raw-data-to-executive-decisions': {
+    slug: 'insight-os-from-raw-data-to-executive-decisions',
+    title: 'Insight OS: From Raw Data to Executive Decisions',
+    category: 'AI Search & Visibility',
+    outcome: 'Build an analytical foundation that transforms raw data into trusted, decision-ready insights used by product leaders, operators, and executives.',
+    build: 'Complete Insight Operating System with KPI frameworks, analytical SQL, metrics layers, actionable dashboards, root-cause analysis, executive communication, and self-serve analytics enablement.',
+    bestFor: 'Data Analysts, Product Analysts, Business Analysts, early-career Data Scientists, and Consultants moving into analytics roles.',
+    time: '~6–8 weeks',
+    industries: ['SaaS', 'E-commerce', 'B2B Sales / RevOps', 'Retail / CPG'],
   },
 };
 
