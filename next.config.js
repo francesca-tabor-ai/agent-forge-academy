@@ -58,6 +58,12 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'www.bvp.com',
+        port: '',
+        pathname: '/**',
+      },
       // Supabase storage (if used)
       {
         protocol: 'https',
