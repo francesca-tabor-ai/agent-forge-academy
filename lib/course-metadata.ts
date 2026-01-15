@@ -62,7 +62,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     build: 'Complete agentic RAG system with CRAG, Adaptive RAG, Graph-based RAG, specialized frameworks, evaluation metrics, security, and production deployment.',
     bestFor: 'AI engineers, ML engineers, and teams building enterprise knowledge assistants with autonomous reasoning capabilities.',
     time: '~7 weeks',
-    industries: ['SaaS', 'DevTools', 'Healthcare'],
+    industries: ['SaaS', 'DevTools'],
   },
   'amazon-rufus-optimisation': {
     slug: 'amazon-rufus-optimisation',
@@ -222,7 +222,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     build: 'A governance checklist (risk classification, documentation, human oversight, monitoring, incident response).',
     bestFor: 'Operators, compliance, product leaders in the EU orbit.',
     time: '~3–6 hours',
-    industries: ['Legal & Compliance', 'SaaS', 'Healthcare', 'Fintech'],
+    industries: ['Legal & Compliance', 'SaaS', 'Fintech'],
   },
   'multi-agent-systems': {
     slug: 'multi-agent-systems',
@@ -322,7 +322,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     build: 'Complete Leadership & Strategy Operating System with data & AI strategy design, operating models, KPI trees and OKRs, portfolio prioritization, executive communication, and culture scaling.',
     bestFor: 'Directors and VPs of Data, Analytics, or AI, Heads of Data Science or Machine Learning, Senior Product or Engineering leaders owning AI strategy, and aspiring Chief Data or Chief AI Officers.',
     time: '~6–8 weeks',
-    industries: ['SaaS', 'E-commerce', 'B2B Sales / RevOps', 'Healthcare', 'Fintech'],
+    industries: ['SaaS', 'E-commerce', 'B2B Sales / RevOps', 'Fintech'],
   },
   'ai-product-os': {
     slug: 'ai-product-os',
@@ -372,7 +372,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     build: 'Complete vertical AI visibility program with industry-specific playbooks, risk registers, share of voice dashboards, executive briefings, and operational guidance for product, PR, and compliance teams.',
     bestFor: 'Vertical AI Strategy Directors, Industry AI Visibility Leads, Executive AI Advisors, and senior leaders building proprietary AI strategy IP.',
     time: '~8–10 weeks',
-    industries: ['Healthcare', 'Fintech', 'E-commerce', 'SaaS', 'Legal & Compliance'],
+    industries: ['Fintech', 'E-commerce', 'SaaS', 'Legal & Compliance'],
   },
   'ai-visibility-attribution': {
     slug: 'ai-visibility-attribution',
@@ -412,7 +412,17 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     build: 'Complete AI automation operations system with automation target selection, human-in-the-loop design, tooling integration, training and enablement, productivity measurement, and operating model frameworks.',
     bestFor: 'Operations leaders, Automation engineers, IT leaders, and professionals responsible for deploying AI automation at scale.',
     time: '~8 weeks',
-    industries: ['SaaS', 'B2B Sales / RevOps', 'E-commerce', 'Healthcare'],
+    industries: ['SaaS', 'B2B Sales / RevOps', 'E-commerce'],
+  },
+  'ai-native-go-to-market-systems-agentic': {
+    slug: 'ai-native-go-to-market-systems',
+    title: 'AI-Native Go-To-Market Systems, for GTM Engineers',
+    category: 'Agentic Systems',
+    outcome: 'Design, build, and iterate on AI-native GTM engines that support Sales, Marketing, and CS at scale.',
+    build: 'Complete AI-native GTM system with HubSpot automation, data enrichment, event-driven workflows, AI-powered classification and routing, outbound sequencing, analytics dashboards, and end-to-end monitoring.',
+    bestFor: 'Early-career operators (1–4 years) in RevOps, Sales Ops, Growth Ops, Marketing Ops, or Business Systems who want to become builders of modern GTM systems.',
+    time: '~8–10 weeks',
+    industries: ['B2B Sales / RevOps', 'SaaS'],
   },
   'building-ai-native-applications-with-weaviate': {
     slug: 'building-ai-native-applications-with-weaviate',
@@ -422,7 +432,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     build: 'Complete AI-native application with Weaviate vector database, semantic and hybrid search, RAG pipelines, multimodal data handling, scaling and security, and production deployment.',
     bestFor: 'AI engineers, ML engineers, Backend engineers, and Data engineers building AI-native applications with vector databases.',
     time: '~8 weeks',
-    industries: ['SaaS', 'DevTools', 'E-commerce', 'Healthcare'],
+    industries: ['SaaS', 'DevTools', 'E-commerce'],
   },
   'lawyer-to-legal-engineer': {
     slug: 'lawyer-to-legal-engineer',
@@ -432,7 +442,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     build: 'Complete legal AI system with legal workflow decomposition, prompt design for legal interfaces, RAG for legal knowledge, single and multi-agent systems, orchestration and state management, evaluation frameworks, and deployment strategies.',
     bestFor: 'Lawyers transitioning to legal engineering, Legal tech professionals, Legal operations directors, and professionals building AI systems for legal organizations.',
     time: '~11 weeks',
-    industries: ['Legal & Compliance', 'Healthcare', 'Fintech'],
+    industries: ['Legal & Compliance', 'Fintech'],
   },
   'trust-os-responsible-ai-data-governance': {
     slug: 'trust-os-responsible-ai-data-governance',
@@ -442,7 +452,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     build: 'Complete Trust OS with responsible AI frameworks, data governance models, compliance systems, explainability mechanisms, risk assessment, and organizational governance models.',
     bestFor: 'AI governance specialists, Compliance leaders, Risk managers, Data privacy professionals, and executives responsible for AI ethics and compliance.',
     time: '~6–8 weeks',
-    industries: ['Legal & Compliance', 'Healthcare', 'Fintech', 'SaaS'],
+    industries: ['Legal & Compliance', 'Fintech', 'SaaS'],
   },
   'reputation-hallucination-risk-management': {
     slug: 'reputation-hallucination-risk-management',
