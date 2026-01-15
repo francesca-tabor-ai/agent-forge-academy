@@ -182,4 +182,5 @@ if (require.main === module) {
   process.exit(exitCode);
 }
 
-export { lintContent, Violation };
+export { lintContent };
+export type { Violation };
