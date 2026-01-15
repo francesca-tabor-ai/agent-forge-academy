@@ -42,14 +42,16 @@ export default function PortfolioError({ error, reset }: ErrorProps) {
             <p className="text-sm text-gray-600 mb-4">
               We encountered an error while loading your portfolio.
             </p>
+            {/* Show digest in all environments for error tracking */}
+            {error.digest && (
+              <div className="mb-4 p-3 bg-gray-100 rounded text-xs text-left font-mono text-gray-800">
+                <strong>Error ID:</strong> {error.digest}
+              </div>
+            )}
+            {/* Show full error message in development only */}
             {process.env.NODE_ENV === 'development' && error.message && (
               <div className="mb-4 p-3 bg-gray-100 rounded text-xs text-left font-mono text-gray-800">
                 <strong>Error:</strong> {error.message}
-                {error.digest && (
-                  <div className="mt-1">
-                    <strong>Digest:</strong> {error.digest}
-                  </div>
-                )}
               </div>
             )}
             <div className="flex items-center justify-center gap-3">
@@ -57,7 +59,7 @@ export default function PortfolioError({ error, reset }: ErrorProps) {
                 onClick={reset}
                 className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
               >
-                Try again
+                Retry
               </button>
               <button
                 onClick={() => router.push('/student/dashboard')}
