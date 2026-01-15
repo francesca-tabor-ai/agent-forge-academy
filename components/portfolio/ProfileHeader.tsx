@@ -63,14 +63,17 @@ export function ProfileHeader({
   };
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+    <div className="bg-white border border-gray-200 rounded-lg relative overflow-visible">
       {/* Cover Banner - Fixed height, LinkedIn style */}
-      <div className="relative h-[140px] sm:h-[180px] md:h-[200px] bg-gradient-to-br from-blue-600 via-blue-500 to-indigo-600 rounded-t-lg overflow-hidden">
+      {/* Layer 1: Cover layer (background only) - overflow-hidden only on the gradient, not the wrapper */}
+      <div className="relative h-[140px] sm:h-[180px] md:h-[200px] bg-gradient-to-br from-blue-600 via-blue-500 to-indigo-600 rounded-t-lg overflow-visible">
         {/* Optional: Add banner image upload in future */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/90 via-blue-500/90 to-indigo-600/90"></div>
+        {/* Gradient overlay - overflow-hidden only here to clip the gradient to rounded corners */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/90 via-blue-500/90 to-indigo-600/90 rounded-t-lg overflow-hidden"></div>
         
-        {/* Avatar - Absolutely positioned, overlapping cover boundary only */}
-        <div className="absolute left-6 bottom-0 translate-y-1/2">
+        {/* Layer 2: Avatar layer - positioned relative to cover, above all decorative layers */}
+        {/* Avatar extends below cover by 50% of its height, guaranteed to be fully visible */}
+        <div className="absolute left-6 bottom-0 translate-y-1/2 z-30">
           <div className="w-20 h-20 sm:w-28 sm:h-28 rounded-full border-4 border-white bg-white shadow-xl overflow-hidden flex-shrink-0">
             {headshotImageUrl ? (
               <Image
@@ -89,8 +92,10 @@ export function ProfileHeader({
         </div>
       </div>
 
-      {/* Header Info Row - Normal flow, below cover with padding to clear avatar */}
-      <div className="px-6 pt-12 sm:pt-16 pb-6">
+      {/* Layer 3: Info layer - Normal flow, below cover with padding to clear avatar */}
+      {/* Padding calculation: avatar radius (40px mobile, 56px desktop) + gap (16px mobile, 20px desktop) */}
+      {/* pt-14 = 56px (40px + 16px), pt-20 = 80px (56px + 24px) */}
+      <div className="px-6 pt-14 sm:pt-20 pb-6 relative z-10 bg-white rounded-b-lg">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           {/* Left Side - Primary Info */}
           <div className="flex-1 min-w-0">
