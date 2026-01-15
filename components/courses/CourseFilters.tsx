@@ -65,11 +65,12 @@ const BEST_FOR_OPTIONS = [
 ];
 
 const SORT_OPTIONS = [
+  { value: 'track', label: 'Track A–Z' },
+  { value: 'course', label: 'Course Name A–Z' },
   { value: 'recommended', label: 'Recommended' },
   { value: 'shortest', label: 'Shortest → Longest' },
   { value: 'longest', label: 'Longest → Shortest' },
   { value: 'newest', label: 'Newest' },
-  { value: 'track', label: 'Track A–Z' },
 ];
 
 // Helper function to extract numeric time value for sorting
@@ -106,7 +107,7 @@ export function CourseFilters({ courses, onFilteredCoursesChange }: CourseFilter
   const [selectedIndustries, setSelectedIndustries] = useState<string[]>(
     searchParams.get('industries')?.split(',').filter(Boolean) || []
   );
-  const [sort, setSort] = useState(searchParams.get('sort') || 'recommended');
+  const [sort, setSort] = useState(searchParams.get('sort') || 'track');
   const [isExpanded, setIsExpanded] = useState(false);
 
   // Update URL params when filters change
@@ -118,7 +119,7 @@ export function CourseFilters({ courses, onFilteredCoursesChange }: CourseFilter
     if (difficulty) params.set('difficulty', difficulty);
     if (selectedBestFor.length > 0) params.set('bestFor', selectedBestFor.join(','));
     if (selectedIndustries.length > 0) params.set('industries', selectedIndustries.join(','));
-    if (sort && sort !== 'recommended') params.set('sort', sort);
+    if (sort && sort !== 'track') params.set('sort', sort);
 
     // Update URL without navigation
     const newUrl = params.toString() ? `?${params.toString()}` : window.location.pathname;
@@ -148,7 +149,7 @@ export function CourseFilters({ courses, onFilteredCoursesChange }: CourseFilter
         setDifficulty(parsed.difficulty || '');
         setSelectedBestFor(parsed.selectedBestFor || []);
         setSelectedIndustries(parsed.selectedIndustries || []);
-        setSort(parsed.sort || 'recommended');
+        setSort(parsed.sort || 'track');
       } catch (e) {
         // Ignore parse errors
       }
@@ -247,7 +248,16 @@ export function CourseFilters({ courses, onFilteredCoursesChange }: CourseFilter
       } else if (sort === 'track') {
         const trackA = a.metadata?.category || '';
         const trackB = b.metadata?.category || '';
-        return trackA.localeCompare(trackB);
+        const trackCompare = trackA.localeCompare(trackB);
+        // If tracks are the same, sort by course name A-Z
+        if (trackCompare !== 0) return trackCompare;
+        const titleA = a.metadata?.title || a.title || '';
+        const titleB = b.metadata?.title || b.title || '';
+        return titleA.localeCompare(titleB);
+      } else if (sort === 'course') {
+        const titleA = a.metadata?.title || a.title || '';
+        const titleB = b.metadata?.title || b.title || '';
+        return titleA.localeCompare(titleB);
       }
       // Recommended (default) - keep original order
       return 0;
@@ -286,7 +296,7 @@ export function CourseFilters({ courses, onFilteredCoursesChange }: CourseFilter
     setDifficulty('');
     setSelectedBestFor([]);
     setSelectedIndustries([]);
-    setSort('recommended');
+    setSort('track');
   };
 
   const hasActiveFilters =
@@ -300,7 +310,7 @@ export function CourseFilters({ courses, onFilteredCoursesChange }: CourseFilter
     (difficulty ? 1 : 0) +
     selectedBestFor.length +
     selectedIndustries.length +
-    (sort !== 'recommended' ? 1 : 0);
+    (sort !== 'track' ? 1 : 0);
 
   // Build array of active filter chips
   const activeFilterChips = useMemo(() => {
@@ -357,11 +367,11 @@ export function CourseFilters({ courses, onFilteredCoursesChange }: CourseFilter
     });
 
     // Sort
-    if (sort !== 'recommended') {
+    if (sort !== 'track') {
       const sortLabel = SORT_OPTIONS.find((opt) => opt.value === sort)?.label || sort;
       chips.push({
         label: `Sort: ${sortLabel}`,
-        onRemove: () => setSort('recommended'),
+        onRemove: () => setSort('track'),
       });
     }
 
