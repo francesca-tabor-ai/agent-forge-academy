@@ -72,6 +72,24 @@ const SORT_OPTIONS = [
   { value: 'track', label: 'Track A–Z' },
 ];
 
+// Helper function to extract numeric time value for sorting
+function extractTimeValue(timeStr: string): number {
+  // Extract hours or weeks
+  const hoursMatch = timeStr.match(/(\d+)[–-](\d+)\s*hours?/i);
+  if (hoursMatch) {
+    return parseInt(hoursMatch[2] || hoursMatch[1], 10);
+  }
+  const singleHourMatch = timeStr.match(/(\d+)\s*hours?/i);
+  if (singleHourMatch) {
+    return parseInt(singleHourMatch[1], 10);
+  }
+  const weeksMatch = timeStr.match(/(\d+)\s*weeks?/i);
+  if (weeksMatch) {
+    return parseInt(weeksMatch[1], 10) * 40; // Convert weeks to approximate hours
+  }
+  return 0;
+}
+
 export function CourseFilters({ courses, onFilteredCoursesChange }: CourseFiltersProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -543,22 +561,4 @@ export function CourseFilters({ courses, onFilteredCoursesChange }: CourseFilter
       </div>
     </div>
   );
-}
-
-// Helper function to extract numeric time value for sorting
-function extractTimeValue(timeStr: string): number {
-  // Extract hours or weeks
-  const hoursMatch = timeStr.match(/(\d+)[–-](\d+)\s*hours?/i);
-  if (hoursMatch) {
-    return parseInt(hoursMatch[2] || hoursMatch[1], 10);
-  }
-  const singleHourMatch = timeStr.match(/(\d+)\s*hours?/i);
-  if (singleHourMatch) {
-    return parseInt(singleHourMatch[1], 10);
-  }
-  const weeksMatch = timeStr.match(/(\d+)\s*weeks?/i);
-  if (weeksMatch) {
-    return parseInt(weeksMatch[1], 10) * 40; // Convert weeks to approximate hours
-  }
-  return 0;
 }

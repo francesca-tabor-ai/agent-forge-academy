@@ -69,36 +69,40 @@ export function AboutSection({ bio }: AboutSectionProps) {
       </div>
       
       <div className="text-sm text-gray-700 leading-relaxed">
-        {isBulletFormat ? (
-          // Bullet format
-          <ul className="space-y-2 list-none">
-            {((isExpanded ? cleanedBio : previewBio) ?? '')
-              .split('\n')
-              .filter(line => line.trim().length > 0)
-              .map((line, index) => {
-                // Remove bullet markers if present
-                const cleanLine = line.replace(/^[-•*]\s+/, '').trim();
-                return (
-                  <li key={index} className="flex items-start gap-2">
-                    <span className="text-gray-400 mt-1.5 flex-shrink-0">•</span>
-                    <span>{cleanLine}</span>
-                  </li>
-                );
-              })}
-          </ul>
-        ) : (
-          // Paragraph format
-          <div className="space-y-3">
-            {((isExpanded ? cleanedBio : previewBio) ?? '')
-              .split('\n\n')
-              .filter(para => para.trim().length > 0)
-              .map((paragraph, index) => (
-                <p key={index} className="leading-relaxed">
-                  {paragraph.trim()}
-                </p>
-              ))}
-          </div>
-        )}
+        {(() => {
+          const bioText = ((isExpanded ? cleanedBio : previewBio) ?? '');
+          
+          return isBulletFormat ? (
+            // Bullet format
+            <ul className="space-y-2 list-none">
+              {bioText
+                .split('\n')
+                .filter(line => line.trim().length > 0)
+                .map((line, index) => {
+                  // Remove bullet markers if present
+                  const cleanLine = line.replace(/^[-•*]\s+/, '').trim();
+                  return (
+                    <li key={index} className="flex items-start gap-2">
+                      <span className="text-gray-400 mt-1.5 flex-shrink-0">•</span>
+                      <span>{cleanLine}</span>
+                    </li>
+                  );
+                })}
+            </ul>
+          ) : (
+            // Paragraph format
+            <div className="space-y-3">
+              {bioText
+                .split('\n\n')
+                .filter(para => para.trim().length > 0)
+                .map((paragraph, index) => (
+                  <p key={index} className="leading-relaxed">
+                    {paragraph.trim()}
+                  </p>
+                ))}
+            </div>
+          );
+        })()}
       </div>
 
       {needsExpansion && (
