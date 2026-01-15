@@ -119,6 +119,7 @@ export function CourseCard({
     imageUrl: course.imageUrl,
     thumbnail_url: course.thumbnail_url,
     category: course.category || metadata?.category,
+    industries: displayIndustries,
     metadata,
   });
 
