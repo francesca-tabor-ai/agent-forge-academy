@@ -60,6 +60,12 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'www.esri.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'www.bvp.com',
         port: '',
         pathname: '/**',
