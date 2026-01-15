@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 interface Skill {
@@ -33,6 +34,7 @@ function normalizeSkills(skills: string[] | Skill[] | undefined): Skill[] {
 }
 
 export function SkillsSection({ skills = [], studentProfileId, onUpdate }: SkillsSectionProps) {
+  const router = useRouter();
   const [expanded, setExpanded] = useState(false);
   const [loading, setLoading] = useState<string | null>(null);
   
@@ -83,8 +85,8 @@ export function SkillsSection({ skills = [], studentProfileId, onUpdate }: Skill
       if (onUpdate) {
         onUpdate();
       } else {
-        // Fallback: reload page
-        window.location.reload();
+        // Fallback: refresh page data
+        router.refresh();
       }
     } catch (error) {
       console.error('Error moving skill up:', error);
@@ -126,8 +128,8 @@ export function SkillsSection({ skills = [], studentProfileId, onUpdate }: Skill
       if (onUpdate) {
         onUpdate();
       } else {
-        // Fallback: reload page
-        window.location.reload();
+        // Fallback: refresh page data
+        router.refresh();
       }
     } catch (error) {
       console.error('Error moving skill down:', error);
@@ -178,8 +180,8 @@ export function SkillsSection({ skills = [], studentProfileId, onUpdate }: Skill
       if (onUpdate) {
         onUpdate();
       } else {
-        // Fallback: reload page
-        window.location.reload();
+        // Fallback: refresh page data
+        router.refresh();
       }
     } catch (error) {
       console.error('Error toggling top skill:', error);
