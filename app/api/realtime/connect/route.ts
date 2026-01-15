@@ -51,10 +51,18 @@ export async function POST(request: NextRequest) {
 
     // Forward SDP offer to OpenAI Realtime API
     // OpenAI Realtime API WebRTC endpoint
-    // Note: The exact endpoint may vary - check OpenAI's latest documentation
+    // According to OpenAI docs: https://platform.openai.com/docs/guides/realtime-webrtc
     const REALTIME_ENDPOINT = 'https://api.openai.com/v1/realtime/calls';
     
     try {
+      // Validate SDP format (should be a string)
+      if (typeof sdp !== 'string' || !sdp.trim()) {
+        return NextResponse.json(
+          { error: 'Invalid SDP offer format' },
+          { status: 400 }
+        );
+      }
+
       const response = await fetch(REALTIME_ENDPOINT, {
         method: 'POST',
         headers: {
@@ -63,7 +71,7 @@ export async function POST(request: NextRequest) {
           // Include session info if available
           ...(session_token && { 'X-Session-Token': session_token }),
         },
-        body: sdp, // Send SDP offer as plain text
+        body: sdp, // Send SDP offer as plain text (not JSON)
       });
 
       if (!response.ok) {

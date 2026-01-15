@@ -703,14 +703,33 @@ export function WebRTCRealtime({
         
         // Provide more specific error messages
         let userFriendlyError = `Failed to connect to OpenAI Realtime API`;
+        let shouldFallback = false;
+        
         if (sdpResponse.status === 400) {
-          userFriendlyError = `Invalid connection request. Please try reconnecting.`;
+          userFriendlyError = `Realtime API connection failed. Falling back to standard voice.`;
+          shouldFallback = true;
         } else if (sdpResponse.status === 401) {
           userFriendlyError = `Authentication failed. Please refresh the page and try again.`;
         } else if (sdpResponse.status === 429) {
           userFriendlyError = `Rate limit exceeded. Please wait a moment and try again.`;
         } else if (sdpResponse.status === 503) {
           userFriendlyError = `Realtime service is temporarily unavailable. Please try again later.`;
+          shouldFallback = true;
+        }
+        
+        // For 400/503 errors, trigger fallback instead of showing error
+        if (shouldFallback && onFallback) {
+          safeLogger.warn('WebRTC connection failed, falling back to standard voice', {
+            status: sdpResponse.status,
+            error: errorText,
+            hasSession: !!session,
+            sessionId: session?.session_id,
+          });
+          setHasFailed(true);
+          setShowFallbackMessage(true);
+          onFallback();
+          setIsConnecting(false);
+          return; // Exit early, don't set error state
         }
         
         safeLogger.error('WebRTC connection failed', {
@@ -718,7 +737,7 @@ export function WebRTCRealtime({
           error: errorText,
           details: errorDetails,
           hasSession: !!session,
-          sessionId: session.session_id,
+          sessionId: session?.session_id,
         });
         
         throw new Error(`${userFriendlyError} (${sdpResponse.status})`);
