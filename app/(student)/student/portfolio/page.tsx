@@ -85,8 +85,30 @@ export default async function PortfolioPage() {
     }
 
     // Get portfolio projects (only if student profile exists)
-    let projects = null;
-    let featuredProjects = null;
+    type PortfolioProject = {
+      id: string;
+      title: string;
+      description: string | null;
+      github_url: string | null;
+      demo_url: string | null;
+      visibility: 'private' | 'recruiters_only' | 'public';
+      cover_image_url?: string | null;
+      images?: string[] | null;
+      created_at: string | null;
+      featured?: boolean;
+    };
+    
+    type FeaturedProject = {
+      id: string;
+      title: string;
+      description: string | null;
+      github_url: string | null;
+      demo_url: string | null;
+      cover_image_url: string | null;
+    };
+    
+    let projects: PortfolioProject[] | null = null;
+    let featuredProjects: FeaturedProject[] | null = null;
     
     if (studentProfile) {
       const { data: projectsData, error: projectsError } = await supabase
@@ -108,12 +130,13 @@ export default async function PortfolioPage() {
         // Serialize Date objects to ISO strings to avoid serialization issues
         projects = (projectsData || []).map(project => ({
           ...project,
+          visibility: (project.visibility as 'private' | 'recruiters_only' | 'public') || 'private',
           created_at: project.created_at 
             ? (typeof project.created_at === 'string' 
                 ? project.created_at 
                 : new Date(project.created_at).toISOString())
             : null,
-        }));
+        })) as PortfolioProject[];
       }
 
       const { data: featuredData, error: featuredError } = await supabase
@@ -159,7 +182,7 @@ export default async function PortfolioPage() {
       }
     }
 
-  const hasCV = !!cv;
+    const hasCV = !!cv;
 
     // Generate download URL - use signed URL if private, otherwise use public URL
     let cvDownloadUrl: string | null = null;
@@ -205,7 +228,6 @@ export default async function PortfolioPage() {
     const hasProfile = studentProfile && studentProfile.bio && studentProfile.bio.length > 50;
     if (hasProfile) completionScore += 25;
 
-    const hasCV = !!cv;
     if (hasCV) completionScore += 25;
 
     const hasProjects = projects && projects.length >= 2;

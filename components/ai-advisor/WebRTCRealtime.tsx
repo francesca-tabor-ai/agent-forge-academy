@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { usePathname } from 'next/navigation';
 import { createSystemConfigEvent, REALTIME_TOOLS } from '@/lib/ai/realtime-tools';
 import { safeLogger } from '@/lib/utils/redactPII';
 
