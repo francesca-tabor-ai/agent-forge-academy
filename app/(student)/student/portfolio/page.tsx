@@ -105,7 +105,15 @@ export default async function PortfolioPage() {
         // Don't throw - just log and continue with empty projects
         projects = [];
       } else {
-        projects = projectsData;
+        // Serialize Date objects to ISO strings to avoid serialization issues
+        projects = (projectsData || []).map(project => ({
+          ...project,
+          created_at: project.created_at 
+            ? (typeof project.created_at === 'string' 
+                ? project.created_at 
+                : new Date(project.created_at).toISOString())
+            : null,
+        }));
       }
 
       const { data: featuredData, error: featuredError } = await supabase
@@ -211,7 +219,12 @@ export default async function PortfolioPage() {
     const primaryRoles: string[] = []; // Can be derived from skills or separate field in future
     const coreSkills = (studentProfile?.skills as string[]) || [];
     const cvFileName = cv?.file_name || null;
-    const cvLastUpdated = cv?.uploaded_at || null;
+    // Serialize Date to ISO string to avoid serialization issues
+    const cvLastUpdated = cv?.uploaded_at 
+      ? (typeof cv.uploaded_at === 'string' 
+          ? cv.uploaded_at 
+          : new Date(cv.uploaded_at).toISOString())
+      : null;
     const cvVisibility = cv?.visibility || null;
 
     // Calculate visible project count
@@ -236,15 +249,15 @@ export default async function PortfolioPage() {
           {/* Profile Header - LinkedIn style */}
           {studentProfile && (
             <ProfileHeader
-              fullName={studentProfile.full_name}
-              headline={headline}
-              headshotImageUrl={studentProfile.headshot_image_url}
-              location={studentProfile.location}
-              linkedinUrl={studentProfile.linkedin_url}
-              githubUrl={studentProfile.github_url}
-              websiteUrl={studentProfile.website_url}
-              email={user.email}
-              visibility={studentProfile.visibility}
+              fullName={studentProfile.full_name || ''}
+              headline={headline || ''}
+              headshotImageUrl={studentProfile.headshot_image_url || null}
+              location={studentProfile.location || null}
+              linkedinUrl={studentProfile.linkedin_url || null}
+              githubUrl={studentProfile.github_url || null}
+              websiteUrl={studentProfile.website_url || null}
+              email={user?.email || ''}
+              visibility={studentProfile.visibility || 'private'}
               studentProfileId={studentProfile.id}
             />
           )}
@@ -307,7 +320,7 @@ export default async function PortfolioPage() {
           )}
 
           {/* Portfolio Advisor */}
-          <PortfolioAdvisorSection latestProjectId={projects && projects.length > 0 ? projects[0].id : undefined} />
+          <PortfolioAdvisorSection latestProjectId={projects && projects.length > 0 && projects[0]?.id ? projects[0].id : undefined} />
         </div>
       </div>
     </div>

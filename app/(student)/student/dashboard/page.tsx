@@ -4,11 +4,6 @@ import { getAllCourseSlugs, loadAllLessons } from '@/lib/lessons';
 import { courseMetadata } from '@/lib/course-metadata';
 import { CoursesSection } from '@/components/dashboard/CoursesSection';
 import { PortfolioSection } from '@/components/dashboard/PortfolioSection';
-import { JobOpportunitiesSection } from '@/components/dashboard/JobOpportunitiesSection';
-import { AIAdvisorSection } from '@/components/dashboard/AIAdvisorSection';
-import { OffersSection } from '@/components/dashboard/OffersSection';
-import { SubscriptionSection } from '@/components/dashboard/SubscriptionSection';
-import { getUserRole } from '@/lib/supabase/server';
 
 export default async function StudentDashboard() {
   const supabase = await createUserSupabaseClient();
@@ -19,8 +14,6 @@ export default async function StudentDashboard() {
   if (!user) {
     redirect('/auth/login');
   }
-
-  const role = await getUserRole();
 
   // Get student profile to check enrollments
   const { data: profile } = await supabase
@@ -151,25 +144,6 @@ export default async function StudentDashboard() {
     };
   }
 
-  // Get enrolled course slugs for offer recommendations
-  let enrolledCourseSlugs: string[] = [];
-  if (studentProfileId) {
-    const { data: enrollments } = await supabase
-      .from('course_enrollments')
-      .select('course_id')
-      .eq('student_profile_id', studentProfileId);
-
-    if (enrollments && enrollments.length > 0) {
-      const courseIds = enrollments.map(e => e.course_id);
-      const { data: courses } = await supabase
-        .from('courses')
-        .select('slug')
-        .in('id', courseIds);
-      
-      enrolledCourseSlugs = (courses || []).map(c => c.slug).filter(Boolean);
-    }
-  }
-
   return (
     <div className="space-y-8">
       <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
@@ -183,24 +157,6 @@ export default async function StudentDashboard() {
 
       {/* (2) Portfolio Section - Career signal layer */}
       <PortfolioSection portfolioData={portfolioData} />
-
-      {/* (3) Job Opportunities Section - Motivation + outcome alignment */}
-      <JobOpportunitiesSection studentProfileId={studentProfileId} />
-
-      {/* (4) AI Advisor Section - Support + momentum recovery */}
-      <AIAdvisorSection 
-        studentProfileId={studentProfileId}
-        activeCourses={allCourses.filter(c => c.id && enrollments[c.id])}
-      />
-
-      {/* (5) Offers Section - Tool Discounts (small card, never above learning/career) */}
-      <OffersSection 
-        studentProfileId={studentProfileId}
-        enrolledCourseSlugs={enrolledCourseSlugs}
-      />
-
-      {/* (6) Subscription Section - Lowest priority, admin-only */}
-      {role === 'admin' && <SubscriptionSection />}
     </div>
   );
 }
