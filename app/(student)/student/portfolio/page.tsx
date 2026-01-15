@@ -1,5 +1,7 @@
 import { createUserSupabaseClient, createServerSupabaseClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
+import { headers } from 'next/headers';
+import { safeLogger } from '@/lib/utils/redactPII';
 import Link from 'next/link';
 import { ProfileHeader } from '@/components/portfolio/ProfileHeader';
 import { AboutSection } from '@/components/portfolio/AboutSection';
@@ -16,111 +18,206 @@ import { Suspense } from 'react';
 import { getResumeBucketName } from '@/lib/utils/storage';
 
 export default async function PortfolioPage() {
-  const supabase = await createUserSupabaseClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const reqId = headers().get('x-vercel-id') ?? headers().get('x-request-id') ?? `local-${Date.now()}`;
 
-  if (!user) {
-    redirect('/login');
-  }
+  try {
+    const supabase = await createUserSupabaseClient();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
 
-  // Get user's profile
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('id, role')
-    .eq('user_id', user.id)
-    .single();
+    if (authError) {
+      safeLogger.error('[PortfolioPage] Auth error', {
+        reqId,
+        error: authError.message,
+        code: authError.status,
+      });
+      throw new Error(`Authentication error: ${authError.message}`);
+    }
 
-  if (!profile || profile.role !== 'student') {
-    redirect('/');
-  }
+    if (!user) {
+      redirect('/auth/login');
+    }
 
-  // Get student profile
-  const { data: studentProfile } = await supabase
-    .from('student_profiles')
-    .select('id, visibility, full_name, bio, headline, skills, location, linkedin_url, github_url, website_url, headshot_image_url')
-    .eq('profile_id', profile.id)
-    .single();
+    // Get user's profile
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('id, role')
+      .eq('user_id', user.id)
+      .single();
 
-  // Get portfolio projects (only if student profile exists)
-  const { data: projects } = studentProfile
-    ? await supabase
+    if (profileError) {
+      safeLogger.error('[PortfolioPage] Profile query error', {
+        reqId,
+        userId: user.id,
+        error: profileError.message,
+        code: profileError.code,
+        details: profileError.details,
+        hint: profileError.hint,
+      });
+      throw new Error(`Failed to fetch profile: ${profileError.message}`);
+    }
+
+    if (!profile || profile.role !== 'student') {
+      redirect('/');
+    }
+
+    // Get student profile
+    const { data: studentProfile, error: studentProfileError } = await supabase
+      .from('student_profiles')
+      .select('id, visibility, full_name, bio, headline, skills, location, linkedin_url, github_url, website_url, headshot_image_url')
+      .eq('profile_id', profile.id)
+      .single();
+
+    if (studentProfileError && studentProfileError.code !== 'PGRST116') {
+      // PGRST116 is "not found" which is acceptable (student profile might not exist yet)
+      safeLogger.error('[PortfolioPage] Student profile query error', {
+        reqId,
+        userId: user.id,
+        profileId: profile.id,
+        error: studentProfileError.message,
+        code: studentProfileError.code,
+        details: studentProfileError.details,
+        hint: studentProfileError.hint,
+      });
+      throw new Error(`Failed to fetch student profile: ${studentProfileError.message}`);
+    }
+
+    // Get portfolio projects (only if student profile exists)
+    let projects = null;
+    let featuredProjects = null;
+    
+    if (studentProfile) {
+      const { data: projectsData, error: projectsError } = await supabase
         .from('portfolio_projects')
         .select('id, title, description, github_url, demo_url, visibility, cover_image_url, images, created_at, featured')
         .eq('student_profile_id', studentProfile.id)
-        .order('created_at', { ascending: false })
-    : { data: null };
+        .order('created_at', { ascending: false });
 
-  // Get featured projects separately (for Featured section)
-  const { data: featuredProjects } = studentProfile
-    ? await supabase
+      if (projectsError) {
+        safeLogger.error('[PortfolioPage] Projects query error', {
+          reqId,
+          studentProfileId: studentProfile.id,
+          error: projectsError.message,
+          code: projectsError.code,
+        });
+        // Don't throw - just log and continue with empty projects
+        projects = [];
+      } else {
+        projects = projectsData;
+      }
+
+      const { data: featuredData, error: featuredError } = await supabase
         .from('portfolio_projects')
         .select('id, title, description, github_url, demo_url, cover_image_url')
         .eq('student_profile_id', studentProfile.id)
         .eq('featured', true)
         .order('created_at', { ascending: false })
-        .limit(4)
-    : { data: null };
+        .limit(4);
 
-  // Get CV data
-  const { data: cv } = await supabase
-    .from('student_cvs')
-    .select('file_name, uploaded_at, visibility, url, file_path')
-    .eq('student_profile_id', studentProfile?.id)
-    .order('uploaded_at', { ascending: false })
-    .limit(1)
-    .maybeSingle();
+      if (featuredError) {
+        safeLogger.warn('[PortfolioPage] Featured projects query error', {
+          reqId,
+          studentProfileId: studentProfile.id,
+          error: featuredError.message,
+        });
+        featuredProjects = [];
+      } else {
+        featuredProjects = featuredData;
+      }
+    }
+
+    // Get CV data
+    let cv = null;
+    if (studentProfile) {
+      const { data: cvData, error: cvError } = await supabase
+        .from('student_cvs')
+        .select('file_name, uploaded_at, visibility, url, file_path')
+        .eq('student_profile_id', studentProfile.id)
+        .order('uploaded_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (cvError && cvError.code !== 'PGRST116') {
+        safeLogger.warn('[PortfolioPage] CV query error', {
+          reqId,
+          studentProfileId: studentProfile.id,
+          error: cvError.message,
+        });
+        // Don't throw - CV is optional
+      } else {
+        cv = cvData;
+      }
+    }
 
   const hasCV = !!cv;
 
-  // Generate download URL - use signed URL if private, otherwise use public URL
-  let cvDownloadUrl: string | null = null;
-  if (cv) {
-    const bucketName = getResumeBucketName();
-    const serverSupabase = createServerSupabaseClient();
-    
-    if (cv.visibility === 'private') {
-      // Generate signed URL for private CVs (expires in 1 hour)
-      const { data: signedUrl } = await serverSupabase.storage
-        .from(bucketName)
-        .createSignedUrl(cv.file_path, 3600);
-      cvDownloadUrl = signedUrl?.signedUrl || null;
-    } else {
-      // Use public URL for non-private CVs
-      const { data: urlData } = serverSupabase.storage
-        .from(bucketName)
-        .getPublicUrl(cv.file_path);
-      cvDownloadUrl = urlData.publicUrl || cv.url || null;
+    // Generate download URL - use signed URL if private, otherwise use public URL
+    let cvDownloadUrl: string | null = null;
+    if (cv) {
+      try {
+        const bucketName = getResumeBucketName();
+        const serverSupabase = createServerSupabaseClient();
+        
+        if (cv.visibility === 'private') {
+          // Generate signed URL for private CVs (expires in 1 hour)
+          const { data: signedUrl, error: signedUrlError } = await serverSupabase.storage
+            .from(bucketName)
+            .createSignedUrl(cv.file_path, 3600);
+          
+          if (signedUrlError) {
+            safeLogger.warn('[PortfolioPage] Failed to generate signed URL', {
+              reqId,
+              error: signedUrlError.message,
+              filePath: cv.file_path,
+            });
+          } else {
+            cvDownloadUrl = signedUrl?.signedUrl || null;
+          }
+        } else {
+          // Use public URL for non-private CVs
+          const { data: urlData } = serverSupabase.storage
+            .from(bucketName)
+            .getPublicUrl(cv.file_path);
+          cvDownloadUrl = urlData.publicUrl || cv.url || null;
+        }
+      } catch (storageError: any) {
+        safeLogger.warn('[PortfolioPage] Storage URL generation error', {
+          reqId,
+          error: storageError?.message || 'Unknown storage error',
+        });
+        // Don't throw - CV download is optional
+      }
     }
-  }
 
-  // Calculate portfolio completion percentage
-  // Scoring: Profile (25%), CV (25%), Projects (25%), Visibility (25%)
-  let completionScore = 0;
-  const hasProfile = studentProfile && studentProfile.bio && studentProfile.bio.length > 50;
-  if (hasProfile) completionScore += 25;
+    // Calculate portfolio completion percentage
+    // Scoring: Profile (25%), CV (25%), Projects (25%), Visibility (25%)
+    let completionScore = 0;
+    const hasProfile = studentProfile && studentProfile.bio && studentProfile.bio.length > 50;
+    if (hasProfile) completionScore += 25;
 
-  if (hasCV) completionScore += 25;
+    const hasCV = !!cv;
+    if (hasCV) completionScore += 25;
 
-  const hasProjects = projects && projects.length >= 2;
-  if (hasProjects) completionScore += 25;
+    const hasProjects = projects && projects.length >= 2;
+    if (hasProjects) completionScore += 25;
 
-  const hasVisibleProjects = projects && projects.some(p => p.visibility !== 'private');
-  if (hasVisibleProjects) completionScore += 25;
+    const hasVisibleProjects = projects && projects.some(p => p.visibility !== 'private');
+    if (hasVisibleProjects) completionScore += 25;
 
-  // Get profile data
-  const headline = studentProfile?.headline || null;
-  const primaryRoles: string[] = []; // Can be derived from skills or separate field in future
-  const coreSkills = (studentProfile?.skills as string[]) || [];
-  const cvFileName = cv?.file_name || null;
-  const cvLastUpdated = cv?.uploaded_at || null;
-  const cvVisibility = cv?.visibility || null;
+    // Get profile data
+    const headline = studentProfile?.headline || null;
+    const primaryRoles: string[] = []; // Can be derived from skills or separate field in future
+    const coreSkills = (studentProfile?.skills as string[]) || [];
+    const cvFileName = cv?.file_name || null;
+    const cvLastUpdated = cv?.uploaded_at || null;
+    const cvVisibility = cv?.visibility || null;
 
-  // Calculate visible project count
-  const visibleProjectCount = projects ? projects.filter(p => p.visibility !== 'private').length : 0;
+    // Calculate visible project count
+    const visibleProjectCount = projects ? projects.filter(p => p.visibility !== 'private').length : 0;
 
-  return (
+    return (
     <div className="max-w-7xl mx-auto">
       {/* Toast Notification */}
       <Suspense fallback={null}>
@@ -214,6 +311,20 @@ export default async function PortfolioPage() {
         </div>
       </div>
     </div>
-  );
+    );
+  } catch (e) {
+    const error = e instanceof Error ? e : new Error(String(e));
+    
+    safeLogger.error('[PortfolioPage] Server render error', {
+      reqId,
+      message: error.message,
+      stack: error.stack,
+      name: error.name,
+      cause: error.cause,
+    });
+
+    // Re-throw to trigger error boundary
+    throw e;
+  }
 }
 
