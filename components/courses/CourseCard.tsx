@@ -115,6 +115,7 @@ export function CourseCard({
   const displayIndustries = course.industries || metadata?.industries || [];
   
   // Resolve image URL with fallback logic
+  // This always returns a valid URL (has fallback to default)
   const imageUrl = resolveCourseImageUrl({
     imageUrl: course.imageUrl,
     thumbnail_url: course.thumbnail_url,
@@ -122,6 +123,9 @@ export function CourseCard({
     industries: displayIndustries,
     metadata,
   });
+
+  // Safety check: ensure imageUrl is never empty or invalid
+  const safeImageUrl = imageUrl && imageUrl.trim() ? imageUrl : '/images/tracks/default.jpg';
 
   const handleCardClick = (e: React.MouseEvent) => {
     // Don't navigate if clicking on expand button or read more buttons
@@ -177,7 +181,7 @@ export function CourseCard({
       >
         {/* Optimized Background Image */}
         <Image
-          src={imageUrl}
+          src={safeImageUrl}
           alt={displayTitle}
           fill
           className="object-cover"

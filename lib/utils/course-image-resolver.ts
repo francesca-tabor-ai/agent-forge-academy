@@ -53,13 +53,18 @@ interface CourseWithImage {
  * 5. Global fallback image
  */
 export function resolveCourseImageUrl(course: CourseWithImage): string {
+  // Helper to validate URL is not empty or invalid
+  const isValidUrl = (url: string | null | undefined): url is string => {
+    return !!url && typeof url === 'string' && url.trim().length > 0;
+  };
+
   // Priority 1: Direct imageUrl
-  if (course.imageUrl) {
+  if (isValidUrl(course.imageUrl)) {
     return course.imageUrl;
   }
 
   // Priority 2: thumbnail_url from database
-  if (course.thumbnail_url) {
+  if (isValidUrl(course.thumbnail_url)) {
     return course.thumbnail_url;
   }
 
