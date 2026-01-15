@@ -113,7 +113,10 @@ export function CourseCard({
   const displayTime = metadata?.time || (course.duration_weeks ? `${course.duration_weeks} weeks` : '');
   const displayBestFor = metadata?.bestFor || '';
   const displayBuild = metadata?.build || '';
-  const displayIndustries = course.industries || metadata?.industries || [];
+  // Use course industries if it has values, otherwise fall back to metadata industries
+  const displayIndustries = (course.industries && course.industries.length > 0) 
+    ? course.industries 
+    : (metadata?.industries || []);
   
   // Show expand button if there's any content to expand (outcome/description, build, or bestFor)
   const hasExpandableContent = !!(displayOutcome || displayBuild || displayBestFor);
