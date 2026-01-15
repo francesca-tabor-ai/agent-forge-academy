@@ -415,16 +415,6 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     time: '~8 weeks',
     industries: ['SaaS', 'B2B Sales / RevOps', 'E-commerce'],
   },
-  'ai-native-go-to-market-systems-agentic': {
-    slug: 'ai-native-go-to-market-systems',
-    title: 'AI-Native Go-To-Market Systems, for GTM Engineers',
-    category: 'Agentic Systems',
-    outcome: 'Design, build, and iterate on AI-native GTM engines that support Sales, Marketing, and CS at scale.',
-    build: 'Complete AI-native GTM system with HubSpot automation, data enrichment, event-driven workflows, AI-powered classification and routing, outbound sequencing, analytics dashboards, and end-to-end monitoring.',
-    bestFor: 'Early-career operators (1–4 years) in RevOps, Sales Ops, Growth Ops, Marketing Ops, or Business Systems who want to become builders of modern GTM systems.',
-    time: '~8–10 weeks',
-    industries: ['B2B Sales / RevOps', 'SaaS'],
-  },
   'building-ai-native-applications-with-weaviate': {
     slug: 'building-ai-native-applications-with-weaviate',
     title: 'Building AI-Native Applications with Weaviate',

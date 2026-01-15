@@ -120,7 +120,7 @@ export default async function CoursesPage() {
         id: null, // Not in database yet
         slug,
         title: dynamicMetadata?.metadata?.title || metadata?.title || slug.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()),
-        description: dynamicMetadata?.metadata?.description || metadata?.outcome || null,
+        description: dynamicMetadata?.metadata?.description || staticMetadata?.outcome || null,
         thumbnail_url: dynamicMetadata?.metadata?.thumbnail_url || null,
         imageUrl: dynamicMetadata?.metadata?.imageUrl || metadata?.imageUrl,
         duration_weeks: dynamicMetadata?.metadata?.duration_weeks || null,
