@@ -72,7 +72,7 @@ export function AboutSection({ bio }: AboutSectionProps) {
         {isBulletFormat ? (
           // Bullet format
           <ul className="space-y-2 list-none">
-            {(isExpanded ? cleanedBio : previewBio)
+            {((isExpanded ? cleanedBio : previewBio) ?? '')
               .split('\n')
               .filter(line => line.trim().length > 0)
               .map((line, index) => {
@@ -89,7 +89,7 @@ export function AboutSection({ bio }: AboutSectionProps) {
         ) : (
           // Paragraph format
           <div className="space-y-3">
-            {(isExpanded ? cleanedBio : previewBio)
+            {((isExpanded ? cleanedBio : previewBio) ?? '')
               .split('\n\n')
               .filter(para => para.trim().length > 0)
               .map((paragraph, index) => (
