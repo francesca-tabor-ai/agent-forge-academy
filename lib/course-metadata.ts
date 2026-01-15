@@ -344,6 +344,16 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     time: '~6–8 weeks',
     industries: ['SaaS', 'E-commerce', 'B2B Sales / RevOps', 'Retail / CPG'],
   },
+  'prediction-os-applied-machine-learning-for-business': {
+    slug: 'prediction-os-applied-machine-learning-for-business',
+    title: 'Prediction OS: Applied Machine Learning for Business',
+    category: 'AI Search & Visibility',
+    outcome: 'Build predictive models that are used, trusted, and embedded in real business workflows to materially influence business decisions.',
+    build: 'Complete Prediction Operating System with problem framing, feature engineering at scale, predictive modeling patterns, bias evaluation, decision frameworks, productionization, and stakeholder communication.',
+    bestFor: 'Data Scientists, Applied Scientists, ML-curious Analysts transitioning to DS, and Product-focused ML practitioners building business-impacting predictions.',
+    time: '~8–10 weeks',
+    industries: ['SaaS', 'E-commerce', 'B2B Sales / RevOps', 'Retail / CPG'],
+  },
 };
 
 // Get category groups for organizing courses
