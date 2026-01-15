@@ -1,8 +1,8 @@
 ---
 slug: "lawyer-to-legal-engineer"
-title: "Course Index & Reference Guide"
-description: "Navigate all course materials and find what you need quickly"
-category: "Agentic Systems"
+title: "From Lawyer to Legal Engineer"
+description: "From Lawyer to Legal Engineer: Designing, Governing, and Deploying AI Systems for Legal Work"
+category: "Trust & Regulation"
 duration_weeks: 11
 difficulty_level: "intermediate"
 is_published: true
