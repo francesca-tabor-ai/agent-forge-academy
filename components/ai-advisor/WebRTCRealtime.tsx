@@ -62,6 +62,9 @@ export function WebRTCRealtime({
   context,
   onFallback,
 }: WebRTCRealtimeProps) {
+  const pathname = usePathname();
+  const isAiAdvisorRoute = pathname?.startsWith('/student/ai-advisor') ?? false;
+  
   const [isConnected, setIsConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -896,12 +899,21 @@ export function WebRTCRealtime({
     }
   }, [voiceOutputEnabled]);
 
-  // Auto-connect on mount - establish connection on page load
-  // Keep connection open until user navigates away or explicitly disconnects
+  // Auto-connect on mount - but only on AI Advisor route
+  // Gate Realtime connection to prevent it from connecting on Jobs/Portfolio pages
   useEffect(() => {
-    // Only connect once on mount, not on every render
-    if (!disabled && !isConnected && !isConnecting && !peerConnectionRef.current) {
+    // Only connect if:
+    // 1. On AI Advisor route
+    // 2. Not disabled
+    // 3. Not already connected/connecting
+    // 4. No existing connection
+    if (isAiAdvisorRoute && !disabled && !isConnected && !isConnecting && !peerConnectionRef.current) {
       connect();
+    } else if (!isAiAdvisorRoute) {
+      // If we're not on AI Advisor route, ensure we're disconnected
+      if (peerConnectionRef.current) {
+        disconnect();
+      }
     }
 
     // Cleanup on unmount (when user navigates away)
@@ -911,7 +923,7 @@ export function WebRTCRealtime({
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Empty deps - only run on mount/unmount
+  }, [isAiAdvisorRoute]); // Re-run when route changes
 
   // Sync audio element muted state with voice output toggle
   useEffect(() => {

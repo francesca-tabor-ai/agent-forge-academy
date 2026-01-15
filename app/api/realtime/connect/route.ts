@@ -14,24 +14,92 @@ import { safeLogger } from '@/lib/utils/redactPII';
  * - Validates session token (if implemented)
  */
 export async function POST(request: NextRequest) {
+  const reqId = `realtime-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+  
   try {
     // Authenticate user
     const supabase = await createUserSupabaseClient();
     const {
       data: { user },
+      error: authError,
     } = await supabase.auth.getUser();
 
+    if (authError) {
+      safeLogger.error('[RealtimeConnect] Auth error', {
+        reqId,
+        error: authError.message,
+        code: authError.status,
+      });
+      return NextResponse.json(
+        { 
+          error: 'Unauthorized',
+          message: 'Authentication failed',
+          details: process.env.NODE_ENV === 'development' ? authError.message : undefined,
+        },
+        { status: 401 }
+      );
+    }
+
     if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      safeLogger.error('[RealtimeConnect] No user session', { reqId });
+      return NextResponse.json(
+        { 
+          error: 'Unauthorized',
+          message: 'User session not found',
+        },
+        { status: 401 }
+      );
     }
 
     // Get request body
-    const body = await request.json();
+    let body;
+    try {
+      body = await request.json();
+    } catch (parseError) {
+      safeLogger.error('[RealtimeConnect] Invalid JSON body', {
+        reqId,
+        error: parseError instanceof Error ? parseError.message : 'Unknown parse error',
+      });
+      return NextResponse.json(
+        { 
+          error: 'Invalid request body',
+          message: 'Request body must be valid JSON',
+        },
+        { status: 400 }
+      );
+    }
+
     const { sdp, session_token } = body;
 
+    // Validate required fields
     if (!sdp) {
+      safeLogger.error('[RealtimeConnect] Missing SDP offer', {
+        reqId,
+        userId: user.id,
+        hasSessionToken: !!session_token,
+      });
       return NextResponse.json(
-        { error: 'SDP offer is required' },
+        { 
+          error: 'SDP offer is required',
+          message: 'SDP offer field is missing from request body',
+        },
+        { status: 400 }
+      );
+    }
+
+    // Validate SDP format
+    if (typeof sdp !== 'string' || !sdp.trim()) {
+      safeLogger.error('[RealtimeConnect] Invalid SDP format', {
+        reqId,
+        userId: user.id,
+        sdpType: typeof sdp,
+        sdpLength: sdp?.length || 0,
+      });
+      return NextResponse.json(
+        { 
+          error: 'Invalid SDP offer format',
+          message: 'SDP offer must be a non-empty string',
+        },
         { status: 400 }
       );
     }
@@ -39,9 +107,17 @@ export async function POST(request: NextRequest) {
     // Get OpenAI API key from environment
     const OPENAI_API_KEY = process.env.OPENAI_API_KEY || process.env.LLM_API_KEY;
     if (!OPENAI_API_KEY) {
-      safeLogger.error('OpenAI API key not configured for Realtime API');
+      safeLogger.error('[RealtimeConnect] OpenAI API key not configured', {
+        reqId,
+        userId: user.id,
+        hasOpenAIKey: !!process.env.OPENAI_API_KEY,
+        hasLLMKey: !!process.env.LLM_API_KEY,
+      });
       return NextResponse.json(
-        { error: 'Realtime API is not configured' },
+        { 
+          error: 'Realtime API is not configured',
+          message: 'OpenAI API key is missing. Please configure OPENAI_API_KEY or LLM_API_KEY environment variable.',
+        },
         { status: 500 }
       );
     }
@@ -55,13 +131,13 @@ export async function POST(request: NextRequest) {
     const REALTIME_ENDPOINT = 'https://api.openai.com/v1/realtime/calls';
     
     try {
-      // Validate SDP format (should be a string)
-      if (typeof sdp !== 'string' || !sdp.trim()) {
-        return NextResponse.json(
-          { error: 'Invalid SDP offer format' },
-          { status: 400 }
-        );
-      }
+      safeLogger.info('[RealtimeConnect] Attempting connection to OpenAI', {
+        reqId,
+        userId: user.id,
+        sdpLength: sdp.length,
+        hasSessionToken: !!session_token,
+        endpoint: REALTIME_ENDPOINT,
+      });
 
       const response = await fetch(REALTIME_ENDPOINT, {
         method: 'POST',
@@ -87,24 +163,38 @@ export async function POST(request: NextRequest) {
           errorMessage = errorText || errorMessage;
         }
         
-        safeLogger.error('Failed to connect to OpenAI Realtime API', {
+        safeLogger.error('[RealtimeConnect] OpenAI API returned error', {
+          reqId,
           status: response.status,
           statusText: response.statusText,
           error: errorMessage,
           userId: user.id,
           hasSdp: !!sdp,
           sdpLength: sdp?.length || 0,
+          hasOpenAIKey: !!OPENAI_API_KEY,
+          endpoint: REALTIME_ENDPOINT,
         });
+        
+        // Return appropriate status code based on OpenAI's response
+        const statusCode = response.status >= 400 && response.status < 500 
+          ? response.status 
+          : 500;
         
         return NextResponse.json(
           { 
             error: 'Failed to connect to OpenAI Realtime API',
-            message: process.env.NODE_ENV === 'development'
+            message: statusCode === 400
+              ? 'Invalid connection request. Please check your SDP offer format.'
+              : statusCode === 401
+              ? 'OpenAI API authentication failed. Please check API key configuration.'
+              : statusCode === 429
+              ? 'Rate limit exceeded. Please try again later.'
+              : process.env.NODE_ENV === 'development'
               ? `${response.status}: ${errorMessage}`
               : 'Realtime connection failed. Please try again.',
             details: process.env.NODE_ENV === 'development' ? errorMessage : undefined,
           },
-          { status: response.status || 500 }
+          { status: statusCode }
         );
       }
 
@@ -123,7 +213,8 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      safeLogger.info('WebRTC SDP exchange successful', {
+      safeLogger.info('[RealtimeConnect] WebRTC SDP exchange successful', {
+        reqId,
         userId: user.id,
         sdpAnswerLength: sdpAnswer.length,
         hasAudio: false, // Never log raw audio
@@ -134,26 +225,41 @@ export async function POST(request: NextRequest) {
         sdp: sdpAnswer,
       });
     } catch (error: any) {
-      safeLogger.error('Error connecting to OpenAI Realtime API', {
+      safeLogger.error('[RealtimeConnect] Network error connecting to OpenAI', {
+        reqId,
         error: error.message,
         stack: error.stack,
         userId: user.id,
+        errorName: error.name,
+        endpoint: REALTIME_ENDPOINT,
       });
       
       return NextResponse.json(
         { 
           error: 'Failed to connect to OpenAI Realtime API',
-          message: process.env.NODE_ENV === 'development'
+          message: error.message?.includes('fetch')
+            ? 'Network error connecting to OpenAI. Please check your internet connection.'
+            : process.env.NODE_ENV === 'development'
             ? error.message
             : 'Realtime connection error. Please try again.',
+          details: process.env.NODE_ENV === 'development' ? error.message : undefined,
         },
         { status: 500 }
       );
     }
   } catch (error) {
-    safeLogger.error('Error connecting to OpenAI Realtime API', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    safeLogger.error('[RealtimeConnect] Unexpected error', {
+      reqId,
+      error: errorMessage,
+      stack: error instanceof Error ? error.stack : undefined,
+    });
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Failed to connect to OpenAI Realtime API' },
+      { 
+        error: 'Failed to connect to OpenAI Realtime API',
+        message: errorMessage,
+        details: process.env.NODE_ENV === 'development' ? errorMessage : undefined,
+      },
       { status: 500 }
     );
   }
