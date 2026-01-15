@@ -27,7 +27,7 @@ export default async function CourseLessonPage({ params }: CourseLessonPageProps
     notFound();
   }
 
-  // Get course info
+  // Get course info (optional - course may exist only in file system)
   const { data: course } = await supabase
     .from('courses')
     .select('id, title, slug')
@@ -36,9 +36,7 @@ export default async function CourseLessonPage({ params }: CourseLessonPageProps
 
   const courseTitle = course?.title || courseSlug.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
   
-  if (!course) {
-    notFound();
-  }
+  // Don't require course to be in database - allow file system only courses
 
   // Get navigation info for next lesson
   const navigation = getLessonNavigation(slug, courseSlug);
