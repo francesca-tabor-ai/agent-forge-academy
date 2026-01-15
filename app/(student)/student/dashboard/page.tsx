@@ -95,6 +95,8 @@ export default async function StudentDashboard() {
     
     return {
       ...course,
+      // Use dynamic metadata description if available, otherwise use database description
+      description: dynamicMetadata?.metadata?.description || course.description,
       industries: course.industries || dynamicMetadata?.metadata?.industries || [],
       hasContent: courseSlugSet.has(course.slug),
       category: metadata?.category || dynamicMetadata?.metadata?.category,

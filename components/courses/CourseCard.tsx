@@ -108,11 +108,15 @@ export function CourseCard({
   const isEnrolled = !!enrollment;
   const isLocked = isCourseLocked(course.slug, subscriptionTier);
   const displayTitle = metadata?.title || course.title;
+  // Use description from course if outcome is not available (for dynamic metadata courses like Finance)
   const displayOutcome = metadata?.outcome || course.description || '';
   const displayTime = metadata?.time || (course.duration_weeks ? `${course.duration_weeks} weeks` : '');
   const displayBestFor = metadata?.bestFor || '';
   const displayBuild = metadata?.build || '';
   const displayIndustries = course.industries || metadata?.industries || [];
+  
+  // Show expand button if there's any content to expand (outcome/description, build, or bestFor)
+  const hasExpandableContent = !!(displayOutcome || displayBuild || displayBestFor);
   
   // Resolve image URL with fallback logic
   // This always returns a valid URL (has fallback to default)
@@ -193,7 +197,7 @@ export function CourseCard({
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-[1]" />
         
         {/* Top-right: Expand Icon Button - Large tap target for mobile */}
-        {(displayBuild || displayBestFor || displayOutcome) && (
+        {hasExpandableContent && (
           <motion.button
             onClick={handleExpandToggle}
             className="absolute top-3 right-3 min-w-[44px] min-h-[44px] p-3 bg-white/90 hover:bg-white rounded-full transition-colors shadow-sm z-[2] flex items-center justify-center"
