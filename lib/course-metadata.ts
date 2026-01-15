@@ -354,6 +354,16 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     time: '~8–10 weeks',
     industries: ['SaaS', 'E-commerce', 'B2B Sales / RevOps', 'Retail / CPG'],
   },
+  'ai-native-product-content-engines': {
+    slug: 'ai-native-product-content-engines',
+    title: 'AI-Native Product Content Engines',
+    category: 'AI Search & Visibility',
+    outcome: 'Design, govern, and scale AI-native product content systems that improve AI recommendations, conversion, and customer trust.',
+    build: 'Complete AI-native product content engine with PDP scoring, claim-proof pairing, automated generation workflows, cross-channel consistency, measurement dashboards, and organizational operating models.',
+    bestFor: 'Directors of Product Content, E-commerce leaders, Product managers, Content strategists, and teams scaling product content for AI-native commerce.',
+    time: '~8–10 weeks',
+    industries: ['E-commerce', 'Marketplaces', 'Retail / CPG'],
+  },
 };
 
 // Get category groups for organizing courses
