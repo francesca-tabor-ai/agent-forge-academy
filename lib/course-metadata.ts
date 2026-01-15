@@ -273,6 +273,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     bestFor: 'Early-career operators (1–4 years) in RevOps, Sales Ops, Growth Ops, Marketing Ops, or Business Systems who want to become builders of modern GTM systems.',
     time: '~8–10 weeks',
     industries: ['B2B Sales / RevOps', 'SaaS'],
+    imageUrl: 'https://www.bvp.com/assets/uploads/2023/11/gtm-course-header-graphic-min.jpg',
   },
   'healthcare-agentic-ai-voice-systems': {
     slug: 'healthcare-agentic-ai-voice-systems',
