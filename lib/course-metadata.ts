@@ -114,6 +114,16 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     time: '~6–8 weeks',
     industries: ['Media & Publishing', 'SaaS', 'E-commerce'],
   },
+  'decision-os-experimentation-causal-inference-uplift': {
+    slug: 'decision-os-experimentation-causal-inference-uplift',
+    title: 'Decision OS: Experimentation, Causal Inference & Uplift',
+    category: 'AI Search & Visibility',
+    outcome: 'Confidently answer "Did this change work—and should we roll it out?" by separating causation from correlation.',
+    build: 'Complete Decision Operating System with experiment design, causal inference methods, result interpretation, guardrails, and rollout decision frameworks.',
+    bestFor: 'Experimentation Scientists, Senior Data Scientists, Product Analysts working on A/B tests, and Growth & Personalization specialists.',
+    time: '~6–8 weeks',
+    industries: ['SaaS', 'E-commerce', 'B2B Sales / RevOps', 'Media & Publishing'],
+  },
   'llm-first-websites': {
     slug: 'llm-first-websites',
     title: 'Engineering for Machine Judgment (RX)',
@@ -267,7 +277,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
   'production-ml-os': {
     slug: 'production-ml-os',
     title: 'Production ML OS: Shipping Models at Scale',
-    category: 'ML Engineering',
+    category: 'AI Search & Visibility',
     outcome: 'Deploy, operate, and maintain ML systems that are reliable, scalable, observable, and resilient in production.',
     build: 'Complete production ML system with serving patterns, feature stores, monitoring, CI/CD, failure handling, and production readiness frameworks.',
     bestFor: 'Machine Learning Engineers, Software Engineers transitioning into ML, Senior Data Scientists moving toward production ownership, and Platform & Infrastructure engineers supporting ML.',
@@ -277,7 +287,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
   'platform-os': {
     slug: 'platform-os',
     title: 'Platform OS: Building the Data & ML Backbone',
-    category: 'Platform Engineering',
+    category: 'AI Search & Visibility',
     outcome: 'Design, build, and evolve durable, scalable data and ML platforms that reliably support analytics, experimentation, and production AI.',
     build: 'Complete data and ML platform architecture with storage (warehouses/lakehouses), batch and streaming pipelines, feature stores, observability, governance, cost optimization, and platform operating models.',
     bestFor: 'Data Platform Engineers, ML Platform Engineers, Senior Data Engineers, and Infrastructure and Analytics Platform Leads.',
@@ -287,12 +297,32 @@ export const courseMetadata: Record<string, CourseMetadata> = {
   'growth-os-data-science-revenue-scale': {
     slug: 'growth-os-data-science-revenue-scale',
     title: 'Growth OS: Data Science for Revenue & Scale',
-    category: 'GTM & Revenue Operations',
+    category: 'AI Search & Visibility',
     outcome: 'Design, evaluate, and scale data-driven growth strategies that deliver measurable revenue impact.',
     build: 'Complete Growth & Revenue Operating System with funnel diagnostics, cohort and LTV modeling, marketing mix modeling, attribution analysis, pricing optimization, experimentation frameworks, and executive communication.',
     bestFor: 'Growth Data Scientists, Marketing Data Scientists, Product Analysts focused on growth, and Analytics professionals partnering with marketing or finance.',
     time: '~6–8 weeks',
     industries: ['SaaS', 'E-commerce', 'B2B Sales / RevOps', 'Retail / CPG'],
+  },
+  'leadership-os-scaling-data-ai-organizations': {
+    slug: 'leadership-os-scaling-data-ai-organizations',
+    title: 'Leadership OS: Scaling Data & AI Organizations',
+    category: 'AI Search & Visibility',
+    outcome: 'Lead data and AI organizations end-to-end, aligning technology, product, and analytics with measurable business outcomes.',
+    build: 'Complete Leadership & Strategy Operating System with data & AI strategy design, operating models, KPI trees and OKRs, portfolio prioritization, executive communication, and culture scaling.',
+    bestFor: 'Directors and VPs of Data, Analytics, or AI, Heads of Data Science or Machine Learning, Senior Product or Engineering leaders owning AI strategy, and aspiring Chief Data or Chief AI Officers.',
+    time: '~6–8 weeks',
+    industries: ['SaaS', 'E-commerce', 'B2B Sales / RevOps', 'Healthcare', 'Fintech'],
+  },
+  'ai-product-os': {
+    slug: 'ai-product-os',
+    title: 'AI Product OS: Building Intelligent User Experiences',
+    category: 'AI Search & Visibility',
+    outcome: 'Design and ship AI-powered product experiences that users trust, adopt, and repeatedly use.',
+    build: 'Complete AI Product Operating System with opportunity discovery, UX design for AI features, decisioning and personalization systems, GenAI patterns, trust mechanisms, ethical safeguards, and measurement frameworks.',
+    bestFor: 'AI Product Managers, Product Managers working with ML or GenAI, Design and UX leaders collaborating on AI products, and Senior Data Scientists transitioning into product roles.',
+    time: '~6–8 weeks',
+    industries: ['SaaS', 'DevTools', 'E-commerce', 'Media & Publishing'],
   },
 };
 
