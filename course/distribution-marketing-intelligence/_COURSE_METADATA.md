@@ -8,4 +8,7 @@ difficulty_level: "advanced"
 is_published: true
 industries: ["Finance"]
 imageUrl: "https://www.esri.com/about/newsroom/app/uploads/2022/03/is-spatial-finance-coming-to-your-company-wherenext-article-wide-1920x1080-1.jpg"
+outcome: "Design, deploy, and govern AI-driven distribution intelligence tools that forecast inflows, diagnose competitive underperformance, and translate data into advisor-ready narratives."
+build: "Predictive inflow forecasting models; automated peer benchmarking engine; narrative performance generator; alternative data integration for distribution insights; advisor-ready intelligence dashboards."
+bestFor: "Asset managers, distribution & sales teams, marketing leaders, product specialists, and data & AI teams optimizing fund distribution strategies."
 ---

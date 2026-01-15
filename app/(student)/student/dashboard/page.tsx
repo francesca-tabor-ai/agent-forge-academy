@@ -91,7 +91,18 @@ export default async function StudentDashboard() {
     const dynamicMetadata = extractCourseMetadata(course.slug);
     // Fallback to static metadata if dynamic extraction fails
     const staticMetadata = courseMetadata[course.slug];
-    const metadata = dynamicMetadata?.metadata || staticMetadata;
+    
+    // Create enhanced metadata that includes dynamic fields (outcome, build, bestFor)
+    const enhancedMetadata = staticMetadata ? {
+      ...staticMetadata,
+      // Override with dynamic metadata fields if available
+      outcome: (dynamicMetadata?.metadata as any)?.outcome || staticMetadata.outcome,
+      build: (dynamicMetadata?.metadata as any)?.build || staticMetadata.build,
+      bestFor: (dynamicMetadata?.metadata as any)?.bestFor || staticMetadata.bestFor,
+      title: dynamicMetadata?.metadata?.title || staticMetadata.title,
+      category: dynamicMetadata?.metadata?.category || staticMetadata.category,
+      imageUrl: dynamicMetadata?.metadata?.imageUrl || staticMetadata.imageUrl,
+    } : staticMetadata;
     
     return {
       ...course,
@@ -99,9 +110,9 @@ export default async function StudentDashboard() {
       description: dynamicMetadata?.metadata?.description || course.description,
       industries: course.industries || dynamicMetadata?.metadata?.industries || [],
       hasContent: courseSlugSet.has(course.slug),
-      category: metadata?.category || dynamicMetadata?.metadata?.category,
-      imageUrl: dynamicMetadata?.metadata?.imageUrl || metadata?.imageUrl,
-      metadata: staticMetadata, // Keep static metadata for backward compatibility
+      category: enhancedMetadata?.category || dynamicMetadata?.metadata?.category,
+      imageUrl: dynamicMetadata?.metadata?.imageUrl || enhancedMetadata?.imageUrl,
+      metadata: enhancedMetadata, // Pass enhanced metadata with dynamic fields
     };
   });
 

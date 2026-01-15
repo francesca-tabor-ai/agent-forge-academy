@@ -52,10 +52,18 @@ export function extractCourseMetadata(
         if (metadataFile === '_COURSE_METADATA.md') {
           const rawMetadata: RawCourseMetadata = data;
           const normalized = normalizeCourseMetadata(rawMetadata, courseSlug);
+          // Preserve additional fields (outcome, build, bestFor) that aren't in CourseMetadata type
+          const metadataWithExtras = {
+            ...normalized,
+            // Preserve outcome, build, bestFor from raw metadata if they exist
+            ...(data.outcome && { outcome: String(data.outcome) }),
+            ...(data.build && { build: String(data.build) }),
+            ...(data.bestFor && { bestFor: String(data.bestFor) }),
+          };
           return {
             courseSlug,
             sourceFile: metadataFile,
-            metadata: normalized,
+            metadata: metadataWithExtras as any, // Cast to any to allow extra fields
           };
         }
 
