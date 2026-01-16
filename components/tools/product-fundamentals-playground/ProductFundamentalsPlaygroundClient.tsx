@@ -9,6 +9,7 @@ import { JourneyMapStep } from './steps/JourneyMapStep';
 import { RoadmapStep } from './steps/RoadmapStep';
 import { SprintPlanStep } from './steps/SprintPlanStep';
 import { UATBugsStep } from './steps/UATBugsStep';
+import { ExportStep } from './steps/ExportStep';
 
 type Step = 
   | 'scenario'
@@ -101,30 +102,7 @@ export function ProductFundamentalsPlaygroundClient() {
           )}
           
           {currentStep === 'export' && (
-            <div className="space-y-4">
-              <p className="text-gray-700">
-                Export your work. Download or share your product fundamentals documentation.
-              </p>
-              <div className="mt-4 p-4 bg-white border border-gray-300 rounded">
-                <h3 className="font-semibold text-gray-900 mb-2">Audit Log ({state.auditLog.length} entries):</h3>
-                <div className="max-h-48 overflow-y-auto text-xs text-gray-600 space-y-1">
-                  {state.auditLog.slice(-10).map((entry, idx) => (
-                    <div key={idx} className="border-b border-gray-200 pb-1">
-                      <span className="font-mono text-gray-500">
-                        {new Date(entry.timestamp).toLocaleTimeString()}
-                      </span>
-                      {' '}
-                      <span className="font-semibold">{entry.step}</span>
-                      {' '}
-                      <span>{entry.action}</span>
-                    </div>
-                  ))}
-                  {state.auditLog.length > 10 && (
-                    <p className="text-gray-500 italic">... and {state.auditLog.length - 10} more entries</p>
-                  )}
-                </div>
-              </div>
-            </div>
+            <ExportStep state={state} />
           )}
         </div>
       </div>

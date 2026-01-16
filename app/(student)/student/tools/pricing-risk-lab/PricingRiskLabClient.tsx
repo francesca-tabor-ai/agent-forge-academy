@@ -6,6 +6,8 @@ import { TradeoffVisualiser } from '@/components/tools/pricing-risk-lab/Tradeoff
 import { FraudDashboard } from '@/components/tools/pricing-risk-lab/FraudDashboard';
 import { ABTestDesigner } from '@/components/tools/pricing-risk-lab/ABTestDesigner';
 import { AlertsPanel } from '@/components/tools/pricing-risk-lab/AlertsPanel';
+import { AuditPanel } from '@/components/tools/pricing-risk-lab/AuditPanel';
+import { usePricingRiskLab } from '@/lib/tools/pricing-risk-lab/usePricingRiskLab';
 
 type TabId = 'simulator' | 'ab-test-designer' | 'fraud-dashboard' | 'trade-offs' | 'alerts';
 
@@ -51,6 +53,10 @@ const TABS: Tab[] = [
 
 export function PricingRiskLabClient() {
   const [activeTab, setActiveTab] = useState<TabId>('simulator');
+  const [showAuditPanel, setShowAuditPanel] = useState(false);
+  
+  // Use unified state management
+  const { state } = usePricingRiskLab();
 
   const currentTab = TABS.find((tab) => tab.id === activeTab) || TABS[0];
 
@@ -86,25 +92,52 @@ export function PricingRiskLabClient() {
 
       {/* Tabs Navigation */}
       <div className="border-b border-gray-200">
-        <nav className="-mb-px flex space-x-8" aria-label="Tabs">
-          {TABS.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`
-                whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors
-                ${
-                  activeTab === tab.id
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }
-              `}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </nav>
+        <div className="flex justify-between items-center">
+          <nav className="-mb-px flex space-x-8" aria-label="Tabs">
+            {TABS.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`
+                  whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors
+                  ${
+                    activeTab === tab.id
+                      ? 'border-blue-500 text-blue-600'
+                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  }
+                `}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </nav>
+          {/* Audit Log Button */}
+          <button
+            onClick={() => setShowAuditPanel(!showAuditPanel)}
+            className="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-2"
+          >
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            Audit Log
+            {state.auditLog.length > 0 && (
+              <span className="px-2 py-0.5 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
+                {state.auditLog.length}
+              </span>
+            )}
+          </button>
+        </div>
       </div>
+
+      {/* Audit Panel Drawer */}
+      {showAuditPanel && (
+        <div className="bg-white border border-gray-200 rounded-lg">
+          <AuditPanel
+            auditLog={state.auditLog}
+            onClose={() => setShowAuditPanel(false)}
+          />
+        </div>
+      )}
 
       {/* Tab Content Panel */}
       {activeTab === 'simulator' ? (
