@@ -7,7 +7,6 @@ duration_weeks: 8
 difficulty_level: "advanced"
 is_published: true
 industries: ["Finance"]
-imageUrl: "https://www.esri.com/about/newsroom/app/uploads/2022/03/is-spatial-finance-coming-to-your-company-wherenext-article-wide-1920x1080-1.jpg"
 outcome: "Design, interpret, and govern a predictive wealth insights dashboard that uses alternative data and AI to forecast flows, detect portfolio drift, and support scalable discretionary portfolio management."
 build: "Predictive wealth insights dashboard; alternative data integration; fund flow forecasting models; portfolio drift detection; dynamic rebalancing systems with AI decision support."
 bestFor: "Financial advisers, CIO and investment strategy teams, DPM portfolio managers, wealth platforms, and data & AI leaders building forward-looking investment intelligence."
