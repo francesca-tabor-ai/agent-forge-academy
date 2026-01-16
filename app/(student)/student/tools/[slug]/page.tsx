@@ -117,22 +117,40 @@ export default async function ToolDetailPage({ params }: { params: Promise<{ slu
     courses = (coursesData || []) as Course[];
   }
 
-  // Get enrolled courses for this student
+  // Get enrolled courses and completion status for this student
   let enrolledCourseSlugs: string[] = [];
+  let completedCourseSlugs: string[] = [];
+  let completedCourseIds: Set<string> = new Set();
+  
   if (studentProfileId) {
     const { data: enrollments } = await supabase
       .from('course_enrollments')
-      .select('course_id')
+      .select('course_id, progress_percentage, completed_at')
       .eq('student_profile_id', studentProfileId);
 
     if (enrollments && enrollments.length > 0) {
       const courseIds = enrollments.map(e => e.course_id);
       const { data: enrolledCourses } = await supabase
         .from('courses')
-        .select('slug')
+        .select('id, slug')
         .in('id', courseIds);
       
       enrolledCourseSlugs = (enrolledCourses || []).map(c => c.slug).filter(Boolean);
+      
+      // Check which courses are completed
+      enrollments.forEach(enrollment => {
+        const isCompleted = enrollment.completed_at !== null || 
+                           (enrollment.progress_percentage !== null && enrollment.progress_percentage >= 100);
+        if (isCompleted) {
+          completedCourseIds.add(enrollment.course_id);
+        }
+      });
+      
+      // Get slugs for completed courses
+      completedCourseSlugs = (enrolledCourses || [])
+        .filter(c => completedCourseIds.has(c.id))
+        .map(c => c.slug)
+        .filter(Boolean);
     }
   }
 
@@ -272,9 +290,21 @@ export default async function ToolDetailPage({ params }: { params: Promise<{ slu
               // In the future, this will use tool_offers.requires_course_completion
               const isGated = offer.recommended_for_courses && offer.recommended_for_courses.length > 0;
               const requiredCourseSlug = offer.recommended_for_courses?.[0] || null;
+              
+              // Check if user has completed the required course
               const hasCompletedCourse = requiredCourseSlug 
-                ? enrolledCourseSlugs.includes(requiredCourseSlug)
+                ? completedCourseSlugs.includes(requiredCourseSlug)
                 : true;
+              
+              // Find the course title for display
+              const requiredCourse = requiredCourseSlug 
+                ? courses.find(c => c.slug === requiredCourseSlug)
+                : null;
+              const requiredCourseTitle = requiredCourse?.title || 
+                (requiredCourseSlug 
+                  ? requiredCourseSlug.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())
+                  : null);
+              
               const isUnlocked = !isGated || hasCompletedCourse;
               const claimStatus = claimedOfferIds[offer.id];
 
@@ -318,20 +348,21 @@ export default async function ToolDetailPage({ params }: { params: Promise<{ slu
                   </div>
 
                   {/* Locked Offer Message */}
-                  {!isUnlocked && requiredCourseSlug && (
-                    <div className="mb-4 p-3 bg-amber-100 border border-amber-300 rounded-lg">
-                      <div className="flex items-center gap-2 text-amber-800">
-                        <span className="text-lg">🔒</span>
-                        <span className="text-sm font-medium">
-                          Complete{' '}
+                  {!isUnlocked && requiredCourseSlug && requiredCourseTitle && (
+                    <div className="mb-4 p-4 bg-amber-50 border-2 border-amber-300 rounded-lg">
+                      <div className="flex items-start gap-3">
+                        <span className="text-2xl flex-shrink-0">🔒</span>
+                        <div className="flex-1">
+                          <p className="text-sm font-semibold text-amber-900 mb-2">
+                            Complete <em>{requiredCourseTitle}</em> to unlock this offer.
+                          </p>
                           <Link
                             href={`/student/courses/${requiredCourseSlug}`}
-                            className="underline hover:text-amber-900"
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-amber-600 text-white text-sm font-medium rounded-lg hover:bg-amber-700 transition-colors"
                           >
-                            {requiredCourseSlug.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())}
+                            Go to Course →
                           </Link>
-                          {' '}to unlock
-                        </span>
+                        </div>
                       </div>
                     </div>
                   )}
@@ -409,6 +440,20 @@ export default async function ToolDetailPage({ params }: { params: Promise<{ slu
                           <div className="text-sm text-gray-500">No claim URL available</div>
                         )}
                       </div>
+                    </>
+                  )}
+
+                  {/* Disabled Claim Button for Locked Offers */}
+                  {!isUnlocked && (
+                    <div className="pt-4 border-t border-gray-200">
+                      <button
+                        disabled
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-gray-300 text-gray-500 rounded-md cursor-not-allowed font-medium"
+                      >
+                        Claim Offer (Locked)
+                      </button>
+                    </div>
+                  )}
                     </>
                   )}
                 </div>

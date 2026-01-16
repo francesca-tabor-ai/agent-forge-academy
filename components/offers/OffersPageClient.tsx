@@ -39,6 +39,7 @@ interface Project {
 interface OffersPageClientProps {
   offers: Offer[];
   enrolledCourseSlugs: string[];
+  completedCourseSlugs?: string[];
   projects: Project[];
   savedOfferIds: string[];
   claimedOfferIds: Record<string, 'claimed' | 'not_claimed' | 'requires_verification'>;
@@ -82,6 +83,7 @@ const categoryIcons: Record<string, string> = {
 export function OffersPageClient({
   offers,
   enrolledCourseSlugs,
+  completedCourseSlugs = [],
   projects,
   savedOfferIds,
   claimedOfferIds,
@@ -397,9 +399,16 @@ export function OffersPageClient({
         offer.recommended_for_courses.forEach(slug => tool.courseSlugs.add(slug));
       }
 
-      // Check for gated offers (we'll need to check if offer requires course completion)
-      // For now, we'll mark if there are offers that might be gated
-      // This will be properly implemented when we migrate to tool_offers table
+      // Check for gated offers
+      // For now, we consider an offer gated if it has recommended_for_courses
+      // In the future, this will use tool_offers.requires_course_completion
+      if (offer.recommended_for_courses && offer.recommended_for_courses.length > 0) {
+        tool.hasGatedOffer = true;
+        // Use the first recommended course as the required course
+        if (!tool.requiredCourseForOffer) {
+          tool.requiredCourseForOffer = offer.recommended_for_courses[0];
+        }
+      }
     });
 
     // Convert to array and format for ToolCard
@@ -719,13 +728,6 @@ export function OffersPageClient({
       {toolsData.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {toolsData.map((tool) => {
-            // Find if any offer requires course completion (gated)
-            const gatedOffer = tool.offers.find(offer => {
-              // Check if offer might be gated - this will be properly implemented with tool_offers table
-              // For now, we'll check if there's any indication in the offer data
-              return false; // Placeholder - will be updated when we have tool_offers data
-            });
-
             return (
               <ToolCard
                 key={tool.name}
@@ -739,7 +741,7 @@ export function OffersPageClient({
                 toolSlug={tool.name.toLowerCase().replace(/\s+/g, '-')}
                 hasGatedOffer={tool.hasGatedOffer}
                 requiredCourseForOffer={tool.requiredCourseForOffer}
-                enrolledCourseSlugs={enrolledCourseSlugs}
+                enrolledCourseSlugs={completedCourseSlugs.length > 0 ? completedCourseSlugs : enrolledCourseSlugs}
               />
             );
           })}

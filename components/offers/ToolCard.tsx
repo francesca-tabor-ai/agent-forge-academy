@@ -14,7 +14,7 @@ interface ToolCardProps {
   logoUrl?: string | null;
   toolSlug?: string;
   hasGatedOffer?: boolean;
-  enrolledCourseSlugs?: string[];
+  enrolledCourseSlugs?: string[]; // Actually completedCourseSlugs when passed from parent
   requiredCourseForOffer?: string | null;
 }
 
@@ -51,6 +51,7 @@ export function ToolCard({
   const slug = toolSlug || toolName.toLowerCase().replace(/\s+/g, '-');
   
   // Check if user has completed required course for gated offer
+  // enrolledCourseSlugs should actually be completedCourseSlugs when passed from parent
   const canUnlockOffer = hasGatedOffer && requiredCourseForOffer
     ? enrolledCourseSlugs.includes(requiredCourseForOffer)
     : true;
@@ -167,7 +168,7 @@ export function ToolCard({
           </Link>
         )}
 
-        {hasGatedOffer && (
+        {hasGatedOffer && requiredCourseForOffer && (
           <Link
             href={`/student/tools/${slug}?tab=offers`}
             className={`w-full text-center px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
@@ -176,7 +177,14 @@ export function ToolCard({
                 : 'bg-amber-50 text-amber-700 hover:bg-amber-100 border border-amber-200'
             }`}
           >
-            {canUnlockOffer ? 'Unlock offer' : 'Complete course to unlock'}
+            {canUnlockOffer ? (
+              'Unlock offer'
+            ) : (
+              <span className="flex items-center justify-center gap-2">
+                <span>🔒</span>
+                <span>Complete course to unlock</span>
+              </span>
+            )}
           </Link>
         )}
       </div>

@@ -66,21 +66,41 @@ export default async function ToolsPage() {
     redirect('/');
   }
 
-  // Get active courses for recommendations
+  // Get enrolled and completed courses for gating logic
   let enrolledCourseSlugs: string[] = [];
+  let completedCourseSlugs: string[] = [];
+  
+  if (studentProfileId) {
     const { data: enrollments } = await supabase
       .from('course_enrollments')
-      .select('course_id')
+      .select('course_id, progress_percentage, completed_at')
       .eq('student_profile_id', studentProfileId);
 
     if (enrollments && enrollments.length > 0) {
       const courseIds = enrollments.map(e => e.course_id);
       const { data: courses } = await supabase
         .from('courses')
-        .select('slug')
+        .select('id, slug')
         .in('id', courseIds);
       
       enrolledCourseSlugs = (courses || []).map(c => c.slug).filter(Boolean);
+      
+      // Check which courses are completed
+      const completedCourseIds = new Set<string>();
+      enrollments.forEach(enrollment => {
+        const isCompleted = enrollment.completed_at !== null || 
+                           (enrollment.progress_percentage !== null && enrollment.progress_percentage >= 100);
+        if (isCompleted) {
+          completedCourseIds.add(enrollment.course_id);
+        }
+      });
+      
+      // Get slugs for completed courses
+      completedCourseSlugs = (courses || [])
+        .filter(c => completedCourseIds.has(c.id))
+        .map(c => c.slug)
+        .filter(Boolean);
+    }
   }
 
   // Fetch all active offers
@@ -162,6 +182,7 @@ export default async function ToolsPage() {
     <OffersPageClient
       offers={allOffers}
       enrolledCourseSlugs={enrolledCourseSlugs}
+      completedCourseSlugs={completedCourseSlugs}
       projects={portfolioProjects}
       savedOfferIds={savedOfferIds}
       claimedOfferIds={claimedOfferIds}
