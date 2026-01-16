@@ -29,7 +29,7 @@ export default function Sidebar({ role }: SidebarProps) {
           { href: '/student/portfolio', label: 'Portfolio' },
           { href: '/student/jobs', label: 'Job Opportunities' },
           { href: '/student/ai-advisor', label: 'AI Advisor' },
-          { href: '/student/offers', label: 'Offers' },
+          { href: '/student/tools', label: 'Tools' },
           { href: '/student/subscription', label: 'Subscription' },
         ];
       case 'instructor':

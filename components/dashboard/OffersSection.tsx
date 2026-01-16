@@ -112,11 +112,11 @@ export async function OffersSection({ studentProfileId, enrolledCourseSlugs }: O
     <section className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-semibold text-gray-900">Offers</h2>
+          <h2 className="text-xl font-semibold text-gray-900">Tools</h2>
           <p className="text-xs text-gray-500 mt-1">Exclusive tools to help you build and ship faster</p>
         </div>
         <Link
-          href="/student/offers"
+          href="/student/tools"
           className="text-xs font-medium text-brand-light hover:text-brand-light/90"
         >
           View All →
@@ -226,7 +226,7 @@ export async function OffersSection({ studentProfileId, enrolledCourseSlugs }: O
               {/* CTA */}
               <div className="flex items-center justify-between pt-3 border-t border-gray-200">
                 <Link
-                  href={`/student/offers/${offer.id}`}
+                  href={`/student/tools/${offer.id}`}
                   className="text-xs font-medium text-brand-light hover:text-brand-light/90"
                 >
                   Claim Offer →

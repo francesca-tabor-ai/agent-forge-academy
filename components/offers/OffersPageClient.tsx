@@ -460,7 +460,7 @@ export function OffersPageClient({
       )}
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-gray-900">Offers</h1>
+        <h1 className="text-2xl font-semibold text-gray-900">Tools</h1>
         <p className="text-sm text-gray-500 mt-2">
           Exclusive tools to help you build and ship faster
         </p>
@@ -815,14 +815,14 @@ export function OffersPageClient({
                 {/* Actions */}
                 <div className="pt-3 border-t border-gray-200 space-y-2">
                   <Link
-                    href={`/student/offers/${offer.id}`}
+                    href={`/student/tools/${offer.id}`}
                     className="block w-full text-center px-4 py-2 bg-brand-light text-white text-sm font-medium rounded-lg hover:bg-brand-light/90 transition-colors"
                   >
                     Claim Offer
                   </Link>
                   <div className="flex gap-2">
                     <Link
-                      href={`/student/offers/${offer.id}`}
+                      href={`/student/tools/${offer.id}`}
                       className="flex-1 text-center px-3 py-1.5 bg-gray-100 text-gray-700 text-xs font-medium rounded hover:bg-gray-200 transition-colors"
                     >
                       Setup Guide

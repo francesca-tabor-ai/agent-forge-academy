@@ -59,10 +59,10 @@ export function PlanBenefits({ benefits, usage, onUpgrade, onComparePlans }: Pla
     if (benefits.toolDiscountEligibility) {
       return (
         <Link
-          href="/student/offers"
+          href="/student/tools"
           className="text-sm font-medium text-brand-light hover:text-brand-light/90 inline-flex items-center gap-1"
         >
-          View offers →
+          View tools →
         </Link>
       );
     }
