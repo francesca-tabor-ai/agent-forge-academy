@@ -6,6 +6,7 @@ import Link from 'next/link';
 import type { Segment } from '@/lib/types/segment';
 import type { CourseMetadata } from '@/lib/course-metadata';
 import { getSegmentSubscriptionConfig, formatPrice, calculateAnnualSavings } from '@/lib/utils/segment-subscriptions';
+import { LandingCourseCard } from './LandingCourseCard';
 
 interface PublicSegmentLandingPageProps {
   segment: Segment;
@@ -24,15 +25,15 @@ export default function PublicSegmentLandingPage({ segment, courses }: PublicSeg
   const handleSubscribe = async (cycle: 'monthly' | 'annual') => {
     setIsLoading(true);
     try {
-      const response = await fetch('/api/stripe/create-segment-checkout-session', {
+      const response = await fetch('/api/stripe/checkout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          segmentType: segment.type,
-          segmentKey: segment.key,
-          billingCycle: cycle,
+          segment_type: segment.type,
+          segment_key: segment.key,
+          billing_period: cycle,
           successUrl: `${window.location.origin}/landing/${segment.type}/${segment.key}?success=true`,
           cancelUrl: `${window.location.origin}/landing/${segment.type}/${segment.key}?canceled=true`,
         }),
@@ -150,6 +151,27 @@ export default function PublicSegmentLandingPage({ segment, courses }: PublicSeg
         </div>
       </section>
 
+      {/* Included Courses Section */}
+      <section className="bg-white py-16 sm:py-20 lg:py-24">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-12">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-brand-dark mb-4 font-playfair">
+              Included Courses
+            </h2>
+            <p className="text-xl text-gray-700">
+              {courses.length} live course{courses.length !== 1 ? 's' : ''} included with subscription
+            </p>
+          </div>
+
+          {/* Course Grid */}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {courses.map((course) => (
+              <LandingCourseCard key={course.slug} course={course} />
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Pricing Details Section */}
       {config && (
         <section className="bg-gray-50 py-16 sm:py-20 lg:py-24">
@@ -259,40 +281,6 @@ export default function PublicSegmentLandingPage({ segment, courses }: PublicSeg
         </section>
       )}
 
-      {/* Courses Section */}
-      <section className="bg-white py-16 sm:py-20 lg:py-24">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-12">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-brand-dark mb-4 font-playfair">
-              Live Courses in {segment.displayName}
-            </h2>
-            <p className="text-xl text-gray-700">
-              {courses.length} course{courses.length !== 1 ? 's' : ''} available with subscription
-            </p>
-          </div>
-
-          {/* Course Grid */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {courses.map((course) => (
-              <div
-                key={course.slug}
-                className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow card-interactive"
-              >
-                <h3 className="text-xl font-bold text-brand-dark mb-2 font-playfair">
-                  {course.title}
-                </h3>
-                <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                  {course.outcome}
-                </p>
-                <div className="flex items-center justify-between text-sm text-gray-500">
-                  <span>{course.time}</span>
-                  <span className="capitalize">{course.category}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* Outcomes Section */}
       <section className="bg-gray-50 py-16 sm:py-20 lg:py-24">

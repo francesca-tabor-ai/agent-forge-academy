@@ -1,19 +1,30 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createUserSupabaseClient, createServerSupabaseClient } from '@/lib/supabase/server';
 import { getStripeClient } from '@/lib/stripe';
+import { getStripePriceId } from '@/lib/utils/subscription-metadata';
 
 /**
  * POST /api/stripe/checkout
  * 
  * Generic Stripe Checkout session creation endpoint
+ * Supports both direct priceId and segment-based subscriptions
  * 
- * Body:
+ * Body (Option 1 - Direct price ID):
  * {
- *   "priceId": "price_xxx",  // Stripe price ID (required)
+ *   "priceId": "price_xxx",  // Stripe price ID (required if not using segment)
  *   "successUrl": "/success?session_id={CHECKOUT_SESSION_ID}",
  *   "cancelUrl": "/cancel",
  *   "mode": "subscription" | "payment",  // Default: "subscription"
  *   "metadata": { ... }  // Optional metadata
+ * }
+ * 
+ * Body (Option 2 - Segment subscription):
+ * {
+ *   "segment_type": "track" | "industry" | "role",
+ *   "segment_key": "agentic-systems",
+ *   "billing_period": "monthly" | "annual",
+ *   "successUrl": "/success?session_id={CHECKOUT_SESSION_ID}",
+ *   "cancelUrl": "/cancel"
  * }
  */
 export async function POST(request: NextRequest) {
@@ -23,24 +34,73 @@ export async function POST(request: NextRequest) {
       data: { user },
     } = await supabase.auth.getUser();
 
+    // Require authentication before checkout
     if (!user) {
       return NextResponse.json(
-        { error: 'Unauthorized' },
+        { error: 'Unauthorized', requiresAuth: true },
         { status: 401 }
       );
     }
 
     const body = await request.json();
-    const { priceId, successUrl, cancelUrl, mode = 'subscription', metadata = {} } = body;
+    const { 
+      priceId, 
+      segment_type, 
+      segment_key, 
+      billing_period,
+      successUrl, 
+      cancelUrl, 
+      mode = 'subscription', 
+      metadata = {} 
+    } = body;
 
-    // Validate inputs
-    if (!priceId) {
+    // Determine price ID - either direct or from segment subscription
+    let finalPriceId: string | null = null;
+
+    if (priceId) {
+      // Direct price ID provided
+      finalPriceId = priceId;
+    } else if (segment_type && segment_key && billing_period) {
+      // Segment subscription - look up price ID from subscriptions.md
+      if (!['track', 'industry', 'role'].includes(segment_type)) {
+        return NextResponse.json(
+          { error: 'Invalid segment_type. Must be "track", "industry", or "role"' },
+          { status: 400 }
+        );
+      }
+
+      if (billing_period !== 'monthly' && billing_period !== 'annual') {
+        return NextResponse.json(
+          { error: 'Invalid billing_period. Must be "monthly" or "annual"' },
+          { status: 400 }
+        );
+      }
+
+      finalPriceId = getStripePriceId(
+        segment_type as 'track' | 'industry' | 'role',
+        segment_key,
+        billing_period as 'monthly' | 'annual'
+      );
+
+      if (!finalPriceId) {
+        return NextResponse.json(
+          { error: `Subscription not found for ${segment_type}:${segment_key}` },
+          { status: 404 }
+        );
+      }
+
+      // Add segment metadata
+      metadata.segment_type = segment_type;
+      metadata.segment_key = segment_key;
+      metadata.billing_period = billing_period;
+    } else {
       return NextResponse.json(
-        { error: 'priceId is required' },
+        { error: 'Either priceId or (segment_type, segment_key, billing_period) is required' },
         { status: 400 }
       );
     }
 
+    // Validate mode
     if (mode !== 'subscription' && mode !== 'payment') {
       return NextResponse.json(
         { error: 'mode must be "subscription" or "payment"' },
@@ -121,7 +181,7 @@ export async function POST(request: NextRequest) {
       payment_method_types: ['card'],
       line_items: [
         {
-          price: priceId,
+          price: finalPriceId,
           quantity: 1,
         },
       ],
