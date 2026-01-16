@@ -107,7 +107,10 @@ export function CourseFilters({ courses, onFilteredCoursesChange }: CourseFilter
   const [selectedIndustries, setSelectedIndustries] = useState<string[]>(
     searchParams.get('industries')?.split(',').filter(Boolean) || []
   );
-  const [sort, setSort] = useState(searchParams.get('sort') || 'track');
+  // Default sort to 'track' so courses are organized by track, not grouped by industry
+  const [sort, setSort] = useState<'track' | 'course' | 'recommended' | 'shortest' | 'longest' | 'newest'>(
+    (searchParams.get('sort') as any) || 'track'
+  );
   const [isExpanded, setIsExpanded] = useState(false);
 
   // Update URL params when filters change

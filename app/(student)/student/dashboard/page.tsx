@@ -93,6 +93,8 @@ export default async function StudentDashboard() {
     const staticMetadata = courseMetadata[course.slug];
     
     // Create enhanced metadata that includes dynamic fields (outcome, build, bestFor)
+    // For courses with static metadata, merge with dynamic fields
+    // For courses without static metadata (like Finance), create metadata from dynamic fields
     const enhancedMetadata = staticMetadata ? {
       ...staticMetadata,
       // Override with dynamic metadata fields if available
@@ -102,7 +104,18 @@ export default async function StudentDashboard() {
       title: dynamicMetadata?.metadata?.title || staticMetadata.title,
       category: dynamicMetadata?.metadata?.category || staticMetadata.category,
       imageUrl: dynamicMetadata?.metadata?.imageUrl || staticMetadata.imageUrl,
-    } : staticMetadata;
+    } : (dynamicMetadata?.metadata ? {
+      // Create CourseMetadata from dynamic metadata for courses without static metadata
+      slug: course.slug,
+      title: dynamicMetadata.metadata.title || course.title,
+      category: dynamicMetadata.metadata.category || course.category || '',
+      outcome: (dynamicMetadata.metadata as any)?.outcome || dynamicMetadata.metadata.description || '',
+      build: (dynamicMetadata.metadata as any)?.build || '',
+      bestFor: (dynamicMetadata.metadata as any)?.bestFor || '',
+      time: dynamicMetadata.metadata.duration_weeks ? `${dynamicMetadata.metadata.duration_weeks} weeks` : '',
+      industries: dynamicMetadata.metadata.industries || [],
+      imageUrl: (dynamicMetadata.metadata as any)?.imageUrl,
+    } : undefined);
     
     return {
       ...course,
