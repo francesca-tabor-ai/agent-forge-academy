@@ -1,52 +1,18 @@
 'use client';
 
 import { useState } from 'react';
-
-type Module = 
-  | 'agent-boundary-explorer'
-  | 'rag-console'
-  | 'voice-interaction-demo'
-  | 'failure-mode-viewer'
-  | 'governance-panel';
-
-interface ModuleInfo {
-  id: Module;
-  title: string;
-  description: string;
-}
-
-const modules: ModuleInfo[] = [
-  {
-    id: 'agent-boundary-explorer',
-    title: 'Agent Boundary Explorer',
-    description: 'Explore the boundaries and limitations of AI agents in clinical settings. Understand where human oversight is critical and how to define clear agent responsibilities and constraints.',
-  },
-  {
-    id: 'rag-console',
-    title: 'RAG Console',
-    description: 'Test and debug Retrieval-Augmented Generation systems for clinical knowledge. Query medical databases, review retrieved context, and evaluate response quality and accuracy.',
-  },
-  {
-    id: 'voice-interaction-demo',
-    title: 'Voice Interaction Demo',
-    description: 'Experience voice-based interactions with clinical AI systems. Test natural language understanding, speech recognition, and conversational flows in a simulated clinical environment.',
-  },
-  {
-    id: 'failure-mode-viewer',
-    title: 'Failure Mode Viewer',
-    description: 'Analyze common failure modes in clinical AI applications. Review case studies of system failures, edge cases, and learn how to implement robust error handling and safety measures.',
-  },
-  {
-    id: 'governance-panel',
-    title: 'Governance Panel',
-    description: 'Understand regulatory requirements, compliance frameworks, and governance models for clinical AI. Explore audit trails, documentation standards, and risk management protocols.',
-  },
-];
+import {
+  CLINICAL_AI_SANDBOX_MODULES,
+  getDefaultModule,
+  getModuleById,
+  type ModuleId,
+} from '@/lib/tools/clinical-ai-sandbox';
 
 export function ClinicalAISandboxClient() {
-  const [activeModule, setActiveModule] = useState<Module>('agent-boundary-explorer');
+  const defaultModule = getDefaultModule();
+  const [activeModule, setActiveModule] = useState<ModuleId>(defaultModule.id);
 
-  const currentModule = modules.find(m => m.id === activeModule) || modules[0];
+  const currentModule = getModuleById(activeModule) || defaultModule;
 
   return (
     <div className="space-y-6">
@@ -85,7 +51,7 @@ export function ClinicalAISandboxClient() {
         {/* Left Sidebar Navigation */}
         <div className="bg-white border border-gray-200 rounded-lg p-4">
           <nav className="space-y-2">
-            {modules.map((module) => (
+            {CLINICAL_AI_SANDBOX_MODULES.map((module) => (
               <button
                 key={module.id}
                 onClick={() => setActiveModule(module.id)}
