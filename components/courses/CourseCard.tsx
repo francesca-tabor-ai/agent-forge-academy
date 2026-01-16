@@ -132,7 +132,8 @@ export function CourseCard({
   });
 
   // Safety check: ensure imageUrl is never empty or invalid
-  const safeImageUrl = imageUrl && imageUrl.trim() ? imageUrl : '/images/tracks/default.jpg';
+  // Use the resolved imageUrl (which already has fallback logic)
+  const safeImageUrl = imageUrl && imageUrl.trim() && imageUrl !== 'image' ? imageUrl : 'https://wallpaperaccess.com/full/340554.png';
 
   const handleCardClick = (e: React.MouseEvent) => {
     // Don't navigate if clicking on expand button or read more buttons

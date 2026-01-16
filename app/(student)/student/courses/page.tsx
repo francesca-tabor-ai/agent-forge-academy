@@ -141,24 +141,44 @@ export default async function CoursesPage() {
       const dynamicMetadata = extractCourseMetadata(slug);
       // Fallback to static metadata if dynamic extraction fails
       const staticMetadata = courseMetadata[slug];
-      const metadata = dynamicMetadata?.metadata || staticMetadata;
+      
+      // Create enhanced metadata for file system courses (same logic as database courses)
+      const enhancedMetadata = staticMetadata ? {
+        ...staticMetadata,
+        outcome: (dynamicMetadata?.metadata as any)?.outcome || staticMetadata.outcome,
+        build: (dynamicMetadata?.metadata as any)?.build || staticMetadata.build,
+        bestFor: (dynamicMetadata?.metadata as any)?.bestFor || staticMetadata.bestFor,
+        title: dynamicMetadata?.metadata?.title || staticMetadata.title,
+        category: dynamicMetadata?.metadata?.category || staticMetadata.category,
+        imageUrl: dynamicMetadata?.metadata?.imageUrl || staticMetadata.imageUrl,
+      } : (dynamicMetadata?.metadata ? {
+        slug,
+        title: dynamicMetadata.metadata.title || slug.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()),
+        category: dynamicMetadata.metadata.category || '',
+        outcome: (dynamicMetadata.metadata as any)?.outcome || dynamicMetadata.metadata.description || '',
+        build: (dynamicMetadata.metadata as any)?.build || '',
+        bestFor: (dynamicMetadata.metadata as any)?.bestFor || '',
+        time: dynamicMetadata.metadata.duration_weeks ? `${dynamicMetadata.metadata.duration_weeks} weeks` : '',
+        industries: dynamicMetadata.metadata.industries || [],
+        imageUrl: (dynamicMetadata.metadata as any)?.imageUrl,
+      } : undefined);
       
       allCourses.push({
         id: null, // Not in database yet
         slug,
-        title: dynamicMetadata?.metadata?.title || metadata?.title || slug.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()),
-        description: dynamicMetadata?.metadata?.description || staticMetadata?.outcome || null,
+        title: dynamicMetadata?.metadata?.title || enhancedMetadata?.title || slug.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()),
+        description: dynamicMetadata?.metadata?.description || enhancedMetadata?.outcome || null,
         thumbnail_url: dynamicMetadata?.metadata?.thumbnail_url || null,
-        imageUrl: dynamicMetadata?.metadata?.imageUrl || metadata?.imageUrl,
+        imageUrl: dynamicMetadata?.metadata?.imageUrl || enhancedMetadata?.imageUrl,
         duration_weeks: dynamicMetadata?.metadata?.duration_weeks || null,
         difficulty_level: dynamicMetadata?.metadata?.difficulty_level || null,
         is_published: dynamicMetadata?.metadata?.is_published || false,
         created_at: null,
         updated_at: null,
         hasContent: lessons.length > 0,
-        industries: dynamicMetadata?.metadata?.industries || metadata?.industries || [],
-        category: dynamicMetadata?.metadata?.category || metadata?.category,
-        metadata: staticMetadata, // Keep static metadata for backward compatibility
+        industries: dynamicMetadata?.metadata?.industries || enhancedMetadata?.industries || [],
+        category: enhancedMetadata?.category || dynamicMetadata?.metadata?.category,
+        metadata: enhancedMetadata, // Pass enhanced metadata with dynamic fields
       });
     }
   }
