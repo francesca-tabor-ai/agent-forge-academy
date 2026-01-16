@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { useContentSystemsStudio } from '@/lib/tools/content-systems-studio/useContentSystemsStudio';
 import { ContentEditor } from '@/components/tools/content-systems-studio/ContentEditor';
 import { RulesPanel } from '@/components/tools/content-systems-studio/RulesPanel';
+import { WorkflowPanel } from '@/components/tools/content-systems-studio/WorkflowPanel';
+import type { Role } from '@/lib/tools/content-systems-studio/types';
 
 type TabId = 'editor' | 'rules' | 'workflow' | 'variations' | 'dashboard';
 
@@ -67,11 +69,17 @@ const TABS: Tab[] = [
   },
 ];
 
-export function ContentSystemsStudioClient() {
+interface ContentSystemsStudioClientProps {
+  currentRole?: Role;
+}
+
+export function ContentSystemsStudioClient({ currentRole = 'student' }: ContentSystemsStudioClientProps = { currentRole: 'student' }) {
   const [activeTab, setActiveTab] = useState<TabId>('editor');
+  const [demoRole, setDemoRole] = useState<Role>(currentRole);
   const studio = useContentSystemsStudio();
 
   const currentTab = TABS.find((tab) => tab.id === activeTab) || TABS[0];
+  const activeRole = demoRole;
 
   return (
     <div className="space-y-6">
@@ -107,7 +115,7 @@ export function ContentSystemsStudioClient() {
 
       {/* Tab Content Panel */}
       {activeTab === 'editor' ? (
-        <ContentEditor studio={studio} currentRole="student" />
+        <ContentEditor studio={studio} currentRole={activeRole} />
       ) : activeTab === 'rules' ? (
         <div className="bg-white border border-gray-200 rounded-lg p-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-6">
@@ -124,6 +132,13 @@ export function ContentSystemsStudioClient() {
             showAcknowledgeCheckbox={true}
           />
         </div>
+      ) : activeTab === 'workflow' ? (
+        <WorkflowPanel
+          studio={studio}
+          currentRole={activeRole}
+          onRoleChange={setDemoRole}
+          showRoleSelector={true}
+        />
       ) : (
         <div className="bg-white border border-gray-200 rounded-lg p-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">
