@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { usePlayground } from '@/lib/tools/product-fundamentals-playground/usePlayground';
 import { ScenarioStep } from './steps/ScenarioStep';
+import { ResearchStep } from './steps/ResearchStep';
 
 type Step = 
   | 'scenario'
@@ -71,18 +72,7 @@ export function ProductFundamentalsPlaygroundClient() {
           )}
           
           {currentStep === 'research' && (
-            <div className="space-y-4">
-              <p className="text-gray-700">
-                Conduct market research. Analyze competitors, market trends, and user needs.
-              </p>
-              {state.research && (
-                <div className="mt-4 p-4 bg-white border border-gray-300 rounded">
-                  <h3 className="font-semibold text-gray-900 mb-2">Research Notes:</h3>
-                  <p className="text-sm text-gray-700"><strong>Source Type:</strong> {state.research.sourceType}</p>
-                  <p className="text-sm text-gray-700 mt-2">{state.research.rawNotes || 'No notes yet'}</p>
-                </div>
-              )}
-            </div>
+            <ResearchStep state={state} dispatch={dispatch} />
           )}
           
           {currentStep === 'personas-problems' && (

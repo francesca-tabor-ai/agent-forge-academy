@@ -18,8 +18,10 @@ export type PlaygroundAction =
   | { type: 'SET_SCENARIO'; payload: CaseScenario }
   | { type: 'SET_RESEARCH_NOTES'; payload: ResearchInput }
   | { type: 'SET_PERSONAS'; payload: Persona[] }
+  | { type: 'ADD_PERSONA'; payload: Persona }
   | { type: 'UPDATE_PERSONA'; payload: Persona }
   | { type: 'SET_PROBLEMS'; payload: ProblemStatement[] }
+  | { type: 'ADD_PROBLEM'; payload: ProblemStatement }
   | { type: 'UPDATE_PROBLEM'; payload: ProblemStatement }
   | { type: 'SET_JOURNEY'; payload: JourneyStage[] }
   | { type: 'UPDATE_JOURNEY_STAGE'; payload: JourneyStage }
@@ -92,6 +94,14 @@ export function playgroundReducer(
       auditMetadata = { count: action.payload.length };
       break;
 
+    case 'ADD_PERSONA':
+      newState = {
+        ...state,
+        personas: [...state.personas, action.payload],
+      };
+      auditMetadata = { personaId: action.payload.id, name: action.payload.name };
+      break;
+
     case 'UPDATE_PERSONA':
       newState = {
         ...state,
@@ -103,6 +113,22 @@ export function playgroundReducer(
       break;
 
     case 'SET_PROBLEMS':
+      newState = {
+        ...state,
+        problems: action.payload,
+      };
+      auditMetadata = { count: action.payload.length };
+      break;
+
+    case 'ADD_PROBLEM':
+      newState = {
+        ...state,
+        problems: [...state.problems, action.payload],
+      };
+      auditMetadata = { problemId: action.payload.id };
+      break;
+
+    case 'UPDATE_PROBLEM':
       newState = {
         ...state,
         problems: action.payload,
@@ -270,8 +296,10 @@ export function playgroundReducer(
     SET_SCENARIO: 'scenario',
     SET_RESEARCH_NOTES: 'research',
     SET_PERSONAS: 'personas-problems',
+    ADD_PERSONA: 'personas-problems',
     UPDATE_PERSONA: 'personas-problems',
     SET_PROBLEMS: 'personas-problems',
+    ADD_PROBLEM: 'personas-problems',
     UPDATE_PROBLEM: 'personas-problems',
     SET_JOURNEY: 'journey-map',
     UPDATE_JOURNEY_STAGE: 'journey-map',
