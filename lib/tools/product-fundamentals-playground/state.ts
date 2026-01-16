@@ -38,7 +38,8 @@ export type PlaygroundAction =
   | { type: 'UPDATE_BUG'; payload: Bug }
   | { type: 'DELETE_BUG'; payload: string } // Bug ID
   | { type: 'SET_SHIP_DECISION'; payload: { bugId: string; decision: Bug['decision']; rationale: string | null } }
-  | { type: 'ADD_AUDIT_ENTRY'; payload: Omit<AuditEntry, 'timestamp'> };
+  | { type: 'ADD_AUDIT_ENTRY'; payload: Omit<AuditEntry, 'timestamp'> }
+  | { type: 'LOAD_STATE'; payload: PlaygroundState };
 
 // Initial state
 export const initialState: PlaygroundState = {
@@ -303,6 +304,11 @@ export function playgroundReducer(
       };
       // Don't add another audit entry for audit entries themselves
       return newState;
+
+    case 'LOAD_STATE':
+      // Load entire state (used for persistence)
+      // Don't audit this action - it's a restore operation
+      return action.payload;
 
     default:
       return state;
