@@ -1,7 +1,7 @@
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
 import { safeLogger } from '@/lib/utils/redactPII';
-import { mapGitHubRepoToProject, filterGitHubRepos, validateProjectInput, type GitHubRepo } from '@/lib/portfolio/github-mapper';
+import { filterGitHubRepos, extractSkillsFromRepo, type GitHubRepo } from '@/lib/portfolio/github-mapper';
 import { normalizeSkill } from '@/lib/profile/extractSkillsFromCv';
 
 /**
@@ -402,25 +402,12 @@ export async function POST(request: NextRequest) {
         projectsUpserted++;
 
         // Extract skills from repo metadata
-        const repoSkills: string[] = [];
-        
-        // Add language as a skill (if present)
-        if (repo.language) {
-          const normalizedLang = normalizeSkill(repo.language);
-          if (normalizedLang) {
-            repoSkills.push(normalizedLang);
-          }
-        }
-
-        // Add topics as skills (normalized)
-        if (repo.topics && repo.topics.length > 0) {
-          for (const topic of repo.topics) {
-            const normalizedTopic = normalizeSkill(topic);
-            if (normalizedTopic && !repoSkills.includes(normalizedTopic)) {
-              repoSkills.push(normalizedTopic);
-            }
-          }
-        }
+        // Sources:
+        // 1. repo.language (e.g., "TypeScript")
+        // 2. repo.topics (requires GitHub topics API; may need preview header or GraphQL)
+        // 3. heuristic from repo name/description keywords (lightweight)
+        // Normalization: trim, title case, dedupe
+        const repoSkills = extractSkillsFromRepo(repo, normalizeSkill);
 
         // Fetch all existing skills for this user (for case-insensitive matching)
         // The unique constraint is on (user_id, LOWER(name)), so we need case-insensitive lookup

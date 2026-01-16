@@ -185,3 +185,126 @@ export function validateProjectInput(project: PortfolioProjectInput): {
     errors,
   };
 }
+
+/**
+ * Normalize skill name: trim, title case, and return canonical form
+ * Uses lowercase for storage (for case-insensitive matching) but formats for display
+ */
+function formatSkillName(skill: string): string {
+  // Trim and normalize whitespace
+  let formatted = skill.trim().replace(/\s+/g, ' ');
+  
+  // Convert to title case (capitalize first letter of each word)
+  formatted = formatted
+    .split(/\s+/)
+    .map(word => {
+      if (word.length === 0) return word;
+      // Handle special cases like "C++", "C#", ".NET"
+      if (/^[.#+\-]+$/.test(word)) return word;
+      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+    })
+    .join(' ');
+  
+  return formatted;
+}
+
+/**
+ * Extract skills from GitHub repository metadata
+ * 
+ * Sources:
+ * 1. repo.language (e.g., "TypeScript")
+ * 2. repo.topics (array of topic strings)
+ * 3. Heuristic from repo name/description keywords (lightweight)
+ * 
+ * Normalization:
+ * - trim whitespace
+ * - title case (or consistent casing)
+ * - dedupe
+ * 
+ * @param repo - GitHub repository data
+ * @param normalizeSkillFn - Function to normalize skill names (from extractSkillsFromCv)
+ * @returns Array of normalized skill names (deduplicated)
+ */
+export function extractSkillsFromRepo(
+  repo: GitHubRepo,
+  normalizeSkillFn: (skill: string) => string
+): string[] {
+  const skills = new Set<string>();
+  
+  // 1. Extract from repo.language
+  if (repo.language) {
+    const normalized = normalizeSkillFn(repo.language);
+    if (normalized && normalized.length > 0) {
+      skills.add(normalized);
+    }
+  }
+  
+  // 2. Extract from repo.topics
+  if (repo.topics && repo.topics.length > 0) {
+    for (const topic of repo.topics) {
+      const normalized = normalizeSkillFn(topic);
+      if (normalized && normalized.length > 0) {
+        skills.add(normalized);
+      }
+    }
+  }
+  
+  // 3. Heuristic extraction from repo name/description keywords
+  // Combine name and description for keyword matching
+  const textToSearch = [
+    repo.name,
+    repo.description || '',
+  ].join(' ').toLowerCase();
+  
+  // Common technology keywords to look for
+  const techKeywords = [
+    // Languages
+    'javascript', 'typescript', 'python', 'java', 'c++', 'cpp', 'c#', 'csharp',
+    'go', 'golang', 'rust', 'php', 'ruby', 'swift', 'kotlin', 'scala', 'r',
+    // Frontend
+    'react', 'vue', 'angular', 'svelte', 'nextjs', 'next.js', 'nuxt', 'gatsby',
+    'html', 'css', 'sass', 'scss', 'less', 'tailwind', 'bootstrap', 'material-ui',
+    // Backend
+    'node', 'nodejs', 'node.js', 'express', 'nestjs', 'fastify', 'koa',
+    'django', 'flask', 'fastapi', 'spring', 'springboot', 'laravel', 'symfony',
+    'rails', 'ruby on rails', 'asp.net', 'aspnet',
+    // Databases
+    'postgresql', 'postgres', 'mysql', 'mongodb', 'redis', 'sqlite', 'cassandra',
+    // Cloud/DevOps
+    'aws', 'azure', 'gcp', 'docker', 'kubernetes', 'k8s', 'terraform', 'ansible',
+    // Tools
+    'git', 'github', 'gitlab', 'jenkins', 'ci/cd', 'github actions',
+    // ML/AI
+    'tensorflow', 'pytorch', 'scikit-learn', 'machine learning', 'deep learning', 'ai',
+  ];
+  
+  // Look for keywords in repo name/description
+  for (const keyword of techKeywords) {
+    // Use word boundaries to avoid partial matches
+    const regex = new RegExp(`\\b${keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i');
+    if (regex.test(textToSearch)) {
+      const normalized = normalizeSkillFn(keyword);
+      if (normalized && normalized.length > 0) {
+        skills.add(normalized);
+      }
+    }
+  }
+  
+  // Convert to array, format for display (title case), and dedupe
+  const skillArray = Array.from(skills);
+  const formattedSkills = skillArray.map(skill => formatSkillName(skill));
+  
+  // Final deduplication (case-insensitive)
+  const deduplicated = new Set<string>();
+  const lowerToOriginal = new Map<string, string>();
+  
+  for (const skill of formattedSkills) {
+    const lower = skill.toLowerCase();
+    if (!lowerToOriginal.has(lower)) {
+      lowerToOriginal.set(lower, skill);
+      deduplicated.add(skill);
+    }
+  }
+  
+  return Array.from(deduplicated).sort();
+}
