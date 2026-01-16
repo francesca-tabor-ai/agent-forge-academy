@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
 import { getSegment } from '@/lib/utils/segments';
 import { courseMetadata } from '@/lib/course-metadata';
 import PublicSegmentLandingPage from '@/components/segments/PublicSegmentLandingPage';
@@ -8,6 +9,48 @@ interface PageProps {
   params: Promise<{
     slug: string;
   }>;
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const segment = getSegment('track', slug);
+  
+  if (!segment) {
+    return {
+      title: 'Track Not Found',
+    };
+  }
+
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://agentforge.academy';
+  const canonicalUrl = `${baseUrl}/landing/track/${slug}`;
+  
+  return {
+    title: `${segment.displayName} - AI Growth Hub`,
+    description: segment.description || `Learn ${segment.displayName} with ${segment.includedCourseSlugs.length} live courses. Subscribe to access all courses in this track.`,
+    openGraph: {
+      title: `${segment.displayName} - AI Growth Hub`,
+      description: segment.description || `Learn ${segment.displayName} with ${segment.includedCourseSlugs.length} live courses.`,
+      images: [
+        {
+          url: segment.heroImageUrl,
+          width: 1200,
+          height: 630,
+          alt: `${segment.displayName} hero image`,
+        },
+      ],
+      type: 'website',
+      url: canonicalUrl,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${segment.displayName} - AI Growth Hub`,
+      description: segment.description || `Learn ${segment.displayName} with ${segment.includedCourseSlugs.length} live courses.`,
+      images: [segment.heroImageUrl],
+    },
+    alternates: {
+      canonical: canonicalUrl,
+    },
+  };
 }
 
 export async function generateStaticParams() {
