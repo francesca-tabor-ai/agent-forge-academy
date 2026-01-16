@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { ToolLogo } from '@/components/offers/ToolLogo';
 import { OfferDetailClient } from '@/components/offers/OfferDetailClient';
 import { ProjectsUsingTool } from '@/components/offers/ProjectsUsingTool';
+import { ToolProficiencyDisplay } from '@/components/offers/ToolProficiencyDisplay';
 
 interface Offer {
   id: string;
@@ -207,7 +208,10 @@ export default async function ToolDetailPage({ params }: { params: Promise<{ slu
             className="flex-shrink-0"
           />
           <div className="flex-1">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">{toolName}</h1>
+            <div className="flex items-center gap-3 mb-2">
+              <h1 className="text-3xl font-bold text-gray-900">{toolName}</h1>
+              <ToolProficiencyDisplay toolName={toolName} toolSlug={slug} />
+            </div>
             <div className="flex items-center gap-4 mb-4">
               <span className="px-3 py-1 bg-gray-100 text-gray-700 text-sm font-medium rounded-full">
                 {categoryLabels[toolCategory] || toolCategory}

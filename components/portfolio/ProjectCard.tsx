@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { ExpandableDescription } from './ExpandableDescription';
+import { ProjectToolProficiencies } from './ProjectToolProficiencies';
 
 interface ProjectCardProps {
   id: string;

@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { ProfileHeader } from '@/components/portfolio/ProfileHeader';
 import { AboutSection } from '@/components/portfolio/AboutSection';
 import { SkillsSection } from '@/components/portfolio/SkillsSection';
+import { ProfileToolProficiencies } from '@/components/portfolio/ProfileToolProficiencies';
 import { FeaturedProjects } from '@/components/portfolio/FeaturedProjects';
 import { CVResumeSection } from '@/components/portfolio/CVResumeSection';
 import { RecruiterVisibilitySection } from '@/components/portfolio/RecruiterVisibilitySection';
@@ -363,6 +364,11 @@ export default async function PortfolioPage() {
             skills={coreSkills} 
             studentProfileId={studentProfile?.id}
           />
+
+          {/* Tool Proficiencies */}
+          {studentProfile?.id && (
+            <ProfileToolProficiencies studentProfileId={studentProfile.id} />
+          )}
         </div>
 
         {/* Right Sidebar - Tools & Actions */}
