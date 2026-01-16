@@ -9,3 +9,6 @@ export * from './registry';
 export * from './state';
 export * from './ClinicalSandboxContext';
 export * from './useClinicalSandbox';
+export * from './boundaryEngine';
+export * from './docs';
+export * from './ragEngine';

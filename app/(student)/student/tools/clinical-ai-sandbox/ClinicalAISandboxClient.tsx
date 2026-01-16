@@ -7,6 +7,7 @@ import {
   useClinicalSandbox,
 } from '@/lib/tools/clinical-ai-sandbox';
 import { AgentBoundaryExplorer } from '@/components/tools/clinical-ai-sandbox/AgentBoundaryExplorer';
+import { RAGConsole } from '@/components/tools/clinical-ai-sandbox/RAGConsole';
 
 function ClinicalAISandboxContent() {
   const { activeModule, setActiveModule } = useClinicalSandbox();
@@ -73,6 +74,8 @@ function ClinicalAISandboxContent() {
         <div className="bg-white border border-gray-200 rounded-lg p-6">
           {activeModule === 'agent-boundary-explorer' ? (
             <AgentBoundaryExplorer />
+          ) : activeModule === 'rag-console' ? (
+            <RAGConsole />
           ) : (
             <>
               <h2 className="text-xl font-semibold text-gray-900 mb-4">

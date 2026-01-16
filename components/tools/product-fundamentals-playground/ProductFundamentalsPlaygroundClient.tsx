@@ -1,0 +1,236 @@
+'use client';
+
+import { useState } from 'react';
+
+type Step = 
+  | 'scenario'
+  | 'research'
+  | 'personas-problems'
+  | 'journey-map'
+  | 'roadmap'
+  | 'sprint-plan'
+  | 'uat-bugs'
+  | 'export';
+
+interface StepConfig {
+  key: Step;
+  label: string;
+  description?: string;
+}
+
+const STEPS: StepConfig[] = [
+  { key: 'scenario', label: 'Scenario', description: 'Define your product scenario' },
+  { key: 'research', label: 'Research', description: 'Conduct market research' },
+  { key: 'personas-problems', label: 'Personas & Problems', description: 'Identify personas and problems' },
+  { key: 'journey-map', label: 'Journey Map', description: 'Map user journeys' },
+  { key: 'roadmap', label: 'Roadmap', description: 'Create product roadmap' },
+  { key: 'sprint-plan', label: 'Sprint Plan', description: 'Plan development sprints' },
+  { key: 'uat-bugs', label: 'UAT & Bugs', description: 'User acceptance testing and bug tracking' },
+  { key: 'export', label: 'Export', description: 'Export your work' },
+];
+
+export function ProductFundamentalsPlaygroundClient() {
+  const [currentStep, setCurrentStep] = useState<Step>('scenario');
+  const [stepData, setStepData] = useState<Record<Step, string>>({
+    scenario: '',
+    research: '',
+    'personas-problems': '',
+    'journey-map': '',
+    roadmap: '',
+    'sprint-plan': '',
+    'uat-bugs': '',
+    export: '',
+  });
+
+  const currentStepIndex = STEPS.findIndex(s => s.key === currentStep);
+
+  const handleNext = () => {
+    if (currentStepIndex < STEPS.length - 1) {
+      setCurrentStep(STEPS[currentStepIndex + 1].key);
+    }
+  };
+
+  const handleBack = () => {
+    if (currentStepIndex > 0) {
+      setCurrentStep(STEPS[currentStepIndex - 1].key);
+    }
+  };
+
+  const handleStepClick = (step: Step) => {
+    setCurrentStep(step);
+  };
+
+  const renderStepContent = () => {
+    const step = STEPS.find(s => s.key === currentStep);
+
+    return (
+      <div className="space-y-4">
+        <div>
+          <h2 className="text-2xl font-semibold text-gray-900 mb-2">{step?.label}</h2>
+          {step?.description && (
+            <p className="text-gray-600">{step?.description}</p>
+          )}
+        </div>
+        
+        <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 min-h-[400px]">
+          <p className="text-gray-500 text-sm mb-4">
+            Placeholder content for {step?.label}. This section will contain the actual tool interface.
+          </p>
+          
+          {currentStep === 'scenario' && (
+            <div className="space-y-4">
+              <p className="text-gray-700">
+                Define your product scenario here. What problem are you solving? Who is your target audience?
+              </p>
+            </div>
+          )}
+          
+          {currentStep === 'research' && (
+            <div className="space-y-4">
+              <p className="text-gray-700">
+                Conduct market research. Analyze competitors, market trends, and user needs.
+              </p>
+            </div>
+          )}
+          
+          {currentStep === 'personas-problems' && (
+            <div className="space-y-4">
+              <p className="text-gray-700">
+                Identify key personas and their problems. Create detailed user personas and problem statements.
+              </p>
+            </div>
+          )}
+          
+          {currentStep === 'journey-map' && (
+            <div className="space-y-4">
+              <p className="text-gray-700">
+                Map user journeys. Visualize how users interact with your product at each stage.
+              </p>
+            </div>
+          )}
+          
+          {currentStep === 'roadmap' && (
+            <div className="space-y-4">
+              <p className="text-gray-700">
+                Create your product roadmap. Plan features, milestones, and timelines.
+              </p>
+            </div>
+          )}
+          
+          {currentStep === 'sprint-plan' && (
+            <div className="space-y-4">
+              <p className="text-gray-700">
+                Plan development sprints. Break down work into manageable sprints with clear goals.
+              </p>
+            </div>
+          )}
+          
+          {currentStep === 'uat-bugs' && (
+            <div className="space-y-4">
+              <p className="text-gray-700">
+                User acceptance testing and bug tracking. Document test results and track issues.
+              </p>
+            </div>
+          )}
+          
+          {currentStep === 'export' && (
+            <div className="space-y-4">
+              <p className="text-gray-700">
+                Export your work. Download or share your product fundamentals documentation.
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+      {/* Persistent Banner */}
+      <div className="bg-blue-50 border-b border-blue-200 px-6 py-3">
+        <p className="text-sm text-blue-800 font-medium">
+          AI suggests — you decide. All outputs are editable.
+        </p>
+      </div>
+
+      <div className="flex flex-col lg:flex-row min-h-[600px]">
+        {/* Left Stepper */}
+        <div className="lg:w-64 border-r border-gray-200 bg-gray-50 p-6">
+          <nav className="space-y-2" aria-label="Steps">
+            {STEPS.map((step, index) => {
+              const isActive = step.key === currentStep;
+              const isCompleted = index < currentStepIndex;
+              const isAccessible = index <= currentStepIndex;
+
+              return (
+                <button
+                  key={step.key}
+                  onClick={() => isAccessible && handleStepClick(step.key)}
+                  disabled={!isAccessible}
+                  className={`
+                    w-full text-left px-4 py-3 rounded-lg transition-colors
+                    ${isActive 
+                      ? 'bg-brand-light text-white shadow-sm' 
+                      : isCompleted
+                      ? 'bg-white border border-gray-300 text-gray-900 hover:bg-gray-50'
+                      : 'bg-white border border-gray-200 text-gray-400 cursor-not-allowed'
+                    }
+                    ${isAccessible && !isActive ? 'hover:bg-gray-50' : ''}
+                  `}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className={`
+                      w-6 h-6 rounded-full flex items-center justify-center text-xs font-semibold flex-shrink-0
+                      ${isActive 
+                        ? 'bg-white text-brand-light' 
+                        : isCompleted
+                        ? 'bg-brand-light text-white'
+                        : 'bg-gray-200 text-gray-400'
+                      }
+                    `}>
+                      {isCompleted ? '✓' : index + 1}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className={`text-sm font-medium ${isActive ? 'text-white' : isCompleted ? 'text-gray-900' : 'text-gray-400'}`}>
+                        {step.label}
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
+          </nav>
+        </div>
+
+        {/* Main Content Panel */}
+        <div className="flex-1 flex flex-col">
+          <div className="flex-1 p-6 overflow-y-auto">
+            {renderStepContent()}
+          </div>
+
+          {/* Footer with Next/Back */}
+          <div className="border-t border-gray-200 px-6 py-4 bg-gray-50 flex items-center justify-between">
+            <button
+              onClick={handleBack}
+              disabled={currentStepIndex === 0}
+              className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Back
+            </button>
+            <div className="text-sm text-gray-500">
+              Step {currentStepIndex + 1} of {STEPS.length}
+            </div>
+            <button
+              onClick={handleNext}
+              disabled={currentStepIndex === STEPS.length - 1}
+              className="px-4 py-2 bg-brand-light text-white rounded-lg hover:bg-brand-light/90 transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
