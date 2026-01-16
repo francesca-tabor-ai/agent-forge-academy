@@ -6,6 +6,7 @@ import { ScenarioStep } from './steps/ScenarioStep';
 import { ResearchStep } from './steps/ResearchStep';
 import { PersonasProblemsStep } from './steps/PersonasProblemsStep';
 import { JourneyMapStep } from './steps/JourneyMapStep';
+import { RoadmapStep } from './steps/RoadmapStep';
 
 type Step = 
   | 'scenario'
@@ -86,21 +87,7 @@ export function ProductFundamentalsPlaygroundClient() {
           )}
           
           {currentStep === 'roadmap' && (
-            <div className="space-y-4">
-              <p className="text-gray-700">
-                Create your product roadmap. Plan features, milestones, and timelines.
-              </p>
-              {state.roadmap.length > 0 && (
-                <div className="mt-4 p-4 bg-white border border-gray-300 rounded">
-                  <h3 className="font-semibold text-gray-900 mb-2">Roadmap Items ({state.roadmap.length}):</h3>
-                  {state.roadmap.map((r) => (
-                    <div key={r.id} className="text-sm text-gray-700 mb-2">
-                      <strong>{r.title}</strong> - {r.quadrant} ({r.horizon} term)
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+            <RoadmapStep state={state} dispatch={dispatch} />
           )}
           
           {currentStep === 'sprint-plan' && (
