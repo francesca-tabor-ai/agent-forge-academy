@@ -5,6 +5,8 @@ import { ToolLogo } from '@/components/offers/ToolLogo';
 import { OfferDetailClient } from '@/components/offers/OfferDetailClient';
 import { ProjectsUsingTool } from '@/components/offers/ProjectsUsingTool';
 import { ToolProficiencyDisplay } from '@/components/offers/ToolProficiencyDisplay';
+import { ToolViewTracker } from '@/components/offers/ToolViewTracker';
+import { OfferClaimButton } from '@/components/offers/OfferClaimButton';
 
 interface Offer {
   id: string;
@@ -425,15 +427,13 @@ export default async function ToolDetailPage({ params }: { params: Promise<{ slu
                       {/* Claim Button */}
                       <div className="pt-4 border-t border-gray-200">
                         {offer.external_url ? (
-                          <a
-                            href={offer.external_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-brand-light text-white rounded-md hover:bg-brand-light/90 transition-colors font-medium"
-            >
-              Claim Offer →
-            </a>
-          ) : (
+                          <OfferClaimButton
+                            offerId={offer.id}
+                            toolName={toolName}
+                            externalUrl={offer.external_url}
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-brand-light text-white rounded-md hover:bg-brand-light/90 transition-colors font-medium"
+                          />
+                        ) : (
                           <div className="text-sm text-gray-500">No claim URL available</div>
                         )}
                       </div>

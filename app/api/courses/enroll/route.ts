@@ -125,6 +125,35 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Track course → tool conversion for tools taught in this course
+    try {
+      const { data: toolCourses } = await supabase
+        .from('tool_courses')
+        .select('tool_id')
+        .eq('course_id', courseId);
+
+      if (toolCourses && toolCourses.length > 0) {
+        // Track conversion for each tool taught in this course
+        for (const tc of toolCourses) {
+          await supabase
+            .from('tool_analytics_events')
+            .insert({
+              event_type: 'course_tool_conversion',
+              user_id: user.id,
+              student_profile_id: studentProfile.id,
+              course_id: courseId,
+              tool_id: tc.tool_id,
+              metadata: {
+                enrollment_date: new Date().toISOString(),
+              },
+            });
+        }
+      }
+    } catch (error) {
+      // Don't fail enrollment if tracking fails
+      console.error('Error tracking course-tool conversion:', error);
+    }
+
     // Get course slug for redirect
     const { data: courseData } = await supabase
       .from('courses')
