@@ -5,6 +5,7 @@ import { SystemMap } from './SystemMap';
 import { EventSimulator, type SimulatedEvent } from './EventSimulator';
 import { DataQualityMonitor } from './DataQualityMonitor';
 import { TradeoffToggles, type TradeoffSettings } from './TradeoffToggles';
+import { RefactorModeComparison } from './RefactorModeComparison';
 import type { GTMSystemNode, GTMFailureType, GTMEvent, NodeConfiguration } from '@/lib/tools/gtm-control-tower';
 import {
   simulateEvent,
@@ -13,6 +14,7 @@ import {
   type SimulationResult,
 } from '@/lib/tools/gtm-control-tower/simEngine';
 import { DEFAULT_NODE_CONFIGS } from '@/lib/tools/gtm-control-tower/defaults';
+import { getEarlyStageArchitecture, getScaledArchitecture } from '@/lib/tools/gtm-control-tower/architectures';
 import { getNodeRelationships } from '@/lib/tools/gtm-control-tower/node-relationships';
 
 /**
@@ -29,6 +31,11 @@ interface GTMControlTowerState {
   lastSimulationResult: SimulationResult | null;
   previousSimulationResult: SimulationResult | null;
   tradeoffSettings: TradeoffSettings;
+  refactorMode: boolean;
+  earlyStageResult: SimulationResult | null;
+  scaledResult: SimulationResult | null;
+  earlyStagePrevious: SimulationResult | null;
+  scaledPrevious: SimulationResult | null;
 }
 
 /**
@@ -40,7 +47,9 @@ type GTMAction =
   | { type: 'ADD_FAILURE'; payload: { node: GTMSystemNode; failureType: GTMFailureType } }
   | { type: 'CLEAR_FAILURES'; payload: { node: GTMSystemNode } }
   | { type: 'UPDATE_FROM_SIMULATION'; payload: SimulationResult }
+  | { type: 'UPDATE_FROM_REFACTOR_SIMULATION'; payload: { earlyStage: SimulationResult; scaled: SimulationResult } }
   | { type: 'UPDATE_TRADEOFF_SETTINGS'; payload: TradeoffSettings }
+  | { type: 'TOGGLE_REFACTOR_MODE' }
   | { type: 'RESET_ALL' };
 
 /**
@@ -126,10 +135,51 @@ function gtmReducer(
         lastSimulationResult: result,
       };
     }
+    case 'UPDATE_FROM_REFACTOR_SIMULATION': {
+      // For refactor mode, we need to merge statuses from both results
+      const newStatuses = new Map(state.nodeStatuses);
+      const newFailures = new Map(state.activeFailures);
+
+      // Update from early-stage result
+      for (const update of action.payload.earlyStage.nodeStatusUpdates) {
+        newStatuses.set(update.node, update.status);
+      }
+      for (const failure of action.payload.earlyStage.failures) {
+        const nodeFailures = new Set(newFailures.get(failure.node) || []);
+        nodeFailures.add(failure.type);
+        newFailures.set(failure.node, nodeFailures);
+      }
+
+      // Update from scaled result (scaled takes precedence for status display)
+      for (const update of action.payload.scaled.nodeStatusUpdates) {
+        newStatuses.set(update.node, update.status);
+      }
+      for (const failure of action.payload.scaled.failures) {
+        const nodeFailures = new Set(newFailures.get(failure.node) || []);
+        nodeFailures.add(failure.type);
+        newFailures.set(failure.node, nodeFailures);
+      }
+
+      return {
+        ...state,
+        nodeStatuses: newStatuses,
+        activeFailures: newFailures,
+        earlyStagePrevious: state.earlyStageResult,
+        scaledPrevious: state.scaledResult,
+        earlyStageResult: action.payload.earlyStage,
+        scaledResult: action.payload.scaled,
+      };
+    }
     case 'UPDATE_TRADEOFF_SETTINGS': {
       return {
         ...state,
         tradeoffSettings: action.payload,
+      };
+    }
+    case 'TOGGLE_REFACTOR_MODE': {
+      return {
+        ...state,
+        refactorMode: !state.refactorMode,
       };
     }
     case 'RESET_ALL': {
@@ -143,6 +193,11 @@ function gtmReducer(
           costVsCoverage: 50,
           centralizedVsLocal: 50,
         },
+        refactorMode: false,
+        earlyStageResult: null,
+        scaledResult: null,
+        earlyStagePrevious: null,
+        scaledPrevious: null,
       };
     }
     default:
@@ -217,6 +272,11 @@ export function GTMControlTowerClient() {
       costVsCoverage: 50,
       centralizedVsLocal: 50,
     },
+    refactorMode: false,
+    earlyStageResult: null,
+    scaledResult: null,
+    earlyStagePrevious: null,
+    scaledPrevious: null,
   });
 
   // Convert activeFailures Map to Set for SystemMap
@@ -261,66 +321,139 @@ export function GTMControlTowerClient() {
         dispatch({ type: 'SET_NODE_PROCESSING', payload: { node } });
       }
 
-      // Apply trade-off settings to node configurations
-      const adjustedConfigs = applyTradeoffSettings(DEFAULT_NODE_CONFIGS, state.tradeoffSettings);
+      if (state.refactorMode) {
+        // Run both architectures in parallel
+        const earlyStageConfigs = getEarlyStageArchitecture();
+        const scaledConfigs = getScaledArchitecture();
 
-      // Run simulation
-      const settings: SimulationSettings = {
-        nodes: adjustedConfigs,
-        seed: Date.now(), // Use timestamp for variation
-      };
+        const earlyStageSettings: SimulationSettings = {
+          nodes: earlyStageConfigs,
+          seed: Date.now(),
+        };
 
-      const records = createEmptyRecords();
-      const result = await simulateEvent(gtmEvent, settings, records);
+        const scaledSettings: SimulationSettings = {
+          nodes: scaledConfigs,
+          seed: Date.now() + 1, // Different seed for variation
+        };
 
-      // Update state from simulation result
-      dispatch({ type: 'UPDATE_FROM_SIMULATION', payload: result });
+        const records = createEmptyRecords();
+        
+        // Run both simulations in parallel
+        const [earlyStageResult, scaledResult] = await Promise.all([
+          simulateEvent(gtmEvent, earlyStageSettings, records),
+          simulateEvent(gtmEvent, scaledSettings, records),
+        ]);
+
+        // Update state from both results
+        dispatch({
+          type: 'UPDATE_FROM_REFACTOR_SIMULATION',
+          payload: {
+            earlyStage: earlyStageResult,
+            scaled: scaledResult,
+          },
+        });
+      } else {
+        // Normal mode - single simulation
+        const adjustedConfigs = applyTradeoffSettings(DEFAULT_NODE_CONFIGS, state.tradeoffSettings);
+
+        const settings: SimulationSettings = {
+          nodes: adjustedConfigs,
+          seed: Date.now(),
+        };
+
+        const records = createEmptyRecords();
+        const result = await simulateEvent(gtmEvent, settings, records);
+
+        // Update state from simulation result
+        dispatch({ type: 'UPDATE_FROM_SIMULATION', payload: result });
+      }
     },
-    [state.tradeoffSettings]
+    [state.tradeoffSettings, state.refactorMode]
   );
 
   return (
     <div className="space-y-6">
-      {/* Two-column layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-[50%_50%] gap-6">
-        {/* Left Column - System Map */}
-        <div className="bg-white border border-gray-200 rounded-lg p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">System Map</h2>
-          <SystemMap
-            activeFailureModes={activeFailureModes}
-            nodeStatuses={state.nodeStatuses}
-          />
+      {/* Refactor Mode Toggle */}
+      <div className="flex items-center justify-between bg-white border border-gray-200 rounded-lg p-4">
+        <div className="flex-1">
+          <h3 className="text-sm font-semibold text-gray-900">Refactor Mode</h3>
+          <p className="text-xs text-gray-600 mt-1">
+            Compare Early-Stage vs Scaled architectures side-by-side
+          </p>
         </div>
+        <button
+          onClick={() => dispatch({ type: 'TOGGLE_REFACTOR_MODE' })}
+          className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+            state.refactorMode ? 'bg-blue-600' : 'bg-gray-300'
+          }`}
+        >
+          <span
+            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+              state.refactorMode ? 'translate-x-6' : 'translate-x-1'
+            }`}
+          />
+        </button>
+      </div>
 
-        {/* Right Column - Stacked Panels */}
+      {state.refactorMode ? (
+        /* Refactor Mode - Side-by-side Comparison */
         <div className="space-y-6">
-          {/* Event Simulator */}
+          {/* Event Simulator - Always visible */}
           <div className="bg-white border border-gray-200 rounded-lg p-6">
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Event Simulator</h2>
             <EventSimulator onEventAdded={handleEventAdded} />
           </div>
 
-          {/* Trade-off Toggles */}
+          {/* Comparison View */}
+          <RefactorModeComparison
+            earlyStageResult={state.earlyStageResult}
+            scaledResult={state.scaledResult}
+            earlyStagePrevious={state.earlyStagePrevious}
+            scaledPrevious={state.scaledPrevious}
+          />
+        </div>
+      ) : (
+        /* Normal Mode - Standard View */
+        <div className="grid grid-cols-1 lg:grid-cols-[50%_50%] gap-6">
+          {/* Left Column - System Map */}
           <div className="bg-white border border-gray-200 rounded-lg p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Trade-off Toggles</h2>
-            <TradeoffToggles
-              settings={state.tradeoffSettings}
-              onChange={(settings) => {
-                dispatch({ type: 'UPDATE_TRADEOFF_SETTINGS', payload: settings });
-              }}
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">System Map</h2>
+            <SystemMap
+              activeFailureModes={activeFailureModes}
+              nodeStatuses={state.nodeStatuses}
             />
           </div>
 
-          {/* Data Quality Monitor */}
-          <div className="bg-white border border-gray-200 rounded-lg p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Data Quality Monitor</h2>
-            <DataQualityMonitor
-              simulationResult={state.lastSimulationResult}
-              previousResult={state.previousSimulationResult}
-            />
+          {/* Right Column - Stacked Panels */}
+          <div className="space-y-6">
+            {/* Event Simulator */}
+            <div className="bg-white border border-gray-200 rounded-lg p-6">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">Event Simulator</h2>
+              <EventSimulator onEventAdded={handleEventAdded} />
+            </div>
+
+            {/* Trade-off Toggles */}
+            <div className="bg-white border border-gray-200 rounded-lg p-6">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">Trade-off Toggles</h2>
+              <TradeoffToggles
+                settings={state.tradeoffSettings}
+                onChange={(settings) => {
+                  dispatch({ type: 'UPDATE_TRADEOFF_SETTINGS', payload: settings });
+                }}
+              />
+            </div>
+
+            {/* Data Quality Monitor */}
+            <div className="bg-white border border-gray-200 rounded-lg p-6">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">Data Quality Monitor</h2>
+              <DataQualityMonitor
+                simulationResult={state.lastSimulationResult}
+                previousResult={state.previousSimulationResult}
+              />
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
