@@ -4,8 +4,9 @@
  * Hook for accessing and modifying Clinical AI Sandbox state.
  */
 
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useClinicalSandboxContext } from './ClinicalSandboxContext';
+import { queueAuditLogForPersistence, flushPendingAuditLogs } from './persistAuditLog';
 import type {
   ModuleId,
   BoundaryAction,
@@ -21,16 +22,33 @@ export function useClinicalSandbox() {
 
   /**
    * Add an audit log entry
+   * Also queues it for optional persistence to Supabase
    */
   const addAuditLogEntry = useCallback(
     (entry: Omit<AuditLogEntry, 'timestamp'> & { timestamp?: Date }) => {
+      const fullEntry: AuditLogEntry = {
+        ...entry,
+        timestamp: entry.timestamp || new Date(),
+      };
+
+      // Add to local state
       dispatch({
         type: 'ADD_AUDIT_LOG_ENTRY',
-        payload: entry,
+        payload: fullEntry,
       });
+
+      // Queue for optional persistence (gracefully degrades if API fails)
+      queueAuditLogForPersistence(fullEntry);
     },
     [dispatch]
   );
+
+  // Flush pending logs on unmount
+  useEffect(() => {
+    return () => {
+      flushPendingAuditLogs();
+    };
+  }, []);
 
   /**
    * Set the active module

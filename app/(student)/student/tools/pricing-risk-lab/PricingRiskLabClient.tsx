@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Simulator } from '@/components/tools/pricing-risk-lab/Simulator';
 import { TradeoffVisualiser } from '@/components/tools/pricing-risk-lab/TradeoffVisualiser';
 import { FraudDashboard } from '@/components/tools/pricing-risk-lab/FraudDashboard';
+import { ABTestDesigner } from '@/components/tools/pricing-risk-lab/ABTestDesigner';
 
 type TabId = 'simulator' | 'ab-test-designer' | 'fraud-dashboard' | 'trade-offs' | 'alerts';
 
@@ -111,6 +112,8 @@ export function PricingRiskLabClient() {
         <TradeoffVisualiser />
       ) : activeTab === 'fraud-dashboard' ? (
         <FraudDashboard />
+      ) : activeTab === 'ab-test-designer' ? (
+        <ABTestDesigner />
       ) : (
         <div className="bg-white border border-gray-200 rounded-lg p-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">
