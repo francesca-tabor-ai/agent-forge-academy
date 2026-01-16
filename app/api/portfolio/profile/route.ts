@@ -4,6 +4,7 @@ import { logRequest, getUserIdFromRequest, getIpAddress, getUserAgent } from '@/
 import { safeLogger } from '@/lib/utils/redactPII';
 import { mapGitHubRepoToProject, validateProjectInput, filterGitHubRepos, type GitHubRepo } from '@/lib/portfolio/github-mapper';
 import { revalidatePath } from 'next/cache';
+import { parseLocation } from '@/lib/profile/parseLocation';
 
 /**
  * Helper function to sync GitHub repositories and create portfolio projects
@@ -716,6 +717,10 @@ export async function PATCH(request: NextRequest) {
     bio = bio?.trim() || null;
     location = location?.trim() || null;
 
+    // Parse location to extract city and country
+    // Parse city from first token before comma, store normalized city key
+    const { city, country } = parseLocation(location);
+
     if (!studentProfile) {
       // Create student profile if it doesn't exist
       const { data: newProfile, error: createError } = await supabase
@@ -727,6 +732,8 @@ export async function PATCH(request: NextRequest) {
           bio: bio || null,
           skills: skills || [],
           location: location || null,
+          city: city,
+          country: country,
           linkedin_url: linkedin_url,
           github_url: github_url,
           website_url: website_url,
@@ -810,6 +817,8 @@ export async function PATCH(request: NextRequest) {
     }
 
     // Update existing student profile (RLS will enforce ownership)
+    // When user edits profile location, parse city from first token before comma
+    // Store normalized city key (e.g., "london")
     const { data: updatedProfile, error } = await supabase
       .from('student_profiles')
       .update({
@@ -818,6 +827,8 @@ export async function PATCH(request: NextRequest) {
         bio: bio || null,
         skills: skills || [],
         location: location || null,
+        city: city, // Normalized city key (e.g., "london")
+        country: country, // Country (e.g., "UK")
         linkedin_url: linkedin_url,
         github_url: github_url,
         website_url: website_url,
