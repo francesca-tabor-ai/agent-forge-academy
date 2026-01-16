@@ -10,9 +10,10 @@ import { isValidIndustry } from '@/lib/utils/industries';
 
 /**
  * Filter and validate industries array to ensure it's Industry[]
+ * Accepts string[] from dynamic metadata and validates/narrows to Industry[]
  */
-function filterIndustries(industries: string[] | Industry[] | undefined | null): Industry[] {
-  if (!industries || !Array.isArray(industries)) {
+function filterIndustries(industries: string[] | undefined | null): Industry[] {
+  if (!industries?.length) {
     return [];
   }
   return industries.filter((i): i is Industry => isValidIndustry(i));
