@@ -1,7 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { usePlayground } from '@/lib/tools/product-fundamentals-playground/usePlayground';
+import { usePersistence } from '@/lib/tools/product-fundamentals-playground/usePersistence';
 import { ScenarioStep } from './steps/ScenarioStep';
 import { ResearchStep } from './steps/ResearchStep';
 import { PersonasProblemsStep } from './steps/PersonasProblemsStep';
@@ -41,6 +43,85 @@ const STEPS: StepConfig[] = [
 export function ProductFundamentalsPlaygroundClient() {
   const { state, dispatch } = usePlayground();
   const [currentStep, setCurrentStep] = useState<Step>('scenario');
+  const [caseId, setCaseId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [caseTitle, setCaseTitle] = useState('Untitled Case');
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  // Initialize case from URL or create new
+  useEffect(() => {
+    const urlCaseId = searchParams.get('caseId');
+    if (urlCaseId) {
+      setCaseId(urlCaseId);
+      loadCase(urlCaseId);
+    } else {
+      createNewCase();
+    }
+  }, [searchParams]);
+
+  const createNewCase = async () => {
+    try {
+      const response = await fetch('/api/tools/product-fundamentals/cases', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title: 'Untitled Case',
+          state,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create case');
+      }
+
+      const data = await response.json();
+      setCaseId(data.case.id);
+      setCaseTitle(data.case.title);
+      router.replace(`?caseId=${data.case.id}`, { scroll: false });
+      setIsLoading(false);
+    } catch (err) {
+      console.error('Error creating case:', err);
+      setIsLoading(false);
+      // Gracefully fallback - continue without persistence
+    }
+  };
+
+  const loadCase = async (id: string) => {
+    try {
+      const response = await fetch(`/api/tools/product-fundamentals/cases/${id}`);
+
+      if (!response.ok) {
+        if (response.status === 404) {
+          // Case doesn't exist, create new
+          createNewCase();
+          return;
+        }
+        throw new Error('Failed to load case');
+      }
+
+      const data = await response.json();
+      if (data.case?.state) {
+        // Load state into reducer
+        dispatch({ type: 'LOAD_STATE', payload: data.case.state });
+      }
+      setCaseTitle(data.case.title || 'Untitled Case');
+      setIsLoading(false);
+    } catch (err) {
+      console.error('Error loading case:', err);
+      setIsLoading(false);
+      // Gracefully fallback - continue with empty state
+    }
+  };
+
+  // Persistence hook
+  const { isSaving, lastSaved, error: persistenceError } = usePersistence({
+    caseId,
+    state,
+    enabled: !!caseId,
+  });
 
   const currentStepIndex = STEPS.findIndex(s => s.key === currentStep);
 
