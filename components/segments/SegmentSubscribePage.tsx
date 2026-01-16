@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import type { Segment } from '@/lib/types/segment';
 import type { SegmentSubscriptionConfig } from '@/lib/utils/segment-subscriptions';
-import { formatPrice, calculateAnnualSavings } from '@/lib/utils/segment-subscriptions';
+import { formatPrice, calculateAnnualSavings } from '@/lib/utils/subscription-utils';
 
 interface SegmentSubscribePageProps {
   segment: Segment;

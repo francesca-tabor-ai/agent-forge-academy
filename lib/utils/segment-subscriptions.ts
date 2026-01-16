@@ -1,7 +1,11 @@
 /**
  * Segment subscription utilities
  * Maps segments to Stripe product/price IDs using content/subscriptions.md
+ * 
+ * NOTE: This file imports server-only code. For client-safe utilities, use subscription-utils.ts
  */
+
+import 'server-only';
 
 import type { Segment, SegmentType } from '@/lib/types/segment';
 import { getSegmentKey } from '@/lib/types/segment';
@@ -82,24 +86,5 @@ export function getSegmentSubscriptionConfig(segment: Segment): SegmentSubscript
   };
 }
 
-/**
- * Get billing cycle from price ID
- */
-export function getBillingCycleFromPriceId(priceId: string): 'monthly' | 'annual' {
-  return priceId.includes('annual') ? 'annual' : 'monthly';
-}
-
-/**
- * Format price for display
- */
-export function formatPrice(pence: number): string {
-  return `£${(pence / 100).toFixed(0)}`;
-}
-
-/**
- * Calculate annual savings
- */
-export function calculateAnnualSavings(monthlyPrice: number, annualPrice: number): number {
-  const monthlyTotal = monthlyPrice * 12;
-  return monthlyTotal - annualPrice;
-}
+// Note: formatPrice, calculateAnnualSavings, and getBillingCycleFromPriceId 
+// have been moved to subscription-utils.ts for client-side use

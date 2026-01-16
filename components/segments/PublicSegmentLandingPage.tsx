@@ -5,19 +5,20 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type { Segment } from '@/lib/types/segment';
 import type { CourseMetadata } from '@/lib/course-metadata';
-import { getSegmentSubscriptionConfig, formatPrice, calculateAnnualSavings } from '@/lib/utils/segment-subscriptions';
+import type { SegmentSubscriptionConfig } from '@/lib/utils/segment-subscriptions';
+import { formatPrice, calculateAnnualSavings } from '@/lib/utils/subscription-utils';
 import { LandingCourseCard } from './LandingCourseCard';
 
 interface PublicSegmentLandingPageProps {
   segment: Segment;
   courses: Array<CourseMetadata & { slug: string }>;
+  config: SegmentSubscriptionConfig | null;
 }
 
-export default function PublicSegmentLandingPage({ segment, courses }: PublicSegmentLandingPageProps) {
+export default function PublicSegmentLandingPage({ segment, courses, config }: PublicSegmentLandingPageProps) {
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'annual'>('monthly');
   const [isLoading, setIsLoading] = useState(false);
 
-  const config = getSegmentSubscriptionConfig(segment);
   const monthlyPrice = config?.monthlyPrice || 4900;
   const annualPrice = config?.annualPrice || 49000;
   const annualSavings = calculateAnnualSavings(monthlyPrice, annualPrice);

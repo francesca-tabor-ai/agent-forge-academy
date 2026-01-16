@@ -4,6 +4,8 @@
  * Format: segment_type | segment_key | display_name | stripe_product_id | stripe_monthly_price_id | stripe_annual_price_id | display_price_monthly | display_price_annual | currency | marketing_bullets
  */
 
+import 'server-only';
+
 import { readFileSync } from 'fs';
 import { join } from 'path';
 

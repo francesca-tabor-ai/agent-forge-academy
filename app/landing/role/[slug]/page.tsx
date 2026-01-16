@@ -4,6 +4,7 @@ import { getSegment } from '@/lib/utils/segments';
 import { courseMetadata } from '@/lib/course-metadata';
 import PublicSegmentLandingPage from '@/components/segments/PublicSegmentLandingPage';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { getSegmentSubscriptionConfig } from '@/lib/utils/segment-subscriptions';
 
 interface PageProps {
   params: Promise<{
@@ -103,5 +104,8 @@ export default async function RoleLandingPage({ params }: PageProps) {
     })
     .filter((course) => course !== null);
   
-  return <PublicSegmentLandingPage segment={segment} courses={courses} />;
+  // Get subscription config server-side
+  const config = getSegmentSubscriptionConfig(segment);
+  
+  return <PublicSegmentLandingPage segment={segment} courses={courses} config={config} />;
 }
