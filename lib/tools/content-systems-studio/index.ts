@@ -66,3 +66,13 @@ export {
 export {
   runRules,
 } from './rulesEngine';
+
+// Variation Engine
+export {
+  generateVariants,
+  canGenerateVariants,
+  type GeneratedVariant,
+  type VariantType,
+  type ToneVariant,
+  type LengthVariant,
+} from './variationEngine';

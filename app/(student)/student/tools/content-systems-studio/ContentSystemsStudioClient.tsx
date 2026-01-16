@@ -5,6 +5,7 @@ import { useContentSystemsStudio } from '@/lib/tools/content-systems-studio/useC
 import { ContentEditor } from '@/components/tools/content-systems-studio/ContentEditor';
 import { RulesPanel } from '@/components/tools/content-systems-studio/RulesPanel';
 import { WorkflowPanel } from '@/components/tools/content-systems-studio/WorkflowPanel';
+import { VariationsPanel } from '@/components/tools/content-systems-studio/VariationsPanel';
 import type { Role } from '@/lib/tools/content-systems-studio/types';
 
 type TabId = 'editor' | 'rules' | 'workflow' | 'variations' | 'dashboard';
@@ -139,6 +140,8 @@ export function ContentSystemsStudioClient({ currentRole = 'student' }: ContentS
           onRoleChange={setDemoRole}
           showRoleSelector={true}
         />
+      ) : activeTab === 'variations' ? (
+        <VariationsPanel studio={studio} currentRole={activeRole} />
       ) : (
         <div className="bg-white border border-gray-200 rounded-lg p-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">
