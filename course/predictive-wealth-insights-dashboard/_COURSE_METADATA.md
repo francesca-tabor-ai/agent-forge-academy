@@ -2,7 +2,7 @@
 slug: "predictive-wealth-insights-dashboard"
 title: "Predictive Wealth Insights Dashboard"
 description: "From Data Aggregation to Forward-Looking Investment Intelligence - Build AI-powered predictive dashboards for wealth management"
-category: "ML Engineering"
+category: "Trust & Regulation"
 duration_weeks: 8
 difficulty_level: "advanced"
 is_published: true

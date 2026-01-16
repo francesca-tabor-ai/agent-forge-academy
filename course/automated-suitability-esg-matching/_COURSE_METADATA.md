@@ -2,7 +2,7 @@
 slug: "automated-suitability-esg-matching"
 title: "Automated Suitability & ESG Preference Matching"
 description: "Build AI-powered systems for automated suitability assessment and ESG preference matching in digital advisory platforms"
-category: "ML Engineering"
+category: "Trust & Regulation"
 duration_weeks: 8
 difficulty_level: "intermediate"
 is_published: true

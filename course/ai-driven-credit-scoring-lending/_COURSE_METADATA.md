@@ -2,7 +2,7 @@
 slug: "ai-driven-credit-scoring-lending"
 title: "AI-Driven Credit Scoring and Lending"
 description: "Build AI-powered credit scoring models, loan underwriting systems, and automated lending platforms"
-category: "ML Engineering"
+category: "Trust & Regulation"
 duration_weeks: 8
 difficulty_level: "intermediate"
 is_published: true

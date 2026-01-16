@@ -2,7 +2,7 @@
 slug: "frictionless-compliance-onboarding-assistant"
 title: "Frictionless Compliance & Onboarding Assistant"
 description: "Using AI to Cut Administrative Burden Without Compromising Regulatory Trust - Build AI-powered compliance and onboarding tools"
-category: "ML Engineering"
+category: "Trust & Regulation"
 duration_weeks: 8
 difficulty_level: "advanced"
 is_published: true

@@ -2,7 +2,7 @@
 slug: "ai-powered-financial-risk-management"
 title: "AI-Powered Financial Risk Management"
 description: "Master AI-driven risk assessment, portfolio optimization, and real-time market monitoring systems for financial institutions"
-category: "ML Engineering"
+category: "Trust & Regulation"
 duration_weeks: 8
 difficulty_level: "intermediate"
 is_published: true

@@ -2,7 +2,7 @@
 slug: "distribution-marketing-intelligence"
 title: "Distribution & Marketing Intelligence"
 description: "Using AI to Predict Flows, Understand Competition, and Enable Advice-Led Distribution - Build AI-driven distribution intelligence tools"
-category: "ML Engineering"
+category: "Trust & Regulation"
 duration_weeks: 8
 difficulty_level: "advanced"
 is_published: true

@@ -2,7 +2,7 @@
 slug: "esg-sustainable-investment-insights"
 title: "ESG & Sustainable Investment Insights"
 description: "From Lagging ESG Scores to Real-Time Risk & Double Materiality Intelligence - Build AI-powered ESG intelligence tools"
-category: "ML Engineering"
+category: "Trust & Regulation"
 duration_weeks: 8
 difficulty_level: "advanced"
 is_published: true

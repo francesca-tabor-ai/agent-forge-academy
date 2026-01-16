@@ -2,7 +2,7 @@
 slug: "automated-financial-reporting-analysis"
 title: "Automated Financial Reporting and Analysis"
 description: "Build AI-powered systems for automated financial statement analysis, reporting, and insights generation"
-category: "ML Engineering"
+category: "Trust & Regulation"
 duration_weeks: 6
 difficulty_level: "intermediate"
 is_published: true

@@ -2,7 +2,7 @@
 slug: "financial-fraud-detection-ai"
 title: "Financial Fraud Detection with AI"
 description: "Build AI-powered fraud detection systems for transactions, identity verification, and compliance"
-category: "ML Engineering"
+category: "Trust & Regulation"
 duration_weeks: 7
 difficulty_level: "intermediate"
 is_published: true

@@ -2,7 +2,7 @@
 slug: "hyper-personalized-client-communication"
 title: "Hyper-Personalized Client Communication Tools"
 description: "Using AI to Differentiate Advice, Deepen Trust, and Scale Personalization - Build AI-powered communication tools for financial advisory"
-category: "ML Engineering"
+category: "Trust & Regulation"
 duration_weeks: 8
 difficulty_level: "advanced"
 is_published: true

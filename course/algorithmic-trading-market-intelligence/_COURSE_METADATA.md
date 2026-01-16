@@ -2,7 +2,7 @@
 slug: "algorithmic-trading-market-intelligence"
 title: "Algorithmic Trading and Market Intelligence"
 description: "Build AI-powered trading systems, market prediction models, and real-time execution engines"
-category: "ML Engineering"
+category: "Trust & Regulation"
 duration_weeks: 10
 difficulty_level: "advanced"
 is_published: true

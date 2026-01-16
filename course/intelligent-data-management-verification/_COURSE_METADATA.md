@@ -2,7 +2,7 @@
 slug: "intelligent-data-management-verification"
 title: "Intelligent Data Management & Verification"
 description: "Building the AI Data Brain for Asset Managers - Design AI-driven data management systems for fund data at scale"
-category: "ML Engineering"
+category: "Trust & Regulation"
 duration_weeks: 8
 difficulty_level: "advanced"
 is_published: true

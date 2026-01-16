@@ -2,7 +2,7 @@
 slug: "intelligent-document-intelligence-hub"
 title: "Intelligent Document Intelligence Hub (Prospectus Miner)"
 description: "From 300-Page PDFs to Real-Time, Actionable Fund Intelligence - Build AI-powered document intelligence systems for financial document analysis"
-category: "ML Engineering"
+category: "Trust & Regulation"
 duration_weeks: 8
 difficulty_level: "advanced"
 is_published: true
