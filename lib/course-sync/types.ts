@@ -17,8 +17,11 @@ export interface CourseMetadata {
   difficulty_level: DifficultyLevel | null;
   is_published: boolean;
   industries: string[];
-  // Optional fields for tracking
-  category?: string; // Not in DB yet, but useful for metadata
+  // Course overview fields
+  outcome?: string[]; // Array of learning outcomes
+  youll_build?: string[]; // Array of things students will build
+  best_for?: string[]; // Array of target audiences
+  category?: string; // Course track/category
   imageUrl?: string; // Optional direct image URL (takes precedence over thumbnail_url)
 }
 
