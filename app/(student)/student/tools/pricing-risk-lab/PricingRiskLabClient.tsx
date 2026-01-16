@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { Simulator } from '@/components/tools/pricing-risk-lab/Simulator';
 
 type TabId = 'simulator' | 'ab-test-designer' | 'fraud-dashboard' | 'trade-offs' | 'alerts';
 
@@ -102,14 +103,18 @@ export function PricingRiskLabClient() {
       </div>
 
       {/* Tab Content Panel */}
-      <div className="bg-white border border-gray-200 rounded-lg p-6">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">
-          {currentTab.title}
-        </h2>
-        <p className="text-gray-600">
-          {currentTab.description}
-        </p>
-      </div>
+      {activeTab === 'simulator' ? (
+        <Simulator />
+      ) : (
+        <div className="bg-white border border-gray-200 rounded-lg p-6">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">
+            {currentTab.title}
+          </h2>
+          <p className="text-gray-600">
+            {currentTab.description}
+          </p>
+        </div>
+      )}
     </div>
   );
 }
