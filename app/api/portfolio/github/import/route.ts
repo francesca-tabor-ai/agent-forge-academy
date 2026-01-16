@@ -233,28 +233,68 @@ export async function POST(request: NextRequest) {
     for (const repo of filteredRepos) {
       try {
         // Map GitHub repo to portfolio project
-        const projectInput = mapGitHubRepoToProject(repo, {
-          defaultVisibility: 'private',
-          includeTopicsInDescription: true,
-        });
+        // Mapping requirements:
+        // - title = repo.name (exact, no formatting)
+        // - description = repo.description ?? ""
+        // - repo_url = repo.html_url
+        // - demo_url = repo.homepage ?? null
+        // - source = "github"
+        // - source_id = `${repo.id}`
+        // - status = "draft" (always on first import)
+        // - visibility = "private" (always on first import)
+        // - last_synced_at = now
+        
+        // Use simple mapping (no formatting) to match requirements exactly
+        const projectInput = {
+          title: repo.name,
+          description: repo.description ?? "",
+          github_url: repo.html_url,
+          demo_url: repo.homepage ?? null,
+          visibility: 'private' as const,
+          source: 'github' as const,
+          source_id: repo.id,
+        };
 
-        // Validate the mapped project
-        const validation = validateProjectInput(projectInput);
-        if (!validation.valid) {
-          safeLogger.error('[GitHub Import API] Invalid project input', {
+        // Validate demo_url if present
+        if (projectInput.demo_url) {
+          try {
+            new URL(projectInput.demo_url);
+          } catch {
+            // Invalid URL, set to null
+            projectInput.demo_url = null;
+          }
+        }
+        
+        // Basic validation
+        if (!projectInput.title || projectInput.title.trim().length === 0) {
+          safeLogger.error('[GitHub Import API] Invalid project: missing title', {
             userId,
             username,
             repo: repo.name,
-            errors: validation.errors,
           });
-          errors.push(`Invalid project input for ${repo.name}: ${validation.errors.join(', ')}`);
+          errors.push(`Invalid project ${repo.name}: missing title`);
+          continue;
+        }
+        
+        if (projectInput.title.length > 255) {
+          safeLogger.error('[GitHub Import API] Invalid project: title too long', {
+            userId,
+            username,
+            repo: repo.name,
+            titleLength: projectInput.title.length,
+          });
+          errors.push(`Invalid project ${repo.name}: title too long`);
           continue;
         }
 
-        // Check if project already exists (dedupe by source + source_id)
+        // Check if project already exists (dedupe by student_profile_id + source + source_id)
+        // The unique constraint is on (student_profile_id, source, source_id)
+        // This is functionally equivalent to (user_id, source, source_id) since each
+        // student_profile belongs to one user
+        // ✅ Acceptance test: import twice → no duplicates (enforced by unique constraint)
         const { data: existing } = await supabase
           .from('portfolio_projects')
-          .select('id')
+          .select('id, image_url')
           .eq('student_profile_id', studentProfile.id)
           .eq('source', 'github')
           .eq('source_id', String(projectInput.source_id))
@@ -263,18 +303,24 @@ export async function POST(request: NextRequest) {
         let projectId: string;
 
         if (existing) {
-          // Update existing project
+          // Update existing project - only safe fields
+          // Update safe fields: title, description, repo_url, demo_url, last_synced_at
+          // Do NOT overwrite user edits like image_url if user set it
+          // Do NOT overwrite status/visibility (user may have changed them)
+          const updateData: any = {
+            title: projectInput.title,
+            description: projectInput.description,
+            repo_url: projectInput.github_url,
+            github_url: projectInput.github_url, // Keep for backward compatibility
+            demo_url: projectInput.demo_url,
+            last_synced_at: new Date().toISOString(),
+            // Keep existing status and visibility (don't overwrite user changes)
+            // Keep existing image_url (don't overwrite user edits)
+          };
+          
           const { error: updateError } = await supabase
             .from('portfolio_projects')
-            .update({
-              title: projectInput.title,
-              description: projectInput.description,
-              repo_url: projectInput.github_url,
-              github_url: projectInput.github_url, // Keep for backward compatibility
-              demo_url: projectInput.demo_url,
-              last_synced_at: new Date().toISOString(),
-              // Keep existing status and visibility (don't overwrite user changes)
-            })
+            .update(updateData)
             .eq('id', existing.id);
 
           if (updateError) {
