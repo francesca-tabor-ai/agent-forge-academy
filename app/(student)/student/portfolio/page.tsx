@@ -93,9 +93,14 @@ export default async function PortfolioPage() {
       demo_url: string | null;
       visibility: 'private' | 'recruiters_only' | 'public';
       cover_image_url?: string | null;
+      image_url?: string | null;
       images?: string[] | null;
       created_at: string | null;
+      updated_at?: string | null;
+      last_synced_at?: string | null;
+      status?: 'draft' | 'published';
       featured?: boolean;
+      skills?: Array<{ id: string; name: string }>;
     };
     
     type FeaturedProject = {
@@ -113,7 +118,22 @@ export default async function PortfolioPage() {
     if (studentProfile) {
       const { data: projectsData, error: projectsError } = await supabase
         .from('portfolio_projects')
-        .select('id, title, description, github_url, demo_url, visibility, cover_image_url, images, created_at, featured')
+        .select(`
+          id, 
+          title, 
+          description, 
+          github_url, 
+          demo_url, 
+          visibility, 
+          cover_image_url,
+          image_url,
+          images, 
+          created_at,
+          updated_at,
+          last_synced_at,
+          status,
+          featured
+        `)
         .eq('student_profile_id', studentProfile.id)
         .order('created_at', { ascending: false });
 
@@ -127,16 +147,53 @@ export default async function PortfolioPage() {
         // Don't throw - just log and continue with empty projects
         projects = [];
       } else {
-        // Serialize Date objects to ISO strings to avoid serialization issues
-        projects = (projectsData || []).map(project => ({
-          ...project,
-          visibility: (project.visibility as 'private' | 'recruiters_only' | 'public') || 'private',
-          created_at: project.created_at 
-            ? (typeof project.created_at === 'string' 
-                ? project.created_at 
-                : new Date(project.created_at).toISOString())
-            : null,
-        })) as PortfolioProject[];
+        // Fetch skills for each project
+        const projectsWithSkills = await Promise.all(
+          (projectsData || []).map(async (project) => {
+            // Fetch project skills
+            const { data: projectSkills } = await supabase
+              .from('project_skills')
+              .select(`
+                skill_id,
+                skills:skill_id (
+                  id,
+                  name
+                )
+              `)
+              .eq('project_id', project.id);
+
+            const skills = (projectSkills || [])
+              .map((ps: any) => ps.skills)
+              .filter(Boolean)
+              .map((skill: any) => ({
+                id: skill.id,
+                name: skill.name,
+              }));
+
+            return {
+              ...project,
+              visibility: (project.visibility as 'private' | 'recruiters_only' | 'public') || 'private',
+              created_at: project.created_at 
+                ? (typeof project.created_at === 'string' 
+                    ? project.created_at 
+                    : new Date(project.created_at).toISOString())
+                : null,
+              updated_at: project.updated_at 
+                ? (typeof project.updated_at === 'string' 
+                    ? project.updated_at 
+                    : new Date(project.updated_at).toISOString())
+                : null,
+              last_synced_at: project.last_synced_at 
+                ? (typeof project.last_synced_at === 'string' 
+                    ? project.last_synced_at 
+                    : new Date(project.last_synced_at).toISOString())
+                : null,
+              skills,
+            };
+          })
+        );
+
+        projects = projectsWithSkills as PortfolioProject[];
       }
 
       const { data: featuredData, error: featuredError } = await supabase

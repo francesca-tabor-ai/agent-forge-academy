@@ -12,7 +12,12 @@ interface Project {
   demo_url: string | null;
   visibility: 'private' | 'recruiters_only' | 'public';
   cover_image_url?: string | null;
+  image_url?: string | null;
   images?: string[] | null;
+  status?: 'draft' | 'published';
+  updated_at?: string | null;
+  last_synced_at?: string | null;
+  skills?: Array<{ id: string; name: string }>;
   featured?: boolean;
 }
 
@@ -22,18 +27,18 @@ interface ProjectsViewProps {
 }
 
 export function ProjectsView({ projects, onFeaturedUpdate }: ProjectsViewProps) {
-  const [viewMode, setViewMode] = useState<'list' | 'card'>('list');
+  const [viewMode, setViewMode] = useState<'list' | 'tiles'>('list');
 
   // Load view preference from localStorage
   useEffect(() => {
     const saved = localStorage.getItem('portfolioViewMode');
-    if (saved === 'list' || saved === 'card') {
+    if (saved === 'list' || saved === 'tiles') {
       setViewMode(saved);
     }
   }, []);
 
   // Save view preference to localStorage
-  const handleViewModeChange = (mode: 'list' | 'card') => {
+  const handleViewModeChange = (mode: 'list' | 'tiles') => {
     setViewMode(mode);
     localStorage.setItem('portfolioViewMode', mode);
   };
@@ -75,14 +80,14 @@ export function ProjectsView({ projects, onFeaturedUpdate }: ProjectsViewProps) 
             </button>
             <button
               type="button"
-              onClick={() => handleViewModeChange('card')}
+              onClick={() => handleViewModeChange('tiles')}
               className={`px-3 py-1.5 text-sm font-medium transition-colors ${
-                viewMode === 'card'
+                viewMode === 'tiles'
                   ? 'bg-gray-900 text-white'
                   : 'bg-white text-gray-700 hover:bg-gray-50'
               }`}
             >
-              Cards
+              Tiles
             </button>
           </div>
           <Link
@@ -94,7 +99,7 @@ export function ProjectsView({ projects, onFeaturedUpdate }: ProjectsViewProps) 
         </div>
       </div>
 
-      {viewMode === 'card' ? (
+      {viewMode === 'tiles' ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project) => (
             <ProjectCard
@@ -105,8 +110,11 @@ export function ProjectsView({ projects, onFeaturedUpdate }: ProjectsViewProps) 
               github_url={project.github_url}
               demo_url={project.demo_url}
               visibility={project.visibility}
-              coverImageUrl={project.cover_image_url || null}
-              viewMode="card"
+              status={project.status}
+              coverImageUrl={project.image_url || project.cover_image_url || null}
+              skills={project.skills || []}
+              updatedAt={project.updated_at || project.last_synced_at || project.created_at}
+              viewMode="tiles"
               featured={project.featured}
               onFeaturedUpdate={onFeaturedUpdate}
             />
@@ -123,7 +131,10 @@ export function ProjectsView({ projects, onFeaturedUpdate }: ProjectsViewProps) 
               github_url={project.github_url}
               demo_url={project.demo_url}
               visibility={project.visibility}
-              coverImageUrl={project.cover_image_url || null}
+              status={project.status}
+              coverImageUrl={project.image_url || project.cover_image_url || null}
+              skills={project.skills || []}
+              updatedAt={project.updated_at || project.last_synced_at || project.created_at}
               viewMode="list"
               featured={project.featured}
               onFeaturedUpdate={onFeaturedUpdate}

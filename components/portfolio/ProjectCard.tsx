@@ -15,9 +15,41 @@ interface ProjectCardProps {
   techStack?: string[];
   outcome?: string | null;
   coverImageUrl?: string | null;
-  viewMode?: 'list' | 'card';
+  skills?: Array<{ id: string; name: string }>;
+  updatedAt?: string | null;
+  viewMode?: 'list' | 'tiles' | 'card';
   featured?: boolean;
   onFeaturedUpdate?: () => void;
+}
+
+// Helper function to resolve project image URL
+// Priority: project.image_url → fallback → default
+function resolveProjectImageUrl(imageUrl: string | null | undefined): string {
+  if (imageUrl && imageUrl.trim().length > 0) {
+    return imageUrl;
+  }
+  // Fallback to default project cover
+  return '/project-covers/default.jpg';
+}
+
+// Format date for display
+function formatDate(dateString: string | null | undefined): string {
+  if (!dateString) return '';
+  try {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    
+    if (diffDays === 0) return 'Today';
+    if (diffDays === 1) return 'Yesterday';
+    if (diffDays < 7) return `${diffDays} days ago`;
+    if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
+    if (diffDays < 365) return `${Math.floor(diffDays / 30)} months ago`;
+    return `${Math.floor(diffDays / 365)} years ago`;
+  } catch {
+    return '';
+  }
 }
 
 export function ProjectCard({
@@ -31,6 +63,8 @@ export function ProjectCard({
   techStack = [],
   outcome,
   coverImageUrl,
+  skills = [],
+  updatedAt,
   viewMode = 'list',
   featured = false,
   onFeaturedUpdate,
@@ -102,50 +136,72 @@ export function ProjectCard({
   // Determine status from description length if not provided
   const displayStatus = status || (description && description.length > 50 ? 'complete' : 'draft');
 
+  // Resolve image URL
+  const resolvedImageUrl = resolveProjectImageUrl(coverImageUrl);
+
+  // Format updated date
+  const formattedUpdatedAt = formatDate(updatedAt);
+
   // Gallery images (currently not passed as prop, so default to empty array)
   const galleryImages: string[] = [];
 
-  if (viewMode === 'card') {
+  // Support both 'card' and 'tiles' for backward compatibility
+  if (viewMode === 'card' || viewMode === 'tiles') {
     return (
-      <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-gray-300 transition-colors flex flex-col shadow-sm">
-        {/* Cover Image */}
-        {coverImageUrl ? (
-          <div className="w-full h-40 overflow-hidden bg-gray-100">
-            <img
-              src={coverImageUrl}
-              alt={title}
-              className="w-full h-full object-cover hover:scale-105 transition-transform duration-200"
-            />
-          </div>
-        ) : (
-          <div className="w-full h-40 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
-            <span className="text-4xl text-gray-300">📁</span>
-          </div>
-        )}
-        
-        <div className="p-4 flex-1 flex flex-col">
-          {/* Title and Pills */}
-          <div className="mb-2">
-            <div className="flex items-start gap-2 mb-2">
-              <h3 className="text-base font-semibold text-gray-900 flex-1">{title}</h3>
-              {isFeatured && (
-                <span className="text-yellow-500 text-sm flex-shrink-0" title="Featured project">
-                  ⭐
-                </span>
-              )}
-            </div>
-            <div className="flex items-center gap-2 flex-wrap">
+      <Link
+        href={`/student/portfolio/${id}/edit`}
+        className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-gray-300 transition-all flex flex-col shadow-sm hover:shadow-md group cursor-pointer"
+      >
+        {/* Cover Image with Gradient Overlay */}
+        <div className="relative w-full h-48 overflow-hidden bg-gray-100">
+          <img
+            src={resolvedImageUrl}
+            alt={title}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            onError={(e) => {
+              // Fallback to default if image fails to load
+              (e.target as HTMLImageElement).src = '/project-covers/default.jpg';
+            }}
+          />
+          {/* Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+          
+          {/* Title and Status Pill - Overlay on Image */}
+          <div className="absolute bottom-0 left-0 right-0 p-4">
+            <div className="flex items-start justify-between gap-2">
+              <h3 className="text-white font-semibold text-lg flex-1 drop-shadow-lg">
+                {title}
+              </h3>
               {displayStatus && (
-                <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${statusColors[displayStatus]}`}>
+                <span className={`px-2.5 py-1 text-xs font-medium rounded-full ${statusColors[displayStatus]} flex-shrink-0`}>
                   {statusLabels[displayStatus]}
                 </span>
               )}
-              <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${visibilityColors[visibility]}`}>
-                {visibilityIcons[visibility]} {visibilityLabels[visibility]}
-              </span>
             </div>
+            
+            {/* Skills Preview */}
+            {skills.length > 0 && (
+              <div className="flex items-center gap-1.5 mt-2 flex-wrap">
+                {skills.slice(0, 3).map((skill) => (
+                  <span
+                    key={skill.id}
+                    className="px-2 py-0.5 text-xs font-medium bg-white/90 text-gray-700 rounded-full backdrop-blur-sm"
+                  >
+                    {skill.name}
+                  </span>
+                ))}
+                {skills.length > 3 && (
+                  <span className="px-2 py-0.5 text-xs font-medium bg-white/90 text-gray-700 rounded-full backdrop-blur-sm">
+                    +{skills.length - 3}
+                  </span>
+                )}
+              </div>
+            )}
           </div>
-
+        </div>
+        
+        {/* Content below image */}
+        <div className="p-4 flex-1 flex flex-col">
           {/* Description */}
           {description && (
             <p className="text-sm text-gray-700 mb-3 line-clamp-2 leading-relaxed flex-1">
@@ -189,7 +245,11 @@ export function ProjectCard({
               </div>
               <div className="flex items-center gap-1">
                 <button
-                  onClick={handleToggleFeatured}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleToggleFeatured(e);
+                  }}
                   disabled={loading}
                   className={`p-1.5 rounded transition-colors ${
                     isFeatured
@@ -202,28 +262,20 @@ export function ProjectCard({
                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                   </svg>
                 </button>
-                <Link
-                  href={`/student/portfolio/${id}/edit`}
-                  className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded transition-colors"
-                  title="Edit project"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                  </svg>
-                </Link>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </Link>
     );
   }
 
+  // List view: title, status, visibility, last updated, skill chips, edit button
   return (
     <div className="bg-white border border-gray-200 rounded-lg p-5 hover:border-gray-300 transition-colors">
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1 min-w-0">
-          {/* Title and Pills Row */}
+          {/* Title and Status Row */}
           <div className="flex items-start gap-3 mb-2 flex-wrap">
             <h3 className="text-base font-semibold text-gray-900 flex-shrink-0">{title}</h3>
             <div className="flex items-center gap-2 flex-wrap">
@@ -242,6 +294,27 @@ export function ProjectCard({
               </span>
             </div>
           </div>
+
+          {/* Last Updated */}
+          {formattedUpdatedAt && (
+            <div className="text-xs text-gray-500 mb-2">
+              Updated {formattedUpdatedAt}
+            </div>
+          )}
+
+          {/* Skill Chips */}
+          {skills.length > 0 && (
+            <div className="flex items-center gap-1.5 mb-3 flex-wrap">
+              {skills.map((skill) => (
+                <span
+                  key={skill.id}
+                  className="px-2 py-0.5 text-xs font-medium bg-gray-100 text-gray-700 rounded-full"
+                >
+                  {skill.name}
+                </span>
+              ))}
+            </div>
+          )}
 
           {/* Description Snippet (2 lines) */}
           {description && (
@@ -286,7 +359,7 @@ export function ProjectCard({
           </div>
         </div>
 
-        {/* Actions - Subtle icon buttons */}
+        {/* Edit Button */}
         <div className="flex items-center gap-1 flex-shrink-0">
           <button
             onClick={handleToggleFeatured}
