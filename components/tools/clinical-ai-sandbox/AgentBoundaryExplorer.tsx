@@ -40,10 +40,10 @@ export function AgentBoundaryExplorer() {
       module: 'agent-boundary-explorer',
       input: testPrompt,
       decision: result.action,
-      reasons: [result.reason],
-      escalation: result.matchedRule?.escalationPath,
+      reasons: result.reasons,
+      escalation: result.escalation,
       metadata: {
-        nextStep: result.nextStep,
+        safeResponseTemplate: result.safeResponseTemplate,
         matchedRuleId: result.matchedRule?.id,
       },
     });
@@ -159,12 +159,22 @@ export function AgentBoundaryExplorer() {
                 </div>
                 <div className="space-y-2 text-sm">
                   <div>
-                    <span className="font-medium text-gray-700">Reason:</span>
-                    <p className="text-gray-600 mt-1">{evaluationResult.reason}</p>
+                    <span className="font-medium text-gray-700">Escalation:</span>
+                    <p className="text-gray-600 mt-1 capitalize">{evaluationResult.escalation}</p>
                   </div>
                   <div>
-                    <span className="font-medium text-gray-700">Next Step:</span>
-                    <p className="text-gray-600 mt-1">{evaluationResult.nextStep}</p>
+                    <span className="font-medium text-gray-700">Reasons:</span>
+                    <ul className="list-disc list-inside text-gray-600 mt-1 space-y-1">
+                      {evaluationResult.reasons.map((reason, idx) => (
+                        <li key={idx}>{reason}</li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <span className="font-medium text-gray-700">Safe Response Template:</span>
+                    <p className="text-gray-600 mt-1 italic bg-gray-50 p-2 rounded border border-gray-200">
+                      {evaluationResult.safeResponseTemplate}
+                    </p>
                   </div>
                   {evaluationResult.matchedRule && (
                     <div>
