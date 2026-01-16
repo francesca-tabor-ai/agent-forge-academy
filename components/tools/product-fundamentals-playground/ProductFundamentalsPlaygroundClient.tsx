@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { usePlayground } from '@/lib/tools/product-fundamentals-playground/usePlayground';
 
 type Step = 
   | 'scenario'
@@ -30,17 +31,8 @@ const STEPS: StepConfig[] = [
 ];
 
 export function ProductFundamentalsPlaygroundClient() {
+  const { state, dispatch } = usePlayground();
   const [currentStep, setCurrentStep] = useState<Step>('scenario');
-  const [stepData, setStepData] = useState<Record<Step, string>>({
-    scenario: '',
-    research: '',
-    'personas-problems': '',
-    'journey-map': '',
-    roadmap: '',
-    'sprint-plan': '',
-    'uat-bugs': '',
-    export: '',
-  });
 
   const currentStepIndex = STEPS.findIndex(s => s.key === currentStep);
 
@@ -77,11 +69,31 @@ export function ProductFundamentalsPlaygroundClient() {
             Placeholder content for {step?.label}. This section will contain the actual tool interface.
           </p>
           
+          {/* Debug: Show state info */}
+          <div className="mt-4 p-3 bg-white border border-gray-300 rounded text-xs text-gray-600">
+            <strong>State Debug:</strong> Audit log entries: {state.auditLog.length}
+            {state.scenario && ` | Scenario: ${state.scenario.title}`}
+            {state.research && ` | Research: ${state.research.sourceType}`}
+            {state.personas.length > 0 && ` | Personas: ${state.personas.length}`}
+            {state.problems.length > 0 && ` | Problems: ${state.problems.length}`}
+            {state.journey.length > 0 && ` | Journey stages: ${state.journey.length}`}
+            {state.roadmap.length > 0 && ` | Roadmap items: ${state.roadmap.length}`}
+            {state.stories.length > 0 && ` | Stories: ${state.stories.length}`}
+            {state.bugs.length > 0 && ` | Bugs: ${state.bugs.length}`}
+          </div>
+          
           {currentStep === 'scenario' && (
             <div className="space-y-4">
               <p className="text-gray-700">
                 Define your product scenario here. What problem are you solving? Who is your target audience?
               </p>
+              {state.scenario && (
+                <div className="mt-4 p-4 bg-white border border-gray-300 rounded">
+                  <h3 className="font-semibold text-gray-900 mb-2">Current Scenario:</h3>
+                  <p className="text-sm text-gray-700"><strong>Title:</strong> {state.scenario.title}</p>
+                  <p className="text-sm text-gray-700"><strong>Target User:</strong> {state.scenario.targetUser}</p>
+                </div>
+              )}
             </div>
           )}
           
@@ -90,6 +102,13 @@ export function ProductFundamentalsPlaygroundClient() {
               <p className="text-gray-700">
                 Conduct market research. Analyze competitors, market trends, and user needs.
               </p>
+              {state.research && (
+                <div className="mt-4 p-4 bg-white border border-gray-300 rounded">
+                  <h3 className="font-semibold text-gray-900 mb-2">Research Notes:</h3>
+                  <p className="text-sm text-gray-700"><strong>Source Type:</strong> {state.research.sourceType}</p>
+                  <p className="text-sm text-gray-700 mt-2">{state.research.rawNotes || 'No notes yet'}</p>
+                </div>
+              )}
             </div>
           )}
           
@@ -98,6 +117,26 @@ export function ProductFundamentalsPlaygroundClient() {
               <p className="text-gray-700">
                 Identify key personas and their problems. Create detailed user personas and problem statements.
               </p>
+              {state.personas.length > 0 && (
+                <div className="mt-4 p-4 bg-white border border-gray-300 rounded">
+                  <h3 className="font-semibold text-gray-900 mb-2">Personas ({state.personas.length}):</h3>
+                  {state.personas.map((p) => (
+                    <div key={p.id} className="text-sm text-gray-700 mb-2">
+                      <strong>{p.name}</strong> ({p.archetype})
+                    </div>
+                  ))}
+                </div>
+              )}
+              {state.problems.length > 0 && (
+                <div className="mt-4 p-4 bg-white border border-gray-300 rounded">
+                  <h3 className="font-semibold text-gray-900 mb-2">Problems ({state.problems.length}):</h3>
+                  {state.problems.map((p) => (
+                    <div key={p.id} className="text-sm text-gray-700 mb-2">
+                      <strong>{p.who}</strong> needs {p.need}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
           
@@ -106,6 +145,16 @@ export function ProductFundamentalsPlaygroundClient() {
               <p className="text-gray-700">
                 Map user journeys. Visualize how users interact with your product at each stage.
               </p>
+              {state.journey.length > 0 && (
+                <div className="mt-4 p-4 bg-white border border-gray-300 rounded">
+                  <h3 className="font-semibold text-gray-900 mb-2">Journey Stages ({state.journey.length}):</h3>
+                  {state.journey.map((j) => (
+                    <div key={j.id} className="text-sm text-gray-700 mb-2">
+                      <strong>{j.name}</strong>: {j.userGoal}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
           
@@ -114,6 +163,16 @@ export function ProductFundamentalsPlaygroundClient() {
               <p className="text-gray-700">
                 Create your product roadmap. Plan features, milestones, and timelines.
               </p>
+              {state.roadmap.length > 0 && (
+                <div className="mt-4 p-4 bg-white border border-gray-300 rounded">
+                  <h3 className="font-semibold text-gray-900 mb-2">Roadmap Items ({state.roadmap.length}):</h3>
+                  {state.roadmap.map((r) => (
+                    <div key={r.id} className="text-sm text-gray-700 mb-2">
+                      <strong>{r.title}</strong> - {r.quadrant} ({r.horizon} term)
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
           
@@ -122,6 +181,26 @@ export function ProductFundamentalsPlaygroundClient() {
               <p className="text-gray-700">
                 Plan development sprints. Break down work into manageable sprints with clear goals.
               </p>
+              {state.sprints.length > 0 && (
+                <div className="mt-4 p-4 bg-white border border-gray-300 rounded">
+                  <h3 className="font-semibold text-gray-900 mb-2">Sprints ({state.sprints.length}):</h3>
+                  {state.sprints.map((s, idx) => (
+                    <div key={idx} className="text-sm text-gray-700 mb-2">
+                      <strong>Sprint {idx + 1}:</strong> {s.goal} ({s.capacityPoints} points)
+                    </div>
+                  ))}
+                </div>
+              )}
+              {state.stories.length > 0 && (
+                <div className="mt-4 p-4 bg-white border border-gray-300 rounded">
+                  <h3 className="font-semibold text-gray-900 mb-2">Stories ({state.stories.length}):</h3>
+                  {state.stories.map((s) => (
+                    <div key={s.id} className="text-sm text-gray-700 mb-2">
+                      <strong>{s.title}</strong> ({s.points} points)
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
           
@@ -130,6 +209,27 @@ export function ProductFundamentalsPlaygroundClient() {
               <p className="text-gray-700">
                 User acceptance testing and bug tracking. Document test results and track issues.
               </p>
+              {state.uatScenarios.length > 0 && (
+                <div className="mt-4 p-4 bg-white border border-gray-300 rounded">
+                  <h3 className="font-semibold text-gray-900 mb-2">UAT Scenarios ({state.uatScenarios.length}):</h3>
+                  {state.uatScenarios.map((u) => (
+                    <div key={u.id} className="text-sm text-gray-700 mb-2">
+                      <strong>{u.title}</strong>
+                    </div>
+                  ))}
+                </div>
+              )}
+              {state.bugs.length > 0 && (
+                <div className="mt-4 p-4 bg-white border border-gray-300 rounded">
+                  <h3 className="font-semibold text-gray-900 mb-2">Bugs ({state.bugs.length}):</h3>
+                  {state.bugs.map((b) => (
+                    <div key={b.id} className="text-sm text-gray-700 mb-2">
+                      <strong>{b.title}</strong> - {b.severity}
+                      {b.decision && ` (${b.decision})`}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
           
@@ -138,6 +238,25 @@ export function ProductFundamentalsPlaygroundClient() {
               <p className="text-gray-700">
                 Export your work. Download or share your product fundamentals documentation.
               </p>
+              <div className="mt-4 p-4 bg-white border border-gray-300 rounded">
+                <h3 className="font-semibold text-gray-900 mb-2">Audit Log ({state.auditLog.length} entries):</h3>
+                <div className="max-h-48 overflow-y-auto text-xs text-gray-600 space-y-1">
+                  {state.auditLog.slice(-10).map((entry, idx) => (
+                    <div key={idx} className="border-b border-gray-200 pb-1">
+                      <span className="font-mono text-gray-500">
+                        {new Date(entry.timestamp).toLocaleTimeString()}
+                      </span>
+                      {' '}
+                      <span className="font-semibold">{entry.step}</span>
+                      {' '}
+                      <span>{entry.action}</span>
+                    </div>
+                  ))}
+                  {state.auditLog.length > 10 && (
+                    <p className="text-gray-500 italic">... and {state.auditLog.length - 10} more entries</p>
+                  )}
+                </div>
+              </div>
             </div>
           )}
         </div>
