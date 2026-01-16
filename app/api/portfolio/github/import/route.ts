@@ -107,11 +107,13 @@ export async function POST(request: NextRequest) {
     });
 
     // Fetch repositories from GitHub API
+    // Endpoint: GET https://api.github.com/users/:username/repos?per_page=100&sort=updated
     const headers: HeadersInit = {
       'Accept': 'application/vnd.github.v3+json',
     };
 
     // Use GITHUB_TOKEN from environment if available (for higher rate limits)
+    // Add Authorization header: token ${process.env.GITHUB_TOKEN}
     const githubToken = process.env.GITHUB_TOKEN;
     if (githubToken) {
       headers['Authorization'] = `token ${githubToken}`;
@@ -204,11 +206,14 @@ export async function POST(request: NextRequest) {
       reposFetched,
     });
 
-    // Filter repos based on rules (exclude forks, archived, and empty repos)
+    // Filter repos based on rules:
+    // - ignore forks: fork === false
+    // - ignore archived: archived === false
+    // - ignore empty repos: size > 0
     const filteredRepos = filterGitHubRepos(repos, {
-      excludeForks: true,
-      excludeArchived: true,
-      excludeEmpty: true,
+      excludeForks: true,      // fork === false
+      excludeArchived: true,    // archived === false
+      excludeEmpty: true,       // size > 0
     });
 
     safeLogger.info('[GitHub Import API] Filtered repositories', {
