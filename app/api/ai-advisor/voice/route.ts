@@ -537,6 +537,25 @@ export async function POST(request: NextRequest) {
       }, { status: 401 });
     }
 
+    // Parse FormData (needed for both mock and real mode)
+    const formData = await request.formData();
+    const audioFile = formData.get('audio') as File;
+    const studentProfileId = formData.get('studentProfileId') as string | null;
+    const conversationId = formData.get('conversationId') as string | undefined;
+    const shouldGenerateAudio = formData.get('generateAudio') === 'true';
+    const intent = formData.get('intent') as string | undefined;
+
+    // Parse context JSON if provided
+    let context: VoiceRequest['context'] | undefined;
+    const contextStr = formData.get('context') as string | null;
+    if (contextStr) {
+      try {
+        context = JSON.parse(contextStr);
+      } catch (e) {
+        safeLogger.warn('Failed to parse context JSON', e);
+      }
+    }
+
     // UAT Mock Mode: Return deterministic transcription for testing
     if (isMockMode) {
       const mockTranscript = getMockVoiceTranscript();
@@ -559,25 +578,6 @@ export async function POST(request: NextRequest) {
         conversationId: convId,
         requestId,
       });
-    }
-
-    // Parse FormData
-    const formData = await request.formData();
-    const audioFile = formData.get('audio') as File;
-    const studentProfileId = formData.get('studentProfileId') as string | null;
-    const conversationId = formData.get('conversationId') as string | undefined;
-    const shouldGenerateAudio = formData.get('generateAudio') === 'true';
-    const intent = formData.get('intent') as string | undefined;
-
-    // Parse context JSON if provided
-    let context: VoiceRequest['context'] | undefined;
-    const contextStr = formData.get('context') as string | null;
-    if (contextStr) {
-      try {
-        context = JSON.parse(contextStr);
-      } catch (e) {
-        safeLogger.warn('Failed to parse context JSON', e);
-      }
     }
 
     // Parse conversation history JSON if provided
