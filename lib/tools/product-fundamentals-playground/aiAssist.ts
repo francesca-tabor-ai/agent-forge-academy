@@ -127,6 +127,8 @@ export function generateResearchInsights(notes: string): ResearchInsights {
         because,
         evidence: trimmed,
         successMetric: 'User satisfaction and task completion rate',
+        rationale: '', // User must fill this in
+        linkedPersonaIds: [],
       });
     }
   });
@@ -140,6 +142,8 @@ export function generateResearchInsights(notes: string): ResearchInsights {
         because: pain.toLowerCase(),
         evidence: pain,
         successMetric: 'Reduction in reported pain points',
+        rationale: '', // User must fill this in
+        linkedPersonaIds: [],
       });
     });
   }

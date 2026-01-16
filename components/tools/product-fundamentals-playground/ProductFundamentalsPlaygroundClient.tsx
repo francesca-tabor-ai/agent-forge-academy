@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { usePlayground } from '@/lib/tools/product-fundamentals-playground/usePlayground';
 import { ScenarioStep } from './steps/ScenarioStep';
 import { ResearchStep } from './steps/ResearchStep';
+import { PersonasProblemsStep } from './steps/PersonasProblemsStep';
 
 type Step = 
   | 'scenario'
@@ -76,31 +77,7 @@ export function ProductFundamentalsPlaygroundClient() {
           )}
           
           {currentStep === 'personas-problems' && (
-            <div className="space-y-4">
-              <p className="text-gray-700">
-                Identify key personas and their problems. Create detailed user personas and problem statements.
-              </p>
-              {state.personas.length > 0 && (
-                <div className="mt-4 p-4 bg-white border border-gray-300 rounded">
-                  <h3 className="font-semibold text-gray-900 mb-2">Personas ({state.personas.length}):</h3>
-                  {state.personas.map((p) => (
-                    <div key={p.id} className="text-sm text-gray-700 mb-2">
-                      <strong>{p.name}</strong> ({p.archetype})
-                    </div>
-                  ))}
-                </div>
-              )}
-              {state.problems.length > 0 && (
-                <div className="mt-4 p-4 bg-white border border-gray-300 rounded">
-                  <h3 className="font-semibold text-gray-900 mb-2">Problems ({state.problems.length}):</h3>
-                  {state.problems.map((p) => (
-                    <div key={p.id} className="text-sm text-gray-700 mb-2">
-                      <strong>{p.who}</strong> needs {p.need}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+            <PersonasProblemsStep state={state} dispatch={dispatch} />
           )}
           
           {currentStep === 'journey-map' && (

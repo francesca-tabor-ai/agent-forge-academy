@@ -154,6 +154,8 @@ export function ResearchStep({ state, dispatch }: ResearchStepProps) {
     const problemWithId: ProblemStatement = {
       ...problem,
       id: `problem-${Date.now()}-${index}`,
+      rationale: problem.rationale || '', // Ensure rationale field exists
+      linkedPersonaIds: problem.linkedPersonaIds || [], // Ensure linkedPersonaIds field exists
     };
 
     dispatch({

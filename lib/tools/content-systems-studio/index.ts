@@ -76,3 +76,14 @@ export {
   type ToneVariant,
   type LengthVariant,
 } from './variationEngine';
+
+// Metrics
+export {
+  computeThroughputMetrics,
+  type ThroughputMetrics,
+  type MetricsFilters,
+  type ItemsPerState,
+  type AvgTimePerStage,
+  type RuleViolationsOverTime,
+  type VariantsPerItem,
+} from './metrics';

@@ -239,25 +239,53 @@ function computeRuleViolationsOverTime(
 ): RuleViolationsOverTime[] {
   const filteredAudit = filterAuditEvents(auditLog, filters.timeRange || 'all');
 
-  // Group rule results by date (from audit log entries that triggered rules)
+  // Group rule violations by date from audit log
+  // We track when rules were run and count violations
   const violationsByDate = new Map<string, { warnings: number; blocks: number }>();
 
-  // Find audit events related to rule execution
-  // We'll use the ruleResults and match them with audit timestamps
-  // For simplicity, we'll use the most recent rule execution timestamp
-  const latestRuleExecution = filteredAudit
-    .filter((e) => e.action === 'run_rules' || e.metadata?.ruleResults)
-    .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())[0];
+  // Find audit events that indicate rule execution
+  // Look for save actions and state transitions that would trigger rules
+  const ruleTriggerEvents = filteredAudit.filter(
+    (e) =>
+      e.action === 'update_field' ||
+      e.action === 'transition_state' ||
+      e.action === 'run_rules' ||
+      e.metadata?.ruleResults
+  );
 
-  // Count rule violations from current rule results
-  // In a real implementation, we'd track rule execution history
-  // For now, we'll use the current rule results and distribute them over time
-  const today = new Date().toISOString().split('T')[0];
-  const warnings = ruleResults.filter((r) => r.status === 'warn').length;
-  const blocks = ruleResults.filter((r) => r.status === 'block').length;
+  // For each event, if it has rule results in metadata, count violations
+  for (const event of ruleTriggerEvents) {
+    const date = event.timestamp.toISOString().split('T')[0];
+    
+    // If metadata has rule results, use them
+    const ruleResultsInEvent = event.metadata?.ruleResults as RuleResult[] | undefined;
+    if (ruleResultsInEvent && Array.isArray(ruleResultsInEvent)) {
+      const warnings = ruleResultsInEvent.filter((r) => r.status === 'warn').length;
+      const blocks = ruleResultsInEvent.filter((r) => r.status === 'block').length;
+      
+      if (warnings > 0 || blocks > 0) {
+        const existing = violationsByDate.get(date) || { warnings: 0, blocks: 0 };
+        violationsByDate.set(date, {
+          warnings: existing.warnings + warnings,
+          blocks: existing.blocks + blocks,
+        });
+      }
+    }
+  }
 
-  if (warnings > 0 || blocks > 0) {
-    violationsByDate.set(today, { warnings, blocks });
+  // Also include current rule results if they exist (for today)
+  if (ruleResults.length > 0) {
+    const today = new Date().toISOString().split('T')[0];
+    const warnings = ruleResults.filter((r) => r.status === 'warn').length;
+    const blocks = ruleResults.filter((r) => r.status === 'block').length;
+    
+    if (warnings > 0 || blocks > 0) {
+      const existing = violationsByDate.get(today) || { warnings: 0, blocks: 0 };
+      violationsByDate.set(today, {
+        warnings: existing.warnings + warnings,
+        blocks: existing.blocks + blocks,
+      });
+    }
   }
 
   // Convert to array and sort by date

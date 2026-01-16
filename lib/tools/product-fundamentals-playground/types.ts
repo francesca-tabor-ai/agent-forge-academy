@@ -31,6 +31,8 @@ export interface ProblemStatement {
   because: string;
   evidence: string;
   successMetric: string;
+  rationale: string; // "Why this matters" - required field
+  linkedPersonaIds: string[]; // Multi-select persona links
 }
 
 export interface JourneyStage {
