@@ -122,6 +122,35 @@ export function normalizeCourseMetadata(
       : Boolean(raw.is_published);
   }
 
+  // Normalize is_live (defaults to true if published, false otherwise)
+  let isLive = isPublished; // Default: live if published
+  if (raw.is_live !== undefined && raw.is_live !== null) {
+    isLive = typeof raw.is_live === 'string'
+      ? raw.is_live.toLowerCase() === 'true'
+      : Boolean(raw.is_live);
+  }
+
+  // Normalize industries (can be string or array)
+  let industries: string[] = [];
+  if (raw.industries !== undefined && raw.industries !== null) {
+    if (Array.isArray(raw.industries)) {
+      industries = raw.industries.map(String);
+    } else {
+      industries = [String(raw.industries)];
+    }
+  }
+
+  // Normalize best_for/bestFor (can be string or array)
+  let bestFor: string[] | undefined = undefined;
+  const bestForValue = raw.best_for || raw.bestFor;
+  if (bestForValue !== undefined && bestForValue !== null) {
+    if (Array.isArray(bestForValue)) {
+      bestFor = bestForValue.map(String);
+    } else {
+      bestFor = [String(bestForValue)];
+    }
+  }
+
   return {
     slug: courseSlug, // Always use directory name as source of truth
     title: String(raw.title || courseSlug).trim(),
@@ -131,7 +160,9 @@ export function normalizeCourseMetadata(
     duration_weeks: durationWeeks,
     difficulty_level: difficultyLevel,
     is_published: isPublished,
-    industries: Array.isArray(raw.industries) ? raw.industries.map(String) : [],
+    is_live: isLive,
+    industries,
+    best_for: bestFor,
     category: raw.category ? String(raw.category).trim() : undefined,
   };
 }

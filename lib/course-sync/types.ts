@@ -16,12 +16,13 @@ export interface CourseMetadata {
   duration_weeks: number | null;
   difficulty_level: DifficultyLevel | null;
   is_published: boolean;
-  industries: string[];
+  is_live: boolean; // Indicates if course is live and available for enrollment
+  industries: string[]; // Array of industry domains
   // Course overview fields
   outcome?: string[]; // Array of learning outcomes
   youll_build?: string[]; // Array of things students will build
-  best_for?: string[]; // Array of target audiences
-  category?: string; // Course track/category
+  best_for?: string[]; // Array of target audiences (job roles)
+  category?: string; // Course track/category (e.g., "Agentic Systems", "Vibe Engineering")
   imageUrl?: string; // Optional direct image URL (takes precedence over thumbnail_url)
 }
 
@@ -38,7 +39,11 @@ export interface RawCourseMetadata {
   duration_weeks?: number | string;
   difficulty_level?: string;
   is_published?: boolean | string;
-  category?: string;
+  is_live?: boolean | string; // Indicates if course is live
+  category?: string; // Track/category
+  industries?: string | string[]; // Industry domains (can be string or array)
+  bestFor?: string | string[]; // Job roles (can be string or array)
+  best_for?: string | string[]; // Alternative field name
   [key: string]: unknown; // Allow other fields
 }
 
