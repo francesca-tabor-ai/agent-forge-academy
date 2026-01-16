@@ -1,0 +1,105 @@
+import type { UATScenario } from './types';
+
+export const PRELOADED_UAT_SCENARIOS: UATScenario[] = [
+  {
+    id: 'uat-1',
+    title: 'User Registration Flow',
+    steps: [
+      'Navigate to registration page',
+      'Enter email address',
+      'Enter password (min 8 characters)',
+      'Click "Create Account" button',
+      'Verify email confirmation message appears',
+    ],
+    expected: 'User account is created successfully and confirmation email is sent',
+  },
+  {
+    id: 'uat-2',
+    title: 'Product Search and Filter',
+    steps: [
+      'Navigate to product catalog',
+      'Enter search term in search bar',
+      'Apply price filter (e.g., $0-$50)',
+      'Apply category filter',
+      'Verify filtered results display correctly',
+    ],
+    expected: 'Search results show only products matching search term and applied filters',
+  },
+  {
+    id: 'uat-3',
+    title: 'Shopping Cart Checkout',
+    steps: [
+      'Add items to cart',
+      'Navigate to cart page',
+      'Review cart contents',
+      'Click "Proceed to Checkout"',
+      'Enter shipping information',
+      'Select payment method',
+      'Complete purchase',
+    ],
+    expected: 'Order is placed successfully and order confirmation is displayed',
+  },
+  {
+    id: 'uat-4',
+    title: 'User Profile Update',
+    steps: [
+      'Log in to account',
+      'Navigate to profile settings',
+      'Update email address',
+      'Update phone number',
+      'Save changes',
+    ],
+    expected: 'Profile information is updated and confirmation message is shown',
+  },
+  {
+    id: 'uat-5',
+    title: 'Password Reset Flow',
+    steps: [
+      'Navigate to login page',
+      'Click "Forgot Password" link',
+      'Enter email address',
+      'Check email for reset link',
+      'Click reset link',
+      'Enter new password',
+      'Confirm new password',
+      'Submit',
+    ],
+    expected: 'Password is reset successfully and user can log in with new password',
+  },
+  {
+    id: 'uat-6',
+    title: 'Mobile Responsive Navigation',
+    steps: [
+      'Open application on mobile device',
+      'Tap hamburger menu icon',
+      'Navigate through menu items',
+      'Verify menu closes after selection',
+      'Test on different screen sizes',
+    ],
+    expected: 'Navigation menu works correctly on all mobile screen sizes',
+  },
+  {
+    id: 'uat-7',
+    title: 'Data Export Functionality',
+    steps: [
+      'Navigate to data dashboard',
+      'Select date range',
+      'Click "Export" button',
+      'Choose export format (CSV/PDF)',
+      'Download file',
+    ],
+    expected: 'Data is exported in selected format with correct data and formatting',
+  },
+  {
+    id: 'uat-8',
+    title: 'Multi-user Collaboration',
+    steps: [
+      'User A creates a document',
+      'User A shares document with User B',
+      'User B opens shared document',
+      'User B makes edits',
+      'User A sees real-time updates',
+    ],
+    expected: 'Multiple users can collaborate on documents with real-time synchronization',
+  },
+];

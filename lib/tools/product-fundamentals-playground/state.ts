@@ -36,6 +36,7 @@ export type PlaygroundAction =
   | { type: 'UPDATE_UAT_SCENARIO'; payload: UATScenario }
   | { type: 'ADD_BUG'; payload: Bug }
   | { type: 'UPDATE_BUG'; payload: Bug }
+  | { type: 'DELETE_BUG'; payload: string } // Bug ID
   | { type: 'SET_SHIP_DECISION'; payload: { bugId: string; decision: Bug['decision']; rationale: string | null } }
   | { type: 'ADD_AUDIT_ENTRY'; payload: Omit<AuditEntry, 'timestamp'> };
 
@@ -274,6 +275,14 @@ export function playgroundReducer(
       auditMetadata = { bugId: action.payload.id, title: action.payload.title };
       break;
 
+    case 'DELETE_BUG':
+      newState = {
+        ...state,
+        bugs: state.bugs.filter((b) => b.id !== action.payload),
+      };
+      auditMetadata = { bugId: action.payload };
+      break;
+
     case 'SET_SHIP_DECISION':
       newState = {
         ...state,
@@ -323,6 +332,7 @@ export function playgroundReducer(
     UPDATE_UAT_SCENARIO: 'uat-bugs',
     ADD_BUG: 'uat-bugs',
     UPDATE_BUG: 'uat-bugs',
+    DELETE_BUG: 'uat-bugs',
     SET_SHIP_DECISION: 'uat-bugs',
   };
 

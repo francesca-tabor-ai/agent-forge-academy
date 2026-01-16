@@ -8,6 +8,7 @@ import { PersonasProblemsStep } from './steps/PersonasProblemsStep';
 import { JourneyMapStep } from './steps/JourneyMapStep';
 import { RoadmapStep } from './steps/RoadmapStep';
 import { SprintPlanStep } from './steps/SprintPlanStep';
+import { UATBugsStep } from './steps/UATBugsStep';
 
 type Step = 
   | 'scenario'
@@ -96,32 +97,7 @@ export function ProductFundamentalsPlaygroundClient() {
           )}
           
           {currentStep === 'uat-bugs' && (
-            <div className="space-y-4">
-              <p className="text-gray-700">
-                User acceptance testing and bug tracking. Document test results and track issues.
-              </p>
-              {state.uatScenarios.length > 0 && (
-                <div className="mt-4 p-4 bg-white border border-gray-300 rounded">
-                  <h3 className="font-semibold text-gray-900 mb-2">UAT Scenarios ({state.uatScenarios.length}):</h3>
-                  {state.uatScenarios.map((u) => (
-                    <div key={u.id} className="text-sm text-gray-700 mb-2">
-                      <strong>{u.title}</strong>
-                    </div>
-                  ))}
-                </div>
-              )}
-              {state.bugs.length > 0 && (
-                <div className="mt-4 p-4 bg-white border border-gray-300 rounded">
-                  <h3 className="font-semibold text-gray-900 mb-2">Bugs ({state.bugs.length}):</h3>
-                  {state.bugs.map((b) => (
-                    <div key={b.id} className="text-sm text-gray-700 mb-2">
-                      <strong>{b.title}</strong> - {b.severity}
-                      {b.decision && ` (${b.decision})`}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+            <UATBugsStep state={state} dispatch={dispatch} />
           )}
           
           {currentStep === 'export' && (
