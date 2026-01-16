@@ -103,7 +103,7 @@ export async function POST(request: NextRequest) {
         break;
 
       case 'invoice.paid':
-        await handleInvoicePaid(event.data.object, supabase);
+        await handleInvoicePaid(event.data.object, stripe, supabase);
         break;
 
       case 'invoice.payment_failed':
@@ -214,6 +214,7 @@ async function ensureStripeCustomer(
 
 /**
  * Handle checkout.session.completed event
+ * Creates/updates subscription for segment subscriptions
  */
 async function handleCheckoutSessionCompleted(
   session: any,
@@ -231,7 +232,67 @@ async function handleCheckoutSessionCompleted(
     await ensureStripeCustomer(userId, customerId, supabase);
   }
 
-  console.log('Checkout session completed:', session.id, 'user:', userId);
+  // If this is a segment subscription, create/update the subscription record
+  if (session.metadata?.segment_type && session.metadata?.segment_key) {
+    // Retrieve the subscription from Stripe if available
+    const subscriptionId = session.subscription as string | null;
+    let subscription: any = null;
+    let currentPeriodEnd: Date;
+
+    if (subscriptionId) {
+      try {
+        subscription = await stripe.subscriptions.retrieve(subscriptionId);
+        currentPeriodEnd = new Date(subscription.current_period_end * 1000);
+      } catch (error) {
+        console.error('Error retrieving subscription:', error);
+        // Fall back to default period end (30 days from now for monthly, 365 for annual)
+        const billingPeriod = session.metadata.billing_period || 'monthly';
+        const days = billingPeriod === 'annual' ? 365 : 30;
+        currentPeriodEnd = new Date(Date.now() + days * 24 * 60 * 60 * 1000);
+      }
+    } else {
+      // No subscription yet (might be a one-time payment), use default period
+      const billingPeriod = session.metadata.billing_period || 'monthly';
+      const days = billingPeriod === 'annual' ? 365 : 30;
+      currentPeriodEnd = new Date(Date.now() + days * 24 * 60 * 60 * 1000);
+    }
+
+    // Determine status
+    let status = 'active';
+    if (subscription) {
+      if (subscription.status === 'canceled' || subscription.status === 'unpaid') {
+        status = 'canceled';
+      } else if (subscription.status === 'past_due') {
+        status = 'past_due';
+      }
+    }
+
+    // Create or update subscription record
+    const subscriptionData = {
+      user_id: userId,
+      segment_type: session.metadata.segment_type,
+      segment_key: session.metadata.segment_key,
+      stripe_customer_id: customerId,
+      stripe_subscription_id: subscriptionId,
+      status: status,
+      current_period_end: currentPeriodEnd.toISOString(),
+    };
+
+    const { error } = await supabase
+      .from('subscriptions')
+      .upsert(subscriptionData, {
+        onConflict: 'user_id,segment_type,segment_key',
+      });
+
+    if (error) {
+      console.error('Error upserting subscription from checkout session:', error);
+      throw error;
+    }
+
+    console.log('Subscription created/updated from checkout session:', session.id, 'user:', userId, 'segment:', session.metadata.segment_type, session.metadata.segment_key);
+  } else {
+    console.log('Checkout session completed (not a segment subscription):', session.id, 'user:', userId);
+  }
 }
 
 /**
@@ -408,9 +469,11 @@ async function handleSubscriptionDeleted(
 
 /**
  * Handle invoice.paid event
+ * Updates subscription period and status for segment subscriptions
  */
 async function handleInvoicePaid(
   invoice: any,
+  stripe: any,
   supabase: any
 ) {
   const invoiceId = invoice.id;
@@ -474,21 +537,68 @@ async function handleInvoicePaid(
 
   // Update subscription period if it's a subscription invoice
   if (subscriptionId) {
-    const { error: subError } = await supabase
-      .from('subscriptions')
-      .update({
-        current_period_start: invoice.period_start
-          ? new Date(invoice.period_start * 1000).toISOString()
-          : null,
+    // First, try to get the subscription from Stripe to get metadata
+    let subscription: any = null;
+    try {
+      subscription = await stripe.subscriptions.retrieve(subscriptionId);
+    } catch (error) {
+      console.error('Error retrieving subscription for invoice:', error);
+    }
+
+    // If this is a segment subscription, update the segment subscriptions table
+    if (subscription?.metadata?.segment_type && subscription.metadata?.segment_key) {
+      const subscriptionData = {
+        stripe_subscription_id: subscriptionId,
+        status: subscription.status === 'active' ? 'active' : 
+                subscription.status === 'past_due' ? 'past_due' : 'canceled',
         current_period_end: invoice.period_end
           ? new Date(invoice.period_end * 1000).toISOString()
-          : null,
+          : new Date().toISOString(),
         updated_at: new Date().toISOString(),
-      })
-      .eq('id', subscriptionId);
+      };
 
-    if (subError) {
-      console.error('Error updating subscription period:', subError);
+      const { error: subError } = await supabase
+        .from('subscriptions')
+        .update(subscriptionData)
+        .eq('stripe_subscription_id', subscriptionId);
+
+      if (subError) {
+        console.error('Error updating segment subscription from invoice:', subError);
+      } else {
+        console.log('Segment subscription updated from invoice:', subscriptionId, 'segment:', subscription.metadata.segment_type, subscription.metadata.segment_key);
+      }
+    } else {
+      // Update regular subscription table (if it exists with id = subscriptionId)
+      const { error: subError } = await supabase
+        .from('subscriptions')
+        .update({
+          current_period_start: invoice.period_start
+            ? new Date(invoice.period_start * 1000).toISOString()
+            : null,
+          current_period_end: invoice.period_end
+            ? new Date(invoice.period_end * 1000).toISOString()
+            : null,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', subscriptionId);
+
+      if (subError) {
+        // This is expected if the subscription table uses stripe_subscription_id as id
+        // Try updating by stripe_subscription_id instead
+        const { error: subError2 } = await supabase
+          .from('subscriptions')
+          .update({
+            current_period_end: invoice.period_end
+              ? new Date(invoice.period_end * 1000).toISOString()
+              : null,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('stripe_subscription_id', subscriptionId);
+
+        if (subError2) {
+          console.error('Error updating subscription period:', subError2);
+        }
+      }
     }
   }
 

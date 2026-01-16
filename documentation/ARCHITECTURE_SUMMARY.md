@@ -94,7 +94,8 @@ AI Growth Hub is a Next.js 14+ (App Router) learning platform with Supabase back
 - `/student/jobs/[id]` - Job detail
 - `/student/ai-advisor` - AI advisor chat interface
 - `/student/questions` - Q&A system
-- `/student/offers` - Tool discounts/offers
+- `/student/tools` - Tool discounts/offers (also accessible via `/student/offers` redirect)
+- `/student/tools/[slug]` - Individual tool detail
 - `/student/subscription` - Subscription management
 
 ### API Routes

@@ -1,36 +1,7 @@
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
-import { OffersPageClient } from '@/components/offers/OffersPageClient';
-
-interface Offer {
-  id: string;
-  title: string;
-  provider: string;
-  description: string;
-  category: 'api' | 'hosting' | 'monitoring' | 'data' | 'tools' | 'services' | 'database' | 'vector_database' | 'ai_llm' | 'observability' | 'analytics' | 'ml_tools';
-  discount_text: string;
-  discount_type: 'percentage' | 'fixed_amount' | 'free_credits' | 'extended_trial' | 'tier_upgrade';
-  discount_value: number | null;
-  discount_code: string | null;
-  external_url: string | null;
-  eligibility: string | null;
-  recommended_for_courses: string[] | null;
-  original_price: string | null;
-  discounted_price: string | null;
-  features: string[] | null;
-  is_recommended: boolean;
-  expiration_date: string | null;
-  usage_count: number;
-  max_usage: number | null;
-}
-
-interface Project {
-  id: string;
-  title: string;
-  description: string | null;
-  github_url: string | null;
-  demo_url: string | null;
-}
+import { ToolsPageClient } from '@/components/tools/ToolsPageClient';
+import { getAvailableTools } from '@/lib/tools/registry';
 
 export default async function ToolsPage() {
   const supabase = await createUserSupabaseClient();
@@ -42,7 +13,7 @@ export default async function ToolsPage() {
     redirect('/auth/login');
   }
 
-  // Get student profile to check enrollments
+  // Get student profile to check role
   const { data: profile } = await supabase
     .from('profiles')
     .select('id, role')
@@ -66,127 +37,12 @@ export default async function ToolsPage() {
     redirect('/');
   }
 
-  // Get enrolled and completed courses for gating logic
-  let enrolledCourseSlugs: string[] = [];
-  let completedCourseSlugs: string[] = [];
-  
-  if (studentProfileId) {
-    const { data: enrollments } = await supabase
-      .from('course_enrollments')
-      .select('course_id, progress_percentage, completed_at')
-      .eq('student_profile_id', studentProfileId);
-
-    if (enrollments && enrollments.length > 0) {
-      const courseIds = enrollments.map(e => e.course_id);
-      const { data: courses } = await supabase
-        .from('courses')
-        .select('id, slug')
-        .in('id', courseIds);
-      
-      enrolledCourseSlugs = (courses || []).map(c => c.slug).filter(Boolean);
-      
-      // Check which courses are completed
-      const completedCourseIds = new Set<string>();
-      enrollments.forEach(enrollment => {
-        const isCompleted = enrollment.completed_at !== null || 
-                           (enrollment.progress_percentage !== null && enrollment.progress_percentage >= 100);
-        if (isCompleted) {
-          completedCourseIds.add(enrollment.course_id);
-        }
-      });
-      
-      // Get slugs for completed courses
-      completedCourseSlugs = (courses || [])
-        .filter(c => completedCourseIds.has(c.id))
-        .map(c => c.slug)
-        .filter(Boolean);
-    }
-  }
-
-  // Fetch all active offers
-  const { data: offers, error } = await supabase
-    .from('offers')
-    .select('*')
-    .eq('is_active', true)
-    .order('is_recommended', { ascending: false })
-    .order('created_at', { ascending: false });
-
-  if (error) {
-    console.error('Error fetching offers:', error);
-  }
-
-  const allOffers: Offer[] = (offers || []) as Offer[];
-
-  // Get portfolio projects
-  const { data: projects } = await supabase
-    .from('portfolio_projects')
-    .select('id, title, description, github_url, demo_url')
-    .eq('student_profile_id', studentProfileId)
-    .order('created_at', { ascending: false });
-
-  const portfolioProjects: Project[] = (projects || []).map(p => ({
-    id: p.id,
-    title: p.title,
-    description: p.description,
-    github_url: p.github_url,
-    demo_url: p.demo_url,
-  }));
-
-  // Get saved offers
-  const { data: savedOffers } = await supabase
-    .from('saved_offers')
-    .select('offer_id')
-    .eq('student_profile_id', studentProfileId);
-
-  const savedOfferIds: string[] = (savedOffers || []).map(so => so.offer_id);
-
-  // Get claimed offers
-  const { data: claims } = await supabase
-    .from('offer_claims')
-    .select('offer_id, status')
-    .eq('student_profile_id', studentProfileId);
-
-  const claimedOfferIds: Record<string, 'claimed' | 'not_claimed' | 'requires_verification'> = {};
-  (claims || []).forEach(claim => {
-    claimedOfferIds[claim.offer_id] = claim.status as 'claimed' | 'not_claimed' | 'requires_verification';
-  });
-
-  // Get linked offers (offers linked to projects)
-  let linkedOffers: Record<string, { projectId: string; projectTitle: string }[]> = {};
-  
-  if (portfolioProjects.length > 0) {
-    const { data: projectOffers } = await supabase
-      .from('project_offers')
-      .select(`
-        offer_id,
-        project_id,
-        portfolio_projects!inner(id, title)
-      `)
-      .in('project_id', portfolioProjects.map(p => p.id));
-
-    // Create a map of offer_id to project info
-    (projectOffers || []).forEach(po => {
-      const offerId = po.offer_id;
-      const project = (po.portfolio_projects as any);
-      if (!linkedOffers[offerId]) {
-        linkedOffers[offerId] = [];
-      }
-      linkedOffers[offerId].push({
-        projectId: project.id,
-        projectTitle: project.title,
-      });
-    });
-  }
+  // Get tools from registry (includes active, beta, and coming_soon - excludes deprecated)
+  const tools = getAvailableTools();
 
   return (
-    <OffersPageClient
-      offers={allOffers}
-      enrolledCourseSlugs={enrolledCourseSlugs}
-      completedCourseSlugs={completedCourseSlugs}
-      projects={portfolioProjects}
-      savedOfferIds={savedOfferIds}
-      claimedOfferIds={claimedOfferIds}
-      linkedOffers={linkedOffers}
+    <ToolsPageClient
+      tools={tools}
       studentProfileId={studentProfileId}
     />
   );
