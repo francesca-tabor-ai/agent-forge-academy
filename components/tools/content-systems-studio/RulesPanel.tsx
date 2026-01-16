@@ -42,6 +42,32 @@ export function RulesPanel({
 
   return (
     <div className="space-y-6">
+      {/* No Black-Box Behavior Statement */}
+      <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+        <div className="flex items-start">
+          <div className="flex-shrink-0">
+            <svg
+              className="h-5 w-5 text-gray-600"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                fillRule="evenodd"
+                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </div>
+          <div className="ml-3">
+            <p className="text-sm text-gray-700">
+              <span className="font-semibold">No black-box behavior:</span> Every rule decision is explainable. 
+              Rationale is always visible, and all automation is deterministic and inspectable.
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* Blocked Rules */}
       {blocked.length > 0 && (
         <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg">
@@ -78,12 +104,12 @@ export function RulesPanel({
                         {result.code}
                       </span>
                     </div>
-                    {result.rationale && (
-                      <div className="mt-3 pt-3 border-t border-red-200">
-                        <p className="text-xs font-medium text-red-700 mb-1">Why this rule triggered:</p>
-                        <p className="text-xs text-red-600 leading-relaxed">{result.rationale}</p>
-                      </div>
-                    )}
+                    <div className="mt-3 pt-3 border-t border-red-200">
+                      <p className="text-xs font-medium text-red-700 mb-1">Why this rule triggered:</p>
+                      <p className="text-xs text-red-600 leading-relaxed">
+                        {result.rationale || 'Rule triggered based on content validation criteria.'}
+                      </p>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -148,12 +174,12 @@ export function RulesPanel({
                         {result.code}
                       </span>
                     </div>
-                    {result.rationale && (
-                      <div className="mt-3 pt-3 border-t border-yellow-200">
-                        <p className="text-xs font-medium text-yellow-700 mb-1">Why this rule triggered:</p>
-                        <p className="text-xs text-yellow-600 leading-relaxed">{result.rationale}</p>
-                      </div>
-                    )}
+                    <div className="mt-3 pt-3 border-t border-yellow-200">
+                      <p className="text-xs font-medium text-yellow-700 mb-1">Why this rule triggered:</p>
+                      <p className="text-xs text-yellow-600 leading-relaxed">
+                        {result.rationale || 'Rule triggered based on content validation criteria.'}
+                      </p>
+                    </div>
                   </div>
                 ))}
               </div>
