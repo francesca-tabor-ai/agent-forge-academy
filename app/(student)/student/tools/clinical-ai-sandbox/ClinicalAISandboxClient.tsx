@@ -6,6 +6,7 @@ import {
   ClinicalSandboxProvider,
   useClinicalSandbox,
 } from '@/lib/tools/clinical-ai-sandbox';
+import { AgentBoundaryExplorer } from '@/components/tools/clinical-ai-sandbox/AgentBoundaryExplorer';
 
 function ClinicalAISandboxContent() {
   const { activeModule, setActiveModule } = useClinicalSandbox();
@@ -70,12 +71,18 @@ function ClinicalAISandboxContent() {
 
         {/* Right Content Panel */}
         <div className="bg-white border border-gray-200 rounded-lg p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
-            {currentModule.title}
-          </h2>
-          <p className="text-gray-600 leading-relaxed">
-            {currentModule.description}
-          </p>
+          {activeModule === 'agent-boundary-explorer' ? (
+            <AgentBoundaryExplorer />
+          ) : (
+            <>
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">
+                {currentModule.title}
+              </h2>
+              <p className="text-gray-600 leading-relaxed">
+                {currentModule.description}
+              </p>
+            </>
+          )}
         </div>
       </div>
     </div>
