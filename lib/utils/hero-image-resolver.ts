@@ -1,8 +1,9 @@
 /**
  * Hero image resolver for tracks, industries, and roles
  * 
- * Loads image mappings from COURSE_IMAGE_URLS.md and provides functions
- * to get hero image URLs by slug.
+ * Loads image mappings from:
+ * - COURSE_IMAGE_URLS.md (for tracks and industries)
+ * - content/landing/role-images.md (for roles)
  * 
  * Format: key | display | image_url
  */
@@ -21,6 +22,7 @@ interface ImageMappings {
   industries: Map<string, ImageMapping>;
   roles: Map<string, ImageMapping>;
   default: string;
+  roleDefault: string; // Default fallback for roles
 }
 
 let cachedMappings: ImageMappings | null = null;
@@ -39,6 +41,7 @@ function parseImageMappings(): ImageMappings {
     industries: new Map(),
     roles: new Map(),
     default: 'https://wallpaperaccess.com/full/340554.png',
+    roleDefault: '/landing/default-role.jpg', // Default fallback for roles
   };
 
   try {
@@ -54,12 +57,14 @@ function parseImageMappings(): ImageMappings {
       // Skip empty lines and markdown headers
       if (!trimmed || trimmed.startsWith('#') || trimmed.startsWith('##') || trimmed.startsWith('###')) {
         // Detect section changes
+        // Note: Roles are loaded from content/landing/role-images.md, not from this file
         if (trimmed.includes('TRACKS') || trimmed.includes('Categories')) {
           currentSection = 'tracks';
         } else if (trimmed.includes('INDUSTRIES')) {
           currentSection = 'industries';
         } else if (trimmed.includes('ROLES')) {
-          currentSection = 'roles';
+          // Skip roles section - they're loaded from role-images.md
+          currentSection = null;
         }
         continue;
       }
@@ -91,15 +96,52 @@ function parseImageMappings(): ImageMappings {
             mappings.tracks.set(key, mapping);
           } else if (currentSection === 'industries') {
             mappings.industries.set(key, mapping);
-          } else if (currentSection === 'roles') {
-            mappings.roles.set(key, mapping);
           }
+          // Roles are loaded from content/landing/role-images.md, not from this file
         }
       }
     }
   } catch (error) {
     console.error('Error parsing COURSE_IMAGE_URLS.md:', error);
-    // Return empty mappings with default fallback
+    // Continue with empty mappings - will try to load role images separately
+  }
+
+  // Load role images from content/landing/role-images.md
+  try {
+    const roleImagesPath = join(process.cwd(), 'content', 'landing', 'role-images.md');
+    const roleContent = readFileSync(roleImagesPath, 'utf-8');
+    const roleLines = roleContent.split('\n');
+
+    for (const line of roleLines) {
+      const trimmed = line.trim();
+      
+      // Skip empty lines, headers, and code block markers
+      if (!trimmed || trimmed.startsWith('#') || trimmed.startsWith('```')) {
+        continue;
+      }
+
+      // Parse format: role_key | display_name | image_url
+      if (trimmed.includes('|')) {
+        const parts = trimmed.split('|').map((p) => p.trim());
+        if (parts.length >= 3) {
+          const [key, display, imageUrl] = parts;
+          
+          // Use fallback if image_url is empty
+          const finalImageUrl = imageUrl || mappings.roleDefault;
+
+          const mapping: ImageMapping = {
+            key,
+            display,
+            imageUrl: finalImageUrl,
+          };
+
+          mappings.roles.set(key, mapping);
+        }
+      }
+    }
+  } catch (error) {
+    console.error('Error parsing content/landing/role-images.md:', error);
+    // Continue with empty role mappings - will use fallback
   }
 
   cachedMappings = mappings;
@@ -191,7 +233,7 @@ export function getIndustryHeroImage(industryIdentifier: string): string {
 /**
  * Get hero image URL for a role by slug or display name
  * @param roleIdentifier - Role slug (e.g., "engineer") or display name (e.g., "Engineer")
- * @returns Hero image URL or default fallback
+ * @returns Hero image URL or role-specific default fallback (/landing/default-role.jpg)
  */
 export function getRoleHeroImage(roleIdentifier: string): string {
   const mappings = parseImageMappings();
@@ -199,7 +241,7 @@ export function getRoleHeroImage(roleIdentifier: string): string {
   // Try exact match first
   let mapping = mappings.roles.get(roleIdentifier);
   
-  if (mapping) {
+  if (mapping && mapping.imageUrl) {
     return mapping.imageUrl;
   }
 
@@ -207,7 +249,7 @@ export function getRoleHeroImage(roleIdentifier: string): string {
   const normalizedSlug = normalizeToSlug(roleIdentifier);
   mapping = mappings.roles.get(normalizedSlug);
   
-  if (mapping) {
+  if (mapping && mapping.imageUrl) {
     return mapping.imageUrl;
   }
 
@@ -217,11 +259,12 @@ export function getRoleHeroImage(roleIdentifier: string): string {
            m.display.toLowerCase() === roleIdentifier.toLowerCase()
   );
   
-  if (normalizedMapping) {
+  if (normalizedMapping && normalizedMapping.imageUrl) {
     return normalizedMapping.imageUrl;
   }
 
-  return mappings.default;
+  // Use role-specific default fallback
+  return mappings.roleDefault;
 }
 
 /**
