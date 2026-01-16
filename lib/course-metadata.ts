@@ -4,12 +4,13 @@ import { Industry } from './utils/industries';
 export interface CourseMetadata {
   slug: string;
   title: string;
-  category: string;
+  category: string; // Track/category (e.g., "Agentic Systems", "Vibe Engineering")
   outcome: string;
   build: string;
-  bestFor: string;
+  bestFor: string | string[]; // Job roles - can be string or array for backward compatibility
   time: string;
-  industries: Industry[];
+  industries: Industry[]; // Array of industry domains
+  isLive?: boolean; // Indicates if course is live (defaults to true if not specified)
   imageUrl?: string; // Optional direct image URL
 }
 

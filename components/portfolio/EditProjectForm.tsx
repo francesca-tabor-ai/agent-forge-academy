@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { RichTextEditor } from './RichTextEditor';
 import { ProjectImageUpload } from './ProjectImageUpload';
+import { ProjectToolStack } from './ProjectToolStack';
+import { ProjectToolOffers } from './ProjectToolOffers';
 
 interface GalleryImage {
   id: string;
@@ -170,6 +172,16 @@ export function EditProjectForm({ project }: EditProjectFormProps) {
               });
             }}
           />
+        </div>
+
+        {/* Tool Stack */}
+        <div className="border-t border-gray-200 pt-6">
+          <ProjectToolStack projectId={project.id} />
+        </div>
+
+        {/* Relevant Offers */}
+        <div className="border-t border-gray-200 pt-6">
+          <ProjectToolOffers projectId={project.id} />
         </div>
 
         <div>

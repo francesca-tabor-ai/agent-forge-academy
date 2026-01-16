@@ -24,16 +24,22 @@ function getAllTracks(): string[] {
 
 /**
  * Get all unique job roles from "bestFor" fields
- * Extracts role keywords from bestFor strings
+ * Extracts role keywords from bestFor strings or arrays
  */
 function getAllJobRoles(): string[] {
   const roles = new Set<string>();
   
   Object.values(courseMetadata).forEach((course) => {
     if (course.bestFor) {
-      // Extract role keywords from bestFor strings
-      // Common patterns: "Engineers", "PMs", "Data Scientists", "Product Managers", etc.
-      const bestForLower = course.bestFor.toLowerCase();
+      // Handle bestFor as string or array
+      const bestForArray = Array.isArray(course.bestFor) 
+        ? course.bestFor 
+        : [course.bestFor];
+      
+      bestForArray.forEach((bestForEntry) => {
+        // Extract role keywords from bestFor strings
+        // Common patterns: "Engineers", "PMs", "Data Scientists", "Product Managers", etc.
+        const bestForLower = String(bestForEntry).toLowerCase();
       
       // Common role keywords
       const roleKeywords = [
@@ -74,6 +80,7 @@ function getAllJobRoles(): string[] {
           }
         }
       });
+      });
     }
   });
   
@@ -82,42 +89,67 @@ function getAllJobRoles(): string[] {
 
 /**
  * Get courses that match a track (category)
- * Note: All courses in courseMetadata are considered published
+ * Filters by isLive if specified (defaults to true - only live courses)
  */
-function getCoursesForTrack(track: string): string[] {
+function getCoursesForTrack(track: string, onlyLive: boolean = true): string[] {
   return Object.values(courseMetadata)
-    .filter((course) => course.category === track)
+    .filter((course) => {
+      // Check track match
+      if (course.category !== track) return false;
+      // Check if live (defaults to true if not specified)
+      if (onlyLive && course.isLive === false) return false;
+      return true;
+    })
     .map((course) => course.slug);
 }
 
 /**
  * Get courses that match an industry
- * Note: All courses in courseMetadata are considered published
+ * Filters by isLive if specified (defaults to true - only live courses)
  */
-function getCoursesForIndustry(industry: string): string[] {
+function getCoursesForIndustry(industry: string, onlyLive: boolean = true): string[] {
   return Object.values(courseMetadata)
     .filter((course) => {
       const courseIndustries = course.industries || [];
-      return courseIndustries.includes(industry);
+      // Check industry match
+      if (!courseIndustries.includes(industry)) return false;
+      // Check if live (defaults to true if not specified)
+      if (onlyLive && course.isLive === false) return false;
+      return true;
     })
     .map((course) => course.slug);
 }
 
 /**
  * Get courses that match a job role (bestFor contains role keywords)
- * Note: All courses in courseMetadata are considered published
+ * Filters by isLive if specified (defaults to true - only live courses)
+ * Handles bestFor as both string and array
  */
-function getCoursesForRole(role: string): string[] {
+function getCoursesForRole(role: string, onlyLive: boolean = true): string[] {
   const roleLower = role.toLowerCase();
   const roleKeywords = roleLower.split(' ');
   
   return Object.values(courseMetadata)
     .filter((course) => {
       if (!course.bestFor) return false;
-      const bestForLower = course.bestFor.toLowerCase();
       
-      // Check if any role keyword appears in bestFor
-      return roleKeywords.some((keyword) => bestForLower.includes(keyword));
+      // Handle bestFor as string or array
+      const bestForArray = Array.isArray(course.bestFor) 
+        ? course.bestFor 
+        : [course.bestFor];
+      
+      // Check if any role keyword appears in any bestFor entry
+      const matches = bestForArray.some((bestForEntry) => {
+        const bestForLower = String(bestForEntry).toLowerCase();
+        return roleKeywords.some((keyword) => bestForLower.includes(keyword));
+      });
+      
+      if (!matches) return false;
+      
+      // Check if live (defaults to true if not specified)
+      if (onlyLive && course.isLive === false) return false;
+      
+      return true;
     })
     .map((course) => course.slug);
 }

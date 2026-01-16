@@ -47,6 +47,10 @@ function coursesAreDifferent(
   const fileIndustries = (fileMetadata.industries || []).sort().join(',');
   const dbIndustries = (dbMetadata.industries || []).sort().join(',');
   
+  // Compare best_for arrays (order doesn't matter)
+  const fileBestFor = (fileMetadata.best_for || []).sort().join(',');
+  const dbBestFor = (dbMetadata.best_for || []).sort().join(',');
+  
   return (
     fileMetadata.title !== dbMetadata.title ||
     fileMetadata.description !== dbMetadata.description ||
@@ -54,7 +58,10 @@ function coursesAreDifferent(
     fileMetadata.duration_weeks !== dbMetadata.duration_weeks ||
     fileMetadata.difficulty_level !== dbMetadata.difficulty_level ||
     fileMetadata.is_published !== dbMetadata.is_published ||
-    fileIndustries !== dbIndustries
+    (fileMetadata.is_live !== undefined ? fileMetadata.is_live : fileMetadata.is_published) !== (dbMetadata.is_live !== undefined ? dbMetadata.is_live : dbMetadata.is_published) ||
+    (fileMetadata.category || null) !== (dbMetadata.category || null) ||
+    fileIndustries !== dbIndustries ||
+    fileBestFor !== dbBestFor
   );
 }
 
@@ -131,7 +138,10 @@ export async function syncCoursesToDatabase(
             duration_weeks: fileMetadata.duration_weeks,
             difficulty_level: fileMetadata.difficulty_level,
             is_published: fileMetadata.is_published,
+            is_live: fileMetadata.is_live !== undefined ? fileMetadata.is_live : fileMetadata.is_published, // Default to published status
             industries: fileMetadata.industries || [],
+            category: fileMetadata.category || null,
+            best_for: fileMetadata.best_for || [],
           });
 
         if (error) {
@@ -158,7 +168,10 @@ export async function syncCoursesToDatabase(
             duration_weeks: fileMetadata.duration_weeks,
             difficulty_level: fileMetadata.difficulty_level,
             is_published: fileMetadata.is_published,
+            is_live: fileMetadata.is_live !== undefined ? fileMetadata.is_live : fileMetadata.is_published, // Default to published status
             industries: fileMetadata.industries || [],
+            category: fileMetadata.category || null,
+            best_for: fileMetadata.best_for || [],
             updated_at: new Date().toISOString(),
           })
           .eq('slug', fileMetadata.slug);

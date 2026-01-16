@@ -3,6 +3,7 @@ import { redirect, notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ToolLogo } from '@/components/offers/ToolLogo';
 import { OfferDetailClient } from '@/components/offers/OfferDetailClient';
+import { ProjectsUsingTool } from '@/components/offers/ProjectsUsingTool';
 
 interface Offer {
   id: string;
@@ -265,6 +266,11 @@ export default async function ToolDetailPage({ params }: { params: Promise<{ slu
           <p className="text-sm">Video content coming soon. Check back for tutorials and walkthroughs.</p>
         </div>
       </div>
+
+      {/* Projects Using This Tool Section */}
+      {studentProfileId && (
+        <ProjectsUsingTool toolName={toolName} studentProfileId={studentProfileId} />
+      )}
 
       {/* Offers Section */}
       <div className="bg-white border border-gray-200 rounded-lg p-6">
