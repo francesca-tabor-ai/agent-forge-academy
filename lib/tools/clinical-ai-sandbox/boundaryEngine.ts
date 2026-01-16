@@ -36,6 +36,8 @@ export interface BoundaryEvaluationResult {
 const SAFE_RESPONSE_TEMPLATES = {
   blocked_diagnosis_treatment: 'I understand you\'re looking for medical guidance. I\'m not able to provide diagnoses, treatment recommendations, or dosing instructions, as these require a healthcare professional who can evaluate your specific situation. I\'d recommend speaking with your doctor or a qualified healthcare provider who can give you personalized medical advice.',
   
+  blocked_self_harm_crisis: 'I want you to know that your safety is important. If you\'re having thoughts of self-harm or suicide, please reach out for immediate help. You can contact the National Suicide Prevention Lifeline at 988 (in the US), or your local emergency services. You don\'t have to go through this alone, and there are people who want to help. Please speak with a mental health professional or crisis counselor who can provide the support you need.',
+  
   blocked_medical_decision: 'I appreciate you reaching out, but I\'m not able to help with medical decision-making. These decisions are best made with a healthcare professional who can consider your full medical history, current medications, and individual circumstances. Please consult with your doctor for guidance.',
   
   allowed_symptom_anxiety: 'It\'s completely understandable to feel concerned about symptoms. While I can provide general information, I want to emphasize that I\'m not a healthcare provider and cannot diagnose or treat. If your symptoms are causing significant worry or affecting your daily life, I\'d encourage you to speak with a healthcare professional who can provide proper evaluation and support. You\'re not alone in seeking answers, and reaching out to a doctor is a positive step.',
@@ -72,6 +74,27 @@ export const BOUNDARY_RULES: BoundaryRule[] = [
         lower.includes('dose') ||
         lower.includes('dosage') ||
         lower.includes('how much') && (lower.includes('take') || lower.includes('mg') || lower.includes('ml'))
+      );
+    },
+  },
+
+  // BLOCKED: Self-Harm / Crisis Situations (highest priority - check early)
+  {
+    id: 'blocked-self-harm-crisis',
+    action: 'blocked',
+    ruleStatement: 'Mentions of self-harm, suicidal ideation, or crisis situations require immediate human escalation.',
+    whyExists: 'These situations require immediate professional mental health support and crisis intervention. AI must recognize and escalate appropriately.',
+    escalationPath: 'handoff',
+    evaluator: (prompt: string) => {
+      const lower = prompt.toLowerCase();
+      return (
+        lower.includes('don\'t want to be here') ||
+        lower.includes('want to hurt myself') ||
+        lower.includes('end it all') ||
+        lower.includes('suicide') ||
+        lower.includes('kill myself') ||
+        (lower.includes('thoughts') && (lower.includes('harm') || lower.includes('hurt'))) ||
+        lower.includes('crisis')
       );
     },
   },
@@ -204,6 +227,9 @@ export function evaluateBoundary(prompt: string): BoundaryEvaluationResult {
  */
 function getSafeResponseTemplate(ruleId: string, action: BoundaryAction): string {
   // Specific templates for key rules
+  if (ruleId === 'blocked-self-harm-crisis') {
+    return SAFE_RESPONSE_TEMPLATES.blocked_self_harm_crisis;
+  }
   if (ruleId === 'blocked-diagnosis-treatment-dose') {
     return SAFE_RESPONSE_TEMPLATES.blocked_diagnosis_treatment;
   }

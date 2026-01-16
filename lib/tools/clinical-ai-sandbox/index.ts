@@ -12,3 +12,4 @@ export * from './useClinicalSandbox';
 export * from './boundaryEngine';
 export * from './docs';
 export * from './ragEngine';
+export * from './failurePrompts';
