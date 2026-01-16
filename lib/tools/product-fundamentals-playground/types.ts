@@ -41,6 +41,7 @@ export interface JourneyStage {
   userGoal: string;
   actions: string[];
   painPoints: string[];
+  highFrictionPainPoints: string[]; // Pain points marked as "High friction"
   opportunities: string[];
 }
 

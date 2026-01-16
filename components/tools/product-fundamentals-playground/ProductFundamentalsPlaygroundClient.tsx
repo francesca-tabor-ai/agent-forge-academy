@@ -5,6 +5,7 @@ import { usePlayground } from '@/lib/tools/product-fundamentals-playground/usePl
 import { ScenarioStep } from './steps/ScenarioStep';
 import { ResearchStep } from './steps/ResearchStep';
 import { PersonasProblemsStep } from './steps/PersonasProblemsStep';
+import { JourneyMapStep } from './steps/JourneyMapStep';
 
 type Step = 
   | 'scenario'
@@ -81,21 +82,7 @@ export function ProductFundamentalsPlaygroundClient() {
           )}
           
           {currentStep === 'journey-map' && (
-            <div className="space-y-4">
-              <p className="text-gray-700">
-                Map user journeys. Visualize how users interact with your product at each stage.
-              </p>
-              {state.journey.length > 0 && (
-                <div className="mt-4 p-4 bg-white border border-gray-300 rounded">
-                  <h3 className="font-semibold text-gray-900 mb-2">Journey Stages ({state.journey.length}):</h3>
-                  {state.journey.map((j) => (
-                    <div key={j.id} className="text-sm text-gray-700 mb-2">
-                      <strong>{j.name}</strong>: {j.userGoal}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+            <JourneyMapStep state={state} dispatch={dispatch} />
           )}
           
           {currentStep === 'roadmap' && (
