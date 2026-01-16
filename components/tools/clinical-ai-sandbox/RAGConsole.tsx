@@ -4,7 +4,8 @@ import { useState } from 'react';
 import { useClinicalSandbox } from '@/lib/tools/clinical-ai-sandbox/useClinicalSandbox';
 import {
   retrieveDocuments,
-  generateAnswerWithCitations,
+  getRAGResponse,
+  CONFIDENCE_THRESHOLD,
   type RAGQueryResult,
 } from '@/lib/tools/clinical-ai-sandbox/ragEngine';
 
@@ -31,13 +32,9 @@ export function RAGConsole() {
     const retrievalResult = retrieveDocuments(query.trim());
     setResult(retrievalResult);
 
-    // Generate answer if coverage is sufficient
-    if (retrievalResult.canAnswer) {
-      const generatedAnswer = generateAnswerWithCitations(retrievalResult);
-      setAnswer(generatedAnswer);
-    } else {
-      setAnswer('');
-    }
+    // Get response (enforces confidence threshold - no hallucinations)
+    const response = getRAGResponse(retrievalResult);
+    setAnswer(response);
 
     // Append audit log entry
     addAuditLogEntry({
@@ -119,24 +116,30 @@ export function RAGConsole() {
             <div className="mb-4 p-4 bg-gray-50 rounded-lg">
               <div className="flex items-center justify-between mb-2">
                 <span className="font-medium text-gray-700">Retrieval Confidence:</span>
-                <span className={`text-lg font-bold ${
-                  result.confidence >= 0.7 ? 'text-green-600' :
-                  result.confidence >= 0.5 ? 'text-yellow-600' :
-                  'text-red-600'
-                }`}>
-                  {(result.confidence * 100).toFixed(1)}%
-                </span>
+                <div className="flex items-center gap-3">
+                  <span className={`text-lg font-bold ${
+                    result.confidence >= CONFIDENCE_THRESHOLD ? 'text-green-600' : 'text-red-600'
+                  }`}>
+                    {(result.confidence * 100).toFixed(1)}%
+                  </span>
+                  <span className="text-xs text-gray-500">
+                    (Threshold: {(CONFIDENCE_THRESHOLD * 100).toFixed(0)}%)
+                  </span>
+                </div>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
+              <div className="w-full bg-gray-200 rounded-full h-2 mb-1">
                 <div
                   className={`h-2 rounded-full ${
-                    result.confidence >= 0.7 ? 'bg-green-500' :
-                    result.confidence >= 0.5 ? 'bg-yellow-500' :
-                    'bg-red-500'
+                    result.confidence >= CONFIDENCE_THRESHOLD ? 'bg-green-500' : 'bg-red-500'
                   }`}
                   style={{ width: `${result.confidence * 100}%` }}
                 ></div>
               </div>
+              {result.confidence < CONFIDENCE_THRESHOLD && (
+                <p className="text-xs text-red-600 mt-1">
+                  Below threshold - answer will be refused to prevent hallucinations
+                </p>
+              )}
             </div>
 
             {/* Coverage Gaps */}
@@ -205,11 +208,14 @@ export function RAGConsole() {
           {/* Response Area */}
           <div className="bg-white border border-gray-200 rounded-lg p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Response</h3>
-            {result.canAnswer && answer ? (
+            {result.canAnswer && result.confidence >= CONFIDENCE_THRESHOLD && answer ? (
               <div className="space-y-4">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">
                     Answer with Citations
+                  </span>
+                  <span className="text-xs text-gray-500">
+                    (Only uses retrieved excerpts - no hallucinations)
                   </span>
                 </div>
                 <div className="prose max-w-none">
@@ -224,25 +230,14 @@ export function RAGConsole() {
                   <span className="px-3 py-1 bg-red-100 text-red-700 rounded-full text-sm font-medium">
                     Out of Scope / Insufficient Coverage → Refusal
                   </span>
+                  <span className="text-xs text-gray-500">
+                    (Confidence threshold enforced)
+                  </span>
                 </div>
                 <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
-                  <p className="text-red-800 font-medium mb-2">
-                    Cannot provide an answer due to insufficient coverage.
-                  </p>
-                  <p className="text-red-700 text-sm">
-                    The retrieved documents do not provide sufficient information to answer this query safely and accurately. 
-                    This query is outside the scope of the available knowledge base or requires additional context that is not available.
-                  </p>
-                  {result.coverageGaps.length > 0 && (
-                    <div className="mt-3">
-                      <p className="text-red-800 font-medium text-sm mb-1">Specific gaps identified:</p>
-                      <ul className="list-disc list-inside text-sm text-red-700 space-y-1">
-                        {result.coverageGaps.map((gap, idx) => (
-                          <li key={idx}>{gap}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
+                  <pre className="whitespace-pre-wrap text-sm text-red-700">
+                    {answer || 'Cannot provide an answer due to insufficient coverage or low confidence.'}
+                  </pre>
                 </div>
               </div>
             )}
