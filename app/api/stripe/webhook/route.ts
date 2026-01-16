@@ -86,14 +86,20 @@ export async function POST(request: NextRequest) {
 
       case 'customer.subscription.created':
         await handleSubscriptionCreated(event.data.object, stripe, supabase);
+        // Also handle segment subscriptions if metadata indicates it
+        await handleSegmentSubscriptionCreated(event.data.object, stripe, supabase);
         break;
 
       case 'customer.subscription.updated':
         await handleSubscriptionUpdated(event.data.object, stripe, supabase);
+        // Also handle segment subscriptions if metadata indicates it
+        await handleSegmentSubscriptionUpdated(event.data.object, stripe, supabase);
         break;
 
       case 'customer.subscription.deleted':
         await handleSubscriptionDeleted(event.data.object, supabase);
+        // Also handle segment subscriptions if metadata indicates it
+        await handleSegmentSubscriptionDeleted(event.data.object, supabase);
         break;
 
       case 'invoice.paid':
@@ -683,4 +689,163 @@ async function handleChargeSucceeded(
   }
 
   console.log('Charge succeeded:', chargeId);
+}
+
+/**
+ * Handle segment subscription created event
+ */
+async function handleSegmentSubscriptionCreated(
+  subscription: any,
+  stripe: any,
+  supabase: any
+) {
+  // Check if this is a segment subscription
+  if (!subscription.metadata?.segment_type || !subscription.metadata?.segment_key) {
+    return; // Not a segment subscription
+  }
+
+  const subscriptionId = subscription.id;
+  const priceId = subscription.items.data[0]?.price.id;
+
+  if (!priceId) {
+    console.error('No price ID found in segment subscription:', subscriptionId);
+    return;
+  }
+
+  // Resolve user_id
+  const userId = await resolveUserId(subscription, stripe, supabase);
+  if (!userId) {
+    console.error('Could not resolve user_id for segment subscription:', subscriptionId);
+    return;
+  }
+
+  // Determine billing cycle from price ID
+  const billingCycle = priceId.includes('annual') ? 'annual' : 'monthly';
+
+  // Upsert segment subscription
+  const segmentSubscriptionData = {
+    user_id: userId,
+    segment_type: subscription.metadata.segment_type,
+    segment_key: subscription.metadata.segment_key,
+    stripe_subscription_id: subscriptionId,
+    stripe_price_id: priceId,
+    status: subscription.status === 'active' ? 'active' : 'canceled',
+    billing_cycle: billingCycle,
+    current_period_start: subscription.current_period_start
+      ? new Date(subscription.current_period_start * 1000).toISOString()
+      : new Date().toISOString(),
+    current_period_end: subscription.current_period_end
+      ? new Date(subscription.current_period_end * 1000).toISOString()
+      : new Date(Date.now() + (billingCycle === 'annual' ? 365 : 30) * 24 * 60 * 60 * 1000).toISOString(),
+    canceled_at: subscription.canceled_at
+      ? new Date(subscription.canceled_at * 1000).toISOString()
+      : null,
+    updated_at: new Date().toISOString(),
+  };
+
+  const { error } = await supabase
+    .from('segment_subscriptions')
+    .upsert(segmentSubscriptionData, {
+      onConflict: 'user_id,segment_type,segment_key',
+    });
+
+  if (error) {
+    console.error('Error upserting segment subscription:', error);
+    throw error;
+  }
+
+  console.log('Segment subscription created/updated:', subscriptionId, subscription.metadata.segment_type, subscription.metadata.segment_key);
+}
+
+/**
+ * Handle segment subscription updated event
+ */
+async function handleSegmentSubscriptionUpdated(
+  subscription: any,
+  stripe: any,
+  supabase: any
+) {
+  // Check if this is a segment subscription
+  if (!subscription.metadata?.segment_type || !subscription.metadata?.segment_key) {
+    return; // Not a segment subscription
+  }
+
+  const subscriptionId = subscription.id;
+  const priceId = subscription.items.data[0]?.price.id;
+
+  if (!priceId) {
+    console.error('No price ID found in segment subscription:', subscriptionId);
+    return;
+  }
+
+  // Resolve user_id
+  const userId = await resolveUserId(subscription, stripe, supabase);
+  if (!userId) {
+    console.error('Could not resolve user_id for segment subscription:', subscriptionId);
+    return;
+  }
+
+  // Determine billing cycle from price ID
+  const billingCycle = priceId.includes('annual') ? 'annual' : 'monthly';
+
+  // Update segment subscription
+  const segmentSubscriptionData = {
+    stripe_price_id: priceId,
+    status: subscription.status === 'active' ? 'active' : subscription.status === 'canceled' ? 'canceled' : 'expired',
+    billing_cycle: billingCycle,
+    current_period_start: subscription.current_period_start
+      ? new Date(subscription.current_period_start * 1000).toISOString()
+      : null,
+    current_period_end: subscription.current_period_end
+      ? new Date(subscription.current_period_end * 1000).toISOString()
+      : null,
+    canceled_at: subscription.canceled_at
+      ? new Date(subscription.canceled_at * 1000).toISOString()
+      : null,
+    updated_at: new Date().toISOString(),
+  };
+
+  const { error } = await supabase
+    .from('segment_subscriptions')
+    .update(segmentSubscriptionData)
+    .eq('stripe_subscription_id', subscriptionId);
+
+  if (error) {
+    console.error('Error updating segment subscription:', error);
+    throw error;
+  }
+
+  console.log('Segment subscription updated:', subscriptionId);
+}
+
+/**
+ * Handle segment subscription deleted event
+ */
+async function handleSegmentSubscriptionDeleted(
+  subscription: any,
+  supabase: any
+) {
+  // Check if this is a segment subscription
+  if (!subscription.metadata?.segment_type || !subscription.metadata?.segment_key) {
+    return; // Not a segment subscription
+  }
+
+  const subscriptionId = subscription.id;
+
+  // Mark segment subscription as expired
+  const { error } = await supabase
+    .from('segment_subscriptions')
+    .update({
+      status: 'expired',
+      canceled_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    })
+    .eq('stripe_subscription_id', subscriptionId);
+
+  if (error) {
+    console.error('Error deleting segment subscription:', error);
+    throw error;
+  }
+
+  console.log('Segment subscription deleted:', subscriptionId);
 }

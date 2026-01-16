@@ -13,6 +13,7 @@ import 'server-only';
 
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { ESSENTIAL_TIER_COURSES, type SubscriptionTier, type SubscriptionStatus } from './subscription-types';
+import { hasSegmentCourseAccess } from './segment-access';
 
 // Re-export types for backward compatibility (server-side only)
 export type { SubscriptionTier, SubscriptionStatus };
@@ -120,6 +121,18 @@ export async function canUserAccessCourse(
       .single();
 
     if (subscriptionError || !subscription) {
+      // No tier-based subscription found - check segment subscriptions
+      const courseSlug = course.slug;
+      const hasSegmentAccess = await hasSegmentCourseAccess(userId, courseSlug);
+      if (hasSegmentAccess) {
+        console.log('[canUserAccessCourse] No tier subscription - access granted via segment subscription', {
+          userId,
+          courseId,
+          courseSlug,
+        });
+        return true;
+      }
+      
       console.warn('[canUserAccessCourse] No subscription found', { userId, error: subscriptionError });
       return false;
     }
@@ -171,7 +184,18 @@ export async function canUserAccessCourse(
         });
         return true;
       } else {
-        console.warn('[canUserAccessCourse] Essential tier - course not in allowed list', { 
+        // Check if user has access via segment subscription
+        const hasSegmentAccess = await hasSegmentCourseAccess(userId, courseSlug);
+        if (hasSegmentAccess) {
+          console.log('[canUserAccessCourse] Essential tier - access granted via segment subscription', {
+            userId,
+            courseId,
+            courseSlug,
+          });
+          return true;
+        }
+        
+        console.warn('[canUserAccessCourse] Essential tier - course not in allowed list and no segment access', { 
           userId, 
           courseId, 
           courseSlug,
@@ -182,7 +206,19 @@ export async function canUserAccessCourse(
     }
 
     // Edge Case 5: Unknown tier (shouldn't happen, but handle gracefully)
-    console.error('[canUserAccessCourse] Unknown subscription tier', { 
+    // Check segment access as fallback
+    const courseSlug = course.slug;
+    const hasSegmentAccess = await hasSegmentCourseAccess(userId, courseSlug);
+    if (hasSegmentAccess) {
+      console.log('[canUserAccessCourse] Unknown tier - access granted via segment subscription', {
+        userId,
+        courseId,
+        courseSlug,
+      });
+      return true;
+    }
+    
+    console.error('[canUserAccessCourse] Unknown subscription tier and no segment access', { 
       userId, 
       tier: subscriptionData.tier 
     });
