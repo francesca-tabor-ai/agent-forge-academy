@@ -5,6 +5,8 @@ import { courseMetadata } from '@/lib/course-metadata';
 import { extractCourseMetadata } from '@/lib/course-sync/extract-metadata';
 import { CoursesSection } from '@/components/dashboard/CoursesSection';
 import { PortfolioSection } from '@/components/dashboard/PortfolioSection';
+import { ToolsToLearnNext } from '@/components/offers/ToolsToLearnNext';
+import { UnlockedOffersRecommendations } from '@/components/offers/UnlockedOffersRecommendations';
 
 export default async function StudentDashboard() {
   const supabase = await createUserSupabaseClient();
@@ -199,7 +201,11 @@ export default async function StudentDashboard() {
         studentProfileId={studentProfileId}
       />
 
-      {/* (2) Portfolio Section - Career signal layer */}
+      {/* (2) Personalized Tool Recommendations */}
+      <ToolsToLearnNext />
+      <UnlockedOffersRecommendations />
+
+      {/* (3) Portfolio Section - Career signal layer */}
       <PortfolioSection portfolioData={portfolioData} />
     </div>
   );

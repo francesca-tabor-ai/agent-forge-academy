@@ -6,6 +6,8 @@ import { courseMetadata } from '@/lib/course-metadata';
 import { AddOfferToProjectModal } from './AddOfferToProjectModal';
 import { ToolCard } from './ToolCard';
 import { ToolLogo } from './ToolLogo';
+import { ToolsToLearnNext } from './ToolsToLearnNext';
+import { UnlockedOffersRecommendations } from './UnlockedOffersRecommendations';
 
 interface Offer {
   id: string;
@@ -577,6 +579,12 @@ export function OffersPageClient({
         <p className="text-sm text-gray-500 mt-2">
           Exclusive tools to help you build and ship faster
         </p>
+      </div>
+
+      {/* Personalized Recommendations */}
+      <div className="mb-6 space-y-6">
+        <ToolsToLearnNext />
+        <UnlockedOffersRecommendations />
       </div>
 
       {/* Search Bar */}
