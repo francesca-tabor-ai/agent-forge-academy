@@ -1,18 +1,19 @@
 'use client';
 
-import { useState } from 'react';
 import {
   CLINICAL_AI_SANDBOX_MODULES,
-  getDefaultModule,
   getModuleById,
-  type ModuleId,
+  ClinicalSandboxProvider,
+  useClinicalSandbox,
 } from '@/lib/tools/clinical-ai-sandbox';
 
-export function ClinicalAISandboxClient() {
-  const defaultModule = getDefaultModule();
-  const [activeModule, setActiveModule] = useState<ModuleId>(defaultModule.id);
+function ClinicalAISandboxContent() {
+  const { activeModule, setActiveModule } = useClinicalSandbox();
+  const currentModule = getModuleById(activeModule);
 
-  const currentModule = getModuleById(activeModule) || defaultModule;
+  if (!currentModule) {
+    return null;
+  }
 
   return (
     <div className="space-y-6">
@@ -78,5 +79,13 @@ export function ClinicalAISandboxClient() {
         </div>
       </div>
     </div>
+  );
+}
+
+export function ClinicalAISandboxClient() {
+  return (
+    <ClinicalSandboxProvider>
+      <ClinicalAISandboxContent />
+    </ClinicalSandboxProvider>
   );
 }
