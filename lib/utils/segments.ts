@@ -6,8 +6,12 @@ import type { Segment, SegmentType } from '@/lib/types/segment';
 import { courseMetadata } from '@/lib/course-metadata';
 import { INDUSTRIES } from '@/lib/utils/industries';
 import { getSegmentKey } from '@/lib/types/segment';
-import { TRACK_COVERS } from '@/lib/courseCovers';
-import { INDUSTRY_COVERS } from '@/lib/courseCovers';
+import { 
+  getTrackHeroImage as getTrackHeroImageFromResolver,
+  getIndustryHeroImage as getIndustryHeroImageFromResolver,
+  getRoleHeroImage as getRoleHeroImageFromResolver,
+  getDefaultHeroImage,
+} from '@/lib/utils/hero-image-resolver';
 
 /**
  * Get all unique tracks (categories) from course metadata
@@ -156,26 +160,32 @@ function getCoursesForRole(role: string, onlyLive: boolean = true): string[] {
 
 /**
  * Get hero image URL for a track
+ * Uses the hero image resolver to get image by track display name (normalized to slug)
  */
 function getTrackHeroImage(track: string): string {
-  return TRACK_COVERS[track] || INDUSTRY_COVERS.Default;
+  // Normalize track name to slug format
+  const trackSlug = track.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  return getTrackHeroImageFromResolver(trackSlug);
 }
 
 /**
  * Get hero image URL for an industry
+ * Uses the hero image resolver to get image by industry display name (normalized to slug)
  */
 function getIndustryHeroImage(industry: string): string {
-  return INDUSTRY_COVERS[industry] || INDUSTRY_COVERS.Default;
+  // Normalize industry name to slug format
+  const industrySlug = industry.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  return getIndustryHeroImageFromResolver(industrySlug);
 }
 
 /**
  * Get hero image URL for a job role
- * For now, use a default image - can be customized later
+ * Uses the hero image resolver to get image by role display name (normalized to slug)
  */
 function getRoleHeroImage(role: string): string {
-  // TODO: Add role-specific images to COURSE_IMAGE_URLS.md
-  // For now, use a generic professional image
-  return 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1920&q=80';
+  // Normalize role name to slug format
+  const roleSlug = role.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  return getRoleHeroImageFromResolver(roleSlug);
 }
 
 /**
