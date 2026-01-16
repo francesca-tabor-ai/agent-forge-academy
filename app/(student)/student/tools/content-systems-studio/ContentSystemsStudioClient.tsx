@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useContentSystemsStudio } from '@/lib/tools/content-systems-studio/useContentSystemsStudio';
 
 type TabId = 'editor' | 'rules' | 'workflow' | 'variations' | 'dashboard';
 
@@ -66,6 +67,7 @@ const TABS: Tab[] = [
 
 export function ContentSystemsStudioClient() {
   const [activeTab, setActiveTab] = useState<TabId>('editor');
+  const studio = useContentSystemsStudio();
 
   const currentTab = TABS.find((tab) => tab.id === activeTab) || TABS[0];
 
@@ -114,6 +116,16 @@ export function ContentSystemsStudioClient() {
             </li>
           ))}
         </ul>
+        
+        {/* Debug info - showing selected item when editor tab is active */}
+        {activeTab === 'editor' && studio.selectedItem && (
+          <div className="mt-6 pt-6 border-t border-gray-200">
+            <p className="text-sm font-medium text-gray-700 mb-2">Selected Item:</p>
+            <p className="text-sm text-gray-600">
+              {studio.selectedItem.id} - {studio.selectedItem.schemaId} ({studio.selectedItem.status})
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
