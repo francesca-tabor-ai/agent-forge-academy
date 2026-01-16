@@ -241,6 +241,7 @@ export default async function ToolDetailPage({ params }: { params: Promise<{ slu
             </div>
           </div>
         </div>
+      </div>
 
       {/* Courses Section */}
       {courses.length > 0 && (
@@ -450,9 +451,7 @@ export default async function ToolDetailPage({ params }: { params: Promise<{ slu
                       </button>
                     </div>
                   )}
-                    </>
-          )}
-        </div>
+                </div>
               );
             })}
           </div>

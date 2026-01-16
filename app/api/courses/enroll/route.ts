@@ -90,14 +90,6 @@ export async function POST(request: NextRequest) {
         { status: 403 }
       );
     }
-      return NextResponse.json(
-        { 
-          error: 'Course access denied. Please upgrade your subscription to access this course.',
-          requires_subscription: true 
-        },
-        { status: 403 }
-      );
-    }
 
     // Check if already enrolled
     const { data: existingEnrollment } = await supabase

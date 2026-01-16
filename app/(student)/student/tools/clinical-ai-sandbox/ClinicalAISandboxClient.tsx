@@ -10,6 +10,7 @@ import { AgentBoundaryExplorer } from '@/components/tools/clinical-ai-sandbox/Ag
 import { RAGConsole } from '@/components/tools/clinical-ai-sandbox/RAGConsole';
 import { FailureModeViewer } from '@/components/tools/clinical-ai-sandbox/FailureModeViewer';
 import { GovernancePanel } from '@/components/tools/clinical-ai-sandbox/GovernancePanel';
+import { VoiceInteractionDemo } from '@/components/tools/clinical-ai-sandbox/VoiceInteractionDemo';
 
 function ClinicalAISandboxContent() {
   const { activeModule, setActiveModule } = useClinicalSandbox();
@@ -78,6 +79,8 @@ function ClinicalAISandboxContent() {
             <AgentBoundaryExplorer />
           ) : activeModule === 'rag-console' ? (
             <RAGConsole />
+          ) : activeModule === 'voice-interaction-demo' ? (
+            <VoiceInteractionDemo />
           ) : activeModule === 'failure-mode-viewer' ? (
             <FailureModeViewer />
           ) : activeModule === 'governance-panel' ? (
