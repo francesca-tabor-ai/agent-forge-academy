@@ -5,6 +5,18 @@ import { courseMetadata } from '@/lib/course-metadata';
 import { extractCourseMetadata } from '@/lib/course-sync/extract-metadata';
 import { CoursesPageClient } from '@/components/courses/CoursesPageClient';
 import { getUserSubscriptionTier } from '@/lib/utils/subscription-access';
+import type { Industry } from '@/lib/utils/industries';
+import { isValidIndustry } from '@/lib/utils/industries';
+
+/**
+ * Filter and validate industries array to ensure it's Industry[]
+ */
+function filterIndustries(industries: string[] | Industry[] | undefined | null): Industry[] {
+  if (!industries || !Array.isArray(industries)) {
+    return [];
+  }
+  return industries.filter((i): i is Industry => isValidIndustry(i));
+}
 
 export default async function CoursesPage() {
   const supabase = await createUserSupabaseClient();
@@ -119,7 +131,7 @@ export default async function CoursesPage() {
       build: (dynamicMetadata.metadata as any)?.build || '',
       bestFor: (dynamicMetadata.metadata as any)?.bestFor || '',
       time: dynamicMetadata.metadata.duration_weeks ? `${dynamicMetadata.metadata.duration_weeks} weeks` : '',
-      industries: dynamicMetadata.metadata.industries || [],
+      industries: filterIndustries(dynamicMetadata.metadata.industries),
       imageUrl: (dynamicMetadata.metadata as any)?.imageUrl,
     } : undefined);
     
@@ -128,9 +140,11 @@ export default async function CoursesPage() {
       // Use dynamic metadata description if available, otherwise use database description
       description: dynamicMetadata?.metadata?.description || course.description,
       // Use database industries if it has values, otherwise fall back to metadata industries
-      industries: (course.industries && course.industries.length > 0) 
-        ? course.industries 
-        : (dynamicMetadata?.metadata?.industries || []),
+      industries: filterIndustries(
+        (course.industries && course.industries.length > 0) 
+          ? course.industries 
+          : (dynamicMetadata?.metadata?.industries || [])
+      ),
       hasContent: courseSlugSet.has(course.slug),
       category: enhancedMetadata?.category || dynamicMetadata?.metadata?.category,
       imageUrl: dynamicMetadata?.metadata?.imageUrl || enhancedMetadata?.imageUrl,
@@ -171,7 +185,7 @@ export default async function CoursesPage() {
         build: (dynamicMetadata.metadata as any)?.build || '',
         bestFor: (dynamicMetadata.metadata as any)?.bestFor || '',
         time: dynamicMetadata.metadata.duration_weeks ? `${dynamicMetadata.metadata.duration_weeks} weeks` : '',
-        industries: dynamicMetadata.metadata.industries || [],
+        industries: filterIndustries(dynamicMetadata.metadata.industries),
         imageUrl: (dynamicMetadata.metadata as any)?.imageUrl,
       } : undefined);
       
@@ -190,7 +204,7 @@ export default async function CoursesPage() {
         created_at: null,
         updated_at: null,
         hasContent: lessons.length > 0,
-        industries: dynamicMetadata?.metadata?.industries || enhancedMetadata?.industries || [],
+        industries: filterIndustries(dynamicMetadata?.metadata?.industries || enhancedMetadata?.industries),
         category: enhancedMetadata?.category || dynamicMetadata?.metadata?.category,
         metadata: enhancedMetadata, // Pass enhanced metadata with dynamic fields
       });
