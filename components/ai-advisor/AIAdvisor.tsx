@@ -899,6 +899,7 @@ export function AIAdvisor({
                 autoConnect={false} // Never auto-connect - user must click Connect button
               />
             </VoiceErrorBoundary>
+          )}
 
           {/* Voice Controls - Standard Mode */}
           {!useWebRTCRealtime && (
