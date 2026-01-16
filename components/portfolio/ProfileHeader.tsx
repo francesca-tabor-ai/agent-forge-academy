@@ -3,12 +3,14 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { resolveCityBanner } from '@/lib/cityBanners';
 
 interface ProfileHeaderProps {
   fullName?: string | null;
   headline?: string | null;
   headshotImageUrl?: string | null;
   location?: string | null;
+  city?: string | null;
   linkedinUrl?: string | null;
   githubUrl?: string | null;
   websiteUrl?: string | null;
@@ -32,6 +34,7 @@ export function ProfileHeader({
   headline,
   headshotImageUrl,
   location,
+  city,
   linkedinUrl,
   githubUrl,
   websiteUrl,
@@ -42,6 +45,10 @@ export function ProfileHeader({
   const router = useRouter();
   const initials = getInitials(fullName);
   const isDiscoverable = visibility !== 'private';
+  
+  // Resolve banner image from city
+  // Given profile.city, return city image URL if known, else default banner image
+  const bannerImageUrl = resolveCityBanner(city);
 
   const handleMakeDiscoverable = () => {
     router.push('/student/portfolio/profile/edit');
@@ -66,10 +73,21 @@ export function ProfileHeader({
     <div className="bg-white border border-gray-200 rounded-lg relative overflow-visible">
       {/* Cover Banner - Fixed height, LinkedIn style */}
       {/* Layer 1: Cover layer (background only) - overflow-hidden only on the gradient, not the wrapper */}
-      <div className="relative h-[140px] sm:h-[180px] md:h-[200px] bg-gradient-to-br from-blue-600 via-blue-500 to-indigo-600 rounded-t-lg overflow-visible">
-        {/* Optional: Add banner image upload in future */}
-        {/* Gradient overlay - overflow-hidden only here to clip the gradient to rounded corners */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/90 via-blue-500/90 to-indigo-600/90 rounded-t-lg overflow-hidden"></div>
+      <div className="relative h-[140px] sm:h-[180px] md:h-[200px] rounded-t-lg overflow-visible">
+        {/* Cover image (city banner) */}
+        <div className="absolute inset-0 rounded-t-lg overflow-hidden">
+          <Image
+            src={bannerImageUrl}
+            alt={city ? `${city} city banner` : 'Default banner'}
+            fill
+            className="object-cover"
+            priority
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 65vw, 840px"
+          />
+        </div>
+        
+        {/* Gradient overlay - ensures text/avatar visibility, never overlaps/clips */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black/40 via-black/30 to-black/50 rounded-t-lg overflow-hidden"></div>
         
         {/* Layer 2: Avatar layer - positioned relative to cover, above all decorative layers */}
         {/* Avatar extends below cover by 50% of its height, guaranteed to be fully visible */}

@@ -66,7 +66,7 @@ export default async function PortfolioPage() {
     // Get student profile
     const { data: studentProfile, error: studentProfileError } = await supabase
       .from('student_profiles')
-      .select('id, visibility, full_name, bio, headline, skills, location, linkedin_url, github_url, website_url, headshot_image_url')
+      .select('id, visibility, full_name, bio, headline, skills, location, city, linkedin_url, github_url, website_url, headshot_image_url')
       .eq('profile_id', profile.id)
       .single();
 
@@ -332,6 +332,7 @@ export default async function PortfolioPage() {
               headline={headline || ''}
               headshotImageUrl={studentProfile.headshot_image_url || null}
               location={studentProfile.location || null}
+              city={studentProfile.city || null}
               linkedinUrl={studentProfile.linkedin_url || null}
               githubUrl={studentProfile.github_url || null}
               websiteUrl={studentProfile.website_url || null}
