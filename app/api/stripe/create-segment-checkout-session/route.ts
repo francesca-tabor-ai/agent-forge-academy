@@ -26,9 +26,11 @@ export async function POST(request: NextRequest) {
       data: { user },
     } = await supabase.auth.getUser();
 
+    // For public landing pages, allow unauthenticated users but require signup
+    // Return a special error code that the frontend can handle
     if (!user) {
       return NextResponse.json(
-        { error: 'Unauthorized' },
+        { error: 'Unauthorized', requiresAuth: true },
         { status: 401 }
       );
     }

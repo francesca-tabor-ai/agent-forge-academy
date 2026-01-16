@@ -95,7 +95,10 @@ export async function middleware(request: NextRequest) {
 
     // Public routes that don't require authentication
     const publicRoutes = ['/', '/auth/login', '/auth/signup', '/auth/reset-password'];
-    const isPublicRoute = publicRoutes.some((route) => pathname === route) || pathname.startsWith('/auth/');
+    const isPublicRoute = 
+      publicRoutes.some((route) => pathname === route) || 
+      pathname.startsWith('/auth/') ||
+      pathname.startsWith('/landing/'); // Landing pages are public
 
     // If logged in and visiting /, redirect to /app
     if (user && pathname === '/') {
