@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useContentSystemsStudio } from '@/lib/tools/content-systems-studio/useContentSystemsStudio';
 import { ContentEditor } from '@/components/tools/content-systems-studio/ContentEditor';
+import { RulesPanel } from '@/components/tools/content-systems-studio/RulesPanel';
 
 type TabId = 'editor' | 'rules' | 'workflow' | 'variations' | 'dashboard';
 
@@ -107,6 +108,22 @@ export function ContentSystemsStudioClient() {
       {/* Tab Content Panel */}
       {activeTab === 'editor' ? (
         <ContentEditor studio={studio} currentRole="student" />
+      ) : activeTab === 'rules' ? (
+        <div className="bg-white border border-gray-200 rounded-lg p-6">
+          <h2 className="text-xl font-semibold text-gray-900 mb-6">
+            {currentTab.title}
+          </h2>
+          <RulesPanel
+            studio={studio}
+            ruleResults={studio.state.ruleResults}
+            onAcknowledgeWarnings={(codes) => {
+              if (studio.selectedItem) {
+                studio.ackWarnings(studio.selectedItem.id, codes);
+              }
+            }}
+            showAcknowledgeCheckbox={true}
+          />
+        </div>
       ) : (
         <div className="bg-white border border-gray-200 rounded-lg p-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">

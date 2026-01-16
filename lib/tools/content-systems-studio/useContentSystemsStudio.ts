@@ -14,6 +14,8 @@ import {
   type ContentSystemsStudioState,
   type ContentSystemsStudioAction,
 } from './state';
+import { runRules as executeRules } from './rulesEngine';
+import { getSchemaById } from './schemaRegistry';
 
 /**
  * Return type for the useContentSystemsStudio hook
@@ -115,6 +117,23 @@ export function useContentSystemsStudio(): UseContentSystemsStudioReturn {
     actorRole: Role,
     comment?: string
   ) => {
+    // Run rules before allowing transition
+    const item = state.contentItems.find((i) => i.id === itemId);
+    if (item) {
+      const schema = getSchemaById(item.schemaId);
+      if (schema) {
+        const ruleResults = executeRules(item, schema);
+        runRules(itemId, ruleResults);
+
+        // Check for blocking rules - prevent transition if any exist
+        const blockingRules = ruleResults.filter((r) => r.status === 'block');
+        if (blockingRules.length > 0) {
+          // Don't transition if there are blocking rules
+          return;
+        }
+      }
+    }
+
     dispatch({
       type: 'TRANSITION_STATE',
       payload: { itemId, fromState, toState, actorRole, comment },

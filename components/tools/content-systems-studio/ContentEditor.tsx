@@ -3,7 +3,9 @@
 import { useState, useEffect } from 'react';
 import type { ContentItem, ContentSchema, SchemaField, FieldValue, Role } from '@/lib/tools/content-systems-studio/types';
 import { validateItem } from '@/lib/tools/content-systems-studio/validateItem';
+import { runRules } from '@/lib/tools/content-systems-studio/rulesEngine';
 import type { UseContentSystemsStudioReturn } from '@/lib/tools/content-systems-studio/useContentSystemsStudio';
+import { RulesPanel } from './RulesPanel';
 
 interface ContentEditorProps {
   studio: UseContentSystemsStudioReturn;
@@ -314,11 +316,21 @@ export function ContentEditor({ studio, currentRole }: ContentEditorProps) {
       fields: localFields,
     };
 
+    // Run schema validation
     const errors = validateItem(itemToValidate, currentSchema);
-
     if (errors.length > 0) {
-      // Set validation errors in state
       validateItemAction(currentItem.id, errors);
+      return;
+    }
+
+    // Run rules engine
+    const ruleResults = runRules(itemToValidate, currentSchema);
+    studio.runRules(currentItem.id, ruleResults);
+
+    // Check for blocking rules
+    const blockingRules = ruleResults.filter((r) => r.status === 'block');
+    if (blockingRules.length > 0) {
+      // Don't save if there are blocking rules
       return;
     }
 
@@ -462,6 +474,17 @@ export function ContentEditor({ studio, currentRole }: ContentEditorProps) {
                     <li key={index}>{error.message}</li>
                   ))}
                 </ul>
+              </div>
+            )}
+
+            {/* Show rule results if there are blocking rules */}
+            {state.ruleResults.length > 0 && (
+              <div className="mb-6">
+                <RulesPanel
+                  studio={studio}
+                  ruleResults={state.ruleResults}
+                  showAcknowledgeCheckbox={false}
+                />
               </div>
             )}
 
