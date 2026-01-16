@@ -722,13 +722,11 @@ export async function POST(request: NextRequest) {
         hasContext: !!context,
         hasConversationHistory: conversationHistory?.length > 0,
         intent: intent || 'general',
-      userId: user.id,
-      messageLength: message.length,
-      hasContext: !!context,
-      activeCourseId: context?.course?.id || null,
-      activeProjectId: context?.project?.id || null,
-      activeJobId: context?.job?.id || null,
-    });
+        messageLength: message.length,
+        activeCourseId: context?.course?.id || null,
+        activeProjectId: context?.project?.id || null,
+        activeJobId: context?.job?.id || null,
+      });
 
     // Check for sensitive information
     if (containsSensitiveInfo(message)) {
