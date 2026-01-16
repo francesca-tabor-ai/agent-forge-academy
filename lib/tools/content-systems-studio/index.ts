@@ -87,3 +87,13 @@ export {
   type RuleViolationsOverTime,
   type VariantsPerItem,
 } from './metrics';
+
+// Persistence
+export {
+  loadContentItems,
+  saveContentItem,
+  updateContentItem,
+  loadAuditEvents,
+  appendAuditEvent,
+  isPersistenceAvailable,
+} from './persistence';

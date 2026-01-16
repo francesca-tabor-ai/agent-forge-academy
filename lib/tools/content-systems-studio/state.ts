@@ -123,6 +123,13 @@ export type ContentSystemsStudioAction =
   | {
       type: 'ADD_AUDIT_EVENT';
       payload: Omit<AuditEvent, 'timestamp'> & { timestamp?: Date };
+    }
+  | {
+      type: 'LOAD_FROM_PERSISTENCE';
+      payload: {
+        items: ContentItem[];
+        auditEvents: AuditEvent[];
+      };
     };
 
 /**
@@ -336,6 +343,32 @@ export function contentSystemsStudioReducer(
       return {
         ...state,
         auditLog: [...state.auditLog, auditEvent],
+      };
+    }
+
+    case 'LOAD_FROM_PERSISTENCE': {
+      // Merge loaded items with existing items (prefer loaded items if IDs match)
+      const loadedItemIds = new Set(action.payload.items.map((item) => item.id));
+      const existingItems = state.contentItems.filter(
+        (item) => !loadedItemIds.has(item.id)
+      );
+      const mergedItems = [...action.payload.items, ...existingItems];
+
+      // Merge audit events (append-only, no duplicates)
+      const existingEventIds = new Set(
+        state.auditLog.map((e) => `${e.timestamp.getTime()}-${e.action}`)
+      );
+      const newEvents = action.payload.auditEvents.filter(
+        (e) => !existingEventIds.has(`${e.timestamp.getTime()}-${e.action}`)
+      );
+      const mergedAuditLog = [...state.auditLog, ...newEvents].sort(
+        (a, b) => a.timestamp.getTime() - b.timestamp.getTime()
+      );
+
+      return {
+        ...state,
+        contentItems: mergedItems,
+        auditLog: mergedAuditLog,
       };
     }
 

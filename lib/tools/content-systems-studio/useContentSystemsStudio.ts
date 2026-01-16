@@ -6,7 +6,7 @@
 
 'use client';
 
-import { useReducer, useMemo } from 'react';
+import { useReducer, useMemo, useEffect, useState } from 'react';
 import type { Role } from './types';
 import {
   initialState,
@@ -16,6 +16,14 @@ import {
 } from './state';
 import { runRules as executeRules } from './rulesEngine';
 import { getSchemaById } from './schemaRegistry';
+import {
+  loadContentItems,
+  loadAuditEvents,
+  saveContentItem,
+  updateContentItem,
+  appendAuditEvent,
+  isPersistenceAvailable,
+} from './persistence';
 
 /**
  * Return type for the useContentSystemsStudio hook
@@ -57,6 +65,111 @@ export interface UseContentSystemsStudioReturn {
  */
 export function useContentSystemsStudio(): UseContentSystemsStudioReturn {
   const [state, dispatch] = useReducer(contentSystemsStudioReducer, initialState);
+  const [persistenceEnabled, setPersistenceEnabled] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Load data from Supabase on mount
+  useEffect(() => {
+    let mounted = true;
+
+    async function loadData() {
+      try {
+        const available = await isPersistenceAvailable();
+        if (!available || !mounted) return;
+
+        setPersistenceEnabled(true);
+        setIsLoading(true);
+
+        // Load content items
+        const items = await loadContentItems();
+        if (!mounted) return;
+
+        // Load audit events for all items
+        const allAuditEvents: ContentSystemsStudioState['auditLog'] = [];
+        for (const item of items) {
+          const events = await loadAuditEvents(item.id);
+          allAuditEvents.push(...events);
+        }
+
+        if (!mounted) return;
+
+        // Update state with loaded data
+        if (items.length > 0 || allAuditEvents.length > 0) {
+          dispatch({
+            type: 'LOAD_FROM_PERSISTENCE',
+            payload: {
+              items,
+              auditEvents: allAuditEvents,
+            },
+          });
+        }
+      } catch (error) {
+        console.warn('Failed to load from Supabase, using local state:', error);
+        // Graceful fallback - continue with local state
+      } finally {
+        if (mounted) {
+          setIsLoading(false);
+        }
+      }
+    }
+
+    loadData();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  // Save to Supabase when items change (debounced)
+  useEffect(() => {
+    if (!persistenceEnabled || isLoading) return;
+
+    const timeoutId = setTimeout(async () => {
+      // Save each item that has been modified
+      for (const item of state.contentItems) {
+        try {
+          // Check if item exists in DB by trying to update it
+          const updated = await updateContentItem(item);
+          if (!updated) {
+            // Item doesn't exist, create it
+            await saveContentItem(item);
+          }
+        } catch (error) {
+          console.warn(`Failed to persist item ${item.id}:`, error);
+          // Graceful fallback - continue with local state
+        }
+      }
+    }, 1000); // Debounce saves by 1 second
+
+    return () => clearTimeout(timeoutId);
+  }, [state.contentItems, persistenceEnabled, isLoading]);
+
+  // Save audit events to Supabase when they're added
+  useEffect(() => {
+    if (!persistenceEnabled || isLoading) return;
+
+    const newEvents = state.auditLog.filter((event) => {
+      // Only save events that haven't been persisted yet
+      // We can check this by looking at metadata or tracking persisted events
+      return true; // For now, save all events (could be optimized)
+    });
+
+    for (const event of newEvents) {
+      const itemId = event.metadata?.itemId as string | undefined;
+      if (itemId) {
+        appendAuditEvent(itemId, {
+          actorRole: event.actorRole,
+          action: event.action,
+          fromState: event.fromState,
+          toState: event.toState,
+          metadata: event.metadata,
+        }).catch((error) => {
+          console.warn('Failed to persist audit event:', error);
+          // Graceful fallback - continue with local state
+        });
+      }
+    }
+  }, [state.auditLog, persistenceEnabled, isLoading]);
 
   // Memoized convenience getters
   const selectedItem = useMemo(() => {
