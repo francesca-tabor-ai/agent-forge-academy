@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import { getSegment } from '@/lib/utils/segments';
 import { courseMetadata } from '@/lib/course-metadata';
 import PublicSegmentLandingPage from '@/components/segments/PublicSegmentLandingPage';
+import { createServerSupabaseClient } from '@/lib/supabase/server';
 
 interface PageProps {
   params: Promise<{
@@ -29,15 +30,32 @@ export default async function RoleLandingPage({ params }: PageProps) {
   }
   
   // Get live course details for included courses
+  const supabase = await createServerSupabaseClient();
+  
+  // Fetch course data from database to get difficulty_level
+  const { data: dbCourses } = await supabase
+    .from('courses')
+    .select('slug, difficulty_level, is_live')
+    .in('slug', segment.includedCourseSlugs);
+  
+  const dbCoursesMap = new Map(
+    (dbCourses || []).map((c) => [c.slug, c])
+  );
+  
   const courses = segment.includedCourseSlugs
     .map((courseSlug) => {
       const metadata = courseMetadata[courseSlug];
       if (!metadata) return null;
-      // Filter by isLive (defaults to true if not specified)
-      if (metadata.isLive === false) return null;
+      
+      // Filter by isLive - check both metadata and database
+      const dbCourse = dbCoursesMap.get(courseSlug);
+      const isLive = dbCourse?.is_live !== false && metadata.isLive !== false;
+      if (!isLive) return null;
+      
       return {
         slug: courseSlug,
         ...metadata,
+        difficulty: dbCourse?.difficulty_level || null,
       };
     })
     .filter((course) => course !== null);
