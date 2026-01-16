@@ -21,7 +21,7 @@ export default function PublicSegmentLandingPage({ segment, courses }: PublicSeg
   const annualPrice = config?.annualPrice || 49000;
   const annualSavings = calculateAnnualSavings(monthlyPrice, annualPrice);
 
-  const handleSubscribe = async () => {
+  const handleSubscribe = async (cycle: 'monthly' | 'annual') => {
     setIsLoading(true);
     try {
       const response = await fetch('/api/stripe/create-segment-checkout-session', {
@@ -32,7 +32,7 @@ export default function PublicSegmentLandingPage({ segment, courses }: PublicSeg
         body: JSON.stringify({
           segmentType: segment.type,
           segmentKey: segment.key,
-          billingCycle,
+          billingCycle: cycle,
           successUrl: `${window.location.origin}/landing/${segment.type}/${segment.key}?success=true`,
           cancelUrl: `${window.location.origin}/landing/${segment.type}/${segment.key}?canceled=true`,
         }),
@@ -65,10 +65,24 @@ export default function PublicSegmentLandingPage({ segment, courses }: PublicSeg
     }
   };
 
+  const savingsPercent = annualSavings > 0 
+    ? Math.round((annualSavings / (monthlyPrice * 12)) * 100)
+    : 0;
+
+  const handleStartMonthly = () => {
+    setBillingCycle('monthly');
+    handleSubscribe('monthly');
+  };
+
+  const handleStartAnnual = () => {
+    setBillingCycle('annual');
+    handleSubscribe('annual');
+  };
+
   return (
     <div className="min-h-screen bg-white">
       {/* Full-bleed Hero Section */}
-      <section className="relative w-full h-[60vh] min-h-[500px] flex items-center">
+      <section className="relative w-full h-screen min-h-[600px] flex items-end">
         {/* Background Image */}
         <Image
           src={segment.heroImageUrl}
@@ -79,131 +93,168 @@ export default function PublicSegmentLandingPage({ segment, courses }: PublicSeg
           sizes="100vw"
         />
         
-        {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/80" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-50" />
+        {/* Gradient Overlay - Dark bottom */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/70 to-black/40" />
         
         {/* Hero Content */}
-        <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8">
+        <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8 pb-16 sm:pb-20 lg:pb-24">
           <div className="max-w-4xl mx-auto">
-            <div className="space-y-6 pt-16 pb-24">
-              {/* Segment Type Badge */}
-              <div className="inline-block">
-                <span className="bg-brand-yellow/90 text-brand-dark text-sm font-semibold px-4 py-2 rounded-full uppercase tracking-wide">
-                  {segment.type === 'track' ? 'Track' : segment.type === 'industry' ? 'Industry' : 'Role'}
+            <div className="space-y-8">
+              {/* Title and Subtitle */}
+              <div className="space-y-4">
+                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight tracking-tight font-playfair">
+                  {segment.displayName}
+                </h1>
+                <p className="text-xl sm:text-2xl md:text-3xl text-white leading-relaxed max-w-3xl font-light">
+                  {segment.description}
+                </p>
+              </div>
+
+              {/* CTA Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                <button
+                  onClick={handleStartMonthly}
+                  disabled={isLoading}
+                  className="btn-primary bg-white text-brand-dark hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed text-center"
+                >
+                  {isLoading && billingCycle === 'monthly' ? 'Processing...' : `Start monthly`}
+                </button>
+                <button
+                  onClick={handleStartAnnual}
+                  disabled={isLoading}
+                  className="btn-primary bg-brand-yellow text-brand-dark hover:bg-brand-yellow/90 disabled:opacity-50 disabled:cursor-not-allowed text-center"
+                >
+                  {isLoading && billingCycle === 'annual' ? 'Processing...' : `Start annual${savingsPercent > 0 ? ` (save ${savingsPercent}%)` : ''}`}
+                </button>
+              </div>
+
+              {/* Trust Row */}
+              <div className="flex flex-wrap items-center gap-4 sm:gap-6 pt-4 text-white/90 text-sm sm:text-base">
+                <span className="flex items-center gap-2">
+                  <span className="text-white">✓</span>
+                  <span>Cancel anytime</span>
+                </span>
+                <span className="hidden sm:inline">•</span>
+                <span className="flex items-center gap-2">
+                  <span className="text-white">✓</span>
+                  <span>Access {courses.length} matching course{courses.length !== 1 ? 's' : ''}</span>
+                </span>
+                <span className="hidden sm:inline">•</span>
+                <span className="flex items-center gap-2">
+                  <span className="text-white">✓</span>
+                  <span>New courses added</span>
                 </span>
               </div>
-              
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight tracking-tight font-playfair">
-                {segment.displayName}
-              </h1>
-              
-              <p className="text-xl sm:text-2xl md:text-3xl text-gray-100 leading-relaxed max-w-3xl font-light">
-                {segment.description}
-              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Pricing CTA Section */}
+      {/* Pricing Details Section */}
       {config && (
-        <section className="bg-brand-dark py-16 sm:py-20 lg:py-24">
+        <section className="bg-gray-50 py-16 sm:py-20 lg:py-24">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 font-playfair">
-                Start Learning Today
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-brand-dark mb-4 font-playfair">
+                Pricing
               </h2>
-              <p className="text-xl sm:text-2xl text-gray-200 font-light">
-                Get access to {courses.length} live course{courses.length !== 1 ? 's' : ''} in {segment.displayName}
+              <p className="text-xl text-gray-700">
+                Choose the plan that works for you
               </p>
             </div>
 
-            {/* Billing Cycle Toggle */}
-            <div className="flex justify-center mb-8">
-              <div className="inline-flex rounded-lg border border-gray-300 p-1 bg-white">
+            {/* Pricing Cards */}
+            <div className="grid md:grid-cols-2 gap-8">
+              {/* Monthly Plan */}
+              <div className="bg-white rounded-lg shadow-lg p-8 border-2 border-gray-200">
+                <div className="text-center mb-6">
+                  <div className="text-4xl font-bold text-brand-dark mb-2">
+                    {formatPrice(monthlyPrice)}
+                  </div>
+                  <div className="text-gray-600">/ month</div>
+                </div>
+                <ul className="space-y-3 mb-6">
+                  <li className="flex items-start gap-3">
+                    <span className="text-green-600 mt-1">✓</span>
+                    <span className="text-gray-700">
+                      Access to {courses.length} live course{courses.length !== 1 ? 's' : ''}
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-green-600 mt-1">✓</span>
+                    <span className="text-gray-700">
+                      All course materials and resources
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-green-600 mt-1">✓</span>
+                    <span className="text-gray-700">
+                      Ongoing access with updates
+                    </span>
+                  </li>
+                </ul>
                 <button
-                  onClick={() => setBillingCycle('monthly')}
-                  className={`px-6 py-2 rounded-md font-medium transition-colors ${
-                    billingCycle === 'monthly'
-                      ? 'bg-brand-dark text-white'
-                      : 'text-gray-700 hover:text-brand-dark'
-                  }`}
+                  onClick={handleStartMonthly}
+                  disabled={isLoading}
+                  className="w-full btn-primary bg-brand-dark text-white hover:bg-brand-dark/90 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Monthly
-                </button>
-                <button
-                  onClick={() => setBillingCycle('annual')}
-                  className={`px-6 py-2 rounded-md font-medium transition-colors ${
-                    billingCycle === 'annual'
-                      ? 'bg-brand-dark text-white'
-                      : 'text-gray-700 hover:text-brand-dark'
-                  }`}
-                >
-                  Annual
+                  {isLoading && billingCycle === 'monthly' ? 'Processing...' : 'Start monthly'}
                 </button>
               </div>
-            </div>
 
-            {/* Pricing Card */}
-            <div className="bg-white rounded-lg shadow-lg p-8 max-w-2xl mx-auto">
-              <div className="text-center mb-8">
-                <div className="text-5xl font-bold text-brand-dark mb-2">
-                  {billingCycle === 'annual' ? formatPrice(annualPrice) : formatPrice(monthlyPrice)}
-                </div>
-                <div className="text-gray-600">
-                  {billingCycle === 'annual' ? '/ year' : '/ month'}
-                </div>
-                {billingCycle === 'annual' && annualSavings > 0 && (
-                  <div className="mt-4">
-                    <span className="inline-block bg-green-100 text-green-800 text-sm font-semibold px-4 py-2 rounded-full">
-                      Save {formatPrice(annualSavings)} per year
+              {/* Annual Plan */}
+              <div className="bg-white rounded-lg shadow-lg p-8 border-2 border-brand-yellow relative">
+                {savingsPercent > 0 && (
+                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                    <span className="bg-brand-yellow text-brand-dark text-sm font-semibold px-4 py-1 rounded-full">
+                      Save {savingsPercent}%
                     </span>
                   </div>
                 )}
+                <div className="text-center mb-6">
+                  <div className="text-4xl font-bold text-brand-dark mb-2">
+                    {formatPrice(annualPrice)}
+                  </div>
+                  <div className="text-gray-600">/ year</div>
+                  {savingsPercent > 0 && (
+                    <div className="mt-2 text-sm text-gray-600">
+                      Save {formatPrice(annualSavings)} per year
+                    </div>
+                  )}
+                </div>
+                <ul className="space-y-3 mb-6">
+                  <li className="flex items-start gap-3">
+                    <span className="text-green-600 mt-1">✓</span>
+                    <span className="text-gray-700">
+                      Access to {courses.length} live course{courses.length !== 1 ? 's' : ''}
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-green-600 mt-1">✓</span>
+                    <span className="text-gray-700">
+                      All course materials and resources
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-green-600 mt-1">✓</span>
+                    <span className="text-gray-700">
+                      12 months access with updates
+                    </span>
+                  </li>
+                </ul>
+                <button
+                  onClick={handleStartAnnual}
+                  disabled={isLoading}
+                  className="w-full btn-primary bg-brand-yellow text-brand-dark hover:bg-brand-yellow/90 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isLoading && billingCycle === 'annual' ? 'Processing...' : `Start annual${savingsPercent > 0 ? ` (save ${savingsPercent}%)` : ''}`}
+                </button>
               </div>
-
-              {/* Features */}
-              <ul className="space-y-3 mb-8">
-                <li className="flex items-start gap-3">
-                  <span className="text-green-600 mt-1">✓</span>
-                  <span className="text-gray-700">
-                    Access to {courses.length} live course{courses.length !== 1 ? 's' : ''} in {segment.displayName}
-                  </span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-green-600 mt-1">✓</span>
-                  <span className="text-gray-700">
-                    All course materials, lessons, and resources
-                  </span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-green-600 mt-1">✓</span>
-                  <span className="text-gray-700">
-                    {billingCycle === 'annual' ? '12 months' : 'Ongoing'} access with updates
-                  </span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-green-600 mt-1">✓</span>
-                  <span className="text-gray-700">
-                    Cancel anytime
-                  </span>
-                </li>
-              </ul>
-
-              {/* Subscribe Button */}
-              <button
-                onClick={handleSubscribe}
-                disabled={isLoading}
-                className="w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isLoading ? 'Processing...' : `Subscribe to ${segment.displayName}`}
-              </button>
-
-              <p className="mt-6 text-sm text-gray-500 text-center">
-                By subscribing, you agree to our terms of service. You can cancel your subscription at any time.
-              </p>
             </div>
+
+            <p className="mt-8 text-sm text-gray-500 text-center">
+              By subscribing, you agree to our terms of service. You can cancel your subscription at any time.
+            </p>
           </div>
         </section>
       )}
@@ -358,13 +409,22 @@ export default function PublicSegmentLandingPage({ segment, courses }: PublicSeg
           <p className="text-xl sm:text-2xl text-gray-700 mb-8 font-light">
             Join thousands of professionals learning {segment.displayName}
           </p>
-          <button
-            onClick={handleSubscribe}
-            disabled={isLoading}
-            className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isLoading ? 'Processing...' : 'Get Started Now'}
-          </button>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <button
+              onClick={handleStartMonthly}
+              disabled={isLoading}
+              className="btn-primary bg-brand-dark text-white hover:bg-brand-dark/90 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isLoading && billingCycle === 'monthly' ? 'Processing...' : 'Start monthly'}
+            </button>
+            <button
+              onClick={handleStartAnnual}
+              disabled={isLoading}
+              className="btn-primary bg-brand-yellow text-brand-dark hover:bg-brand-yellow/90 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isLoading && billingCycle === 'annual' ? 'Processing...' : `Start annual${savingsPercent > 0 ? ` (save ${savingsPercent}%)` : ''}`}
+            </button>
+          </div>
         </div>
       </section>
     </div>
