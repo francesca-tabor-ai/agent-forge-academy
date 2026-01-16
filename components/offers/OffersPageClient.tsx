@@ -4,6 +4,7 @@ import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { courseMetadata } from '@/lib/course-metadata';
 import { AddOfferToProjectModal } from './AddOfferToProjectModal';
+import { ToolCard } from './ToolCard';
 
 interface Offer {
   id: string;
@@ -358,7 +359,63 @@ export function OffersPageClient({
     });
 
     return filtered;
-  }, [offers, viewFilter, selectedCategory, selectedEligibility, selectedCostImpact, sortBy, enrolledCourseSlugs]);
+  }, [offers, viewFilter, selectedCategory, selectedEligibility, selectedCostImpact, sortBy, searchQuery]);
+
+  // Group offers by tool (provider) and aggregate data
+  const toolsData = useMemo(() => {
+    const toolMap = new Map<string, {
+      name: string;
+      description: string;
+      categories: Set<string>;
+      courseSlugs: Set<string>;
+      offers: Offer[];
+      hasGatedOffer: boolean;
+      requiredCourseForOffer: string | null;
+    }>();
+
+    filteredAndSortedOffers.forEach(offer => {
+      const toolName = offer.provider;
+      
+      if (!toolMap.has(toolName)) {
+        toolMap.set(toolName, {
+          name: toolName,
+          description: offer.description, // Use first offer's description
+          categories: new Set(),
+          courseSlugs: new Set(),
+          offers: [],
+          hasGatedOffer: false,
+          requiredCourseForOffer: null,
+        });
+      }
+
+      const tool = toolMap.get(toolName)!;
+      tool.categories.add(offer.category);
+      tool.offers.push(offer);
+      
+      // Collect course slugs
+      if (offer.recommended_for_courses) {
+        offer.recommended_for_courses.forEach(slug => tool.courseSlugs.add(slug));
+      }
+
+      // Check for gated offers (we'll need to check if offer requires course completion)
+      // For now, we'll mark if there are offers that might be gated
+      // This will be properly implemented when we migrate to tool_offers table
+    });
+
+    // Convert to array and format for ToolCard
+    return Array.from(toolMap.values()).map(tool => ({
+      name: tool.name,
+      description: tool.description,
+      categories: Array.from(tool.categories),
+      courseCount: tool.courseSlugs.size,
+      videoCount: 0, // Will be populated when we have tool_videos data
+      offersCount: tool.offers.length,
+      hasOffers: tool.offers.length > 0,
+      hasGatedOffer: tool.hasGatedOffer,
+      requiredCourseForOffer: tool.requiredCourseForOffer,
+      offers: tool.offers,
+    }));
+  }, [filteredAndSortedOffers]);
 
   // Toggle save offer
   const handleSaveOffer = async (offerId: string) => {
@@ -658,8 +715,43 @@ export function OffersPageClient({
         </div>
       </div>
 
-      {/* Offers Grid */}
-      {filteredAndSortedOffers.length > 0 ? (
+      {/* Tools Grid */}
+      {toolsData.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {toolsData.map((tool) => {
+            // Find if any offer requires course completion (gated)
+            const gatedOffer = tool.offers.find(offer => {
+              // Check if offer might be gated - this will be properly implemented with tool_offers table
+              // For now, we'll check if there's any indication in the offer data
+              return false; // Placeholder - will be updated when we have tool_offers data
+            });
+
+            return (
+              <ToolCard
+                key={tool.name}
+                toolName={tool.name}
+                description={tool.description}
+                categories={tool.categories}
+                courseCount={tool.courseCount}
+                videoCount={tool.videoCount}
+                hasOffers={tool.hasOffers}
+                offersCount={tool.offersCount}
+                toolSlug={tool.name.toLowerCase().replace(/\s+/g, '-')}
+                hasGatedOffer={tool.hasGatedOffer}
+                requiredCourseForOffer={tool.requiredCourseForOffer}
+                enrolledCourseSlugs={enrolledCourseSlugs}
+              />
+            );
+          })}
+        </div>
+      ) : (
+        <div className="text-center py-12">
+          <p className="text-gray-500">No tools found matching your search criteria.</p>
+        </div>
+      )}
+
+      {/* Legacy Offers Grid (hidden for now, can be shown in a separate tab later) */}
+      {false && filteredAndSortedOffers.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredAndSortedOffers.map((offer) => {
             const props = getOfferProperties(offer);
@@ -926,12 +1018,6 @@ export function OffersPageClient({
               </div>
             );
           })}
-        </div>
-      ) : (
-        <div className="bg-white border border-gray-200 rounded-lg p-12 text-center">
-          <p className="text-gray-600 mb-4">
-            No offers match your filters. Try adjusting your selection.
-          </p>
         </div>
       )}
     </div>

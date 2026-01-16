@@ -101,7 +101,9 @@ export default async function StudentDashboard() {
       outcome: (dynamicMetadata?.metadata as any)?.outcome || staticMetadata.outcome,
       build: (dynamicMetadata?.metadata as any)?.build || staticMetadata.build,
       bestFor: (dynamicMetadata?.metadata as any)?.bestFor || staticMetadata.bestFor,
-      title: dynamicMetadata?.metadata?.title || staticMetadata.title,
+      // Prioritize static metadata title (course-metadata.ts) over dynamic metadata title
+      // to ensure we show the course name, not the first lesson title
+      title: staticMetadata.title || dynamicMetadata?.metadata?.title,
       category: dynamicMetadata?.metadata?.category || staticMetadata.category,
       imageUrl: dynamicMetadata?.metadata?.imageUrl || staticMetadata.imageUrl,
     } : (dynamicMetadata?.metadata ? {
@@ -146,7 +148,9 @@ export default async function StudentDashboard() {
       allCourses.push({
         id: null, // Not in database yet
         slug,
-        title: dynamicMetadata?.metadata?.title || metadata?.title || slug.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()),
+        // Prioritize static metadata title (course-metadata.ts) over dynamic metadata title
+        // to ensure we show the course name, not the first lesson title
+        title: staticMetadata?.title || dynamicMetadata?.metadata?.title || slug.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()),
         description: dynamicMetadata?.metadata?.description || staticMetadata?.outcome || null,
         thumbnail_url: dynamicMetadata?.metadata?.thumbnail_url || null,
         imageUrl: dynamicMetadata?.metadata?.imageUrl || metadata?.imageUrl,
