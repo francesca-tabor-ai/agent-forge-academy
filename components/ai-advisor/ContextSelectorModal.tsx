@@ -70,11 +70,12 @@ export function ContextSelectorModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 animate-fade-in">
+    <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 animate-fade-in" data-testid="context-selector-modal">
       <div className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto animate-scale-in shadow-2xl">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold text-gray-900">Change Context</h2>
           <button
+            data-testid="context-modal-close-button"
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 text-2xl"
           >
@@ -89,6 +90,7 @@ export function ContextSelectorModal({
               Active Course
             </label>
             <select
+              data-testid="context-course-select"
               value={selectedCourse || ''}
               onChange={(e) => setSelectedCourse(e.target.value || null)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -108,6 +110,7 @@ export function ContextSelectorModal({
               Active Project
             </label>
             <select
+              data-testid="context-project-select"
               value={selectedProject || ''}
               onChange={(e) => setSelectedProject(e.target.value || null)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -127,6 +130,7 @@ export function ContextSelectorModal({
               Active Job / Application
             </label>
             <select
+              data-testid="context-job-select"
               value={selectedJob || ''}
               onChange={(e) => setSelectedJob(e.target.value || null)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -143,12 +147,14 @@ export function ContextSelectorModal({
 
         <div className="flex items-center justify-end gap-3 mt-6 pt-6 border-t border-gray-200">
           <button
+            data-testid="context-modal-cancel-button"
             onClick={onClose}
             className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 hover:scale-105 active:scale-95 transition-all duration-200 ease-out text-sm font-medium"
           >
             Cancel
           </button>
           <button
+            data-testid="context-modal-apply-button"
             onClick={handleApply}
             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 hover:scale-105 active:scale-95 hover:shadow-lg transition-all duration-200 ease-out text-sm font-medium"
           >

@@ -44,32 +44,68 @@ export async function CoursesSection({ courses, enrollments, studentProfileId }:
   // Get detailed information for each active course
   const activeCoursesWithDetails = await Promise.all(
     activeCourses.map(async (course) => {
-      if (!course.slug) return { 
-        course, 
-        nextLesson: null, 
-        timeEstimate: null, 
-        totalLessons: 0,
-        completedLessons: 0,
-        lessonsRemaining: 0,
-        timeSpent: '0h',
-        estimatedTimeRemaining: null,
-        nextMilestone: null,
-        streakDays: 0,
-      };
+      if (!course.slug) {
+        // Extract explicit course fields - NEVER derive card title from lesson data
+        const courseTitle = course.metadata?.title || course.title; // Always use course title
+        const courseSlug = course.slug || null;
+        const courseTrack = course.metadata?.category || course.category || null;
+        const courseDifficulty = course.difficulty_level || null;
+        const courseDuration = course.metadata?.time || (course.duration_weeks ? `${course.duration_weeks} week${course.duration_weeks !== 1 ? 's' : ''}` : null);
+        
+        return { 
+          course, 
+          nextLesson: null, 
+          // Explicit course fields - card title MUST use courseTitle, never nextLessonTitle
+          courseTitle,
+          courseSlug,
+          courseTrack,
+          courseDifficulty,
+          courseDuration,
+          // Explicit next lesson fields
+          nextLessonTitle: null,
+          nextLessonSlug: null,
+          timeEstimate: null, 
+          totalLessons: 0,
+          completedLessons: 0,
+          lessonsRemaining: 0,
+          timeSpent: '0h',
+          estimatedTimeRemaining: null,
+          nextMilestone: null,
+          streakDays: 0,
+        };
+      }
       
       const lessons = loadAllLessons(undefined, course.slug);
-      if (lessons.length === 0) return { 
-        course, 
-        nextLesson: null, 
-        timeEstimate: null,
-        totalLessons: 0,
-        completedLessons: 0,
-        lessonsRemaining: 0,
-        timeSpent: '0h',
-        estimatedTimeRemaining: null,
-        nextMilestone: null,
-        streakDays: 0,
-      };
+      if (lessons.length === 0) {
+        // Extract explicit course fields - NEVER derive card title from lesson data
+        const courseTitle = course.metadata?.title || course.title; // Always use course title
+        const courseSlug = course.slug;
+        const courseTrack = course.metadata?.category || course.category || null;
+        const courseDifficulty = course.difficulty_level || null;
+        const courseDuration = course.metadata?.time || (course.duration_weeks ? `${course.duration_weeks} week${course.duration_weeks !== 1 ? 's' : ''}` : null);
+        
+        return { 
+          course, 
+          nextLesson: null, 
+          // Explicit course fields - card title MUST use courseTitle, never nextLessonTitle
+          courseTitle,
+          courseSlug,
+          courseTrack,
+          courseDifficulty,
+          courseDuration,
+          // Explicit next lesson fields
+          nextLessonTitle: null,
+          nextLessonSlug: null,
+          timeEstimate: null,
+          totalLessons: 0,
+          completedLessons: 0,
+          lessonsRemaining: 0,
+          timeSpent: '0h',
+          estimatedTimeRemaining: null,
+          nextMilestone: null,
+          streakDays: 0,
+        };
+      }
 
       // Find next lesson based on progress
       const enrollment = course.id ? enrollments[course.id] : null;
@@ -115,9 +151,30 @@ export async function CoursesSection({ courses, enrollments, studentProfileId }:
       const daysSinceEnrollment = Math.floor((Date.now() - enrollmentDate.getTime()) / (1000 * 60 * 60 * 24));
       const streakDays = Math.min(daysSinceEnrollment, 7); // Mock: assume active for last 7 days
 
+      // Extract explicit course fields - NEVER derive card title from lesson data
+      const courseTitle = course.metadata?.title || course.title; // Always use course title, never lesson title
+      const courseSlug = course.slug;
+      const courseTrack = course.metadata?.category || course.category || null; // Track/category
+      const courseDifficulty = course.difficulty_level || null;
+      // Format duration for display
+      const courseDuration = course.metadata?.time || (course.duration_weeks ? `${course.duration_weeks} week${course.duration_weeks !== 1 ? 's' : ''}` : null);
+      
+      // Next lesson fields (only for display, never for course title)
+      const nextLessonTitle = nextLesson?.frontmatter?.title || nextLesson?.slug || null;
+      const nextLessonSlug = nextLesson?.slug || null;
+
       return { 
-        course, 
-        nextLesson, 
+        course, // Keep full course object for backward compatibility
+        nextLesson, // Keep full nextLesson object for backward compatibility
+        // Explicit course fields - card title MUST use courseTitle, never nextLessonTitle
+        courseTitle,
+        courseSlug,
+        courseTrack,
+        courseDifficulty,
+        courseDuration,
+        // Explicit next lesson fields
+        nextLessonTitle,
+        nextLessonSlug,
         timeEstimate, 
         nextMilestone,
         totalLessons: lessons.length,
@@ -165,6 +222,15 @@ export async function CoursesSection({ courses, enrollments, studentProfileId }:
           {activeCoursesWithDetails.map(({ 
             course, 
             nextLesson, 
+            // Explicit course fields - card title MUST use courseTitle, never nextLessonTitle
+            courseTitle,
+            courseSlug,
+            courseTrack,
+            courseDifficulty,
+            courseDuration,
+            // Explicit next lesson fields
+            nextLessonTitle,
+            nextLessonSlug,
             timeEstimate, 
             nextMilestone,
             totalLessons,
@@ -176,7 +242,6 @@ export async function CoursesSection({ courses, enrollments, studentProfileId }:
           }) => {
             const enrollment = course.id ? enrollments[course.id] : null;
             const progress = enrollment?.progress_percentage || 0;
-            const displayTitle = course.metadata?.title || course.title;
             const enrolledDate = enrollment ? new Date(enrollment.enrolled_at) : null;
             const daysEnrolled = enrolledDate 
               ? Math.floor((Date.now() - enrolledDate.getTime()) / (1000 * 60 * 60 * 24))
@@ -184,23 +249,33 @@ export async function CoursesSection({ courses, enrollments, studentProfileId }:
 
             return (
               <div
-                key={course.slug}
+                key={courseSlug || course.slug}
                 className="bg-white border border-gray-200 rounded-lg p-6 hover:border-brand-light transition-colors"
               >
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-3">
-                      <h3 className="text-lg font-semibold text-gray-900">{displayTitle}</h3>
-                      {course.metadata?.category && (
-                        <span className="px-2 py-1 text-xs font-medium text-brand-light bg-brand-light/10 rounded-full">
-                          {course.metadata.category}
-                        </span>
-                      )}
-                      {course.difficulty_level && (
-                        <span className="px-2 py-1 text-xs font-medium text-gray-600 bg-gray-100 rounded-full capitalize">
-                          {course.difficulty_level}
-                        </span>
-                      )}
+                    {/* Card Header: Course Title (primary) + Chips (secondary) */}
+                    <div className="mb-3">
+                      {/* Primary: Course Title - NEVER use lesson title here */}
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2">{courseTitle}</h3>
+                      {/* Secondary: Track + Difficulty + Duration chips */}
+                      <div className="flex items-center gap-2 flex-wrap">
+                        {courseTrack && (
+                          <span className="px-2 py-1 text-xs font-medium text-brand-light bg-brand-light/10 rounded-full">
+                            {courseTrack}
+                          </span>
+                        )}
+                        {courseDifficulty && (
+                          <span className="px-2 py-1 text-xs font-medium text-gray-600 bg-gray-100 rounded-full capitalize">
+                            {courseDifficulty}
+                          </span>
+                        )}
+                        {courseDuration && (
+                          <span className="px-2 py-1 text-xs font-medium text-gray-600 bg-gray-100 rounded-full">
+                            {courseDuration}
+                          </span>
+                        )}
+                      </div>
                     </div>
                     
                     {/* Detailed Progress Information */}
@@ -273,13 +348,15 @@ export async function CoursesSection({ courses, enrollments, studentProfileId }:
                               Next Lesson
                             </p>
                             <Link
-                              href={course.slug 
-                                ? `/student/courses/${course.slug}/lessons/${nextLesson.slug}`
-                                : `/student/lessons/${nextLesson.slug}`
+                              href={courseSlug && nextLessonSlug
+                                ? `/student/courses/${courseSlug}/lessons/${nextLessonSlug}`
+                                : nextLessonSlug
+                                ? `/student/lessons/${nextLessonSlug}`
+                                : '#'
                               }
                               className="text-sm font-semibold text-gray-900 hover:text-brand-light block mb-1"
                             >
-                              {nextLesson.frontmatter.title || nextLesson.slug}
+                              {nextLessonTitle}
                             </Link>
                             {nextLesson.frontmatter.description && (
                               <p className="text-xs text-gray-600 mb-2 line-clamp-2">
@@ -293,9 +370,11 @@ export async function CoursesSection({ courses, enrollments, studentProfileId }:
                             )}
                           </div>
                           <Link
-                            href={course.slug 
-                              ? `/student/courses/${course.slug}/lessons/${nextLesson.slug}`
-                              : `/student/lessons/${nextLesson.slug}`
+                            href={courseSlug && nextLessonSlug
+                              ? `/student/courses/${courseSlug}/lessons/${nextLessonSlug}`
+                              : nextLessonSlug
+                              ? `/student/lessons/${nextLessonSlug}`
+                              : '#'
                             }
                             className="ml-4 px-4 py-2 bg-brand-light text-white rounded-lg hover:bg-brand-light/90 text-sm font-medium whitespace-nowrap"
                           >
@@ -357,13 +436,13 @@ export async function CoursesSection({ courses, enrollments, studentProfileId }:
 
                   <div className="ml-4 flex flex-col gap-2">
                     <Link
-                      href={`/student/courses/${course.slug}`}
+                      href={courseSlug ? `/student/courses/${courseSlug}` : '#'}
                       className="px-4 py-2 bg-brand-light text-white rounded-lg hover:bg-brand-light/90 text-sm font-medium text-center whitespace-nowrap"
                     >
                       Continue →
                     </Link>
                     <Link
-                      href={`/student/courses/${course.slug}`}
+                      href={courseSlug ? `/student/courses/${courseSlug}` : '#'}
                       className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 text-sm font-medium text-center"
                     >
                       View Details

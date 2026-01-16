@@ -603,7 +603,7 @@ export function AIAdvisor({
   const hasNoContext = !activeContext.course && !activeContext.project && !activeContext.job;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" data-testid="ai-advisor-page">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -614,6 +614,7 @@ export function AIAdvisor({
         </div>
         {messages.length > 1 && (
           <button
+            data-testid="new-chat-button"
             onClick={() => {
               setMessages([
                 {
@@ -721,6 +722,7 @@ export function AIAdvisor({
             <label className="text-xs text-gray-600">Voice Mode:</label>
             <button
               type="button"
+              data-testid="voice-mode-standard-button"
               onClick={() => setUseWebRTCRealtime(false)}
               className={`px-2 py-1 text-xs rounded transition-colors ${
                 !useWebRTCRealtime
@@ -732,6 +734,7 @@ export function AIAdvisor({
             </button>
             <button
               type="button"
+              data-testid="voice-mode-webrtc-button"
               onClick={() => setUseWebRTCRealtime(true)}
               className={`px-2 py-1 text-xs rounded transition-colors ${
                 useWebRTCRealtime
@@ -926,6 +929,8 @@ export function AIAdvisor({
               autoSpeak={voiceOutputEnabled}
               voiceOutputEnabled={voiceOutputEnabled}
               onVoiceOutputToggle={handleVoiceOutputToggle}
+              studentProfileId={studentProfileId}
+              context={activeContext}
             />
           </VoiceErrorBoundary>
           )}
@@ -933,6 +938,7 @@ export function AIAdvisor({
           <form onSubmit={handleSubmit} className="flex gap-2 mt-3">
             <input
               type="text"
+              data-testid="chat-input"
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
               placeholder="Ask anything… (e.g., &quot;Explain CRAG like I&apos;m new&quot;, &quot;Review my project approach&quot;, &quot;Tailor my CV to this job&quot;)"
@@ -941,6 +947,7 @@ export function AIAdvisor({
             />
             <button
               type="submit"
+              data-testid="send-button"
               disabled={isLoading || !inputMessage.trim()}
               className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 hover:scale-105 active:scale-95 hover:shadow-lg transition-all duration-200 ease-out text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 whitespace-nowrap"
             >

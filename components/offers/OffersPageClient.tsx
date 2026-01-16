@@ -47,7 +47,6 @@ interface OffersPageClientProps {
   studentProfileId: string;
 }
 
-type ViewFilter = 'all' | 'recommended' | 'active_discounts';
 type SortOption = 'most_relevant' | 'highest_value' | 'expiring_soon';
 
 const categoryLabels: Record<string, string> = {
@@ -90,12 +89,13 @@ export function OffersPageClient({
   linkedOffers: initialLinkedOffers,
   studentProfileId,
 }: OffersPageClientProps) {
-  const [viewFilter, setViewFilter] = useState<ViewFilter>('all');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [selectedEligibility, setSelectedEligibility] = useState<string>('all');
-  const [selectedCostImpact, setSelectedCostImpact] = useState<string>('all');
+  const [hasOffers, setHasOffers] = useState<boolean>(false);
+  const [hasFreeTier, setHasFreeTier] = useState<boolean>(false);
+  const [hasGatedOffers, setHasGatedOffers] = useState<boolean>(false);
+  const [linkedToMyCourses, setLinkedToMyCourses] = useState<boolean>(false);
+  const [recommendedForMe, setRecommendedForMe] = useState<boolean>(false);
   const [sortBy, setSortBy] = useState<SortOption>('most_relevant');
-  const [selectedProjectId, setSelectedProjectId] = useState<string>('all');
   const [expandedOffers, setExpandedOffers] = useState<Set<string>>(new Set());
   const [savedOffers, setSavedOffers] = useState<Set<string>>(new Set(savedOfferIds));
   const [reminderDays, setReminderDays] = useState<Record<string, number>>({});
@@ -276,55 +276,8 @@ export function OffersPageClient({
       });
     }
 
-    // Apply view filter
-    if (viewFilter === 'recommended') {
-      filtered = filtered.filter(offer => {
-        const props = getOfferProperties(offer);
-        return props.isRecommended;
-      });
-    } else if (viewFilter === 'active_discounts') {
-      filtered = filtered.filter(offer => {
-        const props = getOfferProperties(offer);
-        return props.isActiveDiscount;
-      });
-    }
-
-    // Apply category filter
-    if (selectedCategory !== 'all') {
-      filtered = filtered.filter(offer => offer.category === selectedCategory);
-    }
-
-    // Apply eligibility filter
-    if (selectedEligibility !== 'all') {
-      filtered = filtered.filter(offer => {
-        if (selectedEligibility === 'students_only') {
-          return offer.eligibility?.toLowerCase().includes('student');
-        }
-        if (selectedEligibility === 'new_users_only') {
-          return offer.eligibility?.toLowerCase().includes('new user');
-        }
-        if (selectedEligibility === 'open_to_all') {
-          return !offer.eligibility || (!offer.eligibility.toLowerCase().includes('student') && !offer.eligibility.toLowerCase().includes('new user'));
-        }
-        return true;
-      });
-    }
-
-    // Apply cost impact filter
-    if (selectedCostImpact !== 'all') {
-      filtered = filtered.filter(offer => {
-        if (selectedCostImpact === 'free_tier') {
-          return offer.discount_type === 'free_credits' || offer.discount_type === 'extended_trial';
-        }
-        if (selectedCostImpact === 'credits') {
-          return offer.discount_type === 'free_credits';
-        }
-        if (selectedCostImpact === 'percent_off') {
-          return offer.discount_type === 'percentage';
-        }
-        return true;
-      });
-    }
+    // Note: Tool-level filters are applied in toolsData useMemo
+    // We only apply search filter here at the offer level
 
     // Sort offers
     filtered.sort((a, b) => {
@@ -412,7 +365,7 @@ export function OffersPageClient({
     });
 
     // Convert to array and format for ToolCard
-    return Array.from(toolMap.values()).map(tool => ({
+    let tools = Array.from(toolMap.values()).map(tool => ({
       name: tool.name,
       description: tool.description,
       categories: Array.from(tool.categories),
@@ -423,8 +376,86 @@ export function OffersPageClient({
       hasGatedOffer: tool.hasGatedOffer,
       requiredCourseForOffer: tool.requiredCourseForOffer,
       offers: tool.offers,
+      courseSlugs: Array.from(tool.courseSlugs),
     }));
-  }, [filteredAndSortedOffers]);
+
+    // Apply tool-first filters
+    if (selectedCategory !== 'all') {
+      tools = tools.filter(tool => tool.categories.includes(selectedCategory));
+    }
+
+    if (hasOffers) {
+      tools = tools.filter(tool => tool.hasOffers);
+    }
+
+    if (hasFreeTier) {
+      tools = tools.filter(tool => {
+        // Check if any offer has free tier (free_credits or extended_trial)
+        return tool.offers.some(offer => 
+          offer.discount_type === 'free_credits' || 
+          offer.discount_type === 'extended_trial'
+        );
+      });
+    }
+
+    if (hasGatedOffers) {
+      tools = tools.filter(tool => tool.hasGatedOffer);
+    }
+
+    if (linkedToMyCourses) {
+      tools = tools.filter(tool => {
+        // Check if tool is linked to any of the user's enrolled courses
+        return tool.courseSlugs.some(slug => enrolledCourseSlugs.includes(slug));
+      });
+    }
+
+    if (recommendedForMe) {
+      tools = tools.filter(tool => {
+        // Check if tool is recommended based on enrolled courses
+        return tool.courseSlugs.some(slug => enrolledCourseSlugs.includes(slug)) ||
+               tool.offers.some(offer => 
+                 offer.is_recommended || 
+                 (offer.recommended_for_courses && 
+                  offer.recommended_for_courses.some(courseSlug => enrolledCourseSlugs.includes(courseSlug)))
+               );
+      });
+    }
+
+    // Apply sorting
+    tools.sort((a, b) => {
+      if (sortBy === 'most_relevant') {
+        // Prioritize recommended tools
+        const aRecommended = recommendedForMe && (
+          a.courseSlugs.some(slug => enrolledCourseSlugs.includes(slug)) ||
+          a.offers.some(offer => offer.is_recommended)
+        );
+        const bRecommended = recommendedForMe && (
+          b.courseSlugs.some(slug => enrolledCourseSlugs.includes(slug)) ||
+          b.offers.some(offer => offer.is_recommended)
+        );
+        if (aRecommended && !bRecommended) return -1;
+        if (!aRecommended && bRecommended) return 1;
+        
+        // Then by number of offers
+        return b.offersCount - a.offersCount;
+      } else if (sortBy === 'highest_value') {
+        // Sort by highest offer value (number of offers as proxy)
+        return b.offersCount - a.offersCount;
+      } else if (sortBy === 'expiring_soon') {
+        // Sort by soonest expiring offer
+        const aExpiration = a.offers
+          .map(o => o.expiration_date ? new Date(o.expiration_date).getTime() : Infinity)
+          .sort((x, y) => x - y)[0] || Infinity;
+        const bExpiration = b.offers
+          .map(o => o.expiration_date ? new Date(o.expiration_date).getTime() : Infinity)
+          .sort((x, y) => x - y)[0] || Infinity;
+        return aExpiration - bExpiration;
+      }
+      return 0;
+    });
+
+    return tools;
+  }, [filteredAndSortedOffers, selectedCategory, hasOffers, hasFreeTier, hasGatedOffers, linkedToMyCourses, recommendedForMe, enrolledCourseSlugs, sortBy]);
 
   // Toggle save offer
   const handleSaveOffer = async (offerId: string) => {
@@ -586,7 +617,7 @@ export function OffersPageClient({
             </svg>
           </div>
           {searchQuery && (
-            <button
+        <button
               onClick={() => setSearchQuery('')}
               className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600"
               aria-label="Clear search"
@@ -604,48 +635,14 @@ export function OffersPageClient({
                   d="M6 18L18 6M6 6l12 12"
                 />
               </svg>
-            </button>
+        </button>
           )}
         </div>
       </div>
 
-      {/* View Toggle */}
-      <div className="mb-6 flex gap-2">
-        <button
-          onClick={() => setViewFilter('all')}
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-            viewFilter === 'all'
-              ? 'bg-brand-light text-white'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-          }`}
-        >
-          All Offers
-        </button>
-        <button
-          onClick={() => setViewFilter('recommended')}
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-            viewFilter === 'recommended'
-              ? 'bg-brand-light text-white'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-          }`}
-        >
-          Recommended for me
-        </button>
-        <button
-          onClick={() => setViewFilter('active_discounts')}
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-            viewFilter === 'active_discounts'
-              ? 'bg-brand-light text-white'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-          }`}
-        >
-          Active discounts
-        </button>
-      </div>
-
-      {/* Filters */}
+      {/* Tool-First Filters */}
       <div className="mb-6 space-y-4">
-        <div className="flex flex-wrap gap-4">
+        <div className="flex flex-wrap gap-4 items-end">
           {/* Category Filter */}
           <div>
             <label className="block text-xs font-medium text-gray-700 mb-1">Category</label>
@@ -658,36 +655,6 @@ export function OffersPageClient({
               {categories.map(cat => (
                 <option key={cat} value={cat}>{categoryLabels[cat] || cat}</option>
               ))}
-            </select>
-          </div>
-
-          {/* Eligibility Filter */}
-          <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">Eligibility</label>
-            <select
-              value={selectedEligibility}
-              onChange={(e) => setSelectedEligibility(e.target.value)}
-              className="px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light"
-            >
-              <option value="all">All</option>
-              <option value="students_only">Students only</option>
-              <option value="new_users_only">New users only</option>
-              <option value="open_to_all">Open to all</option>
-            </select>
-          </div>
-
-          {/* Cost Impact Filter */}
-          <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">Cost Impact</label>
-            <select
-              value={selectedCostImpact}
-              onChange={(e) => setSelectedCostImpact(e.target.value)}
-              className="px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light"
-            >
-              <option value="all">All</option>
-              <option value="free_tier">Free tier</option>
-              <option value="credits">Credits</option>
-              <option value="percent_off">% off</option>
             </select>
           </div>
 
@@ -704,25 +671,61 @@ export function OffersPageClient({
               <option value="expiring_soon">Expiring soon</option>
             </select>
           </div>
+          </div>
 
-          {/* Project Selector (for recommendations) */}
-          {viewFilter === 'recommended' && projects.length > 0 && (
-            <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">Use project</label>
-              <select
-                value={selectedProjectId}
-                onChange={(e) => setSelectedProjectId(e.target.value)}
-                className="px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light"
-              >
-                <option value="all">All projects</option>
-                {projects.map(project => (
-                  <option key={project.id} value={project.id}>{project.title}</option>
-                ))}
-              </select>
+        {/* Checkbox Filters */}
+        <div className="flex flex-wrap gap-4">
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={hasOffers}
+              onChange={(e) => setHasOffers(e.target.checked)}
+              className="w-4 h-4 text-brand-light border-gray-300 rounded focus:ring-brand-light"
+            />
+            <span className="text-sm text-gray-700">Has offers</span>
+          </label>
+
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={hasFreeTier}
+              onChange={(e) => setHasFreeTier(e.target.checked)}
+              className="w-4 h-4 text-brand-light border-gray-300 rounded focus:ring-brand-light"
+            />
+            <span className="text-sm text-gray-700">Has free tier</span>
+          </label>
+
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={hasGatedOffers}
+              onChange={(e) => setHasGatedOffers(e.target.checked)}
+              className="w-4 h-4 text-brand-light border-gray-300 rounded focus:ring-brand-light"
+            />
+            <span className="text-sm text-gray-700">Has gated offers</span>
+          </label>
+
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={linkedToMyCourses}
+              onChange={(e) => setLinkedToMyCourses(e.target.checked)}
+              className="w-4 h-4 text-brand-light border-gray-300 rounded focus:ring-brand-light"
+            />
+            <span className="text-sm text-gray-700">Linked to my active courses</span>
+          </label>
+
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={recommendedForMe}
+              onChange={(e) => setRecommendedForMe(e.target.checked)}
+              className="w-4 h-4 text-brand-light border-gray-300 rounded focus:ring-brand-light"
+            />
+            <span className="text-sm text-gray-700">Recommended for me</span>
+          </label>
             </div>
-          )}
         </div>
-      </div>
 
       {/* Tools Grid */}
       {toolsData.length > 0 ? (
@@ -745,7 +748,7 @@ export function OffersPageClient({
               />
             );
           })}
-        </div>
+      </div>
       ) : (
         <div className="text-center py-12">
           <p className="text-gray-500">No tools found matching your search criteria.</p>

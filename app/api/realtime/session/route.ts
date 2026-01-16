@@ -31,6 +31,30 @@ export async function POST(request: NextRequest) {
     const body = await request.json().catch(() => ({}));
     const enableTurnDetection = body.enableTurnDetection ?? false; // For hands-free mode
 
+    // UAT Mock Mode: Return deterministic session credentials for testing
+    const isMockMode = process.env.UAT_MOCK_AI === '1';
+    if (isMockMode) {
+      const sessionId = `mock_session_${user.id}_${Date.now()}`;
+      const ephemeralToken = Buffer.from(
+        `${sessionId}:${user.id}:${Date.now()}:mock`
+      ).toString('base64');
+      
+      safeLogger.info('Realtime session created (mock mode)', {
+        userId: user.id,
+        sessionId,
+        enableTurnDetection,
+      });
+      
+      return NextResponse.json({
+        client_secret: ephemeralToken,
+        expires_at: new Date(Date.now() + 60 * 60 * 1000).toISOString(), // 1 hour from now
+        session_id: sessionId,
+        model: 'gpt-4o-realtime-preview-2024-12-17',
+        voice: 'alloy',
+        turn_detection: enableTurnDetection,
+      });
+    }
+
     // Get OpenAI API key from environment
     const OPENAI_API_KEY = process.env.OPENAI_API_KEY || process.env.LLM_API_KEY;
     if (!OPENAI_API_KEY) {

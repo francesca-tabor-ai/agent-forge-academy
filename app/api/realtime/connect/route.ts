@@ -14,7 +14,12 @@ import { safeLogger } from '@/lib/utils/redactPII';
  * - Validates session token (if implemented)
  */
 export async function POST(request: NextRequest) {
-  const reqId = `realtime-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+  // Generate requestId for observability
+  // In mock mode, use deterministic request ID for testing
+  const isMockMode = process.env.UAT_MOCK_AI === '1';
+  const reqId = isMockMode 
+    ? 'mock-req-realtime-connect-12345' 
+    : `realtime-${Date.now()}-${Math.random().toString(36).substring(7)}`;
   
   try {
     // Authenticate user
@@ -70,6 +75,31 @@ export async function POST(request: NextRequest) {
     }
 
     const { sdp, session_token } = body;
+
+    // UAT Mock Mode: Return deterministic response for testing
+    if (isMockMode) {
+      // Check if we should simulate unavailable (for testing fallback)
+      const simulateUnavailable = process.env.UAT_MOCK_REALTIME_UNAVAILABLE === '1';
+      
+      if (simulateUnavailable) {
+        safeLogger.info('[RealtimeConnect] Mock mode: Simulating unavailable', { reqId, userId: user.id });
+        return NextResponse.json(
+          { 
+            error: 'Realtime service unavailable',
+            message: 'Realtime API is temporarily unavailable (mock mode)',
+            details: 'This is a mock response for UAT testing',
+          },
+          { status: 503 }
+        );
+      }
+      
+      // Return mock successful connection
+      safeLogger.info('[RealtimeConnect] Mock mode: Returning mock SDP answer', { reqId, userId: user.id });
+      return NextResponse.json({
+        sdp: `v=0\r\no=- ${Date.now()} ${Date.now()} IN IP4 127.0.0.1\r\ns=-\r\nt=0 0\r\na=group:BUNDLE 0\r\na=msid-semantic: WMS mock-stream\r\nm=audio 9 UDP/TLS/RTP/SAVPF 111\r\nc=IN IP4 0.0.0.0\r\na=rtcp:9 IN IP4 0.0.0.0\r\na=ice-ufrag:mock\r\na=ice-pwd:mockpwd123456789012345678901234567890\r\na=fingerprint:sha-256 AA:BB:CC:DD:EE:FF:00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD:EE:FF:00:11:22:33:44:55:66:77:88:99\r\na=setup:actpass\r\na=mid:0\r\na=sendonly\r\na=rtcp-mux\r\na=rtpmap:111 opus/48000/2\r\n`,
+        session_id: session_token || 'mock-session-123',
+      });
+    }
 
     // Validate required fields
     if (!sdp) {

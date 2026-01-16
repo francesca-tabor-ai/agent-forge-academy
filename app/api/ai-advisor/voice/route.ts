@@ -125,6 +125,41 @@ async function generateAudio(text: string): Promise<{ audio: Buffer; format: str
   }
 }
 
+/**
+ * Get mock voice transcript for UAT testing
+ * Returns deterministic transcription text
+ */
+function getMockVoiceTranscript(): string {
+  return "This is a mock voice transcription for UAT testing. In production, this would be the actual transcribed text from the audio input.";
+}
+
+/**
+ * Get mock chat response for UAT testing (reused from chat route)
+ */
+function getMockChatResponse(
+  message: string,
+  context?: VoiceRequest['context'],
+  intent?: string
+): string {
+  const lowerMessage = message.toLowerCase();
+  
+  // Context-aware responses
+  if (context?.course) {
+    return `I can help you with **${context.course.title}**. Based on your question "${message}", here's a helpful response:\n\nThis is a mock response for UAT testing. In production, I would provide detailed course-specific guidance about ${context.course.title}.`;
+  }
+  
+  if (context?.project) {
+    return `I can help you with your project **${context.project.title}**. Based on your question "${message}", here's a helpful response:\n\nThis is a mock response for UAT testing. In production, I would provide detailed project-specific feedback about ${context.project.title}.`;
+  }
+  
+  if (context?.job) {
+    return `I can help you with the job application for **${context.job.title} at ${context.job.company}**. Based on your question "${message}", here's a helpful response:\n\nThis is a mock response for UAT testing. In production, I would provide detailed job application guidance.`;
+  }
+  
+  // Default mock response
+  return `This is a mock AI advisor response for UAT testing. Your message was: "${message}". In production, I would provide a helpful, context-aware response based on your question and current context.`;
+}
+
 // Reuse functions from chat route
 async function loadActiveContext(
   supabase: any,
@@ -452,7 +487,12 @@ async function buildLLMMessages(
 }
 
 export async function POST(request: NextRequest) {
-  const requestId = `voice_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+  // Generate requestId for observability
+  // In mock mode, use deterministic request ID for testing
+  const isMockMode = process.env.UAT_MOCK_AI === '1';
+  const requestId = isMockMode 
+    ? 'mock-req-voice-12345' 
+    : `voice_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
   
   // Check feature flag
   if (!isVoiceAPIEnabled()) {
@@ -475,6 +515,30 @@ export async function POST(request: NextRequest) {
 
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    // UAT Mock Mode: Return deterministic transcription for testing
+    if (isMockMode) {
+      const mockTranscript = getMockVoiceTranscript();
+      const mockResponse = getMockChatResponse(mockTranscript, context, intent);
+      
+      // Generate UUID if not provided
+      let convId = conversationId;
+      if (!convId) {
+        const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+          const r = (Math.random() * 16) | 0;
+          const v = c === 'x' ? r : (r & 0x3) | 0x8;
+          return v.toString(16);
+        });
+        convId = uuid;
+      }
+      
+      return NextResponse.json({
+        transcript: mockTranscript,
+        responseText: mockResponse,
+        conversationId: convId,
+        requestId,
+      });
     }
 
     // Parse FormData

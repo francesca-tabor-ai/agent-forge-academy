@@ -612,9 +612,54 @@ function containsSensitiveInfo(message: string): boolean {
   return sensitivePatterns.some(pattern => pattern.test(message));
 }
 
+/**
+ * Get mock chat response for UAT testing
+ * Returns deterministic responses based on message content and context
+ */
+function getMockChatResponse(
+  message: string,
+  context?: ChatRequest['context'],
+  intent?: string
+): string {
+  const lowerMessage = message.toLowerCase();
+  
+  // Context-aware responses
+  if (context?.course) {
+    return `I can help you with **${context.course.title}**. Based on your question "${message}", here's a helpful response:\n\nThis is a mock response for UAT testing. In production, I would provide detailed course-specific guidance about ${context.course.title}.`;
+  }
+  
+  if (context?.project) {
+    return `I can help you with your project **${context.project.title}**. Based on your question "${message}", here's a helpful response:\n\nThis is a mock response for UAT testing. In production, I would provide detailed project-specific feedback about ${context.project.title}.`;
+  }
+  
+  if (context?.job) {
+    return `I can help you with the job application for **${context.job.title} at ${context.job.company}**. Based on your question "${message}", here's a helpful response:\n\nThis is a mock response for UAT testing. In production, I would provide detailed job application guidance.`;
+  }
+  
+  // Intent-based responses
+  if (intent === 'learning_help' || lowerMessage.includes('explain') || lowerMessage.includes('how') || lowerMessage.includes('what')) {
+    return `This is a mock learning help response for UAT testing. In production, I would provide detailed explanations and learning guidance based on your question: "${message}".`;
+  }
+  
+  if (intent === 'project_review' || lowerMessage.includes('project') || lowerMessage.includes('review')) {
+    return `This is a mock project review response for UAT testing. In production, I would provide detailed project feedback and suggestions based on your question: "${message}".`;
+  }
+  
+  if (intent === 'job_matching' || lowerMessage.includes('job') || lowerMessage.includes('career')) {
+    return `This is a mock job matching response for UAT testing. In production, I would provide detailed job recommendations and career guidance based on your question: "${message}".`;
+  }
+  
+  // Default mock response
+  return `This is a mock AI advisor response for UAT testing. Your message was: "${message}". In production, I would provide a helpful, context-aware response based on your question and current context.`;
+}
+
 export async function POST(request: NextRequest) {
   // Generate requestId for observability
-  const requestId = `req_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+  // In mock mode, use deterministic request ID for testing
+  const isMockMode = process.env.UAT_MOCK_AI === '1';
+  const requestId = isMockMode 
+    ? 'mock-req-chat-12345' 
+    : `req_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
   const startTime = Date.now();
 
   try {
@@ -689,6 +734,66 @@ export async function POST(request: NextRequest) {
         response: `⚠️ **Security Warning:** I noticed you may have shared sensitive information (like passwords or API keys). Please redact any secrets before continuing. I can still help you, but make sure to remove any credentials from your message.\n\n**Next Steps:**\n1. Remove any passwords, API keys, or secrets from your question\n2. Rephrase your question without sensitive data\n3. If you need help with authentication, describe the problem without sharing actual credentials`,
         requestId,
       });
+    }
+
+    // UAT Mock Mode: Return deterministic canned responses for testing
+    if (isMockMode) {
+      const mockResponse = getMockChatResponse(message, context, intent);
+      const stream = request.headers.get('accept')?.includes('text/event-stream') || 
+                     new URL(request.url).searchParams.get('stream') === 'true';
+      
+      if (stream) {
+        // Return streaming mock response
+        return new Response(
+          new ReadableStream({
+            start(controller) {
+              const encoder = new TextEncoder();
+              // Simulate streaming by sending chunks
+              const words = mockResponse.split(' ');
+              let index = 0;
+              
+              const sendChunk = () => {
+                if (index < words.length) {
+                  const chunk = words[index] + (index < words.length - 1 ? ' ' : '');
+                  controller.enqueue(
+                    encoder.encode(`data: ${JSON.stringify({ content: chunk, done: false })}\n\n`)
+                  );
+                  index++;
+                  setTimeout(sendChunk, 50); // Simulate streaming delay
+                } else {
+                  controller.enqueue(
+                    encoder.encode(`data: ${JSON.stringify({ 
+                      content: '', 
+                      done: true, 
+                      conversationId: conversationId || 'mock-conv-123',
+                      requestId 
+                    })}\n\n`)
+                  );
+                  controller.close();
+                }
+              };
+              
+              sendChunk();
+            },
+          }),
+          {
+            headers: {
+              'Content-Type': 'text/event-stream',
+              'Cache-Control': 'no-cache',
+              Connection: 'keep-alive',
+              'X-Request-ID': requestId,
+            },
+          }
+        );
+      } else {
+        // Return non-streaming mock response
+        return NextResponse.json({
+          ok: true,
+          response: mockResponse,
+          conversationId: conversationId || 'mock-conv-123',
+          requestId,
+        });
+      }
     }
 
     // Check if streaming is requested

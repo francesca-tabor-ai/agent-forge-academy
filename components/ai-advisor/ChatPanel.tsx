@@ -148,6 +148,7 @@ export function ChatPanel({ messages, isLoading, chatEndRef, activeContext, onAp
       {messages.map((msg) => (
         <div
           key={msg.id}
+          data-testid={`message-bubble-${msg.role}`}
           className={`flex items-start gap-3 ${
             msg.role === 'user' ? 'flex-row-reverse' : ''
           }`}
@@ -173,6 +174,7 @@ export function ChatPanel({ messages, isLoading, chatEndRef, activeContext, onAp
             {/* Render message content first - always show content if present */}
             {msg.content && msg.content.trim() ? (
               <div
+                data-testid={msg.content.includes('Service unavailable') || msg.content.includes('SERVICE_UNAVAILABLE') ? 'service-unavailable-banner' : undefined}
                 className={`inline-block p-3 rounded-lg ${
                   msg.role === 'user'
                     ? 'bg-blue-600 text-white'

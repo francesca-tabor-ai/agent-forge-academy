@@ -11,6 +11,8 @@ export interface VoiceControlsProps {
   voiceOutputEnabled?: boolean; // Whether voice output is enabled
   onVoiceOutputToggle?: (enabled: boolean) => void; // Toggle voice output
   allowEditBeforeSend?: boolean; // Allow editing transcript before sending
+  studentProfileId?: string | null; // For API calls in mock mode
+  context?: any; // Active context for API calls
 }
 
 type VoiceMode = 'push-to-talk' | 'hands-free';
@@ -125,6 +127,67 @@ export function checkVoiceCapabilities(): {
   };
 }
 
+/**
+ * Check if UAT mock mode is enabled
+ * Mock mode can be enabled via window variable or environment check
+ */
+function isMockModeEnabled(): boolean {
+  if (typeof window === 'undefined') return false;
+  // Check for window variable set by test environment
+  return (window as any).__UAT_MOCK_AI === true || 
+         (window as any).__UAT_MOCK_AI === '1' ||
+         // Check localStorage (set by test setup)
+         localStorage.getItem('UAT_MOCK_AI') === '1';
+}
+
+/**
+ * Create a mock audio blob for testing
+ */
+function createMockAudioBlob(): Blob {
+  // Create a minimal WebM audio blob (empty but valid format)
+  // In real tests, this would be replaced by Playwright's audio simulation
+  const mockAudioData = new Uint8Array([
+    0x1a, 0x45, 0xdf, 0xa3, // EBML header
+    0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1f,
+    0x42, 0x86, 0x81, 0x01, // DocType
+    0x42, 0xf7, 0x81, 0x01, // DocTypeVersion
+    0x42, 0xf2, 0x81, 0x04, // DocTypeReadVersion
+    0x42, 0xf3, 0x81, 0x08, // DocTypeExtension
+    0x42, 0x82, 0x84, 0x77, 0x65, 0x62, 0x6d, // DocType: "webm"
+  ]);
+  return new Blob([mockAudioData], { type: 'audio/webm' });
+}
+
+/**
+ * Send audio to voice API for transcription (mock mode)
+ */
+async function transcribeAudioViaAPI(
+  audioBlob: Blob,
+  studentProfileId: string | null,
+  context?: any
+): Promise<string> {
+  const formData = new FormData();
+  formData.append('audio', audioBlob, 'audio.webm');
+  if (studentProfileId) {
+    formData.append('studentProfileId', studentProfileId);
+  }
+  if (context) {
+    formData.append('context', JSON.stringify(context));
+  }
+
+  const response = await fetch('/api/ai-advisor/voice', {
+    method: 'POST',
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error(`Voice API error: ${response.status}`);
+  }
+
+  const data = await response.json();
+  return data.transcript || '';
+}
+
 export function VoiceControls({
   onTranscript,
   onSpeak,
@@ -134,6 +197,8 @@ export function VoiceControls({
   voiceOutputEnabled = false,
   onVoiceOutputToggle,
   allowEditBeforeSend = true,
+  studentProfileId = null,
+  context,
 }: VoiceControlsProps) {
   const [mode, setMode] = useState<VoiceMode>('push-to-talk');
   const [isListening, setIsListening] = useState(false);
@@ -206,6 +271,13 @@ export function VoiceControls({
 
   // Check microphone permission on mount with error handling
   useEffect(() => {
+    // UAT Mock Mode: Skip microphone permission check
+    const mockMode = isMockModeEnabled();
+    if (mockMode) {
+      setPermissionError(null); // No permission needed in mock mode
+      return;
+    }
+
     const checkMicrophonePermission = async () => {
       // Check if MediaDevices API is available
       if (!isMediaDevicesSupported()) {
@@ -253,6 +325,15 @@ export function VoiceControls({
   // Check browser support on mount with error handling
   useEffect(() => {
     try {
+      // UAT Mock Mode: Bypass browser checks and use API-based transcription
+      const mockMode = isMockModeEnabled();
+      if (mockMode) {
+        setIsSupported(true);
+        // In mock mode, we'll use API-based transcription instead of browser Speech Recognition
+        // No need to initialize Speech Recognition
+        return;
+      }
+
       const capabilities = checkVoiceCapabilities();
       
       // Check secure context first (required for voice)
@@ -280,6 +361,14 @@ export function VoiceControls({
       }
 
       setIsSupported(true);
+
+      // UAT Mock Mode: Skip Speech Recognition initialization
+      const mockMode = isMockModeEnabled();
+      if (mockMode) {
+        // In mock mode, we use API-based transcription, so no Speech Recognition needed
+        recognitionRef.current = { mockMode: true }; // Mark as mock mode
+        return;
+      }
 
       // Initialize Speech Recognition with error handling
       let SpeechRecognition;
@@ -596,8 +685,42 @@ export function VoiceControls({
     }
   }, [mode, disabled, onTranscript, allowEditBeforeSend]);
 
-  const startListening = useCallback(() => {
+  const startListening = useCallback(async () => {
     if (!recognitionRef.current || disabled || isListening) return;
+    
+    // UAT Mock Mode: Use API-based transcription instead of browser Speech Recognition
+    const mockMode = isMockModeEnabled();
+    if (mockMode) {
+      try {
+        setPartialTranscript('');
+        setFinalTranscript('');
+        setError(null);
+        setIsListening(true);
+        setRecognitionState('listening');
+        recordingStartTimeRef.current = Date.now();
+        setRecordingDuration(0);
+        
+        // Start recording duration timer
+        if (recordingIntervalRef.current) {
+          clearInterval(recordingIntervalRef.current);
+        }
+        recordingIntervalRef.current = setInterval(() => {
+          setRecordingDuration(Math.floor((Date.now() - recordingStartTimeRef.current) / 1000));
+        }, 1000);
+        
+        // Show partial transcript simulation
+        setPartialTranscript('Listening...');
+        
+        // In mock mode, we simulate recording but don't actually need to record
+        // The actual transcription will happen when stopListening is called
+        return;
+      } catch (error) {
+        console.error('Error starting mock recording:', error);
+        setError('Failed to start voice recording. Please try again.');
+        setIsListening(false);
+        setRecognitionState('error');
+      }
+    }
     
     // Check if offline
     if (isOffline) {
@@ -682,11 +805,72 @@ export function VoiceControls({
     }
   }, [disabled, isListening, voiceUnavailableReason, isOffline]);
 
-  const stopListening = useCallback(() => {
+  const stopListening = useCallback(async () => {
+    // UAT Mock Mode: Send audio to API for transcription
+    const mockMode = isMockModeEnabled();
+    if (mockMode && isListening && recognitionRef.current?.mockMode) {
+      try {
+        setRecognitionState('processing');
+        setPartialTranscript('');
+        
+        // Create mock audio blob
+        const mockAudioBlob = createMockAudioBlob();
+        
+        // Send to voice API for transcription
+        const transcript = await transcribeAudioViaAPI(mockAudioBlob, studentProfileId, context);
+        
+        if (transcript && transcript.trim()) {
+          const fullText = transcript.trim();
+          setFinalTranscript(fullText);
+          setPartialTranscript('');
+          
+          // If edit mode is enabled, show editable transcript
+          if (allowEditBeforeSend) {
+            setEditableTranscript(fullText);
+            setIsEditingTranscript(true);
+            isEditingTranscriptRef.current = true;
+            setTimeout(() => {
+              try {
+                transcriptInputRef.current?.focus();
+                transcriptInputRef.current?.setSelectionRange(fullText.length, fullText.length);
+              } catch (error) {
+                console.warn('Error focusing transcript input:', error);
+              }
+            }, 100);
+          } else {
+            // Immediately send transcript
+            try {
+              onTranscript(fullText);
+            } catch (error) {
+              console.error('Error in onTranscript callback:', error);
+              setError('Failed to send transcript. Please try typing your message instead.');
+            }
+          }
+        } else {
+          setError('No transcription received. Please try again.');
+        }
+      } catch (error: any) {
+        console.error('Error in mock transcription:', error);
+        setError('Failed to transcribe audio. Please try again or use text input.');
+        setRecognitionState('error');
+      } finally {
+        setIsListening(false);
+        setRecognitionState('idle');
+        
+        // Stop recording timer
+        if (recordingIntervalRef.current) {
+          clearInterval(recordingIntervalRef.current);
+          recordingIntervalRef.current = null;
+        }
+        setRecordingDuration(0);
+      }
+      return;
+    }
+    
     if (recognitionRef.current) {
       try {
-        if (isListening) {
-      recognitionRef.current.stop();
+        if (isListening && !recognitionRef.current.mockMode) {
+          recognitionRef.current.stop();
         }
       } catch (error) {
         console.error('Error stopping recognition:', error);
@@ -708,7 +892,7 @@ export function VoiceControls({
       clearTimeout(silenceTimerRef.current);
       silenceTimerRef.current = null;
     }
-  }, [isListening]);
+  }, [isListening, studentProfileId, context, allowEditBeforeSend, onTranscript]);
 
   const handleSendEditedTranscript = useCallback(() => {
     const textToSend = editableTranscript.trim();
@@ -936,6 +1120,7 @@ export function VoiceControls({
         <div className="flex gap-2">
           <button
             type="button"
+            data-testid="voice-push-to-talk-toggle"
             onClick={() => {
               stopListening();
               setMode('push-to-talk');
@@ -951,6 +1136,7 @@ export function VoiceControls({
           </button>
       <button
         type="button"
+            data-testid="voice-hands-free-toggle"
             onClick={() => {
               stopListening();
               setMode('hands-free');
@@ -972,6 +1158,7 @@ export function VoiceControls({
         {/* Microphone Button with Enhanced Visual State */}
         <button
           type="button"
+          data-testid="microphone-button"
           onMouseDown={() => {
             if (mode === 'push-to-talk') {
               startListening();
@@ -1151,6 +1338,7 @@ export function VoiceControls({
           </div>
           <textarea
             ref={transcriptInputRef}
+            data-testid="transcript-input"
             value={editableTranscript}
             onChange={(e) => setEditableTranscript(e.target.value)}
             onKeyDown={(e) => {
@@ -1174,6 +1362,7 @@ export function VoiceControls({
             <div className="flex gap-2">
               <button
                 type="button"
+                data-testid="transcript-cancel-button"
                 onClick={handleCancelEdit}
                 className="px-3 py-1.5 text-xs bg-white border border-amber-300 text-amber-700 rounded-lg hover:bg-amber-50 transition-colors"
               >
@@ -1181,6 +1370,7 @@ export function VoiceControls({
               </button>
               <button
                 type="button"
+                data-testid="transcript-send-button"
                 onClick={handleSendEditedTranscript}
                 disabled={!editableTranscript.trim()}
                 className="px-3 py-1.5 text-xs bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"

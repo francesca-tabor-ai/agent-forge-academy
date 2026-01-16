@@ -49,6 +49,19 @@ interface RealtimeSession {
  * - Receives synthesized audio and transcripts from OpenAI
  * - Maintains the connection for the lifetime of the component
  */
+/**
+ * Check if UAT mock mode is enabled for Realtime
+ * Mock mode can be enabled via window variable or environment check
+ */
+function isMockRealtimeEnabled(): boolean {
+  if (typeof window === 'undefined') return false;
+  // Check for window variable set by test environment
+  return (window as any).__UAT_MOCK_REALTIME === true || 
+         (window as any).__UAT_MOCK_REALTIME === '1' ||
+         // Check localStorage (set by test setup)
+         localStorage.getItem('UAT_MOCK_REALTIME') === '1';
+}
+
 export function WebRTCRealtime({
   onTranscript,
   onResponse,
@@ -175,7 +188,16 @@ export function WebRTCRealtime({
     console.log('WebRTC failed, triggering fallback to standard voice');
     setHasFailed(true);
     setShowFallbackMessage(true);
-    disconnect();
+    
+    // Disconnect only if not in mock mode (mock mode doesn't have real connections)
+    const mockMode = isMockRealtimeEnabled();
+    if (!mockMode) {
+      disconnect();
+    } else {
+      // In mock mode, just reset connection state
+      setIsConnected(false);
+      setIsConnecting(false);
+    }
     
     // Call fallback callback if provided
     if (onFallback) {
@@ -514,6 +536,84 @@ export function WebRTCRealtime({
   ]);
 
   /**
+   * Mock connection for UAT testing
+   * Calls /api/realtime/connect and simulates connection states
+   */
+  const connectMock = useCallback(async () => {
+    if (disabled || isConnecting || isConnected) return;
+
+    try {
+      setIsConnecting(true);
+      setError(null);
+      setHasFailed(false);
+      setShowFallbackMessage(false);
+
+      // Call /api/realtime/connect with mock SDP offer
+      const mockSdpOffer = `v=0\r\no=- ${Date.now()} ${Date.now()} IN IP4 127.0.0.1\r\ns=-\r\nt=0 0\r\nm=audio 9 UDP/TLS/RTP/SAVPF 111\r\na=rtpmap:111 opus/48000/2\r\n`;
+
+      const response = await fetch('/api/realtime/connect', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          sdp: mockSdpOffer,
+          session_token: sessionRef.current?.client_secret || 'mock-token',
+        }),
+      });
+
+      if (!response.ok) {
+        // Simulate failure - trigger fallback
+        const errorData = await response.json().catch(() => ({}));
+        const errorMessage = errorData.message || errorData.error || 'Connection failed';
+        
+        setError(errorMessage);
+        setHasFailed(true);
+        setIsConnecting(false);
+        
+        // Trigger fallback
+        triggerFallback();
+        
+        if (onError) {
+          onError(errorMessage);
+        }
+        return;
+      }
+
+      // Success - simulate connected state
+      const data = await response.json();
+      
+      // Simulate connection delay
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      setIsConnected(true);
+      setIsConnecting(false);
+      setError(null);
+      setHasFailed(false);
+      
+      // Enable mic for hands-free mode
+      if (voiceMode === 'hands-free') {
+        setIsMuted(false);
+      }
+      
+      console.log('[WebRTC Mock] Connected successfully');
+    } catch (error: any) {
+      console.error('[WebRTC Mock] Connection error:', error);
+      const errorMessage = error.message || 'Connection failed';
+      setError(errorMessage);
+      setHasFailed(true);
+      setIsConnecting(false);
+      
+      // Trigger fallback
+      triggerFallback();
+      
+      if (onError) {
+        onError(errorMessage);
+      }
+    }
+  }, [disabled, isConnecting, isConnected, voiceMode, onError, triggerFallback]);
+
+  /**
    * Establish WebRTC connection to OpenAI Realtime API
    * 
    * Flow:
@@ -525,6 +625,12 @@ export function WebRTCRealtime({
    */
   const connect = useCallback(async () => {
     if (disabled || isConnecting || isConnected) return;
+
+    // UAT Mock Mode: Use mock connection instead of real WebRTC
+    const mockMode = isMockRealtimeEnabled();
+    if (mockMode) {
+      return connectMock();
+    }
 
     try {
       setIsConnecting(true);
@@ -944,7 +1050,11 @@ export function WebRTCRealtime({
     <div className="space-y-3">
       {/* Fallback Message */}
       {showFallbackMessage && (
-        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+        <div 
+          className="bg-yellow-50 border border-yellow-200 rounded-lg p-3" 
+          data-testid="fallback-banner"
+          data-testid-fallback-triggered="true"
+        >
           <div className="flex items-start gap-2">
             <div className="text-yellow-600 text-sm font-medium">
               ⚠️ Realtime unavailable, switching to standard voice
@@ -962,8 +1072,9 @@ export function WebRTCRealtime({
       )}
 
       {/* Connection Status */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2" data-testid="webrtc-connection-status">
         <div
+          data-testid={`webrtc-status-indicator-${isConnected ? 'connected' : isConnecting ? 'connecting' : hasFailed ? 'failed' : 'disconnected'}`}
           className={`h-3 w-3 rounded-full ${
             isConnected
               ? 'bg-green-500 animate-pulse'
@@ -974,7 +1085,10 @@ export function WebRTCRealtime({
               : 'bg-gray-400'
           }`}
         />
-        <span className="text-sm text-gray-600">
+        <span 
+          data-testid="webrtc-status-text"
+          className="text-sm text-gray-600"
+        >
           {isConnected
             ? 'Connected'
             : isConnecting
@@ -987,6 +1101,7 @@ export function WebRTCRealtime({
         {hasFailed && !isConnecting && (
           <button
             type="button"
+            data-testid="reconnect-button"
             onClick={reconnect}
             className="ml-2 px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
           >
@@ -1007,6 +1122,7 @@ export function WebRTCRealtime({
         <label className="text-xs text-gray-600">Mode:</label>
         <button
           type="button"
+          data-testid="webrtc-push-to-talk-toggle"
           onClick={() => {
             setVoiceMode('push-to-talk');
             // Disable mic when switching to push-to-talk
@@ -1028,6 +1144,7 @@ export function WebRTCRealtime({
         </button>
         <button
           type="button"
+          data-testid="webrtc-hands-free-toggle"
           onClick={() => {
             setVoiceMode('hands-free');
             // Enable mic when switching to hands-free (if connected)
@@ -1055,6 +1172,7 @@ export function WebRTCRealtime({
             {/* Push-to-Talk: Hold to speak button */}
             <button
               type="button"
+              data-testid="webrtc-microphone-button"
               onMouseDown={handleHoldMic}
               onMouseUp={handleReleaseMic}
               onMouseLeave={handleReleaseMic} // Release if mouse leaves button
@@ -1074,6 +1192,7 @@ export function WebRTCRealtime({
           <>
             <button
               type="button"
+              data-testid="webrtc-connect-button"
               onClick={isConnected ? disconnect : connect}
               disabled={disabled || isConnecting}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
