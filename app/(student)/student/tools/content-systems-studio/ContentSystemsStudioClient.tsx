@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useContentSystemsStudio } from '@/lib/tools/content-systems-studio/useContentSystemsStudio';
+import { ContentEditor } from '@/components/tools/content-systems-studio/ContentEditor';
 
 type TabId = 'editor' | 'rules' | 'workflow' | 'variations' | 'dashboard';
 
@@ -104,29 +105,23 @@ export function ContentSystemsStudioClient() {
       </div>
 
       {/* Tab Content Panel */}
-      <div className="bg-white border border-gray-200 rounded-lg p-6">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">
-          {currentTab.title}
-        </h2>
-        <ul className="space-y-2">
-          {currentTab.description.map((item, index) => (
-            <li key={index} className="text-gray-600 flex items-start">
-              <span className="text-blue-500 mr-2">•</span>
-              <span>{item}</span>
-            </li>
-          ))}
-        </ul>
-        
-        {/* Debug info - showing selected item when editor tab is active */}
-        {activeTab === 'editor' && studio.selectedItem && (
-          <div className="mt-6 pt-6 border-t border-gray-200">
-            <p className="text-sm font-medium text-gray-700 mb-2">Selected Item:</p>
-            <p className="text-sm text-gray-600">
-              {studio.selectedItem.id} - {studio.selectedItem.schemaId} ({studio.selectedItem.status})
-            </p>
-          </div>
-        )}
-      </div>
+      {activeTab === 'editor' ? (
+        <ContentEditor studio={studio} currentRole="student" />
+      ) : (
+        <div className="bg-white border border-gray-200 rounded-lg p-6">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">
+            {currentTab.title}
+          </h2>
+          <ul className="space-y-2">
+            {currentTab.description.map((item, index) => (
+              <li key={index} className="text-gray-600 flex items-start">
+                <span className="text-blue-500 mr-2">•</span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }

@@ -55,3 +55,9 @@ export {
   useContentSystemsStudio,
   type UseContentSystemsStudioReturn,
 } from './useContentSystemsStudio';
+
+// Validation
+export {
+  validateItem,
+  isValidItem,
+} from './validateItem';
