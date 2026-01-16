@@ -104,7 +104,7 @@ export default async function CoursesPage() {
       // Prioritize static metadata title (course-metadata.ts) over dynamic metadata title
       // to ensure we show the course name, not the first lesson title
       // Ensure title is always a string with hard fallback
-      title: staticMetadata.title || dynamicMetadata?.metadata?.title || course.title || course.slug.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase()),
+      title: staticMetadata.title || dynamicMetadata?.metadata?.title || course.title || course.slug.replace(/-/g, " ").replace(/\b\w/g, (l: string) => l.toUpperCase()),
       // Ensure category is always a string with hard fallback
       category: dynamicMetadata?.metadata?.category || staticMetadata.category || course.category || "Uncategorized",
       imageUrl: dynamicMetadata?.metadata?.imageUrl || staticMetadata.imageUrl,
@@ -112,7 +112,7 @@ export default async function CoursesPage() {
       // Create CourseMetadata from dynamic metadata for courses without static metadata
       slug: course.slug,
       // Ensure title is always a string with hard fallback
-      title: dynamicMetadata.metadata.title || course.title || course.slug.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase()),
+      title: dynamicMetadata.metadata.title || course.title || course.slug.replace(/-/g, " ").replace(/\b\w/g, (l: string) => l.toUpperCase()),
       // Ensure category is always a string with hard fallback
       category: dynamicMetadata.metadata.category || course.category || "Uncategorized",
       outcome: (dynamicMetadata.metadata as any)?.outcome || dynamicMetadata.metadata.description || '',
@@ -157,14 +157,14 @@ export default async function CoursesPage() {
         // Prioritize static metadata title (course-metadata.ts) over dynamic metadata title
         // to ensure we show the course name, not the first lesson title
         // Ensure title is always a string with hard fallback
-        title: staticMetadata.title || dynamicMetadata?.metadata?.title || slug.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase()),
+        title: staticMetadata.title || dynamicMetadata?.metadata?.title || slug.replace(/-/g, " ").replace(/\b\w/g, (l: string) => l.toUpperCase()),
         // Ensure category is always a string with hard fallback
         category: dynamicMetadata?.metadata?.category || staticMetadata.category || "Uncategorized",
         imageUrl: dynamicMetadata?.metadata?.imageUrl || staticMetadata.imageUrl,
       } : (dynamicMetadata?.metadata ? {
         slug,
         // Ensure title is always a string with hard fallback
-        title: dynamicMetadata.metadata.title || slug.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase()),
+        title: dynamicMetadata.metadata.title || slug.replace(/-/g, " ").replace(/\b\w/g, (l: string) => l.toUpperCase()),
         // Ensure category is always a string with hard fallback
         category: dynamicMetadata.metadata.category || "Uncategorized",
         outcome: (dynamicMetadata.metadata as any)?.outcome || dynamicMetadata.metadata.description || '',
@@ -180,7 +180,7 @@ export default async function CoursesPage() {
         slug,
         // Prioritize static metadata title (course-metadata.ts) over dynamic metadata title
         // to ensure we show the course name, not the first lesson title
-        title: enhancedMetadata?.title || dynamicMetadata?.metadata?.title || slug.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()),
+        title: enhancedMetadata?.title || dynamicMetadata?.metadata?.title || slug.replace(/-/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()),
         description: dynamicMetadata?.metadata?.description || enhancedMetadata?.outcome || null,
         thumbnail_url: dynamicMetadata?.metadata?.thumbnail_url || null,
         imageUrl: dynamicMetadata?.metadata?.imageUrl || enhancedMetadata?.imageUrl,
