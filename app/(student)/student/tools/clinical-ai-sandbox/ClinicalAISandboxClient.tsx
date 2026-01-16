@@ -6,6 +6,7 @@ import {
   ClinicalSandboxProvider,
   useClinicalSandbox,
 } from '@/lib/tools/clinical-ai-sandbox';
+import { getModeCopy } from '@/lib/tools/clinical-ai-sandbox/modeCopy';
 import { AgentBoundaryExplorer } from '@/components/tools/clinical-ai-sandbox/AgentBoundaryExplorer';
 import { RAGConsole } from '@/components/tools/clinical-ai-sandbox/RAGConsole';
 import { FailureModeViewer } from '@/components/tools/clinical-ai-sandbox/FailureModeViewer';
@@ -13,8 +14,9 @@ import { GovernancePanel } from '@/components/tools/clinical-ai-sandbox/Governan
 import { VoiceInteractionDemo } from '@/components/tools/clinical-ai-sandbox/VoiceInteractionDemo';
 
 function ClinicalAISandboxContent() {
-  const { activeModule, setActiveModule } = useClinicalSandbox();
+  const { activeModule, setActiveModule, viewingMode, setViewingMode } = useClinicalSandbox();
   const currentModule = getModuleById(activeModule);
+  const modeCopy = getModeCopy(viewingMode);
 
   if (!currentModule) {
     return null;
@@ -22,9 +24,87 @@ function ClinicalAISandboxContent() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">Clinical AI Sandbox</h1>
+      {/* Header with Mode Toggle */}
+      <div className="flex items-start justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">{modeCopy.header.title}</h1>
+          <p className="mt-1 text-sm text-gray-600">{modeCopy.header.subtitle}</p>
+        </div>
+        <div className="flex items-center gap-3">
+          {/* Viewing Mode Toggle */}
+          <div className="flex items-center gap-2 bg-gray-100 rounded-lg p-1">
+            <button
+              onClick={() => setViewingMode('regulator')}
+              className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
+                viewingMode === 'regulator'
+                  ? 'bg-white text-gray-900 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              Regulator Mode
+            </button>
+            <button
+              onClick={() => setViewingMode('hiring-panel')}
+              className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
+                viewingMode === 'hiring-panel'
+                  ? 'bg-white text-gray-900 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              Hiring Panel Mode
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mode Emphasis Indicators */}
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <div className="flex items-center gap-4 flex-wrap">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+            <span className="text-sm font-medium text-blue-900">{modeCopy.emphasis.primary}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+            <span className="text-sm text-blue-800">{modeCopy.emphasis.secondary}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-blue-300 rounded-full"></div>
+            <span className="text-sm text-blue-700">{modeCopy.emphasis.tertiary}</span>
+          </div>
+        </div>
+        <p className="mt-2 text-sm text-blue-800">{modeCopy.description}</p>
+      </div>
+
+      {/* Shareable Demo Link Banner */}
+      <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <svg
+              className="h-5 w-5 text-green-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
+              />
+            </svg>
+            <span className="text-sm font-medium text-green-900">Shareable Demo Link</span>
+          </div>
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText(window.location.href);
+              // Could show a toast notification here
+            }}
+            className="px-3 py-1.5 bg-green-600 text-white rounded text-sm font-medium hover:bg-green-700 transition-colors"
+          >
+            Copy Link
+          </button>
+        </div>
       </div>
 
       {/* Persistent Disclaimer Banner */}

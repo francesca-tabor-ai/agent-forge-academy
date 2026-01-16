@@ -12,6 +12,7 @@ import type {
   BoundaryAction,
   EscalationPath,
   AuditLogEntry,
+  ViewingMode,
 } from './types';
 
 /**
@@ -102,6 +103,19 @@ export function useClinicalSandbox() {
     [dispatch]
   );
 
+  /**
+   * Set viewing mode (regulator or hiring-panel)
+   */
+  const setViewingMode = useCallback(
+    (mode: ViewingMode) => {
+      dispatch({
+        type: 'SET_VIEWING_MODE',
+        payload: mode,
+      });
+    },
+    [dispatch]
+  );
+
   return {
     // State
     state,
@@ -110,6 +124,7 @@ export function useClinicalSandbox() {
     boundarySelection: state.boundarySelection,
     activeDocset: state.activeDocset,
     voiceMode: state.voiceMode,
+    viewingMode: state.viewingMode,
 
     // Actions
     addAuditLogEntry,
@@ -117,5 +132,6 @@ export function useClinicalSandbox() {
     setBoundarySelection,
     setActiveDocset,
     setVoiceMode,
+    setViewingMode,
   };
 }

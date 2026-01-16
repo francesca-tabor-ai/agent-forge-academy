@@ -13,3 +13,4 @@ export * from './boundaryEngine';
 export * from './docs';
 export * from './ragEngine';
 export * from './failurePrompts';
+export * from './modeCopy';

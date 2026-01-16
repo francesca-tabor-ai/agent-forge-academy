@@ -9,6 +9,7 @@ import type {
   BoundaryAction,
   EscalationPath,
   AuditLogEntry,
+  ViewingMode,
 } from './types';
 import { getDefaultModule } from './registry';
 
@@ -21,6 +22,7 @@ export interface ClinicalSandboxState {
   boundarySelection: BoundaryAction | null;
   activeDocset: string | null;
   voiceMode: boolean;
+  viewingMode: ViewingMode;
 }
 
 /**
@@ -32,6 +34,7 @@ export const initialState: ClinicalSandboxState = {
   boundarySelection: null,
   activeDocset: null,
   voiceMode: false,
+  viewingMode: 'regulator', // Default to regulator mode
 };
 
 /**
@@ -57,6 +60,10 @@ export type ClinicalSandboxAction =
   | {
       type: 'SET_VOICE_MODE';
       payload: boolean;
+    }
+  | {
+      type: 'SET_VIEWING_MODE';
+      payload: ViewingMode;
     };
 
 /**
@@ -103,6 +110,13 @@ export function clinicalSandboxReducer(
       return {
         ...state,
         voiceMode: action.payload,
+      };
+    }
+
+    case 'SET_VIEWING_MODE': {
+      return {
+        ...state,
+        viewingMode: action.payload,
       };
     }
 

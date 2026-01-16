@@ -67,3 +67,8 @@ export interface DemoPrompt {
   prompt: string;
   expected_behavior: string;
 }
+
+/**
+ * Viewing mode for Clinical AI Sandbox
+ */
+export type ViewingMode = 'regulator' | 'hiring-panel';
