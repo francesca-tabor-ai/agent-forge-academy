@@ -8,3 +8,4 @@ export * from './types';
 export * from './defaults';
 export * from './node-relationships';
 export * from './simEngine';
+export * from './architectures';

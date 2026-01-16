@@ -241,7 +241,6 @@ export default async function ToolDetailPage({ params }: { params: Promise<{ slu
             </div>
           </div>
         </div>
-        </div>
 
       {/* Courses Section */}
       {courses.length > 0 && (

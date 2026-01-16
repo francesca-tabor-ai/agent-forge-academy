@@ -290,6 +290,76 @@ export function GTMControlTowerClient() {
     return allFailures;
   }, [state.activeFailures]);
 
+  // Save tool run to database (graceful fallback on failure)
+  const saveToolRun = useCallback(
+    async (
+      event: GTMEvent,
+      settings: SimulationSettings,
+      result: SimulationResult
+    ) => {
+      try {
+        // Calculate metrics snapshot
+        const metricsSnapshot = {
+          totalActions: result.actions.length,
+          totalFailures: result.failures.length,
+          failedNodes: result.nodeStatusUpdates.filter((u) => u.status === 'failed').length,
+          totalRecords: result.records.leads.size + result.records.accounts.size,
+          silentDrops: result.failures.filter((f) => f.type === 'silent_drop').length,
+        };
+
+        const response = await fetch('/api/tools/runs', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            tool_id: 'gtm-control-tower',
+            inputs: {
+              event: {
+                id: event.id,
+                type: event.type,
+                timestamp: event.timestamp.toISOString(),
+                sourceNode: event.sourceNode,
+                priority: event.priority,
+              },
+              settings: {
+                nodes: settings.nodes.map((n) => ({
+                  node: n.node,
+                  baseLatency: n.baseLatency,
+                  errorRate: n.errorRate,
+                  enabled: n.enabled,
+                })),
+                seed: settings.seed,
+              },
+            },
+            outputs: {
+              actions: result.actions.map((a) => ({
+                type: a.type,
+                node: a.node,
+                timestamp: a.timestamp.toISOString(),
+              })),
+              failures: result.failures.map((f) => ({
+                type: f.type,
+                node: f.node,
+                severity: f.severity,
+                message: f.message,
+              })),
+              metrics: metricsSnapshot,
+            },
+          }),
+        });
+
+        if (!response.ok) {
+          console.warn('Failed to save tool run:', await response.text());
+        }
+      } catch (error) {
+        // Graceful fallback - don't block UI if persistence fails
+        console.warn('Error saving tool run (non-blocking):', error);
+      }
+    },
+    []
+  );
+
   // Handle event simulation
   const handleEventAdded = useCallback(
     async (simulatedEvent: SimulatedEvent) => {
@@ -352,6 +422,14 @@ export function GTMControlTowerClient() {
             scaled: scaledResult,
           },
         });
+
+        // Save runs (non-blocking, graceful fallback)
+        await Promise.all([
+          saveToolRun(gtmEvent, earlyStageSettings, earlyStageResult),
+          saveToolRun(gtmEvent, scaledSettings, scaledResult),
+        ]).catch(() => {
+          // Already handled in saveToolRun, just prevent unhandled rejection
+        });
       } else {
         // Normal mode - single simulation
         const adjustedConfigs = applyTradeoffSettings(DEFAULT_NODE_CONFIGS, state.tradeoffSettings);
@@ -366,9 +444,14 @@ export function GTMControlTowerClient() {
 
         // Update state from simulation result
         dispatch({ type: 'UPDATE_FROM_SIMULATION', payload: result });
+
+        // Save run (non-blocking, graceful fallback)
+        await saveToolRun(gtmEvent, settings, result).catch(() => {
+          // Already handled in saveToolRun, just prevent unhandled rejection
+        });
       }
     },
-    [state.tradeoffSettings, state.refactorMode]
+    [state.tradeoffSettings, state.refactorMode, saveToolRun]
   );
 
   return (
