@@ -5,6 +5,8 @@ import { loadAllLessons } from '@/lib/lessons';
 import { getCourseCover } from '@/lib/courseCovers';
 import { extractCourseMetadata } from '@/lib/course-sync/extract-metadata';
 import { courseMetadata } from '@/lib/course-metadata';
+import { hasCourseAccess, getSegmentsForCourse } from '@/lib/utils/course-access';
+import { CoursePaywall } from '@/components/courses/CoursePaywall';
 
 interface CoursePageProps {
   params: Promise<{ courseSlug: string }>;
@@ -21,6 +23,27 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
   }
 
   const { courseSlug } = await params;
+
+  // Check course access
+  const accessResult = await hasCourseAccess(user.id, courseSlug);
+  
+  if (!accessResult.hasAccess) {
+    // Get segments that include this course for paywall
+    const segments = await getSegmentsForCourse(courseSlug);
+    
+    // Get course metadata for display
+    const dynamicMetadata = extractCourseMetadata(courseSlug);
+    const metadata = dynamicMetadata?.metadata || courseMetadata[courseSlug];
+    const courseTitle = metadata?.title || courseSlug;
+    
+    return (
+      <CoursePaywall 
+        courseTitle={courseTitle}
+        courseSlug={courseSlug}
+        segments={segments}
+      />
+    );
+  }
 
   // Get course from database
   const { data: course, error } = await supabase

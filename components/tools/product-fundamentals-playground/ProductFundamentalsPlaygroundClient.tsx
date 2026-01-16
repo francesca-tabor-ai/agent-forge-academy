@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { usePlayground } from '@/lib/tools/product-fundamentals-playground/usePlayground';
+import { ScenarioStep } from './steps/ScenarioStep';
 
 type Step = 
   | 'scenario'
@@ -65,36 +66,8 @@ export function ProductFundamentalsPlaygroundClient() {
         </div>
         
         <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 min-h-[400px]">
-          <p className="text-gray-500 text-sm mb-4">
-            Placeholder content for {step?.label}. This section will contain the actual tool interface.
-          </p>
-          
-          {/* Debug: Show state info */}
-          <div className="mt-4 p-3 bg-white border border-gray-300 rounded text-xs text-gray-600">
-            <strong>State Debug:</strong> Audit log entries: {state.auditLog.length}
-            {state.scenario && ` | Scenario: ${state.scenario.title}`}
-            {state.research && ` | Research: ${state.research.sourceType}`}
-            {state.personas.length > 0 && ` | Personas: ${state.personas.length}`}
-            {state.problems.length > 0 && ` | Problems: ${state.problems.length}`}
-            {state.journey.length > 0 && ` | Journey stages: ${state.journey.length}`}
-            {state.roadmap.length > 0 && ` | Roadmap items: ${state.roadmap.length}`}
-            {state.stories.length > 0 && ` | Stories: ${state.stories.length}`}
-            {state.bugs.length > 0 && ` | Bugs: ${state.bugs.length}`}
-          </div>
-          
           {currentStep === 'scenario' && (
-            <div className="space-y-4">
-              <p className="text-gray-700">
-                Define your product scenario here. What problem are you solving? Who is your target audience?
-              </p>
-              {state.scenario && (
-                <div className="mt-4 p-4 bg-white border border-gray-300 rounded">
-                  <h3 className="font-semibold text-gray-900 mb-2">Current Scenario:</h3>
-                  <p className="text-sm text-gray-700"><strong>Title:</strong> {state.scenario.title}</p>
-                  <p className="text-sm text-gray-700"><strong>Target User:</strong> {state.scenario.targetUser}</p>
-                </div>
-              )}
-            </div>
+            <ScenarioStep state={state} dispatch={dispatch} />
           )}
           
           {currentStep === 'research' && (

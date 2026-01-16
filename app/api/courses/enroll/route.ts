@@ -1,5 +1,6 @@
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
+import { hasCourseAccess, getSegmentsForCourse } from '@/lib/utils/course-access';
 
 export async function POST(request: NextRequest) {
   try {
@@ -62,22 +63,33 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Course is not available for enrollment' }, { status: 403 });
     }
 
-    // Check subscription access using the database function
-    const { data: hasAccess, error: accessError } = await supabase
-      .rpc('has_course_access', {
-        p_user_id: user.id,
-        p_course_id: courseId,
-      });
+    // Get course slug for access check
+    const { data: courseForSlug } = await supabase
+      .from('courses')
+      .select('slug')
+      .eq('id', courseId)
+      .single();
 
-    if (accessError) {
-      console.error('Error checking course access:', accessError);
-      return NextResponse.json(
-        { error: 'Failed to verify course access' },
-        { status: 500 }
-      );
+    if (!courseForSlug?.slug) {
+      return NextResponse.json({ error: 'Course not found' }, { status: 404 });
     }
 
-    if (!hasAccess) {
+    // Check course access using new access function
+    const accessResult = await hasCourseAccess(user.id, courseForSlug.slug);
+
+    if (!accessResult.hasAccess) {
+      // Get segments for paywall
+      const segments = await getSegmentsForCourse(courseForSlug.slug);
+      
+      return NextResponse.json(
+        { 
+          error: 'Subscription required to enroll in this course',
+          paywall: true,
+          segments: segments,
+        },
+        { status: 403 }
+      );
+    }
       return NextResponse.json(
         { 
           error: 'Course access denied. Please upgrade your subscription to access this course.',

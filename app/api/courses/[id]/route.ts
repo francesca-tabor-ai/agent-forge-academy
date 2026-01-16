@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { guardCourseAccessViaDB } from '@/lib/middleware/course-access-guard';
+import { hasCourseAccess, getSegmentsForCourse } from '@/lib/utils/course-access';
 
 /**
  * GET /api/courses/:courseId
@@ -43,7 +44,23 @@ export async function GET(
 
     // If access is denied, return the guard's response with error details
     if (!guardResult.allowed) {
+      // Get course slug for segment lookup
+      const { data: courseForSlug } = await supabase
+        .from('courses')
+        .select('slug')
+        .eq('id', params.id)
+        .single();
+      
       const responseBody: any = { error: guardResult.error };
+      
+      // Add segment information for paywall if course slug is available
+      if (courseForSlug?.slug) {
+        const segments = await getSegmentsForCourse(courseForSlug.slug);
+        if (segments.length > 0) {
+          responseBody.segments = segments;
+          responseBody.paywall = true;
+        }
+      }
       
       // Add action required if provided
       if (guardResult.actionRequired) {
