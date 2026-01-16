@@ -26,7 +26,12 @@ export function VoiceInteractionDemo() {
   // Check for Web Speech API support
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      // Type-safe check for Speech Recognition API
+      const win = window as Window & {
+        SpeechRecognition?: { new (): SpeechRecognition };
+        webkitSpeechRecognition?: { new (): SpeechRecognition };
+      };
+      const SpeechRecognition = win.SpeechRecognition || win.webkitSpeechRecognition;
       const speechSynthesis = window.speechSynthesis;
       
       setSpeechSupported(!!SpeechRecognition);
@@ -37,7 +42,11 @@ export function VoiceInteractionDemo() {
   // Initialize speech recognition if available
   useEffect(() => {
     if (speechSupported && voiceMode) {
-      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      const win = window as Window & {
+        SpeechRecognition?: { new (): SpeechRecognition };
+        webkitSpeechRecognition?: { new (): SpeechRecognition };
+      };
+      const SpeechRecognition = win.SpeechRecognition || win.webkitSpeechRecognition;
       if (SpeechRecognition) {
         const recognition = new SpeechRecognition();
         recognition.continuous = false;
