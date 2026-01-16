@@ -5,6 +5,10 @@ import { loadLessonBySlug, getAllLessonSlugs, getLessonNavigation } from '@/lib/
 import LessonContent from '@/components/lessons/LessonContent';
 import { LessonCompletionButton } from '@/components/lessons/LessonCompletionButton';
 import { NextLessonNavigation } from '@/components/lessons/NextLessonNavigation';
+import { hasCourseAccess, getSegmentsForCourse } from '@/lib/utils/course-access';
+import { CoursePaywall } from '@/components/courses/CoursePaywall';
+import { extractCourseMetadata } from '@/lib/course-sync/extract-metadata';
+import { courseMetadata } from '@/lib/course-metadata';
 
 interface LessonPageProps {
   params: Promise<{ slug: string }>;
@@ -30,6 +34,30 @@ export default async function LessonPage({ params, searchParams }: LessonPagePro
     notFound();
   }
 
+  // Check course access if lesson is part of a course
+  const effectiveCourseSlug = courseSlug || lesson.courseSlug;
+  if (effectiveCourseSlug) {
+    const accessResult = await hasCourseAccess(user.id, effectiveCourseSlug);
+    
+    if (!accessResult.hasAccess) {
+      // Get segments that include this course for paywall
+      const segments = await getSegmentsForCourse(effectiveCourseSlug);
+      
+      // Get course metadata for display
+      const dynamicMetadata = extractCourseMetadata(effectiveCourseSlug);
+      const metadata = dynamicMetadata?.metadata || courseMetadata[effectiveCourseSlug];
+      const courseTitle = metadata?.title || effectiveCourseSlug;
+      
+      return (
+        <CoursePaywall 
+          courseTitle={courseTitle}
+          courseSlug={effectiveCourseSlug}
+          segments={segments}
+        />
+      );
+    }
+  }
+
   // Get course info if courseSlug is provided
   let courseId: string | null = null;
   if (courseSlug) {
@@ -42,7 +70,6 @@ export default async function LessonPage({ params, searchParams }: LessonPagePro
   }
 
   // Get navigation info for next lesson
-  const effectiveCourseSlug = courseSlug || lesson.courseSlug;
   const navigation = getLessonNavigation(slug, effectiveCourseSlug);
 
   return (

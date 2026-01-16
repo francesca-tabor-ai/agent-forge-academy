@@ -41,15 +41,13 @@ async function hasSegmentSubscriptionAccess(
 ): Promise<{ hasAccess: boolean; segmentType?: SegmentType; segmentKey?: string; segmentDisplayName?: string }> {
   const supabase = await createUserSupabaseClient();
 
-  // Get user's active segment subscriptions
-  // Note: We check both 'subscriptions' (new table) and 'segment_subscriptions' (legacy table)
+  // Get user's active segment subscriptions from segment_subscriptions table
   const { data: subscriptions } = await supabase
-    .from('subscriptions')
+    .from('segment_subscriptions')
     .select('segment_type, segment_key, status, current_period_end')
     .eq('user_id', userId)
     .eq('status', 'active')
-    .gt('current_period_end', new Date().toISOString())
-    .not('segment_type', 'is', null); // Only get segment subscriptions (not global tier subscriptions)
+    .gt('current_period_end', new Date().toISOString());
 
   if (!subscriptions || subscriptions.length === 0) {
     return { hasAccess: false };

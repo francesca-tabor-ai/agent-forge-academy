@@ -1,14 +1,11 @@
 /**
  * Segment subscription utilities
- * Maps segments to Stripe product/price IDs
- * 
- * Note: This is a placeholder implementation.
- * Replace with actual Stripe product/price IDs from STRIPE_SEGMENT_PRODUCTS.md
- * after creating products in Stripe Dashboard.
+ * Maps segments to Stripe product/price IDs using content/subscriptions.md
  */
 
 import type { Segment, SegmentType } from '@/lib/types/segment';
 import { getSegmentKey } from '@/lib/types/segment';
+import { getSubscriptionMetadata } from './subscription-metadata';
 
 export interface SegmentSubscriptionConfig {
   productId: string;
@@ -17,63 +14,72 @@ export interface SegmentSubscriptionConfig {
   monthlyPrice: number; // in pence/cents
   annualPrice: number; // in pence/cents
   marketingCopy: string;
+  displayPriceMonthly: string; // e.g., "£49/mo"
+  displayPriceAnnual: string; // e.g., "£490/yr"
+  currency: string;
+  marketingBullets: string[];
 }
 
 /**
- * Get subscription config for a segment
- * 
- * TODO: Replace placeholder IDs with actual Stripe product/price IDs
- * from STRIPE_SEGMENT_PRODUCTS.md after creating products in Stripe Dashboard
+ * Parse display price string (e.g., "£49/mo") to pence
+ */
+function parsePriceToPence(priceStr: string): number {
+  // Remove currency symbols and extract number
+  const match = priceStr.match(/[\d,]+\.?\d*/);
+  if (!match) return 0;
+  
+  const numStr = match[0].replace(/,/g, '');
+  const num = parseFloat(numStr);
+  
+  // If it's monthly, multiply by 12 for annual comparison
+  // But we want the actual price, so just convert to pence
+  return Math.round(num * 100);
+}
+
+/**
+ * Get subscription config for a segment from content/subscriptions.md
  */
 export function getSegmentSubscriptionConfig(segment: Segment): SegmentSubscriptionConfig | null {
-  const key = segment.key;
-  const type = segment.type;
+  const metadata = getSubscriptionMetadata(segment.type, segment.key);
   
-  // Placeholder implementation - replace with actual Stripe IDs
-  // For now, return a default config structure
-  const baseConfig: SegmentSubscriptionConfig = {
-    productId: `prod_${type}_${key}`,
-    monthlyPriceId: `price_monthly_${type}_${key}`,
-    annualPriceId: `price_annual_${type}_${key}`,
-    monthlyPrice: 4900, // £49 in pence
-    annualPrice: 49000, // £490 in pence (save £98)
-    marketingCopy: `Subscribe to ${segment.displayName} and get access to ${segment.includedCourseSlugs.length} courses.`,
-  };
-  
-  // Type-specific pricing adjustments
-  if (type === 'track') {
-    // Tracks: £39-£59/month depending on track
-    if (key.includes('ml-engineering') || key.includes('platform-engineering')) {
-      baseConfig.monthlyPrice = 5900; // £59
-      baseConfig.annualPrice = 59000; // £590
-    } else if (key.includes('media-content') || key.includes('trust-regulation') || key.includes('vibe-engineering')) {
-      baseConfig.monthlyPrice = 3900; // £39
-      baseConfig.annualPrice = 39000; // £390
-    }
-  } else if (type === 'industry') {
-    // Industries: £39-£59/month depending on industry
-    if (key.includes('finance') || key.includes('healthcare') || key.includes('fintech')) {
-      baseConfig.monthlyPrice = 5900; // £59
-      baseConfig.annualPrice = 59000; // £590
-    } else if (key.includes('media-publishing')) {
-      baseConfig.monthlyPrice = 3900; // £39
-      baseConfig.annualPrice = 39000; // £390
-    }
-  } else if (type === 'role') {
-    // Roles: £39-£79/month depending on role
-    if (key.includes('executive')) {
-      baseConfig.monthlyPrice = 7900; // £79
-      baseConfig.annualPrice = 79000; // £790
-    } else if (key.includes('engineer') || key.includes('data-scientist') || key.includes('leader') || key.includes('director')) {
-      baseConfig.monthlyPrice = 5900; // £59
-      baseConfig.annualPrice = 59000; // £590
-    } else if (key.includes('designer')) {
-      baseConfig.monthlyPrice = 3900; // £39
-      baseConfig.annualPrice = 39000; // £390
-    }
+  if (!metadata) {
+    // Fallback to default if not found in subscriptions.md
+    return {
+      productId: `prod_${segment.type}_${segment.key}`,
+      monthlyPriceId: `price_monthly_${segment.type}_${segment.key}`,
+      annualPriceId: `price_annual_${segment.type}_${segment.key}`,
+      monthlyPrice: 4900, // £49 in pence
+      annualPrice: 49000, // £490 in pence
+      marketingCopy: `Subscribe to ${segment.displayName} and get access to ${segment.includedCourseSlugs.length} courses.`,
+      displayPriceMonthly: '£49/mo',
+      displayPriceAnnual: '£490/yr',
+      currency: 'GBP',
+      marketingBullets: [],
+    };
   }
   
-  return baseConfig;
+  // Parse prices from display strings
+  const monthlyPrice = parsePriceToPence(metadata.displayPriceMonthly);
+  const annualPrice = parsePriceToPence(metadata.displayPriceAnnual);
+  
+  // Parse marketing bullets (semicolon-separated)
+  const marketingBullets = metadata.marketingBullets
+    .split(';')
+    .map(b => b.trim())
+    .filter(b => b.length > 0);
+  
+  return {
+    productId: metadata.stripeProductId,
+    monthlyPriceId: metadata.stripeMonthlyPriceId,
+    annualPriceId: metadata.stripeAnnualPriceId,
+    monthlyPrice,
+    annualPrice,
+    marketingCopy: `Subscribe to ${segment.displayName} and get access to ${segment.includedCourseSlugs.length} courses.`,
+    displayPriceMonthly: metadata.displayPriceMonthly,
+    displayPriceAnnual: metadata.displayPriceAnnual,
+    currency: metadata.currency,
+    marketingBullets,
+  };
 }
 
 /**

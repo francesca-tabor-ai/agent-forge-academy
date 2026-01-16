@@ -363,7 +363,6 @@ export function VoiceControls({
       setIsSupported(true);
 
       // UAT Mock Mode: Skip Speech Recognition initialization
-      const mockMode = isMockModeEnabled();
       if (mockMode) {
         // In mock mode, we use API-based transcription, so no Speech Recognition needed
         recognitionRef.current = { mockMode: true }; // Mark as mock mode

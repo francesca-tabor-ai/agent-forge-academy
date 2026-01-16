@@ -237,24 +237,34 @@ async function handleCheckoutSessionCompleted(
     // Retrieve the subscription from Stripe if available
     const subscriptionId = session.subscription as string | null;
     let subscription: any = null;
+    let currentPeriodStart: Date;
     let currentPeriodEnd: Date;
+    let priceId: string | null = null;
+    const billingPeriod = (session.metadata.billing_period || 'monthly') as 'monthly' | 'annual';
 
     if (subscriptionId) {
       try {
         subscription = await stripe.subscriptions.retrieve(subscriptionId);
+        currentPeriodStart = new Date(subscription.current_period_start * 1000);
         currentPeriodEnd = new Date(subscription.current_period_end * 1000);
+        priceId = subscription.items.data[0]?.price.id || null;
       } catch (error) {
         console.error('Error retrieving subscription:', error);
         // Fall back to default period end (30 days from now for monthly, 365 for annual)
-        const billingPeriod = session.metadata.billing_period || 'monthly';
         const days = billingPeriod === 'annual' ? 365 : 30;
+        currentPeriodStart = new Date();
         currentPeriodEnd = new Date(Date.now() + days * 24 * 60 * 60 * 1000);
       }
     } else {
       // No subscription yet (might be a one-time payment), use default period
-      const billingPeriod = session.metadata.billing_period || 'monthly';
       const days = billingPeriod === 'annual' ? 365 : 30;
+      currentPeriodStart = new Date();
       currentPeriodEnd = new Date(Date.now() + days * 24 * 60 * 60 * 1000);
+      
+      // Try to get price ID from line items
+      if (session.line_items?.data?.[0]?.price?.id) {
+        priceId = session.line_items.data[0].price.id;
+      }
     }
 
     // Determine status
@@ -264,32 +274,37 @@ async function handleCheckoutSessionCompleted(
         status = 'canceled';
       } else if (subscription.status === 'past_due') {
         status = 'past_due';
+      } else if (subscription.status === 'expired') {
+        status = 'expired';
       }
     }
 
-    // Create or update subscription record
+    // Create or update segment subscription record
     const subscriptionData = {
       user_id: userId,
       segment_type: session.metadata.segment_type,
       segment_key: session.metadata.segment_key,
-      stripe_customer_id: customerId,
       stripe_subscription_id: subscriptionId,
+      stripe_price_id: priceId || 'unknown', // Required field, use 'unknown' as fallback
       status: status,
+      billing_cycle: billingPeriod,
+      current_period_start: currentPeriodStart.toISOString(),
       current_period_end: currentPeriodEnd.toISOString(),
+      canceled_at: subscription?.canceled_at ? new Date(subscription.canceled_at * 1000).toISOString() : null,
     };
 
     const { error } = await supabase
-      .from('subscriptions')
+      .from('segment_subscriptions')
       .upsert(subscriptionData, {
         onConflict: 'user_id,segment_type,segment_key',
       });
 
     if (error) {
-      console.error('Error upserting subscription from checkout session:', error);
+      console.error('Error upserting segment subscription from checkout session:', error);
       throw error;
     }
 
-    console.log('Subscription created/updated from checkout session:', session.id, 'user:', userId, 'segment:', session.metadata.segment_type, session.metadata.segment_key);
+    console.log('Segment subscription created/updated from checkout session:', session.id, 'user:', userId, 'segment:', session.metadata.segment_type, session.metadata.segment_key);
   } else {
     console.log('Checkout session completed (not a segment subscription):', session.id, 'user:', userId);
   }
@@ -550,7 +565,11 @@ async function handleInvoicePaid(
       const subscriptionData = {
         stripe_subscription_id: subscriptionId,
         status: subscription.status === 'active' ? 'active' : 
-                subscription.status === 'past_due' ? 'past_due' : 'canceled',
+                subscription.status === 'past_due' ? 'past_due' : 
+                subscription.status === 'canceled' ? 'canceled' : 'expired',
+        current_period_start: invoice.period_start
+          ? new Date(invoice.period_start * 1000).toISOString()
+          : null,
         current_period_end: invoice.period_end
           ? new Date(invoice.period_end * 1000).toISOString()
           : new Date().toISOString(),
@@ -558,7 +577,7 @@ async function handleInvoicePaid(
       };
 
       const { error: subError } = await supabase
-        .from('subscriptions')
+        .from('segment_subscriptions')
         .update(subscriptionData)
         .eq('stripe_subscription_id', subscriptionId);
 

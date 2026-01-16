@@ -5,6 +5,10 @@ import { loadLessonBySlug, getLessonNavigation } from '@/lib/lessons';
 import LessonContent from '@/components/lessons/LessonContent';
 import { LessonCompletionButton } from '@/components/lessons/LessonCompletionButton';
 import { NextLessonNavigation } from '@/components/lessons/NextLessonNavigation';
+import { hasCourseAccess, getSegmentsForCourse } from '@/lib/utils/course-access';
+import { CoursePaywall } from '@/components/courses/CoursePaywall';
+import { extractCourseMetadata } from '@/lib/course-sync/extract-metadata';
+import { courseMetadata } from '@/lib/course-metadata';
 
 interface CourseLessonPageProps {
   params: Promise<{ courseSlug: string; slug: string }>;
@@ -21,6 +25,28 @@ export default async function CourseLessonPage({ params }: CourseLessonPageProps
   }
 
   const { courseSlug, slug } = await params;
+  
+  // Check course access before loading lesson
+  const accessResult = await hasCourseAccess(user.id, courseSlug);
+  
+  if (!accessResult.hasAccess) {
+    // Get segments that include this course for paywall
+    const segments = await getSegmentsForCourse(courseSlug);
+    
+    // Get course metadata for display
+    const dynamicMetadata = extractCourseMetadata(courseSlug);
+    const metadata = dynamicMetadata?.metadata || courseMetadata[courseSlug];
+    const courseTitle = metadata?.title || courseSlug;
+    
+    return (
+      <CoursePaywall 
+        courseTitle={courseTitle}
+        courseSlug={courseSlug}
+        segments={segments}
+      />
+    );
+  }
+
   const lesson = loadLessonBySlug(slug, undefined, courseSlug);
 
   if (!lesson) {

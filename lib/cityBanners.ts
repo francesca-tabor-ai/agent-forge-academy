@@ -67,7 +67,6 @@ try {
   'ottawa': 'https://images.unsplash.com/photo-1531326111166-855395867b2d?w=1920&q=80',
   };
 }
-}
 
 /**
  * Default banner image URL
