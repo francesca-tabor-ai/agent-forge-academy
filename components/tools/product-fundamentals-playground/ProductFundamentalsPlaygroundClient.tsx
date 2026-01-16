@@ -190,13 +190,46 @@ export function ProductFundamentalsPlaygroundClient() {
     );
   };
 
+  if (isLoading) {
+    return (
+      <div className="bg-white border border-gray-200 rounded-lg p-12 text-center">
+        <div className="text-gray-600">Loading case...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
       {/* Persistent Banner */}
       <div className="bg-blue-50 border-b border-blue-200 px-6 py-3">
-        <p className="text-sm text-blue-800 font-medium">
-          AI suggests — you decide. All outputs are editable.
-        </p>
+        <div className="flex items-center justify-between">
+          <p className="text-sm text-blue-800 font-medium">
+            AI suggests — you decide. All outputs are editable.
+          </p>
+          <div className="flex items-center gap-4 text-xs text-blue-700">
+            {isSaving && (
+              <span className="flex items-center gap-1">
+                <span className="animate-spin">⏳</span>
+                Saving...
+              </span>
+            )}
+            {lastSaved && !isSaving && (
+              <span className="text-green-700">
+                Saved {lastSaved.toLocaleTimeString()}
+              </span>
+            )}
+            {persistenceError && (
+              <span className="text-red-700">
+                ⚠️ {persistenceError}
+              </span>
+            )}
+            {!navigator.onLine && (
+              <span className="text-orange-700">
+                ⚠️ Offline - changes will save when online
+              </span>
+            )}
+          </div>
+        </div>
       </div>
 
       <div className="flex flex-col lg:flex-row min-h-[600px]">
