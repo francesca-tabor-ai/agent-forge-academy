@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run generate:city-banners && next build",
+    "generate:city-banners": "tsx scripts/generate-city-banners.ts",
     "start": "next start",
     "lint": "next lint",
     "test": "vitest run",
@@ -12,6 +13,7 @@
     "test:integration": "vitest run tests/integration",
     "test:regression": "vitest run tests/regression",
     "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:all": "npm run test:unit && npm run test:integration && npm run test:regression && npm run test:e2e",

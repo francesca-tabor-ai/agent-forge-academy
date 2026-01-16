@@ -2,15 +2,20 @@
  * City Banner Image Resolver
  * 
  * Maps city names (normalized keys) to banner image URLs
- * Initially uses a TS object; later can be generated from an MD file
+ * Generated from content/cities.md at build time
  */
 
-/**
- * City-to-image URL mapping
- * Keys are normalized city names (lowercase, e.g., "london", "new york")
- * Values are banner image URLs
- */
-const CITY_BANNER_MAP: Record<string, string> = {
+// Try to import generated mapping, fallback to empty object if not generated yet
+let CITY_BANNER_MAP: Record<string, string> = {};
+
+try {
+  // Import generated mapping (created at build time from content/cities.md)
+  const generated = require('./cityBanners.generated');
+  CITY_BANNER_MAP = generated.CITY_BANNER_MAP || {};
+} catch (error) {
+  // Fallback: use hardcoded mapping if generated file doesn't exist yet
+  // This allows the app to work before the first build
+  CITY_BANNER_MAP = {
   // Major cities
   'london': 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=1920&q=80',
   'new york': 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=1920&q=80',
@@ -60,7 +65,9 @@ const CITY_BANNER_MAP: Record<string, string> = {
   'montreal': 'https://images.unsplash.com/photo-1531326111166-855395867b2d?w=1920&q=80',
   'calgary': 'https://images.unsplash.com/photo-1531326111166-855395867b2d?w=1920&q=80',
   'ottawa': 'https://images.unsplash.com/photo-1531326111166-855395867b2d?w=1920&q=80',
-};
+  };
+}
+}
 
 /**
  * Default banner image URL
