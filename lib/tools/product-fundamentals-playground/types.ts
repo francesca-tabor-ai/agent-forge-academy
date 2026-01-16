@@ -64,6 +64,7 @@ export interface RoadmapItem {
 export interface Sprint {
   goal: string;
   capacityPoints: number;
+  overCapacityJustification?: string; // Required if total story points exceed capacity
 }
 
 export interface Story {

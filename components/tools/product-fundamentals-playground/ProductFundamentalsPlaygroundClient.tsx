@@ -7,6 +7,7 @@ import { ResearchStep } from './steps/ResearchStep';
 import { PersonasProblemsStep } from './steps/PersonasProblemsStep';
 import { JourneyMapStep } from './steps/JourneyMapStep';
 import { RoadmapStep } from './steps/RoadmapStep';
+import { SprintPlanStep } from './steps/SprintPlanStep';
 
 type Step = 
   | 'scenario'
@@ -91,31 +92,7 @@ export function ProductFundamentalsPlaygroundClient() {
           )}
           
           {currentStep === 'sprint-plan' && (
-            <div className="space-y-4">
-              <p className="text-gray-700">
-                Plan development sprints. Break down work into manageable sprints with clear goals.
-              </p>
-              {state.sprints.length > 0 && (
-                <div className="mt-4 p-4 bg-white border border-gray-300 rounded">
-                  <h3 className="font-semibold text-gray-900 mb-2">Sprints ({state.sprints.length}):</h3>
-                  {state.sprints.map((s, idx) => (
-                    <div key={idx} className="text-sm text-gray-700 mb-2">
-                      <strong>Sprint {idx + 1}:</strong> {s.goal} ({s.capacityPoints} points)
-                    </div>
-                  ))}
-                </div>
-              )}
-              {state.stories.length > 0 && (
-                <div className="mt-4 p-4 bg-white border border-gray-300 rounded">
-                  <h3 className="font-semibold text-gray-900 mb-2">Stories ({state.stories.length}):</h3>
-                  {state.stories.map((s) => (
-                    <div key={s.id} className="text-sm text-gray-700 mb-2">
-                      <strong>{s.title}</strong> ({s.points} points)
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+            <SprintPlanStep state={state} dispatch={dispatch} />
           )}
           
           {currentStep === 'uat-bugs' && (

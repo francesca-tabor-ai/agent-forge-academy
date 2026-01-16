@@ -30,6 +30,7 @@ export type PlaygroundAction =
   | { type: 'SET_SPRINT'; payload: { index: number; sprint: Sprint } }
   | { type: 'ADD_STORY'; payload: Story }
   | { type: 'UPDATE_STORY'; payload: Story }
+  | { type: 'DELETE_STORY'; payload: string } // Story ID
   | { type: 'SET_UAT_SCENARIOS'; payload: UATScenario[] }
   | { type: 'ADD_UAT_SCENARIO'; payload: UATScenario }
   | { type: 'UPDATE_UAT_SCENARIO'; payload: UATScenario }
@@ -221,6 +222,14 @@ export function playgroundReducer(
       auditMetadata = { storyId: action.payload.id, title: action.payload.title };
       break;
 
+    case 'DELETE_STORY':
+      newState = {
+        ...state,
+        stories: state.stories.filter((s) => s.id !== action.payload),
+      };
+      auditMetadata = { storyId: action.payload };
+      break;
+
     case 'SET_UAT_SCENARIOS':
       newState = {
         ...state,
@@ -308,6 +317,7 @@ export function playgroundReducer(
     SET_SPRINT: 'sprint-plan',
     ADD_STORY: 'sprint-plan',
     UPDATE_STORY: 'sprint-plan',
+    DELETE_STORY: 'sprint-plan',
     SET_UAT_SCENARIOS: 'uat-bugs',
     ADD_UAT_SCENARIO: 'uat-bugs',
     UPDATE_UAT_SCENARIO: 'uat-bugs',
