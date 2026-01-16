@@ -14,9 +14,9 @@ import {
 
 describe('Regression Tests - Course List Changes', () => {
   describe('Essential Tier Course List Integrity', () => {
-    it('should maintain exactly 5 courses in Essential tier', () => {
+    it('should maintain exactly 6 courses in Essential tier', () => {
       // Regression: If someone accidentally adds/removes a course, this fails
-      expect(ESSENTIAL_TIER_COURSES.length).toBe(5);
+      expect(ESSENTIAL_TIER_COURSES.length).toBe(6);
     });
 
     it('should include all required Essential courses', () => {
@@ -26,6 +26,7 @@ describe('Regression Tests - Course List Changes', () => {
         'reddit-ai-visibility',
         'seo-to-aeo',
         'ai-governance-eu-ai-act',
+        'creative-automation-templatization',
       ];
 
       requiredCourses.forEach((course) => {
@@ -78,6 +79,7 @@ describe('Regression Tests - Course List Changes', () => {
         'reddit-ai-visibility',
         'seo-to-aeo',
         'ai-governance-eu-ai-act',
+        'creative-automation-templatization',
       ];
 
       requiredCourses.forEach((course) => {
@@ -156,6 +158,8 @@ describe('Regression Tests - Course List Changes', () => {
       
       expect(ESSENTIAL_TIER_COURSES.length).toBeGreaterThan(0);
       expect(ESSENTIAL_TIER_COURSES.length).toBeLessThanOrEqual(20); // Reasonable limit
+      // Current count: 6 courses in Essential tier
+      expect(ESSENTIAL_TIER_COURSES.length).toBe(6);
     });
   });
 

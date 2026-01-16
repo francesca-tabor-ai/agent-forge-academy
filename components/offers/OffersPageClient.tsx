@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { courseMetadata } from '@/lib/course-metadata';
 import { AddOfferToProjectModal } from './AddOfferToProjectModal';
 import { ToolCard } from './ToolCard';
+import { ToolLogo } from './ToolLogo';
 
 interface Offer {
   id: string;
@@ -64,20 +65,7 @@ const categoryLabels: Record<string, string> = {
   ml_tools: 'Experiment Tracking',
 };
 
-const categoryIcons: Record<string, string> = {
-  api: '🔌',
-  hosting: '☁️',
-  monitoring: '📊',
-  data: '💾',
-  tools: '🛠️',
-  services: '⚙️',
-  database: '🗄️',
-  vector_database: '🔍',
-  ai_llm: '🤖',
-  observability: '👁️',
-  analytics: '📈',
-  ml_tools: '🧪',
-};
+// Category icons removed - using logos instead
 
 export function OffersPageClient({
   offers,
@@ -797,7 +785,12 @@ export function OffersPageClient({
                 {/* Header */}
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-2 flex-1">
-                    <span className="text-2xl">{categoryIcons[offer.category] || '🛠️'}</span>
+                    <ToolLogo
+                      toolName={offer.provider}
+                      logoUrl={null}
+                      size={32}
+                      className="flex-shrink-0"
+                    />
                     <div className="flex-1">
                       <h3 className="text-base font-semibold text-gray-900">{offer.title}</h3>
                       <p className="text-xs text-gray-500">{offer.provider}</p>

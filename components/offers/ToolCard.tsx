@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
+import { ToolLogo } from './ToolLogo';
 
 interface ToolCardProps {
   toolName: string;
@@ -56,43 +56,16 @@ export function ToolCard({
     ? enrolledCourseSlugs.includes(requiredCourseForOffer)
     : true;
 
-  // Get logo URL or use placeholder
-  const displayLogoUrl = logoUrl || `https://logo.clearbit.com/${toolName.toLowerCase().replace(/\s+/g, '')}.com`;
-
   return (
     <div className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-all">
       {/* Header with Logo and Tool Name */}
       <div className="flex items-start gap-4 mb-4">
-        <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center overflow-hidden relative">
-          {logoUrl ? (
-            <Image
-              src={logoUrl}
-              alt={toolName}
-              width={48}
-              height={48}
-              className="object-contain"
-              unoptimized
-            />
-          ) : (
-            <img
-              src={displayLogoUrl}
-              alt={toolName}
-              className="w-full h-full object-contain"
-              onError={(e) => {
-                // Fallback to text if image fails
-                const target = e.target as HTMLImageElement;
-                target.style.display = 'none';
-                const parent = target.parentElement;
-                if (parent && !parent.querySelector('.logo-fallback')) {
-                  const fallback = document.createElement('span');
-                  fallback.className = 'logo-fallback text-lg font-semibold text-gray-600';
-                  fallback.textContent = toolName.charAt(0).toUpperCase();
-                  parent.appendChild(fallback);
-                }
-              }}
-            />
-          )}
-        </div>
+        <ToolLogo
+          toolName={toolName}
+          logoUrl={logoUrl}
+          size={48}
+          className="flex-shrink-0"
+        />
         <div className="flex-1 min-w-0">
           <h3 className="text-lg font-semibold text-gray-900 mb-1">{toolName}</h3>
           <p className="text-sm text-gray-600 line-clamp-2">{description}</p>

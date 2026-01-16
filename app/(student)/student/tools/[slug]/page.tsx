@@ -1,7 +1,7 @@
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { redirect, notFound } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
+import { ToolLogo } from '@/components/offers/ToolLogo';
 import { OfferDetailClient } from '@/components/offers/OfferDetailClient';
 
 interface Offer {
@@ -168,8 +168,7 @@ export default async function ToolDetailPage({ params }: { params: Promise<{ slu
     });
   }
 
-  // Generate logo URL
-  const logoUrl = `https://logo.clearbit.com/${toolName.toLowerCase().replace(/\s+/g, '')}.com`;
+  // Get website URL from first offer or generate
   const websiteUrl = toolOffers[0].external_url || `https://${toolName.toLowerCase().replace(/\s+/g, '')}.com`;
 
   const categoryLabels: Record<string, string> = {
@@ -200,24 +199,12 @@ export default async function ToolDetailPage({ params }: { params: Promise<{ slu
       {/* Header with Logo + Name */}
       <div className="bg-white border border-gray-200 rounded-lg p-6">
         <div className="flex items-start gap-6">
-          <div className="flex-shrink-0 w-20 h-20 rounded-lg bg-gray-100 flex items-center justify-center overflow-hidden">
-            <img
-              src={logoUrl}
-              alt={toolName}
-              className="w-full h-full object-contain"
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.style.display = 'none';
-                const parent = target.parentElement;
-                if (parent && !parent.querySelector('.logo-fallback')) {
-                  const fallback = document.createElement('span');
-                  fallback.className = 'logo-fallback text-2xl font-semibold text-gray-600';
-                  fallback.textContent = toolName.charAt(0).toUpperCase();
-                  parent.appendChild(fallback);
-                }
-              }}
-            />
-          </div>
+          <ToolLogo
+            toolName={toolName}
+            logoUrl={null}
+            size={80}
+            className="flex-shrink-0"
+          />
           <div className="flex-1">
             <h1 className="text-3xl font-bold text-gray-900 mb-2">{toolName}</h1>
             <div className="flex items-center gap-4 mb-4">
@@ -247,7 +234,7 @@ export default async function ToolDetailPage({ params }: { params: Promise<{ slu
             </div>
           </div>
         </div>
-      </div>
+        </div>
 
       {/* Courses Section */}
       {courses.length > 0 && (
@@ -341,7 +328,7 @@ export default async function ToolDetailPage({ params }: { params: Promise<{ slu
                               : 'bg-gray-100 text-gray-700'
                           }`}>
                             Expires in {daysUntilExpiration} day{daysUntilExpiration !== 1 ? 's' : ''}
-                          </span>
+                  </span>
                         )}
                       </div>
                     </div>
@@ -364,8 +351,8 @@ export default async function ToolDetailPage({ params }: { params: Promise<{ slu
                           </Link>
                         </div>
                       </div>
-                    </div>
-                  )}
+            </div>
+          )}
 
                   {/* Unlocked Offer Content */}
                   {isUnlocked && (
@@ -373,7 +360,7 @@ export default async function ToolDetailPage({ params }: { params: Promise<{ slu
                       {offer.discount_code && (
                         <div className="mb-4">
                           <OfferDetailClient discountCode={offer.discount_code} />
-                        </div>
+        </div>
                       )}
 
                       {offer.features && offer.features.length > 0 && (
@@ -382,33 +369,33 @@ export default async function ToolDetailPage({ params }: { params: Promise<{ slu
                           <ul className="space-y-1">
                             {offer.features.map((feature, idx) => (
                               <li key={idx} className="flex items-start gap-2 text-sm text-gray-600">
-                                <span className="text-green-600 mt-0.5">✓</span>
+                  <span className="text-green-600 mt-0.5">✓</span>
                                 <span>{feature}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
                       {/* Setup Guide */}
                       <div className="mb-4 p-3 bg-gray-50 border border-gray-200 rounded-lg">
                         <p className="text-xs font-medium text-gray-700 mb-2">Setup Guide:</p>
                         <ol className="space-y-1 text-xs text-gray-600 list-decimal list-inside">
                           {offer.discount_code ? (
-                            <>
-                              <li>Copy the discount code above</li>
+              <>
+                <li>Copy the discount code above</li>
                               <li>Click "Claim Offer" to visit the provider's website</li>
-                              <li>Apply the code during checkout or signup</li>
-                            </>
-                          ) : (
-                            <>
+                <li>Apply the code during checkout or signup</li>
+              </>
+            ) : (
+              <>
                               <li>Click "Claim Offer" below</li>
-                              <li>Follow the provider's signup or checkout process</li>
-                              <li>The discount will be applied automatically if eligible</li>
-                            </>
-                          )}
-                        </ol>
-                      </div>
+                <li>Follow the provider's signup or checkout process</li>
+                <li>The discount will be applied automatically if eligible</li>
+              </>
+            )}
+          </ol>
+        </div>
 
                       {/* Claim Status */}
                       {claimStatus && (
@@ -420,23 +407,23 @@ export default async function ToolDetailPage({ params }: { params: Promise<{ slu
                               {claimStatus === 'claimed' && 'Claimed'}
                               {claimStatus === 'requires_verification' && 'Requires verification'}
                               {claimStatus === 'not_claimed' && 'Not claimed'}
-                            </span>
-                          </div>
-                        </div>
-                      )}
+                  </span>
+                </div>
+              </div>
+            )}
 
                       {/* Claim Button */}
                       <div className="pt-4 border-t border-gray-200">
                         {offer.external_url ? (
                           <a
                             href={offer.external_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-brand-light text-white rounded-md hover:bg-brand-light/90 transition-colors font-medium"
-                          >
-                            Claim Offer →
-                          </a>
-                        ) : (
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-brand-light text-white rounded-md hover:bg-brand-light/90 transition-colors font-medium"
+            >
+              Claim Offer →
+            </a>
+          ) : (
                           <div className="text-sm text-gray-500">No claim URL available</div>
                         )}
                       </div>
@@ -455,8 +442,8 @@ export default async function ToolDetailPage({ params }: { params: Promise<{ slu
                     </div>
                   )}
                     </>
-                  )}
-                </div>
+          )}
+        </div>
               );
             })}
           </div>
