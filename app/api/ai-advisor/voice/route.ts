@@ -496,7 +496,14 @@ export async function POST(request: NextRequest) {
   
   // Check feature flag
   if (!isVoiceAPIEnabled()) {
-    safeLogger.warn('Voice API disabled', { requestId });
+    // Structured logging: feature disabled
+    safeLogger.warn('[VoiceAPI] Feature disabled', { 
+      requestId,
+      statusCode: 403,
+      errorCode: 'FEATURE_DISABLED',
+      path: '/api/ai-advisor/voice',
+      method: 'POST',
+    });
     return NextResponse.json(
       { 
         error: 'Voice API is not enabled',
@@ -514,7 +521,20 @@ export async function POST(request: NextRequest) {
     } = await supabase.auth.getUser();
 
     if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      // Structured logging: unauthorized request
+      safeLogger.warn('[VoiceAPI] Unauthorized request', { 
+        requestId,
+        userId: null,
+        statusCode: 401,
+        errorCode: 'UNAUTHORIZED',
+        path: '/api/ai-advisor/voice',
+        method: 'POST',
+      });
+      return NextResponse.json({ 
+        error: 'Unauthorized',
+        message: 'Authentication required',
+        requestId,
+      }, { status: 401 });
     }
 
     // UAT Mock Mode: Return deterministic transcription for testing
@@ -581,8 +601,22 @@ export async function POST(request: NextRequest) {
     // Validate audio file
     const allowedTypes = ['audio/webm', 'audio/mp3', 'audio/wav', 'audio/m4a', 'audio/ogg'];
     if (!allowedTypes.includes(audioFile.type)) {
+      // Structured logging: invalid audio format
+      safeLogger.warn('[VoiceAPI] Invalid audio format', {
+        requestId,
+        userId: user.id,
+        statusCode: 400,
+        errorCode: 'BAD_REQUEST',
+        path: '/api/ai-advisor/voice',
+        method: 'POST',
+        audioType: audioFile.type,
+      });
       return NextResponse.json(
-        { error: 'Invalid audio format. Supported: webm, mp3, wav, m4a, ogg' },
+        { 
+          error: 'Invalid audio format. Supported: webm, mp3, wav, m4a, ogg',
+          message: 'Invalid audio format. Supported: webm, mp3, wav, m4a, ogg',
+          requestId,
+        },
         { status: 400 }
       );
     }
@@ -755,11 +789,23 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Structured logging: successful voice request
+    safeLogger.info('[VoiceAPI] Request completed', {
+      requestId,
+      userId: user.id,
+      statusCode: 200,
+      path: '/api/ai-advisor/voice',
+      method: 'POST',
+      conversationId: convId,
+      hasAudio: !!responseAudio,
+    });
+    
     return NextResponse.json({
       transcript: transcription.transcript,
       responseText: responseContent,
       ...(responseAudio && { responseAudio }), // Only include if generated
       conversationId: convId,
+      requestId,
     });
   } catch (error: any) {
     // Note: transcription.transcript is never logged - it contains PII

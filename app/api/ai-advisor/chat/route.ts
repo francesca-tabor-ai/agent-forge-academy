@@ -669,7 +669,15 @@ export async function POST(request: NextRequest) {
     } = await supabase.auth.getUser();
 
     if (!user) {
-      safeLogger.warn('AI Advisor: Unauthorized request', { requestId, userId: null });
+      // Structured logging: unauthorized request
+      safeLogger.warn('[ChatAPI] Unauthorized request', { 
+        requestId, 
+        userId: null,
+        statusCode: 401,
+        errorCode: 'UNAUTHORIZED',
+        path: '/api/ai-advisor/chat',
+        method: 'POST',
+      });
       return NextResponse.json(
         { 
           ok: false,
@@ -705,8 +713,15 @@ export async function POST(request: NextRequest) {
     }
 
     // Log request details
-    safeLogger.info('AI Advisor: Request received', {
-      requestId,
+      // Structured logging: request received
+      safeLogger.info('[ChatAPI] Request received', {
+        requestId,
+        userId: user.id,
+        path: '/api/ai-advisor/chat',
+        method: 'POST',
+        hasContext: !!context,
+        hasConversationHistory: conversationHistory?.length > 0,
+        intent: intent || 'general',
       userId: user.id,
       messageLength: message.length,
       hasContext: !!context,
@@ -1387,7 +1402,16 @@ export async function POST(request: NextRequest) {
       }
 
       const totalLatency = Date.now() - startTime;
-      safeLogger.info('AI Advisor: Request completed', { requestId, totalLatency });
+      // Structured logging: request completed successfully
+      safeLogger.info('[ChatAPI] Request completed', { 
+        requestId, 
+        userId: user.id,
+        statusCode: 200,
+        totalLatency,
+        path: '/api/ai-advisor/chat',
+        method: 'POST',
+        conversationId: convId,
+      });
 
       // Log successful request
       await logRequest({
@@ -1437,15 +1461,20 @@ export async function POST(request: NextRequest) {
       const upstreamStatusMatch = errorMessage.match(/(\d{3})/);
       const upstreamStatus = upstreamStatusMatch ? parseInt(upstreamStatusMatch[1]) : null;
       
-      safeLogger.error('AI Advisor: Error generating LLM response', { 
+      // Structured logging: error with status code and error reason
+      safeLogger.error('[ChatAPI] Error generating LLM response', { 
         requestId,
         userId: user.id,
-        route: '/api/ai-advisor/chat',
+        statusCode,
+        errorCode,
+        path: '/api/ai-advisor/chat',
+        method: 'POST',
         model: process.env.OPENAI_MODEL || 'gpt-4-turbo-preview',
         upstreamStatus,
-        error: errorMessage,
-        stack: error?.stack,
-        elapsed 
+        errorMessage: errorMessage, // Error reason without leaking keys
+        elapsed,
+        // Don't log stack in production to avoid leaking sensitive info
+        stack: process.env.NODE_ENV === 'development' ? error?.stack : undefined,
       });
       
       // Log error request
@@ -1480,11 +1509,16 @@ export async function POST(request: NextRequest) {
     }
   } catch (error: any) {
     const elapsed = Date.now() - startTime;
-    safeLogger.error('AI Advisor: Error in chat handler', { 
+    // Structured logging: top-level error handler
+    safeLogger.error('[ChatAPI] Error in chat handler', { 
       requestId, 
-      error: error?.message || String(error),
-      stack: error?.stack,
-      elapsed 
+      statusCode: 500,
+      errorCode: 'INTERNAL_ERROR',
+      path: '/api/ai-advisor/chat',
+      method: 'POST',
+      errorMessage: error?.message || String(error),
+      elapsed,
+      stack: process.env.NODE_ENV === 'development' ? error?.stack : undefined,
     });
 
     // Log error request

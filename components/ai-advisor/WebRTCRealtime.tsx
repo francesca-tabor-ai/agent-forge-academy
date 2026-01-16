@@ -29,6 +29,8 @@ export interface WebRTCRealtimeProps {
   context?: ActiveContext; // Current active context (course/project/job)
   // Fallback callback - called when WebRTC fails and should fallback to standard voice
   onFallback?: () => void; // Callback to trigger fallback to standard voice
+  // Auto-connect on mount (default: false - user must click Connect button)
+  autoConnect?: boolean; // If true, automatically connect when component mounts (only on AI Advisor route)
 }
 
 interface RealtimeSession {
@@ -75,6 +77,7 @@ export function WebRTCRealtime({
   onFinalAssistantTranscript,
   context,
   onFallback,
+  autoConnect = false, // Default: don't auto-connect - user must click Connect button
 }: WebRTCRealtimeProps) {
   const pathname = usePathname();
   const isAiAdvisorRoute = pathname?.startsWith('/student/ai-advisor') ?? false;
@@ -801,29 +804,34 @@ export function WebRTCRealtime({
       if (!sdpResponse.ok) {
         let errorText = 'Unknown error';
         let errorDetails: any = {};
+        let requestId: string | undefined;
         try {
           const errorData = await sdpResponse.json();
           errorText = errorData.error || errorData.message || errorText;
           errorDetails = errorData;
+          requestId = errorData.requestId;
         } catch {
           errorText = await sdpResponse.text().catch(() => errorText);
         }
         
         console.error('Failed to connect to OpenAI Realtime:', sdpResponse.status, errorText);
         
-        // Provide more specific error messages
+        // Provide more specific error messages with request ID if available
         let userFriendlyError = `Failed to connect to OpenAI Realtime API`;
+        if (requestId) {
+          userFriendlyError += ` (Request ID: ${requestId})`;
+        }
         let shouldFallback = false;
         
         if (sdpResponse.status === 400) {
-          userFriendlyError = `Realtime API connection failed. Falling back to standard voice.`;
+          userFriendlyError = `Realtime API connection failed. Falling back to standard voice.${requestId ? ` (Request ID: ${requestId})` : ''}`;
           shouldFallback = true;
         } else if (sdpResponse.status === 401) {
-          userFriendlyError = `Authentication failed. Please refresh the page and try again.`;
+          userFriendlyError = `Authentication failed. Please refresh the page and try again.${requestId ? ` (Request ID: ${requestId})` : ''}`;
         } else if (sdpResponse.status === 429) {
-          userFriendlyError = `Rate limit exceeded. Please wait a moment and try again.`;
+          userFriendlyError = `Rate limit exceeded. Please wait a moment and try again.${requestId ? ` (Request ID: ${requestId})` : ''}`;
         } else if (sdpResponse.status === 503) {
-          userFriendlyError = `Realtime service is temporarily unavailable. Please try again later.`;
+          userFriendlyError = `Realtime service is temporarily unavailable. Please try again later.${requestId ? ` (Request ID: ${requestId})` : ''}`;
           shouldFallback = true;
         }
         
@@ -832,11 +840,13 @@ export function WebRTCRealtime({
           safeLogger.warn('WebRTC connection failed, falling back to standard voice', {
             status: sdpResponse.status,
             error: errorText,
+            requestId,
             hasSession: !!session,
             sessionId: session?.session_id,
           });
           setHasFailed(true);
           setShowFallbackMessage(true);
+          setError(userFriendlyError); // Store error with request ID for display
           onFallback();
           setIsConnecting(false);
           return; // Exit early, don't set error state
@@ -875,7 +885,16 @@ export function WebRTCRealtime({
     } catch (err) {
       console.error('Error connecting to Realtime API:', err);
       const errorMessage = err instanceof Error ? err.message : 'Failed to connect';
+      
+      // Structured logging: connection error
+      safeLogger.error('WebRTC connection error', {
+        errorMessage: errorMessage, // Error reason without leaking keys
+        hasSession: !!sessionRef.current,
+        sessionId: sessionRef.current?.session_id,
+      });
+      
       setError(errorMessage);
+      setHasFailed(true);
       setIsConnecting(false);
       if (onError) onError(errorMessage);
       
@@ -1006,31 +1025,34 @@ export function WebRTCRealtime({
     }
   }, [voiceOutputEnabled]);
 
-  // Auto-connect on mount - but only on AI Advisor route
-  // Gate Realtime connection to prevent it from connecting on Jobs/Portfolio pages
+  // Auto-connect on mount - ONLY if explicitly enabled AND on AI Advisor route
+  // By default, autoConnect=false, so user must click Connect button
+  // This prevents WebRTC from connecting on other pages or when not selected
   useEffect(() => {
-    // Only connect if:
-    // 1. On AI Advisor route
-    // 2. Not disabled
-    // 3. Not already connected/connecting
-    // 4. No existing connection
-    if (isAiAdvisorRoute && !disabled && !isConnected && !isConnecting && !peerConnectionRef.current) {
+    // Only auto-connect if:
+    // 1. autoConnect prop is true (explicitly enabled)
+    // 2. On AI Advisor route
+    // 3. Not disabled
+    // 4. Not already connected/connecting
+    // 5. No existing connection
+    if (autoConnect && isAiAdvisorRoute && !disabled && !isConnected && !isConnecting && !peerConnectionRef.current) {
       connect();
     } else if (!isAiAdvisorRoute) {
       // If we're not on AI Advisor route, ensure we're disconnected
+      // This is a safety check in case component is rendered on wrong route
       if (peerConnectionRef.current) {
         disconnect();
       }
     }
 
-    // Cleanup on unmount (when user navigates away)
+    // Cleanup on unmount (when user navigates away or component unmounts)
     return () => {
       if (peerConnectionRef.current) {
         disconnect();
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAiAdvisorRoute]); // Re-run when route changes
+  }, [autoConnect, isAiAdvisorRoute]); // Re-run when route changes or autoConnect changes
 
   // Sync audio element muted state with voice output toggle
   useEffect(() => {

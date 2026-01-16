@@ -30,15 +30,21 @@ export async function POST(request: NextRequest) {
     } = await supabase.auth.getUser();
 
     if (authError) {
+      // Structured logging: authentication error
       safeLogger.error('[RealtimeConnect] Auth error', {
-        reqId,
-        error: authError.message,
-        code: authError.status,
+        requestId: reqId,
+        statusCode: 401,
+        errorCode: 'UNAUTHORIZED',
+        path: '/api/realtime/connect',
+        method: 'POST',
+        errorMessage: authError.message, // Error reason without leaking keys
+        authErrorCode: authError.status,
       });
       return NextResponse.json(
         { 
           error: 'Unauthorized',
           message: 'Authentication failed',
+          requestId: reqId,
           details: process.env.NODE_ENV === 'development' ? authError.message : undefined,
         },
         { status: 401 }
@@ -46,11 +52,19 @@ export async function POST(request: NextRequest) {
     }
 
     if (!user) {
-      safeLogger.error('[RealtimeConnect] No user session', { reqId });
+      // Structured logging: no user session
+      safeLogger.error('[RealtimeConnect] No user session', { 
+        requestId: reqId,
+        statusCode: 401,
+        errorCode: 'UNAUTHORIZED',
+        path: '/api/realtime/connect',
+        method: 'POST',
+      });
       return NextResponse.json(
         { 
           error: 'Unauthorized',
           message: 'User session not found',
+          requestId: reqId,
         },
         { status: 401 }
       );
@@ -61,14 +75,20 @@ export async function POST(request: NextRequest) {
     try {
       body = await request.json();
     } catch (parseError) {
+      // Structured logging: invalid JSON body
       safeLogger.error('[RealtimeConnect] Invalid JSON body', {
-        reqId,
-        error: parseError instanceof Error ? parseError.message : 'Unknown parse error',
+        requestId: reqId,
+        statusCode: 400,
+        errorCode: 'BAD_REQUEST',
+        path: '/api/realtime/connect',
+        method: 'POST',
+        errorMessage: parseError instanceof Error ? parseError.message : 'Unknown parse error',
       });
       return NextResponse.json(
         { 
           error: 'Invalid request body',
           message: 'Request body must be valid JSON',
+          requestId: reqId,
         },
         { status: 400 }
       );
@@ -82,11 +102,21 @@ export async function POST(request: NextRequest) {
       const simulateUnavailable = process.env.UAT_MOCK_REALTIME_UNAVAILABLE === '1';
       
       if (simulateUnavailable) {
-        safeLogger.info('[RealtimeConnect] Mock mode: Simulating unavailable', { reqId, userId: user.id });
+        // Structured logging: mock mode unavailable
+        safeLogger.info('[RealtimeConnect] Mock mode: Simulating unavailable', { 
+          requestId: reqId, 
+          userId: user.id,
+          statusCode: 503,
+          errorCode: 'SERVICE_UNAVAILABLE',
+          path: '/api/realtime/connect',
+          method: 'POST',
+          mockMode: true,
+        });
         return NextResponse.json(
           { 
             error: 'Realtime service unavailable',
             message: 'Realtime API is temporarily unavailable (mock mode)',
+            requestId: reqId,
             details: 'This is a mock response for UAT testing',
           },
           { status: 503 }
@@ -103,15 +133,21 @@ export async function POST(request: NextRequest) {
 
     // Validate required fields
     if (!sdp) {
+      // Structured logging: missing SDP offer
       safeLogger.error('[RealtimeConnect] Missing SDP offer', {
-        reqId,
+        requestId: reqId,
         userId: user.id,
+        statusCode: 400,
+        errorCode: 'BAD_REQUEST',
+        path: '/api/realtime/connect',
+        method: 'POST',
         hasSessionToken: !!session_token,
       });
       return NextResponse.json(
         { 
           error: 'SDP offer is required',
           message: 'SDP offer field is missing from request body',
+          requestId: reqId,
         },
         { status: 400 }
       );
@@ -119,9 +155,14 @@ export async function POST(request: NextRequest) {
 
     // Validate SDP format
     if (typeof sdp !== 'string' || !sdp.trim()) {
+      // Structured logging: invalid SDP format
       safeLogger.error('[RealtimeConnect] Invalid SDP format', {
-        reqId,
+        requestId: reqId,
         userId: user.id,
+        statusCode: 400,
+        errorCode: 'BAD_REQUEST',
+        path: '/api/realtime/connect',
+        method: 'POST',
         sdpType: typeof sdp,
         sdpLength: sdp?.length || 0,
       });
@@ -129,6 +170,7 @@ export async function POST(request: NextRequest) {
         { 
           error: 'Invalid SDP offer format',
           message: 'SDP offer must be a non-empty string',
+          requestId: reqId,
         },
         { status: 400 }
       );
@@ -137,16 +179,23 @@ export async function POST(request: NextRequest) {
     // Get OpenAI API key from environment
     const OPENAI_API_KEY = process.env.OPENAI_API_KEY || process.env.LLM_API_KEY;
     if (!OPENAI_API_KEY) {
+      // Structured logging: API key not configured
       safeLogger.error('[RealtimeConnect] OpenAI API key not configured', {
-        reqId,
+        requestId: reqId,
         userId: user.id,
-        hasOpenAIKey: !!process.env.OPENAI_API_KEY,
-        hasLLMKey: !!process.env.LLM_API_KEY,
+        statusCode: 500,
+        errorCode: 'SERVICE_UNAVAILABLE',
+        path: '/api/realtime/connect',
+        method: 'POST',
+        // Don't log API key presence in production
+        hasOpenAIKey: process.env.NODE_ENV === 'development' ? !!process.env.OPENAI_API_KEY : undefined,
+        hasLLMKey: process.env.NODE_ENV === 'development' ? !!process.env.LLM_API_KEY : undefined,
       });
       return NextResponse.json(
         { 
           error: 'Realtime API is not configured',
           message: 'OpenAI API key is missing. Please configure OPENAI_API_KEY or LLM_API_KEY environment variable.',
+          requestId: reqId,
         },
         { status: 500 }
       );
@@ -161,9 +210,12 @@ export async function POST(request: NextRequest) {
     const REALTIME_ENDPOINT = 'https://api.openai.com/v1/realtime/calls';
     
     try {
+      // Structured logging: connection attempt
       safeLogger.info('[RealtimeConnect] Attempting connection to OpenAI', {
-        reqId,
+        requestId: reqId,
         userId: user.id,
+        path: '/api/realtime/connect',
+        method: 'POST',
         sdpLength: sdp.length,
         hasSessionToken: !!session_token,
         endpoint: REALTIME_ENDPOINT,
@@ -193,15 +245,23 @@ export async function POST(request: NextRequest) {
           errorMessage = errorText || errorMessage;
         }
         
+        // Structured logging: OpenAI API error
         safeLogger.error('[RealtimeConnect] OpenAI API returned error', {
-          reqId,
-          status: response.status,
-          statusText: response.statusText,
-          error: errorMessage,
+          requestId: reqId,
           userId: user.id,
+          statusCode: statusCode,
+          errorCode: statusCode === 400 ? 'BAD_REQUEST' :
+                     statusCode === 401 ? 'UNAUTHORIZED' :
+                     statusCode === 429 ? 'RATE_LIMIT_EXCEEDED' : 'UPSTREAM_ERROR',
+          path: '/api/realtime/connect',
+          method: 'POST',
+          upstreamStatus: response.status,
+          upstreamStatusText: response.statusText,
+          errorMessage: errorMessage, // Error reason without leaking keys
           hasSdp: !!sdp,
           sdpLength: sdp?.length || 0,
-          hasOpenAIKey: !!OPENAI_API_KEY,
+          // Don't log API key presence in production
+          hasOpenAIKey: process.env.NODE_ENV === 'development' ? !!OPENAI_API_KEY : undefined,
           endpoint: REALTIME_ENDPOINT,
         });
         
@@ -222,6 +282,7 @@ export async function POST(request: NextRequest) {
               : process.env.NODE_ENV === 'development'
               ? `${response.status}: ${errorMessage}`
               : 'Realtime connection failed. Please try again.',
+            requestId: reqId,
             details: process.env.NODE_ENV === 'development' ? errorMessage : undefined,
           },
           { status: statusCode }
@@ -255,13 +316,18 @@ export async function POST(request: NextRequest) {
         sdp: sdpAnswer,
       });
     } catch (error: any) {
+      // Structured logging: network error
       safeLogger.error('[RealtimeConnect] Network error connecting to OpenAI', {
-        reqId,
-        error: error.message,
-        stack: error.stack,
+        requestId: reqId,
         userId: user.id,
+        statusCode: 500,
+        errorCode: 'NETWORK_ERROR',
+        path: '/api/realtime/connect',
+        method: 'POST',
+        errorMessage: error.message, // Error reason without leaking keys
         errorName: error.name,
         endpoint: REALTIME_ENDPOINT,
+        stack: process.env.NODE_ENV === 'development' ? error.stack : undefined,
       });
       
       return NextResponse.json(
@@ -272,6 +338,7 @@ export async function POST(request: NextRequest) {
             : process.env.NODE_ENV === 'development'
             ? error.message
             : 'Realtime connection error. Please try again.',
+          requestId: reqId,
           details: process.env.NODE_ENV === 'development' ? error.message : undefined,
         },
         { status: 500 }
@@ -279,18 +346,24 @@ export async function POST(request: NextRequest) {
     }
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    // Structured logging: unexpected error
     safeLogger.error('[RealtimeConnect] Unexpected error', {
-      reqId,
-      error: errorMessage,
-      stack: error instanceof Error ? error.stack : undefined,
+      requestId: reqId,
+      statusCode: 500,
+      errorCode: 'INTERNAL_ERROR',
+      path: '/api/realtime/connect',
+      method: 'POST',
+      errorMessage: errorMessage,
+      stack: process.env.NODE_ENV === 'development' && error instanceof Error ? error.stack : undefined,
     });
-    return NextResponse.json(
-      { 
-        error: 'Failed to connect to OpenAI Realtime API',
-        message: errorMessage,
-        details: process.env.NODE_ENV === 'development' ? errorMessage : undefined,
-      },
-      { status: 500 }
-    );
+      return NextResponse.json(
+        { 
+          error: 'Failed to connect to OpenAI Realtime API',
+          message: errorMessage,
+          requestId: reqId,
+          details: process.env.NODE_ENV === 'development' ? errorMessage : undefined,
+        },
+        { status: 500 }
+      );
   }
 }

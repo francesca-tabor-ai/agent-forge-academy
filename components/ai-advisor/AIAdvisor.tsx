@@ -746,13 +746,13 @@ export function AIAdvisor({
             </button>
           </div>
 
-          {/* WebRTC Realtime Connection - Always established on page load */}
-          <VoiceErrorBoundary
-            onError={(error, errorInfo) => {
-              console.error('WebRTCRealtime error caught by boundary:', error, errorInfo);
-            }}
-          >
-            <div className={useWebRTCRealtime ? '' : 'hidden'}>
+          {/* WebRTC Realtime Connection - Only render when WebRTC mode is selected */}
+          {useWebRTCRealtime && (
+            <VoiceErrorBoundary
+              onError={(error, errorInfo) => {
+                console.error('WebRTCRealtime error caught by boundary:', error, errorInfo);
+              }}
+            >
               <WebRTCRealtime
                 // Fallback callback - switch to standard voice when WebRTC fails
                 onFallback={() => {
@@ -894,11 +894,11 @@ export function AIAdvisor({
                 onError={(error) => {
                   console.error('WebRTC Realtime error:', error);
                 }}
-                disabled={false} // Always enabled - connection established on page load
+                disabled={false}
                 studentProfileId={studentProfileId}
+                autoConnect={false} // Never auto-connect - user must click Connect button
               />
-            </div>
-          </VoiceErrorBoundary>
+            </VoiceErrorBoundary>
 
           {/* Voice Controls - Standard Mode */}
           {!useWebRTCRealtime && (

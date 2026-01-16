@@ -184,6 +184,18 @@ async function transcribeAudioViaAPI(
     throw new Error(`Voice API error: ${response.status}`);
   }
 
+  if (!response.ok) {
+    // Extract request ID from error response if available
+    const errorData = await response.json().catch(() => ({}));
+    const errorMessage = errorData.message || errorData.error || `Voice API error: ${response.status}`;
+    const requestId = errorData.requestId;
+    
+    const error = new Error(requestId ? `${errorMessage} (Request ID: ${requestId})` : errorMessage);
+    (error as any).response = response;
+    (error as any).requestId = requestId;
+    throw error;
+  }
+
   const data = await response.json();
   return data.transcript || '';
 }
@@ -816,7 +828,33 @@ export function VoiceControls({
         const mockAudioBlob = createMockAudioBlob();
         
         // Send to voice API for transcription
-        const transcript = await transcribeAudioViaAPI(mockAudioBlob, studentProfileId, context);
+        let transcript: string;
+        try {
+          transcript = await transcribeAudioViaAPI(mockAudioBlob, studentProfileId, context);
+        } catch (error: any) {
+          // Handle API errors with request ID extraction
+          let errorMessage = 'Failed to transcribe audio. Please try again or use text input.';
+          
+          // Extract request ID from error if available
+          if (error.requestId) {
+            errorMessage = `${error.message || errorMessage} (Request ID: ${error.requestId})`;
+          } else if (error.message) {
+            errorMessage = error.message;
+          }
+          
+          setError(errorMessage);
+          setRecognitionState('error');
+          setIsListening(false);
+          setRecognitionState('idle');
+          
+          // Stop recording timer
+          if (recordingIntervalRef.current) {
+            clearInterval(recordingIntervalRef.current);
+            recordingIntervalRef.current = null;
+          }
+          setRecordingDuration(0);
+          return;
+        }
         
         if (transcript && transcript.trim()) {
           const fullText = transcript.trim();
@@ -850,7 +888,25 @@ export function VoiceControls({
         }
       } catch (error: any) {
         console.error('Error in mock transcription:', error);
-        setError('Failed to transcribe audio. Please try again or use text input.');
+        
+        // Extract request ID from error if available
+        let errorMessage = 'Failed to transcribe audio. Please try again or use text input.';
+        if (error.message) {
+          errorMessage = error.message;
+          // Check if error response contains requestId
+          try {
+            const errorData = typeof error === 'object' && 'response' in error 
+              ? await (error as any).response?.json().catch(() => ({}))
+              : {};
+            if (errorData.requestId) {
+              errorMessage += ` (Request ID: ${errorData.requestId})`;
+            }
+          } catch {
+            // Ignore parsing errors
+          }
+        }
+        
+        setError(errorMessage);
         setRecognitionState('error');
       } finally {
         setIsListening(false);
