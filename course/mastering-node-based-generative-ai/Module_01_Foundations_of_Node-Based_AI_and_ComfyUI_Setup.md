@@ -18,70 +18,103 @@ order: 1
 
 ## 1.1 Introduction to the "Lego Block" Philosophy
 
-Node-based interfaces represent a paradigm shift in how we interact with AI models. Instead of writing code or using simple text prompts, we build visual workflows using functional blocks.
+ComfyUI is designed around a modular philosophy where users manage and create workflows by visually connecting different tasks, a process frequently compared to **building with Lego blocks**. Understanding this system requires grasping three core components:
 
-### Core Concepts
+### Nodes (Functional Blocks)
 
-**Nodes (Functional Blocks):**
-- Each node represents a discrete operation or function
-- Nodes have inputs (data coming in) and outputs (data going out)
-- Examples: Load Checkpoint, CLIP Text Encode, KSampler, VAE Decode
+These are the rectangular windows within the interface, each representing a **specific function**, such as loading an AI model, entering a text prompt, or saving the final result. Each node has inputs (data coming in) and outputs (data going out), allowing you to chain operations together.
 
-**Links (Data Pipes):**
-- Connections between nodes that carry data
+**Examples:**
+- Load Checkpoint (loads AI models)
+- CLIP Text Encode (processes text prompts)
+- KSampler (generates images)
+- VAE Decode (converts latent to pixels)
+- Save Image (saves the final result)
+
+### Links (Data Pipes)
+
+These are the visible lines connecting nodes, acting as "piping" that dictates exactly **how information moves** from one part of the project to the next. Links ensure type-safe connections and make the data flow visually apparent.
+
+**Characteristics:**
 - Visual representation of data flow
 - Type-safe connections ensure compatibility
+- Clear indication of processing order
+- Easy to trace data through the workflow
 
-**Workflows:**
-- Visual representations of AI tasks
-- Can be saved, shared, and reused
-- Enable complex multi-stage processes
+### Workflows
 
-### Why Node-Based Interfaces?
+A workflow is the **visual representation** of the entire image creation process from start to finish. One of the platform's primary advantages is that these workflows can be easily shared or saved as JSON files, making collaboration and reuse simple.
 
-1. **Visual Clarity:** See the entire pipeline at a glance
-2. **Modularity:** Reuse components across projects
-3. **Debugging:** Identify bottlenecks and issues visually
-4. **Collaboration:** Share workflows as JSON or embedded in images
-5. **Scalability:** Build complex systems from simple building blocks
+**Benefits:**
+- Visual clarity of the entire pipeline
+- Easy to save and share
+- Can be embedded directly in generated images
+- Enables complex multi-stage processes
 
 ---
 
 ## 1.2 Local Environment Configuration
 
+To run ComfyUI effectively on your own hardware, specific system requirements and installation steps must be followed.
+
 ### System Requirements
 
-**Recommended Hardware:**
-- **GPU:** Nvidia RTX GPU with at least 8GB VRAM (optimal performance)
-- **RAM:** 16GB minimum, 32GB recommended
-- **Storage:** 50GB+ free space for models and checkpoints
-- **OS:** Windows 10/11, macOS 10.15+, or Linux (Ubuntu 20.04+)
-
-**Why Nvidia RTX GPUs?**
-- CUDA acceleration for faster inference
-- Tensor cores for optimized AI operations
+**GPU:**
+- For optimal performance, **Nvidia RTX series cards** are highly preferred due to their superior generation speeds compared to CPUs or other brands.
+- CUDA acceleration enables faster inference
+- Tensor cores optimize AI operations
 - Better memory management for large models
-- Wider compatibility with AI frameworks
 
-### Installation Methods
+**VRAM:**
+- While the system can function on **6GB of VRAM**, at least **8GB of VRAM or more** is recommended for a smooth and fast experience.
+- More VRAM allows for larger image sizes and batch processing
+- Reduces the need for model swapping
+
+**System RAM:**
+- A minimum of **16GB of RAM** is recommended to ensure the workflow runs without bottlenecks.
+- Additional RAM helps with model loading and caching
+- Prevents system slowdowns during generation
+
+**Storage:**
+- 50GB+ free space recommended for models and checkpoints
+- Models can range from 2GB to 7GB each
+- Additional space needed for generated images and workflows
+
+### Installation Procedures
 
 #### Windows (Portable Version - Recommended)
 
+The most straightforward method is downloading the **portable version**, which integrates an independent Python environment.
+
+**Steps:**
 1. Download the portable ComfyUI release from GitHub
-2. Extract to a folder (e.g., `C:\ComfyUI`)
-3. Run `python -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121`
-4. Install additional dependencies: `pip install -r requirements.txt`
-5. Launch: `python main.py`
+2. Extract the archive using tools like 7-Zip or WinRAR to a folder (e.g., `C:\ComfyUI`)
+3. Launch the interface via the `run_nvidia_gpu.bat` file
+4. The portable version includes all necessary dependencies
+
+**Advantages:**
+- No Python installation required
+- Isolated environment
+- Easy to update or remove
+- No system-wide changes
 
 #### macOS
 
+**For Apple Silicon (ARM):**
+- Use the standalone installer specifically designed for Apple Silicon/ARM
+- Follow the installation wizard
+- Launch from Applications folder
+
+**For Intel Macs:**
 1. Install Python 3.10+ via Homebrew: `brew install python@3.10`
 2. Clone ComfyUI repository: `git clone https://github.com/comfyanonymous/ComfyUI.git`
 3. Navigate to directory: `cd ComfyUI`
 4. Install dependencies: `pip install -r requirements.txt`
 5. Launch: `python main.py`
 
-#### Linux (Ubuntu/Debian)
+#### Linux
+
+Linux users typically follow a manual installation guide to set up the necessary dependencies:
 
 1. Install Python and dependencies:
    ```bash
@@ -90,97 +123,145 @@ Node-based interfaces represent a paradigm shift in how we interact with AI mode
    ```
 2. Create virtual environment: `python3 -m venv venv`
 3. Activate: `source venv/bin/activate`
-4. Clone and install ComfyUI
-5. Launch: `python main.py`
+4. Clone ComfyUI: `git clone https://github.com/comfyanonymous/ComfyUI.git`
+5. Navigate: `cd ComfyUI`
+6. Install dependencies: `pip install -r requirements.txt`
+7. Launch: `python main.py`
 
 ---
 
 ## 1.3 First Generation & The Core Workflow
 
-### The Five Basic Nodes
+A standard "text-to-image" workflow in ComfyUI relies on **five foundational nodes** that must be linked in a specific sequence to produce an image.
 
-Every ComfyUI workflow starts with these fundamental components:
+### The Five Foundational Nodes
 
 #### 1. Load Checkpoint
+
+This node is used to select and load your chosen Stable Diffusion model.
+
 - **Purpose:** Loads the Stable Diffusion model
-- **Inputs:** Model file path
+- **Inputs:** Model file path (selected from dropdown)
 - **Outputs:** Model, CLIP, VAE
-- **Location:** Models stored in `models/checkpoints/`
+- **Location:** Models stored in `<ComfyUI_folder>/models/checkpoints`
+- **Usage:** First node in the workflow, provides model data to other nodes
 
-#### 2. CLIP Text Encode (Positive)
+#### 2. CLIP Text Encode
+
+This usually requires **two nodes**—one for the **Positive Prompt** (describing what you want to see) and one for the **Negative Prompt** (describing elements to avoid).
+
+**Positive Prompt Node:**
 - **Purpose:** Encodes your prompt into the model's language space
-- **Inputs:** Text prompt, CLIP model
+- **Inputs:** Text prompt, CLIP model (from Load Checkpoint)
 - **Outputs:** Positive conditioning
-- **Best Practice:** Be specific and descriptive
+- **Best Practice:** Be specific and descriptive about desired elements
 
-#### 3. CLIP Text Encode (Negative)
+**Negative Prompt Node:**
 - **Purpose:** Encodes what you want to avoid
-- **Inputs:** Negative prompt, CLIP model
+- **Inputs:** Negative prompt text, CLIP model (from Load Checkpoint)
 - **Outputs:** Negative conditioning
-- **Common Use:** Remove artifacts, improve quality
+- **Common Use:** Remove artifacts, improve quality, exclude unwanted elements
 
-#### 4. KSampler
+#### 3. KSampler
+
+The "brain" of the generation, which takes the encoded prompts and applies settings like **seed, steps, and CFG** to generate a result in latent space.
+
 - **Purpose:** The actual generation step
-- **Inputs:** Model, positive/negative conditioning, seed, steps, CFG scale
+- **Inputs:** 
+  - Model (from Load Checkpoint)
+  - Positive conditioning (from CLIP Text Encode)
+  - Negative conditioning (from CLIP Text Encode)
+  - Seed (random number for reproducibility)
+  - Steps (number of denoising iterations)
+  - CFG Scale (how closely to follow the prompt)
 - **Outputs:** Latent image representation
 - **Key Parameters:**
-  - Steps: 20-50 (more = better quality, slower)
-  - CFG Scale: 7-12 (higher = more prompt adherence)
+  - **Steps:** 20-50 (more = better quality, slower generation)
+  - **CFG Scale:** 7-12 (higher = more prompt adherence, but can reduce quality if too high)
+  - **Seed:** Random number or fixed value for reproducibility
 
-#### 5. VAE Decode
+#### 4. VAE Decode
+
+This node is critical for **translating compressed latent data** into a viewable image.
+
 - **Purpose:** Converts latent space to pixel space
-- **Inputs:** Latent image, VAE model
-- **Outputs:** Final image
-- **Note:** VAE comes with the checkpoint
+- **Inputs:** Latent image (from KSampler), VAE model (from Load Checkpoint)
+- **Outputs:** Final image in pixel format
+- **Note:** VAE comes with the checkpoint, but can be swapped for different VAE models
 
-#### 6. Save Image
-- **Purpose:** Writes the final image to disk
-- **Inputs:** Image, filename prefix
-- **Outputs:** Saved file path
+#### 5. Save Image
 
-### Understanding Latent Space vs. Pixel Space
+The final step which renders and displays the finished imagery on the canvas.
+
+- **Purpose:** Writes the final image to disk and displays it
+- **Inputs:** Image (from VAE Decode), filename prefix (optional)
+- **Outputs:** Saved file path, displayed image on canvas
+- **Location:** Images saved to `ComfyUI/output` folder by default
+
+### Understanding Latent vs. Pixel Space
 
 **Latent Space:**
-- Compressed representation of the image
-- Smaller memory footprint (e.g., 512x512 → 64x64)
-- Where the AI model actually works
+- AI models primarily operate in **latent space**, a mathematical, compressed representation of an image that is invisible to the human eye
+- Compressed representation (e.g., 512x512 image → 64x64 latent)
+- Smaller memory footprint
+- Where the AI model actually performs generation
 - Faster processing
 
 **Pixel Space:**
+- The **pixel space** is the viewable imagery that we see in the final output
 - Final image pixels (RGB values)
-- What humans see
+- What humans can see and understand
 - Larger memory footprint
 - Final output format
 
-**The Workflow:**
+**The Bridge:**
+The **VAE Decode** node serves as the bridge, converting this mathematical data back into the **pixel space** (viewable imagery) that we see in the final output.
+
+**The Complete Workflow:**
 ```
-Text Prompt → Latent Space (Generation) → Pixel Space (Decoding) → Final Image
+Text Prompt → CLIP Encoding → Latent Space (KSampler Generation) → VAE Decode → Pixel Space (Final Image)
 ```
 
 ---
 
 ## 1.4 Model Management
 
+To generate high-quality results, you must manually manage your models (also known as checkpoints).
+
 ### Downloading Models
 
 **Primary Source: CivitAI**
+- The community platform **CivitAI** is the preferred resource for finding models
 - Visit [civitai.com](https://civitai.com)
-- Browse by category (Checkpoint, LoRA, VAE, etc.)
-- Download `.safetensors` files (safer format)
+- Browse by category (Checkpoint, LoRA, VAE, ControlNet, etc.)
+- Filter by popularity, rating, and tags
+
+**Preferred File Format:**
+- When downloading, the **.safetensors** format is highly preferred over the older `.ckpt` format because it is **safer and more secure**
+- `.safetensors` files prevent arbitrary code execution
+- Better security for model sharing
+- Supported by all modern Stable Diffusion interfaces
 
 **Model Types:**
-- **Checkpoints:** Full models (2-7GB)
-- **LoRA:** Lightweight adapters (10-200MB)
+- **Checkpoints:** Full models (2-7GB) - Complete Stable Diffusion models
+- **LoRA:** Lightweight adapters (10-200MB) - Style or character modifications
 - **VAE:** Visual Autoencoders for better color/quality
-- **ControlNet:** Structural guidance models
+- **ControlNet:** Structural guidance models for precise control
 
-### Organizing Your Models Folder
+### Organizing Folders
 
-**Recommended Structure:**
+**Required Directory Structure:**
+Downloaded model files must be placed in the correct directory to be recognised:
+
+```
+<ComfyUI_folder>/models/checkpoints/
+```
+
+**Complete Folder Structure:**
 ```
 ComfyUI/
 ├── models/
-│   ├── checkpoints/        # Main models
+│   ├── checkpoints/        # Main models (.safetensors or .ckpt files)
 │   ├── loras/              # LoRA adapters
 │   ├── vae/                # VAE models
 │   ├── controlnet/         # ControlNet models
@@ -189,18 +270,35 @@ ComfyUI/
 ```
 
 **Best Practices:**
-- Use descriptive filenames
+- Place models directly in the `checkpoints` folder
+- Use descriptive filenames for easy identification
 - Keep original filenames for version tracking
 - Organize by category, not by download date
 - Document model sources and licenses
 
+### UI Integration
+
+**Refreshing the Model List:**
+- If you add a model while the software is already running, you must click the **"Refresh" button** in the ComfyUI menu to make the new model appear in the Load Checkpoint dropdown list
+- Located in the ComfyUI interface menu
+- Updates the model list without restarting
+- Essential after adding new models
+
+**Model Loading:**
+- Models appear in the Load Checkpoint node dropdown
+- Select from the list to load
+- First load may take time (model loading into VRAM)
+- Subsequent loads are faster if model is cached
+
 ### Model Safety
 
-**Always:**
+**Best Practices:**
 - Download from trusted sources (CivitAI, HuggingFace)
 - Check file hashes when provided
 - Scan for malware (rare but possible)
 - Use `.safetensors` format when available
+- Read model descriptions and reviews
+- Check model licenses before commercial use
 
 ---
 
