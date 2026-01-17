@@ -662,6 +662,35 @@ export async function POST(request: NextRequest) {
     : `req_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
   const startTime = Date.now();
 
+  // Startup guard: Validate LLM configuration early
+  const llmProvider = process.env.LLM_PROVIDER || 'openai';
+  const llmApiKey = process.env.LLM_API_KEY;
+  const model = llmProvider === 'openai' 
+    ? (process.env.OPENAI_MODEL || 'gpt-4-turbo-preview')
+    : (process.env.ANTHROPIC_MODEL || 'claude-3-opus-20240229');
+
+  // Log provider configuration (without exposing keys)
+  safeLogger.info('[AI_ADVISOR] Request received', {
+    requestId,
+    provider: llmProvider,
+    model,
+    hasApiKey: !!llmApiKey,
+    stage: 'request_start',
+  });
+
+  // Early validation: Check if API key is missing
+  if (!llmApiKey) {
+    const errorMsg = 'LLM_API_KEY environment variable is required';
+    safeLogger.error('[AI_ADVISOR] Configuration error', {
+      requestId,
+      stage: 'provider_config_check',
+      error: errorMsg,
+      provider: llmProvider,
+      model,
+    });
+    // Return early with proper error (but we'll still check auth first)
+  }
+
   try {
     const supabase = await createUserSupabaseClient();
     const {
@@ -670,11 +699,12 @@ export async function POST(request: NextRequest) {
 
     if (!user) {
       // Structured logging: unauthorized request
-      safeLogger.warn('[ChatAPI] Unauthorized request', { 
+      safeLogger.warn('[AI_ADVISOR] Unauthorized request', { 
         requestId, 
         userId: null,
         statusCode: 401,
         errorCode: 'UNAUTHORIZED',
+        stage: 'auth_check',
         path: '/api/ai-advisor/chat',
         method: 'POST',
       });
@@ -683,7 +713,43 @@ export async function POST(request: NextRequest) {
           ok: false,
           error: { code: 'UNAUTHORIZED', message: 'Session expired — please sign in again.', requestId } 
         },
-        { status: 401 }
+        { 
+          status: 401,
+          headers: {
+            'X-Request-ID': requestId,
+          },
+        }
+      );
+    }
+
+    // Check LLM configuration after auth (so we can log userId)
+    if (!llmApiKey) {
+      const errorMsg = 'LLM_API_KEY environment variable is required';
+      safeLogger.error('[AI_ADVISOR] Configuration error', {
+        requestId,
+        userId: user.id,
+        stage: 'provider_config_check',
+        error: errorMsg,
+        provider: llmProvider,
+        model,
+        statusCode: 503,
+        errorCode: 'SERVICE_UNAVAILABLE',
+      });
+      return NextResponse.json(
+        { 
+          ok: false,
+          error: { 
+            code: 'SERVICE_UNAVAILABLE', 
+            message: 'AI service is not configured. Please contact support.',
+            requestId 
+          } 
+        },
+        { 
+          status: 503,
+          headers: {
+            'X-Request-ID': requestId,
+          },
+        }
       );
     }
 
@@ -708,15 +774,22 @@ export async function POST(request: NextRequest) {
           ok: false,
           error: { code: 'BAD_REQUEST', message: 'Message is required', requestId } 
         },
-        { status: 400 }
+        { 
+          status: 400,
+          headers: {
+            'X-Request-ID': requestId,
+          },
+        }
       );
     }
 
     // Log request details
       // Structured logging: request received
-      safeLogger.info('[ChatAPI] Request received', {
+      safeLogger.info('[AI_ADVISOR] Request received', {
         requestId,
         userId: user.id,
+        provider: llmProvider,
+        model,
         path: '/api/ai-advisor/chat',
         method: 'POST',
         hasContext: !!context,
@@ -726,6 +799,7 @@ export async function POST(request: NextRequest) {
         activeCourseId: context?.course?.id || null,
         activeProjectId: context?.project?.id || null,
         activeJobId: context?.job?.id || null,
+        stage: 'request_processing',
       });
 
     // Check for sensitive information
@@ -984,21 +1058,28 @@ export async function POST(request: NextRequest) {
                 
                 // Determine appropriate error code
                 let errorCode = 'UPSTREAM_ERROR';
+                let statusCode = 500;
                 if (errorMessage.includes('LLM_API_KEY') || errorMessage.includes('required')) {
                   errorCode = 'SERVICE_UNAVAILABLE';
+                  statusCode = 503;
                 } else if (errorMessage.includes('401') || errorMessage.includes('Unauthorized')) {
                   errorCode = 'UNAUTHORIZED';
+                  statusCode = 401;
                 } else if (errorMessage.includes('429') || errorMessage.includes('rate limit')) {
                   errorCode = 'RATE_LIMIT_EXCEEDED';
+                  statusCode = 429;
                 }
                 
-                safeLogger.error('AI Advisor: LLM provider error', { 
+                safeLogger.error('[AI_ADVISOR] LLM provider error', { 
                   requestId,
                   userId: user.id,
-                  route: '/api/ai-advisor/chat',
-                  model: process.env.OPENAI_MODEL || 'gpt-4-turbo-preview',
+                  provider: llmProvider,
+                  model,
+                  stage: 'provider_call_failed',
+                  statusCode,
+                  errorCode,
                   error: errorMessage,
-                  stack: llmError.stack,
+                  stack: process.env.NODE_ENV === 'development' ? llmError.stack : undefined,
                 });
                 
                 // Send error to client
@@ -1192,14 +1273,17 @@ export async function POST(request: NextRequest) {
               const upstreamStatusMatch = errorMessage.match(/(\d{3})/);
               const upstreamStatus = upstreamStatusMatch ? parseInt(upstreamStatusMatch[1]) : null;
               
-              safeLogger.error('AI Advisor: Error in streaming LLM response', { 
+              safeLogger.error('[AI_ADVISOR] Error in streaming LLM response', { 
                 requestId,
                 userId: user.id,
-                route: '/api/ai-advisor/chat',
-                model: process.env.OPENAI_MODEL || 'gpt-4-turbo-preview',
+                provider: llmProvider,
+                model,
+                stage: 'streaming_error',
+                statusCode,
+                errorCode,
                 upstreamStatus,
                 error: errorMessage,
-                stack: error?.stack,
+                stack: process.env.NODE_ENV === 'development' ? error?.stack : undefined,
                 elapsed 
               });
               
@@ -1246,14 +1330,6 @@ export async function POST(request: NextRequest) {
         llm = getLLMProvider();
       } catch (llmError: any) {
         const errorMessage = llmError.message || 'LLM provider not configured';
-        safeLogger.error('AI Advisor: LLM provider error', { 
-          requestId, 
-          userId: user.id,
-          error: llmError.message,
-          stack: llmError.stack,
-          route: '/api/ai-advisor/chat',
-          model: process.env.OPENAI_MODEL || 'gpt-4-turbo-preview',
-        });
         
         // Determine appropriate status code
         let statusCode = 500;
@@ -1273,6 +1349,18 @@ export async function POST(request: NextRequest) {
           errorCode = 'BAD_REQUEST';
         }
         
+        safeLogger.error('[AI_ADVISOR] LLM provider error', { 
+          requestId, 
+          userId: user.id,
+          provider: llmProvider,
+          model,
+          stage: 'provider_call_failed',
+          statusCode,
+          errorCode,
+          error: errorMessage,
+          stack: process.env.NODE_ENV === 'development' ? llmError.stack : undefined,
+        });
+        
         return NextResponse.json(
           { 
             ok: false,
@@ -1286,7 +1374,12 @@ export async function POST(request: NextRequest) {
               requestId 
             } 
           },
-          { status: statusCode }
+          { 
+            status: statusCode,
+            headers: {
+              'X-Request-ID': requestId,
+            },
+          }
         );
       }
 
@@ -1297,15 +1390,25 @@ export async function POST(request: NextRequest) {
       });
       const llmLatency = Date.now() - llmStartTime;
 
-      safeLogger.info('AI Advisor: Response generated', { 
+      safeLogger.info('[AI_ADVISOR] Response generated', { 
         requestId, 
+        userId: user.id,
+        provider: llmProvider,
+        model,
+        stage: 'response_complete',
         llmLatency,
         responseLength: llmResponse.content.length 
       });
 
       // Guard: Ensure response is not empty
       if (!llmResponse.content || !llmResponse.content.trim()) {
-        safeLogger.error('AI Advisor: Empty completion from LLM', { requestId });
+        safeLogger.error('[AI_ADVISOR] Empty completion from LLM', { 
+          requestId,
+          userId: user.id,
+          provider: llmProvider,
+          model,
+          stage: 'empty_completion',
+        });
         return NextResponse.json(
           { 
             ok: false,
@@ -1315,7 +1418,12 @@ export async function POST(request: NextRequest) {
               requestId 
             } 
           },
-          { status: 500 }
+          { 
+            status: 500,
+            headers: {
+              'X-Request-ID': requestId,
+            },
+          }
         );
       }
 
@@ -1401,9 +1509,12 @@ export async function POST(request: NextRequest) {
 
       const totalLatency = Date.now() - startTime;
       // Structured logging: request completed successfully
-      safeLogger.info('[ChatAPI] Request completed', { 
+      safeLogger.info('[AI_ADVISOR] Request completed', { 
         requestId, 
         userId: user.id,
+        provider: llmProvider,
+        model,
+        stage: 'request_complete',
         statusCode: 200,
         totalLatency,
         path: '/api/ai-advisor/chat',
@@ -1460,14 +1571,16 @@ export async function POST(request: NextRequest) {
       const upstreamStatus = upstreamStatusMatch ? parseInt(upstreamStatusMatch[1]) : null;
       
       // Structured logging: error with status code and error reason
-      safeLogger.error('[ChatAPI] Error generating LLM response', { 
+      safeLogger.error('[AI_ADVISOR] Error generating LLM response', { 
         requestId,
         userId: user.id,
+        provider: llmProvider,
+        model,
+        stage: 'llm_call_failed',
         statusCode,
         errorCode,
         path: '/api/ai-advisor/chat',
         method: 'POST',
-        model: process.env.OPENAI_MODEL || 'gpt-4-turbo-preview',
         upstreamStatus,
         errorMessage: errorMessage, // Error reason without leaking keys
         elapsed,
@@ -1502,14 +1615,22 @@ export async function POST(request: NextRequest) {
             requestId 
           } 
         },
-        { status: statusCode }
+        { 
+          status: statusCode,
+          headers: {
+            'X-Request-ID': requestId,
+          },
+        }
       );
     }
   } catch (error: any) {
     const elapsed = Date.now() - startTime;
     // Structured logging: top-level error handler
-    safeLogger.error('[ChatAPI] Error in chat handler', { 
+    safeLogger.error('[AI_ADVISOR] Error in chat handler', { 
       requestId, 
+      provider: llmProvider,
+      model,
+      stage: 'top_level_error',
       statusCode: 500,
       errorCode: 'INTERNAL_ERROR',
       path: '/api/ai-advisor/chat',
@@ -1542,7 +1663,12 @@ export async function POST(request: NextRequest) {
           requestId 
         } 
       },
-      { status: 500 }
+      { 
+        status: 500,
+        headers: {
+          'X-Request-ID': requestId,
+        },
+      }
     );
   }
 }

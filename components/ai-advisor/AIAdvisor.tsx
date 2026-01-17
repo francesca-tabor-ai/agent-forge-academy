@@ -262,13 +262,20 @@ export function AIAdvisor({
             // Try to read error message
             let errorMessage = 'Failed to get response';
             let requestId: string | undefined;
+            
+            // First try to get requestId from header (fallback)
+            requestId = response.headers.get('X-Request-ID') || undefined;
+            
             try {
               const errorData = await response.json();
               if (errorData.error) {
                 errorMessage = errorData.error.message || errorData.error.code || errorMessage;
-                requestId = errorData.error.requestId;
+                // Prefer requestId from error body, fallback to header
+                requestId = errorData.error.requestId || requestId;
               } else {
                 errorMessage = errorData.error || errorMessage;
+                // Also check top-level requestId in body
+                requestId = errorData.requestId || requestId;
               }
             } catch {
               errorMessage = response.statusText || errorMessage;
@@ -428,13 +435,20 @@ export function AIAdvisor({
             // Try to read error message
             let errorMessage = 'Failed to get response';
             let requestId: string | undefined;
+            
+            // First try to get requestId from header (fallback)
+            requestId = response.headers.get('X-Request-ID') || undefined;
+            
             try {
               const errorData = await response.json();
               if (errorData.error) {
                 errorMessage = errorData.error.message || errorData.error.code || errorMessage;
-                requestId = errorData.error.requestId;
+                // Prefer requestId from error body, fallback to header
+                requestId = errorData.error.requestId || requestId;
               } else {
                 errorMessage = errorData.error || errorMessage;
+                // Also check top-level requestId in body
+                requestId = errorData.requestId || requestId;
               }
             } catch {
               errorMessage = response.statusText || errorMessage;
