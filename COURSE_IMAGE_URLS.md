@@ -27,6 +27,8 @@ ml-engineering | ML Engineering | https://www.databricks.com/sites/default/files
 vibe-engineering | Vibe Engineering | https://www.windowsnoticias.com/wp-content/uploads/2025/04/0_vOaWDgTmVpMfi9ws.png
 platform-engineering | Platform Engineering | https://8allocate.com/wp-content/uploads/2024/01/The-Future-of-Software-Engineering_-Predictions-for-2024.jpg
 gtm-revenue-operations | GTM & Revenue Operations | https://wp.sfdcdigital.com/en-us/wp-content/uploads/sites/4/2024/08/revenue-ops.jpg?w=1024
+creative-ai | Creative AI | https://cached.imagescaler.hbpl.co.uk/resize/scaleWidth/815/cached.offlinehbpl.hbpl.co.uk/news/OMC/Human-creativity-v-machine-creativity-20180614032816356.jpg
+audio-voice | Audio & Voice | https://media.bazaarvoice.com/Shutterstock_1159197631.png
 ```
 
 ---
