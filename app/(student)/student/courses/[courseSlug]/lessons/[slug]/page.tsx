@@ -60,7 +60,7 @@ export default async function CourseLessonPage({ params }: CourseLessonPageProps
     .eq('slug', courseSlug)
     .single();
 
-  const courseTitle = course?.title || courseSlug.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
+  const courseTitle = course?.title || courseSlug.replace(/-/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase());
   
   // Don't require course to be in database - allow file system only courses
 

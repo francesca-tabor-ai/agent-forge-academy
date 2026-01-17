@@ -152,7 +152,7 @@ export default async function StudentDashboard() {
         slug,
         // Prioritize static metadata title (course-metadata.ts) over dynamic metadata title
         // to ensure we show the course name, not the first lesson title
-        title: staticMetadata?.title || dynamicMetadata?.metadata?.title || slug.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()),
+        title: staticMetadata?.title || dynamicMetadata?.metadata?.title || slug.replace(/-/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()),
         description: dynamicMetadata?.metadata?.description || staticMetadata?.outcome || null,
         thumbnail_url: dynamicMetadata?.metadata?.thumbnail_url || null,
         imageUrl: dynamicMetadata?.metadata?.imageUrl || metadata?.imageUrl,

@@ -286,7 +286,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                   href={`/student/courses/${slug}`}
                   className="px-2.5 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded hover:bg-blue-200 transition-colors"
                 >
-                  {slug.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())}
+                  {slug.replace(/-/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase())}
                 </Link>
               ))}
             </div>

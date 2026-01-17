@@ -124,7 +124,7 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
   // Get static metadata (outcome, build, bestFor)
   const staticMetadata = courseMetadata[courseSlug];
 
-  const courseTitle = course?.title || metadata?.title || staticMetadata?.title || courseSlug.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
+  const courseTitle = course?.title || metadata?.title || staticMetadata?.title || courseSlug.replace(/-/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase());
   const courseDescription = course?.description || metadata?.description || null;
   const courseCoverImage = getCourseCover(course || { category: metadata?.category || staticMetadata?.category, industries: metadata?.industries || staticMetadata?.industries });
 

@@ -142,7 +142,7 @@ export function FailureModeViewer() {
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              {category.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())}
+              {category.replace(/-/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase())}
             </button>
           ))}
         </div>

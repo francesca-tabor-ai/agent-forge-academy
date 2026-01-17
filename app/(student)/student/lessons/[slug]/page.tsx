@@ -119,7 +119,7 @@ export default async function LessonPage({ params, searchParams }: LessonPagePro
           <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 mb-6">
             {lesson.courseSlug && (
               <span className="text-brand-light">
-                {lesson.courseSlug.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())}
+                {lesson.courseSlug.replace(/-/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase())}
               </span>
             )}
             {lesson.frontmatter.module && (

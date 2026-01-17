@@ -50,7 +50,7 @@ export function CourseFilter({ courses, courseSlugs, currentCourseSlug }: Course
           .filter((slug) => !courses?.find((c) => c.slug === slug))
           .map((slug) => (
             <option key={slug} value={slug}>
-              {slug.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())}
+              {slug.replace(/-/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase())}
             </option>
           ))}
       </select>

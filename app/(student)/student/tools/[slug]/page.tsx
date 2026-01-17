@@ -301,7 +301,7 @@ export default async function ToolDetailPage({ params }: { params: Promise<{ slu
                 : null;
               const requiredCourseTitle = requiredCourse?.title || 
                 (requiredCourseSlug 
-                  ? requiredCourseSlug.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())
+                  ? requiredCourseSlug.replace(/-/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase())
                   : null);
               
               const isUnlocked = !isGated || hasCompletedCourse;
