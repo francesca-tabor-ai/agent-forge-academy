@@ -237,41 +237,86 @@ Complex workflows can quickly become difficult to navigate:
 - Conditional processing
 - Organize workflow logic
 
-### Workflow Organization Strategies
+### Cleaning the Timeline
 
-**1. Grouping by Function:**
+The Router acts as a central hub that **splits the signal**, allowing for a single, clean line that branches out only when necessary.
+
+**Benefits:**
+- **Single Input Line:** One clean connection to router
+- **Organized Outputs:** Branches only where needed
+- **Reduced Clutter:** No overlapping wires
+- **Clear Data Flow:** Easy to trace connections
+- **Professional Appearance:** Clean, readable workspace
+
+**How It Works:**
+1. Connect source (e.g., reference image) to Router node
+2. Router splits the signal automatically
+3. Connect Router outputs to destination nodes
+4. Clean, organized connections result
+
+### Strategic Placement
+
+Users can place multiple routers strategically to ensure connection lines do not overlap with other functional blocks, keeping the **workspace professional, readable, and easy to manipulate** during live client demonstrations.
+
+**Placement Strategies:**
+
+**1. Input Routers:**
+- Place near input sources
+- Route to multiple processing nodes
+- Keep input section clean
+
+**2. Processing Routers:**
+- Place between processing stages
+- Route intermediate results
+- Organize transformation steps
+
+**3. Output Routers:**
+- Place before final outputs
+- Route to multiple destinations
+- Clean output organization
+
+**4. Hierarchical Routing:**
 ```
-Input Section
-    ↓
-Processing Section
-    ↓
-Output Section
+Input → Router 1 → Processing → Router 2 → Output
+         ↓              ↓            ↓
+      Multiple      Multiple     Multiple
+      Branches      Branches     Branches
 ```
 
-**2. Using Reroute Nodes:**
-- Place reroute nodes at connection points
-- Reduce wire crossings
-- Create clear paths
-- Label important connections
+**Best Practices:**
+- Place routers at logical branching points
+- Use multiple routers for complex workflows
+- Keep routers aligned and organized
+- Maintain consistent spacing
+- Label routers for clarity
 
-**3. Color Coding:**
+**Client Demonstration Benefits:**
+- Professional appearance
+- Easy to explain workflow
+- Clear visual organization
+- Easy to modify during demos
+- Impressive visual presentation
+
+### Additional Organization Techniques
+
+**Color Coding:**
 - Use node colors for categories
 - Input nodes: Blue
 - Processing nodes: Green
 - Output nodes: Red
-- Utility nodes: Yellow
+- Router nodes: Yellow/Orange
 
-**4. Spacing and Layout:**
+**Spacing and Layout:**
 - Leave space between sections
 - Align nodes vertically/horizontally
 - Group related nodes
 - Use consistent spacing
 
-**5. Naming Conventions:**
+**Naming Conventions:**
 - Descriptive node names
 - Consistent naming patterns
+- Label routers clearly
 - Document complex sections
-- Use comments/notes
 
 ### Best Practices for Complex Workflows
 
