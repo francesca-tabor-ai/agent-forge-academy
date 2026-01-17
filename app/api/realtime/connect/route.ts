@@ -245,6 +245,11 @@ export async function POST(request: NextRequest) {
           errorMessage = errorText || errorMessage;
         }
         
+        // Return appropriate status code based on OpenAI's response
+        const statusCode = response.status >= 400 && response.status < 500 
+          ? response.status 
+          : 500;
+        
         // Structured logging: OpenAI API error
         safeLogger.error('[RealtimeConnect] OpenAI API returned error', {
           requestId: reqId,
@@ -264,11 +269,6 @@ export async function POST(request: NextRequest) {
           hasOpenAIKey: process.env.NODE_ENV === 'development' ? !!OPENAI_API_KEY : undefined,
           endpoint: REALTIME_ENDPOINT,
         });
-        
-        // Return appropriate status code based on OpenAI's response
-        const statusCode = response.status >= 400 && response.status < 500 
-          ? response.status 
-          : 500;
         
         return NextResponse.json(
           { 
