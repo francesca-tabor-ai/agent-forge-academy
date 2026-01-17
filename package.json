@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npm run generate:city-banners && next build",
+    "prebuild": "npm run generate:city-banners",
+    "build": "next build",
     "generate:city-banners": "tsx scripts/generate-city-banners.ts",
     "start": "next start",
     "lint": "next lint",
