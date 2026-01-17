@@ -97,8 +97,8 @@ export default async function RoleLandingPage({ params }: PageProps) {
       if (!isLive) return null;
       
       return {
-        slug: courseSlug,
         ...metadata,
+        slug: courseSlug,
         difficulty: dbCourse?.difficulty_level || null,
       };
     })

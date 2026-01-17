@@ -115,8 +115,8 @@ function getCoursesForIndustry(industry: string, onlyLive: boolean = true): stri
   return Object.values(courseMetadata)
     .filter((course) => {
       const courseIndustries = course.industries || [];
-      // Check industry match
-      if (!courseIndustries.includes(industry)) return false;
+      // Check industry match (industry is string; courseIndustries may be a typed union)
+      if (!(courseIndustries as readonly string[]).includes(industry)) return false;
       // Check if live (defaults to true if not specified)
       if (onlyLive && course.isLive === false) return false;
       return true;

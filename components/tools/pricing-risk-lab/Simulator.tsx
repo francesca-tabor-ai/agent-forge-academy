@@ -1,7 +1,7 @@
 'use client';
 
 import { useReducer, useState } from 'react';
-import { runSimulation, compareSimulations, type SimulationInputs } from '@/lib/tools/pricing-risk-lab/simEngine';
+import { runSimulation, compareSimulations, type SimulationInputs, type ComparisonResult } from '@/lib/tools/pricing-risk-lab/simEngine';
 import {
   DEFAULT_MARKETS,
   DEFAULT_SEGMENTS,
@@ -17,7 +17,6 @@ import type {
   PricingScenario,
   SimulationSettings,
   SimulationResult,
-  ComparisonResult,
 } from '@/lib/tools/pricing-risk-lab/types';
 
 /**

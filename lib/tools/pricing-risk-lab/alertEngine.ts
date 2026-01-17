@@ -4,12 +4,12 @@
  * Detects anomalies in simulation results and generates alerts with severity levels.
  */
 
+import type { ComparisonResult } from './simEngine';
 import type {
   SimulationResult,
   Alert,
   AlertType,
   AlertSeverity,
-  ComparisonResult,
 } from './types';
 
 /**

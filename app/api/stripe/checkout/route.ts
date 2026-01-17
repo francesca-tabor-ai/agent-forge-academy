@@ -190,9 +190,12 @@ export async function POST(request: NextRequest) {
     const finalSuccessUrl = successUrl || `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}`;
     const finalCancelUrl = cancelUrl || `${baseUrl}/cancel`;
 
+    // Coerce null to undefined for Stripe (SessionCreateParams rejects null)
+    const customerId = stripeCustomerId ?? undefined;
+
     // Create checkout session
     const session = await stripe.checkout.sessions.create({
-      ...(stripeCustomerId ? { customer: stripeCustomerId } : { customer_email: profile.email }),
+      ...(customerId ? { customer: customerId } : { customer_email: profile.email ?? undefined }),
       payment_method_types: ['card'],
       line_items: [
         {

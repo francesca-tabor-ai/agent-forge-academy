@@ -169,11 +169,12 @@ export function CourseFilters({ courses, onFilteredCoursesChange }: CourseFilter
       filtered = filtered.filter((course) => {
         const title = course.metadata?.title || course.title || '';
         const track = course.metadata?.category || '';
-        const bestFor = course.metadata?.bestFor || '';
+        const rawBestFor = course.metadata?.bestFor;
+        const bestForStr = !rawBestFor ? '' : Array.isArray(rawBestFor) ? rawBestFor.join(' ') : rawBestFor;
         return (
           title.toLowerCase().includes(searchLower) ||
           track.toLowerCase().includes(searchLower) ||
-          bestFor.toLowerCase().includes(searchLower)
+          bestForStr.toLowerCase().includes(searchLower)
         );
       });
     }
@@ -216,8 +217,9 @@ export function CourseFilters({ courses, onFilteredCoursesChange }: CourseFilter
     // Best For filter
     if (selectedBestFor.length > 0) {
       filtered = filtered.filter((course) => {
-        const bestFor = course.metadata?.bestFor || '';
-        return selectedBestFor.some((bf) => bestFor.toLowerCase().includes(bf.toLowerCase()));
+        const rawBestFor = course.metadata?.bestFor;
+        const bestForStr = !rawBestFor ? '' : Array.isArray(rawBestFor) ? rawBestFor.join(' ') : rawBestFor;
+        return selectedBestFor.some((bf) => bestForStr.toLowerCase().includes(bf.toLowerCase()));
       });
     }
 
@@ -401,7 +403,7 @@ export function CourseFilters({ courses, onFilteredCoursesChange }: CourseFilter
           <select
             id="sort-select"
             value={sort}
-            onChange={(e) => setSort(e.target.value)}
+            onChange={(e) => setSort(e.target.value as 'track' | 'course' | 'recommended' | 'shortest' | 'longest' | 'newest')}
             className="px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent bg-white"
           >
             {SORT_OPTIONS.map((option) => (

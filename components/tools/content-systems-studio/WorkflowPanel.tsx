@@ -439,11 +439,11 @@ export function WorkflowPanel({
                   </div>
                   <div className="text-xs text-gray-600">
                     <span className="font-medium">Actor:</span> {event.actorRole}
-                    {event.metadata?.comment && (
+                    {event.metadata?.comment != null && String(event.metadata.comment).trim() !== '' && (
                       <>
                         <br />
                         <span className="font-medium">Comment:</span>{' '}
-                        {event.metadata.comment as string}
+                        {String(event.metadata.comment)}
                       </>
                     )}
                   </div>

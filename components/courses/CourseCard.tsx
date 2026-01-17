@@ -111,7 +111,8 @@ export function CourseCard({
   // Use description from course if outcome is not available (for dynamic metadata courses like Finance)
   const displayOutcome = metadata?.outcome || course.description || '';
   const displayTime = metadata?.time || (course.duration_weeks ? `${course.duration_weeks} weeks` : '');
-  const displayBestFor = metadata?.bestFor || '';
+  const rawBestFor = metadata?.bestFor;
+  const displayBestFor: string = !rawBestFor ? '' : Array.isArray(rawBestFor) ? rawBestFor.join('\n') : rawBestFor;
   const displayBuild = metadata?.build || '';
   // Use course industries if it has values, otherwise fall back to metadata industries
   const displayIndustries = (course.industries && course.industries.length > 0) 

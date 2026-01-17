@@ -130,18 +130,18 @@ export function ProductFundamentalsReview({ caseData }: ProductFundamentalsRevie
                   {new Date(shipDecision.timestamp).toLocaleString()}
                 </span>
               </div>
-              {shipDecision.metadata?.explanation && (
+              {shipDecision.metadata?.explanation != null && String(shipDecision.metadata.explanation).trim() !== '' ? (
                 <div className="text-sm text-gray-700 bg-gray-50 border border-gray-200 rounded p-3">
                   <strong>Reasoning:</strong>
                   <p className="mt-1">{String(shipDecision.metadata.explanation)}</p>
                 </div>
-              )}
-              {shipDecision.metadata?.blockerBugsCount && Number(shipDecision.metadata.blockerBugsCount) > 0 && (
+              ) : null}
+              {Number(shipDecision.metadata?.blockerBugsCount || 0) > 0 ? (
                 <div className="mt-3 text-sm text-orange-700 bg-orange-50 border border-orange-200 rounded p-2">
-                  <strong>Note:</strong> {shipDecision.metadata.blockerBugsCount} blocker bug(s) present
-                  {shipDecision.metadata.hasOverride && ' (override rationale provided)'}
+                  <strong>Note:</strong> {String(shipDecision.metadata?.blockerBugsCount ?? 0)} blocker bug(s) present
+                  {shipDecision.metadata?.hasOverride ? ' (override rationale provided)' : ''}
                 </div>
-              )}
+              ) : null}
             </div>
           ) : (
             <div className="bg-white border border-gray-200 rounded-lg p-4">

@@ -17,6 +17,7 @@ interface Project {
   status?: 'draft' | 'published';
   updated_at?: string | null;
   last_synced_at?: string | null;
+  created_at?: string | null;
   skills?: Array<{ id: string; name: string }>;
   featured?: boolean;
 }

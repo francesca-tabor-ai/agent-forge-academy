@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { generateAlerts, DEFAULT_ALERT_THRESHOLDS, type AlertThresholds } from '@/lib/tools/pricing-risk-lab/alertEngine';
-import { compareSimulations, type SimulationInputs } from '@/lib/tools/pricing-risk-lab/simEngine';
+import { compareSimulations, type SimulationInputs, type ComparisonResult } from '@/lib/tools/pricing-risk-lab/simEngine';
 import {
   DEFAULT_MARKETS,
   DEFAULT_SEGMENTS,
@@ -14,7 +14,6 @@ import type {
   Alert,
   AlertSeverity,
   SimulationSettings,
-  ComparisonResult,
 } from '@/lib/tools/pricing-risk-lab/types';
 
 /**

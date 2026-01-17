@@ -304,7 +304,7 @@ export function OffersPageClient({
     });
 
     return filtered;
-  }, [offers, viewFilter, selectedCategory, selectedEligibility, selectedCostImpact, sortBy, searchQuery]);
+  }, [offers, selectedCategory, sortBy, searchQuery]);
 
   // Group offers by tool (provider) and aggregate data
   const toolsData = useMemo(() => {
@@ -760,7 +760,7 @@ export function OffersPageClient({
             const isExpanded = expandedOffers.has(offer.id);
             const isSaved = savedOffers.has(offer.id);
             const claimStatus = claimedOfferIds[offer.id];
-            const recommendationReason = getRecommendationReason(offer, selectedProjectId !== 'all' ? selectedProjectId : undefined);
+            const recommendationReason = getRecommendationReason(offer, undefined);
             const usagePercentage = offer.max_usage 
               ? Math.round((offer.usage_count || 0) / offer.max_usage * 100)
               : 0;
@@ -825,11 +825,6 @@ export function OffersPageClient({
                   <div className="mb-3 p-2 bg-blue-50 border border-blue-200 rounded text-xs text-blue-800">
                     <div className="font-medium mb-1">Why recommended?</div>
                     <div>{recommendationReason}</div>
-                    {selectedProjectId !== 'all' && (
-                      <div className="mt-1 text-blue-600">
-                        Based on: {projects.find(p => p.id === selectedProjectId)?.title}
-                      </div>
-                    )}
                   </div>
                 )}
 

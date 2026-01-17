@@ -36,19 +36,20 @@ function compareValues(
   lowerIsBetter: boolean = false
 ): { diff: number; annotation: string } {
   const diff = scaled - early;
-  const percentDiff = early !== 0 ? ((diff / early) * 100).toFixed(1) : '0.0';
+  const percentDiffNum = early !== 0 ? (diff / early) * 100 : 0;
+  const percentStr = Math.abs(percentDiffNum).toFixed(1);
   
   let annotation = '';
   if (Math.abs(diff) < 0.01) {
     annotation = 'No difference';
   } else if (lowerIsBetter) {
     annotation = diff < 0 
-      ? `Scaled is ${Math.abs(percentDiff)}% better (lower ${label})`
-      : `Early-stage is ${Math.abs(percentDiff)}% better (lower ${label})`;
+      ? `Scaled is ${percentStr}% better (lower ${label})`
+      : `Early-stage is ${percentStr}% better (lower ${label})`;
   } else {
     annotation = diff > 0 
-      ? `Scaled is ${Math.abs(percentDiff)}% better (higher ${label})`
-      : `Early-stage is ${Math.abs(percentDiff)}% better (higher ${label})`;
+      ? `Scaled is ${percentStr}% better (higher ${label})`
+      : `Early-stage is ${percentStr}% better (higher ${label})`;
   }
   
   return { diff, annotation };

@@ -134,14 +134,6 @@ export function playgroundReducer(
     case 'UPDATE_PROBLEM':
       newState = {
         ...state,
-        problems: action.payload,
-      };
-      auditMetadata = { count: action.payload.length };
-      break;
-
-    case 'UPDATE_PROBLEM':
-      newState = {
-        ...state,
         problems: state.problems.map((p) =>
           p.id === action.payload.id ? action.payload : p
         ),

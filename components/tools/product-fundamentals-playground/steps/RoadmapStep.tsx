@@ -6,7 +6,7 @@ import type { RoadmapItem, ImpactLevel, EffortLevel, Quadrant, Horizon } from '@
 
 interface RoadmapStepProps {
   state: {
-    problems: Array<{ id: string; who: string; need: string }>;
+    problems: Array<{ id: string; who: string; need: string; because?: string }>;
     roadmap: RoadmapItem[];
   };
   dispatch: React.Dispatch<PlaygroundAction>;
@@ -522,7 +522,7 @@ export function RoadmapStep({ state, dispatch }: RoadmapStepProps) {
                         />
                         <div className="flex-1 text-sm text-gray-700">
                           <div className="font-medium">{problem.who} needs {problem.need}</div>
-                          <div className="text-xs text-gray-500">Because: {problem.because}</div>
+                          <div className="text-xs text-gray-500">Because: {problem.because ?? ''}</div>
                         </div>
                       </label>
                     ))}

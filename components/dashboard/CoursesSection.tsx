@@ -15,6 +15,7 @@ interface CourseWithMetadata {
   updated_at: string | null;
   hasContent: boolean;
   industries: string[];
+  category?: string;
   metadata?: typeof courseMetadata[string];
 }
 

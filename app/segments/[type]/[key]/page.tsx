@@ -52,8 +52,8 @@ export default async function SegmentPage({ params }: PageProps) {
       const metadata = courseMetadata[slug];
       if (!metadata) return null;
       return {
-        slug,
         ...metadata,
+        slug,
       };
     })
     .filter((course) => course !== null);
