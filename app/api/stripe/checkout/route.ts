@@ -132,28 +132,30 @@ export async function POST(request: NextRequest) {
       .eq('user_id', user.id)
       .single();
 
-    let stripeCustomerId: string;
+    let stripeCustomerId: string | undefined;
 
     if (existingCustomer?.stripe_customer_id) {
-      stripeCustomerId = existingCustomer.stripe_customer_id;
-      try {
-        await stripe.customers.retrieve(stripeCustomerId);
-      } catch (error: any) {
-        // Customer might have been deleted, create a new one
-        const newCustomer = await stripe.customers.create({
-          email: profile.email,
-          metadata: {
-            user_id: user.id,
-            ...metadata,
-          },
-        });
-        stripeCustomerId = newCustomer.id;
+      stripeCustomerId = existingCustomer.stripe_customer_id ?? undefined;
+      if (stripeCustomerId) {
+        try {
+          await stripe.customers.retrieve(stripeCustomerId);
+        } catch (error: any) {
+          // Customer might have been deleted, create a new one
+          const newCustomer = await stripe.customers.create({
+            email: profile.email,
+            metadata: {
+              user_id: user.id,
+              ...metadata,
+            },
+          });
+          stripeCustomerId = newCustomer.id;
 
-        const serverSupabase = createServerSupabaseClient();
-        await serverSupabase
-          .from('stripe_customers')
-          .update({ stripe_customer_id: stripeCustomerId })
-          .eq('user_id', user.id);
+          const serverSupabase = createServerSupabaseClient();
+          await serverSupabase
+            .from('stripe_customers')
+            .update({ stripe_customer_id: stripeCustomerId })
+            .eq('user_id', user.id);
+        }
       }
     } else {
       // Create new Stripe customer
@@ -177,7 +179,7 @@ export async function POST(request: NextRequest) {
 
     // Create checkout session
     const session = await stripe.checkout.sessions.create({
-      customer: stripeCustomerId,
+      ...(stripeCustomerId ? { customer: stripeCustomerId } : { customer_email: profile.email }),
       payment_method_types: ['card'],
       line_items: [
         {
