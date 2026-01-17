@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createUserSupabaseClient } from '@/lib/supabase/server';
-import { getLLMProvider, type LLMMessage } from '@/lib/ai/llm';
+import { getLLMProvider, getLLMProviderWithFallback, type LLMMessage } from '@/lib/ai/llm';
 import { retrieveChunks, formatChunksForContext, generateCitations } from '@/lib/rag/retrieve';
 import { classifyIntent, getToolsForIntent, type AdvisorIntent, type IntentClassification } from '@/lib/ai/intent';
 import { getTopJobMatches, formatJobMatchesForLLM } from '@/lib/jobs/advisor-tools';
@@ -678,7 +678,7 @@ export async function POST(request: NextRequest) {
     stage: 'request_start',
   });
 
-  // Early validation: Check if API key is missing
+  // Early validation: Check if API key is missing (log but don't return yet - need auth first)
   if (!llmApiKey) {
     const errorMsg = 'LLM_API_KEY environment variable is required';
     safeLogger.error('[AI_ADVISOR] Configuration error', {
@@ -687,8 +687,10 @@ export async function POST(request: NextRequest) {
       error: errorMsg,
       provider: llmProvider,
       model,
+      statusCode: 503,
+      errorCode: 'SERVICE_UNAVAILABLE',
     });
-    // Return early with proper error (but we'll still check auth first)
+    // Will return error after auth check
   }
 
   try {
@@ -734,6 +736,8 @@ export async function POST(request: NextRequest) {
         model,
         statusCode: 503,
         errorCode: 'SERVICE_UNAVAILABLE',
+        message: errorMsg,
+        stack: process.env.NODE_ENV === 'development' ? new Error().stack : undefined,
       });
       return NextResponse.json(
         { 
@@ -1049,10 +1053,26 @@ export async function POST(request: NextRequest) {
             });
 
             try {
-              // Check if LLM provider is configured
+              // Check if LLM provider is configured (with fallback support)
               let llm;
+              let actualProvider = llmProvider;
+              let isFallback = false;
+              
               try {
-                llm = getLLMProvider();
+                const providerResult = getLLMProviderWithFallback();
+                llm = providerResult.provider;
+                actualProvider = providerResult.providerName;
+                isFallback = providerResult.isFallback;
+                
+                if (isFallback) {
+                  safeLogger.warn('[AI_ADVISOR] Using fallback provider', {
+                    requestId,
+                    userId: user.id,
+                    primaryProvider: llmProvider,
+                    fallbackProvider: actualProvider,
+                    stage: 'provider_fallback',
+                  });
+                }
               } catch (llmError: any) {
                 const errorMessage = llmError.message || 'LLM provider not configured';
                 
@@ -1078,7 +1098,7 @@ export async function POST(request: NextRequest) {
                   stage: 'provider_call_failed',
                   statusCode,
                   errorCode,
-                  error: errorMessage,
+                  message: errorMessage,
                   stack: process.env.NODE_ENV === 'development' ? llmError.stack : undefined,
                 });
                 
@@ -1123,11 +1143,15 @@ export async function POST(request: NextRequest) {
 
                   if (chunk.done) {
                     const llmLatency = Date.now() - llmStartTime;
-                    safeLogger.info('AI Advisor: Stream completed', { 
-                      requestId, 
-                      llmLatency,
-                      responseLength: fullResponse.length 
-                    });
+      safeLogger.info('AI Advisor: Stream completed', { 
+        requestId,
+        userId: user.id,
+        provider: actualProvider,
+        model,
+        llmLatency,
+        responseLength: fullResponse.length,
+        isFallback,
+      });
 
                     // Guard: Ensure response is not empty
                     if (!fullResponse || !fullResponse.trim()) {
@@ -1273,6 +1297,14 @@ export async function POST(request: NextRequest) {
               const upstreamStatusMatch = errorMessage.match(/(\d{3})/);
               const upstreamStatus = upstreamStatusMatch ? parseInt(upstreamStatusMatch[1]) : null;
               
+              // Determine status code for logging
+              let statusCode = 500;
+              if (errorCode === 'SERVICE_UNAVAILABLE') statusCode = 503;
+              else if (errorCode === 'UNAUTHORIZED') statusCode = 401;
+              else if (errorCode === 'RATE_LIMIT_EXCEEDED') statusCode = 429;
+              else if (errorCode === 'TIMEOUT') statusCode = 504;
+              else if (upstreamStatus) statusCode = upstreamStatus;
+              
               safeLogger.error('[AI_ADVISOR] Error in streaming LLM response', { 
                 requestId,
                 userId: user.id,
@@ -1282,7 +1314,7 @@ export async function POST(request: NextRequest) {
                 statusCode,
                 errorCode,
                 upstreamStatus,
-                error: errorMessage,
+                message: errorMessage,
                 stack: process.env.NODE_ENV === 'development' ? error?.stack : undefined,
                 elapsed 
               });
@@ -1326,8 +1358,24 @@ export async function POST(request: NextRequest) {
     // Non-streaming response
     try {
       let llm;
+      let actualProvider = llmProvider;
+      let isFallback = false;
+      
       try {
-        llm = getLLMProvider();
+        const providerResult = getLLMProviderWithFallback();
+        llm = providerResult.provider;
+        actualProvider = providerResult.providerName;
+        isFallback = providerResult.isFallback;
+        
+        if (isFallback) {
+          safeLogger.warn('[AI_ADVISOR] Using fallback provider', {
+            requestId,
+            userId: user.id,
+            primaryProvider: llmProvider,
+            fallbackProvider: actualProvider,
+            stage: 'provider_fallback',
+          });
+        }
       } catch (llmError: any) {
         const errorMessage = llmError.message || 'LLM provider not configured';
         
@@ -1357,7 +1405,7 @@ export async function POST(request: NextRequest) {
           stage: 'provider_call_failed',
           statusCode,
           errorCode,
-          error: errorMessage,
+          message: errorMessage,
           stack: process.env.NODE_ENV === 'development' ? llmError.stack : undefined,
         });
         
@@ -1393,11 +1441,12 @@ export async function POST(request: NextRequest) {
       safeLogger.info('[AI_ADVISOR] Response generated', { 
         requestId, 
         userId: user.id,
-        provider: llmProvider,
+        provider: actualProvider,
         model,
         stage: 'response_complete',
         llmLatency,
-        responseLength: llmResponse.content.length 
+        responseLength: llmResponse.content.length,
+        isFallback,
       });
 
       // Guard: Ensure response is not empty
@@ -1582,7 +1631,7 @@ export async function POST(request: NextRequest) {
         path: '/api/ai-advisor/chat',
         method: 'POST',
         upstreamStatus,
-        errorMessage: errorMessage, // Error reason without leaking keys
+        message: errorMessage, // Error reason without leaking keys
         elapsed,
         // Don't log stack in production to avoid leaking sensitive info
         stack: process.env.NODE_ENV === 'development' ? error?.stack : undefined,
@@ -1635,7 +1684,7 @@ export async function POST(request: NextRequest) {
       errorCode: 'INTERNAL_ERROR',
       path: '/api/ai-advisor/chat',
       method: 'POST',
-      errorMessage: error?.message || String(error),
+      message: error?.message || String(error),
       elapsed,
       stack: process.env.NODE_ENV === 'development' ? error?.stack : undefined,
     });

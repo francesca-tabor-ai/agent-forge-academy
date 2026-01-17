@@ -50,8 +50,9 @@ export interface LLMOptions {
 /**
  * Get the configured LLM provider
  * Reads from environment variables to determine which provider to use
+ * @param fallbackProvider - Optional fallback provider to try if primary fails
  */
-export function getLLMProvider(): LLMProvider {
+export function getLLMProvider(fallbackProvider?: string): LLMProvider {
   const provider = process.env.LLM_PROVIDER || 'openai';
   const apiKey = process.env.LLM_API_KEY;
 
@@ -59,13 +60,46 @@ export function getLLMProvider(): LLMProvider {
     throw new Error('LLM_API_KEY environment variable is required');
   }
 
-  switch (provider.toLowerCase()) {
+  const providerToUse = fallbackProvider || provider;
+
+  switch (providerToUse.toLowerCase()) {
     case 'openai':
       return new OpenAIProvider(apiKey);
     case 'anthropic':
       return new AnthropicProvider(apiKey);
     default:
-      throw new Error(`Unsupported LLM provider: ${provider}`);
+      throw new Error(`Unsupported LLM provider: ${providerToUse}`);
+  }
+}
+
+/**
+ * Get LLM provider with fallback support
+ * Tries primary provider first, falls back to secondary if configured
+ */
+export function getLLMProviderWithFallback(): { provider: LLMProvider; providerName: string; isFallback: boolean } {
+  const primaryProvider = process.env.LLM_PROVIDER || 'openai';
+  const fallbackProvider = process.env.LLM_FALLBACK_PROVIDER; // e.g., 'anthropic' if primary is 'openai'
+  const apiKey = process.env.LLM_API_KEY;
+
+  if (!apiKey) {
+    throw new Error('LLM_API_KEY environment variable is required');
+  }
+
+  try {
+    const provider = getLLMProvider();
+    return { provider, providerName: primaryProvider, isFallback: false };
+  } catch (error) {
+    // If primary fails and fallback is configured, try fallback
+    if (fallbackProvider && fallbackProvider !== primaryProvider) {
+      try {
+        const provider = getLLMProvider(fallbackProvider);
+        return { provider, providerName: fallbackProvider, isFallback: true };
+      } catch (fallbackError) {
+        // If fallback also fails, throw original error
+        throw error;
+      }
+    }
+    throw error;
   }
 }
 

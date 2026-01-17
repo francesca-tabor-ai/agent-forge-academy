@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getLLMProvider } from '@/lib/ai/llm';
+import { getLLMProvider, getLLMProviderWithFallback } from '@/lib/ai/llm';
 
 /**
  * Diagnostics endpoint for AI Advisor
@@ -27,18 +27,40 @@ export async function GET(request: NextRequest) {
     
     let providerConfigured = false;
     let errorMessage: string | undefined;
+    let fallbackAvailable = false;
+    let fallbackProvider: string | undefined;
 
     // Check if API key exists
     const hasApiKey = !!apiKey;
 
+    // Check for fallback provider
+    const fallbackProviderEnv = process.env.LLM_FALLBACK_PROVIDER;
+    if (fallbackProviderEnv && fallbackProviderEnv !== provider) {
+      fallbackAvailable = true;
+      fallbackProvider = fallbackProviderEnv;
+    }
+
     // Try to instantiate provider (this validates configuration)
     if (hasApiKey) {
       try {
+        // Try primary provider first
         getLLMProvider();
         providerConfigured = true;
       } catch (error: any) {
-        providerConfigured = false;
-        errorMessage = error.message || 'Failed to initialize provider';
+        // If primary fails, try fallback if available
+        if (fallbackAvailable && fallbackProvider) {
+          try {
+            const fallbackResult = getLLMProviderWithFallback();
+            providerConfigured = true;
+            errorMessage = `Primary provider (${provider}) failed, but fallback (${fallbackProvider}) is available`;
+          } catch (fallbackError: any) {
+            providerConfigured = false;
+            errorMessage = `Both primary (${provider}) and fallback (${fallbackProvider}) providers failed: ${error.message || 'Failed to initialize'}`;
+          }
+        } else {
+          providerConfigured = false;
+          errorMessage = error.message || 'Failed to initialize provider';
+        }
       }
     } else {
       errorMessage = 'LLM_API_KEY environment variable is not set';
@@ -54,6 +76,8 @@ export async function GET(request: NextRequest) {
       model,
       hasApiKey,
       providerConfigured,
+      fallbackAvailable,
+      fallbackProvider: fallbackProvider || undefined,
       version,
       error: errorMessage || undefined,
       timestamp: new Date().toISOString(),
