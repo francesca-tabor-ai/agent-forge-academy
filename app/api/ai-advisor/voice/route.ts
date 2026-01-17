@@ -545,8 +545,8 @@ export async function POST(request: NextRequest) {
     const shouldGenerateAudio = formData.get('generateAudio') === 'true';
     const intent = formData.get('intent') as string | undefined;
 
-    // Parse context JSON if provided
-    let context: VoiceRequest['context'] | undefined;
+    // Parse context JSON if provided (must be done before mock mode check)
+    let context: VoiceRequest['context'] | undefined = undefined;
     const contextStr = formData.get('context') as string | null;
     if (contextStr) {
       try {
