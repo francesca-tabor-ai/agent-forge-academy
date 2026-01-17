@@ -100,6 +100,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Ensure finalPriceId is a string (TypeScript guard)
+    if (!finalPriceId) {
+      return NextResponse.json(
+        { error: 'Price ID is required' },
+        { status: 400 }
+      );
+    }
+
     // Validate mode
     if (mode !== 'subscription' && mode !== 'payment') {
       return NextResponse.json(
@@ -177,19 +185,24 @@ export async function POST(request: NextRequest) {
         });
     }
 
+    // Ensure URLs are always strings
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    const finalSuccessUrl = successUrl || `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}`;
+    const finalCancelUrl = cancelUrl || `${baseUrl}/cancel`;
+
     // Create checkout session
     const session = await stripe.checkout.sessions.create({
       ...(stripeCustomerId ? { customer: stripeCustomerId } : { customer_email: profile.email }),
       payment_method_types: ['card'],
       line_items: [
         {
-          price: finalPriceId,
+          price: finalPriceId, // TypeScript now knows this is string (not null)
           quantity: 1,
         },
       ],
       mode: mode as 'subscription' | 'payment',
-      success_url: successUrl || `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: cancelUrl || `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/cancel`,
+      success_url: finalSuccessUrl,
+      cancel_url: finalCancelUrl,
       allow_promotion_codes: true,
       client_reference_id: user.id,
       metadata: {

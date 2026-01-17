@@ -546,6 +546,7 @@ export async function POST(request: NextRequest) {
     const intent = formData.get('intent') as string | undefined;
 
     // Parse context JSON if provided (must be done before mock mode check)
+    // Initialize context early to ensure it's available for mock mode
     let context: VoiceRequest['context'] | undefined = undefined;
     const contextStr = formData.get('context') as string | null;
     if (contextStr) {
@@ -553,10 +554,13 @@ export async function POST(request: NextRequest) {
         context = JSON.parse(contextStr);
       } catch (e) {
         safeLogger.warn('Failed to parse context JSON', e);
+        // Keep context as undefined if parsing fails
+        context = undefined;
       }
     }
 
     // UAT Mock Mode: Return deterministic transcription for testing
+    // context is now guaranteed to be initialized (even if undefined)
     if (isMockMode) {
       const mockTranscript = getMockVoiceTranscript();
       const mockResponse = getMockChatResponse(mockTranscript, context, intent);

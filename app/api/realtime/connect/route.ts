@@ -246,7 +246,8 @@ export async function POST(request: NextRequest) {
         }
         
         // Return appropriate status code based on OpenAI's response
-        const statusCode = response.status >= 400 && response.status < 500 
+        // Declare statusCode before using it in logger
+        let statusCode = response.status >= 400 && response.status < 500 
           ? response.status 
           : 500;
         
