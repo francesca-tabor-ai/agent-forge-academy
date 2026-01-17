@@ -16,176 +16,200 @@ order: 4
 
 ---
 
-## 4.1 Multi-Model Workflows
+## 4.1 Multi-Model Workflows: The "Audition" Phase
 
-### Testing Multiple Models Simultaneously
+One of the most powerful features of platforms like Weavy and Phygital+ is the ability to test multiple AI "artists" simultaneously using a single instruction.
 
-One of the most powerful features of advanced node-based platforms is the ability to test an entire array of models with a single prompt.
+### Simultaneous Testing in Weavy
 
-**Why Multi-Model Testing?**
-- Compare quality and style differences
-- Find the best model for specific use cases
-- Understand model strengths and weaknesses
-- Make informed decisions about model selection
+In Weavy, users can drag out a single prompt node and connect it to an entire **array of AI models**—such as Flux, Nano Banana, Luma, Recraft, and Stable Diffusion—to generate results from all of them at once.
 
-### Building a Model Comparison Workflow
-
-**Architecture:**
+**Workflow Architecture:**
 ```
-Single Prompt Input
-    ├─→ Model 1 (GPT-5)
-    ├─→ Model 2 (Nano Banana)
-    ├─→ Model 3 (Ideogram)
-    └─→ Model 4 (Flux)
+Single Prompt Node
+    ├─→ Flux Model
+    ├─→ Nano Banana Model
+    ├─→ Luma Model
+    ├─→ Recraft Model
+    └─→ Stable Diffusion Model
          ↓
-    Output Grid/Comparison
+    Simultaneous Outputs
 ```
 
-**Implementation Steps:**
+**Benefits:**
+- Generate from multiple models in parallel
+- Compare results instantly
+- No need to run separate workflows
+- Efficient use of time and resources
 
-1. **Create Input Node:**
-   - Single prompt input
-   - Shared across all models
-   - Consistent parameters
+**Implementation:**
+1. Create a single prompt node
+2. Connect to multiple model nodes simultaneously
+3. Configure each model's specific settings
+4. Execute all models at once
+5. Compare results side-by-side
 
-2. **Add Multiple Model Nodes:**
-   - Connect same prompt to each
-   - Configure model-specific settings
-   - Maintain consistent seed (optional)
+### Quality Comparison in Phygital+
 
-3. **Create Output Grid:**
-   - Display all results side-by-side
-   - Label each with model name
-   - Enable easy comparison
+Phygital+ allows users to compare different models like **GPT, Gemini, and Flux** side-by-side on an infinite canvas. This enables a creator to "audition" different models and select the one that best fits a particular project's aesthetic before committing credits to further generations.
+
+**Features:**
+- **Infinite Canvas:** Arrange and compare results visually
+- **Side-by-Side Comparison:** View multiple model outputs simultaneously
+- **Aesthetic Evaluation:** Assess which model matches project vision
+- **Credit Efficiency:** Test before committing to large generations
 
 **Use Cases:**
 - Style exploration
 - Quality comparison
 - Cost-benefit analysis
 - Model selection for projects
+- Client presentations
 
-### Comparing Model Outputs
+### Prompt Refinement in Flora AI
 
-**Evaluation Criteria:**
-- **Quality:** Detail, realism, artifacts
-- **Style:** Aesthetic match to prompt
-- **Speed:** Generation time
-- **Cost:** Credits/API costs
-- **Consistency:** Reproducibility
+In Flora AI, a text block can be used with models like **GPT-5** to rewrite and optimise a basic prompt into a cleaner version before it is automatically sent to connected image models like **Nano Banana Pro** or **Ideogram**.
+
+**Workflow:**
+```
+Basic Prompt → GPT-5 (LLM Node) → Refined Prompt → Image Models
+```
+
+**Benefits:**
+- Improve prompt quality automatically
+- Optimize for specific models
+- Enhance prompt clarity and detail
+- Better generation results
+
+**Implementation:**
+1. Input basic prompt into text block
+2. Connect to LLM node (GPT-5)
+3. LLM refines and optimizes prompt
+4. Refined prompt automatically sent to image models
+5. Generate with improved prompts
 
 **Best Practices:**
-- Use same seed for fair comparison
-- Test with various prompt types
-- Document findings
-- Create model selection guide
+- Start with clear basic prompts
+- Let LLM enhance technical details
+- Test refinement quality
+- Iterate based on results
 
 ---
 
-## 4.2 Character Consistency
+## 4.2 Achieving Character Consistency
 
-### The Challenge
+Maintaining the same character across different scenes or angles is a primary challenge in generative AI. This is addressed through two main advanced techniques.
 
-Maintaining character consistency across multiple images is one of the most difficult problems in AI generation. Characters often change appearance, clothing, or features between generations.
+### LLM-Driven Descriptions
 
-### Generating Detailed Image Descriptions via LLM Nodes
-
-**Approach:**
-Use LLM nodes to generate detailed, consistent character descriptions that can be reused across generations.
+In Flora, users can connect an image to an LLM node (such as Claude or GPT-5) and ask it to provide a **detailed description** of the character's hair, outfit, and lighting. By feeding this highly detailed text into a new generation node, creators can produce **variations of the same character** while maintaining a consistent visual identity.
 
 **Workflow:**
+```
+Reference Image → LLM Node (Claude/GPT-5) → Detailed Description → Image Generation Nodes
+```
 
-1. **Initial Character Creation:**
-   - Generate base character image
-   - Extract detailed description
-   - Store in reusable format
+**LLM Description Process:**
+1. Load reference character image
+2. Connect to LLM node (Claude or GPT-5)
+3. LLM analyzes and describes:
+   - Hair style and color
+   - Outfit details
+   - Lighting conditions
+   - Physical features
+   - Style characteristics
+4. Detailed description generated
+5. Feed description to new generation nodes
 
-2. **LLM Description Generation:**
-   ```
-   Base Image → LLM Node → Detailed Description
-   ```
+**Description Format:**
+```
+Character: [Name]
+Hair: [Detailed hair description - style, color, texture]
+Outfit: [Specific clothing details - colors, patterns, style]
+Lighting: [Lighting conditions and mood]
+Features: [Facial features, body type, distinctive characteristics]
+Style: [Artistic style notes]
+```
 
-3. **Description Format:**
-   ```
-   Character: [Name]
-   Appearance: [Detailed physical description]
-   Clothing: [Specific outfit details]
-   Style: [Artistic style notes]
-   ```
+**Benefits:**
+- Consistent character appearance
+- Detailed visual identity
+- Reusable descriptions
+- Easy to maintain across generations
 
-4. **Reuse in Prompts:**
-   - Append description to new prompts
-   - Maintain consistency
-   - Allow variation in scenes
-
-**LLM Node Configuration:**
-- Use GPT-4 or Claude for descriptions
-- Prompt: "Describe this character in detail..."
-- Format output as reusable text
-- Store in workflow variables
+**Implementation:**
+1. Generate or select base character image
+2. Connect image to LLM node
+3. Configure LLM prompt: "Describe this character's hair, outfit, and lighting in detail"
+4. Extract detailed description
+5. Use description in new generation prompts
+6. Generate variations maintaining consistency
 
 ### Multi-Angle Scene Building
 
-**Concept:**
-Generate the same character from different camera angles and perspectives while maintaining consistency.
+#### Automated Prompting in Weavy
 
-**Using Router Nodes:**
+In Weavy, an LLM node can be instructed to "describe five distinct camera angles" (e.g., **macro shot, close-up, medium shot, side angle, and wide shot**) based on a reference character.
 
-**Router Node Purpose:**
-- Split reference images into different processing paths
-- Apply different transformations
-- Maintain source consistency
+**Workflow:**
+```
+Reference Character → LLM Node → Multiple Angle Descriptions → Image Generation
+```
+
+**LLM Configuration:**
+- Prompt: "Describe five distinct camera angles for this character: macro shot, close-up, medium shot, side angle, and wide shot"
+- LLM generates detailed descriptions for each angle
+- Descriptions maintain character consistency
+- Each description optimized for specific angle
+
+#### Data Splitting
+
+These descriptions are processed through an **array** or **list node**, which separates the individual instructions by a specific character (like an asterisk). Each separate prompt is then fed into a corresponding image model node to generate the character from all five angles simultaneously.
 
 **Workflow Architecture:**
 ```
-Reference Image
-    ├─→ Router Node
-         ├─→ Macro Angle (Close-up)
-         ├─→ Close-up Angle (Head/Shoulders)
-         ├─→ Medium Shot (Upper Body)
-         └─→ Wide Shot (Full Body)
-              ↓
-         Consistent Character Outputs
+Reference Character
+    ↓
+LLM Node (5 Angle Descriptions)
+    ↓
+Array/List Node (Split by *)
+    ├─→ Macro Shot Prompt → Image Model
+    ├─→ Close-up Prompt → Image Model
+    ├─→ Medium Shot Prompt → Image Model
+    ├─→ Side Angle Prompt → Image Model
+    └─→ Wide Shot Prompt → Image Model
+         ↓
+    Simultaneous Multi-Angle Outputs
 ```
 
-**Implementation:**
+**Array/List Node Configuration:**
+- Input: Combined descriptions separated by delimiter (e.g., *)
+- Processing: Split into individual prompts
+- Output: Separate prompts for each angle
+- Distribution: Send each to corresponding model node
 
-1. **Load Reference Image:**
-   - Character base image
-   - High quality, clear features
+**Angle Types:**
+- **Macro Shot:** Extreme close-up, detailed features
+- **Close-up:** Head and shoulders, portrait style
+- **Medium Shot:** Upper body, natural pose
+- **Side Angle:** Profile view, different perspective
+- **Wide Shot:** Full body, environmental context
 
-2. **Router Node Configuration:**
-   - Split into multiple paths
-   - Each path = different angle
-   - Maintain character description
+**Benefits:**
+- Generate all angles simultaneously
+- Maintain character consistency across angles
+- Create complete character sheet automatically
+- Efficient workflow execution
 
-3. **Angle-Specific Prompts:**
-   - Macro: "extreme close-up, detailed features"
-   - Close-up: "head and shoulders, portrait"
-   - Medium: "upper body, natural pose"
-   - Wide: "full body, environmental context"
-
-4. **Consistency Techniques:**
-   - Use same character description
-   - Apply IPAdapter for face consistency
-   - Use ControlNet for pose/structure
-   - Maintain style parameters
-
-**Advanced Techniques:**
-
-**Character Sheet Generation:**
-- Generate multiple angles automatically
-- Create reference document
-- Use for future consistency
-
-**Pose Control:**
-- Use OpenPose ControlNet
-- Maintain body structure
-- Vary camera angles only
-
-**Style Locking:**
-- Lock artistic style
-- Vary composition only
-- Maintain visual consistency
+**Implementation Steps:**
+1. Load reference character image
+2. Connect to LLM node
+3. Configure LLM to generate 5 angle descriptions
+4. Connect LLM output to Array/List node
+5. Configure delimiter (e.g., *)
+6. Connect split prompts to image model nodes
+7. Execute all generations simultaneously
+8. Review multi-angle character sheet
 
 ---
 
