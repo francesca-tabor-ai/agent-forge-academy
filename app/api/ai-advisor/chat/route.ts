@@ -551,6 +551,50 @@ async function buildLLMMessages(
             score: chunk.score,
           }))
         );
+      } else {
+        // Retrieval was attempted but returned no chunks - add fallback behavior
+        retrievalEmpty = true;
+        
+        // Determine reason and provide guidance
+        if (activeCourseId || courseSlug) {
+          // Course context was provided but no chunks found
+          retrievalEmptyReason = courseTitle 
+            ? `The course "${courseTitle}" may not have content indexed yet, or the content may not match your query.`
+            : 'The selected course may not have content indexed yet, or the content may not match your query.';
+          
+          systemPrompt += `\n\n**Important Notice:** No course content was found for your query. This could mean:
+- The course content has not been indexed yet
+- Your query doesn't match any indexed content
+- The course may not have lessons available
+
+**Your Response Should:**
+- Acknowledge that course content is not available
+- Politely explain that you cannot provide course-specific answers without indexed content
+- Suggest the user: "Please try selecting a different course, or contact support if you believe content should be available"
+- Offer to help with general questions if applicable
+- Be helpful and friendly, not dismissive`;
+        } else {
+          // No course context provided
+          retrievalEmptyReason = 'No course was selected. Please select a course to get course-specific answers.';
+          
+          systemPrompt += `\n\n**Important Notice:** No course context was provided. 
+
+**Your Response Should:**
+- Politely explain that course-specific answers require selecting a course
+- Guide the user: "To get course-specific help, please select a course from your dashboard or course list"
+- Offer to help with general questions if applicable
+- Be helpful and friendly`;
+        }
+        
+        safeLogger.warn('[AI_ADVISOR] Retrieval returned empty results', {
+          requestId: requestId || 'unknown',
+          courseSlug: courseSlug || null,
+          activeCourseId: activeCourseId || null,
+          query: redactPII(message, { maxLength: 200 }),
+          reason: retrievalEmptyReason,
+          stage: 'retrieval_empty',
+          timestamp: new Date().toISOString(),
+        });
       }
       
       // Store diagnostics for return if requested (will be included in response if debug mode enabled)
@@ -1641,6 +1685,14 @@ export async function POST(request: NextRequest) {
                       };
                     }
                     
+                    // Include retrieval empty flag if applicable
+                    if (retrievalEmpty) {
+                      finalChunk.retrievalEmpty = true;
+                      if (retrievalEmptyReason) {
+                        finalChunk.retrievalEmptyReason = retrievalEmptyReason;
+                      }
+                    }
+                    
                     controller.enqueue(
                       encoder.encode(`data: ${JSON.stringify(finalChunk)}\n\n`)
                     );
@@ -1958,6 +2010,10 @@ export async function POST(request: NextRequest) {
           debug: {
             retrieval: retrievalDiagnostics,
           },
+        } : {}),
+        ...(retrievalEmpty ? {
+          retrievalEmpty: true,
+          retrievalEmptyReason: retrievalEmptyReason || undefined,
         } : {}),
       });
     } catch (error: any) {
