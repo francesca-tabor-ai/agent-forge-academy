@@ -74,6 +74,42 @@ function isMediaDevicesSupported(): boolean {
 }
 
 /**
+ * Check if MediaRecorder is supported
+ */
+function isMediaRecorderSupported(): boolean {
+  if (typeof window === 'undefined') return false;
+  try {
+    return typeof MediaRecorder !== 'undefined';
+  } catch (error) {
+    console.warn('Error checking MediaRecorder support:', error);
+    return false;
+  }
+}
+
+/**
+ * Get the best available MIME type for MediaRecorder
+ */
+function getBestAudioMimeType(): string | null {
+  if (!isMediaRecorderSupported()) return null;
+  
+  // Prefer Opus codec (better quality, smaller size)
+  const preferredTypes = [
+    'audio/webm;codecs=opus',
+    'audio/webm',
+    'audio/ogg;codecs=opus',
+    'audio/mp4',
+  ];
+  
+  for (const mimeType of preferredTypes) {
+    if (MediaRecorder.isTypeSupported(mimeType)) {
+      return mimeType;
+    }
+  }
+  
+  return null;
+}
+
+/**
  * Comprehensive browser capability check
  * Returns object with detailed capability information
  */
@@ -159,7 +195,7 @@ function createMockAudioBlob(): Blob {
 }
 
 /**
- * Send audio to voice API for transcription (mock mode)
+ * Send audio to voice API for transcription (mock mode or API fallback)
  */
 async function transcribeAudioViaAPI(
   audioBlob: Blob,
@@ -179,10 +215,6 @@ async function transcribeAudioViaAPI(
     method: 'POST',
     body: formData,
   });
-
-  if (!response.ok) {
-    throw new Error(`Voice API error: ${response.status}`);
-  }
 
   if (!response.ok) {
     // Extract request ID from error response if available
@@ -241,6 +273,10 @@ export function VoiceControls({
   const networkErrorLoggedRef = useRef<boolean>(false);
   const networkErrorLoggedAtRef = useRef<number>(0);
   const restartTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  // MediaRecorder refs for API fallback
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const recordingStreamRef = useRef<MediaStream | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
 
   // Offline/online detection
   useEffect(() => {
@@ -591,6 +627,15 @@ export function VoiceControls({
             networkErrorLoggedRef.current = false;
           }
           
+          // Try API fallback for certain errors if MediaRecorder is available
+          const fallbackErrors = ['no-speech', 'audio-capture', 'not-allowed'];
+          if (fallbackErrors.includes(errorType) && isMediaRecorderSupported() && mediaRecorderRef.current) {
+            // We're already recording with MediaRecorder, just continue
+            console.log(`Speech Recognition error (${errorType}), using API fallback`);
+            // Don't set error state yet, let the fallback handle it
+            return;
+          }
+          
           // Log other errors (but not repeatedly)
           if (timeSinceLastError > 2000 || lastErrorTypeRef.current !== errorType) {
             if (errorType === 'aborted') {
@@ -696,6 +741,181 @@ export function VoiceControls({
     }
   }, [mode, disabled, onTranscript, allowEditBeforeSend]);
 
+  /**
+   * Start recording with MediaRecorder for API fallback
+   */
+  const startMediaRecorder = useCallback(async (): Promise<boolean> => {
+    // Check if MediaRecorder is supported
+    if (!isMediaRecorderSupported() || !isMediaDevicesSupported()) {
+      return false;
+    }
+
+    try {
+      // Get audio stream with constraints for better quality
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true,
+          sampleRate: 48000,
+          channelCount: 1, // Mono for speech
+        }
+      });
+
+      recordingStreamRef.current = stream;
+
+      // Get best available MIME type
+      const mimeType = getBestAudioMimeType();
+      if (!mimeType) {
+        console.warn('No supported audio MIME type found, falling back to default');
+        stream.getTracks().forEach(track => track.stop());
+        return false;
+      }
+
+      // Create MediaRecorder
+      const mediaRecorder = new MediaRecorder(stream, {
+        mimeType,
+        audioBitsPerSecond: 64000, // 64 kbps for speech
+      });
+
+      // Reset chunks
+      audioChunksRef.current = [];
+
+      // Handle data available
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          audioChunksRef.current.push(event.data);
+        }
+      };
+
+      // Start recording
+      mediaRecorder.start();
+      mediaRecorderRef.current = mediaRecorder;
+
+      return true;
+    } catch (error) {
+      console.error('Error starting MediaRecorder:', error);
+      // Cleanup on error
+      if (recordingStreamRef.current) {
+        recordingStreamRef.current.getTracks().forEach(track => track.stop());
+        recordingStreamRef.current = null;
+      }
+      return false;
+    }
+  }, []);
+
+  /**
+   * Stop MediaRecorder and get audio blob
+   */
+  const stopMediaRecorder = useCallback((): Promise<Blob | null> => {
+    return new Promise((resolve) => {
+      if (!mediaRecorderRef.current || mediaRecorderRef.current.state === 'inactive') {
+        resolve(null);
+        return;
+      }
+
+      // Wait for data to be available
+      mediaRecorderRef.current.onstop = () => {
+        const audioBlob = new Blob(audioChunksRef.current, { 
+          type: getBestAudioMimeType() || 'audio/webm' 
+        });
+        
+        // Cleanup
+        if (recordingStreamRef.current) {
+          recordingStreamRef.current.getTracks().forEach(track => track.stop());
+          recordingStreamRef.current = null;
+        }
+        mediaRecorderRef.current = null;
+        audioChunksRef.current = [];
+
+        resolve(audioBlob);
+      };
+
+      // Stop recording
+      if (mediaRecorderRef.current.state === 'recording') {
+        mediaRecorderRef.current.stop();
+      } else {
+        resolve(null);
+      }
+    });
+  }, []);
+
+  /**
+   * Fallback to API transcription using MediaRecorder
+   */
+  const fallbackToAPITranscription = useCallback(async () => {
+    try {
+      setRecognitionState('processing');
+      setPartialTranscript('');
+      
+      // Stop MediaRecorder and get audio blob
+      const audioBlob = await stopMediaRecorder();
+      if (!audioBlob) {
+        setError('No audio recorded. Please try again.');
+        setRecognitionState('error');
+        setIsListening(false);
+        return;
+      }
+
+      // Send to voice API for transcription
+      const transcript = await transcribeAudioViaAPI(audioBlob, studentProfileId, context);
+      
+      if (transcript && transcript.trim()) {
+        const fullText = transcript.trim();
+        setFinalTranscript(fullText);
+        setPartialTranscript('');
+        
+        // If edit mode is enabled, show editable transcript
+        if (allowEditBeforeSend) {
+          setEditableTranscript(fullText);
+          setIsEditingTranscript(true);
+          isEditingTranscriptRef.current = true;
+          setTimeout(() => {
+            try {
+              transcriptInputRef.current?.focus();
+              transcriptInputRef.current?.setSelectionRange(fullText.length, fullText.length);
+            } catch (error) {
+              console.warn('Error focusing transcript input:', error);
+            }
+          }, 100);
+        } else {
+          // Immediately send transcript
+          try {
+            onTranscript(fullText);
+          } catch (error) {
+            console.error('Error in onTranscript callback:', error);
+            setError('Failed to send transcript. Please try typing your message instead.');
+          }
+        }
+      } else {
+        setError('No transcription received. Please try again.');
+      }
+    } catch (error: any) {
+      console.error('Error in API transcription fallback:', error);
+      
+      // Extract request ID from error if available
+      let errorMessage = 'Failed to transcribe audio. Please try again or use text input.';
+      if (error.requestId) {
+        errorMessage = `${error.message || errorMessage} (Request ID: ${error.requestId})`;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      setError(errorMessage);
+      setRecognitionState('error');
+    } finally {
+      setIsListening(false);
+      setRecognitionState('idle');
+      
+      // Stop recording timer
+      if (recordingIntervalRef.current) {
+        clearInterval(recordingIntervalRef.current);
+        recordingIntervalRef.current = null;
+      }
+      setRecordingDuration(0);
+    }
+  }, [stopMediaRecorder, studentProfileId, context, allowEditBeforeSend, onTranscript]);
+
   const startListening = useCallback(async () => {
     if (!recognitionRef.current || disabled || isListening) return;
     
@@ -772,6 +992,15 @@ export function VoiceControls({
         restartBackoffRef.current = 1000; // Reset backoff on manual retry
       }
       
+      // Start MediaRecorder for API fallback if supported
+      const useMediaRecorder = isMediaRecorderSupported() && isMediaDevicesSupported();
+      if (useMediaRecorder) {
+        const started = await startMediaRecorder();
+        if (!started) {
+          console.warn('Failed to start MediaRecorder for fallback');
+        }
+      }
+      
       // Ensure recognition is not already running
       try {
         if (recognitionRef.current && recognitionRef.current.state !== 'idle') {
@@ -817,6 +1046,22 @@ export function VoiceControls({
   }, [disabled, isListening, voiceUnavailableReason, isOffline]);
 
   const stopListening = useCallback(async () => {
+    // If MediaRecorder is active, use API fallback
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
+      // Stop Speech Recognition if active
+      if (recognitionRef.current && recognitionRef.current.state !== 'idle') {
+        try {
+          recognitionRef.current.stop();
+        } catch (e) {
+          // Ignore stop errors
+        }
+      }
+      
+      // Use API fallback
+      await fallbackToAPITranscription();
+      return;
+    }
+    
     // UAT Mock Mode: Send audio to API for transcription
     const mockMode = isMockModeEnabled();
     if (mockMode && isListening && recognitionRef.current?.mockMode) {
