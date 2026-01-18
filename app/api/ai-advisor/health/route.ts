@@ -173,62 +173,76 @@ export async function GET(request: NextRequest) {
     });
   }
 
-  // 4. pgvector Extension Check
+  // 4. pgvector Extension Check (via function availability)
   try {
     const supabase = createServerSupabaseClient();
     
-    const { data: extensions, error: extError } = await supabase
-      .rpc('exec_sql', {
-        query: "SELECT * FROM pg_extension WHERE extname = 'vector'",
-      }).catch(() => {
-        // If exec_sql doesn't exist, try direct query
-        return supabase
-          .from('pg_extension')
-          .select('*')
-          .eq('extname', 'vector')
-          .limit(1);
-      });
-    
-    // Alternative: Check if vector search function exists (indirect check)
+    // Check if vector search function exists by attempting to call it with minimal params
+    // We use a zero vector and request 0 results to minimize load
+    const zeroVector = Array(1536).fill(0);
     const { data: functionCheck, error: funcError } = await supabase
       .rpc('match_lesson_chunks', {
-        query_embedding: Array(1536).fill(0), // Dummy embedding for test
+        query_embedding: zeroVector,
         match_threshold: 0.0,
         match_count: 0, // Request 0 results to minimize load
-      }).catch(() => ({ data: null, error: { message: 'Function not available' } }));
+      });
     
-    if (funcError && funcError.message !== 'Function not available') {
-      // Function exists but may have failed due to dummy data - that's okay
+    if (funcError) {
+      // Check if error is due to function not existing vs other issues
+      if (funcError.message?.includes('function') && funcError.message?.includes('does not exist')) {
+        checks.push({
+          name: 'pgvector Extension',
+          status: 'warn',
+          message: 'pgvector extension may not be installed (match_lesson_chunks function not found)',
+          details: {
+            note: 'Vector search will fall back to keyword search',
+            error: funcError.message,
+          },
+        });
+      } else {
+        // Function exists but may have failed due to other reasons (e.g., no embeddings)
+        // This is actually a good sign - function exists
+        checks.push({
+          name: 'pgvector Extension',
+          status: 'pass',
+          message: 'pgvector extension appears to be installed (match_lesson_chunks function exists)',
+          details: {
+            note: funcError.message?.includes('embedding') 
+              ? 'Function exists but may need embeddings to be indexed'
+              : undefined,
+          },
+        });
+      }
+    } else {
+      // Function call succeeded (even with 0 results)
       checks.push({
         name: 'pgvector Extension',
         status: 'pass',
-        message: 'pgvector extension appears to be installed (match_lesson_chunks function exists)',
+        message: 'pgvector extension is installed and match_lesson_chunks function is available',
       });
-    } else if (funcError && funcError.message === 'Function not available') {
+    }
+  } catch (error: any) {
+    // If RPC call fails completely, function likely doesn't exist
+    if (error.message?.includes('function') || error.message?.includes('RPC')) {
       checks.push({
         name: 'pgvector Extension',
         status: 'warn',
-        message: 'pgvector extension may not be installed (match_lesson_chunks function not found)',
+        message: 'pgvector extension may not be installed (match_lesson_chunks function not available)',
         details: {
           note: 'Vector search will fall back to keyword search',
+          error: error.message,
         },
       });
     } else {
       checks.push({
         name: 'pgvector Extension',
-        status: 'pass',
-        message: 'pgvector extension appears to be installed',
+        status: 'warn',
+        message: `Could not verify pgvector extension: ${error.message}`,
+        details: {
+          note: 'Vector search may fall back to keyword search',
+        },
       });
     }
-  } catch (error: any) {
-    checks.push({
-      name: 'pgvector Extension',
-      status: 'warn',
-      message: `Could not verify pgvector extension: ${error.message}`,
-      details: {
-        note: 'Vector search may fall back to keyword search',
-      },
-    });
   }
 
   // 5. Index Existence Check
