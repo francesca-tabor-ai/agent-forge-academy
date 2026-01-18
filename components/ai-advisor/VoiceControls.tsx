@@ -287,6 +287,7 @@ export function VoiceControls({
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const recordingStreamRef = useRef<MediaStream | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
+  const correlationIdRef = useRef<string | null>(null);
 
   // Offline/online detection
   useEffect(() => {
