@@ -12,11 +12,11 @@ email_action: "Improve one weak product output using better angles, descriptions
 
 **Duration:** Week 4  
 **Learning Objectives:**
-- Understand why product inconsistency happens
-- Learn angle alignment with packshots
-- Master descriptive redundancy (on purpose)
-- Learn to train models through examples, not wishes
-- Improve product outputs systematically
+- **why product inconsistency happens Understanding**: Understand why product inconsistency happens
+- **angle alignment with packshots Understanding**: Learn angle alignment with packshots
+- **descriptive redundancy Understanding**: Master descriptive redundancy (on purpose)
+- **to train models through examples, not wishes Understanding**: Learn to train models through examples, not wishes
+- **Improve Product**: Improve product outputs systematically
 
 ---
 

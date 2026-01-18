@@ -9,10 +9,10 @@ order: 2
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Mine news, social media, and NGO reports for ESG signals
-- Implement NLP for controversy detection and severity scoring
-- Separate signal from noise in ESG monitoring
-- Design event timelines and escalation logic
+- **Mine News,**: Mine news, social media, and NGO reports for ESG signals
+- **NLP for controversy detection and severity scoring Implementation**: Implement NLP for controversy detection and severity scoring
+- **Separate Signal**: Separate signal from noise in ESG monitoring
+- **event timelines and escalation logic Development**: Design event timelines and escalation logic
 
 ---
 
@@ -293,10 +293,10 @@ Create a comprehensive alert framework that detects and escalates emerging ESG c
 
 ## Key Takeaways
 
-- Mining news, social media, and NGO reports provides early ESG risk signals
-- NLP enables automated controversy detection and severity scoring
-- Separating signal from noise improves alert quality and reduces false positives
-- Event timelines and escalation logic ensure timely response to ESG risks
+- **Mining News,**: Mining news, social media, and NGO reports provides early ESG risk signals
+- **Nlp Enables**: NLP enables automated controversy detection and severity scoring
+- **Separating Signal**: Separating signal from noise improves alert quality and reduces false positives
+- **Event Timelines**: Event timelines and escalation logic ensure timely response to ESG risks
 
 ---
 

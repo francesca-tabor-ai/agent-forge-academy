@@ -9,11 +9,11 @@ order: 1
 
 **Duration:** Week 1  
 **Learning Objectives:**
-- Understand why flows lag investor intent
-- Recognize the decline of product-push distribution
-- Distinguish advisor behavior vs. end-investor behavior
-- Shift from reporting KPIs to predicting outcomes
-- Identify where current distribution dashboards fail
+- **why flows lag investor intent Understanding**: Understand why flows lag investor intent
+- **Recognize The**: Recognize the decline of product-push distribution
+- **advisor behavior Analysis**: Distinguish advisor behavior vs. end-investor behavior
+- **Shift From**: Shift from reporting KPIs to predicting outcomes
+- **Identify Where**: Identify where current distribution dashboards fail
 
 ---
 
@@ -174,10 +174,10 @@ Analyze current distribution dashboards and identify gaps in explaining fund inf
 
 ## Key Takeaways
 
-- Flows lag investor intent by 2-4 weeks, creating opportunity for early signals
-- Product-push distribution is declining in favor of advice-led approaches
-- Advisor and end-investor behaviors differ significantly, requiring tailored strategies
-- Shifting from reporting KPIs to predicting outcomes enables proactive distribution
+- **Flows Lag**: Flows lag investor intent by 2-4 weeks, creating opportunity for early signals
+- **Product-Push Distribution**: Product-push distribution is declining in favor of advice-led approaches
+- **Advisor And**: Advisor and end-investor behaviors differ significantly, requiring tailored strategies
+- **Shifting From**: Shifting from reporting KPIs to predicting outcomes enables proactive distribution
 
 ---
 

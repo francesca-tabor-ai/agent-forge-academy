@@ -9,10 +9,10 @@ order: 4
 
 **Duration:** Week 4  
 **Learning Objectives:**
-- Understand why compliance cannot be fully autonomous
-- Implement confidence scoring and exception thresholds
-- Design audit trails and supervisory review
-- Manage regulator expectations for AI use
+- **why compliance cannot be fully autonomous Understanding**: Understand why compliance cannot be fully autonomous
+- **confidence scoring and exception thresholds Implementation**: Implement confidence scoring and exception thresholds
+- **audit trails and supervisory review Development**: Design audit trails and supervisory review
+- **Manage Regulator**: Manage regulator expectations for AI use
 
 ---
 
@@ -193,10 +193,10 @@ Create a comprehensive human-review workflow for handling compliance exceptions 
 
 ## Key Takeaways
 
-- Compliance requires human oversight and cannot be fully autonomous
-- Confidence scoring enables efficient exception handling
-- Audit trails are essential for regulatory compliance
-- Managing regulator expectations requires transparency and documentation
+- **Compliance Requires**: Compliance requires human oversight and cannot be fully autonomous
+- **Confidence Scoring**: Confidence scoring enables efficient exception handling
+- **Audit Trails**: Audit trails are essential for regulatory compliance
+- **Managing Regulator**: Managing regulator expectations requires transparency and documentation
 
 ---
 

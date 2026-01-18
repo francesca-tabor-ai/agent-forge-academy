@@ -9,12 +9,12 @@ order: 7
 
 **Duration:** Week 7  
 **Learning Objectives:**
-- Prepare teams and agencies for rapid execution
-- Define ownership before platforms launch
-- Learn to work with paid media teams
-- Educate agencies on AI-native buying
-- Ensure procurement and contract readiness
-- Align brand, legal, and finance expectations
+- **Prepare Teams**: Prepare teams and agencies for rapid execution
+- **Define Ownership**: Define ownership before platforms launch
+- **to work with paid media teams Understanding**: Learn to work with paid media teams
+- **Educate Agencies**: Educate agencies on AI-native buying
+- **Ensure Procurement**: Ensure procurement and contract readiness
+- **Align Brand,**: Align brand, legal, and finance expectations
 
 ---
 
@@ -617,15 +617,15 @@ Create internal education deck:
 
 ## Key Takeaways
 
-- **Team preparation is critical:** Paid media teams need new skills for AI-native buying
+- **Team preparation is critical:**: Paid media teams need new skills for AI-native buying
 
-- **Agency education is essential:** Agencies must understand AI-native concepts and strategies
+- **Agency education is essential:**: Agencies must understand AI-native concepts and strategies
 
-- **Procurement readiness enables speed:** Contracts, budgets, and processes must be ready
+- **Procurement readiness enables speed:**: Contracts, budgets, and processes must be ready
 
-- **Stakeholder alignment prevents issues:** Brand, legal, and finance must be aligned
+- **Stakeholder alignment prevents issues:**: Brand, legal, and finance must be aligned
 
-- **Playbook enables execution:** Comprehensive playbook ensures readiness on day one
+- **Playbook enables execution:**: Comprehensive playbook ensures readiness on day one
 
 ---
 

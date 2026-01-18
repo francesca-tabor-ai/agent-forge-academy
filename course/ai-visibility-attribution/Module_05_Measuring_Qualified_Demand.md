@@ -11,11 +11,11 @@ order: 5
 
 **Duration:** Week 5  
 **Learning Objectives:**
-- Quantify how AI traffic differs from traditional channels
-- Redefine success metrics around demand quality
-- Distinguish qualified vs unqualified AI sessions
-- Compare AI, search, social, and referral traffic quality
-- Identify early indicators of LTV from AI-originated users
+- **Quantify How**: Quantify how AI traffic differs from traditional channels
+- **Redefine Success**: Redefine success metrics around demand quality
+- **qualified Analysis**: Distinguish qualified vs unqualified AI sessions
+- **AI, search, social, Analysis**: Compare AI, search, social, and referral traffic quality
+- **Identify Early**: Identify early indicators of LTV from AI-originated users
 
 ---
 
@@ -579,12 +579,12 @@ Create a dashboard that compares AI traffic quality to other channels.
 
 ## Key Takeaways
 
-- **Quality beats volume:** Qualified demand matters more than traffic volume
-- **AI traffic is highly qualified:** 30% high qualification vs. 15-25% for other channels
-- **Conversion confidence matters:** Not just whether conversion happens, but how likely
-- **AI outperforms on quality metrics:** Higher conversion, faster time-to-conversion, better engagement
-- **AI users have higher LTV:** 20-50% higher than other channels
-- **Scoring enables optimization:** Qualification scores help prioritize and optimize
+- **Quality beats volume:**: Qualified demand matters more than traffic volume
+- **AI traffic is highly qualified:**: 30% high qualification vs. 15-25% for other channels
+- **Conversion confidence matters:**: Not just whether conversion happens, but how likely
+- **AI outperforms on quality metrics:**: Higher conversion, faster time-to-conversion, better engagement
+- **AI users have higher LTV:**: 20-50% higher than other channels
+- **Scoring enables optimization:**: Qualification scores help prioritize and optimize
 
 ---
 

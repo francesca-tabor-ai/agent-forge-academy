@@ -11,11 +11,11 @@ order: 4
 **Theme:** *Dashboards are products*
 
 **Learning Objectives:**
-- Choose the right visualization for your data
-- Design dashboards for different audiences
-- Distinguish signal from noise
-- Avoid common dashboard failure patterns
-- Build dashboards that drive decisions
+- **Choose The**: Choose the right visualization for your data
+- **dashboards for different audiences Development**: Design dashboards for different audiences
+- **signal from noise Analysis**: Distinguish signal from noise
+- **Avoid Common**: Avoid common dashboard failure patterns
+- **dashboards that drive decisions Development**: Build dashboards that drive decisions
 
 ---
 
@@ -520,11 +520,11 @@ For both dashboards:
 
 ## Key Takeaways
 
-1. **Right Visualization:** Match chart type to data and message
-2. **Audience Matters:** Different dashboards for different audiences
-3. **Signal vs Noise:** Focus on what matters, remove the rest
-4. **Avoid Failures:** Common patterns lead to ineffective dashboards
-5. **Drive Action:** Dashboards should lead to decisions, not just display data
+- **Right Visualization:**: Match chart type to data and message
+- **Audience Matters:**: Different dashboards for different audiences
+- **Signal vs Noise:**: Focus on what matters, remove the rest
+- **Avoid Failures:**: Common patterns lead to ineffective dashboards
+- **Drive Action:**: Dashboards should lead to decisions, not just display data
 
 ---
 

@@ -9,10 +9,10 @@ order: 6
 
 **Duration:** Week 6  
 **Learning Objectives:**
-- Understand agentic metrics beyond traditional NLG metrics
-- Implement security measures and red teaming
-- Manage operational risks in production
-- Address ethics and governance requirements
+- **agentic metrics beyond traditional NLG metrics Understanding**: Understand agentic metrics beyond traditional NLG metrics
+- **security measures and red teaming Implementation**: Implement security measures and red teaming
+- **Manage Operational**: Manage operational risks in production
+- **Address Ethics**: Address ethics and governance requirements
 
 ---
 
@@ -641,15 +641,15 @@ Implement comprehensive evaluation framework and security measures for an agenti
 
 **Key Takeaways:**
 
-1. **Agentic Metrics:** Plan fidelity, tool success, traceability
-2. **Security:** Prompt injection, info disclosure, bias
-3. **Operational Risks:** Loops, latency, cost
-4. **Ethics:** GDPR, bias, autonomy boundaries
+- **Agentic Metrics:**: Plan fidelity, tool success, traceability
+- **Security:**: Prompt injection, info disclosure, bias
+- **Operational Risks:**: Loops, latency, cost
+- **Ethics:**: GDPR, bias, autonomy boundaries
 
 **Next Steps:**
-- Module 7: Learn implementation and tooling
-- Deploy production systems
-- Set up observability
+- **Module 7:**: Module 7: Learn implementation and tooling
+- **production Implementation**: Deploy production systems
+- **observability Implementation**: Apply set up observability in relevant contexts
 
 ---
 

@@ -11,12 +11,12 @@ order: 8
 **Theme:** *Making growth insights actionable*
 
 **Learning Objectives:**
-- Translate analytics into financial impact
-- Tell stories with growth metrics
-- Manage stakeholder expectations
-- Handle uncertainty and trade-offs
-- Build trust with finance and marketing leaders
-- Create executive-ready growth impact memos
+- **Translate Analytics**: Translate analytics into financial impact
+- **Tell Stories**: Tell stories with growth metrics
+- **Manage Stakeholder**: Apply manage stakeholder expectations in relevant contexts
+- **Handle Uncertainty**: Handle uncertainty and trade-offs
+- **trust with finance and marketing leaders Development**: Build trust with finance and marketing leaders
+- **executive-ready growth impact memos Development**: Create executive-ready growth impact memos
 
 ---
 
@@ -514,16 +514,16 @@ An executive-ready growth impact memo that:
 
 **Key Takeaways:**
 
-1. **Translate to Business Language:** Revenue, profit, ROI, not just metrics
-2. **Tell Stories:** Context → Problem → Analysis → Impact → Recommendation
-3. **Manage Expectations:** Set realistic expectations with confidence intervals
-4. **Handle Uncertainty:** Be transparent about assumptions and risks
-5. **Build Trust:** Accuracy, transparency, consistency, relevance, actionability
+- **Translate to Business Language:**: Revenue, profit, ROI, not just metrics
+- **Tell Stories:**: Context → Problem → Analysis → Impact → Recommendation
+- **Manage Expectations:**: Set realistic expectations with confidence intervals
+- **Handle Uncertainty:**: Be transparent about assumptions and risks
+- **Build Trust:**: Accuracy, transparency, consistency, relevance, actionability
 
 **Next Steps:**
-- Capstone: Build end-to-end Growth OS
-- Apply all learnings to real scenario
-- Defend strategy in revenue review simulation
+- **Capstone: End-To-End**: Capstone: Build end-to-end Growth OS
+- **Apply All**: Apply all learnings to real scenario
+- **Defend Strategy**: Defend strategy in revenue review simulation
 
 ---
 

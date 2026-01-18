@@ -14,11 +14,11 @@ Global marketing requires creative that resonates across cultures, languages, an
 
 ## Learning Objectives
 
-- Design templates for multilingual expansion
-- Accommodate text expansion and cultural variation
-- Collaborate effectively with localization and transcreation teams
-- Manage regional brand flexibility
-- Implement QA strategies for global asset deployment
+- **templates for multilingual expansion Development**: Design templates for multilingual expansion
+- **Accommodate Text**: Accommodate text expansion and cultural variation
+- **Collaborate Effectively**: Collaborate effectively with localization and transcreation teams
+- **Manage Regional**: Manage regional brand flexibility
+- **QA strategies for global asset deployment Implementation**: Implement QA strategies for global asset deployment
 
 ---
 
@@ -505,18 +505,18 @@ Final Approval
 
 ### Key Takeaways
 
-1. **Multilingual templates** require flexible containers and adaptable layouts
-2. **Text expansion** must be accommodated with dynamic typography and layout adjustments
-3. **Cultural variation** affects imagery, colors, messaging, and formats
-4. **Collaboration** with localization teams is essential for quality
-5. **QA strategies** ensure global assets meet brand, cultural, and legal requirements
+- **Multilingual templates**: Require flexible containers and adaptable layouts
+- **Text expansion**: Must be accommodated with dynamic typography and layout adjustments
+- **Cultural variation**: Affects imagery, colors, messaging, and formats
+- **Collaboration**: With localization teams is essential for quality
+- **QA strategies**: Ensure global assets meet brand, cultural, and legal requirements
 
 ### Next Steps
 
-- Design a multilingual template structure
-- Create text expansion accommodation rules
-- Establish collaboration workflows with localization teams
-- Move to Module 9 to learn about quality control and brand governance
+- **a multilingual template structure Development**: Design a multilingual template structure
+- **text expansion accommodation rules Development**: Create text expansion accommodation rules
+- **Establish Collaboration**: Establish collaboration workflows with localization teams
+- **Move To**: Move to Module 9 to learn about quality control and brand governance
 
 ---
 

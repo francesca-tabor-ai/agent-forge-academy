@@ -9,10 +9,10 @@ order: 8
 
 **Duration:** Week 8  
 **Learning Objectives:**
-- Integrate forecasting, benchmarking, and narratives
-- Design dashboards for sales, marketing, and product teams
-- Measure impact: inflows, conversion, advisor engagement
-- Plan future roadmap: personalization and real-time insights
+- **forecasting, benchmarking, Integration**: Integrate forecasting, benchmarking, and narratives
+- **dashboards for sales, marketing, and product teams Development**: Design dashboards for sales, marketing, and product teams
+- **Measure Impact:**: Measure impact: inflows, conversion, advisor engagement
+- **Plan Future**: Plan future roadmap: personalization and real-time insights
 
 ---
 
@@ -250,10 +250,10 @@ Design a complete Distribution & Marketing Intelligence platform for an asset ma
 
 ## Key Takeaways
 
-- Integrating forecasting, benchmarking, and narratives creates comprehensive intelligence
-- Team-specific dashboards provide relevant insights for each function
-- Measuring impact demonstrates value and guides improvement
-- Future roadmap includes personalization and real-time capabilities
+- **Integrating Forecasting,**: Integrating forecasting, benchmarking, and narratives creates comprehensive intelligence
+- **Team-Specific Dashboards**: Team-specific dashboards provide relevant insights for each function
+- **Measuring Impact**: Measuring impact demonstrates value and guides improvement
+- **Future Roadmap**: Future roadmap includes personalization and real-time capabilities
 
 ---
 

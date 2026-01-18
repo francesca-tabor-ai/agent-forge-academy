@@ -10,11 +10,11 @@ description: Search, social, display, video, CTV, and in-app personalization
 
 By the end of this module, you will be able to:
 
-- Understand personalization strategies for search, social, display, video, CTV, and in-app advertising
-- Evaluate AI-driven media buying and bidding strategies
-- Distinguish between cross-channel and omnichannel personalisation approaches
-- Navigate platform constraints and walled-garden environments
-- Analyze AI-optimized advertising campaigns
+- **personalization strategies for search, social, display, video, CTV, and in-app advertising Understanding**: Understand personalization strategies for search, social, display, video, CTV, and in-app advertising
+- **AI-driven media buying Evaluation**: Evaluate AI-driven media buying and bidding strategies
+- **between cross-channel Analysis**: Distinguish between cross-channel and omnichannel personalisation approaches
+- **Navigate Platform**: Navigate platform constraints and walled-garden environments
+- **Analyze Ai-Optimized**: Analyze AI-optimized advertising campaigns
 
 ## Introduction
 
@@ -509,11 +509,11 @@ Hyper-personalised advertising requires understanding the unique characteristics
 
 ## Key Takeaways
 
-- Each advertising channel has unique personalization opportunities and constraints
-- AI-driven bidding and optimization improve performance at scale
-- Cross-channel personalization coordinates across channels; omnichannel creates unified experiences
-- Walled gardens require strategic approaches to data, targeting, and measurement
-- Successful AI-optimized campaigns combine channel expertise with AI capabilities
+- **Each Advertising**: Each advertising channel has unique personalization opportunities and constraints
+- **Ai-Driven Bidding**: AI-driven bidding and optimization improve performance at scale
+- **Cross-Channel Personalization**: Cross-channel personalization coordinates across channels; omnichannel creates unified experiences
+- **Walled Gardens**: Walled gardens require strategic approaches to data, targeting, and measurement
+- **Successful Ai-Optimized**: Successful AI-optimized campaigns combine channel expertise with AI capabilities
 
 ## Additional Resources
 

@@ -11,11 +11,11 @@ order: 6
 
 **Duration:** Week 6  
 **Learning Objectives:**
-- Use AI to generate product content without hallucination or drift
-- Implement guardrails and human-in-the-loop systems
-- Understand structured inputs vs freeform generation
-- Automate PDP sections, infographic images, video scripts, UGC prompts
-- Implement version control and content governance
+- **Use Ai**: Use AI to generate product content without hallucination or drift
+- **guardrails and human-in-the-loop Implementation**: Implement guardrails and human-in-the-loop systems
+- **structured inputs vs freeform generation Understanding**: Understand structured inputs vs freeform generation
+- **Automate Pdp**: Automate PDP sections, infographic images, video scripts, UGC prompts
+- **version control and content governance Implementation**: Implement version control and content governance
 
 ---
 
@@ -431,16 +431,16 @@ In this module, you've learned:
 - **Content Types:** Automate PDPs, infographics, scripts, UGC prompts
 
 **Key Takeaways:**
-- Structured inputs reduce hallucination risk
-- Guardrails enforce quality and consistency
-- Human review ensures trust and accuracy
-- Version control enables governance
-- Automation scales without sacrificing truth
+- **Structured Inputs**: Structured inputs reduce hallucination risk
+- **Guardrails Enforce**: Guardrails enforce quality and consistency
+- **Human Review**: Human review ensures trust and accuracy
+- **Version Control**: Version control enables governance
+- **Automation Scales**: Automation scales without sacrificing truth
 
 **Next Steps:**
-- Complete Lab 6: Automated PDP Generation Workflow
-- Review Module 7: Cross-Channel Consistency
-- Begin mapping channel content requirements
+- **Complete Lab**: Complete Lab 6: Automated PDP Generation Workflow
+- **Review Module**: Review Module 7: Cross-Channel Consistency
+- **Begin Mapping**: Begin mapping channel content requirements
 
 ---
 

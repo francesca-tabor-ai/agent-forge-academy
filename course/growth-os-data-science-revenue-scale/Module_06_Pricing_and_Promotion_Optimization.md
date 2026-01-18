@@ -11,12 +11,12 @@ order: 6
 **Theme:** *Revenue is a function of choice architecture*
 
 **Learning Objectives:**
-- Understand price elasticity and demand curves
-- Measure discount effectiveness and cannibalization
-- Design promotion targeting and personalization
-- Test pricing changes safely
-- Balance long-term vs short-term revenue trade-offs
-- Build pricing optimization models
+- **price elasticity and demand curves Understanding**: Understand price elasticity and demand curves
+- **Measure Discount**: Measure discount effectiveness and cannibalization
+- **promotion targeting and personalization Development**: Design promotion targeting and personalization
+- **Test Pricing**: Test pricing changes safely
+- **Balance Long-Term**: Balance long-term vs short-term revenue trade-offs
+- **pricing optimization models Development**: Build pricing optimization models
 
 ---
 
@@ -635,16 +635,16 @@ A pricing or promo strategy backed by data and risk analysis that:
 
 **Key Takeaways:**
 
-1. **Price Elasticity Matters:** Understand how price affects demand
-2. **Discounts Have Trade-offs:** Measure effectiveness, cannibalization, pull-forward
-3. **Target Strategically:** Personalize promotions based on LTV and sensitivity
-4. **Test Safely:** Use guardrails and proper experiment design
-5. **Think Long-Term:** Balance short-term revenue with long-term value
+- **Price Elasticity Matters:**: Understand how price affects demand
+- **Discounts Have Trade-offs:**: Measure effectiveness, cannibalization, pull-forward
+- **Target Strategically:**: Personalize promotions based on LTV and sensitivity
+- **Test Safely:**: Use guardrails and proper experiment design
+- **Think Long-Term:**: Balance short-term revenue with long-term value
 
 **Next Steps:**
-- Module 7: Learn experimentation for growth decisions
-- Understand growth experimentation frameworks
-- Design experiment roadmaps
+- **Module 7:**: Module 7: Learn experimentation for growth decisions
+- **growth experimentation frameworks Understanding**: Understand growth experimentation frameworks
+- **experiment roadmaps Development**: Apply design experiment roadmaps in relevant contexts
 
 ---
 

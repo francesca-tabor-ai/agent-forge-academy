@@ -16,13 +16,13 @@ This comprehensive course teaches you how to effectively communicate with Large 
 
 By the end of this course, you will be able to:
 
-- Understand how LLMs function as prediction engines and leverage this knowledge for better prompting
-- Apply structured prompting frameworks (ROSES, CO-STAR, CREATE) to create effective prompts
-- Implement advanced reasoning techniques including Chain of Thought, Self-Consistency, and Tree of Thoughts
-- Build agentic systems that integrate LLMs with external tools and APIs
-- Apply prompt engineering to industry-specific use cases including code, business intelligence, and content creation
-- Evaluate and optimize prompts using offline and online testing methodologies
-- Identify and mitigate ethical risks including adversarial prompting, bias, and hallucination
+- **how LLMs function as prediction engines and leverage this knowledge for better prompting Understanding**: Understand how LLMs function as prediction engines and leverage this knowledge for better prompting
+- **Apply Structured**: Apply structured prompting frameworks (ROSES, CO-STAR, CREATE) to create effective prompts
+- **advanced reasoning techniques including Chain of Thought, Self-Consistency, and Tree of Thoughts Implementation**: Implement advanced reasoning techniques including Chain of Thought, Self-Consistency, and Tree of Thoughts
+- **agentic Development**: Build agentic systems that integrate LLMs with external tools and APIs
+- **Apply Prompt**: Apply prompt engineering to industry-specific use cases including code, business intelligence, and content creation
+- **and optimize prompts using offline Evaluation**: Evaluate and optimize prompts using offline and online testing methodologies
+- **Identify And**: Identify and mitigate ethical risks including adversarial prompting, bias, and hallucination
 
 ## Course Structure
 

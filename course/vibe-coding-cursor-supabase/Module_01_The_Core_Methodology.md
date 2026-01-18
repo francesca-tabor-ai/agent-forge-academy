@@ -11,10 +11,10 @@ email_action: "Write a 3-sentence intent for a feature you've been putting offâ€
 
 **Duration:** Week 1  
 **Learning Objectives:**
-- Understand the philosophy of Intent-Driven Development
-- Learn how to work with AI as a collaborator
-- Master the scaffolding strategy for rapid development
-- Shift from manual implementation to AI-assisted workflows
+- **the philosophy of Intent-Driven Development Understanding**: Understand the philosophy of Intent-Driven Development
+- **how to work with AI as a collaborator Understanding**: Learn how to work with AI as a collaborator
+- **the scaffolding strategy for rapid development Understanding**: Master the scaffolding strategy for rapid development
+- **Shift From**: Shift from manual implementation to AI-assisted workflows
 
 ---
 

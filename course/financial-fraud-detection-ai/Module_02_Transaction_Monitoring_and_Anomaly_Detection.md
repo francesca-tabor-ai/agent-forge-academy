@@ -9,10 +9,10 @@ order: 2
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Build real-time transaction scoring
-- Implement anomaly detection algorithms
-- Create behavioral profiling systems
-- Design velocity checks
+- **real-time transaction scoring Development**: Build real-time transaction scoring
+- **anomaly detection algorithms Implementation**: Implement anomaly detection algorithms
+- **behavioral profiling Development**: Create behavioral profiling systems
+- **velocity checks Development**: Apply design velocity checks in relevant contexts
 
 ---
 

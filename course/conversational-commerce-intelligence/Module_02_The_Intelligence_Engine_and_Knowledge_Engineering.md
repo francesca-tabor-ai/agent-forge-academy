@@ -9,10 +9,10 @@ order: 2
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Design and build unified knowledge graphs from multiple data sources
-- Implement Retrieval-Augmented Generation (RAG) architecture
-- Develop product and allergen ontologies for safe recommendations
-- Prevent AI hallucinations through grounded responses
+- **and build unified knowledge graphs from multiple data sources Development**: Design and build unified knowledge graphs from multiple data sources
+- **Retrieval-Augmented Generation (RAG) architecture Implementation**: Implement Retrieval-Augmented Generation (RAG) architecture
+- **product and allergen ontologies for safe recommendations Development**: Develop product and allergen ontologies for safe recommendations
+- **Prevent Ai**: Prevent AI hallucinations through grounded responses
 
 ---
 
@@ -395,11 +395,11 @@ Build a unified knowledge graph from sample PIM, DAM, and CMS data, then impleme
 
 ## Key Takeaways
 
-1. **Knowledge graphs unify fragmented data:** Model entities and relationships, not just tables
-2. **RAG prevents hallucinations:** Ground LLM responses in vetted company data
-3. **Ontologies ensure safety:** Structured rules for allergens and product relationships
-4. **Data quality is critical:** Validation and conflict resolution maintain accuracy
-5. **Vector search enables semantic understanding:** Find relevant information beyond keywords
+- **Knowledge graphs unify fragmented data:**: Model entities and relationships, not just tables
+- **RAG prevents hallucinations:**: Ground LLM responses in vetted company data
+- **Ontologies ensure safety:**: Structured rules for allergens and product relationships
+- **Data quality is critical:**: Validation and conflict resolution maintain accuracy
+- **Vector search enables semantic understanding:**: Find relevant information beyond keywords
 
 ---
 
@@ -425,14 +425,14 @@ Build a unified knowledge graph from sample PIM, DAM, and CMS data, then impleme
 ## Next Steps
 
 **Ready for Module 3?**
-- Review Module 3: Conversational Capabilities & Brand Persona
-- Prepare to configure dynamic persona engines
-- Understand multi-turn conversation management
+- **Review Module**: Review Module 3: Conversational Capabilities & Brand Persona
+- **Prepare To**: Prepare to configure dynamic persona engines
+- **multi-turn conversation management Understanding**: Understand multi-turn conversation management
 
 **Questions to Consider:**
-- How would you structure your product ontology?
-- What validation rules are critical for your industry?
-- How can RAG improve your current customer interactions?
+- **How Would**: How would you structure your product ontology?
+- **What Validation**: What validation rules are critical for your industry?
+- **How Can**: How can RAG improve your current customer interactions?
 
 ---
 

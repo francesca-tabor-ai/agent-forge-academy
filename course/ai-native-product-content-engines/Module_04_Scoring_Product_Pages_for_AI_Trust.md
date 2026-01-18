@@ -11,12 +11,12 @@ order: 4
 
 **Duration:** Week 4  
 **Learning Objectives:**
-- Learn how to evaluate PDPs the way AI does
-- Replace subjective content reviews with scoring systems
-- Understand truthfulness: claims vs verifiable support
-- Learn completeness: who should buy vs shouldn't
-- Master evidence density: specs, comparisons, visuals, constraints
-- Recognize risk of omission vs over-claiming
+- **how to evaluate PDPs the way AI does Understanding**: Learn how to evaluate PDPs the way AI does
+- **Replace Subjective**: Replace subjective content reviews with scoring systems
+- **Truthfulness: Claims**: Understand truthfulness: claims vs verifiable support
+- **Completeness: Who**: Learn completeness: who should buy vs shouldn't
+- **Evidence Density:**: Master evidence density: specs, comparisons, visuals, constraints
+- **Recognize Risk**: Recognize risk of omission vs over-claiming
 
 ---
 
@@ -438,15 +438,15 @@ In this module, you've learned:
 - **Risk Assessment:** Omission vs over-claiming risks
 
 **Key Takeaways:**
-- Replace subjective reviews with objective scoring
-- AI evaluates on truthfulness, completeness, evidence density
-- Balance omission risk with over-claiming risk
-- Use scorecard to prioritize improvements
+- **Replace Subjective**: Replace subjective reviews with objective scoring
+- **Ai Evaluates**: AI evaluates on truthfulness, completeness, evidence density
+- **Balance Omission**: Balance omission risk with over-claiming risk
+- **Use Scorecard**: Use scorecard to prioritize improvements
 
 **Next Steps:**
-- Complete Lab 4: AI PDP Scorecard
-- Review Module 5: Designing AI-Readable PDPs
-- Begin rebuilding PDPs with AI-native structure
+- **Complete Lab**: Complete Lab 4: AI PDP Scorecard
+- **Review Module**: Review Module 5: Designing AI-Readable PDPs
+- **Begin Rebuilding**: Begin rebuilding PDPs with AI-native structure
 
 ---
 

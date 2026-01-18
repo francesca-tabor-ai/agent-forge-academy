@@ -19,12 +19,12 @@ order: 0
 
 By completing this course, you will be able to:
 
-- Build advanced credit scoring models using machine learning
-- Design automated loan underwriting systems
-- Implement alternative credit scoring with alternative data
-- Create loan pricing and risk-based pricing models
-- Develop automated lending platforms
-- Ensure regulatory compliance (Fair Lending, explainability)
+- **advanced credit scoring models using machine learning Development**: Build advanced credit scoring models using machine learning
+- **automated loan underwriting Development**: Design automated loan underwriting systems
+- **alternative credit scoring with alternative data Implementation**: Implement alternative credit scoring with alternative data
+- **loan pricing and risk-based pricing models Development**: Create loan pricing and risk-based pricing models
+- **automated lending platforms Development**: Develop automated lending platforms
+- **Ensure Regulatory**: Ensure regulatory compliance (Fair Lending, explainability)
 
 ---
 

@@ -20,12 +20,12 @@ order: 0
 
 By completing this course, you will be able to:
 
-- Design and ship **AI-powered product experiences** that users trust, adopt, and repeatedly use
-- Identify where AI meaningfully improves user experience
-- Design AI-powered decisioning and personalization systems
-- Apply GenAI patterns to real product problems
-- Incorporate human-in-the-loop mechanisms for trust and control
-- Navigate ethical, safety, and responsibility considerations in AI products
+- **and ship **: AI-powered product experiences: Design and ship  that users trust, adopt, and repeatedly use
+- **Identify Where**: Identify where AI meaningfully improves user experience
+- **AI-powered decisioning and personalization Development**: Design AI-powered decisioning and personalization systems
+- **Apply Genai**: Apply GenAI patterns to real product problems
+- **Incorporate Human-In-The-Loop**: Incorporate human-in-the-loop mechanisms for trust and control
+- **Navigate Ethical,**: Navigate ethical, safety, and responsibility considerations in AI products
 
 ---
 

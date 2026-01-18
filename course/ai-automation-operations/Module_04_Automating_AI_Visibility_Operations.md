@@ -11,12 +11,12 @@ order: 4
 
 **Duration:** Week 4  
 **Learning Objectives:**
-- Implement automation where it creates immediate relief
-- Automate AI answer monitoring and diff detection
-- Design alert routing and remediation workflows
-- Generate automated visibility reports
-- Increase signal quality without adding noise
-- Create an AI Visibility Automation Blueprint and monitoring pipeline
+- **automation where it creates immediate relief Implementation**: Implement automation where it creates immediate relief
+- **Automate Ai**: Automate AI answer monitoring and diff detection
+- **alert routing and remediation Development**: Design alert routing and remediation workflows
+- **Generate Automated**: Generate automated visibility reports
+- **Increase Signal**: Increase signal quality without adding noise
+- **an AI Visibility Automation Blueprint and monitoring Development**: Create an AI Visibility Automation Blueprint and monitoring pipeline
 
 ---
 
@@ -688,12 +688,12 @@ Design and document a complete automated monitoring and reporting pipeline for A
 
 ## Key Takeaways
 
-- **Automation creates relief:** Automated monitoring frees teams from manual work
-- **Signal over noise:** Intelligent alerting ensures important changes are noticed
-- **Remediation support:** First-draft suggestions accelerate problem resolution
-- **Visibility through reporting:** Automated reports provide consistent insights
-- **Human oversight:** Automation supports humans, doesn't replace them
-- **Continuous improvement:** Systems should learn and adapt over time
+- **Automation creates relief:**: Automated monitoring frees teams from manual work
+- **Signal over noise:**: Intelligent alerting ensures important changes are noticed
+- **Remediation support:**: First-draft suggestions accelerate problem resolution
+- **Visibility through reporting:**: Automated reports provide consistent insights
+- **Human oversight:**: Automation supports humans, doesn't replace them
+- **Continuous improvement:**: Systems should learn and adapt over time
 
 ---
 

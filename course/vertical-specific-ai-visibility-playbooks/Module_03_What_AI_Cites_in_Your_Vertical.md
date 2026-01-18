@@ -11,11 +11,11 @@ order: 3
 
 **Duration:** Week 3  
 **Learning Objectives:**
-- Identify which sources AI trusts in your industry
-- Understand citation hierarchies and displacement mechanics
-- Recognize the role of standards bodies, regulators, and trade publications
-- Map the impact of PR vs product data vs UGC by vertical
-- Complete an AI Citation Landscape by Vertical
+- **Identify Which**: Identify which sources AI trusts in your industry
+- **citation hierarchies and displacement mechanics Understanding**: Understand citation hierarchies and displacement mechanics
+- **Recognize The**: Recognize the role of standards bodies, regulators, and trade publications
+- **Map The**: Map the impact of PR vs product data vs UGC by vertical
+- **Complete An**: Complete an AI Citation Landscape by Vertical
 
 ---
 
@@ -489,11 +489,11 @@ Map the citation landscape for your vertical to understand which sources AI trus
 
 ## Key Takeaways
 
-- **Authority is contextual:** Different verticals trust different sources
-- **Primary vs secondary matters:** Understanding hierarchy is critical
-- **Standards bodies and regulators are powerful:** High authority in regulated verticals
-- **PR/product data/UGC impact varies:** Different verticals prioritize differently
-- **Competitors can hijack authority:** Monitoring and defense are essential
+- **Authority is contextual:**: Different verticals trust different sources
+- **Primary vs secondary matters:**: Understanding hierarchy is critical
+- **Standards bodies and regulators are powerful:**: High authority in regulated verticals
+- **PR/product data/UGC impact varies:**: Different verticals prioritize differently
+- **Competitors can hijack authority:**: Monitoring and defense are essential
 
 ---
 

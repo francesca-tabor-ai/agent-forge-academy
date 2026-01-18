@@ -19,11 +19,11 @@ order: 0
 
 By completing this course, you will be able to:
 
-- Own AI visibility as a system, not a tactic
-- Detect and respond to AI-driven brand risk
-- Coordinate multiple teams around AI answer dominance
-- Speak credibly to CMOs, product leaders, and boards
-- Build institutional AI visibility capability
+- **Own Ai**: Own AI visibility as a system, not a tactic
+- **Detect And**: Detect and respond to AI-driven brand risk
+- **Coordinate Multiple**: Coordinate multiple teams around AI answer dominance
+- **Speak Credibly**: Speak credibly to CMOs, product leaders, and boards
+- **institutional AI visibility capability Development**: Build institutional AI visibility capability
 
 ---
 

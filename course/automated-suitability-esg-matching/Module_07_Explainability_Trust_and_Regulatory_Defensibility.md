@@ -9,10 +9,10 @@ order: 7
 
 **Duration:** Week 7  
 **Learning Objectives:**
-- Understand why "black box" AI fails in financial advice
-- Balance model transparency with commercial IP
-- Automate suitability reporting
-- Handle overrides and exceptions
+- **why "black box" AI fails in financial advice Understanding**: Understand why "black box" AI fails in financial advice
+- **Balance Model**: Balance model transparency with commercial IP
+- **Automate Suitability**: Apply automate suitability reporting in relevant contexts
+- **Handle Overrides**: Handle overrides and exceptions
 
 ---
 
@@ -282,11 +282,11 @@ Please review this recommendation and let us know if you have any questions.
 
 ## Key Takeaways
 
-- Black box AI cannot meet regulatory requirements for financial advice
-- Balancing transparency with IP protection requires careful design
-- Automated suitability reporting ensures consistency and compliance
-- Override handling must maintain audit trails and compliance
-- Clear explanations build client trust and regulatory defensibility
+- **Black Box**: Black box AI cannot meet regulatory requirements for financial advice
+- **Balancing Transparency**: Balancing transparency with IP protection requires careful design
+- **Automated Suitability**: Automated suitability reporting ensures consistency and compliance
+- **Override Handling**: Override handling must maintain audit trails and compliance
+- **Clear Explanations**: Clear explanations build client trust and regulatory defensibility
 
 ---
 

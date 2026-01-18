@@ -11,12 +11,12 @@ order: 4
 **Theme:** *Measuring what actually drives demand*
 
 **Learning Objectives:**
-- Understand when MMM is the right tool (and when it isn't)
-- Learn core MMM concepts and assumptions
-- Model media saturation and diminishing returns
-- Account for seasonality, trends, and external factors
-- Translate MMM outputs into budget decisions
-- Build and interpret an MMM model
+- **when MMM is the right tool Understanding**: Understand when MMM is the right tool (and when it isn't)
+- **core MMM concepts and assumptions Understanding**: Learn core MMM concepts and assumptions
+- **Model Media**: Model media saturation and diminishing returns
+- **Account For**: Account for seasonality, trends, and external factors
+- **Translate Mmm**: Translate MMM outputs into budget decisions
+- **and interpret an MMM model Development**: Build and interpret an MMM model
 
 ---
 
@@ -715,16 +715,16 @@ A media effectiveness and budget reallocation recommendation that:
 
 **Key Takeaways:**
 
-1. **MMM for Strategy:** Use for long-term budget planning, not daily optimization
-2. **Adstock Matters:** Marketing effects carry over time
-3. **Saturation Exists:** Diminishing returns are real and measurable
-4. **Control for Everything:** Seasonality, trends, external factors matter
-5. **Translate to Decisions:** Use MMM outputs to reallocate budget
+- **MMM for Strategy:**: Use for long-term budget planning, not daily optimization
+- **Adstock Matters:**: Marketing effects carry over time
+- **Saturation Exists:**: Diminishing returns are real and measurable
+- **Control for Everything:**: Seasonality, trends, external factors matter
+- **Translate to Decisions:**: Use MMM outputs to reallocate budget
 
 **Next Steps:**
-- Module 5: Learn attribution and incrementality
-- Understand credit vs causality
-- Compare attribution and incrementality methods
+- **Module 5:**: Module 5: Learn attribution and incrementality
+- **credit vs causality Understanding**: Understand credit vs causality
+- **attribution Analysis**: Compare attribution and incrementality methods
 
 ---
 

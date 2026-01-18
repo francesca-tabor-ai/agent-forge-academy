@@ -13,11 +13,11 @@ email_action: "Conduct a risk assessment for one AI system in your organization.
 **Theme:** *Anticipating failure before it happens*
 
 **Learning Objectives:**
-- Understand AI risk categories and threat models
-- Learn risk identification and prioritization techniques
-- Master risk scoring and tolerance thresholds
-- Design preventive vs detective controls
-- Create incident response and escalation procedures
+- **AI risk categories and threat models Understanding**: Understand AI risk categories and threat models
+- **risk identification and prioritization techniques Understanding**: Learn risk identification and prioritization techniques
+- **risk scoring and tolerance thresholds Understanding**: Master risk scoring and tolerance thresholds
+- **preventive vs detective controls Development**: Design preventive vs detective controls
+- **incident response and escalation procedures Development**: Create incident response and escalation procedures
 
 ---
 
@@ -896,17 +896,17 @@ A comprehensive risk register that includes:
 
 ## Key Takeaways
 
-1. **AI systems face unique risks:** Model performance, bias, security, privacy, operational, and regulatory risks require specialized management.
+- **AI systems face unique risks:**: Model performance, bias, security, privacy, operational, and regulatory risks require specialized management
 
-2. **Systematic risk identification:** Use multiple techniques (brainstorming, checklists, scenarios, historical analysis) to identify risks comprehensively.
+- **Systematic risk identification:**: Use multiple techniques (brainstorming, checklists, scenarios, historical analysis) to identify risks comprehensively
 
-3. **Risk prioritization is essential:** Score risks based on likelihood and impact to focus efforts on highest-priority risks.
+- **Risk prioritization is essential:**: Score risks based on likelihood and impact to focus efforts on highest-priority risks
 
-4. **Balance preventive and detective controls:** Preventive controls stop problems; detective controls catch them early.
+- **Balance preventive and detective controls:**: Preventive controls stop problems; detective controls catch them early
 
-5. **Incident response is critical:** Prepare for incidents with clear procedures, severity levels, and escalation paths.
+- **Incident response is critical:**: Prepare for incidents with clear procedures, severity levels, and escalation paths
 
-6. **Risk management is continuous:** Regularly review and update risk assessments as systems and threats evolve.
+- **Risk management is continuous:**: Regularly review and update risk assessments as systems and threats evolve
 
 ---
 

@@ -13,12 +13,12 @@ email_action: "Design an experimentation workflow for a product team, including 
 **Theme:** *Scaling experiments safely*
 
 **Learning Objectives:**
-- Understand experimentation platform architecture
-- Master feature flags, ramp-ups, and kill switches
-- Handle concurrent experiments and interaction effects
-- Design organizational experiment review processes
-- Recognize and manage experiment debt and fatigue
-- Build scalable experimentation operating models
+- **experimentation platform architecture Understanding**: Understand experimentation platform architecture
+- **feature flags, ramp-ups, and kill switches Understanding**: Master feature flags, ramp-ups, and kill switches
+- **Handle Concurrent**: Handle concurrent experiments and interaction effects
+- **organizational experiment review processes Development**: Design organizational experiment review processes
+- **Recognize And**: Recognize and manage experiment debt and fatigue
+- **scalable experimentation operating models Development**: Build scalable experimentation operating models
 
 ---
 

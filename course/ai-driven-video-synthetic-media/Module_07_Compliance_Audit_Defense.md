@@ -10,10 +10,10 @@ order: 7
 **Duration:** Week 7  
 **Tool Focus:** CertifAI  
 **Learning Objectives:**
-- Generate immutable audit logs for every asset
-- Implement forensic provenance with cryptographic methods
-- Automate defensive disclosure with persistent labels
-- Ensure compliance with EU AI Act and IT Rules
+- **Generate Immutable**: Generate immutable audit logs for every asset
+- **forensic provenance with cryptographic methods Implementation**: Implement forensic provenance with cryptographic methods
+- **Automate Defensive**: Automate defensive disclosure with persistent labels
+- **Ensure Compliance**: Ensure compliance with EU AI Act and IT Rules
 
 ---
 
@@ -573,23 +573,23 @@ class RegulatoryCompliance:
 ## Key Takeaways
 
 **Synthetic Media Audit Log:**
-- Immutable records for every asset
-- Source truth IDs tracked
-- Script hashes for verification
-- Timestamped approver identities
-- Blockchain storage for immutability
+- **Immutable Records**: Immutable records for every asset
+- **Source Truth**: Source truth IDs tracked
+- **Script Hashes**: Script hashes for verification
+- **Timestamped Approver**: Apply timestamped approver identities in relevant contexts
+- **Blockchain Storage**: Blockchain storage for immutability
 
 **Forensic Provenance:**
-- Cryptographic watermarks embedded
-- C2PA metadata tags
-- Machine-readable marks
-- Verification systems
+- **Cryptographic Watermarks**: Apply cryptographic watermarks embedded in relevant contexts
+- **C2Pa Metadata**: Apply c2pa metadata tags in relevant contexts
+- **Machine-Readable Marks**: Implement machine-readable marks effectively across relevant use cases
+- **Verification Systems**: Implement verification systems effectively across relevant use cases
 
 **Defensive Disclosure:**
-- Persistent, unskippable labels
-- Embedded in video stream
-- Regulatory compliance automation
-- EU AI Act and IT Rules support
+- **Persistent, Unskippable**: Apply persistent, unskippable labels in relevant contexts
+- **Embedded In**: Embedded in video stream
+- **Regulatory Compliance**: Apply regulatory compliance automation in relevant contexts
+- **Eu Ai**: EU AI Act and IT Rules support
 
 ---
 

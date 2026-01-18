@@ -13,11 +13,11 @@ email_action: "Identify 3 features in your ML models that could be reused across
 **Theme:** *Enabling ML at scale*
 
 **Learning Objectives:**
-- Understand feature engineering vs feature platforms
-- Learn offline and online feature stores
-- Master feature registries and discoverability
-- Implement point-in-time correctness
-- Design ownership, reuse, and governance models
+- **feature engineering vs feature platforms Understanding**: Understand feature engineering vs feature platforms
+- **offline and online feature stores Understanding**: Learn offline and online feature stores
+- **feature registries and discoverability Understanding**: Master feature registries and discoverability
+- **point-in-time correctness Implementation**: Implement point-in-time correctness
+- **ownership, reuse, and governance models Development**: Design ownership, reuse, and governance models
 
 ---
 
@@ -582,11 +582,11 @@ A feature platform design that includes:
 
 ### Key Takeaways
 
-1. **Feature platforms** enable ML at scale through reuse and consistency
-2. **Offline stores** support training, **online stores** support real-time inference
-3. **Feature registries** enable discovery and prevent duplication
-4. **Point-in-time correctness** is essential for training-serving consistency
-5. **Ownership and governance** ensure quality and enable scale
+- **Feature platforms**: Enable ML at scale through reuse and consistency
+- **Offline stores**: Support training,  support real-time inference
+- **Feature registries**: Enable discovery and prevent duplication
+- **Point-in-time correctness**: Is essential for training-serving consistency
+- **Ownership and governance**: Ensure quality and enable scale
 
 ### Next Steps
 

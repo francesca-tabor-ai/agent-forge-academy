@@ -10,10 +10,10 @@ order: 4
 
 **Duration:** Week 4  
 **Learning Objectives:**
-- Learn to model AI answers as systems, not outputs
-- Track how answers evolve over time
-- Detect answer drift vs true regression
-- Map competitors inside AI answers
+- **to model AI answers as systems, not outputs Understanding**: Learn to model AI answers as systems, not outputs
+- **Track How**: Track how answers evolve over time
+- **Detect Answer**: Detect answer drift vs true regression
+- **Map Competitors**: Map competitors inside AI answers
 
 ---
 
@@ -389,15 +389,15 @@ Build a prototype AI Answer Graph for 1-2 critical intents to establish baseline
 
 ## Key Takeaways
 
-- **Answer graphs model systems:** Not just outputs, but the complete system of how AI generates answers
+- **Answer graphs model systems:**: Not just outputs, but the complete system of how AI generates answers
 
-- **Components matter:** Claims, sources, sentiment, and position all contribute to visibility
+- **Components matter:**: Claims, sources, sentiment, and position all contribute to visibility
 
-- **Time tracking is critical:** Answers change - track versions and detect drift vs regression
+- **Time tracking is critical:**: Answers change - track versions and detect drift vs regression
 
-- **Competitive intelligence:** Answer graphs reveal competitive dynamics and opportunities
+- **Competitive intelligence:**: Answer graphs reveal competitive dynamics and opportunities
 
-- **Baseline establishment:** Week 0 snapshot enables change detection and measurement
+- **Baseline establishment:**: Week 0 snapshot enables change detection and measurement
 
 ---
 

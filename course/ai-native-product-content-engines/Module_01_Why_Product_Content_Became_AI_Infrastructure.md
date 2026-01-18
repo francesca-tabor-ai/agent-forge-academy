@@ -11,12 +11,12 @@ order: 1
 
 **Duration:** Week 1  
 **Learning Objectives:**
-- Understand why AI systems evaluate products differently than humans
-- Reframe PDPs as machine-consumable evidence layers
-- Recognize how LLMs read and interpret product data
-- Understand why "brand voice" collapses under AI scrutiny
-- Learn how transparency, constraints, and tradeoffs function as ranking signals
-- Identify fake differentiation and vague positioning in product content
+- **why AI systems evaluate products differently than humans Understanding**: Understand why AI systems evaluate products differently than humans
+- **Reframe Pdps**: Reframe PDPs as machine-consumable evidence layers
+- **Recognize How**: Recognize how LLMs read and interpret product data
+- **why "brand voice" collapses under AI scrutiny Understanding**: Understand why "brand voice" collapses under AI scrutiny
+- **how transparency, constraints, and tradeoffs function as ranking signals Understanding**: Learn how transparency, constraints, and tradeoffs function as ranking signals
+- **Identify Fake**: Identify fake differentiation and vague positioning in product content
 
 ---
 
@@ -353,15 +353,15 @@ In this module, you've learned:
 - **Evidence Layers:** Reframing PDPs as machine-consumable evidence structures
 
 **Key Takeaways:**
-- AI evaluates products through evidence density, not persuasion
-- Transparency and constraint acknowledgment build trust
-- Vague positioning and fake differentiation are penalized
-- PDPs must be structured as evidence layers, not persuasion layers
+- **Ai Evaluates**: AI evaluates products through evidence density, not persuasion
+- **Transparency And**: Transparency and constraint acknowledgment build trust
+- **Vague Positioning**: Vague positioning and fake differentiation are penalized
+- **Pdps Must**: PDPs must be structured as evidence layers, not persuasion layers
 
 **Next Steps:**
-- Complete Lab 1: Product Content Risk Assessment
-- Review Module 2: Where AI Gets Product Truth
-- Begin mapping your product truth sources
+- **Complete Lab**: Complete Lab 1: Product Content Risk Assessment
+- **Review Module**: Review Module 2: Where AI Gets Product Truth
+- **Begin Mapping**: Begin mapping your product truth sources
 
 ---
 

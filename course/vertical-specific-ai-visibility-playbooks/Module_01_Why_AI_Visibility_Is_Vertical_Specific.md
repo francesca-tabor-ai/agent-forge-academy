@@ -11,10 +11,10 @@ order: 1
 
 **Duration:** Week 1  
 **Learning Objectives:**
-- Understand why AI visibility behaves differently by industry
-- Recognise why horizontal AI strategies fail in regulated and complex sectors
-- Identify vertical-specific risks and opportunities
-- Complete a Vertical AI Maturity Assessment
+- **why AI visibility behaves differently by industry Understanding**: Understand why AI visibility behaves differently by industry
+- **Recognise Why**: Recognise why horizontal AI strategies fail in regulated and complex sectors
+- **Identify Vertical-Specific**: Identify vertical-specific risks and opportunities
+- **Complete A**: Complete a Vertical AI Maturity Assessment
 
 ---
 
@@ -452,11 +452,11 @@ Assess your current understanding of vertical-specific AI visibility and identif
 
 ## Key Takeaways
 
-- **AI visibility is fundamentally vertical-specific:** Universal best practices don't apply
-- **Industry norms shape AI behavior:** Training data creates vertical-specific patterns
-- **Three distinct behaviors:** Suppression, ranking, and silence require different strategies
-- **SEO alone is insufficient:** Vertical intelligence, authority building, and risk management are required
-- **Maturity assessment is critical:** Understanding your current position is the foundation for strategy
+- **AI visibility is fundamentally vertical-specific:**: Universal best practices don't apply
+- **Industry norms shape AI behavior:**: Training data creates vertical-specific patterns
+- **Three distinct behaviors:**: Suppression, ranking, and silence require different strategies
+- **SEO alone is insufficient:**: Vertical intelligence, authority building, and risk management are required
+- **Maturity assessment is critical:**: Understanding your current position is the foundation for strategy
 
 ---
 

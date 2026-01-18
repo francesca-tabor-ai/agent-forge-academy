@@ -9,10 +9,10 @@ order: 3
 
 **Duration:** Week 3  
 **Learning Objectives:**
-- Master core agentic patterns: reflection, planning, and tool use
-- Understand collaborative orchestration patterns
-- Learn optimization workflows for RAG systems
-- Implement reflection and planning in practice
+- **Core Agentic**: Master core agentic patterns: reflection, planning, and tool use
+- **collaborative orchestration patterns Understanding**: Understand collaborative orchestration patterns
+- **optimization workflows for RAG systems Understanding**: Learn optimization workflows for RAG systems
+- **reflection and planning in practice Implementation**: Implement reflection and planning in practice
 
 ---
 
@@ -766,15 +766,15 @@ Implement reflection and planning patterns in an agentic RAG system and compare 
 
 **Key Takeaways:**
 
-1. **Core Patterns:** Reflection, Planning, Tool Use
-2. **Orchestration:** Centralized, Decentralized, Hierarchical
-3. **Optimization:** Prompt Chaining, Routing, Evaluator-Optimizer
-4. **Combination:** Patterns work together for better results
+- **Core Patterns:**: Reflection, Planning, Tool Use
+- **Orchestration:**: Centralized, Decentralized, Hierarchical
+- **Optimization:**: Prompt Chaining, Routing, Evaluator-Optimizer
+- **Combination:**: Patterns work together for better results
 
 **Next Steps:**
-- Module 4: Learn specialized frameworks
-- Implement CRAG, Adaptive RAG, Graph-based RAG
-- Build production-ready systems
+- **Module 4:**: Module 4: Learn specialized frameworks
+- **CRAG, Adaptive RAG, Graph-based RAG Implementation**: Implement CRAG, Adaptive RAG, Graph-based RAG
+- **production-ready Development**: Build production-ready systems
 
 ---
 

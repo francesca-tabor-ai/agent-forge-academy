@@ -11,11 +11,11 @@ order: 5
 
 **Duration:** Week 5  
 **Learning Objectives:**
-- Design canonical datasets that AI systems can reliably reference
-- Reduce hallucination probability at the source
-- Understand what "ground truth" means in an AI context
-- Design structured vs unstructured truth systems
-- Establish governance and update cycles for ground truth data
+- **canonical datasets that AI Development**: Design canonical datasets that AI systems can reliably reference
+- **Reduce Hallucination**: Reduce hallucination probability at the source
+- **what "ground truth" means in an AI context Understanding**: Understand what "ground truth" means in an AI context
+- **structured vs unstructured truth Development**: Design structured vs unstructured truth systems
+- **Establish Governance**: Establish governance and update cycles for ground truth data
 
 ---
 
@@ -514,9 +514,9 @@ In this module, you've learned:
 **Key Takeaway:** Ground truth systems are the foundation of hallucination prevention. By providing AI systems with authoritative, up-to-date data sources, you reduce hallucination probability at the source rather than trying to detect and correct errors after they occur.
 
 **Next Steps:**
-- Complete Lab 5: Canonical Ground Truth Schema
-- Review Module 6: Defensive Content & Correction Strategies
-- Begin mapping your data sources and designing your ground truth schema
+- **Complete Lab**: Complete Lab 5: Canonical Ground Truth Schema
+- **Review Module**: Review Module 6: Defensive Content & Correction Strategies
+- **Begin Mapping**: Begin mapping your data sources and designing your ground truth schema
 
 ---
 

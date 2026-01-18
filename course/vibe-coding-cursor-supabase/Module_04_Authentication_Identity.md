@@ -11,11 +11,11 @@ email_action: "Set up Supabase Auth in a test project—implement email-based OT
 
 **Duration:** Week 4  
 **Learning Objectives:**
-- Implement passwordless OTP authentication
-- Build custom branded authentication flows
-- Create anonymous sign-in experiences
-- Understand identity as a "real-world ownership" primitive
-- Integrate Twilio Verify for SMS/WhatsApp OTP
+- **passwordless OTP authentication Implementation**: Implement passwordless OTP authentication
+- **custom branded authentication flows Development**: Build custom branded authentication flows
+- **anonymous sign-in experiences Development**: Create anonymous sign-in experiences
+- **identity as a "real-world ownership" primitive Understanding**: Understand identity as a "real-world ownership" primitive
+- **Twilio Verify for SMS/WhatsApp OTP Integration**: Integrate Twilio Verify for SMS/WhatsApp OTP
 
 ---
 

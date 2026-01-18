@@ -9,10 +9,10 @@ order: 2
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Understand Probability of Default (PD) modeling
-- Build machine learning models for credit scoring
-- Implement explainable AI for regulatory compliance
-- Develop Loss Given Default (LGD) and Exposure at Default (EAD) models
+- **Probability of Default Understanding**: Understand Probability of Default (PD) modeling
+- **machine learning models for credit scoring Development**: Build machine learning models for credit scoring
+- **explainable AI for regulatory compliance Implementation**: Implement explainable AI for regulatory compliance
+- **Loss Given Default (LGD) and Exposure at Default (EAD) models Development**: Develop Loss Given Default (LGD) and Exposure at Default (EAD) models
 
 ---
 
@@ -131,10 +131,10 @@ Build a complete credit scoring system using machine learning with explainabilit
 
 ## Key Takeaways
 
-- Machine learning models significantly outperform traditional logistic regression for PD estimation
-- Feature engineering is critical for model performance
-- Explainability is essential for regulatory compliance
-- LGD and EAD models complement PD models for complete credit risk assessment
+- **Machine Learning**: Machine learning models significantly outperform traditional logistic regression for PD estimation
+- **Feature Engineering**: Feature engineering is critical for model performance
+- **Explainability Is**: Explainability is essential for regulatory compliance
+- **Lgd And**: LGD and EAD models complement PD models for complete credit risk assessment
 
 ---
 

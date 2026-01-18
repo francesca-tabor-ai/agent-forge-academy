@@ -9,10 +9,10 @@ order: 6
 
 **Duration:** Week 6  
 **Learning Objectives:**
-- Implement TWAP and VWAP algorithms
-- Design smart order routing
-- Build order management systems
-- Optimize execution costs
+- **TWAP and VWAP algorithms Implementation**: Implement TWAP and VWAP algorithms
+- **smart order routing Development**: Design smart order routing
+- **order management Development**: Build order management systems
+- **Optimize Execution**: Apply optimize execution costs in relevant contexts
 
 ---
 

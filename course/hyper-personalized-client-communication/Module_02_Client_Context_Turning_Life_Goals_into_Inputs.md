@@ -9,11 +9,11 @@ order: 2
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Understand life-stage goals (retirement, education, wealth transfer)
-- Learn time horizons, liquidity needs, and emotional risk
-- Distinguish behavioral signals vs. declared preferences
-- Consider data privacy and consent requirements
-- Build client context profiles for AI-driven communication
+- **life-stage goals Understanding**: Understand life-stage goals (retirement, education, wealth transfer)
+- **time horizons, liquidity needs, and emotional risk Understanding**: Learn time horizons, liquidity needs, and emotional risk
+- **behavioral signals Analysis**: Distinguish behavioral signals vs. declared preferences
+- **data privacy Evaluation**: Consider data privacy and consent requirements
+- **client context profiles for AI-driven communication Development**: Build client context profiles for AI-driven communication
 
 ---
 
@@ -308,11 +308,11 @@ Create a structured client context profile that captures all relevant informatio
 
 ## Key Takeaways
 
-- Life-stage goals provide structure for personalization
-- Time horizons, liquidity needs, and emotional risk shape communication
-- Behavioral signals complement declared preferences for better understanding
-- Data privacy and consent are critical for compliant personalization
-- Structured context profiles enable AI-driven personalization at scale
+- **Life-Stage Goals**: Life-stage goals provide structure for personalization
+- **Time Horizons,**: Time horizons, liquidity needs, and emotional risk shape communication
+- **Behavioral Signals**: Behavioral signals complement declared preferences for better understanding
+- **Data Privacy**: Data privacy and consent are critical for compliant personalization
+- **Structured Context**: Structured context profiles enable AI-driven personalization at scale
 
 ---
 

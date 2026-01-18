@@ -11,11 +11,11 @@ order: 5
 **Theme:** *Does the model actually work — and for whom?*
 
 **Learning Objectives:**
-- Choose the right evaluation metrics
-- Understand offline vs online evaluation
-- Perform segment-level performance analysis
-- Identify bias, fairness, and unintended consequences
-- Assess model robustness and temporal stability
+- **Choose The**: Choose the right evaluation metrics
+- **offline vs online evaluation Understanding**: Understand offline vs online evaluation
+- **Perform Segment-Level**: Perform segment-level performance analysis
+- **Identify Bias,**: Identify bias, fairness, and unintended consequences
+- **model robustness Evaluation**: Assess model robustness and temporal stability
 
 ---
 
@@ -803,17 +803,17 @@ Perform comprehensive model evaluation including bias and stability analysis.
 
 **Key Takeaways:**
 
-1. **Right Metrics:** Choose metrics that align with business goals
-2. **Offline + Online:** Use both for comprehensive evaluation
-3. **Segment Analysis:** Average performance hides problems
-4. **Bias Detection:** Always evaluate fairness
-5. **Stability Monitoring:** Track performance over time
-6. **Trustworthy Models:** Evaluation builds trust
+- **Right Metrics:**: Choose metrics that align with business goals
+- **Offline + Online:**: Use both for comprehensive evaluation
+- **Segment Analysis:**: Average performance hides problems
+- **Bias Detection:**: Always evaluate fairness
+- **Stability Monitoring:**: Track performance over time
+- **Trustworthy Models:**: Evaluation builds trust
 
 **Next Steps:**
-- Module 6: Translate predictions into decisions
-- Learn decision frameworks
-- Build action-oriented ML systems
+- **Module 6:**: Module 6: Translate predictions into decisions
+- **decision frameworks Understanding**: Learn decision frameworks
+- **action-oriented ML Development**: Build action-oriented ML systems
 
 ---
 

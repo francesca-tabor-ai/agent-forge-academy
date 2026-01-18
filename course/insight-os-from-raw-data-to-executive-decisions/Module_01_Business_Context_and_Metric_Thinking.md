@@ -11,11 +11,11 @@ order: 1
 **Theme:** *What should we even measure?*
 
 **Learning Objectives:**
-- Understand how businesses actually make decisions
-- Distinguish between North Star metrics and operational metrics
-- Identify leading vs lagging indicators
-- Build KPI trees and metric hierarchies
-- Recognize and avoid metric anti-patterns
+- **how businesses actually make decisions Understanding**: Understand how businesses actually make decisions
+- **between North Star metrics Analysis**: Distinguish between North Star metrics and operational metrics
+- **Identify Leading**: Identify leading vs lagging indicators
+- **KPI trees and metric hierarchies Development**: Build KPI trees and metric hierarchies
+- **Recognize And**: Recognize and avoid metric anti-patterns
 
 ---
 
@@ -575,11 +575,11 @@ For each KPI tree:
 
 ## Key Takeaways
 
-1. **Decision-First Thinking:** Metrics must answer business questions
-2. **North Star Focus:** One primary metric, supported by operational metrics
-3. **Leading Indicators:** Balance leading and lagging indicators (70/30)
-4. **KPI Trees:** Show how metrics connect and create accountability
-5. **Anti-Patterns:** Avoid vanity, proxy, noisy, and unactionable metrics
+- **Decision-First Thinking:**: Metrics must answer business questions
+- **North Star Focus:**: One primary metric, supported by operational metrics
+- **Leading Indicators:**: Balance leading and lagging indicators (70/30)
+- **KPI Trees:**: Show how metrics connect and create accountability
+- **Anti-Patterns:**: Avoid vanity, proxy, noisy, and unactionable metrics
 
 ---
 

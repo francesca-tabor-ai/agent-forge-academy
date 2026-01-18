@@ -10,11 +10,11 @@ order: 6
 **Duration:** Week 6  
 **Theme:** Responsibility is a product requirement  
 **Learning Objectives:**
-- Understand bias, fairness, and representation in AI products
-- Design privacy and consent mechanisms for AI-driven experiences
-- Navigate regulatory considerations (high-level)
-- Evaluate long-term vs short-term impact trade-offs
-- Build ethical review into product workflows
+- **bias, fairness, and representation in AI products Understanding**: Understand bias, fairness, and representation in AI products
+- **privacy and consent mechanisms for AI-driven experiences Development**: Design privacy and consent mechanisms for AI-driven experiences
+- **Navigate Regulatory**: Navigate regulatory considerations (high-level)
+- **long-term vs short-term impact trade-offs Evaluation**: Evaluate long-term vs short-term impact trade-offs
+- **ethical review into product Development**: Build ethical review into product workflows
 
 ---
 
@@ -715,20 +715,20 @@ Conduct a comprehensive ethical risk assessment for an AI feature. Identify risk
 
 **Key Takeaways:**
 
-1. **Bias and Fairness:** Understand different types of bias, use fairness frameworks, and ensure representation in data, outputs, and teams.
+- **Bias and Fairness:**: Understand different types of bias, use fairness frameworks, and ensure representation in data, outputs, and teams
 
-2. **Privacy and Consent:** Minimize data collection, get informed consent, provide user control, and build privacy by design.
+- **Privacy and Consent:**: Minimize data collection, get informed consent, provide user control, and build privacy by design
 
-3. **Regulatory Compliance:** Understand key regulations (GDPR, CCPA, EU AI Act), conduct impact assessments, and maintain documentation.
+- **Regulatory Compliance:**: Understand key regulations (GDPR, CCPA, EU AI Act), conduct impact assessments, and maintain documentation
 
-4. **Long-Term Impact:** Balance short-term value with long-term impact, consider all stakeholders, and evaluate risks carefully.
+- **Long-Term Impact:**: Balance short-term value with long-term impact, consider all stakeholders, and evaluate risks carefully
 
-5. **Ethical Review:** Build ethical review into product workflows, use checklists, involve diverse teams, and review regularly.
+- **Ethical Review:**: Build ethical review into product workflows, use checklists, involve diverse teams, and review regularly
 
 **Next Steps:**
-- Module 7: Learn how to measure AI product success
-- Understand product metrics vs model metrics
-- Design experimentation strategies for AI features
+- **Module 7:**: Module 7: Learn how to measure AI product success
+- **product metrics vs model metrics Understanding**: Understand product metrics vs model metrics
+- **experimentation strategies for AI features Development**: Design experimentation strategies for AI features
 
 ---
 

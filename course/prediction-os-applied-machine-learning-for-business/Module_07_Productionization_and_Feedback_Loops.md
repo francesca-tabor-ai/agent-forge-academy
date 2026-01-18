@@ -11,11 +11,11 @@ order: 7
 **Theme:** *Keeping models alive*
 
 **Learning Objectives:**
-- Understand batch vs real-time prediction
-- Monitor model performance and drift
-- Design retraining strategies
-- Implement data quality checks
-- Collaborate effectively with ML Engineers
+- **batch vs real-time prediction Understanding**: Understand batch vs real-time prediction
+- **Monitor Model**: Monitor model performance and drift
+- **retraining strategies Development**: Apply design retraining strategies in relevant contexts
+- **data quality checks Implementation**: Implement data quality checks
+- **Collaborate Effectively**: Collaborate effectively with ML Engineers
 
 ---
 
@@ -721,16 +721,16 @@ Design a comprehensive monitoring plan for a production ML system.
 
 **Key Takeaways:**
 
-1. **Batch vs Real-Time:** Choose based on latency requirements
-2. **Monitor Everything:** Performance, distributions, drift
-3. **Retrain Strategically:** Scheduled, triggered, or continuous
-4. **Data Quality:** Check before training and in production
-5. **Collaborate Effectively:** Clear interfaces, documentation, testing
+- **Batch vs Real-Time:**: Choose based on latency requirements
+- **Monitor Everything:**: Performance, distributions, drift
+- **Retrain Strategically:**: Scheduled, triggered, or continuous
+- **Data Quality:**: Check before training and in production
+- **Collaborate Effectively:**: Clear interfaces, documentation, testing
 
 **Next Steps:**
-- Module 8: Communicate ML impact
-- Learn stakeholder communication
-- Build trust and alignment
+- **Module 8:**: Module 8: Communicate ML impact
+- **stakeholder communication Understanding**: Learn stakeholder communication
+- **trust and alignment Development**: Build trust and alignment
 
 ---
 

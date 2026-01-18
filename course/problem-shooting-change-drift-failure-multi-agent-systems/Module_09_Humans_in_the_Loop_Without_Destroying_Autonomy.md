@@ -11,11 +11,11 @@ email_action: "How many human reviews does your agent system require? Could conf
 
 **Duration:** Week 9  
 **Learning Objectives:**
-- Design humans as circuit breakers, not babysitters
-- Implement confidence-based escalation
-- Distinguish interrupt vs override vs approve
-- Learn from corrections without overfitting
-- Add human intervention that improves reliability without doubling cost
+- **humans as circuit breakers, not babysitters Development**: Design humans as circuit breakers, not babysitters
+- **confidence-based escalation Implementation**: Implement confidence-based escalation
+- **interrupt Analysis**: Distinguish interrupt vs override vs approve
+- **from corrections without overfitting Understanding**: Learn from corrections without overfitting
+- **Add Human**: Add human intervention that improves reliability without doubling cost
 
 ---
 

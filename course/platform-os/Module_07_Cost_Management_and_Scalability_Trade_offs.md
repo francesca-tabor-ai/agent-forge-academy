@@ -13,11 +13,11 @@ email_action: "Analyze your data platform costs: what are your biggest cost driv
 **Theme:** *Platforms must be financially sustainable*
 
 **Learning Objectives:**
-- Understand cost drivers in modern data platforms
-- Learn storage vs compute separation strategies
-- Master workload isolation and prioritization
-- Design cost attribution and chargeback models
-- Plan scaling strategies and avoid anti-patterns
+- **cost drivers in modern data platforms Understanding**: Understand cost drivers in modern data platforms
+- **storage vs compute separation strategies Understanding**: Learn storage vs compute separation strategies
+- **workload isolation and prioritization Understanding**: Master workload isolation and prioritization
+- **cost attribution and chargeback models Development**: Design cost attribution and chargeback models
+- **Plan Scaling**: Plan scaling strategies and avoid anti-patterns
 
 ---
 
@@ -838,11 +838,11 @@ A cost optimization plan that includes:
 
 ### Key Takeaways
 
-1. **Cost drivers** include storage, compute, network, and operations
-2. **Storage-compute separation** enables independent scaling and cost optimization
-3. **Workload isolation and prioritization** balance performance and cost
-4. **Cost attribution and chargeback** create accountability and incentivize efficiency
-5. **Scaling strategies** must balance performance, cost, and complexity
+- **Cost drivers**: Include storage, compute, network, and operations
+- **Storage-compute separation**: Enables independent scaling and cost optimization
+- **Workload isolation and prioritization**: Balance performance and cost
+- **Cost attribution and chargeback**: Create accountability and incentivize efficiency
+- **Scaling strategies**: Must balance performance, cost, and complexity
 
 ### Next Steps
 

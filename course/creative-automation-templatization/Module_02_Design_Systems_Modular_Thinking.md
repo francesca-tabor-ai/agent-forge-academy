@@ -14,11 +14,11 @@ Effective creative automation requires a fundamental shift from creating individ
 
 ## Learning Objectives
 
-- Apply modular and component-based design principles
-- Understand atomic design methodology for marketing assets
-- Balance layout flexibility with brand control
-- Design for responsive and adaptive formats
-- Accommodate variability in copy, imagery, formats, and languages
+- **Apply Modular**: Apply modular and component-based design principles
+- **atomic design methodology for marketing assets Understanding**: Understand atomic design methodology for marketing assets
+- **Balance Layout**: Balance layout flexibility with brand control
+- **for responsive and adaptive formats Development**: Design for responsive and adaptive formats
+- **Accommodate Variability**: Accommodate variability in copy, imagery, formats, and languages
 
 ---
 
@@ -407,18 +407,18 @@ Master Template (flexible dimensions)
 
 ### Key Takeaways
 
-1. **Modular design** breaks systems into reusable, independent components
-2. **Atomic design** provides a methodology for organizing design systems
-3. **Balance flexibility and control** through constrained flexible zones
-4. **Responsive and adaptive design** ensure templates work across formats
-5. **Design for variability** in copy, imagery, formats, and languages
+- **Modular design**: Breaks systems into reusable, independent components
+- **Atomic design**: Provides a methodology for organizing design systems
+- **Balance flexibility and control**: Through constrained flexible zones
+- **Responsive and adaptive design**: Ensure templates work across formats
+- **Design for variability**: In copy, imagery, formats, and languages
 
 ### Next Steps
 
-- Audit existing creative assets for modular opportunities
-- Create a component inventory
-- Design a sample template using atomic design principles
-- Move to Module 3 to learn templatization strategy
+- **Audit Existing**: Audit existing creative assets for modular opportunities
+- **a component inventory Development**: Create a component inventory
+- **a sample template using atomic design principles Development**: Design a sample template using atomic design principles
+- **Move To**: Move to Module 3 to learn templatization strategy
 
 ---
 

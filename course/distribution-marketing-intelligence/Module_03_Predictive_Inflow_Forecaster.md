@@ -9,10 +9,10 @@ order: 3
 
 **Duration:** Week 3  
 **Learning Objectives:**
-- Implement signal aggregation and weighting
-- Link search intent to allocation behavior
-- Separate noise from durable trends
-- Build scenario-based inflow forecasting
+- **signal aggregation and weighting Implementation**: Implement signal aggregation and weighting
+- **search intent Integration**: Link search intent to allocation behavior
+- **Separate Noise**: Separate noise from durable trends
+- **scenario-based inflow forecasting Development**: Build scenario-based inflow forecasting
 
 ---
 
@@ -238,10 +238,10 @@ Build a simple inflow forecast model that uses search and sentiment data to pred
 
 ## Key Takeaways
 
-- Signal aggregation and weighting combine multiple data sources for better predictions
-- Linking search intent to allocation behavior enables early inflow prediction
-- Separating noise from durable trends improves forecast accuracy
-- Scenario-based forecasting provides risk-aware inflow predictions
+- **Signal Aggregation**: Signal aggregation and weighting combine multiple data sources for better predictions
+- **Linking Search**: Linking search intent to allocation behavior enables early inflow prediction
+- **Separating Noise**: Separating noise from durable trends improves forecast accuracy
+- **Scenario-Based Forecasting**: Scenario-based forecasting provides risk-aware inflow predictions
 
 ---
 

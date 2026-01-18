@@ -9,10 +9,10 @@ order: 3
 
 **Duration:** Week 3  
 **Learning Objectives:**
-- Restructure content using the Inverted Pyramid 2.0 format
-- Implement GEO Method injection for visibility boosting
-- Optimize content fluency and readability for machine parseability
-- Understand how AI models extract and synthesize information
+- **Restructure Content**: Restructure content using the Inverted Pyramid 2.0 format
+- **GEO Method injection for visibility boosting Implementation**: Implement GEO Method injection for visibility boosting
+- **Optimize Content**: Optimize content fluency and readability for machine parseability
+- **how AI models extract and synthesize information Understanding**: Understand how AI models extract and synthesize information
 
 ---
 

@@ -20,12 +20,12 @@ order: 0
 
 By completing this course, you will be able to:
 
-- Make products legible and trustworthy to AI systems
-- Eliminate content-driven AI misrepresentation
-- Improve conversion while reducing returns
-- Scale product content without sacrificing truth
-- Lead AI-native commerce transformation
-- Design, govern, and scale AI-native product content systems
+- **Make Products**: Make products legible and trustworthy to AI systems
+- **Eliminate Content-Driven**: Eliminate content-driven AI misrepresentation
+- **Improve Conversion**: Improve conversion while reducing returns
+- **Scale Product**: Scale product content without sacrificing truth
+- **Lead Ai-Native**: Lead AI-native commerce transformation
+- **Design, Govern,**: Design, govern, and scale AI-native product content systems
 
 ---
 

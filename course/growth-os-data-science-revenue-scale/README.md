@@ -19,13 +19,13 @@ order: 0
 
 By completing this course, you will be able to:
 
-- Design and operate a **Growth & Revenue Operating System**
-- Diagnose and optimize growth funnels using data
-- Quantify long-term customer value and cohort behavior
-- Measure marketing effectiveness using causal and econometric methods
-- Allocate spend based on incrementality, not vanity metrics
-- Design pricing and promotion strategies grounded in data science
-- Communicate growth insights to leadership with financial impact
+- **and operate a **: Growth & Revenue Operating DevelopmentGrowth & Revenue Operating System**
+- **Diagnose And**: Diagnose and optimize growth funnels using data
+- **Quantify Long-Term**: Quantify long-term customer value and cohort behavior
+- **Measure Marketing**: Measure marketing effectiveness using causal and econometric methods
+- **Allocate Spend**: Allocate spend based on incrementality, not vanity metrics
+- **pricing and promotion strategies grounded in data science Development**: Design pricing and promotion strategies grounded in data science
+- **Communicate Growth**: Communicate growth insights to leadership with financial impact
 
 ---
 

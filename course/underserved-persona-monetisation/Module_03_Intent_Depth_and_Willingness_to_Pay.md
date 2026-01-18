@@ -10,12 +10,12 @@ order: 3
 **Duration:** Week 3  
 **Theme:** Separating Curiosity from Revenue  
 **Learning Objectives:**
-- Evaluate which personas represent real monetisation potential
-- Avoid chasing low-value or structurally unprofitable segments
-- Understand intent depth scoring
-- Recognize constraint-driven buying patterns
-- Identify tradeoffs personas explicitly accept
-- Detect early LTV signals from AI-discovered personas
+- **which personas represent real monetisation potential Evaluation**: Evaluate which personas represent real monetisation potential
+- **Avoid Chasing**: Avoid chasing low-value or structurally unprofitable segments
+- **intent depth scoring Understanding**: Understand intent depth scoring
+- **Recognize Constraint-Driven**: Recognize constraint-driven buying patterns
+- **Identify Tradeoffs**: Identify tradeoffs personas explicitly accept
+- **Detect Early**: Detect early LTV signals from AI-discovered personas
 
 ---
 
@@ -478,20 +478,20 @@ Where each component is scored 0-10
 
 **Key Takeaways:**
 
-1. **Intent Depth:** Scoring personas on specificity, constraints, outcomes, urgency, and willingness to pay helps prioritize high-intent personas.
+- **Intent Depth:**: Scoring personas on specificity, constraints, outcomes, urgency, and willingness to pay helps prioritize high-intent personas
 
-2. **Constraint-Driven Buying:** Understanding budget, time, skill, and resource constraints helps design products and offers that align with persona needs.
+- **Constraint-Driven Buying:**: Understanding budget, time, skill, and resource constraints helps design products and offers that align with persona needs
 
-3. **Explicit Tradeoffs:** Personas that explicitly accept tradeoffs (features vs price, speed vs customization, etc.) indicate high intent and readiness to buy.
+- **Explicit Tradeoffs:**: Personas that explicitly accept tradeoffs (features vs price, speed vs customization, etc.) indicate high intent and readiness to buy
 
-4. **LTV Signals:** Early indicators of expansion potential, integration needs, outcome commitment, and constraint evolution help identify high-LTV personas.
+- **LTV Signals:**: Early indicators of expansion potential, integration needs, outcome commitment, and constraint evolution help identify high-LTV personas
 
-5. **Monetisation Scoring:** Combining intent depth, constraint alignment, tradeoff fit, and LTV signals creates a prioritised persona roadmap for monetisation.
+- **Monetisation Scoring:**: Combining intent depth, constraint alignment, tradeoff fit, and LTV signals creates a prioritised persona roadmap for monetisation
 
 **Next Steps:**
-- Module 4: Learn to identify how products, bundles, or pricing fail underserved personas
-- Understand feature gaps vs perception gaps
-- Build skills in product–persona gap analysis
+- **Module 4:**: Module 4: Learn to identify how products, bundles, or pricing fail underserved personas
+- **feature gaps vs perception gaps Understanding**: Understand feature gaps vs perception gaps
+- **skills in product–persona gap analysis Development**: Build skills in product–persona gap analysis
 
 ---
 

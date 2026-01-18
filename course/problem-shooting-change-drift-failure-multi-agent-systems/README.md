@@ -19,12 +19,12 @@ order: 0
 
 By completing this course, you will be able to:
 
-- Design systems that expect to fail and recover gracefully
-- Detect degradation before it becomes catastrophic
-- Diagnose root causes in non-deterministic systems
-- Recover safely without losing in-flight work
-- Roll back intelligently while preserving state
-- Adapt without escalating cost or risk
+- **systems that expect to fail and recover gracefully Development**: Design systems that expect to fail and recover gracefully
+- **Detect Degradation**: Detect degradation before it becomes catastrophic
+- **Diagnose Root**: Diagnose root causes in non-deterministic systems
+- **Recover Safely**: Recover safely without losing in-flight work
+- **Roll Back**: Roll back intelligently while preserving state
+- **Adapt Without**: Adapt without escalating cost or risk
 
 ---
 

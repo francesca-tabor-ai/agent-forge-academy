@@ -14,10 +14,10 @@ email_action: "Design an end-to-end ML CI/CD pipeline with versioning, validatio
 
 **Duration:** Week 6  
 **Learning Objectives:**
-- Version data, features, models, and code
-- Build automated training pipelines
-- Implement model validation and promotion gates
-- Design deployment strategies (shadow, canary, blue-green)
+- **Version Data,**: Version data, features, models, and code
+- **automated training Development**: Build automated training pipelines
+- **model validation and promotion gates Implementation**: Implement model validation and promotion gates
+- **deployment strategies (shadow, canary, blue-green) Development**: Design deployment strategies (shadow, canary, blue-green)
 
 ---
 
@@ -550,16 +550,16 @@ def gradual_rollback():
 
 ### Key Takeaways
 
-1. **Version everything** - Data, features, models, and code
-2. **Automate training** - Consistency and reproducibility
-3. **Validate before deploy** - Gates prevent bad models
-4. **Deploy safely** - Shadow, canary, blue-green strategies
+- **Version everything**: Data, features, models, and code
+- **Automate training**: Consistency and reproducibility
+- **Validate before deploy**: Gates prevent bad models
+- **Deploy safely**: Shadow, canary, blue-green strategies
 
 ### Next Steps
 
-- Complete the CI/CD pipeline exercise
-- Review MLflow, Kubeflow, and other tools
-- Move to Module 7 to learn about failure handling
+- **Complete The**: Complete the CI/CD pipeline exercise
+- **Review Mlflow,**: Review MLflow, Kubeflow, and other tools
+- **Move To**: Move to Module 7 to learn about failure handling
 
 ---
 

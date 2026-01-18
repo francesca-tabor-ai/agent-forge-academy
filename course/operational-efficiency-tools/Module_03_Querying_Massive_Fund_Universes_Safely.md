@@ -9,10 +9,10 @@ order: 3
 
 **Duration:** Week 3  
 **Learning Objectives:**
-- Implement semantic understanding of financial terminology
-- Handle ambiguity and follow-up clarification
-- Design aggregation, filtering, and comparison logic
-- Prevent misinterpretation and false precision
+- **semantic understanding of financial terminology Implementation**: Implement semantic understanding of financial terminology
+- **Handle Ambiguity**: Handle ambiguity and follow-up clarification
+- **aggregation, filtering, and comparison logic Development**: Design aggregation, filtering, and comparison logic
+- **Prevent Misinterpretation**: Prevent misinterpretation and false precision
 
 ---
 
@@ -267,10 +267,10 @@ Create a comprehensive framework for safely handling ambiguous user queries in a
 
 ## Key Takeaways
 
-- Semantic understanding of financial terminology enables accurate query processing
-- Handling ambiguity with follow-up clarification improves query accuracy
-- Aggregation, filtering, and comparison logic enable powerful fund universe queries
-- Preventing misinterpretation and false precision ensures reliable results
+- **Semantic Understanding**: Semantic understanding of financial terminology enables accurate query processing
+- **Handling Ambiguity**: Handling ambiguity with follow-up clarification improves query accuracy
+- **Aggregation, Filtering,**: Aggregation, filtering, and comparison logic enable powerful fund universe queries
+- **Preventing Misinterpretation**: Preventing misinterpretation and false precision ensures reliable results
 
 ---
 

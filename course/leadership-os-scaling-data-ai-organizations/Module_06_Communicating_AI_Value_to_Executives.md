@@ -10,11 +10,11 @@ order: 6
 **Duration:** Week 6  
 **Theme:** Influence, not explanation  
 **Learning Objectives:**
-- Translate technical work into business language
-- Frame data & AI impact in financial terms
-- Master executive storytelling and decision memos
-- Manage expectations and uncertainty
-- Navigate board-level AI conversations
+- **Translate Technical**: Translate technical work into business language
+- **Frame Data**: Frame data & AI impact in financial terms
+- **executive storytelling and decision memos Understanding**: Master executive storytelling and decision memos
+- **Manage Expectations**: Manage expectations and uncertainty
+- **Navigate Board-Level**: Navigate board-level AI conversations
 
 ---
 
@@ -68,8 +68,8 @@ order: 6
 - **Strategy:** Not "roadmap"
 - **Investment:** Not "cost"
 - **Outcome:** Not "deliverable"
-- **Capability:** Not "feature"
-- **Portfolio:** Not "backlog"
+- **Capability:**: Not "feature"
+- **Portfolio:**: Not "backlog"
 
 ### The Translation Process
 
@@ -263,11 +263,11 @@ Market research shows personalization increases revenue by 10-30%. Our analysis 
 - Risk: Technical challenges. Mitigation: Proven technology, experienced team.
 
 **Next Steps:**
-- Secure budget approval (this week)
-- Form project team (next week)
-- Begin platform development (next month)
-- Launch pilot (3 months)
-- Full rollout (6 months)
+- **Secure Budget**: Secure budget approval (this week)
+- **Form Project**: Form project team (next week)
+- **Begin Platform**: Begin platform development (next month)
+- **Launch Pilot**: Launch pilot (3 months)
+- **Full Rollout**: Full rollout (6 months)
 
 ---
 
@@ -525,20 +525,20 @@ Prepare and present a data & AI initiative to a mock executive committee. Demons
 
 **Key Takeaways:**
 
-1. **Business Language:** Translate technical work into business language. Focus on outcomes, not capabilities. Use business frameworks and terminology.
+- **Business Language:**: Translate technical work into business language. Focus on outcomes, not capabilities. Use business frameworks and terminology
 
-2. **Financial Framing:** Frame data & AI impact in financial terms (revenue, cost, risk, capital efficiency). Show ROI, payback, and financial models.
+- **Financial Framing:**: Frame data & AI impact in financial terms (revenue, cost, risk, capital efficiency). Show ROI, payback, and financial models
 
-3. **Executive Storytelling:** Use story structure (problem, solution, impact). Write clear decision memos. Be concise and compelling.
+- **Executive Storytelling:**: Use story structure (problem, solution, impact). Write clear decision memos. Be concise and compelling
 
-4. **Expectation Management:** Set realistic expectations. Communicate uncertainty clearly. Under-promise, over-deliver. Regular updates.
+- **Expectation Management:**: Set realistic expectations. Communicate uncertainty clearly. Under-promise, over-deliver. Regular updates
 
-5. **Board Communication:** Focus on strategy, financial impact, and risk. Be concise. Address competitive position. Prepare for common questions.
+- **Board Communication:**: Focus on strategy, financial impact, and risk. Be concise. Address competitive position. Prepare for common questions
 
 **Next Steps:**
-- Module 7: Learn how to scale culture, talent, and trust
-- Build data-driven culture
-- Develop talent and succession plans
+- **Module 7:**: Module 7: Learn how to scale culture, talent, and trust
+- **data-driven culture Development**: Build data-driven culture
+- **talent and succession plans Development**: Develop talent and succession plans
 
 ---
 

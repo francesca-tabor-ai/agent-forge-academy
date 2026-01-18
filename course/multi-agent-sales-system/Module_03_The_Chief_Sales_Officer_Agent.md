@@ -12,13 +12,13 @@ email_action: "Build a CSO agent that runs a daily/weekly sales standup autonomo
 
 **Duration:** Week 3  
 **Learning Objectives:**
-- Design a CSO agent that actually thinks
-- Implement task delegation and prioritisation logic
-- Create clean human escalation moments
-- Understand executive agents vs task agents
-- Learn KPI interpretation and anomaly detection
-- Design cross-team coordination
-- Implement "notify me only when it matters" logic
+- **a CSO agent that actually thinks Development**: Design a CSO agent that actually thinks
+- **task delegation and prioritisation logic Implementation**: Implement task delegation and prioritisation logic
+- **clean human escalation moments Development**: Create clean human escalation moments
+- **executive agents vs task agents Understanding**: Understand executive agents vs task agents
+- **KPI interpretation and anomaly detection Understanding**: Learn KPI interpretation and anomaly detection
+- **cross-team coordination Development**: Apply design cross-team coordination in relevant contexts
+- **"notify me only when it matters" logic Implementation**: Implement "notify me only when it matters" logic
 
 ---
 

@@ -9,10 +9,10 @@ order: 5
 
 **Duration:** Week 5  
 **Learning Objectives:**
-- Monitor global regulatory publications
-- Extract obligations from legal and technical texts
-- Differentiate signal vs. regulatory noise
-- Map new rules to existing data workflows
+- **Monitor Global**: Monitor global regulatory publications
+- **Extract Obligations**: Extract obligations from legal and technical texts
+- **signal Analysis**: Differentiate signal vs. regulatory noise
+- **Map New**: Map new rules to existing data workflows
 
 ---
 
@@ -231,10 +231,10 @@ Analyze a hypothetical new regulation and determine its impact on current fund d
 
 ## Key Takeaways
 
-- Monitoring global regulatory publications enables proactive compliance
-- Extracting obligations from legal texts requires specialized NLP
-- Differentiating signal from noise prioritizes regulatory changes
-- Mapping new rules to workflows enables efficient implementation
+- **Monitoring Global**: Monitoring global regulatory publications enables proactive compliance
+- **Extracting Obligations**: Extracting obligations from legal texts requires specialized NLP
+- **Differentiating Signal**: Differentiating signal from noise prioritizes regulatory changes
+- **Mapping New**: Mapping new rules to workflows enables efficient implementation
 
 ---
 

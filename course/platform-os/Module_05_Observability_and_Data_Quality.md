@@ -13,11 +13,11 @@ email_action: "List your top 3 data quality issues. How would you detect them au
 **Theme:** *Trust through visibility*
 
 **Learning Objectives:**
-- Understand observability layers: data, pipelines, and usage
-- Learn freshness, completeness, and accuracy checks
-- Master schema drift and anomaly detection
-- Design SLAs, SLOs, and alerting strategies
-- Implement incident response for data failures
+- **Observability Layers:**: Understand observability layers: data, pipelines, and usage
+- **freshness, completeness, and accuracy checks Understanding**: Learn freshness, completeness, and accuracy checks
+- **schema drift and anomaly detection Understanding**: Master schema drift and anomaly detection
+- **SLAs, SLOs, and alerting strategies Development**: Design SLAs, SLOs, and alerting strategies
+- **incident response for data failures Implementation**: Implement incident response for data failures
 
 ---
 
@@ -818,11 +818,11 @@ An observability framework that includes:
 
 ### Key Takeaways
 
-1. **Observability** requires monitoring data, pipelines, and usage
-2. **Data quality** checks (freshness, completeness, accuracy) are essential
-3. **Schema drift and anomaly detection** catch issues early
-4. **SLAs, SLOs, and alerting** provide structure for reliability
-5. **Incident response** processes ensure quick resolution
+- **Observability**: Requires monitoring data, pipelines, and usage
+- **Data quality**: Checks (freshness, completeness, accuracy) are essential
+- **Schema drift and anomaly detection**: Catch issues early
+- **SLAs, SLOs, and alerting**: Provide structure for reliability
+- **Incident response**: Processes ensure quick resolution
 
 ### Next Steps
 

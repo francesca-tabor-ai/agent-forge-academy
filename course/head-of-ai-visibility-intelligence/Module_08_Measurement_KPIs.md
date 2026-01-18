@@ -10,10 +10,10 @@ order: 8
 
 **Duration:** Week 8  
 **Learning Objectives:**
-- Replace vanity metrics with executive-grade indicators
-- Tie AI visibility to competitive positioning
-- Create board-ready narratives
-- Measure leading vs lagging indicators
+- **Replace Vanity**: Replace vanity metrics with executive-grade indicators
+- **Tie Ai**: Tie AI visibility to competitive positioning
+- **board-ready narratives Development**: Create board-ready narratives
+- **Measure Leading**: Measure leading vs lagging indicators
 
 ---
 
@@ -522,17 +522,17 @@ Create an executive dashboard and board-ready narrative for AI visibility report
 
 ## Key Takeaways
 
-- **Share of AI answers:** Primary metric for market position and competitive standing
+- **Share of AI answers:**: Primary metric for market position and competitive standing
 
-- **Visibility volatility:** Risk indicator for stability and predictability
+- **Visibility volatility:**: Risk indicator for stability and predictability
 
-- **Competitive displacement:** Tracks competitive dynamics and market shifts
+- **Competitive displacement:**: Tracks competitive dynamics and market shifts
 
-- **Time-to-detection:** Operational excellence metric for rapid response
+- **Time-to-detection:**: Operational excellence metric for rapid response
 
-- **Leading vs lagging:** Balance activity metrics with outcome metrics
+- **Leading vs lagging:**: Balance activity metrics with outcome metrics
 
-- **Executive dashboard:** Board-ready metrics and narratives enable strategic decision-making
+- **Executive dashboard:**: Board-ready metrics and narratives enable strategic decision-making
 
 ---
 

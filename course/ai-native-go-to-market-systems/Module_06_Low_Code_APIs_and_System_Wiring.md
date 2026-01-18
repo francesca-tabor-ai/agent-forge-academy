@@ -9,11 +9,11 @@ order: 6
 
 **Duration:** Week 6  
 **Learning Objectives:**
-- Understand APIs, webhooks, and event listeners conceptually
-- Use no/low-code automation tools effectively
-- Know when to script vs when not to
-- Implement error handling and retries
-- Adopt versioning and rollback mindset
+- **APIs, webhooks, and event listeners conceptually Understanding**: Understand APIs, webhooks, and event listeners conceptually
+- **Use No/Low-Code**: Use no/low-code automation tools effectively
+- **Know When**: Know when to script vs when not to
+- **error handling and retries Implementation**: Implement error handling and retries
+- **Adopt Versioning**: Adopt versioning and rollback mindset
 
 ---
 
@@ -671,20 +671,20 @@ Create a webhook that receives events and triggers actions in HubSpot.
 
 ## Key Takeaways
 
-- **APIs and webhooks enable system integration**  
-- **No-code tools are powerful but have limitations**  
-- **Choose the right tool for the job (no-code vs custom code)**  
-- **Error handling and retries are critical for reliability**  
-- **Versioning and rollback mindset prevents production issues**
+- **APIs and webhooks enable system integration**: **APIs and webhooks enable system integration**: **APIs and webhooks enable system integration**
+- **No-code tools are powerful but have limitations**: **No-code tools are powerful but have limitations**: **No-code tools are powerful but have limitations**
+- **Choose the right tool for the job (no-code vs custom code)**: **Choose the right tool for the job (no-code vs custom code)**: **Choose the right tool for the job (no-code vs custom code)**
+- **Error handling and retries are critical for reliability**: **Error handling and retries are critical for reliability**: **Error handling and retries are critical for reliability**
+- **Versioning and rollback mindset prevents production issues**: **Versioning and rollback mindset prevents production issues**: **Versioning and rollback mindset prevents production issues**
 
 ---
 
 ## Next Steps
 
-- Complete the hands-on exercise: Connect HubSpot with external systems
-- Build webhook-triggered automation
-- Review Module 7: AI-Native GTM Workflows
-- Join course community discussions
+- **Complete The**: Complete the hands-on exercise: Connect HubSpot with external systems
+- **webhook-triggered automation Development**: Build webhook-triggered automation
+- **Review Module**: Review Module 7: AI-Native GTM Workflows
+- **Join Course**: Join course community discussions
 
 ---
 

@@ -10,11 +10,11 @@ order: 3
 **Duration:** Week 3  
 **Theme:** Structure determines outcomes  
 **Learning Objectives:**
-- Understand centralized, federated, and hybrid operating models
-- Design data product teams vs functional teams
-- Define platform vs embedded roles
-- Plan talent mix and career ladders
-- Establish decision rights and accountability
+- **centralized, federated, and hybrid operating models Understanding**: Understand centralized, federated, and hybrid operating models
+- **data product teams vs functional teams Development**: Design data product teams vs functional teams
+- **Define Platform**: Define platform vs embedded roles
+- **Plan Talent**: Plan talent mix and career ladders
+- **Establish Decision**: Establish decision rights and accountability
 
 ---
 
@@ -43,10 +43,10 @@ order: 3
 - ❌ Risk of ivory tower
 
 **Best For:**
-- Early-stage organizations
-- Limited data & AI maturity
-- Need for consistency
-- Centralized business model
+- **Early-Stage Organizations**: Implement early-stage organizations effectively across relevant use cases
+- **Limited Data**: Limited data & AI maturity
+- **Need For**: Apply need for consistency in relevant contexts
+- **Centralized Business**: Apply centralized business model in relevant contexts
 
 #### Federated Model
 
@@ -68,10 +68,10 @@ order: 3
 - ❌ Weaker technical community
 
 **Best For:**
-- Large, diverse organizations
-- Strong business unit autonomy
-- Domain-specific expertise needed
-- Mature data & AI capabilities
+- **Large, Diverse**: Apply large, diverse organizations in relevant contexts
+- **Strong Business**: Strong business unit autonomy
+- **Domain-Specific Expertise**: Apply domain-specific expertise needed in relevant contexts
+- **Mature Data**: Mature data & AI capabilities
 
 #### Hybrid Model
 
@@ -93,10 +93,10 @@ order: 3
 - ❌ Higher overhead
 
 **Best For:**
-- Scaling organizations
-- Need for both platform and business alignment
-- Mature data & AI capabilities
-- Strong leadership and coordination
+- **Scaling Organizations**: Implement scaling organizations effectively across relevant use cases
+- **Need For**: Need for both platform and business alignment
+- **Mature Data**: Mature data & AI capabilities
+- **Strong Leadership**: Strong leadership and coordination
 
 ### Choosing the Right Model
 
@@ -138,10 +138,10 @@ order: 3
 - ❌ Coordination overhead
 
 **Best For:**
-- Large organizations
-- Mature capabilities
-- Need for deep expertise
-- Stable, predictable work
+- **Large Organizations**: Implement large organizations effectively across relevant use cases
+- **Mature Capabilities**: Implement mature capabilities effectively across relevant use cases
+- **Need For**: Need for deep expertise
+- **Stable, Predictable**: Apply stable, predictable work in relevant contexts
 
 #### Data Product Teams
 
@@ -163,10 +163,10 @@ order: 3
 - ❌ Career path challenges
 
 **Best For:**
-- Product-focused organizations
-- Need for speed
-- Clear product boundaries
-- Strong product leadership
+- **Product-Focused Organizations**: Implement product-focused organizations effectively across relevant use cases
+- **Need For**: Apply need for speed in relevant contexts
+- **Clear Product**: Apply clear product boundaries in relevant contexts
+- **Strong Product**: Apply strong product leadership in relevant contexts
 
 ### The Hybrid Approach
 
@@ -182,9 +182,9 @@ order: 3
 - **Analytics Team:** Shared analytics and reporting
 
 **Best For:**
-- Most organizations
-- Balance of speed and efficiency
-- Need for both platform and products
+- **Most Organizations**: Implement most organizations effectively across relevant use cases
+- **Balance Of**: Balance of speed and efficiency
+- **Need For**: Need for both platform and products
 
 ---
 
@@ -517,20 +517,20 @@ Design an operating model for a data organization with multiple teams (your own 
 
 **Key Takeaways:**
 
-1. **Operating Models:** Choose centralized, federated, or hybrid based on organization size, business structure, maturity, and strategic priorities. Most organizations evolve from centralized to hybrid.
+- **Operating Models:**: Choose centralized, federated, or hybrid based on organization size, business structure, maturity, and strategic priorities
 
-2. **Team Models:** Balance functional teams (efficiency, expertise) with product teams (speed, ownership). Hybrid approach often works best.
+- **Team Models:**: Balance functional teams (efficiency, expertise) with product teams (speed, ownership). Hybrid approach often works best
 
-3. **Platform vs Embedded:** Platform roles (20-30%) enable embedded roles (70-80%). Platform enables scale; embedded drives outcomes.
+- **Platform vs Embedded:**: Platform roles (20-30%) enable embedded roles (70-80%). Platform enables scale; embedded drives outcomes
 
-4. **Career Ladders:** Provide dual tracks (IC and management) with clear progression. Both tracks require leadership and are equally valued.
+- **Career Ladders:**: Provide dual tracks (IC and management) with clear progression. Both tracks require leadership and are equally valued
 
-5. **Decision Rights:** Define clear decision rights and accountability. One accountable owner per outcome. Authority matches responsibility. Empower teams.
+- **Decision Rights:**: Define clear decision rights and accountability. One accountable owner per outcome. Authority matches responsibility. Empower teams
 
 **Next Steps:**
-- Module 4: Learn how to turn strategy into execution through KPIs and OKRs
-- Build KPI trees and value decomposition
-- Align metrics across product, data, and business
+- **Module 4:**: Module 4: Learn how to turn strategy into execution through KPIs and OKRs
+- **KPI trees and value decomposition Development**: Build KPI trees and value decomposition
+- **Align Metrics**: Align metrics across product, data, and business
 
 ---
 

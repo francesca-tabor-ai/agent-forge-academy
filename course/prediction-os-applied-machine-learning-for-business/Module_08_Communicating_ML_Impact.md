@@ -11,11 +11,11 @@ order: 8
 **Theme:** *Winning trust across stakeholders*
 
 **Learning Objectives:**
-- Explain models to non-technical audiences
-- Visualize prediction outputs effectively
-- Communicate uncertainty appropriately
-- Align with Product & Business teams
-- Tell compelling ML stories for leadership
+- **Explain Models**: Explain models to non-technical audiences
+- **Visualize Prediction**: Visualize prediction outputs effectively
+- **Communicate Uncertainty**: Apply communicate uncertainty appropriately in relevant contexts
+- **Align With**: Align with Product & Business teams
+- **Tell Compelling**: Tell compelling ML stories for leadership
 
 ---
 
@@ -502,16 +502,16 @@ Create an executive-ready presentation of model results and recommendations.
 
 **Key Takeaways:**
 
-1. **Translate Technical to Business:** Use business language, focus on outcomes
-2. **Visualize Effectively:** Show distributions, trends, comparisons
-3. **Communicate Uncertainty:** Always include confidence and ranges
-4. **Align with Stakeholders:** Regular communication, shared metrics
-5. **Tell Compelling Stories:** Problem → Solution → Impact → Ask
+- **Translate Technical to Business:**: Use business language, focus on outcomes
+- **Visualize Effectively:**: Show distributions, trends, comparisons
+- **Communicate Uncertainty:**: Always include confidence and ranges
+- **Align with Stakeholders:**: Regular communication, shared metrics
+- **Tell Compelling Stories:**: Problem → Solution → Impact → Ask
 
 **Next Steps:**
-- Capstone Project: Build end-to-end Prediction OS
-- Apply all concepts learned
-- Create production-ready system
+- **Capstone Project:**: Capstone Project: Build end-to-end Prediction OS
+- **Apply All**: Apply all concepts learned
+- **production-ready Development**: Create production-ready system
 
 ---
 

@@ -9,10 +9,10 @@ order: 7
 
 **Duration:** Week 7  
 **Learning Objectives:**
-- Address bias and misinformation in news and social data
-- Ensure ethical use of alternative ESG data
-- Design human-in-the-loop review for sensitive alerts
-- Communicate ESG uncertainty to stakeholders
+- **Address Bias**: Address bias and misinformation in news and social data
+- **Ensure Ethical**: Ensure ethical use of alternative ESG data
+- **human-in-the-loop review for sensitive alerts Development**: Design human-in-the-loop review for sensitive alerts
+- **Communicate Esg**: Communicate ESG uncertainty to stakeholders
 
 ---
 
@@ -239,10 +239,10 @@ Create a comprehensive governance framework for managing real-time ESG alerts re
 
 ## Key Takeaways
 
-- Detecting and mitigating bias ensures accurate ESG intelligence
-- Ethical use of alternative data protects privacy and maintains trust
-- Human-in-the-loop review ensures responsible handling of sensitive alerts
-- Transparent communication of uncertainty builds stakeholder confidence
+- **Detecting And**: Detecting and mitigating bias ensures accurate ESG intelligence
+- **Ethical Use**: Ethical use of alternative data protects privacy and maintains trust
+- **Human-In-The-Loop Review**: Human-in-the-loop review ensures responsible handling of sensitive alerts
+- **Transparent Communication**: Transparent communication of uncertainty builds stakeholder confidence
 
 ---
 

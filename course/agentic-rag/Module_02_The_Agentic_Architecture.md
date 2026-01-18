@@ -9,10 +9,10 @@ order: 2
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Understand the four essential components of an AI agent
-- Learn about specialized agent roles in RAG systems
-- Master state management for conversational continuity
-- Build your first agentic RAG system
+- **the four essential components of an AI agent Understanding**: Understand the four essential components of an AI agent
+- **about specialized agent roles in RAG systems Understanding**: Learn about specialized agent roles in RAG systems
+- **state management for conversational continuity Understanding**: Master state management for conversational continuity
+- **your first agentic RAG Development**: Build your first agentic RAG system
 
 ---
 
@@ -711,16 +711,16 @@ Build a complete agentic RAG system with the four core components: reasoning eng
 
 **Key Takeaways:**
 
-1. **Four Components:** LLM, Memory, Planning, Tools
-2. **Specialized Roles:** Planner, Retriever, Verifier, Tool Agent
-3. **Memory Systems:** Short-term (episodic) and long-term (semantic)
-4. **State Management:** LangGraph for complex workflows
-5. **Planning & Reflection:** Task decomposition and self-critique
+- **Four Components:**: LLM, Memory, Planning, Tools
+- **Specialized Roles:**: Planner, Retriever, Verifier, Tool Agent
+- **Memory Systems:**: Short-term (episodic) and long-term (semantic)
+- **State Management:**: LangGraph for complex workflows
+- **Planning & Reflection:**: Task decomposition and self-critique
 
 **Next Steps:**
-- Module 3: Learn design patterns and workflows
-- Implement reflection and planning patterns
-- Build collaborative multi-agent systems
+- **Module 3:**: Module 3: Learn design patterns and workflows
+- **reflection and planning Implementation**: Implement reflection and planning patterns
+- **collaborative multi-agent Development**: Build collaborative multi-agent systems
 
 ---
 

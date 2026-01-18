@@ -9,11 +9,11 @@ order: 4
 
 **Duration:** Week 4  
 **Learning Objectives:**
-- Implement the "Ask-and-Verify" framework for attribute extraction
-- Build PatternRAG systems for catalog guidance
-- Design hallucination detection systems
-- Automate product attribute filling with high precision
-- Maintain factual accuracy in LLM-generated content
+- **the "Ask-and-Verify" framework for attribute extraction Implementation**: Implement the "Ask-and-Verify" framework for attribute extraction
+- **PatternRAG Development**: Build PatternRAG systems for catalog guidance
+- **hallucination detection Development**: Design hallucination detection systems
+- **Automate Product**: Automate product attribute filling with high precision
+- **Maintain Factual**: Maintain factual accuracy in LLM-generated content
 
 ---
 
@@ -1012,28 +1012,28 @@ class HallucinationDetector:
 ## Key Takeaways
 
 **Ask-and-Verify Framework:**
-- Two-step process ensures high precision
-- Ask step finds candidates (high recall)
-- Verify step filters false positives (high precision)
-- Maintains factual accuracy
+- **Two-Step Process**: Two-step process ensures high precision
+- **Ask Step**: Ask step finds candidates (high recall)
+- **Verify Step**: Verify step filters false positives (high precision)
+- **Maintains Factual**: Apply maintains factual accuracy in relevant contexts
 
 **PatternRAG:**
-- Uses internal catalog for few-shot examples
-- Retrieves similar products for guidance
-- Improves prediction accuracy
-- Maintains catalog consistency
+- **Uses Internal**: Uses internal catalog for few-shot examples
+- **Retrieves Similar**: Retrieves similar products for guidance
+- **Improves Prediction**: Apply improves prediction accuracy in relevant contexts
+- **Maintains Catalog**: Apply maintains catalog consistency in relevant contexts
 
 **Hallucination Detection:**
-- Lexical screening checks exact matches
-- Semantic screening checks meaning consistency
-- Two-layer approach catches different error types
-- Prevents incorrect content from reaching customers
+- **Lexical Screening**: Lexical screening checks exact matches
+- **Semantic Screening**: Semantic screening checks meaning consistency
+- **Two-Layer Approach**: Two-layer approach catches different error types
+- **Prevents Incorrect**: Prevents incorrect content from reaching customers
 
 **Catalog Intelligence:**
-- Automates attribute filling at scale
-- Maintains extreme precision
-- Uses multiple verification methods
-- Protects customer trust
+- **Automates Attribute**: Automates attribute filling at scale
+- **Maintains Extreme**: Apply maintains extreme precision in relevant contexts
+- **Uses Multiple**: Uses multiple verification methods
+- **Protects Customer**: Apply protects customer trust in relevant contexts
 
 ---
 

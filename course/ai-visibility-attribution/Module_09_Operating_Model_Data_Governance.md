@@ -11,12 +11,12 @@ order: 9
 
 **Duration:** Week 9  
 **Learning Objectives:**
-- Institutionalize AI attribution across teams
-- Avoid fragmentation and measurement drift
-- Work effectively with analytics & data science teams
-- Integrate with CRM and martech stack
-- Establish data ownership and governance
-- Create roadmap from experimental to core metric
+- **Institutionalize Ai**: Institutionalize AI attribution across teams
+- **Avoid Fragmentation**: Avoid fragmentation and measurement drift
+- **Work Effectively**: Work effectively with analytics & data science teams
+- **with CRM Integration**: Integrate with CRM and martech stack
+- **Establish Data**: Establish data ownership and governance
+- **roadmap from experimental to core metric Development**: Create roadmap from experimental to core metric
 
 ---
 
@@ -716,12 +716,12 @@ Create a detailed 12-month roadmap for rolling out AI attribution from experimen
 
 ## Key Takeaways
 
-- **Cross-functional collaboration is essential:** Marketing, Analytics, Data Science, Engineering must work together
-- **Integration enables scale:** CRM, marketing automation, analytics platforms must be integrated
-- **Governance prevents drift:** Clear ownership, processes, and standards maintain quality
-- **Roadmap guides journey:** Phased approach from experimental to core metric
-- **Documentation is critical:** Operating model, processes, and governance must be documented
-- **Continuous improvement:** Attribution system must evolve and improve over time
+- **Cross-functional collaboration is essential:**: Marketing, Analytics, Data Science, Engineering must work together
+- **Integration enables scale:**: CRM, marketing automation, analytics platforms must be integrated
+- **Governance prevents drift:**: Clear ownership, processes, and standards maintain quality
+- **Roadmap guides journey:**: Phased approach from experimental to core metric
+- **Documentation is critical:**: Operating model, processes, and governance must be documented
+- **Continuous improvement:**: Attribution system must evolve and improve over time
 
 ---
 
@@ -769,9 +769,9 @@ Congratulations! You've completed the AI Visibility Attribution course.
 - Prepare your organization for paid AI attribution models
 
 **Next Steps:**
-- Implement your capstone project
-- Start with Module 1 if you need a refresher
-- Explore optional extensions (B2B vs B2C, marketplace use cases, etc.)
+- **your capstone project Implementation**: Implement your capstone project
+- **Start With**: Start with Module 1 if you need a refresher
+- **Explore Optional**: Explore optional extensions (B2B vs B2C, marketplace use cases, etc.)
 
 ---
 

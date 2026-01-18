@@ -11,11 +11,11 @@ order: 4
 
 **Duration:** Week 4  
 **Learning Objectives:**
-- Move from generic share of voice to AI-native competitive analysis
-- Track visibility where rankings don't exist
-- Understand intent-cluster-based AI share of voice
-- Analyze brand inclusion vs exclusion patterns
-- Complete a Vertical AI Share of Voice Dashboard
+- **Move From**: Move from generic share of voice to AI-native competitive analysis
+- **Track Visibility**: Track visibility where rankings don't exist
+- **intent-cluster-based AI share of voice Understanding**: Understand intent-cluster-based AI share of voice
+- **Analyze Brand**: Analyze brand inclusion vs exclusion patterns
+- **Complete A**: Complete a Vertical AI Share of Voice Dashboard
 
 ---
 
@@ -491,11 +491,11 @@ Create a comprehensive AI share of voice dashboard to track competitive presence
 
 ## Key Takeaways
 
-- **Traditional SOV is insufficient:** AI-native metrics are required
-- **Intent clusters matter:** More accurate than aggregate metrics
-- **Inclusion vs exclusion:** Both are critical for competitive analysis
-- **Mention quality counts:** Recommendations > neutral mentions
-- **Displacement is a threat:** Monitor and defend against competitive displacement
+- **Traditional SOV is insufficient:**: AI-native metrics are required
+- **Intent clusters matter:**: More accurate than aggregate metrics
+- **Inclusion vs exclusion:**: Both are critical for competitive analysis
+- **Mention quality counts:**: Recommendations > neutral mentions
+- **Displacement is a threat:**: Monitor and defend against competitive displacement
 
 ---
 

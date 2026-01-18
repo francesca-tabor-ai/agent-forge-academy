@@ -9,10 +9,10 @@ order: 6
 
 **Duration:** Week 6  
 **Learning Objectives:**
-- Implement Schema.org markup for social proof
-- Create canonical authority through AMAs
-- Measure AEO success with new metrics
-- Build comprehensive AEO measurement framework
+- **Schema.org markup for social proof Implementation**: Implement Schema.org markup for social proof
+- **canonical authority through AMAs Development**: Create canonical authority through AMAs
+- **Measure Aeo**: Measure AEO success with new metrics
+- **comprehensive AEO measurement framework Development**: Build comprehensive AEO measurement framework
 
 ---
 
@@ -634,10 +634,10 @@ Congratulations! You've completed the full Reddit AI Visibility and AEO course. 
 - Measure AEO success
 
 **Next Steps:**
-- Implement your AEO strategy
-- Continue learning and adapting
-- Join the alumni community
-- Share your success stories
+- **your AEO strategy Implementation**: Implement your AEO strategy
+- **Continue Learning**: Continue learning and adapting
+- **Join The**: Join the alumni community
+- **Share Your**: Share your success stories
 
 ---
 

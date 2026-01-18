@@ -11,11 +11,11 @@ order: 9
 
 **Duration:** Week 9  
 **Learning Objectives:**
-- Drive adoption across business units
-- Measure impact beyond visibility metrics
-- Track suppression and misinformation incidents
-- Create continuous improvement loops
-- Complete Capstone Project: Vertical AI Visibility Program
+- **Drive Adoption**: Drive adoption across business units
+- **Measure Impact**: Measure impact beyond visibility metrics
+- **Track Suppression**: Track suppression and misinformation incidents
+- **continuous improvement loops Development**: Create continuous improvement loops
+- **Complete Capstone**: Complete Capstone Project: Vertical AI Visibility Program
 
 ---
 
@@ -456,11 +456,11 @@ Create a complete, operational vertical AI visibility program that integrates al
 
 ## Key Takeaways
 
-- **Adoption is critical:** Playbooks must be used to be effective
-- **Measurement matters:** Track impact beyond visibility
-- **Incident tracking is essential:** Monitor suppression and misinformation
-- **Continuous improvement is mandatory:** Always optimize and refine
-- **Incentive alignment drives results:** Align rewards with AI outcomes
+- **Adoption is critical:**: Playbooks must be used to be effective
+- **Measurement matters:**: Track impact beyond visibility
+- **Incident tracking is essential:**: Monitor suppression and misinformation
+- **Continuous improvement is mandatory:**: Always optimize and refine
+- **Incentive alignment drives results:**: Align rewards with AI outcomes
 
 ---
 
@@ -497,16 +497,16 @@ Create a complete, operational vertical AI visibility program that integrates al
 - Complete operational program
 
 **Next Steps:**
-- Implement your program
-- Monitor and optimize
-- Build on your success
-- Share your learnings
+- **your program Implementation**: Implement your program
+- **Monitor And**: Apply monitor and optimize in relevant contexts
+- **on your success Development**: Build on your success
+- **Share Your**: Apply share your learnings in relevant contexts
 
 **Stay Connected:**
-- Join alumni network
-- Continue learning
-- Share best practices
-- Build community
+- **Join Alumni**: Apply join alumni network in relevant contexts
+- **Continue Learning**: Implement continue learning effectively across relevant use cases
+- **Share Best**: Apply share best practices in relevant contexts
+- **Build Community**: Implement build community effectively across relevant use cases
 
 ---
 

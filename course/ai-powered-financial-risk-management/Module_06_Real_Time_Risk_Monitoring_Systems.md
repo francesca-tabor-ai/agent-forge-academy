@@ -9,10 +9,10 @@ order: 6
 
 **Duration:** Week 6  
 **Learning Objectives:**
-- Design streaming data pipelines for risk metrics
-- Build alert systems for risk threshold breaches
-- Create automated risk reporting dashboards
-- Implement real-time risk aggregation
+- **streaming data Development**: Design streaming data pipelines for risk metrics
+- **alert Development**: Build alert systems for risk threshold breaches
+- **automated risk reporting dashboards Development**: Create automated risk reporting dashboards
+- **real-time risk aggregation Implementation**: Implement real-time risk aggregation
 
 ---
 
@@ -78,10 +78,10 @@ Create a comprehensive risk monitoring system with streaming data and alerts.
 
 ## Key Takeaways
 
-- Streaming architectures enable real-time risk monitoring
-- Alert systems must balance sensitivity and noise
-- Dashboards should focus on actionable insights
-- Performance optimization is critical for real-time systems
+- **Streaming Architectures**: Streaming architectures enable real-time risk monitoring
+- **Alert Systems**: Alert systems must balance sensitivity and noise
+- **Dashboards Should**: Dashboards should focus on actionable insights
+- **Performance Optimization**: Performance optimization is critical for real-time systems
 
 ---
 

@@ -19,14 +19,14 @@ order: 0
 
 By completing this course, you will be able to:
 
-- Design AI-powered communication tools that personalize client engagement at scale
-- Translate qualitative client goals into structured data for AI systems
-- Generate personalized performance narratives and client communications
-- Ensure compliance by design in AI-generated content
-- Deploy interactive chatbots that enhance service without replacing advisors
-- Turn client interactions into actionable market intelligence
-- Design human-in-the-loop workflows that augment advisor capabilities
-- Deploy enterprise-scale hyper-personalized communication platforms
+- **AI-powered communication tools that personalize client engagement at scale Development**: Design AI-powered communication tools that personalize client engagement at scale
+- **Translate Qualitative**: Translate qualitative client goals into structured data for AI systems
+- **Generate Personalized**: Generate personalized performance narratives and client communications
+- **Ensure Compliance**: Ensure compliance by design in AI-generated content
+- **interactive chatbots that enhance service without replacing advisors Implementation**: Deploy interactive chatbots that enhance service without replacing advisors
+- **Turn Client**: Turn client interactions into actionable market intelligence
+- **human-in-the-loop Development**: Design human-in-the-loop workflows that augment advisor capabilities
+- **enterprise-scale hyper-personalized communication platforms Implementation**: Deploy enterprise-scale hyper-personalized communication platforms
 
 ---
 

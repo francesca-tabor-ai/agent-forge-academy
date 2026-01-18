@@ -19,14 +19,14 @@ order: 0
 
 By completing this course, you will be able to:
 
-- Design AI-powered compliance tools that dramatically reduce advisor workload
-- Build jurisdiction-aware regulatory intelligence systems
-- Automate regulatory review of advisor communications
-- Implement human-in-the-loop compliance governance frameworks
-- Accelerate client onboarding with AI while maintaining controls
-- Manage data quality, false positives, and risk in automated systems
-- Ensure automation improves advisor experience and client trust
-- Deploy enterprise-scale compliance and onboarding platforms
+- **AI-powered compliance tools that dramatically reduce advisor workload Development**: Design AI-powered compliance tools that dramatically reduce advisor workload
+- **jurisdiction-aware regulatory intelligence Development**: Build jurisdiction-aware regulatory intelligence systems
+- **Automate Regulatory**: Automate regulatory review of advisor communications
+- **human-in-the-loop compliance governance frameworks Implementation**: Implement human-in-the-loop compliance governance frameworks
+- **Accelerate Client**: Accelerate client onboarding with AI while maintaining controls
+- **Manage Data**: Manage data quality, false positives, and risk in automated systems
+- **Ensure Automation**: Ensure automation improves advisor experience and client trust
+- **enterprise-scale compliance and onboarding platforms Implementation**: Deploy enterprise-scale compliance and onboarding platforms
 
 ---
 

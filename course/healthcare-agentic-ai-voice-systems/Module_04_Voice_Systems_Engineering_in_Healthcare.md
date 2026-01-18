@@ -11,11 +11,11 @@ email_action: "Design a voice pipeline with 3 fallback strategies for a clinical
 
 **Duration:** Week 4-5  
 **Learning Objectives:**
-- Understand voice architecture: ASR → NLU → orchestration → response
-- Design for latency, reliability, and fallback strategies
-- Handle accents, speech impairments, and noise
-- Mitigate voice safety risks: misrecognition and misunderstanding
-- Determine when to force handoff to text or human support
+- **Voice Architecture:**: Understand voice architecture: ASR → NLU → orchestration → response
+- **for latency, reliability, and fallback strategies Development**: Design for latency, reliability, and fallback strategies
+- **Handle Accents,**: Handle accents, speech impairments, and noise
+- **Mitigate Voice**: Mitigate voice safety risks: misrecognition and misunderstanding
+- **Determine When**: Determine when to force handoff to text or human support
 
 ---
 
@@ -805,10 +805,10 @@ Repeated Failures:
 - Test in real clinical environments, not just labs
 
 **Next Steps:**
-- Apply voice architecture to your use case
-- Design fallback and safety mechanisms
-- Plan for noise and impairment handling
-- Test in real clinical environments
+- **Apply Voice**: Apply voice architecture to your use case
+- **fallback and safety mechanisms Development**: Design fallback and safety mechanisms
+- **Plan For**: Plan for noise and impairment handling
+- **Test In**: Test in real clinical environments
 
 ---
 

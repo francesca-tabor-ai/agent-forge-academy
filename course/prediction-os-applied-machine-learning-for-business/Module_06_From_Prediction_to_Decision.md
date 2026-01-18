@@ -11,11 +11,11 @@ order: 6
 **Theme:** *Predictions don't create value — decisions do*
 
 **Learning Objectives:**
-- Set score thresholds and decision policies
-- Apply cost-sensitive modeling
-- Understand ranking vs classification
-- Learn uplift vs propensity modeling
-- Design human-in-the-loop decisioning
+- **Score Thresholds**: Set score thresholds and decision policies
+- **Apply Cost-Sensitive**: Apply apply cost-sensitive modeling in relevant contexts
+- **ranking vs classification Understanding**: Understand ranking vs classification
+- **uplift vs propensity modeling Understanding**: Learn uplift vs propensity modeling
+- **human-in-the-loop decisioning Development**: Apply design human-in-the-loop decisioning in relevant contexts
 
 ---
 
@@ -650,17 +650,17 @@ Build a decision framework that translates model predictions into actionable ret
 
 **Key Takeaways:**
 
-1. **Thresholds Matter:** Choose based on business constraints and costs
-2. **Decision Policies:** Map predictions to actions systematically
-3. **Cost-Sensitive:** Incorporate costs into model training and decisions
-4. **Ranking vs Classification:** Choose based on use case
-5. **Uplift Modeling:** Account for treatment effects when possible
-6. **Human-in-the-Loop:** Combine automation with human judgment
+- **Thresholds Matter:**: Choose based on business constraints and costs
+- **Decision Policies:**: Map predictions to actions systematically
+- **Cost-Sensitive:**: Incorporate costs into model training and decisions
+- **Ranking vs Classification:**: Choose based on use case
+- **Uplift Modeling:**: Account for treatment effects when possible
+- **Human-in-the-Loop:**: Combine automation with human judgment
 
 **Next Steps:**
-- Module 7: Productionize models
-- Learn monitoring and feedback loops
-- Keep models alive and performing
+- **Module 7:**: Module 7: Productionize models
+- **monitoring and feedback loops Understanding**: Learn monitoring and feedback loops
+- **Keep Models**: Keep models alive and performing
 
 ---
 

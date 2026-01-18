@@ -9,11 +9,11 @@ order: 1
 
 **Duration:** Week 1  
 **Learning Objectives:**
-- Understand the explosion of fund and share-class complexity
-- Recognize manual reporting and dependency on data teams
-- Identify product onboarding as a structural choke point
-- Understand cost, risk, and morale implications of inefficiency
-- Identify top operational pain points
+- **the explosion of fund and share-class complexity Understanding**: Understand the explosion of fund and share-class complexity
+- **Recognize Manual**: Recognize manual reporting and dependency on data teams
+- **Identify Product**: Identify product onboarding as a structural choke point
+- **cost, risk, and morale implications of inefficiency Understanding**: Understand cost, risk, and morale implications of inefficiency
+- **Identify Top**: Identify top operational pain points
 
 ---
 
@@ -193,10 +193,10 @@ Analyze current operational workflows and identify the most significant pain poi
 
 ## Key Takeaways
 
-- Fund and share-class complexity has exploded, creating operational challenges
-- Manual reporting creates dependency on data teams and significant bottlenecks
-- Product onboarding is a structural choke point limiting growth and innovation
-- Cost, risk, and morale implications make operational efficiency critical
+- **Fund And**: Fund and share-class complexity has exploded, creating operational challenges
+- **Manual Reporting**: Manual reporting creates dependency on data teams and significant bottlenecks
+- **Product Onboarding**: Product onboarding is a structural choke point limiting growth and innovation
+- **Cost, Risk,**: Cost, risk, and morale implications make operational efficiency critical
 
 ---
 

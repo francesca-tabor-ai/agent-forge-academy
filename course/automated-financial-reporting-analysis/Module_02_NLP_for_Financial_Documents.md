@@ -9,10 +9,10 @@ order: 2
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Apply NLP to financial documents
-- Extract named entities
-- Analyze earnings call transcripts
-- Build financial text classifiers
+- **Apply Nlp**: Apply NLP to financial documents
+- **Extract Named**: Apply extract named entities in relevant contexts
+- **Analyze Earnings**: Analyze earnings call transcripts
+- **financial text classifiers Development**: Build financial text classifiers
 
 ---
 

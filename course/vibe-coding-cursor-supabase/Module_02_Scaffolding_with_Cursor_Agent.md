@@ -11,11 +11,11 @@ email_action: "Open Cursor, press Cmd+I, and ask it to scaffold a simple React c
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Create effective build plans using high-level LLMs
-- Master Cursor Agent Mode (Cmd+I) for code generation
-- Establish guardrails with .cursorrules
-- Generate modular, maintainable components
-- Remove boilerplate efficiently
+- **effective build plans using high-level LLMs Development**: Create effective build plans using high-level LLMs
+- **Cursor Agent Mode Understanding**: Master Cursor Agent Mode (Cmd+I) for code generation
+- **Establish Guardrails**: Establish guardrails with .cursorrules
+- **Generate Modular,**: Generate modular, maintainable components
+- **Remove Boilerplate**: Apply remove boilerplate efficiently in relevant contexts
 
 ---
 

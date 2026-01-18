@@ -9,11 +9,11 @@ order: 6
 
 **Duration:** Week 6  
 **Learning Objectives:**
-- Implement network sandboxing with policy engines (Cedar, Warden)
-- Run AI evaluations (evals) for statistical population tests
-- Use invariant verification to catch architectural bugs
-- Prevent destructive actions through policy enforcement
-- Measure abstraction adherence and detect logic drift
+- **network sandboxing with policy engines (Cedar, Warden) Implementation**: Implement network sandboxing with policy engines (Cedar, Warden)
+- **Run Ai**: Run AI evaluations (evals) for statistical population tests
+- **Use Invariant**: Use invariant verification to catch architectural bugs
+- **Prevent Destructive**: Prevent destructive actions through policy enforcement
+- **Measure Abstraction**: Measure abstraction adherence and detect logic drift
 
 ---
 

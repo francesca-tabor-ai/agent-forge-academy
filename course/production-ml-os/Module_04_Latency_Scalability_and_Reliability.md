@@ -14,10 +14,10 @@ email_action: "Simulate latency failures and design fallback logic for your ML s
 
 **Duration:** Week 4  
 **Learning Objectives:**
-- Design systems that meet latency SLAs
-- Scale ML systems horizontally
-- Implement caching strategies
-- Build graceful degradation and fallbacks
+- **systems that meet latency SLAs Development**: Design systems that meet latency SLAs
+- **Scale Ml**: Scale ML systems horizontally
+- **caching strategies Implementation**: Implement caching strategies
+- **graceful degradation and fallbacks Development**: Build graceful degradation and fallbacks
 
 ---
 
@@ -476,16 +476,16 @@ def predict(features):
 
 ### Key Takeaways
 
-1. **Latency budgets guide optimization** - Break down and measure each component
-2. **Scale horizontally for throughput** - Add instances, not just resources
-3. **Cache aggressively** - Reduces latency, cost, and load
-4. **Design for failure** - Fallbacks ensure reliability
+- **Latency budgets guide optimization**: Break down and measure each component
+- **Scale horizontally for throughput**: Add instances, not just resources
+- **Cache aggressively**: Reduces latency, cost, and load
+- **Design for failure**: Fallbacks ensure reliability
 
 ### Next Steps
 
-- Complete the latency failure simulation exercise
-- Review production ML system architectures
-- Move to Module 5 to learn about monitoring and observability
+- **Complete The**: Complete the latency failure simulation exercise
+- **Review Production**: Review production ML system architectures
+- **Move To**: Move to Module 5 to learn about monitoring and observability
 
 ---
 

@@ -10,10 +10,10 @@ order: 3
 **Duration:** Week 3  
 **Startup Tool Focus:** NeuralMerch (Advanced Layer)  
 **Learning Objectives:**
-- Understand limitations of linear matrix factorization
-- Master MLP-based recommendation models
-- Implement the NeuMF framework
-- Combine linear and non-linear approaches
+- **limitations of linear matrix factorization Understanding**: Understand limitations of linear matrix factorization
+- **MLP-based recommendation models Understanding**: Master MLP-based recommendation models
+- **the NeuMF framework Implementation**: Implement the NeuMF framework
+- **Combine Linear**: Combine linear and non-linear approaches
 
 ---
 
@@ -747,16 +747,16 @@ Implement and compare NeuMF with baseline models.
 
 **Key Takeaways:**
 
-1. **Linear models have limitations:** Dot product assumes linear relationships
-2. **MLPs are universal approximators:** Can learn any interaction function
-3. **NeuMF combines best of both:** Linear (GMF) + Non-linear (MLP)
-4. **Pre-training helps:** Train components separately, then fine-tune
-5. **Non-linearity improves performance:** Especially on complex preference patterns
+- **Linear models have limitations:**: Dot product assumes linear relationships
+- **MLPs are universal approximators:**: Can learn any interaction function
+- **NeuMF combines best of both:**: Linear (GMF) + Non-linear (MLP)
+- **Pre-training helps:**: Train components separately, then fine-tune
+- **Non-linearity improves performance:**: Especially on complex preference patterns
 
 **Next Steps:**
-- Module 4: Temporal Dynamics & Session-Based Models
-- Learn how to capture evolving user preferences
-- Master session-based recommendation for anonymous users
+- **Module 4:**: Module 4: Temporal Dynamics & Session-Based Models
+- **how to capture evolving user preferences Understanding**: Learn how to capture evolving user preferences
+- **session-based recommendation for anonymous users Understanding**: Master session-based recommendation for anonymous users
 
 ---
 

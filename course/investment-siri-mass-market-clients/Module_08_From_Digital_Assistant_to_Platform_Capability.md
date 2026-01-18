@@ -9,10 +9,10 @@ order: 8
 
 **Duration:** Week 8  
 **Learning Objectives:**
-- Integrate the Investment Siri into asset and distribution platforms
-- Measure success: engagement, outcomes, trust
-- Evolve from reactive answers to proactive guidance
-- Plan future roadmap: voice, personalization, and autonomous advice
+- **the Investment Siri into asset Integration**: Integrate the Investment Siri into asset and distribution platforms
+- **Measure Success:**: Measure success: engagement, outcomes, trust
+- **Evolve From**: Evolve from reactive answers to proactive guidance
+- **Plan Future**: Plan future roadmap: voice, personalization, and autonomous advice
 
 ---
 
@@ -232,10 +232,10 @@ Design a complete "Investment Siri" system for a mass-market wealth platform, in
 
 ## Key Takeaways
 
-- Platform integration enables ecosystem-wide deployment and adoption
-- Success measurement guides continuous improvement and demonstrates value
-- Proactive guidance transforms from reactive tool to strategic advisor
-- Future roadmap includes voice, personalization, and autonomous capabilities
+- **Platform Integration**: Platform integration enables ecosystem-wide deployment and adoption
+- **Success Measurement**: Success measurement guides continuous improvement and demonstrates value
+- **Proactive Guidance**: Proactive guidance transforms from reactive tool to strategic advisor
+- **Future Roadmap**: Future roadmap includes voice, personalization, and autonomous capabilities
 
 ---
 

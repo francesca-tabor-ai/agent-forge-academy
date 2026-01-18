@@ -9,10 +9,10 @@ order: 4
 
 **Duration:** Week 4  
 **Learning Objectives:**
-- Understand how non-experts use ethical argumentation strategies
-- Avoid the "Asshole Design" label and negative training data
-- Develop crisis and reputation management protocols
-- Prevent shadow bans through transparency
+- **how non-experts use ethical argumentation strategies Understanding**: Understand how non-experts use ethical argumentation strategies
+- **Avoid The**: Avoid the "Asshole Design" label and negative training data
+- **crisis and reputation management protocols Development**: Develop crisis and reputation management protocols
+- **Prevent Shadow**: Prevent shadow bans through transparency
 
 ---
 

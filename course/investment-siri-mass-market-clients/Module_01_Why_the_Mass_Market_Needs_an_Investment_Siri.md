@@ -9,11 +9,11 @@ order: 1
 
 **Duration:** Week 1  
 **Learning Objectives:**
-- Understand the advice gap and affordability problem
-- Learn why human-only advice does not scale
-- Study lessons from Siri, Alexa, and consumer AI adoption
-- Understand boundaries between guidance, information, and advice
-- Identify client segments for AI-first guidance vs. human advice
+- **the advice gap and affordability problem Understanding**: Understand the advice gap and affordability problem
+- **why human-only advice does not scale Understanding**: Learn why human-only advice does not scale
+- **lessons from Siri, Alexa, and consumer AI adoption Understanding**: Study lessons from Siri, Alexa, and consumer AI adoption
+- **boundaries between guidance, information, and advice Understanding**: Understand boundaries between guidance, information, and advice
+- **Identify Client**: Identify client segments for AI-first guidance vs. human advice
 
 ---
 
@@ -186,10 +186,10 @@ Analyze different client segments and determine which can be served by AI-first 
 
 ## Key Takeaways
 
-- The advice gap and affordability problem create massive market opportunity
-- Human-only advice does not scale to meet mass-market demand
-- Consumer AI adoption provides proven patterns for financial applications
-- Clear boundaries between guidance, information, and advice are essential
+- **The Advice**: The advice gap and affordability problem create massive market opportunity
+- **Human-Only Advice**: Human-only advice does not scale to meet mass-market demand
+- **Consumer Ai**: Consumer AI adoption provides proven patterns for financial applications
+- **Clear Boundaries**: Clear boundaries between guidance, information, and advice are essential
 
 ---
 

@@ -9,10 +9,10 @@ order: 5
 
 **Duration:** Week 5  
 **Learning Objectives:**
-- Interpret sustainability objectives and constraints
-- Map policies to EET disclosures
-- Handle missing or incomplete ESG data
-- Ensure consistency across prospectus, EET, and marketing materials
+- **Interpret Sustainability**: Interpret sustainability objectives and constraints
+- **Map Policies**: Map policies to EET disclosures
+- **Handle Missing**: Handle missing or incomplete ESG data
+- **Ensure Consistency**: Ensure consistency across prospectus, EET, and marketing materials
 
 ---
 
@@ -234,10 +234,10 @@ Create a comprehensive workflow for AI-assisted ESG validation that ensures accu
 
 ## Key Takeaways
 
-- Interpreting sustainability objectives requires understanding policy language and regulatory requirements
-- Mapping policies to EET disclosures ensures accurate and compliant reporting
-- Handling missing data requires clear strategies and alternative approaches
-- Consistency across documents prevents misreporting and greenwashing risk
+- **Interpreting Sustainability**: Interpreting sustainability objectives requires understanding policy language and regulatory requirements
+- **Mapping Policies**: Mapping policies to EET disclosures ensures accurate and compliant reporting
+- **Handling Missing**: Handling missing data requires clear strategies and alternative approaches
+- **Consistency Across**: Consistency across documents prevents misreporting and greenwashing risk
 
 ---
 

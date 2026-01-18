@@ -11,11 +11,11 @@ email_action: "Observe or map one clinical workflow (even from documentation) an
 
 **Duration:** Week 2-3  
 **Learning Objectives:**
-- Understand how clinical workflows actually operate in real hospital environments
-- Identify time-critical vs deferrable tasks
-- Design human-in-the-loop as an engineering primitive
-- Recognize where automation is unsafe by design
-- Translate clinical workflows into system constraints
+- **how clinical workflows actually operate in real hospital environments Understanding**: Understand how clinical workflows actually operate in real hospital environments
+- **Identify Time-Critical**: Identify time-critical vs deferrable tasks
+- **human-in-the-loop as an engineering primitive Development**: Design human-in-the-loop as an engineering primitive
+- **Recognize Where**: Recognize where automation is unsafe by design
+- **Translate Clinical**: Translate clinical workflows into system constraints
 
 ---
 
@@ -585,10 +585,10 @@ Create a comprehensive document mapping a clinical workflow to system constraint
 - Identify and enforce hard stops
 
 **Next Steps:**
-- Apply workflow constraints to system design
-- Design human-in-the-loop workflows
-- Identify hard stops in your system
-- Plan for interruptions and handovers
+- **Apply Workflow**: Apply workflow constraints to system design
+- **human-in-the-loop Development**: Apply design human-in-the-loop workflows in relevant contexts
+- **Identify Hard**: Identify hard stops in your system
+- **Plan For**: Plan for interruptions and handovers
 
 ---
 

@@ -10,11 +10,11 @@ description: Personalized pricing, AI-driven offers, and loyalty program optimiz
 
 By the end of this module, you will be able to:
 
-- Evaluate personalized pricing strategies and associated risks
-- Design AI-driven offers, timing, and promotions
-- Implement loyalty program personalization
-- Apply churn prediction and retention optimization
-- Analyze successes and failures of personalized pricing
+- **personalized pricing strategies Evaluation**: Evaluate personalized pricing strategies and associated risks
+- **AI-driven offers, timing, and promotions Development**: Design AI-driven offers, timing, and promotions
+- **loyalty program personalization Implementation**: Implement loyalty program personalization
+- **Apply Churn**: Apply churn prediction and retention optimization
+- **Analyze Successes**: Analyze successes and failures of personalized pricing
 
 ## Introduction
 
@@ -577,13 +577,13 @@ Pricing, promotions, and loyalty programs are powerful tools for personalization
 
 ## Key Takeaways
 
-- Personalized pricing can optimize revenue but requires careful ethical and legal consideration
-- AI-driven offers and promotions can improve relevance and effectiveness when properly optimized
-- Loyalty program personalization increases engagement and value for both customers and businesses
-- Churn prediction enables proactive retention strategies that save customers and revenue
-- Success in personalized pricing requires transparency, fairness, and customer trust
-- Failures often result from lack of transparency, perceived unfairness, or poor communication
-- Best practices balance business objectives with ethical considerations and customer welfare
+- **Personalized Pricing**: Personalized pricing can optimize revenue but requires careful ethical and legal consideration
+- **Ai-Driven Offers**: AI-driven offers and promotions can improve relevance and effectiveness when properly optimized
+- **Loyalty Program**: Loyalty program personalization increases engagement and value for both customers and businesses
+- **Churn Prediction**: Churn prediction enables proactive retention strategies that save customers and revenue
+- **Success In**: Success in personalized pricing requires transparency, fairness, and customer trust
+- **Failures Often**: Failures often result from lack of transparency, perceived unfairness, or poor communication
+- **Best Practices**: Best practices balance business objectives with ethical considerations and customer welfare
 
 ## Additional Resources
 

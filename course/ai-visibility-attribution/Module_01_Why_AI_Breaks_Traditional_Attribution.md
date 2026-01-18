@@ -11,10 +11,10 @@ order: 1
 
 **Duration:** Week 1  
 **Learning Objectives:**
-- Understand why last-click and multi-touch attribution fail for AI
-- Reframe AI as demand shaping, not demand capture
-- Recognize the executive consequences of misattribution
-- Conduct an attribution failure audit
+- **why last-click and multi-touch attribution fail for AI Understanding**: Understand why last-click and multi-touch attribution fail for AI
+- **Reframe Ai**: Reframe AI as demand shaping, not demand capture
+- **Recognize The**: Recognize the executive consequences of misattribution
+- **Conduct An**: Conduct an attribution failure audit
 
 ---
 
@@ -436,12 +436,12 @@ Assess your current analytics and measurement tools to identify what's missing f
 
 ## Key Takeaways
 
-- **AI breaks traditional attribution:** Clicks are the wrong primitive for measuring AI influence
-- **Intent forms before clicks:** AI shapes demand before any trackable touchpoint
-- **Traffic ≠ Intent:** High-intent, low-traffic channels can outperform high-traffic, low-intent channels
-- **AI conversions are undercounted:** 25-30% attribution gap means AI impact is invisible
-- **Executive consequences are real:** Misattribution leads to budget misallocation and strategic blindness
-- **Measurement stack needs upgrading:** Current tools can't capture AI influence
+- **AI breaks traditional attribution:**: Clicks are the wrong primitive for measuring AI influence
+- **Intent forms before clicks:**: AI shapes demand before any trackable touchpoint
+- **Traffic ≠ Intent:**: High-intent, low-traffic channels can outperform high-traffic, low-intent channels
+- **AI conversions are undercounted:**: 25-30% attribution gap means AI impact is invisible
+- **Executive consequences are real:**: Misattribution leads to budget misallocation and strategic blindness
+- **Measurement stack needs upgrading:**: Current tools can't capture AI influence
 
 ---
 

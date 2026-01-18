@@ -9,10 +9,10 @@ order: 2
 
 **Duration:** Week 3-4  
 **Learning Objectives:**
-- Install and manage custom nodes via ComfyUI Manager
-- Implement automation and structural guidance
-- Enhance image quality with detailers and upscalers
-- Master workflow portability and sharing
+- **Install And**: Install and manage custom nodes via ComfyUI Manager
+- **automation and structural guidance Implementation**: Implement automation and structural guidance
+- **Enhance Image**: Enhance image quality with detailers and upscalers
+- **workflow portability and sharing Understanding**: Master workflow portability and sharing
 
 ---
 
@@ -302,10 +302,10 @@ You've learned:
 - ✅ Exporting and sharing workflows
 
 **Next Steps:**
-- Build complex workflows with custom nodes
-- Experiment with ControlNet and LoRAs
-- Create reusable workflow templates
-- Prepare for Module 3: Cloud-Based AI Ecosystems
+- **complex Development**: Build complex workflows with custom nodes
+- **Experiment With**: Experiment with ControlNet and LoRAs
+- **reusable Development**: Create reusable workflow templates
+- **Prepare For**: Prepare for Module 3: Cloud-Based AI Ecosystems
 
 ---
 

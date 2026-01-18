@@ -14,11 +14,11 @@ Generative AI is transforming creative automation by enabling text, image, and l
 
 ## Learning Objectives
 
-- Understand the role of generative AI in modern creative pipelines
-- Identify text, image, and layout generation use cases
-- Master prompt engineering for scalable outputs
-- Implement human-in-the-loop review models
-- Address ethical, legal, and brand safety considerations
+- **the role of generative AI in modern creative pipelines Understanding**: Understand the role of generative AI in modern creative pipelines
+- **Identify Text,**: Identify text, image, and layout generation use cases
+- **prompt engineering for scalable outputs Understanding**: Master prompt engineering for scalable outputs
+- **human-in-the-loop review models Implementation**: Implement human-in-the-loop review models
+- **Address Ethical,**: Address ethical, legal, and brand safety considerations
 
 ---
 
@@ -542,18 +542,18 @@ AI Generation → Automated QC →
 
 ### Key Takeaways
 
-1. **Generative AI** enhances creative automation with content generation capabilities
-2. **Use cases** span text, image, and layout generation across marketing channels
-3. **Prompt engineering** is critical for consistent, scalable AI outputs
-4. **Human-in-the-loop** review ensures quality, compliance, and brand safety
-5. **Ethical, legal, and brand safety** considerations are essential for responsible AI use
+- **Generative AI**: Enhances creative automation with content generation capabilities
+- **Use cases**: Span text, image, and layout generation across marketing channels
+- **Prompt engineering**: Is critical for consistent, scalable AI outputs
+- **Human-in-the-loop**: Review ensures quality, compliance, and brand safety
+- **Ethical, legal, and brand safety**: Considerations are essential for responsible AI use
 
 ### Next Steps
 
-- Identify AI use cases in your creative workflow
-- Develop prompt templates for your use cases
-- Design a human review process
-- Move to Module 8 to learn about localization and transcreation at scale
+- **Identify Ai**: Identify AI use cases in your creative workflow
+- **prompt templates for your use cases Development**: Develop prompt templates for your use cases
+- **a human review process Development**: Design a human review process
+- **Move To**: Move to Module 8 to learn about localization and transcreation at scale
 
 ---
 

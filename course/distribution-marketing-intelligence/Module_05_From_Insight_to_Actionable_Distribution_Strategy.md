@@ -9,10 +9,10 @@ order: 5
 
 **Duration:** Week 5  
 **Learning Objectives:**
-- Prioritize levers: fees, positioning, channels
-- Distinguish advisor vs. platform-driven distribution
-- Choose between product re-positioning vs. product rationalization
-- Avoid data paralysis
+- **Prioritize Levers:**: Prioritize levers: fees, positioning, channels
+- **advisor Analysis**: Distinguish advisor vs. platform-driven distribution
+- **Choose Between**: Choose between product re-positioning vs. product rationalization
+- **Avoid Data**: Apply avoid data paralysis in relevant contexts
 
 ---
 
@@ -231,10 +231,10 @@ Transform AI-generated benchmarking insights into a concrete, actionable distrib
 
 ## Key Takeaways
 
-- Prioritizing levers (fees, positioning, channels) focuses efforts on highest impact
-- Choosing between advisor and platform-driven distribution depends on fund characteristics
-- Re-positioning vs. rationalization decisions require strategic assessment
-- Avoiding data paralysis requires action-oriented decision-making
+- **Prioritizing Levers**: Prioritizing levers (fees, positioning, channels) focuses efforts on highest impact
+- **Choosing Between**: Choosing between advisor and platform-driven distribution depends on fund characteristics
+- **Re-Positioning Vs.**: Re-positioning vs. rationalization decisions require strategic assessment
+- **Avoiding Data**: Avoiding data paralysis requires action-oriented decision-making
 
 ---
 

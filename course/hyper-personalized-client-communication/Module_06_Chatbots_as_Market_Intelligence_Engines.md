@@ -9,10 +9,10 @@ order: 6
 
 **Duration:** Week 6  
 **Learning Objectives:**
-- Identify friction points in client portals
-- Measure question frequency and abandonment
-- Detect unmet information needs
-- Feed insights back into advisor and marketing teams
+- **Identify Friction**: Identify friction points in client portals
+- **Measure Question**: Measure question frequency and abandonment
+- **Detect Unmet**: Detect unmet information needs
+- **Feed Insights**: Feed insights back into advisor and marketing teams
 
 ---
 
@@ -141,10 +141,10 @@ Create a dashboard that visualizes client pain points derived from chatbot inter
 
 ## Key Takeaways
 
-- Chatbot interactions provide valuable market intelligence
-- Friction points reveal client experience issues
-- Question frequency and abandonment metrics identify improvement opportunities
-- Unmet information needs guide content and process improvements
+- **Chatbot Interactions**: Chatbot interactions provide valuable market intelligence
+- **Friction Points**: Friction points reveal client experience issues
+- **Question Frequency**: Question frequency and abandonment metrics identify improvement opportunities
+- **Unmet Information**: Unmet information needs guide content and process improvements
 
 ---
 

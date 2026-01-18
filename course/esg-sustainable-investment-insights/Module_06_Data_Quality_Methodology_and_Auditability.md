@@ -9,10 +9,10 @@ order: 6
 
 **Duration:** Week 6  
 **Learning Objectives:**
-- Document methodologies and assumptions
-- Reconcile AI-derived estimates with vendor data
-- Implement versioning and restatement management
-- Prepare for regulatory and investor audits
+- **Document Methodologies**: Document methodologies and assumptions
+- **Reconcile Ai-Derived**: Reconcile AI-derived estimates with vendor data
+- **versioning and restatement management Implementation**: Implement versioning and restatement management
+- **Prepare For**: Prepare for regulatory and investor audits
 
 ---
 
@@ -235,10 +235,10 @@ Create a comprehensive, audit-ready methodology note for a Principal Adverse Imp
 
 ## Key Takeaways
 
-- Comprehensive methodology documentation ensures transparency and auditability
-- Reconciling AI estimates with vendor data improves accuracy and confidence
-- Versioning and restatement management maintain data integrity over time
-- Audit preparation ensures regulatory and investor confidence
+- **Comprehensive Methodology**: Comprehensive methodology documentation ensures transparency and auditability
+- **Reconciling Ai**: Reconciling AI estimates with vendor data improves accuracy and confidence
+- **Versioning And**: Versioning and restatement management maintain data integrity over time
+- **Audit Preparation**: Audit preparation ensures regulatory and investor confidence
 
 ---
 

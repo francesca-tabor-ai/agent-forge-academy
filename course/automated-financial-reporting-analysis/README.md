@@ -19,11 +19,11 @@ order: 0
 
 By completing this course, you will be able to:
 
-- Automate financial statement extraction and analysis
-- Build NLP systems for financial document processing
-- Create automated reporting pipelines
-- Generate financial insights using AI
-- Deploy production reporting systems
+- **Automate Financial**: Automate financial statement extraction and analysis
+- **NLP Development**: Build NLP systems for financial document processing
+- **automated reporting Development**: Create automated reporting pipelines
+- **Generate Financial**: Generate financial insights using AI
+- **production reporting Implementation**: Deploy production reporting systems
 
 ---
 

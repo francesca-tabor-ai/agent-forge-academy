@@ -9,10 +9,10 @@ order: 4
 
 **Duration:** Week 4  
 **Learning Objectives:**
-- Design automated underwriting workflows
-- Build decision engines
-- Implement policy rules
-- Create approval/rejection systems
+- **automated underwriting Development**: Design automated underwriting workflows
+- **decision engines Development**: Build decision engines
+- **policy rules Implementation**: Implement policy rules
+- **approval/rejection Development**: Create approval/rejection systems
 
 ---
 

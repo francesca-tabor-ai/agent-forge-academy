@@ -10,10 +10,10 @@ order: 2
 **Duration:** Week 2  
 **Startup Tool Focus:** NeuralMerch  
 **Learning Objectives:**
-- Understand interaction matrix structures
-- Master memory-based collaborative filtering
-- Implement matrix factorization algorithms
-- Learn SVD++ and bias incorporation
+- **interaction matrix structures Understanding**: Understand interaction matrix structures
+- **memory-based collaborative filtering Understanding**: Master memory-based collaborative filtering
+- **matrix factorization algorithms Implementation**: Implement matrix factorization algorithms
+- **SVD++ and bias incorporation Understanding**: Learn SVD++ and bias incorporation
 
 ---
 
@@ -1089,16 +1089,16 @@ Implement and compare different matrix factorization approaches.
 
 **Key Takeaways:**
 
-1. **Interaction matrices are sparse:** 95-99% empty, requiring efficient storage
-2. **Explicit vs implicit feedback:** Different signals, different handling
-3. **Memory-based CF:** User-based and item-based approaches
-4. **Matrix factorization:** Decompose into latent factors
-5. **SVD++:** Incorporates implicit feedback for better performance
+- **Interaction matrices are sparse:**: 95-99% empty, requiring efficient storage
+- **Explicit vs implicit feedback:**: Different signals, different handling
+- **Memory-based CF:**: User-based and item-based approaches
+- **Matrix factorization:**: Decompose into latent factors
+- **SVD++:**: Incorporates implicit feedback for better performance
 
 **Next Steps:**
-- Module 3: Neural Collaborative Filtering
-- Learn how neural networks capture non-linear relationships
-- Master the NeuMF framework
+- **Module 3:**: Module 3: Neural Collaborative Filtering
+- **how neural networks capture non-linear relationships Understanding**: Learn how neural networks capture non-linear relationships
+- **the NeuMF framework Understanding**: Master the NeuMF framework
 
 ---
 

@@ -10,11 +10,11 @@ description: Consumer trust, transparency, bias, and privacy regulations
 
 By the end of this module, you will be able to:
 
-- Understand consumer trust, transparency, and consent requirements
-- Identify bias, discrimination, and algorithmic fairness issues
-- Evaluate explainability and accountability in AI systems
-- Navigate privacy regulations and compliance considerations
-- Engage in critical discussion about personalization ethics
+- **consumer trust, transparency, and consent requirements Understanding**: Understand consumer trust, transparency, and consent requirements
+- **Identify Bias,**: Identify bias, discrimination, and algorithmic fairness issues
+- **explainability Evaluation**: Evaluate explainability and accountability in AI systems
+- **Navigate Privacy**: Navigate privacy regulations and compliance considerations
+- **Engage In**: Engage in critical discussion about personalization ethics
 
 ## Introduction
 
@@ -453,13 +453,13 @@ Hyper-personalised marketing has tremendous potential to create value for both b
 
 ## Key Takeaways
 
-- Trust and transparency are foundational to ethical personalization
-- Consent must be clear, informed, and easily withdrawable
-- Bias in AI systems can perpetuate discrimination and must be actively mitigated
-- Explainability and accountability are essential for responsible AI
-- Privacy regulations require comprehensive compliance frameworks
-- The line between value creation and manipulation requires careful navigation
-- Ethical personalization balances business objectives with customer welfare and societal good
+- **Trust And**: Trust and transparency are foundational to ethical personalization
+- **Consent Must**: Consent must be clear, informed, and easily withdrawable
+- **Bias In**: Bias in AI systems can perpetuate discrimination and must be actively mitigated
+- **Explainability And**: Explainability and accountability are essential for responsible AI
+- **Privacy Regulations**: Privacy regulations require comprehensive compliance frameworks
+- **The Line**: The line between value creation and manipulation requires careful navigation
+- **Ethical Personalization**: Ethical personalization balances business objectives with customer welfare and societal good
 
 ## Additional Resources
 

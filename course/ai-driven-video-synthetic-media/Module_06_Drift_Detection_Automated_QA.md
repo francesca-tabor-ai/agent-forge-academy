@@ -10,10 +10,10 @@ order: 6
 **Duration:** Week 6  
 **Tool Focus:** DriftGuard  
 **Learning Objectives:**
-- Build automated checks for visual and auditory alignment
-- Detect model version drift that alters persona appearance
-- Implement fail-closed systems that halt on violations
-- Monitor for "slow decay" in high-volume production
+- **automated checks for visual and auditory alignment Development**: Build automated checks for visual and auditory alignment
+- **Detect Model**: Detect model version drift that alters persona appearance
+- **fail-closed Implementation**: Implement fail-closed systems that halt on violations
+- **Monitor For**: Monitor for "slow decay" in high-volume production
 
 ---
 
@@ -711,22 +711,22 @@ class SlowDecayDetector:
 ## Key Takeaways
 
 **Visual and Auditory Alignment:**
-- Audio-text alignment ensures 100% precision
-- Numeric data must match source truth exactly
-- Automated checks prevent misalignment
-- Source truth validation ensures accuracy
+- **Audio-Text Alignment**: Audio-text alignment ensures 100% precision
+- **Numeric Data**: Numeric data must match source truth exactly
+- **Automated Checks**: Automated checks prevent misalignment
+- **Source Truth**: Source truth validation ensures accuracy
 
 **Model Version Monitoring:**
-- Model updates can alter persona appearance/behavior
-- Drift detection identifies unauthorized changes
-- Behavioral drift also monitored
-- Version tracking enables audit trail
+- **Model Updates**: Model updates can alter persona appearance/behavior
+- **Drift Detection**: Drift detection identifies unauthorized changes
+- **Behavioral Drift**: Behavioral drift also monitored
+- **Version Tracking**: Version tracking enables audit trail
 
 **Fail-Closed Systems:**
-- Automatic halt on violations prevents bad content
-- Persona lock violations trigger halt
-- Claim boundary violations trigger halt
-- Slow decay detection identifies gradual issues
+- **Automatic Halt**: Automatic halt on violations prevents bad content
+- **Persona Lock**: Persona lock violations trigger halt
+- **Claim Boundary**: Claim boundary violations trigger halt
+- **Slow Decay**: Slow decay detection identifies gradual issues
 
 ---
 

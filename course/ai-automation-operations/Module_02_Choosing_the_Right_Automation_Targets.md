@@ -11,12 +11,12 @@ order: 2
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Identify low-friction automation opportunities
-- Distinguish between monitoring, decision-making, and creation tasks
-- Recognize repetitive, cross-team, and "orphan" tasks
-- Understand automation as glue between teams
-- Identify red flags for politically sensitive workflows
-- Create an Automation Opportunity Backlog and "Do Not Automate" list
+- **Identify Low-Friction**: Identify low-friction automation opportunities
+- **between monitoring, decision-making, Analysis**: Distinguish between monitoring, decision-making, and creation tasks
+- **Recognize Repetitive,**: Recognize repetitive, cross-team, and "orphan" tasks
+- **automation as glue between teams Understanding**: Understand automation as glue between teams
+- **Identify Red**: Identify red flags for politically sensitive workflows
+- **an Automation Opportunity Backlog and "Do Not Automate" list Development**: Create an Automation Opportunity Backlog and "Do Not Automate" list
 
 ---
 
@@ -655,12 +655,12 @@ Create a clear list of tasks and workflows that should NOT be automated, with re
 
 ## Key Takeaways
 
-- **Task taxonomy matters:** Monitoring tasks are ideal for automation; decision-making requires augmentation; creation should be preserved
-- **Sweet spots exist:** Repetitive, cross-team, and "orphan" tasks are prime automation targets
-- **Automation as glue:** Automation can connect teams and processes without human coordination
-- **Red flags are real:** Identity-linked, high-stakes, relationship-building, and creative work should be protected
-- **Backlog is essential:** Systematic identification and prioritization of opportunities
-- **"Do not automate" list is critical:** Clear boundaries prevent political and cultural failures
+- **Task taxonomy matters:**: Monitoring tasks are ideal for automation; decision-making requires augmentation; creation should be preserved
+- **Sweet spots exist:**: Repetitive, cross-team, and "orphan" tasks are prime automation targets
+- **Automation as glue:**: Automation can connect teams and processes without human coordination
+- **Red flags are real:**: Identity-linked, high-stakes, relationship-building, and creative work should be protected
+- **Backlog is essential:**: Systematic identification and prioritization of opportunities
+- **"Do not automate" list is critical:**: Clear boundaries prevent political and cultural failures
 
 ---
 

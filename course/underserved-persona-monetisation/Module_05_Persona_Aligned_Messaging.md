@@ -10,12 +10,12 @@ order: 5
 **Duration:** Week 5  
 **Theme:** Specificity Beats Brand Voice  
 **Learning Objectives:**
-- Build messaging that resonates with AI and humans
-- Avoid generic claims that AI ignores
-- Write for persona constraints and outcomes
-- Create honest tradeoffs and "who this is not for" messaging
-- Build proof-first messaging structures
-- Avoid overreach that damages AI trust
+- **messaging that resonates with AI and humans Development**: Build messaging that resonates with AI and humans
+- **Avoid Generic**: Avoid generic claims that AI ignores
+- **Write For**: Write for persona constraints and outcomes
+- **honest tradeoffs and "who this is not for" messaging Development**: Create honest tradeoffs and "who this is not for" messaging
+- **proof-first messaging structures Development**: Build proof-first messaging structures
+- **Avoid Overreach**: Avoid overreach that damages AI trust
 
 ---
 
@@ -497,20 +497,20 @@ For each persona:
 
 **Key Takeaways:**
 
-1. **Constraint-Focused Messaging:** Writing for persona constraints (budget, time, skills, resources) resonates with both AI and humans.
+- **Constraint-Focused Messaging:**: Writing for persona constraints (budget, time, skills, resources) resonates with both AI and humans
 
-2. **Outcome-Focused Messaging:** Focusing on specific, measurable outcomes rather than features helps personas understand value.
+- **Outcome-Focused Messaging:**: Focusing on specific, measurable outcomes rather than features helps personas understand value
 
-3. **Honest Tradeoffs:** Explicitly stating tradeoffs and "who this is not for" builds trust and helps personas self-select.
+- **Honest Tradeoffs:**: Explicitly stating tradeoffs and "who this is not for" builds trust and helps personas self-select
 
-4. **Proof-First Structures:** Leading with proof rather than claims increases AI recommendation frequency and human trust.
+- **Proof-First Structures:**: Leading with proof rather than claims increases AI recommendation frequency and human trust
 
-5. **Avoiding Overreach:** Being specific, using proof, acknowledging limitations, and aligning with AI systems prevents trust damage.
+- **Avoiding Overreach:**: Being specific, using proof, acknowledging limitations, and aligning with AI systems prevents trust damage
 
 **Next Steps:**
-- Module 6: Learn to capture proof that AI systems amplify organically
-- Understand how to structure testimonials for AI readability
-- Build skills in authentic proof collection
+- **Module 6:**: Module 6: Learn to capture proof that AI systems amplify organically
+- **how to structure testimonials for AI readability Understanding**: Understand how to structure testimonials for AI readability
+- **skills in authentic proof collection Development**: Build skills in authentic proof collection
 
 ---
 

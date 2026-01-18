@@ -9,10 +9,10 @@ order: 3
 
 **Duration:** Week 3  
 **Learning Objectives:**
-- Implement confidence scoring and ambiguity handling
-- Map extracted values to internal data models
-- Provide source attribution ("show me where this came from")
-- Implement version control and document change detection
+- **confidence scoring and ambiguity handling Implementation**: Implement confidence scoring and ambiguity handling
+- **Map Extracted**: Map extracted values to internal data models
+- **Provide Source**: Provide source attribution ("show me where this came from")
+- **version control and document change detection Implementation**: Implement version control and document change detection
 
 ---
 
@@ -261,10 +261,10 @@ Create a comprehensive traceability model that links every data field back to it
 
 ## Key Takeaways
 
-- Confidence scoring enables quality assessment and review prioritization
-- Mapping to internal data models ensures consistency and usability
-- Source attribution provides transparency and auditability
-- Version control and change detection maintain data integrity over time
+- **Confidence Scoring**: Confidence scoring enables quality assessment and review prioritization
+- **Mapping To**: Mapping to internal data models ensures consistency and usability
+- **Source Attribution**: Source attribution provides transparency and auditability
+- **Version Control**: Version control and change detection maintain data integrity over time
 
 ---
 

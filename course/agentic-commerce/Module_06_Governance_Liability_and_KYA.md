@@ -9,10 +9,10 @@ order: 6
 
 **Duration:** Week 6  
 **Learning Objectives:**
-- Understand Know Your Agent (KYA) protocols
-- Navigate tort law and AI liability
-- Ensure regulatory compliance (EU AI Act, HIPAA, financial)
-- Build governance frameworks for agent-mediated transactions
+- **Know Your Agent Understanding**: Understand Know Your Agent (KYA) protocols
+- **Navigate Tort**: Navigate tort law and AI liability
+- **Ensure Regulatory**: Ensure regulatory compliance (EU AI Act, HIPAA, financial)
+- **governance frameworks for agent-mediated transactions Development**: Build governance frameworks for agent-mediated transactions
 
 ---
 
@@ -568,13 +568,13 @@ Create a comprehensive compliance framework for agent-mediated transactions, cov
 
 ## Key Takeaways
 
-1. **KYA:** Essential for agent identity and accountability
-2. **Tort Law:** Understanding liability is critical
-3. **Manufacturing vs. Design Defects:** Important distinction
-4. **EU AI Act:** Comprehensive AI regulation
-5. **HIPAA:** Health information protection
-6. **Financial Compliance:** Multiple regulations apply
-7. **Compliance Framework:** Essential for success
+- **KYA:**: Essential for agent identity and accountability
+- **Tort Law:**: Understanding liability is critical
+- **Manufacturing vs. Design Defects:**: Important distinction
+- **EU AI Act:**: Comprehensive AI regulation
+- **HIPAA:**: Health information protection
+- **Financial Compliance:**: Multiple regulations apply
+- **Compliance Framework:**: Essential for success
 
 ---
 

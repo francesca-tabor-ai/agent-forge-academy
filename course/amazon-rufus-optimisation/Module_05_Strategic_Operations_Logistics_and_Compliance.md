@@ -9,11 +9,11 @@ order: 5
 
 **Duration:** Week 5  
 **Learning Objectives:**
-- Understand ASPIRE framework for causal inference in logistics
-- Solve the GreenBox optimization problem for packaging
-- Implement DeepMMATE for tax compliance classification
-- Use AI to optimize supply chain operations
-- Ensure regulatory compliance with explainable AI
+- **ASPIRE framework for causal inference in logistics Understanding**: Understand ASPIRE framework for causal inference in logistics
+- **Solve The**: Solve the GreenBox optimization problem for packaging
+- **DeepMMATE for tax compliance classification Implementation**: Implement DeepMMATE for tax compliance classification
+- **Use Ai**: Use AI to optimize supply chain operations
+- **Ensure Regulatory**: Ensure regulatory compliance with explainable AI
 
 ---
 
@@ -877,28 +877,28 @@ def train_deepmmate(
 ## Key Takeaways
 
 **ASPIRE Framework:**
-- Uses causal inference for logistics decisions
-- Estimates revenue lift from shipping speed
-- Makes data-driven air-shipping decisions
-- Considers counterfactuals, not just correlations
+- **Uses Causal**: Uses causal inference for logistics decisions
+- **Estimates Revenue**: Estimates revenue lift from shipping speed
+- **Makes Data-Driven**: Makes data-driven air-shipping decisions
+- **Considers Counterfactuals,**: Considers counterfactuals, not just correlations
 
 **GreenBox Optimization:**
-- 3D clustering finds optimal box sizes
-- Minimizes air volume and packaging waste
-- Reduces shipping costs
-- Environmental benefits
+- **3D Clustering**: 3D clustering finds optimal box sizes
+- **Minimizes Air**: Minimizes air volume and packaging waste
+- **Reduces Shipping**: Apply reduces shipping costs in relevant contexts
+- **Environmental Benefits**: Implement environmental benefits effectively across relevant use cases
 
 **DeepMMATE:**
-- Multimodal Siamese network for tax classification
-- Analyzes images and text together
-- Provides explainable decisions for auditors
-- Ensures regulatory compliance
+- **Multimodal Siamese**: Multimodal Siamese network for tax classification
+- **Analyzes Images**: Analyzes images and text together
+- **Provides Explainable**: Provides explainable decisions for auditors
+- **Ensures Regulatory**: Apply ensures regulatory compliance in relevant contexts
 
 **AI in Operations:**
-- Optimizes supply chain decisions
-- Reduces costs and waste
-- Ensures compliance
-- Provides transparency for audits
+- **Optimizes Supply**: Optimizes supply chain decisions
+- **Reduces Costs**: Reduces costs and waste
+- **Ensures Compliance**: Implement ensures compliance effectively across relevant use cases
+- **Provides Transparency**: Provides transparency for audits
 
 ---
 

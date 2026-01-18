@@ -14,11 +14,11 @@ Effective prompt engineering requires a fundamental shift in how you think about
 
 ## Learning Objectives
 
-- Understand the engineering shift from search to reasoning
-- Master the ROSES prompting framework
-- Apply the CO-STAR framework for structured outputs
-- Use the CREATE framework for creative tasks
-- Differentiate between zero-shot, one-shot, and few-shot prompting
+- **the engineering shift from search to reasoning Understanding**: Understand the engineering shift from search to reasoning
+- **the ROSES prompting framework Understanding**: Master the ROSES prompting framework
+- **Apply The**: Apply the CO-STAR framework for structured outputs
+- **Use The**: Use the CREATE framework for creative tasks
+- **between zero-shot, one-shot, Analysis**: Differentiate between zero-shot, one-shot, and few-shot prompting
 
 ---
 
@@ -336,10 +336,10 @@ French:"
 
 ### Key Takeaways
 
-1. **Clarity over brevity**: Detailed prompts produce better results
-2. **Use frameworks**: ROSES, CO-STAR, and CREATE provide structure
-3. **Match paradigm to task**: Zero-shot for simple, few-shot for complex
-4. **Provide context**: Help the model understand your intent
+- **Clarity over brevity**: Detailed prompts produce better results
+- **Use frameworks**: ROSES, CO-STAR, and CREATE provide structure
+- **Match paradigm to task**: Zero-shot for simple, few-shot for complex
+- **Provide context**: Help the model understand your intent
 
 ### Framework Selection Guide
 
@@ -349,9 +349,9 @@ French:"
 
 ### Next Steps
 
-- Practice rewriting prompts using each framework
-- Experiment with zero-shot, one-shot, and few-shot approaches
-- Move to Module 3 to learn advanced reasoning techniques
+- **Practice Rewriting**: Practice rewriting prompts using each framework
+- **Experiment With**: Experiment with zero-shot, one-shot, and few-shot approaches
+- **Move To**: Move to Module 3 to learn advanced reasoning techniques
 
 ---
 

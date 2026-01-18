@@ -9,11 +9,11 @@ order: 7
 
 **Duration:** Week 7  
 **Learning Objectives:**
-- Understand horizontal scaling and sharding
-- Implement authentication and authorization
-- Choose between Weaviate Cloud and self-hosted
-- Set up monitoring and observability
-- Deploy Weaviate on Kubernetes or cloud VMs
+- **horizontal scaling and sharding Understanding**: Understand horizontal scaling and sharding
+- **authentication and authorization Implementation**: Implement authentication and authorization
+- **Choose Between**: Choose between Weaviate Cloud and self-hosted
+- **monitoring and observability Implementation**: Set up monitoring and observability
+- **Weaviate on Kubernetes or cloud VMs Implementation**: Deploy Weaviate on Kubernetes or cloud VMs
 
 ---
 
@@ -694,16 +694,16 @@ print(f"P95 latency: {sorted(results)[int(len(results)*0.95)]:.3f}s")
 ## Summary
 
 **Key Takeaways:**
-- Horizontal scaling requires clustering
-- Sharding distributes data across nodes
-- Authentication is essential for production
-- Monitoring enables proactive management
-- Choose deployment model based on needs
+- **Horizontal Scaling**: Horizontal scaling requires clustering
+- **Sharding Distributes**: Sharding distributes data across nodes
+- **Authentication Is**: Authentication is essential for production
+- **Monitoring Enables**: Monitoring enables proactive management
+- **Choose Deployment**: Choose deployment model based on needs
 
 **What's Next:**
-- Module 8: Capstone project
-- Build complete AI-native application
-- Apply all learned concepts
+- **Module 8:**: Module 8: Capstone project
+- **complete AI-native application Development**: Build complete AI-native application
+- **Apply All**: Apply all learned concepts
 
 ---
 

@@ -10,10 +10,10 @@ order: 7
 
 **Duration:** Week 7  
 **Learning Objectives:**
-- Operationalise AI visibility across teams
-- Avoid ownership confusion and internal resistance
-- Create effective cross-functional collaboration
-- Establish clear operating cadence
+- **Operationalise Ai**: Operationalise AI visibility across teams
+- **Avoid Ownership**: Avoid ownership confusion and internal resistance
+- **effective cross-functional collaboration Development**: Create effective cross-functional collaboration
+- **Establish Clear**: Establish clear operating cadence
 
 ---
 
@@ -517,15 +517,15 @@ Create a RACI model and operating cadence for your organization to enable effect
 
 ## Key Takeaways
 
-- **Cross-functional collaboration is essential:** AI visibility requires coordination across multiple teams
+- **Cross-functional collaboration is essential:**: AI visibility requires coordination across multiple teams
 
-- **Clear ownership matters:** RACI model prevents confusion and ensures accountability
+- **Clear ownership matters:**: RACI model prevents confusion and ensures accountability
 
-- **Regular cadence enables coordination:** Weekly, monthly, and quarterly rhythms keep teams aligned
+- **Regular cadence enables coordination:**: Weekly, monthly, and quarterly rhythms keep teams aligned
 
-- **Team-specific strategies:** Different teams require different approaches and messaging
+- **Team-specific strategies:**: Different teams require different approaches and messaging
 
-- **Vendor integration:** External vendors can complement internal capabilities when integrated properly
+- **Vendor integration:**: External vendors can complement internal capabilities when integrated properly
 
 ---
 

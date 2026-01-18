@@ -9,10 +9,10 @@ order: 2
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Identify all external disclosure documents (SFDR, EET, prospectuses, fact sheets, websites)
-- Distinguish structured vs. narrative ESG statements
-- Understand jurisdiction-specific disclosure variations
-- Recognize versioning and publication timing risk
+- **Identify All**: Identify all external disclosure documents (SFDR, EET, prospectuses, fact sheets, websites)
+- **structured Analysis**: Distinguish structured vs. narrative ESG statements
+- **jurisdiction-specific disclosure variations Understanding**: Understand jurisdiction-specific disclosure variations
+- **Recognize Versioning**: Recognize versioning and publication timing risk
 
 ---
 
@@ -259,10 +259,10 @@ Create a comprehensive map of all disclosures for a single fund across all chann
 
 ## Key Takeaways
 
-- The compliance surface includes regulatory disclosures, fund documents, and digital channels
-- Structured and narrative ESG statements must be aligned and consistent
-- Jurisdiction-specific variations require careful management
-- Versioning and publication timing create significant compliance risk
+- **The Compliance**: The compliance surface includes regulatory disclosures, fund documents, and digital channels
+- **Structured And**: Structured and narrative ESG statements must be aligned and consistent
+- **Jurisdiction-Specific Variations**: Jurisdiction-specific variations require careful management
+- **Versioning And**: Versioning and publication timing create significant compliance risk
 
 ---
 

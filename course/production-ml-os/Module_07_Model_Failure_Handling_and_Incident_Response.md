@@ -14,10 +14,10 @@ email_action: "Run a mock ML incident and write a postmortem with root cause ana
 
 **Duration:** Week 7  
 **Learning Objectives:**
-- Identify common ML failure modes
-- Design fallback strategies
-- Implement kill switches and circuit breakers
-- Conduct post-incident analysis
+- **Identify Common**: Identify common ML failure modes
+- **fallback strategies Development**: Apply design fallback strategies in relevant contexts
+- **kill switches and circuit breakers Implementation**: Implement kill switches and circuit breakers
+- **Conduct Post-Incident**: Apply conduct post-incident analysis in relevant contexts
 
 ---
 
@@ -509,16 +509,16 @@ causing 10% revenue loss.
 
 ### Key Takeaways
 
-1. **Failures are inevitable** - Design for failure from the start
-2. **Fallbacks are essential** - Multiple layers of fallback
-3. **Kill switches save the day** - Manual and automatic controls
-4. **Learn from incidents** - Postmortems prevent recurrence
+- **Failures are inevitable**: Design for failure from the start
+- **Fallbacks are essential**: Multiple layers of fallback
+- **Kill switches save the day**: Manual and automatic controls
+- **Learn from incidents**: Postmortems prevent recurrence
 
 ### Next Steps
 
-- Complete the mock incident exercise
-- Review incident response procedures
-- Move to Module 8 to learn about collaboration and production readiness
+- **Complete The**: Complete the mock incident exercise
+- **Review Incident**: Review incident response procedures
+- **Move To**: Move to Module 8 to learn about collaboration and production readiness
 
 ---
 

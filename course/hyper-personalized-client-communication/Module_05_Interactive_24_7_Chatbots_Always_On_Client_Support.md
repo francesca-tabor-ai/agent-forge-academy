@@ -9,10 +9,10 @@ order: 5
 
 **Duration:** Week 5  
 **Learning Objectives:**
-- Identify appropriate use cases for advisory chatbots
-- Handle routine queries (rates, terms, documentation)
-- Design escalation logic for complex or sensitive questions
-- Establish tone, trust, and transparency ("I am an AI")
+- **Identify Appropriate**: Identify appropriate use cases for advisory chatbots
+- **Handle Routine**: Handle routine queries (rates, terms, documentation)
+- **escalation logic for complex or sensitive questions Development**: Design escalation logic for complex or sensitive questions
+- **Establish Tone,**: Establish tone, trust, and transparency ("I am an AI")
 
 ---
 
@@ -182,10 +182,10 @@ Create clear boundaries defining what the chatbot can and cannot answer.
 
 ## Key Takeaways
 
-- Chatbots excel at routine information queries but must avoid investment advice
-- Clear escalation logic ensures complex questions reach human advisors
-- Transparency about AI identity builds trust
-- Appropriate boundaries protect both clients and the firm
+- **Chatbots Excel**: Chatbots excel at routine information queries but must avoid investment advice
+- **Clear Escalation**: Clear escalation logic ensures complex questions reach human advisors
+- **Transparency About**: Transparency about AI identity builds trust
+- **Appropriate Boundaries**: Appropriate boundaries protect both clients and the firm
 
 ---
 

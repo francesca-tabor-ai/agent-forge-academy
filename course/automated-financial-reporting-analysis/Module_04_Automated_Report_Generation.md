@@ -9,10 +9,10 @@ order: 4
 
 **Duration:** Week 4  
 **Learning Objectives:**
-- Build template-based reporting
-- Implement natural language generation
-- Create automated visualizations
-- Design report distribution systems
+- **template-based reporting Development**: Build template-based reporting
+- **natural language generation Implementation**: Implement natural language generation
+- **automated visualizations Development**: Create automated visualizations
+- **report distribution Development**: Design report distribution systems
 
 ---
 

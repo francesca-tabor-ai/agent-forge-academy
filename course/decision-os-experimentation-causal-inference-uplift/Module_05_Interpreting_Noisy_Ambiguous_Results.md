@@ -13,12 +13,12 @@ email_action: "Analyze an experiment with weak signals or conflicting metrics—
 **Theme:** *Most experiments are not clean*
 
 **Learning Objectives:**
-- Distinguish statistical vs practical significance
-- Interpret confidence intervals vs p-values
-- Understand heterogeneous treatment effects
-- Recognize Simpson's paradox and aggregation bias
-- Make decisions when "no result" is still a decision
-- Create decision narratives under uncertainty
+- **statistical Analysis**: Distinguish statistical vs practical significance
+- **Interpret Confidence**: Interpret confidence intervals vs p-values
+- **heterogeneous treatment effects Understanding**: Understand heterogeneous treatment effects
+- **Recognize Simpson'S**: Recognize Simpson's paradox and aggregation bias
+- **Make Decisions**: Make decisions when "no result" is still a decision
+- **decision narratives under uncertainty Development**: Create decision narratives under uncertainty
 
 ---
 
@@ -569,11 +569,11 @@ Given the positive point estimate and potential for meaningful impact, we recomm
 - Seasonal effects: Results may not generalize
 
 **Next Steps:**
-1. Fix implementation to ensure all treatment users see new flow
-2. Rollout to 10% of users
-3. Monitor daily for 1 week
-4. Expand to 50% if metrics positive
-5. Full rollout if 50% stage successful
+- **Fix Implementation Ensure**: Fix implementation to ensure all treatment users see new flow
+- **Rollout 10% Users**: Rollout to 10% of users
+- **Monitor Daily For**: Apply monitor daily for 1 week principles and best practices
+- **Expand 50% Metrics**: Expand to 50% if metrics positive
+- **Full Rollout 50%**: Full rollout if 50% stage successful
 
 ### Key Principles
 

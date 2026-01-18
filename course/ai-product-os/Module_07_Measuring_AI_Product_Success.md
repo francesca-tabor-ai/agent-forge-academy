@@ -10,11 +10,11 @@ order: 7
 **Duration:** Week 7  
 **Theme:** Adoption over accuracy  
 **Learning Objectives:**
-- Differentiate product metrics from model metrics
-- Measure trust, engagement, and satisfaction in AI products
-- Design experimentation strategies for AI features
-- Interpret mixed or ambiguous results
-- Plan iteration strategies for AI products post-launch
+- **product metrics from model metrics Analysis**: Differentiate product metrics from model metrics
+- **Measure Trust,**: Measure trust, engagement, and satisfaction in AI products
+- **experimentation strategies for AI features Development**: Design experimentation strategies for AI features
+- **Interpret Mixed**: Interpret mixed or ambiguous results
+- **Plan Iteration**: Plan iteration strategies for AI products post-launch
 
 ---
 
@@ -966,20 +966,20 @@ Define comprehensive success metrics and experimentation plans for an AI feature
 
 **Key Takeaways:**
 
-1. **Product vs Model Metrics:** Product metrics measure user and business value; model metrics measure technical performance. Both matter, but product metrics determine success.
+- **Product vs Model Metrics:**: Product metrics measure user and business value; model metrics measure technical performance. Both matter, but product metrics determine success
 
-2. **Trust, Engagement, Satisfaction:** Measure behavioral indicators, explicit measures, corrections, and business impact to understand trust and adoption.
+- **Trust, Engagement, Satisfaction:**: Measure behavioral indicators, explicit measures, corrections, and business impact to understand trust and adoption
 
-3. **Experimentation:** Use A/B tests, bandits, and staged rollouts to validate AI features. Define clear hypotheses, choose appropriate metrics, ensure statistical rigor.
+- **Experimentation:**: Use A/B tests, bandits, and staged rollouts to validate AI features. Define clear hypotheses, choose appropriate metrics, ensure statistical rigor
 
-4. **Interpreting Results:** Mixed results are common. Use frameworks to understand what's happening, why, and what to do.
+- **Interpreting Results:**: Mixed results are common. Use frameworks to understand what's happening, why, and what to do
 
-5. **Iteration:** Continuously monitor, collect feedback, and improve. Iterate on models, UX, features, and optimization.
+- **Iteration:**: Continuously monitor, collect feedback, and improve. Iterate on models, UX, features, and optimization
 
 **Next Steps:**
-- Capstone Project: Apply all learnings to build a complete AI Product OS
-- Design end-to-end AI-powered user experience
-- Address all aspects: opportunity, UX, decisioning, GenAI, trust, ethics, measurement
+- **Capstone Project:**: Capstone Project: Apply all learnings to build a complete AI Product OS
+- **end-to-end AI-powered user experience Development**: Design end-to-end AI-powered user experience
+- **Address All**: Address all aspects: opportunity, UX, decisioning, GenAI, trust, ethics, measurement
 
 ---
 

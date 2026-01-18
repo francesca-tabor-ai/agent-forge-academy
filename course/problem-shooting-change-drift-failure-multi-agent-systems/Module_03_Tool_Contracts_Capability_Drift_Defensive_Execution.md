@@ -11,11 +11,11 @@ email_action: "List one tool your agent uses—what would break if its API chang
 
 **Duration:** Week 3  
 **Learning Objectives:**
-- Understand tools as unstable dependencies
-- Design tool contracts with schemas and invariants
-- Implement capability probing vs optimistic calls
-- Build graceful degradation strategies
-- Recover from tool failures without crashing or retry storms
+- **tools as unstable dependencies Understanding**: Understand tools as unstable dependencies
+- **tool contracts with schemas and invariants Development**: Design tool contracts with schemas and invariants
+- **capability probing vs optimistic calls Implementation**: Implement capability probing vs optimistic calls
+- **graceful degradation strategies Development**: Build graceful degradation strategies
+- **Recover From**: Recover from tool failures without crashing or retry storms
 
 ---
 

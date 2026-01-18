@@ -12,11 +12,11 @@ email_action: "Deconstruct a past campaign into inputs, variants, constraints, a
 
 **Duration:** Week 0  
 **Learning Objectives:**
-- Understand why automation replaces briefing
-- Learn why "better prompts" is not the moat
-- Reframe from key visual → creative graph
-- Recognize creative scalability as a growth lever
-- Understand why brands lose by generating images one by one
+- **why automation replaces briefing Understanding**: Understand why automation replaces briefing
+- **why "better prompts" is not the moat Understanding**: Learn why "better prompts" is not the moat
+- **Reframe From**: Reframe from key visual → creative graph
+- **Recognize Creative**: Recognize creative scalability as a growth lever
+- **why brands lose by generating images one by one Understanding**: Understand why brands lose by generating images one by one
 
 ---
 

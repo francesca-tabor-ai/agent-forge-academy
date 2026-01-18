@@ -11,12 +11,12 @@ order: 3
 **Theme:** *Not all customers are equal*
 
 **Learning Objectives:**
-- Understand conceptual foundations of LTV
-- Differentiate historical vs predictive LTV
-- Calculate contribution margin and include costs
-- Perform segment-level LTV analysis
-- Use LTV for budget and strategy decisions
-- Build predictive LTV models
+- **conceptual foundations of LTV Understanding**: Understand conceptual foundations of LTV
+- **historical Analysis**: Differentiate historical vs predictive LTV
+- **Calculate Contribution**: Calculate contribution margin and include costs
+- **Perform Segment-Level**: Perform segment-level LTV analysis
+- **Use Ltv**: Use LTV for budget and strategy decisions
+- **predictive LTV models Development**: Build predictive LTV models
 
 ---
 
@@ -725,16 +725,16 @@ An LTV framework that:
 
 **Key Takeaways:**
 
-1. **LTV is Fundamental:** Drives acquisition, product, and pricing decisions
-2. **Predictive > Historical:** Need to predict LTV for active customers
-3. **Include Costs:** Gross margin LTV is what matters for decisions
-4. **Segment Analysis Reveals Value:** Average LTV hides massive differences
-5. **Use LTV for Decisions:** Budget allocation, product prioritization, pricing
+- **LTV is Fundamental:**: Drives acquisition, product, and pricing decisions
+- **Predictive > Historical:**: Need to predict LTV for active customers
+- **Include Costs:**: Gross margin LTV is what matters for decisions
+- **Segment Analysis Reveals Value:**: Average LTV hides massive differences
+- **Use LTV for Decisions:**: Budget allocation, product prioritization, pricing
 
 **Next Steps:**
-- Module 4: Learn marketing mix modeling (MMM)
-- Understand how to measure marketing effectiveness
-- Allocate spend based on incrementality
+- **Module 4:**: Module 4: Learn marketing mix modeling (MMM)
+- **how to measure marketing effectiveness Understanding**: Understand how to measure marketing effectiveness
+- **Allocate Spend**: Allocate spend based on incrementality
 
 ---
 

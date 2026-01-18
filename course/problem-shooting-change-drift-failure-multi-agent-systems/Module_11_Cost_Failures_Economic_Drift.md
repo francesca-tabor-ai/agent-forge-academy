@@ -11,11 +11,11 @@ email_action: "What's your cost per decision? How would you detect if it increas
 
 **Duration:** Week 11  
 **Learning Objectives:**
-- Prevent financial incidents
-- Track cost per decision, not per request
-- Implement adaptive reasoning depth
-- Use speculative execution and early stopping
-- Detect slow cost creep before it becomes catastrophic
+- **Prevent Financial**: Apply prevent financial incidents in relevant contexts
+- **Track Cost**: Track cost per decision, not per request
+- **adaptive reasoning depth Implementation**: Implement adaptive reasoning depth
+- **Use Speculative**: Use speculative execution and early stopping
+- **Detect Slow**: Detect slow cost creep before it becomes catastrophic
 
 ---
 

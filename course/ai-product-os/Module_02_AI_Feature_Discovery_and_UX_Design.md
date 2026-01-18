@@ -10,11 +10,11 @@ order: 2
 **Duration:** Week 2  
 **Theme:** Designing experiences, not models  
 **Learning Objectives:**
-- Understand UX challenges unique to AI-powered features
-- Design experiences that communicate uncertainty and confidence
-- Apply progressive disclosure in AI experiences
-- Design effective feedback loops for learning systems
-- Create UX patterns for recommendations, ranking, and predictions
+- **UX challenges unique to AI-powered features Understanding**: Understand UX challenges unique to AI-powered features
+- **experiences that communicate uncertainty and confidence Development**: Design experiences that communicate uncertainty and confidence
+- **Apply Progressive**: Apply progressive disclosure in AI experiences
+- **effective feedback loops for learning Development**: Design effective feedback loops for learning systems
+- **UX patterns for recommendations, ranking, and predictions Development**: Create UX patterns for recommendations, ranking, and predictions
 
 ---
 
@@ -667,20 +667,20 @@ Design complete user flows for an AI-powered feature (recommendations, smart def
 
 **Key Takeaways:**
 
-1. **Unique Challenges:** AI features require special UX considerations around uncertainty, explainability, errors, control, and trust.
+- **Unique Challenges:**: AI features require special UX considerations around uncertainty, explainability, errors, control, and trust
 
-2. **Confidence Communication:** Use multiple signals (visual + text) to communicate uncertainty clearly and actionably.
+- **Confidence Communication:**: Use multiple signals (visual + text) to communicate uncertainty clearly and actionably
 
-3. **Progressive Disclosure:** Reveal information gradually to reduce cognitive load while providing access to details when needed.
+- **Progressive Disclosure:**: Reveal information gradually to reduce cognitive load while providing access to details when needed
 
-4. **Feedback Loops:** Design easy, contextual feedback mechanisms that close the loop and show impact.
+- **Feedback Loops:**: Design easy, contextual feedback mechanisms that close the loop and show impact
 
-5. **Pattern Library:** Use established patterns for recommendations, ranking, and predictions, adapted to your context.
+- **Pattern Library:**: Use established patterns for recommendations, ranking, and predictions, adapted to your context
 
 **Next Steps:**
-- Module 3: Learn how to design decisioning and personalization systems
-- Understand architectures for turning intelligence into action
-- Design systems that safely adapt experiences to users
+- **Module 3:**: Module 3: Learn how to design decisioning and personalization systems
+- **architectures for turning intelligence into action Understanding**: Understand architectures for turning intelligence into action
+- **systems that safely adapt experiences to users Development**: Design systems that safely adapt experiences to users
 
 ---
 

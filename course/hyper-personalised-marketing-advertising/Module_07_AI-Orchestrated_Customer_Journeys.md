@@ -10,11 +10,11 @@ description: Personalised customer journey design and real-time decision engines
 
 By the end of this module, you will be able to:
 
-- Design personalized customer journeys using AI
-- Understand real-time decision engines and next-best-action systems
-- Implement personalization for websites, apps, and e-commerce platforms
-- Leverage conversational AI and chat-based marketing
-- Map customer journeys with AI decision logic
+- **personalized customer journeys using AI Development**: Design personalized customer journeys using AI
+- **real-time decision engines and next-best-action systems Understanding**: Understand real-time decision engines and next-best-action systems
+- **personalization for websites, apps, and e-commerce platforms Implementation**: Implement personalization for websites, apps, and e-commerce platforms
+- **Leverage Conversational**: Leverage conversational AI and chat-based marketing
+- **Map Customer**: Map customer journeys with AI decision logic
 
 ## Introduction
 
@@ -508,12 +508,12 @@ Submit a journey map and decision logic document including:
 
 ## Key Takeaways
 
-- AI-orchestrated journeys are dynamic, personalized, and adaptive rather than linear and static
-- Real-time decision engines use AI to determine the optimal action for each customer at each moment
-- Next-best-action systems predict and recommend the single best action to take right now
-- Website, app, and e-commerce personalization create seamless, relevant experiences
-- Conversational AI enables personalized, context-aware interactions at scale
-- Successful journey orchestration requires integration of data, AI, decision logic, and execution systems
+- **Ai-Orchestrated Journeys**: AI-orchestrated journeys are dynamic, personalized, and adaptive rather than linear and static
+- **Real-Time Decision**: Real-time decision engines use AI to determine the optimal action for each customer at each moment
+- **Next-Best-Action Systems**: Next-best-action systems predict and recommend the single best action to take right now
+- **Website, App,**: Website, app, and e-commerce personalization create seamless, relevant experiences
+- **Conversational Ai**: Conversational AI enables personalized, context-aware interactions at scale
+- **Successful Journey**: Successful journey orchestration requires integration of data, AI, decision logic, and execution systems
 
 ## Additional Resources
 

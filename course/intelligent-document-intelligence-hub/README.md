@@ -19,13 +19,13 @@ order: 0
 
 By completing this course, you will be able to:
 
-- Design and evaluate AI-powered document intelligence systems for financial documents
-- Extract complex risk signals from 300+ page prospectuses using AI
-- Build "golden source" data systems with confidence scoring and validation
-- Generate narrative intelligence and market insights from unstructured text
-- Detect trends across document universes for portfolio-level analysis
-- Ensure explainability, auditability, and regulatory compliance
-- Deploy enterprise-scale document intelligence systems in production
+- **and evaluate AI-powered document intelligence Development**: Design and evaluate AI-powered document intelligence systems for financial documents
+- **Extract Complex**: Extract complex risk signals from 300+ page prospectuses using AI
+- **"golden source" data Development**: Build "golden source" data systems with confidence scoring and validation
+- **Generate Narrative**: Generate narrative intelligence and market insights from unstructured text
+- **Detect Trends**: Detect trends across document universes for portfolio-level analysis
+- **Ensure Explainability,**: Ensure explainability, auditability, and regulatory compliance
+- **enterprise-scale document intelligence Implementation**: Deploy enterprise-scale document intelligence systems in production
 
 ---
 

@@ -9,10 +9,10 @@ order: 5
 
 **Duration:** Week 5  
 **Learning Objectives:**
-- Understand RL fundamentals for trading
-- Implement Q-learning and policy gradient methods
-- Build multi-agent trading systems
-- Design risk-aware RL strategies
+- **RL fundamentals for trading Understanding**: Understand RL fundamentals for trading
+- **Q-learning and policy gradient methods Implementation**: Implement Q-learning and policy gradient methods
+- **multi-agent trading Development**: Build multi-agent trading systems
+- **risk-aware RL strategies Development**: Design risk-aware RL strategies
 
 ---
 

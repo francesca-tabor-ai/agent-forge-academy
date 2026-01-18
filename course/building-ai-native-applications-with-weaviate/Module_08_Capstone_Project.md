@@ -9,11 +9,11 @@ order: 8
 
 **Duration:** Week 8  
 **Learning Objectives:**
-- Apply all course concepts in a real project
-- Build a complete AI-native application
-- Design and implement production-ready system
-- Document architecture and decisions
-- Present technical solution
+- **Apply All**: Apply all course concepts in a real project
+- **a complete AI-native application Development**: Build a complete AI-native application
+- **and implement production-ready Development**: Design and implement production-ready system
+- **Document Architecture**: Document architecture and decisions
+- **Present Technical**: Apply present technical solution in relevant contexts
 
 ---
 
@@ -676,10 +676,10 @@ User → Chat UI → RAG Service → Weaviate → LLM → Response
 - Complete AI-native application
 
 **Next Steps:**
-- Continue building projects
-- Contribute to open source
-- Share your knowledge
-- Keep learning and growing
+- **Continue Building**: Apply continue building projects in relevant contexts
+- **Contribute To**: Contribute to open source
+- **Share Your**: Apply share your knowledge in relevant contexts
+- **Keep Learning**: Keep learning and growing
 
 ---
 

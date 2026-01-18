@@ -11,12 +11,12 @@ order: 1
 **Theme:** *Understanding where growth actually comes from*
 
 **Learning Objectives:**
-- Understand the full growth loop: acquisition, activation, retention, monetization
-- Differentiate between funnel vs lifecycle thinking
-- Identify leading vs lagging growth indicators
-- Diagnose funnel conversion issues and drop-off points
-- Recognize common growth analytics anti-patterns
-- Build funnel diagnostic capabilities
+- **The Full**: Understand the full growth loop: acquisition, activation, retention, monetization
+- **between funnel Analysis**: Differentiate between funnel vs lifecycle thinking
+- **Identify Leading**: Identify leading vs lagging growth indicators
+- **Diagnose Funnel**: Diagnose funnel conversion issues and drop-off points
+- **Recognize Common**: Recognize common growth analytics anti-patterns
+- **funnel diagnostic capabilities Development**: Build funnel diagnostic capabilities
 
 ---
 
@@ -674,16 +674,16 @@ A funnel diagnostic identifying:
 
 **Key Takeaways:**
 
-1. **Growth is a System:** Acquisition → Activation → Retention → Monetization
-2. **Use Both Frameworks:** Funnel thinking for conversion, lifecycle thinking for value
-3. **Leading Indicators Matter:** Build early warning systems, not just reporting
-4. **Diagnose Systematically:** Map funnels, calculate impact, segment analysis
-5. **Avoid Anti-Patterns:** Focus on outcomes, segment properly, establish causation
+- **Growth is a System:**: Acquisition → Activation → Retention → Monetization
+- **Use Both Frameworks:**: Funnel thinking for conversion, lifecycle thinking for value
+- **Leading Indicators Matter:**: Build early warning systems, not just reporting
+- **Diagnose Systematically:**: Map funnels, calculate impact, segment analysis
+- **Avoid Anti-Patterns:**: Focus on outcomes, segment properly, establish causation
 
 **Next Steps:**
-- Module 2: Learn cohort analysis and retention modeling
-- Understand how growth compounds over time
-- Build predictive retention models
+- **Module 2:**: Module 2: Learn cohort analysis and retention modeling
+- **how growth compounds over time Understanding**: Understand how growth compounds over time
+- **predictive retention models Development**: Build predictive retention models
 
 ---
 

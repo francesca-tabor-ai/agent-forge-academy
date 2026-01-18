@@ -18,16 +18,16 @@ This comprehensive course covers the full spectrum of AI-powered recommender sys
 
 By the end of this course, you will be able to:
 
-1. **Solve the Cold Start Problem** - Handle new users, new items, and new systems
-2. **Implement Collaborative Filtering** - Build user-based and item-based recommenders
-3. **Master Matrix Factorization** - Decompose interaction matrices to find latent factors
-4. **Build Neural Recommenders** - Create non-linear models using MLPs and NeuMF
-5. **Handle Temporal Dynamics** - Capture evolving preferences with RNNs and session-based models
-6. **Design Hybrid Systems** - Combine multiple approaches for robust recommendations
-7. **Integrate Multi-Modal Features** - Use images, text, and audio to enhance recommendations
-8. **Explain Recommendations** - Implement attention mechanisms and explainable AI
-9. **Evaluate Systems** - Measure performance with appropriate metrics
-10. **Ensure Ethics & Fairness** - Detect bias, implement privacy-preserving techniques, audit for fairness
+- **Solve the Cold Start Problem**: Handle new users, new items, and new systems
+- **Implement Collaborative Filtering**: Build user-based and item-based recommenders
+- **Master Matrix Factorization**: Decompose interaction matrices to find latent factors
+- **Build Neural Recommenders**: Create non-linear models using MLPs and NeuMF
+- **Handle Temporal Dynamics**: Capture evolving preferences with RNNs and session-based models
+- **Design Hybrid Systems**: Combine multiple approaches for robust recommendations
+- **Integrate Multi-Modal Features**: Use images, text, and audio to enhance recommendations
+- **Explain Recommendations**: Implement attention mechanisms and explainable AI
+- **Evaluate Systems**: Measure performance with appropriate metrics
+- **Ensure Ethics & Fairness**: Detect bias, implement privacy-preserving techniques, audit for fairness
 
 ---
 

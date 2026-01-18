@@ -9,10 +9,10 @@ order: 8
 
 **Duration:** Week 8  
 **Learning Objectives:**
-- Deploy models to production
-- Implement real-time scoring
-- Set up monitoring and validation
-- Ensure system reliability
+- **models to production Implementation**: Deploy models to production
+- **real-time scoring Implementation**: Implement real-time scoring
+- **monitoring and validation Implementation**: Set up monitoring and validation
+- **Ensure System**: Apply ensure system reliability in relevant contexts
 
 ---
 

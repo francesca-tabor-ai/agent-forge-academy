@@ -9,10 +9,10 @@ order: 1
 
 **Duration:** Week 1  
 **Learning Objectives:**
-- Understand the shift from traditional search to AI platforms
-- Learn why Reddit content is prioritized in LLM training data
-- Master General Entity Optimization (GEO) concepts
-- Map the AI Shopping Visibility Funnel
+- **the shift from traditional search to AI platforms Understanding**: Understand the shift from traditional search to AI platforms
+- **why Reddit content is prioritized in LLM training data Understanding**: Learn why Reddit content is prioritized in LLM training data
+- **General Entity Optimization Understanding**: Master General Entity Optimization (GEO) concepts
+- **Map The**: Map the AI Shopping Visibility Funnel
 
 ---
 

@@ -9,11 +9,11 @@ order: 2
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Understand the limitations of "vibe coding"
-- Learn to create machine-parsable Product Requirements Documents (PRDs)
-- Master algorithmic verification using given/when/then structures
-- Implement OpenSpec and Spec-Kit toolkits
-- Align humans and AI before implementation begins
+- **the limitations of "vibe coding" Understanding**: Understand the limitations of "vibe coding"
+- **to create machine-parsable Product Requirements Documents Understanding**: Learn to create machine-parsable Product Requirements Documents (PRDs)
+- **algorithmic verification using given/when/then structures Understanding**: Master algorithmic verification using given/when/then structures
+- **OpenSpec and Spec-Kit toolkits Implementation**: Implement OpenSpec and Spec-Kit toolkits
+- **Align Humans**: Align humans and AI before implementation begins
 
 ---
 

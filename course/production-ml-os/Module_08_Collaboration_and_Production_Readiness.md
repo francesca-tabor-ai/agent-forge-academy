@@ -14,10 +14,10 @@ email_action: "Conduct a production readiness review for an ML system with check
 
 **Duration:** Week 8  
 **Learning Objectives:**
-- Work effectively with cross-functional teams
-- Define ownership and SLAs
-- Conduct production readiness reviews
-- Manage costs and optimize resources
+- **Work Effectively**: Work effectively with cross-functional teams
+- **Define Ownership**: Define ownership and SLAs
+- **Conduct Production**: Conduct production readiness reviews
+- **Manage Costs**: Manage costs and optimize resources
 
 ---
 
@@ -514,16 +514,16 @@ def track_prediction_cost(prediction_request):
 
 ### Key Takeaways
 
-1. **Collaboration is essential** - ML requires cross-functional teamwork
-2. **Ownership must be clear** - RACI matrix defines responsibilities
-3. **SLAs set expectations** - SLOs and error budgets guide decisions
-4. **Readiness reviews prevent issues** - Checklist ensures quality
+- **Collaboration is essential**: ML requires cross-functional teamwork
+- **Ownership must be clear**: RACI matrix defines responsibilities
+- **SLAs set expectations**: SLOs and error budgets guide decisions
+- **Readiness reviews prevent issues**: Checklist ensures quality
 
 ### Next Steps
 
-- Complete the production readiness review exercise
-- Review collaboration best practices
-- Move to Capstone Project to build end-to-end system
+- **Complete The**: Complete the production readiness review exercise
+- **Review Collaboration**: Review collaboration best practices
+- **Move To**: Move to Capstone Project to build end-to-end system
 
 ---
 

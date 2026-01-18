@@ -9,10 +9,10 @@ order: 7
 
 **Duration:** Week 7  
 **Learning Objectives:**
-- Explain forecasts to advisors and clients
-- Manage model drift and data decay
-- Detect bias in alternative data
-- Implement audit trails and supervisory review
+- **Explain Forecasts**: Explain forecasts to advisors and clients
+- **Manage Model**: Manage model drift and data decay
+- **Detect Bias**: Detect bias in alternative data
+- **audit trails and supervisory review Implementation**: Implement audit trails and supervisory review
 
 ---
 
@@ -158,10 +158,10 @@ Design a comprehensive explainability framework for predictive insights.
 
 ## Key Takeaways
 
-- Explainability builds trust and enables adoption
-- Model drift and data decay require continuous monitoring
-- Bias detection and mitigation ensure fairness
-- Audit trails support regulatory compliance and accountability
+- **Explainability Builds**: Explainability builds trust and enables adoption
+- **Model Drift**: Model drift and data decay require continuous monitoring
+- **Bias Detection**: Bias detection and mitigation ensure fairness
+- **Audit Trails**: Audit trails support regulatory compliance and accountability
 
 ---
 

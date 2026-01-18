@@ -11,11 +11,11 @@ email_action: "Design a simple self-healing mechanism—write a 3-step plan for 
 
 **Duration:** Weeks 10-11  
 **Learning Objectives:**
-- Implement agent safety and alignment
-- Build multi-modal agents
-- Manage long-running sessions
-- Design human-agent collaboration
-- Deploy to edge environments
+- **agent safety and alignment Implementation**: Implement agent safety and alignment
+- **multi-modal agents Development**: Build multi-modal agents
+- **Manage Long-Running**: Apply manage long-running sessions in relevant contexts
+- **human-agent collaboration Development**: Apply design human-agent collaboration in relevant contexts
+- **to edge environments Implementation**: Deploy to edge environments
 
 ## Topics Covered:
 

@@ -11,10 +11,10 @@ email_action: "Update your LinkedIn profile—add 'Multi-Agent Systems' to your 
 
 **Duration:** Week 12  
 **Learning Objectives:**
-- Understand 2025 multi-agent landscape
-- Learn emerging standards and protocols
-- Navigate regulatory requirements
-- Explore career paths
+- **2025 multi-agent landscape Understanding**: Understand 2025 multi-agent landscape
+- **emerging standards and protocols Understanding**: Learn emerging standards and protocols
+- **Navigate Regulatory**: Apply navigate regulatory requirements in relevant contexts
+- **Explore Career**: Apply explore career paths in relevant contexts
 
 ## Topics Covered:
 

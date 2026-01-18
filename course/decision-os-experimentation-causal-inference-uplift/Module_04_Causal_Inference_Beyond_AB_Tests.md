@@ -13,12 +13,12 @@ email_action: "Apply Difference-in-Differences or matching to a real policy or f
 **Theme:** *When you can't randomize*
 
 **Learning Objectives:**
-- Understand why real-world experiments break
-- Master Difference-in-Differences (DiD) methodology
-- Learn synthetic control methods
-- Apply matching and reweighting techniques
-- Recognize assumptions and failure modes
-- Choose the least wrong method for each situation
+- **why real-world experiments break Understanding**: Understand why real-world experiments break
+- **Difference-in-Differences Understanding**: Master Difference-in-Differences (DiD) methodology
+- **synthetic control methods Understanding**: Learn synthetic control methods
+- **Apply Matching**: Apply matching and reweighting techniques
+- **Recognize Assumptions**: Recognize assumptions and failure modes
+- **Choose The**: Choose the least wrong method for each situation
 
 ---
 

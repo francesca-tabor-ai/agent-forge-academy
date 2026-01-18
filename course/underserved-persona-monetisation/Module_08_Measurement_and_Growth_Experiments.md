@@ -10,12 +10,12 @@ order: 8
 **Duration:** Week 8  
 **Theme:** Proving Persona Monetisation Works  
 **Learning Objectives:**
-- Measure persona-level impact credibly
-- Run experiments that inform product strategy
-- Understand persona-level conversion and retention
-- Calculate revenue attribution by persona
-- Identify product–market fit signals
-- Establish kill criteria for underperforming personas
+- **Measure Persona-Level**: Measure persona-level impact credibly
+- **Run Experiments**: Run experiments that inform product strategy
+- **persona-level conversion and retention Understanding**: Understand persona-level conversion and retention
+- **Calculate Revenue**: Calculate revenue attribution by persona
+- **Identify Product–Market**: Identify product–market fit signals
+- **Establish Kill**: Establish kill criteria for underperforming personas
 
 ---
 
@@ -660,20 +660,20 @@ Persona Performance Dashboard:
 
 **Key Takeaways:**
 
-1. **Persona-Level Metrics:** Measuring conversion and retention by persona shows which personas are profitable and enables persona-specific optimization.
+- **Persona-Level Metrics:**: Measuring conversion and retention by persona shows which personas are profitable and enables persona-specific optimization
 
-2. **Revenue Attribution:** Attributing revenue to personas enables persona-level ROI calculation and helps prioritize persona investments.
+- **Revenue Attribution:**: Attributing revenue to personas enables persona-level ROI calculation and helps prioritize persona investments
 
-3. **Product–Market Fit:** Measuring product–market fit by persona helps identify high-fit personas and optimize for fit improvement.
+- **Product–Market Fit:**: Measuring product–market fit by persona helps identify high-fit personas and optimize for fit improvement
 
-4. **Kill Criteria:** Establishing clear kill criteria for underperforming personas helps focus resources on high-value personas and improve overall ROI.
+- **Kill Criteria:**: Establishing clear kill criteria for underperforming personas helps focus resources on high-value personas and improve overall ROI
 
-5. **Performance Dashboard:** Creating a comprehensive persona performance dashboard enables data-driven decision-making and continuous optimization.
+- **Performance Dashboard:**: Creating a comprehensive persona performance dashboard enables data-driven decision-making and continuous optimization
 
 **Next Steps:**
-- Module 9: Learn to institutionalise persona monetisation
-- Understand how to make this a repeatable growth engine
-- Build skills in operating model and scale
+- **Module 9:**: Module 9: Learn to institutionalise persona monetisation
+- **how to make this a repeatable growth engine Understanding**: Understand how to make this a repeatable growth engine
+- **skills in operating model and scale Development**: Build skills in operating model and scale
 
 ---
 

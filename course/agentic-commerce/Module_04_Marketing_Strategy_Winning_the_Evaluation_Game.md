@@ -9,10 +9,10 @@ order: 4
 
 **Duration:** Week 4  
 **Learning Objectives:**
-- Understand Retrieval-Share of Voice (RSOV)
-- Implement Answer Engine Optimization (AEO)
-- Structure data for AI agent consumption
-- Become "agent-preferred" in your category
+- **Retrieval-Share of Voice Understanding**: Understand Retrieval-Share of Voice (RSOV)
+- **Answer Engine Optimization (AEO) Implementation**: Implement Answer Engine Optimization (AEO)
+- **Structure Data**: Structure data for AI agent consumption
+- **Become "Agent-Preferred"**: Become "agent-preferred" in your category
 
 ---
 
@@ -536,12 +536,12 @@ Optimize your product data structure for AI agent consumption and measure RSOV i
 
 ## Key Takeaways
 
-1. **RSOV:** Critical metric for agent-mediated visibility
-2. **Brand Omission:** Major risk if not addressed
-3. **Machine-Readable Data:** Foundation of AEO
-4. **Schema.org:** Essential for agent parsing
-5. **Agent-Preferred:** Requires comprehensive strategy
-6. **Continuous Optimization:** Ongoing process
+- **RSOV:**: Critical metric for agent-mediated visibility
+- **Brand Omission:**: Major risk if not addressed
+- **Machine-Readable Data:**: Foundation of AEO
+- **Schema.org:**: Essential for agent parsing
+- **Agent-Preferred:**: Requires comprehensive strategy
+- **Continuous Optimization:**: Ongoing process
 
 ---
 

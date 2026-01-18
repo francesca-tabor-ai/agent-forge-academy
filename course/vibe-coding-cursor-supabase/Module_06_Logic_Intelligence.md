@@ -11,11 +11,11 @@ email_action: "Create a simple Supabase Edge Function—deploy a 'hello world' f
 
 **Duration:** Week 6  
 **Learning Objectives:**
-- Build Supabase Edge Functions with Deno
-- Implement event-driven architectures
-- Create "Backend Primitives" for side effects
-- Enable realtime-first user interfaces
-- Integrate AI models (OpenAI) securely
+- **Supabase Edge Functions with Deno Development**: Build Supabase Edge Functions with Deno
+- **event-driven architectures Implementation**: Implement event-driven architectures
+- **"Backend Primitives" for side effects Development**: Create "Backend Primitives" for side effects
+- **Enable Realtime-First**: Enable realtime-first user interfaces
+- **AI models (OpenAI) securely Integration**: Integrate AI models (OpenAI) securely
 
 ---
 

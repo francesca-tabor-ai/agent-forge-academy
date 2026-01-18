@@ -10,11 +10,11 @@ order: 4
 **Duration:** Week 4  
 **Theme:** Turning strategy into execution  
 **Learning Objectives:**
-- Build KPI trees and value decomposition
-- Align metrics across product, data, and business
-- Design OKRs for data and AI teams
-- Avoid metric theater
-- Link delivery to financial outcomes
+- **KPI trees and value decomposition Development**: Build KPI trees and value decomposition
+- **Align Metrics**: Align metrics across product, data, and business
+- **OKRs for data and AI teams Development**: Design OKRs for data and AI teams
+- **Avoid Metric**: Apply avoid metric theater in relevant contexts
+- **delivery Integration**: Link delivery to financial outcomes
 
 ---
 
@@ -507,20 +507,20 @@ Build a KPI tree and OKRs for a strategic data & AI initiative (your own or a pr
 
 **Key Takeaways:**
 
-1. **KPI Trees:** Decompose business outcomes into drivers and metrics. Connect data & AI work to business outcomes through the tree.
+- **KPI Trees:**: Decompose business outcomes into drivers and metrics. Connect data & AI work to business outcomes through the tree
 
-2. **Metric Alignment:** Align metrics across business, product, and data layers. Ensure teams optimize for shared outcomes.
+- **Metric Alignment:**: Align metrics across business, product, and data layers. Ensure teams optimize for shared outcomes
 
-3. **OKRs:** Use OKRs to turn strategy into execution. Write inspirational objectives and measurable key results. Align across levels.
+- **OKRs:**: Use OKRs to turn strategy into execution. Write inspirational objectives and measurable key results. Align across levels
 
-4. **Avoid Metric Theater:** Connect metrics to business outcomes. Measure what matters, not what's easy. Validate with data.
+- **Avoid Metric Theater:**: Connect metrics to business outcomes. Measure what matters, not what's easy. Validate with data
 
-5. **Financial Linkage:** Explicitly link delivery to financial outcomes. Quantify impact, track progress, validate results.
+- **Financial Linkage:**: Explicitly link delivery to financial outcomes. Quantify impact, track progress, validate results
 
 **Next Steps:**
-- Module 5: Learn how to prioritize a portfolio of data & AI initiatives
-- Balance innovation and reliability
-- Make investment decisions
+- **Module 5:**: Module 5: Learn how to prioritize a portfolio of data & AI initiatives
+- **Balance Innovation**: Balance innovation and reliability
+- **Make Investment**: Apply make investment decisions in relevant contexts
 
 ---
 

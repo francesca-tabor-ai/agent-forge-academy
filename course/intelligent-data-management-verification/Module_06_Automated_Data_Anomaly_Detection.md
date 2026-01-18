@@ -9,10 +9,10 @@ order: 6
 
 **Duration:** Week 6  
 **Learning Objectives:**
-- Implement pattern learning across global fund data feeds
-- Detect outliers, inconsistencies, and definition drift
-- Design suggested corrections vs. hard rejections
-- Learn from historical data errors
+- **pattern learning across global fund data feeds Implementation**: Implement pattern learning across global fund data feeds
+- **Detect Outliers,**: Detect outliers, inconsistencies, and definition drift
+- **suggested corrections vs. hard rejections Development**: Design suggested corrections vs. hard rejections
+- **from historical data errors Understanding**: Learn from historical data errors
 
 ---
 
@@ -265,10 +265,10 @@ Establish appropriate anomaly detection thresholds for critical fund data attrib
 
 ## Key Takeaways
 
-- Pattern learning across global feeds enables comprehensive anomaly detection
-- Detecting outliers, inconsistencies, and drift requires multiple detection methods
-- Suggested corrections provide value while hard rejections ensure data integrity
-- Learning from historical errors continuously improves detection accuracy
+- **Pattern Learning**: Pattern learning across global feeds enables comprehensive anomaly detection
+- **Detecting Outliers,**: Detecting outliers, inconsistencies, and drift requires multiple detection methods
+- **Suggested Corrections**: Suggested corrections provide value while hard rejections ensure data integrity
+- **Learning From**: Learning from historical errors continuously improves detection accuracy
 
 ---
 

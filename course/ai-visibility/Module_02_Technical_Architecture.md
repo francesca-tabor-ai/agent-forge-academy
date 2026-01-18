@@ -9,10 +9,10 @@ order: 2
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Implement the llms.txt standard for AI bot guidance
-- Use structured data (JSON-LD, Schema.org) as ground truth to prevent hallucinations
-- Configure robots.txt and SSR for optimal AI crawler handshakes
-- Understand the difference between training crawlers and live retrieval bots
+- **the llms.txt standard for AI bot guidance Implementation**: Implement the llms.txt standard for AI bot guidance
+- **Use Structured**: Use structured data (JSON-LD, Schema.org) as ground truth to prevent hallucinations
+- **Configure Robots.Txt**: Configure robots.txt and SSR for optimal AI crawler handshakes
+- **the difference between training crawlers and live retrieval bots Understanding**: Understand the difference between training crawlers and live retrieval bots
 
 ---
 

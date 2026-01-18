@@ -13,12 +13,12 @@ email_action: "Write a rollout memo based on experiment results, communicating u
 **Theme:** *Closing the loop*
 
 **Learning Objectives:**
-- Translate experiment results into clear decisions
-- Apply rollout, iterate, or kill frameworks
-- Communicate uncertainty to executives effectively
-- Align Product, Data, and Leadership teams
-- Build institutional learning from experiments
-- Create executive-ready decision recommendations
+- **Translate Experiment**: Translate experiment results into clear decisions
+- **Apply Rollout,**: Apply rollout, iterate, or kill frameworks
+- **Communicate Uncertainty**: Communicate uncertainty to executives effectively
+- **Align Product,**: Align Product, Data, and Leadership teams
+- **institutional learning from experiments Development**: Build institutional learning from experiments
+- **executive-ready decision recommendations Development**: Create executive-ready decision recommendations
 
 ---
 

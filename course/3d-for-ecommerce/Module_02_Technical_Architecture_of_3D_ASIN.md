@@ -9,11 +9,11 @@ order: 2
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Set up MERN stack foundation for 3D commerce platform
-- Implement 3D rendering with Three.js and React Three Fiber
-- Configure server-side batch rendering with Blender
-- Deploy cloud infrastructure on AWS (EC2, Lambda, S3)
-- Build microservices architecture for scalability
+- **MERN stack foundation for 3D commerce platform Implementation**: Set up MERN stack foundation for 3D commerce platform
+- **3D rendering with Three.js and React Three Fiber Implementation**: Implement 3D rendering with Three.js and React Three Fiber
+- **Configure Server-Side**: Configure server-side batch rendering with Blender
+- **cloud infrastructure on AWS (EC2, Lambda, S3) Implementation**: Deploy cloud infrastructure on AWS (EC2, Lambda, S3)
+- **microservices architecture for scalability Development**: Build microservices architecture for scalability
 
 ---
 
@@ -732,10 +732,10 @@ Create a functional 3D product viewer using React Three Fiber.
 
 ## Next Steps
 
-- Complete Lab 2: Build 3D Viewer
-- Review Module 3: 3D Standards and Optimization
-- Set up AWS account and services
-- Prepare sample 3D models for testing
+- **Complete Lab**: Complete Lab 2: Build 3D Viewer
+- **Review Module**: Review Module 3: 3D Standards and Optimization
+- **AWS account and services Implementation**: Set up AWS account and services
+- **Prepare Sample**: Prepare sample 3D models for testing
 
 ---
 

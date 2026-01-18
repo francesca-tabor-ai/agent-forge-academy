@@ -9,11 +9,11 @@ order: 5
 
 **Duration:** Week 5  
 **Learning Objectives:**
-- Understand Weaviate's module system
-- Integrate text, image, and multimodal modules
-- Connect OpenAI, Cohere, and Hugging Face
-- Build custom embedding pipelines
-- Store and query multimodal data
+- **Weaviate's module system Understanding**: Understand Weaviate's module system
+- **text, image, Integration**: Integrate text, image, and multimodal modules
+- **OpenAI, Cohere, Integration**: Connect OpenAI, Cohere, and Hugging Face
+- **custom embedding Development**: Build custom embedding pipelines
+- **Store And**: Store and query multimodal data
 
 ---
 
@@ -833,16 +833,16 @@ for model, metrics in benchmark_results.items():
 ## Summary
 
 **Key Takeaways:**
-- Weaviate modules provide easy integration with embedding services
-- Custom embeddings offer flexibility and control
-- Multimodal data enables cross-modal search
-- Different models have different trade-offs
-- Choose based on use case, cost, and performance
+- **Weaviate Modules**: Weaviate modules provide easy integration with embedding services
+- **Custom Embeddings**: Custom embeddings offer flexibility and control
+- **Multimodal Data**: Multimodal data enables cross-modal search
+- **Different Models**: Different models have different trade-offs
+- **Choose Based**: Choose based on use case, cost, and performance
 
 **What's Next:**
-- Module 6: Build RAG applications
-- Combine retrieval with LLM generation
-- Implement context chunking strategies
+- **Module 6:**: Module 6: Build RAG applications
+- **Combine Retrieval**: Combine retrieval with LLM generation
+- **context chunking strategies Implementation**: Implement context chunking strategies
 
 ---
 

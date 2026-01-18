@@ -9,10 +9,10 @@ order: 7
 
 **Duration:** Week 7  
 **Learning Objectives:**
-- Implement source attribution ("show me where this came from")
-- Handle uncertainty and conflicting disclosures
-- Design human-in-the-loop review workflows
-- Meet regulatory expectations for AI-assisted due diligence
+- **source attribution ("show me where this came from") Implementation**: Implement source attribution ("show me where this came from")
+- **Handle Uncertainty**: Handle uncertainty and conflicting disclosures
+- **human-in-the-loop review Development**: Design human-in-the-loop review workflows
+- **Meet Regulatory**: Meet regulatory expectations for AI-assisted due diligence
 
 ---
 
@@ -268,11 +268,11 @@ stated limits. Consider flagging for compliance review.
 
 ## Key Takeaways
 
-- Source attribution is essential for regulatory compliance and trust
-- Uncertainty and conflicts require systematic handling
-- Human-in-the-loop workflows ensure quality and compliance
-- Regulatory expectations demand comprehensive documentation
-- Explainable reports build trust and enable action
+- **Source Attribution**: Source attribution is essential for regulatory compliance and trust
+- **Uncertainty And**: Uncertainty and conflicts require systematic handling
+- **Human-In-The-Loop Workflows**: Human-in-the-loop workflows ensure quality and compliance
+- **Regulatory Expectations**: Regulatory expectations demand comprehensive documentation
+- **Explainable Reports**: Explainable reports build trust and enable action
 
 ---
 

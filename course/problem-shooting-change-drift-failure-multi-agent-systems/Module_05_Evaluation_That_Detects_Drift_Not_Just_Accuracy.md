@@ -11,11 +11,11 @@ email_action: "Review your current evals—do they test reasoning quality or jus
 
 **Duration:** Week 5  
 **Learning Objectives:**
-- Understand outcome vs process vs trajectory evaluation
-- Learn partial credit and degradation curves
-- Implement regression testing for planning quality
-- Build eval sets that evolve with the system
-- Write evals that catch subtle reasoning regressions
+- **outcome vs process vs trajectory evaluation Understanding**: Understand outcome vs process vs trajectory evaluation
+- **partial credit and degradation curves Understanding**: Learn partial credit and degradation curves
+- **regression testing for planning quality Implementation**: Implement regression testing for planning quality
+- **eval sets that evolve with the Development**: Build eval sets that evolve with the system
+- **Write Evals**: Write evals that catch subtle reasoning regressions
 
 ---
 

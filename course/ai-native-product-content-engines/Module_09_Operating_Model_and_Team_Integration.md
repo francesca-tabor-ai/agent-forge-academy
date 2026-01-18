@@ -11,12 +11,12 @@ order: 9
 
 **Duration:** Weeks 9-10  
 **Learning Objectives:**
-- Operationalise AI-native product content across teams
-- Avoid silos between content, product, and commerce
-- Work effectively with e-commerce and marketplaces
-- Partner with product management
-- Direct creative and video teams with AI-first briefs
-- Govern agencies and external vendors
+- **Operationalise Ai-Native**: Operationalise AI-native product content across teams
+- **Avoid Silos**: Avoid silos between content, product, and commerce
+- **Work Effectively**: Work effectively with e-commerce and marketplaces
+- **Partner With**: Partner with product management
+- **Direct Creative**: Direct creative and video teams with AI-first briefs
+- **Govern Agencies**: Govern agencies and external vendors
 
 ---
 
@@ -474,16 +474,16 @@ In this module, you've learned:
 - **Operating Model:** Structure for AI-native content success
 
 **Key Takeaways:**
-- Break down silos between teams
-- Establish shared understanding of AI needs
-- Create AI-first processes and workflows
-- Build measurement and governance
-- Plan phased rollout
+- **Break Down**: Break down silos between teams
+- **Establish Shared**: Establish shared understanding of AI needs
+- **AI-first processes and Development**: Create AI-first processes and workflows
+- **measurement and governance Development**: Build measurement and governance
+- **Plan Phased**: Apply plan phased rollout in relevant contexts
 
 **Capstone Project:**
-- Create comprehensive AI-Native Product Content Engine Plan
-- Include standards, tooling, KPIs, workflows, roadmap
-- Prepare for organizational implementation
+- **comprehensive AI-Native Product Content Engine Plan Development**: Create comprehensive AI-Native Product Content Engine Plan
+- **Include Standards,**: Include standards, tooling, KPIs, workflows, roadmap
+- **Prepare For**: Prepare for organizational implementation
 
 ---
 
@@ -499,10 +499,10 @@ You now have the knowledge and tools to:
 - Lead AI-native commerce transformation
 
 **Next Steps:**
-- Complete your Capstone Project
-- Begin implementing your AI-Native Product Content Engine
-- Continue learning and iterating
-- Share your success with the community
+- **Complete Your**: Complete your Capstone Project
+- **Begin Implementing**: Begin implementing your AI-Native Product Content Engine
+- **Continue Learning**: Continue learning and iterating
+- **Share Your**: Share your success with the community
 
 **Thank you for your commitment to transforming product content for AI-native commerce! 🚀**
 

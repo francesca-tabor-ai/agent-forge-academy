@@ -19,16 +19,16 @@ order: 0
 
 By completing this course, you will be able to:
 
-- Design, build, operate, and defend agentic and voice-based AI systems that are safe, auditable, and trusted in real hospital environments
-- Engineer systems that respect clinical workflows and safety-critical constraints
-- Build agents with bounded autonomy and explicit escalation paths
-- Design resilient voice pipelines for clinical and patient use cases
-- Conduct failure mode analysis and implement safe degradation strategies
-- Build systems that are compliant by construction (HIPAA, GDPR, clinical governance)
-- Architect safe LLM systems with proper RAG, model selection, and tool sandboxing
-- Implement comprehensive observability and incident response for AI systems
-- Plan safe deployments in hospital environments with proper change management
-- Defend your system design to regulators, clinicians, and legal teams
+- **Design, Build,**: Design, build, operate, and defend agentic and voice-based AI systems that are safe, auditable, and trusted in real hospital environments
+- **Engineer Systems**: Engineer systems that respect clinical workflows and safety-critical constraints
+- **agents with bounded autonomy and explicit escalation paths Development**: Build agents with bounded autonomy and explicit escalation paths
+- **resilient voice Development**: Design resilient voice pipelines for clinical and patient use cases
+- **Conduct Failure**: Conduct failure mode analysis and implement safe degradation strategies
+- **systems that are compliant by construction (HIPAA, GDPR, clinical governance) Development**: Build systems that are compliant by construction (HIPAA, GDPR, clinical governance)
+- **Architect Safe**: Architect safe LLM systems with proper RAG, model selection, and tool sandboxing
+- **comprehensive observability and incident response for AI Implementation**: Implement comprehensive observability and incident response for AI systems
+- **Plan Safe**: Plan safe deployments in hospital environments with proper change management
+- **Defend Your**: Defend your system design to regulators, clinicians, and legal teams
 
 ---
 

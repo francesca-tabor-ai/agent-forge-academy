@@ -11,10 +11,10 @@ order: 2
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Map how AI-originated discovery influences decisions upstream
-- Define what "AI-assisted" really means
-- Understand AI as advisor, comparator, and validator
-- Build an AI Discovery Contribution Model
+- **Map How**: Map how AI-originated discovery influences decisions upstream
+- **Define What**: Define what "AI-assisted" really means
+- **AI as advisor, comparator, and validator Understanding**: Understand AI as advisor, comparator, and validator
+- **an AI Discovery Contribution Model Development**: Build an AI Discovery Contribution Model
 
 ---
 
@@ -568,12 +568,12 @@ Choose a use case:
 
 ## Key Takeaways
 
-- **AI plays three roles:** Advisor, Comparator, Validator - each requires different attribution
-- **Prompt categories matter:** Research, Comparison, Purchase, Validation have different intent levels
-- **Brand positioning varies:** Inclusion, Recommendation, Exclusion have different conversion probabilities
-- **Assist depth and frequency both matter:** Deep, frequent assists drive highest conversion
-- **Intent forms over time:** Multiple AI interactions create cumulative influence
-- **Use cases differ:** B2B, B2C, and other models require custom frameworks
+- **AI plays three roles:**: Advisor, Comparator, Validator - each requires different attribution
+- **Prompt categories matter:**: Research, Comparison, Purchase, Validation have different intent levels
+- **Brand positioning varies:**: Inclusion, Recommendation, Exclusion have different conversion probabilities
+- **Assist depth and frequency both matter:**: Deep, frequent assists drive highest conversion
+- **Intent forms over time:**: Multiple AI interactions create cumulative influence
+- **Use cases differ:**: B2B, B2C, and other models require custom frameworks
 
 ---
 

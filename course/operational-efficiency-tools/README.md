@@ -19,15 +19,15 @@ order: 0
 
 By completing this course, you will be able to:
 
-- Design AI-powered operational tools for asset managers
-- Understand why operations are the hidden bottleneck
-- Implement natural language interfaces for data access
-- Query massive fund universes safely
-- Generate on-demand reporting and insights
-- Automate product due diligence with AI
-- Streamline governance without lowering standards
-- Ensure explainability, accountability, and trust
-- Build scalable operational intelligence platforms
+- **AI-powered operational tools for asset managers Development**: Design AI-powered operational tools for asset managers
+- **why operations are the hidden bottleneck Understanding**: Understand why operations are the hidden bottleneck
+- **natural language interfaces for data access Implementation**: Implement natural language interfaces for data access
+- **Query Massive**: Query massive fund universes safely
+- **Generate On-Demand**: Generate on-demand reporting and insights
+- **Automate Product**: Automate product due diligence with AI
+- **Streamline Governance**: Streamline governance without lowering standards
+- **Ensure Explainability,**: Ensure explainability, accountability, and trust
+- **scalable operational intelligence platforms Development**: Build scalable operational intelligence platforms
 
 ---
 

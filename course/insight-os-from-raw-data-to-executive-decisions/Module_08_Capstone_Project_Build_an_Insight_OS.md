@@ -11,11 +11,11 @@ order: 8
 **Theme:** *End-to-end real-world simulation*
 
 **Learning Objectives:**
-- Apply all course concepts in a comprehensive project
-- Build a complete Insight Operating System
-- Demonstrate ability to work through the full analytics lifecycle
-- Present insights in an executive-style review
-- Showcase skills gained throughout the course
+- **Apply All**: Apply all course concepts in a comprehensive project
+- **a complete Insight Operating Development**: Build a complete Insight Operating System
+- **Demonstrate Ability**: Demonstrate ability to work through the full analytics lifecycle
+- **Present Insights**: Present insights in an executive-style review
+- **Showcase Skills**: Showcase skills gained throughout the course
 
 ---
 
@@ -458,13 +458,13 @@ This means:
 
 This capstone project integrates everything you've learned:
 
-1. **Business Context:** KPIs aligned with decisions
-2. **SQL Mastery:** Production-grade analytical queries
-3. **Data Modeling:** Scalable analytics models
-4. **Dashboard Design:** Actionable visualizations
-5. **Root-Cause Analysis:** Diagnostic problem-solving
-6. **Executive Communication:** Impactful storytelling
-7. **Self-Serve Enablement:** Scaling analytics
+- **Business Context:**: KPIs aligned with decisions
+- **SQL Mastery:**: Production-grade analytical queries
+- **Data Modeling:**: Scalable analytics models
+- **Dashboard Design:**: Actionable visualizations
+- **Root-Cause Analysis:**: Diagnostic problem-solving
+- **Executive Communication:**: Impactful storytelling
+- **Self-Serve Enablement:**: Scaling analytics
 
 ---
 
@@ -472,24 +472,24 @@ This capstone project integrates everything you've learned:
 
 ### Career Preparation
 
-- Update portfolio with capstone project
-- Prepare case studies for interviews
-- Practice explaining your Insight OS
-- Network with course alumni
+- **Update Portfolio**: Update portfolio with capstone project
+- **Prepare Case**: Prepare case studies for interviews
+- **Practice Explaining**: Practice explaining your Insight OS
+- **Network With**: Network with course alumni
 
 ### Continued Learning
 
-- Advanced SQL techniques
-- Machine learning for analytics
-- Data engineering concepts
-- Industry-specific analytics
+- **Advanced Sql**: Apply advanced sql techniques in relevant contexts
+- **Machine Learning**: Machine learning for analytics
+- **Data Engineering**: Apply data engineering concepts in relevant contexts
+- **Industry-Specific Analytics**: Implement industry-specific analytics effectively across relevant use cases
 
 ### Application
 
-- Apply Insight OS concepts to your work
-- Build analytics capabilities in your organization
-- Share knowledge with your team
-- Continue growing as an analyst
+- **Apply Insight**: Apply Insight OS concepts to your work
+- **analytics capabilities in your organization Development**: Build analytics capabilities in your organization
+- **Share Knowledge**: Share knowledge with your team
+- **Continue Growing**: Continue growing as an analyst
 
 ---
 

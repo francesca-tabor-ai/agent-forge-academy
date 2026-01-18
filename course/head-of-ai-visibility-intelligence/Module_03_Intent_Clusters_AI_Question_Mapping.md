@@ -10,10 +10,10 @@ order: 3
 
 **Duration:** Week 3  
 **Learning Objectives:**
-- Move beyond keywords to intent clusters
-- Understand how AI groups, reframes, and escalates questions
-- Identify persona-driven question patterns
-- Map brand coverage vs uncovered intent
+- **Move Beyond**: Move beyond keywords to intent clusters
+- **how AI groups, reframes, and escalates questions Understanding**: Understand how AI groups, reframes, and escalates questions
+- **Identify Persona-Driven**: Identify persona-driven question patterns
+- **Map Brand**: Map brand coverage vs uncovered intent
 
 ---
 
@@ -456,15 +456,15 @@ Create a comprehensive map of AI intent clusters for your brand to identify cove
 
 ## Key Takeaways
 
-- **Intent clusters > keywords:** Group related queries to understand full customer needs
+- **Intent clusters > keywords:**: Group related queries to understand full customer needs
 
-- **Three core intent types:** Informational, evaluative, and transactional require different strategies
+- **Three core intent types:**: Informational, evaluative, and transactional require different strategies
 
-- **Personas matter:** Different personas ask different questions - optimize for your target personas
+- **Personas matter:**: Different personas ask different questions - optimize for your target personas
 
-- **Full journey coverage:** Don't just focus on pre-purchase - post-purchase content matters too
+- **Full journey coverage:**: Don't just focus on pre-purchase - post-purchase content matters too
 
-- **Hidden intents are opportunities:** Problem-aware, alternative solution, risk-averse, and cross-category intents are often missed
+- **Hidden intents are opportunities:**: Problem-aware, alternative solution, risk-averse, and cross-category intents are often missed
 
 ---
 

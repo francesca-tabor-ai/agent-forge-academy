@@ -10,12 +10,12 @@ order: 2
 **Duration:** Week 2  
 **Theme:** Listening Where the Truth Leaks Out  
 **Learning Objectives:**
-- Learn how to extract persona insights directly from AI answers
-- Detect misalignment between brand messaging and AI interpretation
-- Understand persona inference from AI recommendations
-- Identify language patterns that signal unmet needs
-- Distinguish "who should buy this?" from "who actually buys this?"
-- Recognize competitive persona capture inside AI answers
+- **how to extract persona insights directly from AI answers Understanding**: Learn how to extract persona insights directly from AI answers
+- **Detect Misalignment**: Detect misalignment between brand messaging and AI interpretation
+- **persona inference from AI recommendations Understanding**: Understand persona inference from AI recommendations
+- **Identify Language**: Identify language patterns that signal unmet needs
+- **"who should buy this?" from "who actually buys this?" Analysis**: Distinguish "who should buy this?" from "who actually buys this?"
+- **Recognize Competitive**: Recognize competitive persona capture inside AI answers
 
 ---
 
@@ -389,20 +389,20 @@ Create a comprehensive map of persona signals extracted from AI answers, includi
 
 **Key Takeaways:**
 
-1. **Persona Inference:** AI recommendations reveal persona characteristics through feature emphasis, use case clustering, and constraint recognition.
+- **Persona Inference:**: AI recommendations reveal persona characteristics through feature emphasis, use case clustering, and constraint recognition
 
-2. **Language Patterns:** Frustration language, workaround language, and specificity language signal unmet needs and high-intent personas.
+- **Language Patterns:**: Frustration language, workaround language, and specificity language signal unmet needs and high-intent personas
 
-3. **Persona Gap:** There's often a gap between "who should buy" (intended personas) and "who actually buys" (actual personas), which creates opportunities.
+- **Persona Gap:**: There's often a gap between "who should buy" (intended personas) and "who actually buys" (actual personas), which creates opportunities
 
-4. **Competitive Capture:** Competitors capture personas through positioning, language ownership, and use case association in AI recommendations.
+- **Competitive Capture:**: Competitors capture personas through positioning, language ownership, and use case association in AI recommendations
 
-5. **Signal Mapping:** Systematic extraction and mapping of persona signals helps identify underserved personas and alignment opportunities.
+- **Signal Mapping:**: Systematic extraction and mapping of persona signals helps identify underserved personas and alignment opportunities
 
 **Next Steps:**
-- Module 3: Learn to evaluate which personas represent real monetisation potential
-- Understand intent depth scoring and willingness to pay
-- Build skills in persona prioritisation
+- **Module 3:**: Module 3: Learn to evaluate which personas represent real monetisation potential
+- **intent depth scoring and willingness to pay Understanding**: Understand intent depth scoring and willingness to pay
+- **skills in persona prioritisation Development**: Build skills in persona prioritisation
 
 ---
 

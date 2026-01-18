@@ -9,10 +9,10 @@ order: 7
 
 **Duration:** Week 7  
 **Learning Objectives:**
-- Design exception-based review models
-- Ensure explainability and audit readiness
-- Understand regulatory expectations for AI-managed data
-- Measure success: accuracy, timeliness, trust
+- **exception-based review models Development**: Design exception-based review models
+- **Ensure Explainability**: Ensure explainability and audit readiness
+- **regulatory expectations for AI-managed data Understanding**: Understand regulatory expectations for AI-managed data
+- **Measure Success:**: Measure success: accuracy, timeliness, trust
 
 ---
 
@@ -260,10 +260,10 @@ Create a comprehensive governance model that ensures accountability, transparenc
 
 ## Key Takeaways
 
-- Exception-based review models balance automation with human oversight
-- Explainability and audit readiness meet regulatory requirements
-- Understanding regulatory expectations ensures compliance
-- Measuring success guides continuous improvement
+- **Exception-Based Review**: Exception-based review models balance automation with human oversight
+- **Explainability And**: Explainability and audit readiness meet regulatory requirements
+- **Understanding Regulatory**: Understanding regulatory expectations ensures compliance
+- **Measuring Success**: Measuring success guides continuous improvement
 
 ---
 

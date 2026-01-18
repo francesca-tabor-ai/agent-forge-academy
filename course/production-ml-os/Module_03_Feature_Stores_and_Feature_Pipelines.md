@@ -14,10 +14,10 @@ email_action: "Build a time-aware feature pipeline and design a feature store sc
 
 **Duration:** Week 3  
 **Learning Objectives:**
-- Understand feature pipelines vs feature stores
-- Prevent training-serving skew
-- Implement time-aware feature computation
-- Design feature store schemas
+- **feature pipelines vs feature stores Understanding**: Understand feature pipelines vs feature stores
+- **Prevent Training-Serving**: Apply prevent training-serving skew in relevant contexts
+- **time-aware feature computation Implementation**: Implement time-aware feature computation
+- **feature store schemas Development**: Design feature store schemas
 
 ---
 
@@ -412,16 +412,16 @@ recommendation_model_features = [
 
 ### Key Takeaways
 
-1. **Feature pipelines compute, feature stores serve** - Both are needed for production ML
-2. **Consistency is critical** - Training-serving skew causes failures
-3. **Point-in-time correctness matters** - Historical features must reflect past state
-4. **Governance enables scale** - Ownership, reuse, and documentation are essential
+- **Feature pipelines compute, feature stores serve**: Both are needed for production ML
+- **Consistency is critical**: Training-serving skew causes failures
+- **Point-in-time correctness matters**: Historical features must reflect past state
+- **Governance enables scale**: Ownership, reuse, and documentation are essential
 
 ### Next Steps
 
-- Complete the feature store design exercise
-- Review feature store implementations (Feast, Tecton, etc.)
-- Move to Module 4 to learn about latency and scalability
+- **Complete The**: Complete the feature store design exercise
+- **Review Feature**: Review feature store implementations (Feast, Tecton, etc.)
+- **Move To**: Move to Module 4 to learn about latency and scalability
 
 ---
 

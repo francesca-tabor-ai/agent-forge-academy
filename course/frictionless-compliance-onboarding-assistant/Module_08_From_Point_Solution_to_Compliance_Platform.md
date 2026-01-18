@@ -9,10 +9,10 @@ order: 8
 
 **Duration:** Week 8  
 **Learning Objectives:**
-- Integrate compliance AI with CRM and advisory systems
-- Measure ROI: time saved, errors reduced, regulator outcomes
-- Monitor regulatory change and model drift
-- Plan future roadmap: continuous compliance monitoring
+- **compliance AI Integration**: Integrate compliance AI with CRM and advisory systems
+- **Measure Roi:**: Measure ROI: time saved, errors reduced, regulator outcomes
+- **Monitor Regulatory**: Monitor regulatory change and model drift
+- **Plan Future**: Plan future roadmap: continuous compliance monitoring
 
 ---
 
@@ -192,10 +192,10 @@ Design a complete Frictionless Compliance & Onboarding Assistant for a multi-jur
 
 ## Key Takeaways
 
-- Platform integration enables seamless compliance workflows
-- ROI measurement demonstrates value of automation
-- Continuous monitoring ensures system effectiveness
-- Future roadmap includes predictive and continuous compliance
+- **Platform Integration**: Platform integration enables seamless compliance workflows
+- **Roi Measurement**: ROI measurement demonstrates value of automation
+- **Continuous Monitoring**: Continuous monitoring ensures system effectiveness
+- **Future Roadmap**: Future roadmap includes predictive and continuous compliance
 
 ---
 

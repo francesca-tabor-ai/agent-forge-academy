@@ -9,10 +9,10 @@ order: 2
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Understand why SQL and BI tools don't scale to non-technical users
-- Learn Natural Language Interfaces (NLI) explained
-- Implement context-aware querying across massive datasets
-- Design guardrails: permissions, scope, and data sensitivity
+- **why SQL and BI tools don't scale to non-technical users Understanding**: Understand why SQL and BI tools don't scale to non-technical users
+- **Natural Language Interfaces Understanding**: Learn Natural Language Interfaces (NLI) explained
+- **context-aware querying across massive datasets Implementation**: Implement context-aware querying across massive datasets
+- **Design Guardrails:**: Design guardrails: permissions, scope, and data sensitivity
 
 ---
 
@@ -263,10 +263,10 @@ Transform common operational questions into natural language queries that can be
 
 ## Key Takeaways
 
-- SQL and BI tools don't scale to non-technical users, creating barriers
-- Natural Language Interfaces remove technical barriers and enable instant access
-- Context-aware querying provides relevant, personalized results
-- Guardrails ensure security, permissions, and data sensitivity are maintained
+- **Sql And**: SQL and BI tools don't scale to non-technical users, creating barriers
+- **Natural Language**: Natural Language Interfaces remove technical barriers and enable instant access
+- **Context-Aware Querying**: Context-aware querying provides relevant, personalized results
+- **Guardrails Ensure**: Guardrails ensure security, permissions, and data sensitivity are maintained
 
 ---
 

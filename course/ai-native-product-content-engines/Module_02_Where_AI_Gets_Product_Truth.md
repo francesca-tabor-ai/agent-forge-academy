@@ -11,12 +11,12 @@ order: 2
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Learn how AI systems source and weight product information
-- Identify where your product narrative actually comes from
-- Understand Amazon Rufus and marketplace Q&A as truth sources
-- Recognize reviews as objection graphs, not sentiment blobs
-- Learn how Reddit, forums, and UGC function as "truth amplifiers"
-- Understand images and video as evidence, not decoration
+- **how AI systems source and weight product information Understanding**: Learn how AI systems source and weight product information
+- **Identify Where**: Identify where your product narrative actually comes from
+- **Amazon Rufus and marketplace Q&A as truth sources Understanding**: Understand Amazon Rufus and marketplace Q&A as truth sources
+- **Recognize Reviews**: Recognize reviews as objection graphs, not sentiment blobs
+- **how Reddit, forums, and UGC function as "truth amplifiers" Understanding**: Learn how Reddit, forums, and UGC function as "truth amplifiers"
+- **images and video as evidence, not decoration Understanding**: Understand images and video as evidence, not decoration
 
 ---
 
@@ -441,15 +441,15 @@ In this module, you've learned:
 - **Visual Evidence:** Images and video provide evidence, not just decoration
 
 **Key Takeaways:**
-- Your brand content is just one source among many
-- User-generated content often has higher influence
-- AI synthesizes truth from multiple sources
-- You need to map and influence all truth sources, not just your own
+- **Your Brand**: Your brand content is just one source among many
+- **User-Generated Content**: User-generated content often has higher influence
+- **Ai Synthesizes**: AI synthesizes truth from multiple sources
+- **You Need**: You need to map and influence all truth sources, not just your own
 
 **Next Steps:**
-- Complete Lab 2: Product Truth Source Map
-- Review Module 3: AI-Surfaced Product Questions
-- Begin extracting questions from AI interactions
+- **Complete Lab**: Complete Lab 2: Product Truth Source Map
+- **Review Module**: Review Module 3: AI-Surfaced Product Questions
+- **Begin Extracting**: Begin extracting questions from AI interactions
 
 ---
 

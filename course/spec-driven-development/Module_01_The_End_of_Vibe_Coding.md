@@ -9,10 +9,10 @@ order: 1
 
 **Duration:** Week 1  
 **Learning Objectives:**
-- Understand the fundamental problems with "vibe coding"
-- Learn why vague prompts lead to technical debt and production failures
-- Grasp the SDDD philosophy and its core principles
-- Shift mindset from implementation-focused to intent-focused development
+- **the fundamental problems with "vibe coding" Understanding**: Understand the fundamental problems with "vibe coding"
+- **why vague prompts lead to technical debt and production failures Understanding**: Learn why vague prompts lead to technical debt and production failures
+- **Grasp The**: Grasp the SDDD philosophy and its core principles
+- **Shift Mindset**: Shift mindset from implementation-focused to intent-focused development
 
 ---
 
@@ -823,11 +823,11 @@ Analyze an existing project (or create a small one) that was built using "vibe c
 
 ## Key Takeaways
 
-1. **Vibe Coding Problems:** Leads to chaos, technical debt, production failures, and context collapse
-2. **SDDD Philosophy:** Shifts source of truth from code to specification
-3. **Intent Over Implementation:** Focus on what and why, not how
-4. **Traceability:** Every line of code traces to specification
-5. **Validation:** Continuous validation ensures spec compliance
+- **Vibe Coding Problems:**: Leads to chaos, technical debt, production failures, and context collapse
+- **SDDD Philosophy:**: Shifts source of truth from code to specification
+- **Intent Over Implementation:**: Focus on what and why, not how
+- **Traceability:**: Every line of code traces to specification
+- **Validation:**: Continuous validation ensures spec compliance
 
 ---
 

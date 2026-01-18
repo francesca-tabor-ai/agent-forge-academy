@@ -9,10 +9,10 @@ order: 6
 
 **Duration:** Week 6  
 **Learning Objectives:**
-- Implement risk scoring and materiality thresholds
-- Design exception-based escalation to committees
-- Reduce false positives without missing risks
-- Integrate AI findings into PDD documentation
+- **risk scoring and materiality thresholds Implementation**: Implement risk scoring and materiality thresholds
+- **exception-based escalation to committees Development**: Design exception-based escalation to committees
+- **Reduce False**: Reduce false positives without missing risks
+- **AI findings into PDD documentation Integration**: Integrate AI findings into PDD documentation
 
 ---
 
@@ -234,10 +234,10 @@ Create a comprehensive workflow that integrates AI assistance with human checkpo
 
 ## Key Takeaways
 
-- Risk scoring and materiality thresholds enable automated risk assessment
-- Exception-based escalation ensures appropriate governance without over-burdening committees
-- Reducing false positives while maintaining risk detection requires careful balance
-- Integrating AI findings into PDD documentation ensures comprehensive review
+- **Risk Scoring**: Risk scoring and materiality thresholds enable automated risk assessment
+- **Exception-Based Escalation**: Exception-based escalation ensures appropriate governance without over-burdening committees
+- **Reducing False**: Reducing false positives while maintaining risk detection requires careful balance
+- **Integrating Ai**: Integrating AI findings into PDD documentation ensures comprehensive review
 
 ---
 

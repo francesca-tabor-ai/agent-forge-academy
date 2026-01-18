@@ -11,10 +11,10 @@ email_action: "Review your current project—list 3 resources that should have r
 
 **Duration:** Weeks 6-7  
 **Learning Objectives:**
-- Understand agent security threats and mitigations
-- Implement identity and access management
-- Design data security controls
-- Navigate compliance frameworks
+- **agent security threats and mitigations Understanding**: Understand agent security threats and mitigations
+- **identity and access management Implementation**: Implement identity and access management
+- **data security controls Development**: Design data security controls
+- **Navigate Compliance**: Apply navigate compliance frameworks in relevant contexts
 
 ## Topics Covered:
 

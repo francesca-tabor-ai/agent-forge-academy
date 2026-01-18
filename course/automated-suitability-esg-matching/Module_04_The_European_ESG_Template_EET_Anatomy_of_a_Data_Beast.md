@@ -9,10 +9,10 @@ order: 4
 
 **Duration:** Week 4  
 **Learning Objectives:**
-- Understand the structure of the EET and key data sections
-- Distinguish mandatory vs. optional ESG fields
-- Learn about Principal Adverse Impacts (PAIs) and double materiality
-- Handle data quality risks and missing-field logic
+- **the structure of the EET and key data sections Understanding**: Understand the structure of the EET and key data sections
+- **mandatory Analysis**: Distinguish mandatory vs. optional ESG fields
+- **about Principal Adverse Impacts Understanding**: Learn about Principal Adverse Impacts (PAIs) and double materiality
+- **Handle Data**: Handle data quality risks and missing-field logic
 
 ---
 
@@ -282,11 +282,11 @@ Analyze the EET structure and identify which fields are essential for automated 
 
 ## Key Takeaways
 
-- The EET contains 600+ data points organized into logical sections
-- Mandatory fields are critical for regulatory compliance and matching
-- PAIs and double materiality provide comprehensive impact assessment
-- Data quality risks require robust handling strategies
-- Missing-field logic must balance matching quality with data availability
+- **The Eet**: The EET contains 600+ data points organized into logical sections
+- **Mandatory Fields**: Mandatory fields are critical for regulatory compliance and matching
+- **Pais And**: PAIs and double materiality provide comprehensive impact assessment
+- **Data Quality**: Data quality risks require robust handling strategies
+- **Missing-Field Logic**: Missing-field logic must balance matching quality with data availability
 
 ---
 

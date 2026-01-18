@@ -9,10 +9,10 @@ order: 1
 
 **Duration:** Week 1  
 **Learning Objectives:**
-- Understand the fundamental shift from human-led to agent-led commerce
-- Analyze the rise of the invisible marketplace
-- Explore zero-click intent and the flattened sales funnel
-- Examine agent-mediated B2B services
+- **the fundamental shift from human-led to agent-led commerce Understanding**: Understand the fundamental shift from human-led to agent-led commerce
+- **Analyze The**: Analyze the rise of the invisible marketplace
+- **Explore Zero-Click**: Explore zero-click intent and the flattened sales funnel
+- **Examine Agent-Mediated**: Examine agent-mediated B2B services
 
 ---
 
@@ -338,11 +338,11 @@ Analyze the current state of agent-mediated commerce in your industry and identi
 
 ## Key Takeaways
 
-1. **The Invisible Marketplace:** Commerce is shifting to agent-led discovery and purchase
-2. **Zero-Click Intent:** The sales funnel is flattening to a single step
-3. **Beyond Retail:** B2B services are experiencing profound agent-mediated transformation
-4. **Power Shift:** Control is moving from brands to AI agents
-5. **Strategic Imperative:** Businesses must optimize for agent discovery and evaluation
+- **The Invisible Marketplace:**: Commerce is shifting to agent-led discovery and purchase
+- **Zero-Click Intent:**: The sales funnel is flattening to a single step
+- **Beyond Retail:**: B2B services are experiencing profound agent-mediated transformation
+- **Power Shift:**: Control is moving from brands to AI agents
+- **Strategic Imperative:**: Businesses must optimize for agent discovery and evaluation
 
 ---
 

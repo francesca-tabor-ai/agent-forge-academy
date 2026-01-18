@@ -11,12 +11,12 @@ order: 2
 **Theme:** *Growth is cumulative, not instantaneous*
 
 **Learning Objectives:**
-- Understand cohort definitions and design choices
-- Build and interpret retention curves
-- Analyze retention decay patterns
-- Differentiate behavioral vs calendar cohorts
-- Link retention shifts to product and marketing actions
-- Build predictive retention models
+- **cohort definitions and design choices Understanding**: Understand cohort definitions and design choices
+- **and interpret retention curves Development**: Build and interpret retention curves
+- **Analyze Retention**: Analyze retention decay patterns
+- **behavioral Analysis**: Differentiate behavioral vs calendar cohorts
+- **retention shifts Integration**: Link retention shifts to product and marketing actions
+- **predictive retention models Development**: Build predictive retention models
 
 ---
 
@@ -257,10 +257,10 @@ def fit_retention_model(retention_data):
 #### Calendar Cohorts: Understanding Time Effects
 
 **Best For:**
-- Measuring product changes over time
-- Understanding seasonal patterns
-- Comparing marketing campaigns
-- Tracking overall product health
+- **Measuring Product**: Measuring product changes over time
+- **Understanding Seasonal**: Apply understanding seasonal patterns in relevant contexts
+- **Comparing Marketing**: Apply comparing marketing campaigns in relevant contexts
+- **Tracking Overall**: Tracking overall product health
 
 **Example: Measuring Product Improvement**
 
@@ -292,10 +292,10 @@ def compare_cohort_performance(calendar_cohorts):
 #### Behavioral Cohorts: Understanding User Quality
 
 **Best For:**
-- Comparing acquisition channel quality
-- Understanding impact of onboarding
-- Identifying high-value user patterns
-- Optimizing initial experience
+- **Comparing Acquisition**: Comparing acquisition channel quality
+- **Understanding Impact**: Understanding impact of onboarding
+- **Identifying High-Value**: Identifying high-value user patterns
+- **Optimizing Initial**: Apply optimizing initial experience in relevant contexts
 
 **Example: Onboarding Impact**
 
@@ -705,16 +705,16 @@ A cohort-based retention insight with:
 
 **Key Takeaways:**
 
-1. **Cohorts Control for Time:** Compare users who joined at different times
-2. **Retention Curves Show Patterns:** Understand how users behave over time
-3. **Behavioral Cohorts Reveal Quality:** Initial experience matters
-4. **Retention Shifts Signal Changes:** Link changes to product/market events
-5. **Predictive Models Enable Planning:** Forecast future retention
+- **Cohorts Control for Time:**: Compare users who joined at different times
+- **Retention Curves Show Patterns:**: Understand how users behave over time
+- **Behavioral Cohorts Reveal Quality:**: Initial experience matters
+- **Retention Shifts Signal Changes:**: Link changes to product/market events
+- **Predictive Models Enable Planning:**: Forecast future retention
 
 **Next Steps:**
-- Module 3: Learn lifetime value (LTV) modeling
-- Understand how retention drives value
-- Build predictive LTV models
+- **Module 3:**: Module 3: Learn lifetime value (LTV) modeling
+- **how retention drives value Understanding**: Understand how retention drives value
+- **predictive LTV models Development**: Build predictive LTV models
 
 ---
 

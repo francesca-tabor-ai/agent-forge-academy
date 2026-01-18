@@ -13,11 +13,11 @@ email_action: "Map one AI system in your organization and identify where trust c
 **Theme:** *Trust is a system, not a checklist*
 
 **Learning Objectives:**
-- Understand why trust failures derail AI initiatives
-- Identify types of risk: legal, ethical, operational, reputational
-- Differentiate between trust, compliance, and governance
-- Recognize accountability in automated decision systems
-- Learn how to embed trust into AI strategy
+- **why trust failures derail AI initiatives Understanding**: Understand why trust failures derail AI initiatives
+- **Identify Types**: Identify types of risk: legal, ethical, operational, reputational
+- **between trust, compliance, Analysis**: Differentiate between trust, compliance, and governance
+- **Recognize Accountability**: Recognize accountability in automated decision systems
+- **how to embed trust into AI strategy Understanding**: Learn how to embed trust into AI strategy
 
 ---
 
@@ -566,17 +566,17 @@ A comprehensive AI risk landscape document that includes:
 
 ## Key Takeaways
 
-1. **Trust failures are costly:** They cause financial, operational, and reputational damage that can derail AI initiatives.
+- **Trust failures are costly:**: They cause financial, operational, and reputational damage that can derail AI initiatives
 
-2. **Risks are interconnected:** Legal, ethical, operational, and reputational risks cascade and amplify each other.
+- **Risks are interconnected:**: Legal, ethical, operational, and reputational risks cascade and amplify each other
 
-3. **Trust requires governance:** Compliance is necessary but not sufficient—trust requires systematic governance.
+- **Trust requires governance:**: Compliance is necessary but not sufficient—trust requires systematic governance
 
-4. **Accountability is essential:** Humans must remain accountable for AI decisions, even when algorithms make them autonomously.
+- **Accountability is essential:**: Humans must remain accountable for AI decisions, even when algorithms make them autonomously
 
-5. **Trust is strategic:** Embedding trust into AI strategy enables sustainable AI at scale.
+- **Trust is strategic:**: Embedding trust into AI strategy enables sustainable AI at scale
 
-6. **Trust is a system:** It requires policies, controls, processes, and cultural practices across the entire AI lifecycle.
+- **Trust is a system:**: It requires policies, controls, processes, and cultural practices across the entire AI lifecycle
 
 ---
 

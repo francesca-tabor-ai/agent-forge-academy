@@ -12,11 +12,11 @@ email_action: "Sketch your first creative system on paper: one concept, multiple
 
 **Duration:** Week 1  
 **Learning Objectives:**
-- Understand nodes, branches, loops, and batches
-- Learn determinism vs variation
-- Master separation of concerns: concept generation, art direction, product insertion, scale execution
-- Understand why loops beat randomness
-- Build your first creative system
+- **nodes, branches, loops, and batches Understanding**: Understand nodes, branches, loops, and batches
+- **determinism vs variation Understanding**: Learn determinism vs variation
+- **Separation Of**: Master separation of concerns: concept generation, art direction, product insertion, scale execution
+- **why loops beat randomness Understanding**: Understand why loops beat randomness
+- **your first creative Development**: Build your first creative system
 
 ---
 

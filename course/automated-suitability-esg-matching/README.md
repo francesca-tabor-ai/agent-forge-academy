@@ -19,14 +19,14 @@ order: 0
 
 By completing this course, you will be able to:
 
-- Design automated suitability frameworks that scale to millions of client-product matches
-- Build risk profiling systems that translate client preferences into machine-readable risk profiles
-- Convert qualitative ESG preferences into structured data for automated matching
-- Navigate the European ESG Template (EET) and Principal Adverse Impacts (PAIs)
-- Automate regulatory classification for Article 6, 8, and 9 funds
-- Architect AI matching engines that reduce cognitive load while maintaining human oversight
-- Ensure explainability and regulatory defensibility in AI-driven advisory systems
-- Deploy production-ready suitability and ESG matching systems
+- **automated suitability frameworks that scale to millions of client-product matches Development**: Design automated suitability frameworks that scale to millions of client-product matches
+- **risk profiling Development**: Build risk profiling systems that translate client preferences into machine-readable risk profiles
+- **Convert Qualitative**: Convert qualitative ESG preferences into structured data for automated matching
+- **Navigate The**: Navigate the European ESG Template (EET) and Principal Adverse Impacts (PAIs)
+- **Automate Regulatory**: Automate regulatory classification for Article 6, 8, and 9 funds
+- **Architect Ai**: Architect AI matching engines that reduce cognitive load while maintaining human oversight
+- **Ensure Explainability**: Ensure explainability and regulatory defensibility in AI-driven advisory systems
+- **production-ready suitability and ESG matching Implementation**: Deploy production-ready suitability and ESG matching systems
 
 ---
 

@@ -11,11 +11,11 @@ email_action: "Create a vector embedding for one document—use OpenAI's embeddi
 
 **Duration:** Week 7  
 **Learning Objectives:**
-- Understand vector embeddings and semantic search
-- Implement pgvector for similarity search
-- Build production RAG (Retrieval-Augmented Generation) pipelines
-- Create AI-driven dashboards with generated columns
-- Optimize vector queries for performance
+- **vector embeddings and semantic search Understanding**: Understand vector embeddings and semantic search
+- **pgvector for similarity search Implementation**: Implement pgvector for similarity search
+- **production RAG (Retrieval-Augmented Generation) Development**: Build production RAG (Retrieval-Augmented Generation) pipelines
+- **AI-driven dashboards with generated columns Development**: Create AI-driven dashboards with generated columns
+- **Optimize Vector**: Optimize vector queries for performance
 
 ---
 

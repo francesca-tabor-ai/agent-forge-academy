@@ -9,10 +9,10 @@ order: 6
 
 **Duration:** Week 6  
 **Learning Objectives:**
-- Manage false positives in AML checks
-- Reconcile data across providers
-- Handle incomplete or inconsistent client data
-- Implement continuous model calibration
+- **Manage False**: Manage false positives in AML checks
+- **Reconcile Data**: Reconcile data across providers
+- **Handle Incomplete**: Handle incomplete or inconsistent client data
+- **continuous model calibration Implementation**: Implement continuous model calibration
 
 ---
 
@@ -153,10 +153,10 @@ Create escalation rules that appropriately handle high-risk onboarding cases whi
 
 ## Key Takeaways
 
-- False positive management is critical for AML automation success
-- Data reconciliation ensures consistency across providers
-- Incomplete data requires systematic handling strategies
-- Continuous calibration maintains model performance
+- **False Positive**: False positive management is critical for AML automation success
+- **Data Reconciliation**: Data reconciliation ensures consistency across providers
+- **Incomplete Data**: Incomplete data requires systematic handling strategies
+- **Continuous Calibration**: Continuous calibration maintains model performance
 
 ---
 

@@ -9,10 +9,10 @@ order: 4
 
 **Duration:** Week 4  
 **Learning Objectives:**
-- Embed ESG claims into governed data models
-- Link sustainability objectives to measurable indicators
-- Implement automated escalation of high-risk ESG claims
-- Design human-in-the-loop validation for sensitive disclosures
+- **Embed Esg**: Embed ESG claims into governed data models
+- **sustainability objectives Integration**: Link sustainability objectives to measurable indicators
+- **automated escalation of high-risk ESG claims Implementation**: Implement automated escalation of high-risk ESG claims
+- **human-in-the-loop validation for sensitive disclosures Development**: Design human-in-the-loop validation for sensitive disclosures
 
 ---
 
@@ -248,10 +248,10 @@ Design a preventive workflow that ensures ESG marketing language is validated be
 
 ## Key Takeaways
 
-- Embedding ESG claims into governed data models ensures consistency and traceability
-- Linking objectives to measurable indicators provides evidence-based validation
-- Automated escalation ensures high-risk claims receive appropriate review
-- Human-in-the-loop validation maintains accountability for sensitive disclosures
+- **Embedding Esg**: Embedding ESG claims into governed data models ensures consistency and traceability
+- **Linking Objectives**: Linking objectives to measurable indicators provides evidence-based validation
+- **Automated Escalation**: Automated escalation ensures high-risk claims receive appropriate review
+- **Human-In-The-Loop Validation**: Human-in-the-loop validation maintains accountability for sensitive disclosures
 
 ---
 

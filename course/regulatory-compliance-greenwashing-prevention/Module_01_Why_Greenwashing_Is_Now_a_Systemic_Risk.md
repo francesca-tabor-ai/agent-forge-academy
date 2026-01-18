@@ -9,11 +9,11 @@ order: 1
 
 **Duration:** Week 1  
 **Learning Objectives:**
-- Understand the shift from marketing risk to regulatory enforcement
-- Recognize supervisory focus on ESG misrepresentation
-- Learn why manual controls no longer scale
-- Understand financial, reputational, and legal consequences of inconsistency
-- Identify typical greenwashing risk points across fund disclosures
+- **the shift from marketing risk to regulatory enforcement Understanding**: Understand the shift from marketing risk to regulatory enforcement
+- **Recognize Supervisory**: Recognize supervisory focus on ESG misrepresentation
+- **why manual controls no longer scale Understanding**: Learn why manual controls no longer scale
+- **financial, reputational, and legal consequences of inconsistency Understanding**: Understand financial, reputational, and legal consequences of inconsistency
+- **Identify Typical**: Identify typical greenwashing risk points across fund disclosures
 
 ---
 
@@ -170,10 +170,10 @@ Analyze fund disclosures and identify where greenwashing risks typically occur.
 
 ## Key Takeaways
 
-- Greenwashing has evolved from marketing risk to regulatory enforcement priority
-- Supervisors actively focus on ESG misrepresentation with increased enforcement
-- Manual controls cannot scale to meet current compliance requirements
-- Financial, reputational, and legal consequences make greenwashing prevention critical
+- **Greenwashing Has**: Greenwashing has evolved from marketing risk to regulatory enforcement priority
+- **Supervisors Actively**: Supervisors actively focus on ESG misrepresentation with increased enforcement
+- **Manual Controls**: Manual controls cannot scale to meet current compliance requirements
+- **Financial, Reputational,**: Financial, reputational, and legal consequences make greenwashing prevention critical
 
 ---
 

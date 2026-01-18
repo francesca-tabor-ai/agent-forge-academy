@@ -9,10 +9,10 @@ order: 3
 
 **Duration:** Week 3  
 **Learning Objectives:**
-- Integrate alternative data sources
-- Build behavioral scoring models
-- Analyze cash flow patterns
-- Create alternative credit scores
+- **alternative data sources Integration**: Integrate alternative data sources
+- **behavioral scoring models Development**: Build behavioral scoring models
+- **Analyze Cash**: Analyze cash flow patterns
+- **alternative credit scores Development**: Create alternative credit scores
 
 ---
 

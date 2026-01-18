@@ -9,10 +9,10 @@ order: 1
 
 **Duration:** Week 1  
 **Learning Objectives:**
-- Understand the evolution of RAG from Naïve to Advanced and Modular architectures
-- Recognize the Gen AI Paradox and why autonomous reasoning matters
-- Differentiate between traditional and agentic RAG approaches
-- Identify core limitations in traditional RAG systems
+- **the evolution of RAG from Naïve to Advanced and Modular architectures Understanding**: Understand the evolution of RAG from Naïve to Advanced and Modular architectures
+- **Recognize The**: Recognize the Gen AI Paradox and why autonomous reasoning matters
+- **between traditional Analysis**: Differentiate between traditional and agentic RAG approaches
+- **Identify Core**: Identify core limitations in traditional RAG systems
 
 ---
 
@@ -451,16 +451,16 @@ Build both a traditional RAG system and a basic agentic RAG system, then compare
 
 **Key Takeaways:**
 
-1. **RAG Evolution:** From Naïve → Advanced → Modular → Agentic
-2. **The Paradox:** Widespread deployment ≠ Strategic impact without autonomy
-3. **Traditional RAG:** Static, single-pass, no correction
-4. **Agentic RAG:** Dynamic, multi-step, self-correcting
-5. **Core Limitations:** Query sensitivity, no error correction, context fragmentation, static strategies
+- **RAG Evolution:**: From Naïve → Advanced → Modular → Agentic
+- **The Paradox:**: Widespread deployment ≠ Strategic impact without autonomy
+- **Traditional RAG:**: Static, single-pass, no correction
+- **Agentic RAG:**: Dynamic, multi-step, self-correcting
+- **Core Limitations:**: Query sensitivity, no error correction, context fragmentation, static strategies
 
 **Next Steps:**
-- Module 2: Learn the architecture of agentic systems
-- Understand agent components and roles
-- Build your first agentic RAG system
+- **Module 2:**: Module 2: Learn the architecture of agentic systems
+- **agent components and roles Understanding**: Understand agent components and roles
+- **your first agentic RAG Development**: Build your first agentic RAG system
 
 ---
 

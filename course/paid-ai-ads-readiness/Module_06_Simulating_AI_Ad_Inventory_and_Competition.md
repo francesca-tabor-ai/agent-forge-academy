@@ -9,12 +9,12 @@ order: 6
 
 **Duration:** Week 6  
 **Learning Objectives:**
-- Model future AI ad environments
-- Stress-test strategies against competitors
-- Simulate limited inventory scenarios
-- Map competitor strengths by intent
-- Identify budget pressure points and scarcity dynamics
-- Design first-mover vs fast-follower strategies
+- **Model Future**: Model future AI ad environments
+- **Stress-Test Strategies**: Stress-test strategies against competitors
+- **Simulate Limited**: Simulate limited inventory scenarios
+- **Map Competitor**: Map competitor strengths by intent
+- **Identify Budget**: Identify budget pressure points and scarcity dynamics
+- **first-mover vs fast-follower strategies Development**: Design first-mover vs fast-follower strategies
 
 ---
 
@@ -633,15 +633,15 @@ Create comprehensive simulation board:
 
 ## Key Takeaways
 
-- **Inventory will be limited:** Answer slots are few, quality thresholds high, competition intense
+- **Inventory will be limited:**: Answer slots are few, quality thresholds high, competition intense
 
-- **Competitive mapping is essential:** Understand competitor strengths by intent to inform strategy
+- **Competitive mapping is essential:**: Understand competitor strengths by intent to inform strategy
 
-- **Budget pressure points exist:** High-value intents, limited inventory, competitive battlegrounds create pressure
+- **Budget pressure points exist:**: High-value intents, limited inventory, competitive battlegrounds create pressure
 
-- **First-mover vs fast-follower:** Different strategies for different situations, hybrid approach often best
+- **First-mover vs fast-follower:**: Different strategies for different situations, hybrid approach often best
 
-- **Simulation prepares you:** Model scenarios before launch to optimize strategy and budget
+- **Simulation prepares you:**: Model scenarios before launch to optimize strategy and budget
 
 ---
 

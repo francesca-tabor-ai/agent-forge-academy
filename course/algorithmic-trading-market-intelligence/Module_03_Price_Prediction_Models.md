@@ -9,10 +9,10 @@ order: 3
 
 **Duration:** Week 3  
 **Learning Objectives:**
-- Implement LSTM and GRU for time series
-- Build Transformer models for finance
-- Create ensemble prediction systems
-- Evaluate prediction performance
+- **LSTM and GRU for time series Implementation**: Implement LSTM and GRU for time series
+- **Transformer models for finance Development**: Build Transformer models for finance
+- **ensemble prediction Development**: Create ensemble prediction systems
+- **prediction performance Evaluation**: Apply evaluate prediction performance in relevant contexts
 
 ---
 

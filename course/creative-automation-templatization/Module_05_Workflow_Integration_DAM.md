@@ -14,11 +14,11 @@ Creative automation doesn't exist in isolation—it's part of larger creative op
 
 ## Learning Objectives
 
-- Understand end-to-end creative workflows
-- Master DAM fundamentals: structure, metadata, taxonomy, tagging
-- Integrate with workflow management tools (e.g., Workfront)
-- Manage asset handoff, approvals, and lifecycle
-- Identify automation touchpoints across creative operations
+- **end-to-end creative workflows Understanding**: Understand end-to-end creative workflows
+- **Dam Fundamentals:**: Master DAM fundamentals: structure, metadata, taxonomy, tagging
+- **with workflow management Integration**: Integrate with workflow management tools (e.g., Workfront)
+- **Manage Asset**: Manage asset handoff, approvals, and lifecycle
+- **Identify Automation**: Identify automation touchpoints across creative operations
 
 ---
 
@@ -522,18 +522,18 @@ Automated QC Check
 
 ### Key Takeaways
 
-1. **End-to-end workflows** connect planning through distribution
-2. **DAM systems** provide structure, metadata, taxonomy, and tagging
-3. **Workflow tools** integrate with automation for seamless processes
-4. **Asset handoff and approvals** require clear processes and automation
-5. **Automation touchpoints** exist across all creative operations stages
+- **End-to-end workflows**: Connect planning through distribution
+- **DAM systems**: Provide structure, metadata, taxonomy, and tagging
+- **Workflow tools**: Integrate with automation for seamless processes
+- **Asset handoff and approvals**: Require clear processes and automation
+- **Automation touchpoints**: Exist across all creative operations stages
 
 ### Next Steps
 
-- Map your current creative workflow
-- Design a DAM structure for your organization
-- Identify workflow integration opportunities
-- Move to Module 6 to learn about data-driven and dynamic creative
+- **Map Your**: Map your current creative workflow
+- **a DAM structure for your organization Development**: Design a DAM structure for your organization
+- **Identify Workflow**: Identify workflow integration opportunities
+- **Move To**: Move to Module 6 to learn about data-driven and dynamic creative
 
 ---
 

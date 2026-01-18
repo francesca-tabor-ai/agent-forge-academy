@@ -11,11 +11,11 @@ email_action: "What reasoning patterns would indicate your agent is degrading? H
 
 **Duration:** Week 8  
 **Learning Objectives:**
-- Understand decision traces vs logs
-- Trace causal chains in multi-agent failures
-- Attribute costs per decision
-- Detect behavioral drift early
-- Build alerts on reasoning patterns
+- **decision traces vs logs Understanding**: Understand decision traces vs logs
+- **Trace Causal**: Trace causal chains in multi-agent failures
+- **Attribute Costs**: Attribute costs per decision
+- **Detect Behavioral**: Detect behavioral drift early
+- **alerts on reasoning patterns Development**: Build alerts on reasoning patterns
 
 ---
 

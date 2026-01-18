@@ -9,12 +9,12 @@ order: 4
 
 **Duration:** Week 4  
 **Learning Objectives:**
-- Learn how answer-level bidding will likely work
-- Design strategies before platforms define rules
-- Understand answer slots vs keyword inventory
-- Master persona-weighted bidding
-- Apply contextual confidence thresholds
-- Design defensive vs offensive answer strategies
+- **how answer-level bidding will likely work Understanding**: Learn how answer-level bidding will likely work
+- **strategies before platforms define rules Development**: Design strategies before platforms define rules
+- **answer slots vs keyword inventory Understanding**: Understand answer slots vs keyword inventory
+- **persona-weighted bidding Understanding**: Master persona-weighted bidding
+- **Apply Contextual**: Apply contextual confidence thresholds
+- **defensive vs offensive answer strategies Development**: Design defensive vs offensive answer strategies
 
 ---
 
@@ -534,15 +534,15 @@ Create comprehensive bid allocation model:
 
 ## Key Takeaways
 
-- **Answer slots replace keyword inventory:** Fewer, larger auctions at intent level
+- **Answer slots replace keyword inventory:**: Fewer, larger auctions at intent level
 
-- **Persona-weighted bidding optimizes value:** Adjust bids based on persona revenue potential
+- **Persona-weighted bidding optimizes value:**: Adjust bids based on persona revenue potential
 
-- **Confidence thresholds are prerequisites:** Quality must meet threshold before bid matters
+- **Confidence thresholds are prerequisites:**: Quality must meet threshold before bid matters
 
-- **Defensive vs offensive strategies serve different goals:** Defend high-share intents, offend low-share intents
+- **Defensive vs offensive strategies serve different goals:**: Defend high-share intents, offend low-share intents
 
-- **Bid allocation requires strategic framework:** Balance persona value, confidence, and competitive position
+- **Bid allocation requires strategic framework:**: Balance persona value, confidence, and competitive position
 
 ---
 

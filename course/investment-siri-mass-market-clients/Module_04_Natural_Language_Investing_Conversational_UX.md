@@ -9,10 +9,10 @@ order: 4
 
 **Duration:** Week 4  
 **Learning Objectives:**
-- Design conversational interfaces for financial literacy gaps
-- Translate complex concepts into plain language
-- Implement context memory and follow-up questions
-- Handle ambiguity and uncertainty in conversations
+- **conversational interfaces for financial literacy gaps Development**: Design conversational interfaces for financial literacy gaps
+- **Translate Complex**: Translate complex concepts into plain language
+- **context memory and follow-up questions Implementation**: Implement context memory and follow-up questions
+- **Handle Ambiguity**: Handle ambiguity and uncertainty in conversations
 
 ---
 
@@ -215,10 +215,10 @@ Create realistic sample dialogues between clients and the Investment Siri for co
 
 ## Key Takeaways
 
-- Conversational design must accommodate varying financial literacy levels
-- Translating complex concepts into plain language makes advice accessible
-- Context memory enables personalized, coherent conversations
-- Managing ambiguity and uncertainty builds trust and clarity
+- **Conversational Design**: Conversational design must accommodate varying financial literacy levels
+- **Translating Complex**: Translating complex concepts into plain language makes advice accessible
+- **Context Memory**: Context memory enables personalized, coherent conversations
+- **Managing Ambiguity**: Managing ambiguity and uncertainty builds trust and clarity
 
 ---
 

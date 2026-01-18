@@ -9,10 +9,10 @@ order: 4
 
 **Duration:** Week 4  
 **Learning Objectives:**
-- Master section-by-section writing workflows for long-form content
-- Integrate real-time research using Perplexity and Jina AI
-- Learn introduction writing and content stitching techniques
-- Build complete blog post and script generation pipelines
+- **section-by-section writing workflows for long-form content Understanding**: Master section-by-section writing workflows for long-form content
+- **real-time research using Perplexity Integration**: Integrate real-time research using Perplexity and Jina AI
+- **introduction writing and content stitching techniques Understanding**: Learn introduction writing and content stitching techniques
+- **complete blog post and script generation Development**: Build complete blog post and script generation pipelines
 
 ---
 

@@ -10,11 +10,11 @@ order: 5
 **Duration:** Week 5  
 **Theme:** Designing for confidence, not blind automation  
 **Learning Objectives:**
-- Understand when humans should intervene in AI systems
-- Design approval, override, and review patterns
-- Create effective feedback collection for learning
-- Implement transparency and explainability at the UX level
-- Measure trust and adoption in AI products
+- **when humans should intervene in AI systems Understanding**: Understand when humans should intervene in AI systems
+- **approval, override, and review patterns Development**: Design approval, override, and review patterns
+- **effective feedback collection for learning Development**: Create effective feedback collection for learning
+- **transparency and explainability at the UX level Implementation**: Implement transparency and explainability at the UX level
+- **Measure Trust**: Measure trust and adoption in AI products
 
 ---
 
@@ -846,20 +846,20 @@ Take an existing AI feature design and add human-in-the-loop controls, trust mec
 
 **Key Takeaways:**
 
-1. **Intervention Decisions:** Use risk, confidence, complexity, and user preferences to decide when humans should intervene.
+- **Intervention Decisions:**: Use risk, confidence, complexity, and user preferences to decide when humans should intervene
 
-2. **Control Patterns:** Approval, override, and review patterns give users control while maintaining AI benefits.
+- **Control Patterns:**: Approval, override, and review patterns give users control while maintaining AI benefits
 
-3. **Feedback Loops:** Design easy, contextual feedback collection that closes the loop and shows impact.
+- **Feedback Loops:**: Design easy, contextual feedback collection that closes the loop and shows impact
 
-4. **Transparency:** Explain AI decisions at appropriate levels, from basic to detailed, based on user needs.
+- **Transparency:**: Explain AI decisions at appropriate levels, from basic to detailed, based on user needs
 
-5. **Trust Measurement:** Track behavioral indicators, explicit measures, corrections, and business impact to understand trust and adoption.
+- **Trust Measurement:**: Track behavioral indicators, explicit measures, corrections, and business impact to understand trust and adoption
 
 **Next Steps:**
-- Module 6: Learn ethical and responsible AI in product design
-- Understand bias, fairness, privacy, and regulatory considerations
-- Build ethical review into product workflows
+- **Module 6:**: Module 6: Learn ethical and responsible AI in product design
+- **bias, fairness, privacy, and regulatory considerations Understanding**: Understand bias, fairness, privacy, and regulatory considerations
+- **ethical review into product Development**: Build ethical review into product workflows
 
 ---
 

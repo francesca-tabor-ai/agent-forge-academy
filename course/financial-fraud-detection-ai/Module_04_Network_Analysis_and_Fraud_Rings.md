@@ -9,10 +9,10 @@ order: 4
 
 **Duration:** Week 4  
 **Learning Objectives:**
-- Build graph-based fraud detection
-- Implement community detection
-- Create link analysis systems
-- Detect fraud rings
+- **graph-based fraud detection Development**: Build graph-based fraud detection
+- **community detection Implementation**: Implement community detection
+- **link analysis Development**: Create link analysis systems
+- **Detect Fraud**: Apply detect fraud rings in relevant contexts
 
 ---
 

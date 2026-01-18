@@ -9,10 +9,10 @@ order: 4
 
 **Duration:** Week 4  
 **Learning Objectives:**
-- Understand and implement Corrective RAG (CRAG)
-- Build Adaptive RAG systems with query classification
-- Master Graph-Based Agentic RAG for multi-hop reasoning
-- Learn Agentic Document Workflows (ADW) for automation
+- **and implement Corrective RAG Understanding**: Understand and implement Corrective RAG (CRAG)
+- **Adaptive RAG Development**: Build Adaptive RAG systems with query classification
+- **Graph-Based Agentic RAG for multi-hop reasoning Understanding**: Master Graph-Based Agentic RAG for multi-hop reasoning
+- **Agentic Document Workflows Understanding**: Learn Agentic Document Workflows (ADW) for automation
 
 ---
 
@@ -594,15 +594,15 @@ Implement a Corrective RAG system with relevance evaluation, query refinement, a
 
 **Key Takeaways:**
 
-1. **CRAG:** Self-correcting with relevance evaluation and web search
-2. **Adaptive RAG:** Query complexity classification for efficiency
-3. **Graph-Based:** Knowledge graphs with agentic traversal
-4. **ADW:** End-to-end document workflow automation
+- **CRAG:**: Self-correcting with relevance evaluation and web search
+- **Adaptive RAG:**: Query complexity classification for efficiency
+- **Graph-Based:**: Knowledge graphs with agentic traversal
+- **ADW:**: End-to-end document workflow automation
 
 **Next Steps:**
-- Module 5: Apply frameworks to enterprise domains
-- Implement domain-specific solutions
-- Build production applications
+- **Module 5:**: Module 5: Apply frameworks to enterprise domains
+- **domain-specific solutions Implementation**: Implement domain-specific solutions
+- **production applications Development**: Build production applications
 
 ---
 

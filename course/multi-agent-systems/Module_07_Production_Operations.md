@@ -11,10 +11,10 @@ email_action: "Set up a simple GitHub Action that runs tests on every push—sta
 
 **Duration:** Weeks 8-9  
 **Learning Objectives:**
-- Master deployment strategies (blue-green, canary)
-- Build CI/CD pipelines for agents
-- Implement testing strategies
-- Plan for disaster recovery
+- **deployment strategies Understanding**: Master deployment strategies (blue-green, canary)
+- **CI/CD Development**: Build CI/CD pipelines for agents
+- **testing strategies Implementation**: Implement testing strategies
+- **Plan For**: Plan for disaster recovery
 
 ## Topics Covered:
 

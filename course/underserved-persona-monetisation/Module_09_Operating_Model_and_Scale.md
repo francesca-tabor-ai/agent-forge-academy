@@ -10,12 +10,12 @@ order: 9
 **Duration:** Week 9  
 **Theme:** Making This a Repeatable Growth Engine  
 **Learning Objectives:**
-- Institutionalise persona monetisation
-- Avoid one-off wins that don't scale
-- Work effectively with product & pricing teams
-- Partner with brand and research teams
-- Align growth, experimentation, and AI visibility
-- Design portfolio-level persona strategies
+- **Institutionalise Persona**: Apply institutionalise persona monetisation in relevant contexts
+- **Avoid One-Off**: Avoid one-off wins that don't scale
+- **Work Effectively**: Work effectively with product & pricing teams
+- **Partner With**: Partner with brand and research teams
+- **Align Growth,**: Align growth, experimentation, and AI visibility
+- **portfolio-level persona strategies Development**: Design portfolio-level persona strategies
 
 ---
 
@@ -564,22 +564,22 @@ Create a comprehensive plan for monetising an underserved persona, including per
 
 **Key Takeaways:**
 
-1. **Cross-Functional Collaboration:** Working effectively with product, pricing, brand, and research teams ensures persona monetisation success.
+- **Cross-Functional Collaboration:**: Working effectively with product, pricing, brand, and research teams ensures persona monetisation success
 
-2. **Team Alignment:** Aligning growth, experimentation, and AI visibility efforts around personas creates powerful synergies.
+- **Team Alignment:**: Aligning growth, experimentation, and AI visibility efforts around personas creates powerful synergies
 
-3. **Portfolio Strategy:** For multi-brand or PE-backed portfolios, persona strategies can be optimized at the portfolio level.
+- **Portfolio Strategy:**: For multi-brand or PE-backed portfolios, persona strategies can be optimized at the portfolio level
 
-4. **Operating Model:** Creating a repeatable operating model ensures persona monetisation scales and doesn't rely on one-off wins.
+- **Operating Model:**: Creating a repeatable operating model ensures persona monetisation scales and doesn't rely on one-off wins
 
-5. **Capstone Project:** The comprehensive capstone project brings together all course learnings into a complete persona monetisation plan.
+- **Capstone Project:**: The comprehensive capstone project brings together all course learnings into a complete persona monetisation plan
 
 **Course Completion:**
-- You now have the skills to identify, validate, and monetise underserved personas
-- You can align products, pricing, and messaging with personas
-- You can collect proof and improve AI visibility
-- You can measure impact and build operating models
-- You're ready to drive durable growth through persona monetisation
+- **You Now**: You now have the skills to identify, validate, and monetise underserved personas
+- **You Can**: You can align products, pricing, and messaging with personas
+- **You Can**: You can collect proof and improve AI visibility
+- **You Can**: You can measure impact and build operating models
+- **You'Re Ready**: You're ready to drive durable growth through persona monetisation
 
 ---
 
@@ -617,17 +617,17 @@ You now have the knowledge and skills to:
 - Drive durable growth rooted in real customer needs
 
 **Next Steps:**
-- Apply learnings to your current role
-- Start with persona discovery and validation
-- Build persona monetisation capabilities
-- Share learnings with your team
-- Continue learning and iterating
+- **Apply Learnings**: Apply learnings to your current role
+- **Start With**: Start with persona discovery and validation
+- **persona monetisation capabilities Development**: Build persona monetisation capabilities
+- **Share Learnings**: Share learnings with your team
+- **Continue Learning**: Continue learning and iterating
 
 **Stay Connected:**
-- Join course alumni community
-- Attend office hours and events
-- Share success stories
-- Learn from peers
+- **Join Course**: Join course alumni community
+- **Attend Office**: Attend office hours and events
+- **Share Success**: Apply share success stories in relevant contexts
+- **from peers Understanding**: Learn from peers
 
 ---
 

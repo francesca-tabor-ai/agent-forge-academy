@@ -13,11 +13,11 @@ email_action: "Perform a bias assessment on one model in your organization. Iden
 **Theme:** *Responsible outcomes require visibility*
 
 **Learning Objectives:**
-- Understand sources of bias in data and models
-- Learn fairness definitions and trade-offs
-- Master techniques for measuring and monitoring bias
-- Explore explainability techniques and limitations
-- Develop skills for communicating model behavior to stakeholders
+- **sources of bias in data and models Understanding**: Understand sources of bias in data and models
+- **fairness definitions and trade-offs Understanding**: Learn fairness definitions and trade-offs
+- **techniques for measuring and monitoring bias Understanding**: Master techniques for measuring and monitoring bias
+- **Explore Explainability**: Explore explainability techniques and limitations
+- **skills for communicating model behavior to stakeholders Development**: Develop skills for communicating model behavior to stakeholders
 
 ---
 
@@ -987,17 +987,17 @@ A comprehensive fairness and explainability report that includes:
 
 ## Key Takeaways
 
-1. **Bias has multiple sources:** Historical, representation, measurement, aggregation, evaluation, and algorithmic bias all contribute to unfair outcomes.
+- **Bias has multiple sources:**: Historical, representation, measurement, aggregation, evaluation, and algorithmic bias all contribute to unfair outcomes
 
-2. **Fairness is context-dependent:** Different fairness definitions exist, and they often conflict—choose based on context and requirements.
+- **Fairness is context-dependent:**: Different fairness definitions exist, and they often conflict—choose based on context and requirements
 
-3. **Bias requires continuous monitoring:** Bias can emerge over time, so ongoing monitoring is essential.
+- **Bias requires continuous monitoring:**: Bias can emerge over time, so ongoing monitoring is essential
 
-4. **Explainability has limitations:** Trade-offs exist between accuracy and interpretability, and explanations may not always reflect true model behavior.
+- **Explainability has limitations:**: Trade-offs exist between accuracy and interpretability, and explanations may not always reflect true model behavior
 
-5. **Communication is critical:** Different stakeholders need different types of explanations, tailored to their needs and expertise.
+- **Communication is critical:**: Different stakeholders need different types of explanations, tailored to their needs and expertise
 
-6. **Bias and explainability are operational requirements:** They're not just ethical concerns—they're essential for legal compliance, risk management, and business success.
+- **Bias and explainability are operational requirements:**: They're not just ethical concerns—they're essential for legal compliance, risk management, and business success
 
 ---
 

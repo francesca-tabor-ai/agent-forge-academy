@@ -10,12 +10,12 @@ order: 6
 **Duration:** Week 6  
 **Theme:** Why AI Prefers Real Stories Over Claims  
 **Learning Objectives:**
-- Capture proof that AI systems amplify organically
-- Replace influencer narratives with credible evidence
-- Identify high-signal customers
-- Structure testimonials for AI readability
-- Create UGC prompts that surface outcomes, not hype
-- Navigate ethical and legal considerations
+- **Capture Proof**: Capture proof that AI systems amplify organically
+- **Replace Influencer**: Replace influencer narratives with credible evidence
+- **Identify High-Signal**: Apply identify high-signal customers in relevant contexts
+- **Structure Testimonials**: Structure testimonials for AI readability
+- **UGC prompts that surface outcomes, not hype Development**: Create UGC prompts that surface outcomes, not hype
+- **Navigate Ethical**: Navigate ethical and legal considerations
 
 ---
 
@@ -546,20 +546,20 @@ Create a comprehensive plan for collecting authentic proof that AI systems ampli
 
 **Key Takeaways:**
 
-1. **High-Signal Customers:** Identifying customers with strong outcomes, persona alignment, specific results, and credibility helps collect valuable proof.
+- **High-Signal Customers:**: Identifying customers with strong outcomes, persona alignment, specific results, and credibility helps collect valuable proof
 
-2. **AI-Readable Testimonials:** Structuring testimonials with specific, persona-relevant, outcome-focused information makes them more valuable for AI systems.
+- **AI-Readable Testimonials:**: Structuring testimonials with specific, persona-relevant, outcome-focused information makes them more valuable for AI systems
 
-3. **Outcome-Focused UGC:** Creating prompts that surface outcomes, constraints, and persona-relevant information generates more valuable user-generated content.
+- **Outcome-Focused UGC:**: Creating prompts that surface outcomes, constraints, and persona-relevant information generates more valuable user-generated content
 
-4. **Ethical and Legal:** Following ethical guidelines and legal requirements protects both customers and brands while building trust.
+- **Ethical and Legal:**: Following ethical guidelines and legal requirements protects both customers and brands while building trust
 
-5. **Proof Collection Plan:** Systematic collection of authentic proof helps build AI-visible evidence that amplifies organically.
+- **Proof Collection Plan:**: Systematic collection of authentic proof helps build AI-visible evidence that amplifies organically
 
 **Next Steps:**
-- Module 7: Learn to feed persona insights back into AI visibility systems
-- Understand how to update content and product truth layers
-- Build skills in closing the persona–AI visibility loop
+- **Module 7:**: Module 7: Learn to feed persona insights back into AI visibility systems
+- **how to update content and product truth layers Understanding**: Understand how to update content and product truth layers
+- **skills in closing the persona–AI visibility loop Development**: Build skills in closing the persona–AI visibility loop
 
 ---
 

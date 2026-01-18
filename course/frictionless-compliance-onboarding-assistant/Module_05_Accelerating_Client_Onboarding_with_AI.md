@@ -9,10 +9,10 @@ order: 5
 
 **Duration:** Week 5  
 **Learning Objectives:**
-- Automate identity verification (KYC) processes
-- Implement AML screening and transaction monitoring
-- Automate document ingestion and validation
-- Reduce manual "sightings" and rework
+- **Automate Identity**: Automate identity verification (KYC) processes
+- **AML screening and transaction monitoring Implementation**: Implement AML screening and transaction monitoring
+- **Automate Document**: Automate document ingestion and validation
+- **Reduce Manual**: Reduce manual "sightings" and rework
 
 ---
 
@@ -179,10 +179,10 @@ Analyze and compare onboarding timelines for manual and AI-assisted processes.
 
 ## Key Takeaways
 
-- AI automation dramatically accelerates onboarding while maintaining controls
-- KYC automation reduces time from days to hours
-- AML screening automation enables real-time monitoring
-- Document automation reduces manual rework significantly
+- **Ai Automation**: AI automation dramatically accelerates onboarding while maintaining controls
+- **Kyc Automation**: KYC automation reduces time from days to hours
+- **Aml Screening**: AML screening automation enables real-time monitoring
+- **Document Automation**: Document automation reduces manual rework significantly
 
 ---
 

@@ -19,15 +19,15 @@ order: 0
 
 By completing this course, you will be able to:
 
-- Design AI-driven data management systems for asset managers
-- Understand root causes of data quality failures in fund data
-- Extract data from unstructured documents using AI
-- Transform documents into structured, auditable data
-- Automate ESG Template (EET) completion
-- Manage ESG complexity and regulatory alignment
-- Detect data anomalies automatically
-- Implement human-in-the-loop data governance
-- Build scalable, enterprise-grade data platforms
+- **AI-driven data management Development**: Design AI-driven data management systems for asset managers
+- **root causes of data quality failures in fund data Understanding**: Understand root causes of data quality failures in fund data
+- **Extract Data**: Extract data from unstructured documents using AI
+- **Transform Documents**: Transform documents into structured, auditable data
+- **Automate Esg**: Automate ESG Template (EET) completion
+- **Manage Esg**: Manage ESG complexity and regulatory alignment
+- **Detect Data**: Detect data anomalies automatically
+- **human-in-the-loop data governance Implementation**: Implement human-in-the-loop data governance
+- **scalable, enterprise-grade data platforms Development**: Build scalable, enterprise-grade data platforms
 
 ---
 

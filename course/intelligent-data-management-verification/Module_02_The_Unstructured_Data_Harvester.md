@@ -9,10 +9,10 @@ order: 2
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Understand why key risk data lives in unstructured documents
-- Implement OCR for scanned and non-printable PDFs
-- Apply NLP for legal, financial, and regulatory language
-- Extract complex metrics: net derivative exposure, loss absorption, high-yield allocations
+- **why key risk data lives in unstructured documents Understanding**: Understand why key risk data lives in unstructured documents
+- **OCR for scanned and non-printable PDFs Implementation**: Implement OCR for scanned and non-printable PDFs
+- **Apply Nlp**: Apply NLP for legal, financial, and regulatory language
+- **Extract Complex**: Extract complex metrics: net derivative exposure, loss absorption, high-yield allocations
 
 ---
 
@@ -238,10 +238,10 @@ Create a comprehensive extraction blueprint for extracting key data from a 300-p
 
 ## Key Takeaways
 
-- Key risk data lives in unstructured documents due to regulatory and legal requirements
-- OCR enables extraction from scanned and non-printable PDFs
-- Domain-specific NLP is essential for legal, financial, and regulatory language
-- Complex metrics require specialized extraction approaches with validation
+- **Key Risk**: Key risk data lives in unstructured documents due to regulatory and legal requirements
+- **Ocr Enables**: OCR enables extraction from scanned and non-printable PDFs
+- **Domain-Specific Nlp**: Domain-specific NLP is essential for legal, financial, and regulatory language
+- **Complex Metrics**: Complex metrics require specialized extraction approaches with validation
 
 ---
 

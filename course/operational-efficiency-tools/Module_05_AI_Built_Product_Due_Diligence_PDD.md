@@ -9,10 +9,10 @@ order: 5
 
 **Duration:** Week 5  
 **Learning Objectives:**
-- Understand the traditional PDD burden and review fatigue
-- Identify complex derivatives and structured exposures
-- Detect virtual assets, leverage, and embedded optionality
-- Map risk signals to internal governance thresholds
+- **the traditional PDD burden and review fatigue Understanding**: Understand the traditional PDD burden and review fatigue
+- **Identify Complex**: Identify complex derivatives and structured exposures
+- **Detect Virtual**: Detect virtual assets, leverage, and embedded optionality
+- **Map Risk**: Map risk signals to internal governance thresholds
 
 ---
 
@@ -253,10 +253,10 @@ Develop a comprehensive taxonomy of red flags for automated product due diligenc
 
 ## Key Takeaways
 
-- Traditional PDD creates significant burden and review fatigue
-- Detecting complex derivatives and structured exposures requires specialized AI
-- Virtual assets, leverage, and embedded optionality require careful identification
-- Mapping risk signals to governance thresholds enables automated decision-making
+- **Traditional Pdd**: Traditional PDD creates significant burden and review fatigue
+- **Detecting Complex**: Detecting complex derivatives and structured exposures requires specialized AI
+- **Virtual Assets,**: Virtual assets, leverage, and embedded optionality require careful identification
+- **Mapping Risk**: Mapping risk signals to governance thresholds enables automated decision-making
 
 ---
 

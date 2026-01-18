@@ -10,10 +10,10 @@ order: 8
 **Duration:** Weeks 7-8  
 **Theme:** End-to-end executive data & AI strategy  
 **Learning Objectives:**
-- Apply all course learnings to a real-world context
-- Design a complete Leadership OS
-- Integrate strategy, operating model, metrics, portfolio, communication, and culture
-- Present and defend strategy at executive/board level
+- **Apply All**: Apply all course learnings to a real-world context
+- **a complete Leadership OS Development**: Design a complete Leadership OS
+- **strategy, operating model, metrics, portfolio, communication, Integration**: Integrate strategy, operating model, metrics, portfolio, communication, and culture
+- **Present And**: Present and defend strategy at executive/board level
 
 ---
 
@@ -523,21 +523,21 @@ This capstone integrates all course learnings into a comprehensive Leadership OS
 - Strategy defense
 
 **Outcome:**
-- Demonstrate mastery of data & AI leadership
-- Show ability to lead at scale
-- Graduate with executive-ready portfolio
+- **Demonstrate Mastery**: Demonstrate mastery of data & AI leadership
+- **Show Ability**: Show ability to lead at scale
+- **Graduate With**: Graduate with executive-ready portfolio
 
 ---
 
 ## Next Steps
 
-1. **Choose Project Option:** Your organization, case study, or hypothetical
-2. **Review Requirements:** Understand all deliverables
-3. **Create Timeline:** Plan your work
-4. **Start Phase 1:** Begin with context and strategy
-5. **Seek Support:** Use office hours and peer support
-6. **Iterate and Refine:** Get feedback and improve
-7. **Present and Defend:** Show your Leadership OS
+- **Choose Project Option:**: Your organization, case study, or hypothetical
+- **Review Requirements:**: Understand all deliverables
+- **Create Timeline:**: Plan your work
+- **Start Phase 1:**: Begin with context and strategy
+- **Seek Support:**: Use office hours and peer support
+- **Iterate and Refine:**: Get feedback and improve
+- **Present and Defend:**: Show your Leadership OS
 
 ---
 

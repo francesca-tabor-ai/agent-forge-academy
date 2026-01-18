@@ -9,10 +9,10 @@ order: 2
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Distinguish guidance vs. recommendations vs. execution
-- Understand goal-based investing for non-expert clients
-- Design question-led advisory journeys
-- Manage expectations and trust in AI
+- **guidance Analysis**: Distinguish guidance vs. recommendations vs. execution
+- **goal-based investing for non-expert clients Understanding**: Understand goal-based investing for non-expert clients
+- **question-led advisory journeys Development**: Design question-led advisory journeys
+- **Manage Expectations**: Manage expectations and trust in AI
 
 ---
 
@@ -200,10 +200,10 @@ Create a complete conversation flow for a first-time retail investor using the I
 
 ## Key Takeaways
 
-- Clear distinction between guidance, recommendations, and execution is essential
-- Goal-based investing makes advice accessible to non-expert clients
-- Question-led journeys create engaging, personalized experiences
-- Managing expectations and building trust are critical for AI adoption
+- **Clear Distinction**: Clear distinction between guidance, recommendations, and execution is essential
+- **Goal-Based Investing**: Goal-based investing makes advice accessible to non-expert clients
+- **Question-Led Journeys**: Question-led journeys create engaging, personalized experiences
+- **Managing Expectations**: Managing expectations and building trust are critical for AI adoption
 
 ---
 

@@ -9,10 +9,10 @@ order: 4
 
 **Duration:** Week 4  
 **Learning Objectives:**
-- Design insight layering: raw data → signal → recommendation
-- Implement confidence bands and probability scoring
-- Avoid false certainty in communications
-- Communicate forecasts responsibly
+- **Design Insight**: Design insight layering: raw data → signal → recommendation
+- **confidence bands and probability scoring Implementation**: Implement confidence bands and probability scoring
+- **Avoid False**: Avoid false certainty in communications
+- **Communicate Forecasts**: Apply communicate forecasts responsibly in relevant contexts
 
 ---
 
@@ -173,10 +173,10 @@ Transform a complex predictive signal into a clear, actionable insight card for 
 
 ## Key Takeaways
 
-- Insight layering transforms complex data into actionable intelligence
-- Confidence bands and probability scoring communicate uncertainty appropriately
-- Avoiding false certainty builds trust and prevents overconfidence
-- Responsible communication ensures regulatory compliance and advisor trust
+- **Insight Layering**: Insight layering transforms complex data into actionable intelligence
+- **Confidence Bands**: Confidence bands and probability scoring communicate uncertainty appropriately
+- **Avoiding False**: Avoiding false certainty builds trust and prevents overconfidence
+- **Responsible Communication**: Responsible communication ensures regulatory compliance and advisor trust
 
 ---
 

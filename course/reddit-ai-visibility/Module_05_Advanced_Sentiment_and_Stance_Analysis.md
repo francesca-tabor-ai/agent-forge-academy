@@ -9,10 +9,10 @@ order: 5
 
 **Duration:** Week 5  
 **Learning Objectives:**
-- Master Sentiment Volume Change (SVC) metrics
-- Implement stance detection with BERT models
-- Navigate meme economy volatility
-- Predict market trends from Reddit data
+- **Sentiment Volume Change Understanding**: Master Sentiment Volume Change (SVC) metrics
+- **stance detection with BERT models Implementation**: Implement stance detection with BERT models
+- **Navigate Meme**: Navigate meme economy volatility
+- **Predict Market**: Predict market trends from Reddit data
 
 ---
 
@@ -321,10 +321,10 @@ def detect_stance(text, topic):
 4. **Adapt (24+ hours):** Adjust strategy based on outcome
 
 **Outcome:**
-- Brand engaged authentically
-- Community appreciated response
-- Positive sentiment increased
-- Long-term reputation improved
+- **Brand Engaged**: Apply brand engaged authentically in relevant contexts
+- **Community Appreciated**: Apply community appreciated response in relevant contexts
+- **Positive Sentiment**: Apply positive sentiment increased in relevant contexts
+- **Long-Term Reputation**: Apply long-term reputation improved in relevant contexts
 
 ---
 

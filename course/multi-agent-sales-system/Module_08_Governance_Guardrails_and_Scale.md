@@ -12,13 +12,13 @@ email_action: "Design your 'kill switch' and escalation framework."
 
 **Duration:** Week 8  
 **Learning Objectives:**
-- Prevent agent drift
-- Maintain brand, legal, and ethical standards
-- Scale from 10 → 100+ agents safely
-- Understand prompt governance and version control
-- Learn audit logs and explainability
-- Design human override design
-- Know when not to automate
+- **Prevent Agent**: Apply prevent agent drift in relevant contexts
+- **Maintain Brand,**: Maintain brand, legal, and ethical standards
+- **Scale From**: Scale from 10 → 100+ agents safely
+- **prompt governance and version control Understanding**: Understand prompt governance and version control
+- **audit logs and explainability Understanding**: Learn audit logs and explainability
+- **human override design Development**: Design human override design
+- **Know When**: Know when not to automate
 
 ---
 

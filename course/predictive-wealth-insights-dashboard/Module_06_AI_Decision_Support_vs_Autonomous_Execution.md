@@ -9,10 +9,10 @@ order: 6
 
 **Duration:** Week 6  
 **Learning Objectives:**
-- Distinguish suggestive vs. automatic rebalancing
-- Design human-in-the-loop governance
-- Handle market stress and exceptional events
-- Understand regulatory expectations for discretionary management
+- **suggestive Analysis**: Distinguish suggestive vs. automatic rebalancing
+- **human-in-the-loop governance Development**: Apply design human-in-the-loop governance in relevant contexts
+- **Handle Market**: Handle market stress and exceptional events
+- **regulatory expectations for discretionary management Understanding**: Understand regulatory expectations for discretionary management
 
 ---
 
@@ -151,10 +151,10 @@ Create an escalation model that appropriately routes AI-driven rebalancing actio
 
 ## Key Takeaways
 
-- Suggestive and automatic rebalancing serve different use cases
-- Human-in-the-loop governance ensures quality and accountability
-- Market stress requires special handling and human oversight
-- Regulatory expectations demand appropriate automation levels
+- **Suggestive And**: Suggestive and automatic rebalancing serve different use cases
+- **Human-In-The-Loop Governance**: Human-in-the-loop governance ensures quality and accountability
+- **Market Stress**: Market stress requires special handling and human oversight
+- **Regulatory Expectations**: Regulatory expectations demand appropriate automation levels
 
 ---
 

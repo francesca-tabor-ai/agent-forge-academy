@@ -9,10 +9,10 @@ order: 3
 
 **Duration:** Week 3  
 **Learning Objectives:**
-- Implement sentiment scoring and trend acceleration
-- Link search traffic to inflow probability
-- Separate noise from signal
-- Build scenario forecasting across asset classes
+- **sentiment scoring and trend acceleration Implementation**: Implement sentiment scoring and trend acceleration
+- **search traffic Integration**: Link search traffic to inflow probability
+- **Separate Noise**: Separate noise from signal
+- **scenario forecasting across asset classes Development**: Build scenario forecasting across asset classes
 
 ---
 
@@ -175,10 +175,10 @@ Build a simple inflow forecast model using sentiment and search data.
 
 ## Key Takeaways
 
-- Sentiment scoring and trend acceleration provide early flow signals
-- Search traffic correlates with future inflows with measurable lead time
-- Signal processing separates meaningful patterns from noise
-- Scenario forecasting enables multi-asset class intelligence
+- **Sentiment Scoring**: Sentiment scoring and trend acceleration provide early flow signals
+- **Search Traffic**: Search traffic correlates with future inflows with measurable lead time
+- **Signal Processing**: Signal processing separates meaningful patterns from noise
+- **Scenario Forecasting**: Scenario forecasting enables multi-asset class intelligence
 
 ---
 

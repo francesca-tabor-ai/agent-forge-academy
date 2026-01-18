@@ -10,11 +10,11 @@ order: 4
 **Duration:** Week 4  
 **Theme:** Applying generative AI responsibly  
 **Learning Objectives:**
-- Understand core GenAI capabilities (text, image, audio)
-- Apply common GenAI product patterns (assistants, copilots, content generation)
-- Design prompts as a product concern
-- Evaluate cost, latency, and quality trade-offs
-- Design GenAI features with clear user value and constraints
+- **core GenAI capabilities Understanding**: Understand core GenAI capabilities (text, image, audio)
+- **Apply Common**: Apply common GenAI product patterns (assistants, copilots, content generation)
+- **prompts as a product concern Development**: Design prompts as a product concern
+- **cost, latency, Evaluation**: Evaluate cost, latency, and quality trade-offs
+- **GenAI features with clear user value and constraints Development**: Design GenAI features with clear user value and constraints
 
 ---
 
@@ -701,20 +701,20 @@ Design a complete GenAI-powered feature. Define user and business value, technic
 
 **Key Takeaways:**
 
-1. **GenAI Capabilities:** Text, image, and audio generation each have unique applications and considerations.
+- **GenAI Capabilities:**: Text, image, and audio generation each have unique applications and considerations
 
-2. **Product Patterns:** Assistants, content generation, conversational interfaces, creative tools, and enhancement are common patterns.
+- **Product Patterns:**: Assistants, content generation, conversational interfaces, creative tools, and enhancement are common patterns
 
-3. **Prompt Design:** Prompts are product features - design, test, and optimize them like any other feature.
+- **Prompt Design:**: Prompts are product features - design, test, and optimize them like any other feature
 
-4. **Trade-offs:** Balance cost, latency, and quality based on feature requirements and constraints.
+- **Trade-offs:**: Balance cost, latency, and quality based on feature requirements and constraints
 
-5. **Value and Constraints:** Clearly define user value, business value, and constraints before building.
+- **Value and Constraints:**: Clearly define user value, business value, and constraints before building
 
 **Next Steps:**
-- Module 5: Learn human-in-the-loop and trust mechanisms
-- Understand when and how to incorporate human oversight
-- Design AI experiences that build user confidence
+- **Module 5:**: Module 5: Learn human-in-the-loop and trust mechanisms
+- **when and how to incorporate human oversight Understanding**: Understand when and how to incorporate human oversight
+- **AI experiences that build user confidence Development**: Design AI experiences that build user confidence
 
 ---
 

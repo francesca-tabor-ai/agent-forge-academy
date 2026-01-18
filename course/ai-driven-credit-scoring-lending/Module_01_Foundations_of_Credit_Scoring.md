@@ -9,10 +9,10 @@ order: 1
 
 **Duration:** Week 1  
 **Learning Objectives:**
-- Understand traditional credit scoring
-- Learn about credit bureaus and FICO
-- Compare with AI-enhanced approaches
-- Build a basic credit score model
+- **traditional credit scoring Understanding**: Understand traditional credit scoring
+- **about credit bureaus and FICO Understanding**: Learn about credit bureaus and FICO
+- **with AI-enhanced approaches Analysis**: Compare with AI-enhanced approaches
+- **a basic credit score model Development**: Build a basic credit score model
 
 ---
 

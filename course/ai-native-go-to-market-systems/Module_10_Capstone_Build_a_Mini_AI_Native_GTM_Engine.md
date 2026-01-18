@@ -9,11 +9,11 @@ order: 10
 
 **Duration:** Week 10  
 **Learning Objectives:**
-- Design and build a complete GTM system end-to-end
-- Integrate multiple components (data, automation, AI, analytics)
-- Demonstrate ownership of outcomes
-- Document and present your system
-- Reflect on what you'd improve next
+- **and build a complete GTM Development**: Design and build a complete GTM system end-to-end
+- **multiple components (data, automation, AI, analytics) Integration**: Integrate multiple components (data, automation, AI, analytics)
+- **Demonstrate Ownership**: Demonstrate ownership of outcomes
+- **Document And**: Document and present your system
+- **Reflect On**: Reflect on what you'd improve next
 
 ---
 
@@ -598,11 +598,11 @@ Design and build a GTM system that demonstrates your ability to:
 
 ## Key Takeaways
 
-- **End-to-end ownership means designing, building, and maintaining complete systems**  
-- **Integration of multiple components creates powerful GTM engines**  
-- **AI adds leverage when applied to the right use cases with proper guardrails**  
-- **Analytics and monitoring ensure systems deliver value**  
-- **Documentation and reflection enable continuous improvement**
+- **End-to-end ownership means designing, building, and maintaining complete systems**: **End-to-end ownership means designing, building, and maintaining complete systems**: **End-to-end ownership means designing, building, and.
+- **Integration of multiple components creates powerful GTM engines**: **Integration of multiple components creates powerful GTM engines**: **Integration of multiple components creates powerful GTM engines**
+- **AI adds leverage when applied to the right use cases with proper guardrails**: **AI adds leverage when applied to the right use cases with proper guardrails**: **AI adds leverage when applied to the right use cases with.
+- **Analytics and monitoring ensure systems deliver value**: **Analytics and monitoring ensure systems deliver value**: **Analytics and monitoring ensure systems deliver value**
+- **Documentation and reflection enable continuous improvement**: **Documentation and reflection enable continuous improvement**: **Documentation and reflection enable continuous improvement**
 
 ---
 

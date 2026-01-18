@@ -9,10 +9,10 @@ order: 7
 
 **Duration:** Week 7  
 **Learning Objectives:**
-- Master LangChain, LangGraph, and LlamaIndex for agentic RAG
-- Integrate vector stores and graph databases
-- Set up observability with Langfuse
-- Deploy production-ready systems
+- **LangChain, LangGraph, and LlamaIndex for agentic RAG Understanding**: Master LangChain, LangGraph, and LlamaIndex for agentic RAG
+- **vector stores Integration**: Integrate vector stores and graph databases
+- **observability with Langfuse Implementation**: Set up observability with Langfuse
+- **production-ready Implementation**: Deploy production-ready systems
 
 ---
 
@@ -626,10 +626,10 @@ Build and deploy a complete production agentic RAG system with full observabilit
 
 **Key Takeaways:**
 
-1. **Frameworks:** LangChain, LangGraph, LlamaIndex, AutoGen, CrewAI
-2. **Databases:** Vector stores (Qdrant, Pinecone) and graph databases (Memgraph, Neo4j)
-3. **Observability:** Langfuse for monitoring, cost tracking, and optimization
-4. **Production:** Deploy with full observability and monitoring
+- **Frameworks:**: LangChain, LangGraph, LlamaIndex, AutoGen, CrewAI
+- **Databases:**: Vector stores (Qdrant, Pinecone) and graph databases (Memgraph, Neo4j)
+- **Observability:**: Langfuse for monitoring, cost tracking, and optimization
+- **Production:**: Deploy with full observability and monitoring
 
 **Congratulations!** You've completed the Mastering Agentic RAG for Enterprise AI course!
 
@@ -653,10 +653,10 @@ Build and deploy a complete production agentic RAG system with full observabilit
 **Course Complete! **
 
 **Next Steps:**
-- Build your own agentic RAG system
-- Contribute to open source
-- Share your learnings
-- Continue learning and experimenting
+- **your own agentic RAG Development**: Build your own agentic RAG system
+- **Contribute To**: Contribute to open source
+- **Share Your**: Apply share your learnings in relevant contexts
+- **Continue Learning**: Continue learning and experimenting
 
 ---
 

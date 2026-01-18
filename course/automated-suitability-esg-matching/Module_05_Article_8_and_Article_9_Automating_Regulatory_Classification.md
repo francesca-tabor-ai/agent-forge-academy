@@ -9,10 +9,10 @@ order: 5
 
 **Duration:** Week 5  
 **Learning Objectives:**
-- Understand what legally distinguishes Article 6, 8, and 9 funds
-- Identify common misclassification risks
-- Compare rule-based vs. AI-assisted classification
-- Implement pre-trade compliance checks for ESG suitability
+- **what legally distinguishes Article 6, 8, and 9 funds Understanding**: Understand what legally distinguishes Article 6, 8, and 9 funds
+- **Identify Common**: Identify common misclassification risks
+- **rule-based Analysis**: Compare rule-based vs. AI-assisted classification
+- **pre-trade compliance checks for ESG suitability Implementation**: Implement pre-trade compliance checks for ESG suitability
 
 ---
 
@@ -283,11 +283,11 @@ Has Sustainable Investment Objective?
 
 ## Key Takeaways
 
-- Article 6, 8, and 9 have distinct legal requirements that must be accurately applied
-- Misclassification risks can be mitigated through systematic validation
-- Rule-based and AI-assisted approaches can be combined for optimal classification
-- Pre-trade compliance checks ensure ESG suitability before recommendations
-- Automated classification reduces errors while maintaining regulatory compliance
+- **Article 6,**: Article 6, 8, and 9 have distinct legal requirements that must be accurately applied
+- **Misclassification Risks**: Misclassification risks can be mitigated through systematic validation
+- **Rule-Based And**: Rule-based and AI-assisted approaches can be combined for optimal classification
+- **Pre-Trade Compliance**: Pre-trade compliance checks ensure ESG suitability before recommendations
+- **Automated Classification**: Automated classification reduces errors while maintaining regulatory compliance
 
 ---
 

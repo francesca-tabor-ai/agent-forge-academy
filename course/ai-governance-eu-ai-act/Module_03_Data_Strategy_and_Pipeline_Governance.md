@@ -9,10 +9,10 @@ order: 3
 
 **Duration:** Week 3  
 **Learning Objectives:**
-- Understand data as the strategic foundation for AI content pipelines
-- Leverage open data and European data spaces for sovereign AI innovation
-- Establish protocols for dataset quality and integrity
-- Implement technical strategies for bias detection and mitigation
+- **data as the strategic foundation for AI content pipelines Understanding**: Understand data as the strategic foundation for AI content pipelines
+- **Leverage Open**: Leverage open data and European data spaces for sovereign AI innovation
+- **Establish Protocols**: Establish protocols for dataset quality and integrity
+- **technical strategies for bias detection and mitigation Implementation**: Implement technical strategies for bias detection and mitigation
 
 ---
 
@@ -909,9 +909,9 @@ In this module, you've learned:
  **Bias Detection and Mitigation:** Technical strategies for fairness
 
 **Next Steps:**
-- Complete Lab 3
-- Review Module 4: Development, Safety, and Robustness
-- Begin planning technical documentation and security measures
+- **Complete Lab**: Apply complete lab 3 in relevant contexts
+- **Review Module**: Review Module 4: Development, Safety, and Robustness
+- **Begin Planning**: Begin planning technical documentation and security measures
 
 ---
 

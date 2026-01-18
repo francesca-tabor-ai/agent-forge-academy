@@ -11,12 +11,12 @@ order: 8
 
 **Duration:** Week 8  
 **Learning Objectives:**
-- Communicate AI impact without hype
-- Build trust with CMOs, CFOs, and boards
-- Define KPIs that survive executive scrutiny
-- Distinguish leading vs lagging indicators
-- Tell the AI attribution story over time
-- Avoid "AI vanity metrics"
+- **Communicate Ai**: Communicate AI impact without hype
+- **trust with CMOs, CFOs, and boards Development**: Build trust with CMOs, CFOs, and boards
+- **Define Kpis**: Define KPIs that survive executive scrutiny
+- **leading Analysis**: Distinguish leading vs lagging indicators
+- **Tell The**: Tell the AI attribution story over time
+- **Avoid "Ai**: Avoid "AI vanity metrics"
 
 ---
 
@@ -652,12 +652,12 @@ Create a template for executive briefings that tells the AI attribution story cl
 
 ## Key Takeaways
 
-- **Executive KPIs must be business-aligned:** Revenue, ROI, efficiency, quality
-- **Avoid vanity metrics:** Focus on value, not volume
-- **Use leading and lagging indicators:** Predict future and confirm past
-- **Tell the story over time:** Build narrative arc from foundation to maturity
-- **Credibility is critical:** Conservative approaches build trust
-- **Dashboards must be actionable:** Inform decisions, not just report numbers
+- **Executive KPIs must be business-aligned:**: Revenue, ROI, efficiency, quality
+- **Avoid vanity metrics:**: Focus on value, not volume
+- **Use leading and lagging indicators:**: Predict future and confirm past
+- **Tell the story over time:**: Build narrative arc from foundation to maturity
+- **Credibility is critical:**: Conservative approaches build trust
+- **Dashboards must be actionable:**: Inform decisions, not just report numbers
 
 ---
 

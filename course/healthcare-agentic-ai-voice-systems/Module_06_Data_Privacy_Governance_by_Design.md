@@ -11,11 +11,11 @@ email_action: "Design a data flow that separates PHI from generative components 
 
 **Duration:** Week 6-7  
 **Learning Objectives:**
-- Implement data minimization and purpose limitation
-- Separate PHI from generative components
-- Design comprehensive audit trails and traceability
-- Implement consent, access control, and retention policies
-- Support DPIAs and audits through engineering choices
+- **data minimization and purpose limitation Implementation**: Implement data minimization and purpose limitation
+- **Separate Phi**: Separate PHI from generative components
+- **comprehensive audit trails and traceability Development**: Design comprehensive audit trails and traceability
+- **consent, access control, and retention policies Implementation**: Implement consent, access control, and retention policies
+- **Support Dpias**: Support DPIAs and audits through engineering choices
 
 ---
 
@@ -835,11 +835,11 @@ Create a comprehensive data governance design document.
 - Support DPIAs and audits through engineering
 
 **Next Steps:**
-- Apply data minimization to your system
-- Design PHI separation architecture
-- Implement comprehensive audit trails
-- Set up access control and consent management
-- Plan retention and deletion procedures
+- **Apply Data**: Apply data minimization to your system
+- **PHI separation architecture Development**: Design PHI separation architecture
+- **comprehensive audit trails Implementation**: Implement comprehensive audit trails
+- **access control and consent management Implementation**: Set up access control and consent management
+- **Plan Retention**: Plan retention and deletion procedures
 
 ---
 

@@ -9,10 +9,10 @@ order: 2
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Understand the Ability vs. Integrity Paradox
-- Implement the Golden Triangle of Adoption
-- Design Hybrid Models to manage algorithm aversion
-- Build trust strategies for AI-mediated transactions
+- **the Ability vs. Integrity Paradox Understanding**: Understand the Ability vs. Integrity Paradox
+- **the Golden Triangle of Adoption Implementation**: Implement the Golden Triangle of Adoption
+- **Hybrid Models to manage algorithm aversion Development**: Design Hybrid Models to manage algorithm aversion
+- **trust strategies for AI-mediated transactions Development**: Build trust strategies for AI-mediated transactions
 
 ---
 
@@ -424,11 +424,11 @@ Design a comprehensive trust-building strategy for your brand's agentic commerce
 
 ## Key Takeaways
 
-1. **The Paradox:** Users trust AI ability but distrust AI integrity
-2. **The Golden Triangle:** Trust, Transparency, and Personalization are essential
-3. **Hybrid Models:** Pair AI efficiency with human validation
-4. **Algorithm Aversion:** Can be managed through gradual introduction and transparency
-5. **Strategic Imperative:** Trust-building is essential for agentic commerce success
+- **The Paradox:**: Users trust AI ability but distrust AI integrity
+- **The Golden Triangle:**: Trust, Transparency, and Personalization are essential
+- **Hybrid Models:**: Pair AI efficiency with human validation
+- **Algorithm Aversion:**: Can be managed through gradual introduction and transparency
+- **Strategic Imperative:**: Trust-building is essential for agentic commerce success
 
 ---
 

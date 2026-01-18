@@ -9,11 +9,11 @@ order: 3
 
 **Duration:** Week 3  
 **Learning Objectives:**
-- Understand what LLMs are and are not
-- Learn about tokens, context, embeddings, and temperature
-- Recognize hallucination, brittleness, and uncertainty in LLMs
-- Understand implications for legal reasoning and risk
-- Make informed decisions about LLM usage in legal systems
+- **what LLMs are and are not Understanding**: Understand what LLMs are and are not
+- **about tokens, context, embeddings, and temperature Understanding**: Learn about tokens, context, embeddings, and temperature
+- **Recognize Hallucination,**: Recognize hallucination, brittleness, and uncertainty in LLMs
+- **implications for legal reasoning and risk Understanding**: Understand implications for legal reasoning and risk
+- **Make Informed**: Make informed decisions about LLM usage in legal systems
 
 ---
 
@@ -335,15 +335,15 @@ Experiment with different LLM parameters (temperature, prompts, context) and obs
 
 ## Key Takeaways
 
-1. **LLMs are statistical pattern matchers, not reasoning engines** - they generate plausible text based on training data patterns.
+- **LLMs are statistical pattern matchers, not reasoning engines**: They generate plausible text based on training data patterns
 
-2. **Understanding tokens, context, embeddings, and temperature** is essential for effective LLM usage in legal systems.
+- **Understanding tokens, context, embeddings, and temperature**: Is essential for effective LLM usage in legal systems
 
-3. **Hallucination, brittleness, and uncertainty** are inherent LLM limitations that must be addressed in legal applications.
+- **Hallucination, brittleness, and uncertainty**: Are inherent LLM limitations that must be addressed in legal applications
 
-4. **Legal reasoning and LLM text generation are fundamentally different** - LLMs simulate reasoning but don't truly reason.
+- **Legal reasoning and LLM text generation are fundamentally different**: LLMs simulate reasoning but don't truly reason
 
-5. **Risk mitigation is critical** - design systems with appropriate safeguards, verification, and human oversight.
+- **Risk mitigation is critical**: Design systems with appropriate safeguards, verification, and human oversight
 
 ---
 
@@ -365,10 +365,10 @@ Experiment with different LLM parameters (temperature, prompts, context) and obs
 
 ## Next Steps
 
-- Complete Lab 3
-- Review Module 4: Prompting as Legal Interface Design
-- Join course discussion forum
-- Attend office hours if you have questions
+- **Complete Lab**: Apply complete lab 3 in relevant contexts
+- **Review Module**: Review Module 4: Prompting as Legal Interface Design
+- **Join Course**: Join course discussion forum
+- **Attend Office**: Attend office hours if you have questions
 
 ---
 

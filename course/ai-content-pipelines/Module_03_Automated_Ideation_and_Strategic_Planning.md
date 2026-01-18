@@ -9,10 +9,10 @@ order: 3
 
 **Duration:** Week 3  
 **Learning Objectives:**
-- Overcome "blank page" syndrome with AI-powered brainstorming
-- Master Retrieval-Augmented Planning (RAP) for multi-agent coordination
-- Learn the R-C-F-E prompt engineering model
-- Create automated ideation workflows
+- **Overcome "Blank**: Overcome "blank page" syndrome with AI-powered brainstorming
+- **Retrieval-Augmented Planning Understanding**: Master Retrieval-Augmented Planning (RAP) for multi-agent coordination
+- **the R-C-F-E prompt engineering model Understanding**: Learn the R-C-F-E prompt engineering model
+- **automated ideation Development**: Create automated ideation workflows
 
 ---
 

@@ -13,11 +13,11 @@ email_action: "Identify one data capability in your organization that should be 
 **Theme:** *Data platforms are long-lived systems*
 
 **Learning Objectives:**
-- Understand the role of platforms in data and AI organizations
-- Differentiate between platform, product, and project thinking
-- Learn core architectural patterns in modern data stacks
-- Evaluate centralized vs federated data platform approaches
-- Design for evolution, not perfection
+- **the role of platforms in data and AI organizations Understanding**: Understand the role of platforms in data and AI organizations
+- **between platform, product, Analysis**: Differentiate between platform, product, and project thinking
+- **core architectural patterns in modern data stacks Understanding**: Learn core architectural patterns in modern data stacks
+- **centralized vs federated data platform approaches Evaluation**: Evaluate centralized vs federated data platform approaches
+- **for evolution, not perfection Development**: Design for evolution, not perfection
 
 ---
 
@@ -491,11 +491,11 @@ A platform architecture blueprint that includes:
 
 ### Key Takeaways
 
-1. **Platforms are long-lived systems** that require different thinking than projects or products
-2. **Platform thinking** prioritizes enablement, evolution, scale, and trust
-3. **Modern data stacks** use specialized tools with clear separation of concerns
-4. **Architecture choice** (centralized vs federated) depends on organization size and maturity
-5. **Evolution over perfection** - design for change, not for a fixed state
+- **Platforms are long-lived systems**: That require different thinking than projects or products
+- **Platform thinking**: Prioritizes enablement, evolution, scale, and trust
+- **Modern data stacks**: Use specialized tools with clear separation of concerns
+- **Architecture choice**: (centralized vs federated) depends on organization size and maturity
+- **Evolution over perfection**: Design for change, not for a fixed state
 
 ### Next Steps
 

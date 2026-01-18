@@ -9,10 +9,10 @@ order: 4
 
 **Duration:** Week 7-8  
 **Learning Objectives:**
-- Build multi-model comparison workflows
-- Maintain character consistency across generations
-- Create multi-angle scene compositions
-- Organize complex workflows with routing nodes
+- **multi-model comparison Development**: Build multi-model comparison workflows
+- **Maintain Character**: Maintain character consistency across generations
+- **multi-angle scene compositions Development**: Create multi-angle scene compositions
+- **Organize Complex**: Organize complex workflows with routing nodes
 
 ---
 
@@ -356,10 +356,10 @@ You've learned:
 - ✅ Using router and reroute nodes effectively
 
 **Next Steps:**
-- Build a character consistency workflow
-- Create a multi-model comparison system
-- Organize a complex project workflow
-- Prepare for Module 5: AI Automation & API Integration
+- **a character consistency Development**: Build a character consistency workflow
+- **a multi-model comparison Development**: Create a multi-model comparison system
+- **Organize A**: Organize a complex project workflow
+- **Prepare For**: Prepare for Module 5: AI Automation & API Integration
 
 ---
 

@@ -11,10 +11,10 @@ email_action: "Add structured logging to one function in your current project—
 
 **Duration:** Weeks 7-8  
 **Learning Objectives:**
-- Build comprehensive logging infrastructure
-- Implement distributed tracing
-- Create metrics and dashboards
-- Deploy anomaly detection systems
+- **comprehensive logging infrastructure Development**: Build comprehensive logging infrastructure
+- **distributed tracing Implementation**: Implement distributed tracing
+- **metrics and dashboards Development**: Create metrics and dashboards
+- **anomaly detection Implementation**: Deploy anomaly detection systems
 
 ## Topics Covered:
 

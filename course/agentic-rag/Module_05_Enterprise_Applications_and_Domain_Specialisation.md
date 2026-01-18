@@ -9,10 +9,10 @@ order: 5
 
 **Duration:** Week 5  
 **Learning Objectives:**
-- Apply agentic RAG to software quality engineering
-- Implement financial analysis and risk assessment systems
-- Build healthcare diagnostic systems with EHR integration
-- Create legal and e-commerce applications
+- **Apply Agentic**: Apply agentic RAG to software quality engineering
+- **financial analysis and risk assessment Implementation**: Implement financial analysis and risk assessment systems
+- **healthcare diagnostic Development**: Build healthcare diagnostic systems with EHR integration
+- **legal and e-commerce applications Development**: Create legal and e-commerce applications
 
 ---
 
@@ -533,16 +533,16 @@ Choose a domain (software QA, finance, healthcare, legal, or e-commerce) and imp
 
 **Key Takeaways:**
 
-1. **Software QA:** Hybrid vector-graph achieves 94.8% accuracy
-2. **Financial Analysis:** Multi-source integration for risk and fraud
-3. **Healthcare:** EHR + literature for multi-step diagnosis
-4. **Legal:** Contract review with risk identification
-5. **E-Commerce:** Personalized recommendations with agentic reasoning
+- **Software QA:**: Hybrid vector-graph achieves 94.8% accuracy
+- **Financial Analysis:**: Multi-source integration for risk and fraud
+- **Healthcare:**: EHR + literature for multi-step diagnosis
+- **Legal:**: Contract review with risk identification
+- **E-Commerce:**: Personalized recommendations with agentic reasoning
 
 **Next Steps:**
-- Module 6: Learn evaluation and governance
-- Implement security measures
-- Understand risk management
+- **Module 6:**: Module 6: Learn evaluation and governance
+- **security measures Implementation**: Implement security measures
+- **risk management Understanding**: Understand risk management
 
 ---
 

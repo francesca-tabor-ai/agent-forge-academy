@@ -12,13 +12,13 @@ email_action: "Run a full discovery cycle without human prep."
 
 **Duration:** Week 6  
 **Learning Objectives:**
-- Automate qualification and discovery prep
-- Create insight synthesis loops from calls and signals
-- Feed enablement automatically
-- Understand lead scoring without static rules
-- Learn intent signal interpretation
-- Implement call intelligence → follow-ups → playbooks
-- Design continuous learning loops across agents
+- **Automate Qualification**: Automate qualification and discovery prep
+- **insight synthesis loops from calls and signals Development**: Create insight synthesis loops from calls and signals
+- **Feed Enablement**: Apply feed enablement automatically in relevant contexts
+- **lead scoring without static rules Understanding**: Understand lead scoring without static rules
+- **intent signal interpretation Understanding**: Learn intent signal interpretation
+- **call intelligence → follow-ups → playbooks Implementation**: Implement call intelligence → follow-ups → playbooks
+- **continuous learning loops across agents Development**: Design continuous learning loops across agents
 
 ---
 

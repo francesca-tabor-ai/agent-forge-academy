@@ -11,12 +11,12 @@ order: 6
 
 **Duration:** Week 6  
 **Learning Objectives:**
-- Drive adoption without mandates
-- Design role-based AI training models
-- Implement just-in-time enablement
-- Build internal champions and peer learning
-- Avoid "AI theatre"
-- Create an AI Enablement Plan by Function and training materials outline
+- **Drive Adoption**: Drive adoption without mandates
+- **role-based AI training models Development**: Design role-based AI training models
+- **just-in-time enablement Implementation**: Implement just-in-time enablement
+- **internal champions and peer learning Development**: Build internal champions and peer learning
+- **Avoid "Ai**: Apply avoid "ai theatre" in relevant contexts
+- **an AI Enablement Plan by Function and training materials outline Development**: Create an AI Enablement Plan by Function and training materials outline
 
 ---
 
@@ -601,12 +601,12 @@ Create a detailed outline for AI training materials that are practical, role-spe
 
 ## Key Takeaways
 
-- **Role-based training works:** Different roles need different training approaches
-- **Just-in-time enablement:** Contextual help when needed drives adoption
-- **Champions are essential:** Internal advocates accelerate adoption and build community
-- **Peer learning scales:** Communities of practice enable knowledge sharing
-- **Avoid AI theatre:** Focus on value, not compliance; enable, don't force
-- **Continuous improvement:** Training and enablement must evolve with needs
+- **Role-based training works:**: Different roles need different training approaches
+- **Just-in-time enablement:**: Contextual help when needed drives adoption
+- **Champions are essential:**: Internal advocates accelerate adoption and build community
+- **Peer learning scales:**: Communities of practice enable knowledge sharing
+- **Avoid AI theatre:**: Focus on value, not compliance; enable, don't force
+- **Continuous improvement:**: Training and enablement must evolve with needs
 
 ---
 

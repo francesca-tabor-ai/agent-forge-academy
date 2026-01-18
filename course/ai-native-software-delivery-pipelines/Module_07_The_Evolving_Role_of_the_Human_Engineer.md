@@ -9,11 +9,11 @@ order: 7
 
 **Duration:** Week 7  
 **Learning Objectives:**
-- Understand the transition from developer to AI System Architect
-- Design supervisor workflows for managing AI boundaries
-- Implement audit and forensics systems with Git AI
-- Master the manager-agent relationship through coaching
-- Define boundaries of trust for autonomous AI systems
+- **the transition from developer to AI System Architect Understanding**: Understand the transition from developer to AI System Architect
+- **supervisor Development**: Design supervisor workflows for managing AI boundaries
+- **audit and forensics Implementation**: Implement audit and forensics systems with Git AI
+- **the manager-agent relationship through coaching Understanding**: Master the manager-agent relationship through coaching
+- **Define Boundaries**: Define boundaries of trust for autonomous AI systems
 
 ---
 
@@ -792,10 +792,10 @@ Congratulations! You've completed the full course on AI-Native Software Delivery
 - Supervise and coach AI agents
 
 **Next Steps:**
-- Build your first AI Factory
-- Contribute to open-source AI-native projects
-- Share your knowledge with the community
-- Continue learning and experimenting
+- **your first AI Factory Development**: Build your first AI Factory
+- **Contribute To**: Contribute to open-source AI-native projects
+- **Share Your**: Share your knowledge with the community
+- **Continue Learning**: Continue learning and experimenting
 
 ---
 

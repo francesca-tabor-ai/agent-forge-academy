@@ -9,10 +9,10 @@ order: 6
 
 **Duration:** Week 6  
 **Learning Objectives:**
-- Build AML monitoring systems
-- Automate KYC processes
-- Create suspicious activity reporting
-- Ensure regulatory compliance
+- **AML monitoring Development**: Build AML monitoring systems
+- **Automate Kyc**: Apply automate kyc processes in relevant contexts
+- **suspicious activity reporting Development**: Create suspicious activity reporting
+- **Ensure Regulatory**: Apply ensure regulatory compliance in relevant contexts
 
 ---
 

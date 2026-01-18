@@ -12,9 +12,9 @@ Answer Engine Optimization (AEO) focuses on formatting and structuring content t
 
 ## Learning Objectives
 
-- Format content to win answer-first snippets in AI Overviews
-- Design Q&A content frameworks for natural language queries
-- Optimize for voice search and conversational interfaces
+- **Format Content**: Format content to win answer-first snippets in AI Overviews
+- **Q&A content frameworks for natural language queries Development**: Design Q&A content frameworks for natural language queries
+- **Optimize For**: Optimize for voice search and conversational interfaces
 
 ---
 
@@ -404,8 +404,8 @@ Track:
 
 Answer Engine Optimization requires:
 
-1. **Direct, scannable formatting** for AI Overviews and featured snippets
-2. **Q&A content frameworks** that match natural language queries
-3. **Voice search optimization** for conversational interfaces
+- **Direct, scannable formatting**: For AI Overviews and featured snippets
+- **Q&A content frameworks**: That match natural language queries
+- **Voice search optimization**: For conversational interfaces
 
 The goal is to be the source that AI systems cite when providing direct answers to users, rather than just ranking high in traditional search results.

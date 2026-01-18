@@ -9,10 +9,10 @@ order: 2
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Understand social media sentiment and investment narratives
-- Learn online forum mood and crowd psychology
-- Analyze platform search behavior as intent data
-- Consider data ethics, bias, and representativeness
+- **social media sentiment and investment narratives Understanding**: Understand social media sentiment and investment narratives
+- **online forum mood and crowd psychology Understanding**: Learn online forum mood and crowd psychology
+- **Analyze Platform**: Analyze platform search behavior as intent data
+- **data ethics, bias, Evaluation**: Consider data ethics, bias, and representativeness
 
 ---
 
@@ -204,10 +204,10 @@ Create a comprehensive mapping of alternative data sources to potential investme
 
 ## Key Takeaways
 
-- Alternative data provides early signals before traditional indicators
-- Social media sentiment and forum mood reveal crowd psychology
-- Search behavior indicates investment intent and future flows
-- Data ethics and bias must be carefully managed
+- **Alternative Data**: Alternative data provides early signals before traditional indicators
+- **Social Media**: Social media sentiment and forum mood reveal crowd psychology
+- **Search Behavior**: Search behavior indicates investment intent and future flows
+- **Data Ethics**: Data ethics and bias must be carefully managed
 
 ---
 

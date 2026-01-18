@@ -9,10 +9,10 @@ order: 5
 
 **Duration:** Week 5  
 **Learning Objectives:**
-- Generate AI summarization of investment strategy narratives
-- Detect changes in fund manager tone or positioning
-- Identify market themes across multiple documents
-- Replace static PowerPoints with dynamic summaries
+- **Generate Ai**: Generate AI summarization of investment strategy narratives
+- **Detect Changes**: Detect changes in fund manager tone or positioning
+- **Identify Market**: Identify market themes across multiple documents
+- **Replace Static**: Replace static PowerPoints with dynamic summaries
 
 ---
 
@@ -248,11 +248,11 @@ Create an AI-powered system that generates narrative summaries from unstructured
 
 ## Key Takeaways
 
-- AI summarization enables efficient processing of lengthy narratives
-- Tone and positioning detection provides early warning signals
-- Cross-document theme analysis reveals market intelligence
-- Dynamic summaries replace static reports with real-time insights
-- Narrative intelligence adds value beyond data extraction
+- **Ai Summarization**: AI summarization enables efficient processing of lengthy narratives
+- **Tone And**: Tone and positioning detection provides early warning signals
+- **Cross-Document Theme**: Cross-document theme analysis reveals market intelligence
+- **Dynamic Summaries**: Dynamic summaries replace static reports with real-time insights
+- **Narrative Intelligence**: Narrative intelligence adds value beyond data extraction
 
 ---
 

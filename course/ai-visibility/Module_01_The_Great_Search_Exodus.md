@@ -9,10 +9,10 @@ order: 1
 
 **Duration:** Week 1  
 **Learning Objectives:**
-- Understand why the traditional referral economy is collapsing
-- Analyze the impact of AI Overviews on click-through rates
-- Define new success metrics for AI Visibility Optimization (AIVO)
-- Transition from traditional SEO metrics to AI visibility metrics
+- **why the traditional referral economy is collapsing Understanding**: Understand why the traditional referral economy is collapsing
+- **Analyze The**: Analyze the impact of AI Overviews on click-through rates
+- **Define New**: Define new success metrics for AI Visibility Optimization (AIVO)
+- **Transition From**: Transition from traditional SEO metrics to AI visibility metrics
 
 ---
 

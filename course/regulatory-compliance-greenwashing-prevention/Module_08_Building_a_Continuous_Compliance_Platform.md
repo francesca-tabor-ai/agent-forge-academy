@@ -9,10 +9,10 @@ order: 8
 
 **Duration:** Week 8  
 **Learning Objectives:**
-- Integrate consistency checks and horizon scanning
-- Measure compliance effectiveness
-- Scale across products, jurisdictions, and languages
-- Plan future roadmap: real-time ESG supervision
+- **consistency checks Integration**: Integrate consistency checks and horizon scanning
+- **Measure Compliance**: Apply measure compliance effectiveness in relevant contexts
+- **Scale Across**: Scale across products, jurisdictions, and languages
+- **Plan Future**: Plan future roadmap: real-time ESG supervision
 
 ---
 
@@ -252,10 +252,10 @@ Design a complete Regulatory Compliance & Greenwashing Prevention platform for a
 
 ## Key Takeaways
 
-- Integrating consistency checks and horizon scanning creates comprehensive compliance
-- Measuring effectiveness guides continuous improvement
-- Scaling across products, jurisdictions, and languages enables global deployment
-- Future roadmap includes real-time supervision and predictive compliance
+- **Integrating Consistency**: Integrating consistency checks and horizon scanning creates comprehensive compliance
+- **Measuring Effectiveness**: Measuring effectiveness guides continuous improvement
+- **Scaling Across**: Scaling across products, jurisdictions, and languages enables global deployment
+- **Future Roadmap**: Future roadmap includes real-time supervision and predictive compliance
 
 ---
 

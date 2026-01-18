@@ -12,11 +12,11 @@ email_action: "Run the same creative logic across 10 products, 50 products, and 
 
 **Duration:** Week 6  
 **Learning Objectives:**
-- Understand loop mode explained
-- Learn deterministic inputs × variable products
-- Master when to lock vs when to randomize
-- Understand batch execution strategies
-- Scale from 10 to full catalog
+- **loop mode explained Understanding**: Understand loop mode explained
+- **deterministic inputs × variable products Understanding**: Learn deterministic inputs × variable products
+- **when to lock vs when to randomize Understanding**: Master when to lock vs when to randomize
+- **batch execution strategies Understanding**: Understand batch execution strategies
+- **Scale From**: Scale from 10 to full catalog
 
 ---
 

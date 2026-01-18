@@ -9,10 +9,10 @@ order: 5
 
 **Duration:** Week 5  
 **Learning Objectives:**
-- Measure presence, citation, and influence in AI responses
-- Track evidence telemetry to see what data sources are retrieved
-- Create traceability and defensibility systems
-- Understand new metrics that matter in an AI-intermediated world
+- **Measure Presence,**: Measure presence, citation, and influence in AI responses
+- **Track Evidence**: Track evidence telemetry to see what data sources are retrieved
+- **traceability and defensibility Development**: Create traceability and defensibility systems
+- **new metrics that matter in an AI-intermediated world Understanding**: Understand new metrics that matter in an AI-intermediated world
 
 ---
 
@@ -761,13 +761,13 @@ When errors occur, show what went wrong and where.
 
 ## Key Takeaways
 
-1. **Presence measures retrieval** - Track when AI systems retrieve your content
-2. **Citation measures authority** - Monitor how you're cited (authority vs. example)
-3. **Influence measures impact** - See if your information shapes outcomes
-4. **Evidence telemetry tracks sources** - Know what data is retrieved and overridden
-5. **Traceability enables accountability** - Record reasoning steps and data versions
-6. **Defensibility shows compliance** - Demonstrate you followed best practices
-7. **New metrics replace old ones** - Presence, citation, influence replace page views and clicks
+- **Presence measures retrieval**: Track when AI systems retrieve your content
+- **Citation measures authority**: Monitor how you're cited (authority vs. example)
+- **Influence measures impact**: See if your information shapes outcomes
+- **Evidence telemetry tracks sources**: Know what data is retrieved and overridden
+- **Traceability enables accountability**: Record reasoning steps and data versions
+- **Defensibility shows compliance**: Demonstrate you followed best practices
+- **New metrics replace old ones**: Presence, citation, influence replace page views and clicks
 
 ---
 
@@ -794,10 +794,10 @@ When errors occur, show what went wrong and where.
 ## Next Steps
 
 **After completing this module:**
-1. Review your visibility metrics
-2. Analyze telemetry data
-3. Improve traceability
-4. Move to [Module 6: Governance, Drift, and Power](Module_06_Governance_Drift_and_Power.md)
+- **Review Your Visibility**: Apply review your visibility metrics principles and best practices
+- **Telemetry Data Analysis**: Analyze telemetry data
+- **Improve Traceability**: Implement improve traceability effectively across relevant use cases
+- **Move [Module Governance,**: Move to [Module 6: Governance, Drift, and Power](Module_06_Governance_Drift_and_Power.md)
 
 ---
 

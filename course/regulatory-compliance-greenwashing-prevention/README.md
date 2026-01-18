@@ -19,15 +19,15 @@ order: 0
 
 By completing this course, you will be able to:
 
-- Design AI-driven compliance systems for asset managers
-- Understand why greenwashing is a systemic risk
-- Map all external disclosures across channels
-- Ensure cross-document consistency using AI
-- Prevent greenwashing by design
-- Anticipate regulatory change proactively
-- Translate regulations into operational changes
-- Ensure auditability and regulatory trust
-- Build continuous compliance platforms
+- **AI-driven compliance Development**: Design AI-driven compliance systems for asset managers
+- **why greenwashing is a systemic risk Understanding**: Understand why greenwashing is a systemic risk
+- **Map All**: Map all external disclosures across channels
+- **Ensure Cross-Document**: Ensure cross-document consistency using AI
+- **Prevent Greenwashing**: Prevent greenwashing by design
+- **Anticipate Regulatory**: Anticipate regulatory change proactively
+- **Translate Regulations**: Translate regulations into operational changes
+- **Ensure Auditability**: Ensure auditability and regulatory trust
+- **continuous compliance platforms Development**: Build continuous compliance platforms
 
 ---
 

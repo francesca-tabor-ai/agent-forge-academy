@@ -9,10 +9,10 @@ order: 1
 
 **Duration:** Week 1  
 **Learning Objectives:**
-- Define AI systems and understand the distinction between specific-use AI and General Purpose AI (GPAI)
-- Master the five phases of the AI life cycle from ideation to continuous operation
-- Navigate the risk-based approach and understand the four-tier classification system
-- Apply risk classification to real-world AI content pipeline scenarios
+- **Define Ai**: Define AI systems and understand the distinction between specific-use AI and General Purpose AI (GPAI)
+- **the five phases of the AI life cycle from ideation to continuous operation Understanding**: Master the five phases of the AI life cycle from ideation to continuous operation
+- **Navigate The**: Navigate the risk-based approach and understand the four-tier classification system
+- **Apply Risk**: Apply risk classification to real-world AI content pipeline scenarios
 
 ---
 
@@ -660,9 +660,9 @@ In this module, you've learned:
  **Practical Application:** How to classify real-world content pipeline scenarios
 
 **Next Steps:**
-- Complete Lab 1
-- Review Module 2: Scoping, Ideation, and Prohibited Practices
-- Begin thinking about compliance by design
+- **Complete Lab**: Apply complete lab 1 in relevant contexts
+- **Review Module**: Review Module 2: Scoping, Ideation, and Prohibited Practices
+- **Begin Thinking**: Begin thinking about compliance by design
 
 ---
 

@@ -9,10 +9,10 @@ order: 4
 
 **Duration:** Week 4  
 **Learning Objectives:**
-- Define the true peer group for funds
-- Analyze fees (TERs), performance, and rating asymmetries
-- Understand when 5-star ratings don't translate into flows
-- Identify structural vs. cyclical disadvantages
+- **Define The**: Define the true peer group for funds
+- **Analyze Fees**: Analyze fees (TERs), performance, and rating asymmetries
+- **when 5-star ratings don't translate into flows Understanding**: Understand when 5-star ratings don't translate into flows
+- **Identify Structural**: Identify structural vs. cyclical disadvantages
 
 ---
 
@@ -237,10 +237,10 @@ Analyze a fund that has strong performance but weak inflows and diagnose the roo
 
 ## Key Takeaways
 
-- Defining the true peer group ensures meaningful benchmarking
-- Analyzing fees, performance, and rating asymmetries reveals competitive gaps
-- High ratings don't always translate to flows due to multiple factors
-- Distinguishing structural from cyclical disadvantages guides strategic decisions
+- **Defining The**: Defining the true peer group ensures meaningful benchmarking
+- **Analyzing Fees,**: Analyzing fees, performance, and rating asymmetries reveals competitive gaps
+- **High Ratings**: High ratings don't always translate to flows due to multiple factors
+- **Distinguishing Structural**: Distinguishing structural from cyclical disadvantages guides strategic decisions
 
 ---
 

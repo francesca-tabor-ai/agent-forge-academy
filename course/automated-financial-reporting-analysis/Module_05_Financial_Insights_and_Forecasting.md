@@ -9,10 +9,10 @@ order: 5
 
 **Duration:** Week 5  
 **Learning Objectives:**
-- Build predictive analytics models
-- Detect financial anomalies
-- Forecast financial trends
-- Generate actionable insights
+- **predictive analytics models Development**: Build predictive analytics models
+- **Detect Financial**: Apply detect financial anomalies in relevant contexts
+- **Forecast Financial**: Apply forecast financial trends in relevant contexts
+- **Generate Actionable**: Apply generate actionable insights in relevant contexts
 
 ---
 

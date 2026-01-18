@@ -9,10 +9,10 @@ order: 7
 
 **Duration:** Week 7  
 **Learning Objectives:**
-- Answer "Why did the AI say this?"
-- Address bias, fairness, and inclusivity in mass advice
-- Design transparency disclosures for AI advisors
-- Implement accountability and fallback mechanisms
+- **Answer "Why**: Answer "Why did the AI say this?"
+- **Address Bias,**: Address bias, fairness, and inclusivity in mass advice
+- **transparency disclosures for AI advisors Development**: Design transparency disclosures for AI advisors
+- **accountability and fallback mechanisms Implementation**: Implement accountability and fallback mechanisms
 
 ---
 
@@ -226,10 +226,10 @@ Create a comprehensive explainability statement that explains an AI-generated in
 
 ## Key Takeaways
 
-- Explainability answers "why" and builds trust with clients and regulators
-- Bias detection and mitigation ensure fair and inclusive advice
-- Transparency disclosures meet regulatory requirements and build confidence
-- Accountability and fallback mechanisms ensure reliable service delivery
+- **Explainability Answers**: Explainability answers "why" and builds trust with clients and regulators
+- **Bias Detection**: Bias detection and mitigation ensure fair and inclusive advice
+- **Transparency Disclosures**: Transparency disclosures meet regulatory requirements and build confidence
+- **Accountability And**: Accountability and fallback mechanisms ensure reliable service delivery
 
 ---
 

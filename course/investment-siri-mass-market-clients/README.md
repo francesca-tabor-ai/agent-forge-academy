@@ -19,15 +19,15 @@ order: 0
 
 By completing this course, you will be able to:
 
-- Design AI-powered digital investment advisors for mass-market clients
-- Understand the economic drivers behind AI-led advice
-- Define the role and boundaries of digital investment advisors
-- Map end-to-end investment workflows with AI orchestration
-- Create natural language, conversational investment experiences
-- Implement suitability, guardrails, and embedded compliance
-- Scale advice without linear headcount increases
-- Build trust, explainability, and ethical AI design
-- Deploy investment advisors as platform capabilities
+- **AI-powered digital investment advisors for mass-market clients Development**: Design AI-powered digital investment advisors for mass-market clients
+- **the economic drivers behind AI-led advice Understanding**: Understand the economic drivers behind AI-led advice
+- **Define The**: Define the role and boundaries of digital investment advisors
+- **Map End-To-End**: Map end-to-end investment workflows with AI orchestration
+- **natural language, conversational investment experiences Development**: Create natural language, conversational investment experiences
+- **suitability, guardrails, and embedded compliance Implementation**: Implement suitability, guardrails, and embedded compliance
+- **Scale Advice**: Scale advice without linear headcount increases
+- **trust, explainability, and ethical AI design Development**: Build trust, explainability, and ethical AI design
+- **investment advisors as platform capabilities Implementation**: Deploy investment advisors as platform capabilities
 
 ---
 

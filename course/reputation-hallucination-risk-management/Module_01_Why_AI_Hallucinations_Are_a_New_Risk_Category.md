@@ -11,10 +11,10 @@ order: 1
 
 **Duration:** Week 1  
 **Learning Objectives:**
-- Understand why AI hallucinations are structurally different from press errors or user-generated misinformation
-- Reframe AI misinformation as *predictible system failure*, not edge cases
-- Recognize when hallucinations become material risk
-- Understand why disclaimers do not protect brands
+- **why AI hallucinations are structurally different from press errors or user-generated misinformation Understanding**: Understand why AI hallucinations are structurally different from press errors or user-generated misinformation
+- **Reframe Ai**: Reframe AI misinformation as *predictible system failure*, not edge cases
+- **Recognize When**: Recognize when hallucinations become material risk
+- **why disclaimers do not protect brands Understanding**: Understand why disclaimers do not protect brands
 
 ---
 
@@ -173,9 +173,9 @@ Even if legally protected, disclaimers:
 - **Outcome:** Disclaimer doesn't protect against specific false claims
 
 **Without Disclaimer:**
-- Same legal exposure
-- Additional risk of appearing deceptive
-- **Outcome:** No protection, worse optics
+- **Same Legal**: Apply same legal exposure in relevant contexts
+- **Additional Risk**: Additional risk of appearing deceptive
+- **Outcome:**: No protection, worse optics
 
 **The Real Solution:** Prevent hallucinations, don't disclaim them.
 
@@ -397,9 +397,9 @@ In this module, you've learned:
 **Key Takeaway:** AI hallucinations are not random errors—they are systematic, predictable, and preventable with the right infrastructure and processes.
 
 **Next Steps:**
-- Complete Lab 1: Brand AI Risk Landscape Assessment
-- Review Module 2: The AI Hallucination Taxonomy
-- Begin thinking about which types of hallucinations pose the greatest risk to your brand
+- **Complete Lab**: Complete Lab 1: Brand AI Risk Landscape Assessment
+- **Review Module**: Review Module 2: The AI Hallucination Taxonomy
+- **Begin Thinking**: Begin thinking about which types of hallucinations pose the greatest risk to your brand
 
 ---
 

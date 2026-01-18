@@ -9,10 +9,10 @@ order: 3
 
 **Duration:** Week 3  
 **Learning Objectives:**
-- Link controversies to holdings and issuers
-- Distinguish short-term vs. structural ESG risks
-- Design engagement, escalation, or divestment workflows
-- Coordinate between ESG, risk, and investment teams
+- **controversies Integration**: Link controversies to holdings and issuers
+- **short-term Analysis**: Distinguish short-term vs. structural ESG risks
+- **engagement, escalation, or divestment Development**: Design engagement, escalation, or divestment workflows
+- **Coordinate Between**: Coordinate between ESG, risk, and investment teams
 
 ---
 
@@ -265,10 +265,10 @@ Develop a comprehensive response playbook for handling an ESG controversy.
 
 ## Key Takeaways
 
-- Linking controversies to holdings enables targeted portfolio responses
-- Distinguishing short-term from structural risks guides appropriate responses
-- Engagement, escalation, and divestment workflows provide structured response options
-- Team coordination ensures comprehensive assessment and aligned action
+- **Linking Controversies**: Linking controversies to holdings enables targeted portfolio responses
+- **Distinguishing Short-Term**: Distinguishing short-term from structural risks guides appropriate responses
+- **Engagement, Escalation,**: Engagement, escalation, and divestment workflows provide structured response options
+- **Team Coordination**: Team coordination ensures comprehensive assessment and aligned action
 
 ---
 

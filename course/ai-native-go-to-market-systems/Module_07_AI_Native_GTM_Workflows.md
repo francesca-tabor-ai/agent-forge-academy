@@ -9,11 +9,11 @@ order: 7
 
 **Duration:** Week 7  
 **Learning Objectives:**
-- Identify where AI adds real leverage in GTM
-- Implement AI workflows for classification, summarization, routing, and scoring
-- Design human-in-the-loop vs full automation systems
-- Understand risks: hallucination, over-automation
-- Build AI-powered GTM workflows with guardrails
+- **Identify Where**: Identify where AI adds real leverage in GTM
+- **AI workflows for classification, summarization, routing, and scoring Implementation**: Implement AI workflows for classification, summarization, routing, and scoring
+- **human-in-the-loop vs full automation Development**: Design human-in-the-loop vs full automation systems
+- **Risks: Hallucination,**: Understand risks: hallucination, over-automation
+- **AI-powered GTM Development**: Build AI-powered GTM workflows with guardrails
 
 ---
 
@@ -770,20 +770,20 @@ Enhance an existing GTM workflow with AI capabilities.
 
 ## Key Takeaways
 
-- **AI adds leverage in classification, summarization, routing, and scoring**  
-- **Human-in-the-loop is essential for high-stakes decisions**  
-- **Guardrails prevent hallucination and over-automation**  
-- **Balance automation with human judgment**  
-- **Monitor and iterate to improve AI effectiveness**
+- **AI adds leverage in classification, summarization, routing, and scoring**: **AI adds leverage in classification, summarization, routing, and scoring**: **AI adds leverage in classification, summarization, routing,.
+- **Human-in-the-loop is essential for high-stakes decisions**: **Human-in-the-loop is essential for high-stakes decisions**: **Human-in-the-loop is essential for high-stakes decisions**
+- **Guardrails prevent hallucination and over-automation**: **Guardrails prevent hallucination and over-automation**: **Guardrails prevent hallucination and over-automation**
+- **Balance automation with human judgment**: **Balance automation with human judgment**: **Balance automation with human judgment**
+- **Monitor and iterate to improve AI effectiveness**: **Monitor and iterate to improve AI effectiveness**: **Monitor and iterate to improve AI effectiveness**
 
 ---
 
 ## Next Steps
 
-- Complete the hands-on exercise: Build AI workflow
-- Add AI to an existing workflow
-- Review Module 8: GTM Analytics, Monitoring & Debugging
-- Join course community discussions
+- **Complete The**: Complete the hands-on exercise: Build AI workflow
+- **Add Ai**: Add AI to an existing workflow
+- **Review Module**: Review Module 8: GTM Analytics, Monitoring & Debugging
+- **Join Course**: Join course community discussions
 
 ---
 

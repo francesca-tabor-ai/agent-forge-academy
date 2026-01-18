@@ -10,12 +10,12 @@ order: 1
 **Duration:** Week 1  
 **Theme:** From Brand Narratives to Buyer Reality  
 **Learning Objectives:**
-- Understand why AI surfaces personas brands ignore or misrepresent
-- Reframe personas as *emergent demand signals*, not marketing constructs
-- Learn how LLMs infer personas from questions, constraints, and outcomes
-- Identify why traditional segmentation hides real demand
-- Recognize AI's bias toward specificity, utility, and truth
-- Distinguish signals of underserved vs unprofitable personas
+- **why AI surfaces personas brands ignore or misrepresent Understanding**: Understand why AI surfaces personas brands ignore or misrepresent
+- **Reframe Personas**: Reframe personas as *emergent demand signals*, not marketing constructs
+- **how LLMs infer personas from questions, constraints, and outcomes Understanding**: Learn how LLMs infer personas from questions, constraints, and outcomes
+- **Identify Why**: Identify why traditional segmentation hides real demand
+- **Recognize Ai'S**: Recognize AI's bias toward specificity, utility, and truth
+- **signals of underserved Analysis**: Distinguish signals of underserved vs unprofitable personas
 
 ---
 
@@ -400,20 +400,20 @@ Conduct an audit to identify personas that AI surfaces for your brand or a compe
 
 **Key Takeaways:**
 
-1. **AI Persona Inference:** LLMs infer personas from questions, constraints, and outcomes, revealing real behavior rather than assumptions.
+- **AI Persona Inference:**: LLMs infer personas from questions, constraints, and outcomes, revealing real behavior rather than assumptions
 
-2. **Traditional Segmentation Limitations:** Demographic, psychographic, and firmographic segmentation often hide real demand by creating broad, generic segments.
+- **Traditional Segmentation Limitations:**: Demographic, psychographic, and firmographic segmentation often hide real demand by creating broad, generic segments
 
-3. **AI's Bias:** AI systems favor specificity, utility, and truth, which means brands must align with specific personas and demonstrate real value.
+- **AI's Bias:**: AI systems favor specificity, utility, and truth, which means brands must align with specific personas and demonstrate real value
 
-4. **Underserved vs Unprofitable:** High-intent personas with specific constraints and outcomes are underserved; price-only or vague personas are often unprofitable.
+- **Underserved vs Unprofitable:**: High-intent personas with specific constraints and outcomes are underserved; price-only or vague personas are often unprofitable
 
-5. **Persona Exposure:** AI surfaces personas that traditional methods miss, creating opportunities for brands that align with these personas.
+- **Persona Exposure:**: AI surfaces personas that traditional methods miss, creating opportunities for brands that align with these personas
 
 **Next Steps:**
-- Module 2: Learn how to extract persona insights directly from AI answers
-- Understand how to detect misalignment between brand messaging and AI interpretation
-- Build skills in persona signal mapping
+- **Module 2:**: Module 2: Learn how to extract persona insights directly from AI answers
+- **how to detect misalignment between brand messaging and AI interpretation Understanding**: Understand how to detect misalignment between brand messaging and AI interpretation
+- **skills in persona signal mapping Development**: Build skills in persona signal mapping
 
 ---
 

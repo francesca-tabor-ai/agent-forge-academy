@@ -9,10 +9,10 @@ order: 5
 
 **Duration:** Week 5  
 **Learning Objectives:**
-- Design systems that ensure users know they're interacting with AI
-- Implement human oversight mechanisms and override capabilities
-- Address black box models with explainability and interpretability tools
-- Build transparent AI content pipelines that respect human agency
+- **systems that ensure users know they're interacting with AI Development**: Design systems that ensure users know they're interacting with AI
+- **human oversight mechanisms and override capabilities Implementation**: Implement human oversight mechanisms and override capabilities
+- **Address Black**: Address black box models with explainability and interpretability tools
+- **transparent AI content Development**: Build transparent AI content pipelines that respect human agency
 
 ---
 
@@ -786,9 +786,9 @@ In this module, you've learned:
  **Transparency:** Building transparent AI content pipelines
 
 **Next Steps:**
-- Complete Lab 5
-- Review Module 6: Deployment, Monitoring, and Life Cycle Management
-- Begin planning deployment and monitoring strategies
+- **Complete Lab**: Apply complete lab 5 in relevant contexts
+- **Review Module**: Review Module 6: Deployment, Monitoring, and Life Cycle Management
+- **Begin Planning**: Begin planning deployment and monitoring strategies
 
 ---
 

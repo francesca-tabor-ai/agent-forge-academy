@@ -10,11 +10,11 @@ description: ML concepts, recommendation engines, and NLP for marketing
 
 By the end of this module, you will be able to:
 
-- Understand core machine learning concepts from a marketing perspective
-- Distinguish between supervised and unsupervised learning applications
-- Explain how recommendation engines and predictive modeling work
-- Understand Natural Language Processing (NLP) applications in personalization
-- Translate AI model capabilities into marketing use cases
+- **core machine learning concepts from a marketing perspective Understanding**: Understand core machine learning concepts from a marketing perspective
+- **between supervised Analysis**: Distinguish between supervised and unsupervised learning applications
+- **Explain How**: Explain how recommendation engines and predictive modeling work
+- **Natural Language Processing Understanding**: Understand Natural Language Processing (NLP) applications in personalization
+- **Translate Ai**: Translate AI model capabilities into marketing use cases
 
 ## Introduction
 
@@ -299,12 +299,12 @@ Submit a 2-3 page document including:
 
 ## Key Takeaways
 
-- Machine learning enables systems to learn patterns from data rather than following fixed rules
-- Supervised learning uses labeled examples to make predictions; unsupervised learning discovers hidden patterns
-- Recommendation engines combine collaborative and content-based approaches for personalized suggestions
-- Predictive modeling forecasts future customer behaviors and values
-- NLP enables language understanding and generation for personalized content and interactions
-- Understanding AI fundamentals helps marketers make better technology decisions and communicate with technical teams
+- **Machine Learning**: Machine learning enables systems to learn patterns from data rather than following fixed rules
+- **Supervised Learning**: Supervised learning uses labeled examples to make predictions; unsupervised learning discovers hidden patterns
+- **Recommendation Engines**: Recommendation engines combine collaborative and content-based approaches for personalized suggestions
+- **Predictive Modeling**: Predictive modeling forecasts future customer behaviors and values
+- **Nlp Enables**: NLP enables language understanding and generation for personalized content and interactions
+- **Understanding Ai**: Understanding AI fundamentals helps marketers make better technology decisions and communicate with technical teams
 
 ## Additional Resources
 

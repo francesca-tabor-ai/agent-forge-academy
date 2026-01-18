@@ -11,11 +11,11 @@ email_action: "What would break if you rolled back your agent system right now? 
 
 **Duration:** Week 7  
 **Learning Objectives:**
-- Version prompts, agents, tools, and policies
-- Implement canarying for behavioral changes
-- Ensure backward compatibility for agent reasoning
-- Roll back without losing in-flight work
-- Recover from bad deployments without restarting
+- **Version Prompts,**: Version prompts, agents, tools, and policies
+- **canarying for behavioral changes Implementation**: Implement canarying for behavioral changes
+- **Ensure Backward**: Ensure backward compatibility for agent reasoning
+- **Roll Back**: Roll back without losing in-flight work
+- **Recover From**: Recover from bad deployments without restarting
 
 ---
 

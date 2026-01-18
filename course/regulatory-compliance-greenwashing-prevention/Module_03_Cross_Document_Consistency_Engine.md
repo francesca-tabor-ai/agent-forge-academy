@@ -9,10 +9,10 @@ order: 3
 
 **Duration:** Week 3  
 **Learning Objectives:**
-- Implement NLP for semantic comparison across documents
-- Detect contradictions, omissions, and overstatements
-- Align qualitative claims with quantitative data
-- Implement confidence scoring and materiality thresholds
+- **NLP for semantic comparison across documents Implementation**: Implement NLP for semantic comparison across documents
+- **Detect Contradictions,**: Detect contradictions, omissions, and overstatements
+- **Align Qualitative**: Align qualitative claims with quantitative data
+- **confidence scoring and materiality thresholds Implementation**: Implement confidence scoring and materiality thresholds
 
 ---
 
@@ -248,10 +248,10 @@ Design an AI system that checks consistency between structured EET data and narr
 
 ## Key Takeaways
 
-- NLP enables semantic comparison across documents for consistency checking
-- Detecting contradictions, omissions, and overstatements prevents greenwashing
-- Aligning qualitative claims with quantitative data ensures accuracy
-- Confidence scoring and materiality thresholds prioritize review efforts
+- **Nlp Enables**: NLP enables semantic comparison across documents for consistency checking
+- **Detecting Contradictions,**: Detecting contradictions, omissions, and overstatements prevents greenwashing
+- **Aligning Qualitative**: Aligning qualitative claims with quantitative data ensures accuracy
+- **Confidence Scoring**: Confidence scoring and materiality thresholds prioritize review efforts
 
 ---
 

@@ -10,11 +10,11 @@ order: 5
 **Duration:** Week 5  
 **Theme:** Choosing what not to do  
 **Learning Objectives:**
-- Manage a portfolio of data, ML, and AI initiatives
-- Apply prioritization frameworks (impact vs effort, risk-adjusted ROI)
-- Balance innovation and reliability
-- Plan capacity and sequencing
-- Make decisions to kill projects and reallocate investment
+- **Manage A**: Manage a portfolio of data, ML, and AI initiatives
+- **Apply Prioritization**: Apply prioritization frameworks (impact vs effort, risk-adjusted ROI)
+- **Balance Innovation**: Balance innovation and reliability
+- **Plan Capacity**: Plan capacity and sequencing
+- **Make Decisions**: Make decisions to kill projects and reallocate investment
 
 ---
 
@@ -519,20 +519,20 @@ Prioritize a portfolio of data & AI initiatives (your own or a provided case stu
 
 **Key Takeaways:**
 
-1. **Portfolio Management:** Manage initiatives as a portfolio across categories (core, strategic, innovation, support). Balance allocation.
+- **Portfolio Management:**: Manage initiatives as a portfolio across categories (core, strategic, innovation, support). Balance allocation
 
-2. **Prioritization Frameworks:** Use multiple frameworks (impact vs effort, risk-adjusted ROI, strategic value, ICE) and triangulate. Focus on high-impact, high-probability initiatives.
+- **Prioritization Frameworks:**: Use multiple frameworks (impact vs effort, risk-adjusted ROI, strategic value, ICE) and triangulate
 
-3. **Innovation vs Reliability:** Balance innovation and reliability by horizon and category. Time-box innovation, isolate from production, validate before scaling.
+- **Innovation vs Reliability:**: Balance innovation and reliability by horizon and category. Time-box innovation, isolate from production, validate before scaling
 
-4. **Capacity Planning:** Understand true capacity, plan realistically, buffer for uncertainty. Sequence by dependencies, quick wins, risk reduction.
+- **Capacity Planning:**: Understand true capacity, plan realistically, buffer for uncertainty. Sequence by dependencies, quick wins, risk reduction
 
-5. **Kill Decisions:** Kill low-value, low-probability projects. Act quickly, learn from failure, reallocate strategically.
+- **Kill Decisions:**: Kill low-value, low-probability projects. Act quickly, learn from failure, reallocate strategically
 
 **Next Steps:**
-- Module 6: Learn how to communicate AI value to executives
-- Translate technical work into business language
-- Present to executive committees and boards
+- **Module 6:**: Module 6: Learn how to communicate AI value to executives
+- **Translate Technical**: Translate technical work into business language
+- **Present To**: Present to executive committees and boards
 
 ---
 

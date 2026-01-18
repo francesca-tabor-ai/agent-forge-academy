@@ -9,10 +9,10 @@ order: 4
 
 **Duration:** Week 4  
 **Learning Objectives:**
-- Understand the structure of the EET and regulatory intent
-- Distinguish mandatory vs. conditional fields
-- Ingest portfolio holdings and policy documents
-- Align AI suggestions with regulatory technical standards
+- **the structure of the EET and regulatory intent Understanding**: Understand the structure of the EET and regulatory intent
+- **mandatory Analysis**: Distinguish mandatory vs. conditional fields
+- **Ingest Portfolio**: Ingest portfolio holdings and policy documents
+- **Align Ai**: Align AI suggestions with regulatory technical standards
 
 ---
 
@@ -204,10 +204,10 @@ Analyze EET fields and determine which can be automatically populated by AI vers
 
 ## Key Takeaways
 
-- Understanding EET structure and regulatory intent is essential for accurate completion
-- Distinguishing mandatory vs. conditional fields optimizes completion effort
-- Ingesting portfolio holdings and policy documents provides data foundation
-- Aligning AI suggestions with regulatory technical standards ensures compliance
+- **Understanding Eet**: Understanding EET structure and regulatory intent is essential for accurate completion
+- **Distinguishing Mandatory**: Distinguishing mandatory vs. conditional fields optimizes completion effort
+- **Ingesting Portfolio**: Ingesting portfolio holdings and policy documents provides data foundation
+- **Aligning Ai**: Aligning AI suggestions with regulatory technical standards ensures compliance
 
 ---
 

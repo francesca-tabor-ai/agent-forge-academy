@@ -9,11 +9,11 @@ order: 3
 
 **Duration:** Week 3  
 **Learning Objectives:**
-- Understand context as the "new backend" for AI agents
-- Design Agent Experience (AX) with steering rules and context files
-- Deploy knowledge registries using Tessl and MCP servers
-- Implement RAG systems with AI-native databases
-- Prevent hallucinations through accurate knowledge supply
+- **context as the "new backend" for AI agents Understanding**: Understand context as the "new backend" for AI agents
+- **Agent Experience (AX) with steering rules and context files Development**: Design Agent Experience (AX) with steering rules and context files
+- **knowledge registries using Tessl and MCP servers Implementation**: Deploy knowledge registries using Tessl and MCP servers
+- **RAG Implementation**: Implement RAG systems with AI-native databases
+- **Prevent Hallucinations**: Prevent hallucinations through accurate knowledge supply
 
 ---
 

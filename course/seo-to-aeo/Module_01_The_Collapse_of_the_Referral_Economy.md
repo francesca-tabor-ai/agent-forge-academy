@@ -12,9 +12,9 @@ The traditional search economy, built on clicks and referrals, is collapsing. Th
 
 ## Learning Objectives
 
-- Understand why zero-click outcomes are becoming the norm
-- Recognize the behavioral shift of Gen Z and digital natives away from traditional search
-- Comprehend how AI crawlers differ from traditional search bots and their impact on visibility
+- **why zero-click outcomes are becoming the norm Understanding**: Understand why zero-click outcomes are becoming the norm
+- **Recognize The**: Recognize the behavioral shift of Gen Z and digital natives away from traditional search
+- **Comprehend How**: Comprehend how AI crawlers differ from traditional search bots and their impact on visibility
 
 ---
 
@@ -193,8 +193,8 @@ A new protocol for AI agents that provides:
 
 The referral economy is collapsing. Zero-click outcomes dominate, new generations prefer conversational discovery, and AI crawlers operate differently than traditional search bots. Success in this new landscape requires:
 
-1. **Shifting from click optimization to citation optimization**
-2. **Building presence on platforms where your audience actually lives**
-3. **Understanding and accommodating AI crawler behavior**
+- **Shifting from click optimization to citation optimization**: **Shifting from click optimization to citation optimization**: **Shifting from click optimization to citation optimization**
+- **Building presence on platforms where your audience actually lives**: **Building presence on platforms where your audience actually lives**: **Building presence on platforms where your audience actually lives**
+- **Understanding and accommodating AI crawler behavior**: **Understanding and accommodating AI crawler behavior**: **Understanding and accommodating AI crawler behavior**
 
 The next module will explore how to build the technical foundation that makes your content discoverable and citable by AI systems.

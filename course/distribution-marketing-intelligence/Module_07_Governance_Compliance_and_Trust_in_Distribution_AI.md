@@ -9,10 +9,10 @@ order: 7
 
 **Duration:** Week 7  
 **Learning Objectives:**
-- Understand marketing vs. advice boundaries
-- Prevent selective disclosure and over-claiming
-- Ensure explainability of AI-generated insights
-- Design approval workflows and audit trails
+- **marketing vs. advice boundaries Understanding**: Understand marketing vs. advice boundaries
+- **Prevent Selective**: Prevent selective disclosure and over-claiming
+- **Ensure Explainability**: Ensure explainability of AI-generated insights
+- **approval Development**: Design approval workflows and audit trails
 
 ---
 
@@ -218,10 +218,10 @@ Create a comprehensive compliance review process for AI-generated marketing narr
 
 ## Key Takeaways
 
-- Clear marketing vs. advice boundaries ensure regulatory compliance
-- Preventing selective disclosure and over-claiming maintains credibility
-- Explainability of AI insights builds trust and enables validation
-- Approval workflows and audit trails ensure accountability
+- **Clear Marketing**: Clear marketing vs. advice boundaries ensure regulatory compliance
+- **Preventing Selective**: Preventing selective disclosure and over-claiming maintains credibility
+- **Explainability Of**: Explainability of AI insights builds trust and enables validation
+- **Approval Workflows**: Approval workflows and audit trails ensure accountability
 
 ---
 

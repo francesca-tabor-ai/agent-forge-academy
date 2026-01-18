@@ -10,11 +10,11 @@ order: 1
 **Duration:** Week 1  
 **Theme:** When should a product use AI?  
 **Learning Objectives:**
-- Differentiate AI features from traditional product features
-- Identify problems that genuinely benefit from intelligence
-- Understand prediction, decisioning, and generation as product primitives
-- Avoid "AI for AI's sake" and focus on user and business value
-- Frame AI opportunities with clear rationale
+- **AI features from traditional product features Analysis**: Differentiate AI features from traditional product features
+- **Identify Problems**: Identify problems that genuinely benefit from intelligence
+- **prediction, decisioning, and generation as product primitives Understanding**: Understand prediction, decisioning, and generation as product primitives
+- **Avoid "Ai**: Avoid "AI for AI's sake" and focus on user and business value
+- **Frame Ai**: Frame AI opportunities with clear rationale
 
 ---
 
@@ -436,20 +436,20 @@ Analyze an existing product (your own or a well-known product) and identify 3-5 
 
 **Key Takeaways:**
 
-1. **AI vs Traditional:** AI features are probabilistic, adaptive, and learning-based. Use them when personalization, pattern recognition, or continuous improvement is needed.
+- **AI vs Traditional:**: AI features are probabilistic, adaptive, and learning-based. Use them when personalization, pattern recognition, or continuous improvement is needed
 
-2. **Intelligence Opportunities:** Look for problems requiring scale, variety, pattern recognition, personalization, or adaptation.
+- **Intelligence Opportunities:**: Look for problems requiring scale, variety, pattern recognition, personalization, or adaptation
 
-3. **Product Primitives:** Prediction (what will happen), Decisioning (what should we do), and Generation (what should we create) are the core building blocks.
+- **Product Primitives:**: Prediction (what will happen), Decisioning (what should we do), and Generation (what should we create) are the core building blocks
 
-4. **Value First:** Always start with user and business value. Avoid "AI for AI's sake."
+- **Value First:**: Always start with user and business value. Avoid "AI for AI's sake."
 
-5. **Opportunity Framing:** Use structured frameworks to evaluate and communicate AI opportunities clearly.
+- **Opportunity Framing:**: Use structured frameworks to evaluate and communicate AI opportunities clearly
 
 **Next Steps:**
-- Module 2: Learn how to design UX for AI-powered features
-- Understand how to communicate uncertainty and build trust
-- Design user flows that balance automation and control
+- **Module 2:**: Module 2: Learn how to design UX for AI-powered features
+- **how to communicate uncertainty and build trust Understanding**: Understand how to communicate uncertainty and build trust
+- **user flows that balance automation and control Development**: Design user flows that balance automation and control
 
 ---
 

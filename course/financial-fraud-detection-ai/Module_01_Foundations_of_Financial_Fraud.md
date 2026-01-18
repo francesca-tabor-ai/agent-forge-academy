@@ -9,10 +9,10 @@ order: 1
 
 **Duration:** Week 1  
 **Learning Objectives:**
-- Understand types of financial fraud
-- Learn fraud detection challenges
-- Compare traditional vs. AI approaches
-- Build a basic fraud classifier
+- **types of financial fraud Understanding**: Understand types of financial fraud
+- **fraud detection challenges Understanding**: Learn fraud detection challenges
+- **traditional Analysis**: Compare traditional vs. AI approaches
+- **a basic fraud classifier Development**: Build a basic fraud classifier
 
 ---
 

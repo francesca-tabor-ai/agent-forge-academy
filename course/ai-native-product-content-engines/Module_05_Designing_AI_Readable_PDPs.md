@@ -11,12 +11,12 @@ order: 5
 
 **Duration:** Week 5  
 **Learning Objectives:**
-- Build PDP architectures that AI can parse confidently
-- Balance conversion with clarity and evidence
-- Master claim–proof pairing methodology
-- Design comparison tables and decision shortcuts
-- Use visual evidence effectively (use, scale, materials, failure modes)
-- Write for synthesis, not skimming
+- **PDP architectures that AI can parse confidently Development**: Build PDP architectures that AI can parse confidently
+- **Balance Conversion**: Balance conversion with clarity and evidence
+- **claim–proof pairing methodology Understanding**: Master claim–proof pairing methodology
+- **comparison tables and decision shortcuts Development**: Design comparison tables and decision shortcuts
+- **Use Visual**: Use visual evidence effectively (use, scale, materials, failure modes)
+- **Write For**: Write for synthesis, not skimming
 
 ---
 
@@ -170,9 +170,9 @@ order: 5
 | **Best For** | Long flights, noise-sensitive | Lightweight priority | Budget-conscious |
 
 **Decision Guidance:**
-- **Choose Your Product if:** You need maximum battery life and noise cancellation
-- **Choose Competitor A if:** Weight is your priority
-- **Choose Competitor B if:** You're budget-conscious and don't need noise cancellation
+- **Choose Your Product if:**: You need maximum battery life and noise cancellation
+- **Choose Competitor A if:**: Weight is your priority
+- **Choose Competitor B if:**: You're budget-conscious and don't need noise cancellation
 
 ### Decision Shortcuts
 
@@ -424,16 +424,16 @@ In this module, you've learned:
 - **Synthesis Writing:** Write for AI extraction, not just human skimming
 
 **Key Takeaways:**
-- Design for dual audience (AI + humans)
-- Pair every claim with proof
-- Use structured data and comparisons
-- Visual evidence supports claims
-- Write for synthesis, not skimming
+- **for dual audience (AI + humans) Development**: Design for dual audience (AI + humans)
+- **Pair Every**: Pair every claim with proof
+- **Use Structured**: Use structured data and comparisons
+- **Visual Evidence**: Visual evidence supports claims
+- **Write For**: Write for synthesis, not skimming
 
 **Next Steps:**
-- Complete Lab 5: AI-Optimised PDP Template
-- Review Module 6: Automated Product Content Generation
-- Begin planning automated content workflows
+- **Complete Lab**: Complete Lab 5: AI-Optimised PDP Template
+- **Review Module**: Review Module 6: Automated Product Content Generation
+- **Begin Planning**: Begin planning automated content workflows
 
 ---
 

@@ -13,11 +13,11 @@ email_action: "Map your data access patterns: who needs what data? What's your c
 **Theme:** *Scaling safely*
 
 **Learning Objectives:**
-- Understand data ownership and stewardship models
-- Learn identity and access management patterns
-- Master privacy, compliance, and regulatory requirements
-- Implement lineage, auditability, and discoverability
-- Balance governance with developer velocity
+- **data ownership and stewardship models Understanding**: Understand data ownership and stewardship models
+- **identity and access management patterns Understanding**: Learn identity and access management patterns
+- **privacy, compliance, and regulatory requirements Understanding**: Master privacy, compliance, and regulatory requirements
+- **lineage, auditability, and discoverability Implementation**: Implement lineage, auditability, and discoverability
+- **Balance Governance**: Balance governance with developer velocity
 
 ---
 
@@ -785,11 +785,11 @@ A governance model that includes:
 
 ### Key Takeaways
 
-1. **Data ownership** must be clearly defined and documented
-2. **Access management** requires identity, roles, and policies
-3. **Compliance** requires classification, policies, and monitoring
-4. **Lineage, auditing, and discoverability** enable trust and efficiency
-5. **Balanced governance** enables scale without sacrificing velocity
+- **Data ownership**: Must be clearly defined and documented
+- **Access management**: Requires identity, roles, and policies
+- **Compliance**: Requires classification, policies, and monitoring
+- **Lineage, auditing, and discoverability**: Enable trust and efficiency
+- **Balanced governance**: Enables scale without sacrificing velocity
 
 ### Next Steps
 

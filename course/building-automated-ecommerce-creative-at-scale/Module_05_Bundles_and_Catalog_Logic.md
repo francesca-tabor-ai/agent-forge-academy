@@ -12,11 +12,11 @@ email_action: "Design a bundle system: inputs (products), outputs (consistent vi
 
 **Duration:** Week 5  
 **Learning Objectives:**
-- Define "bundle logic" (2 products, 3 products, variants)
-- Understand one need = one batch
-- Learn to loop over SKUs without breaking composition
-- Maintain scene integrity across runs
-- Design bundle systems
+- **Define "Bundle**: Define "bundle logic" (2 products, 3 products, variants)
+- **one need = one batch Understanding**: Understand one need = one batch
+- **to loop over SKUs without breaking composition Understanding**: Learn to loop over SKUs without breaking composition
+- **Maintain Scene**: Maintain scene integrity across runs
+- **bundle Development**: Apply design bundle systems in relevant contexts
 
 ---
 

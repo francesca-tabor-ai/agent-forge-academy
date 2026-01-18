@@ -11,14 +11,14 @@ order: 7
 
 **Duration:** Week 7  
 **Learning Objectives:**
-- Quantify gains without threatening roles
-- Measure quality improvements, not just speed
-- Track automation adoption rates
-- Measure time saved per function
-- Monitor reduction in manual monitoring tasks
-- Assess internal satisfaction with AI tooling
-- Identify early warning signs of burnout or distrust
-- Create an AI Operations KPI Dashboard and productivity baseline
+- **Quantify Gains**: Quantify gains without threatening roles
+- **Measure Quality**: Measure quality improvements, not just speed
+- **Track Automation**: Track automation adoption rates
+- **Measure Time**: Measure time saved per function
+- **Monitor Reduction**: Monitor reduction in manual monitoring tasks
+- **internal satisfaction with AI tooling Evaluation**: Assess internal satisfaction with AI tooling
+- **Identify Early**: Identify early warning signs of burnout or distrust
+- **an AI Operations KPI Dashboard and productivity baseline Development**: Create an AI Operations KPI Dashboard and productivity baseline
 
 ---
 
@@ -737,12 +737,12 @@ Establish comprehensive baselines for productivity and quality metrics to enable
 
 ## Key Takeaways
 
-- **Measure what matters:** Focus on adoption, productivity, quality, and satisfaction
-- **Baseline is essential:** Accurate baselines enable meaningful measurement
-- **Quality matters:** Measure quality improvements, not just speed
-- **Satisfaction drives adoption:** Monitor satisfaction to prevent burnout and distrust
-- **Warning signs are real:** Early detection enables proactive response
-- **Dashboard enables action:** Clear metrics drive decisions and improvement
+- **Measure what matters:**: Focus on adoption, productivity, quality, and satisfaction
+- **Baseline is essential:**: Accurate baselines enable meaningful measurement
+- **Quality matters:**: Measure quality improvements, not just speed
+- **Satisfaction drives adoption:**: Monitor satisfaction to prevent burnout and distrust
+- **Warning signs are real:**: Early detection enables proactive response
+- **Dashboard enables action:**: Clear metrics drive decisions and improvement
 
 ---
 

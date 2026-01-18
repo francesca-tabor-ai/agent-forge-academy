@@ -9,10 +9,10 @@ order: 6
 
 **Duration:** Week 6  
 **Learning Objectives:**
-- Perform cross-fund document analysis
-- Identify emerging risk or allocation trends
-- Compare stated strategy vs. disclosed exposures
-- Design dashboards powered by document-derived insights
+- **Perform Cross-Fund**: Perform cross-fund document analysis
+- **Identify Emerging**: Identify emerging risk or allocation trends
+- **stated strategy Analysis**: Compare stated strategy vs. disclosed exposures
+- **dashboards powered by document-derived insights Development**: Design dashboards powered by document-derived insights
 
 ---
 
@@ -250,11 +250,11 @@ Dashboard Layout:
 
 ## Key Takeaways
 
-- Cross-fund analysis reveals portfolio-level intelligence
-- Trend detection identifies emerging risks and opportunities
-- Strategy-exposure comparison ensures alignment
-- Early warning signals enable proactive due diligence
-- Dashboards transform document intelligence into actionable insights
+- **Cross-Fund Analysis**: Cross-fund analysis reveals portfolio-level intelligence
+- **Trend Detection**: Trend detection identifies emerging risks and opportunities
+- **Strategy-Exposure Comparison**: Strategy-exposure comparison ensures alignment
+- **Early Warning**: Early warning signals enable proactive due diligence
+- **Dashboards Transform**: Dashboards transform document intelligence into actionable insights
 
 ---
 

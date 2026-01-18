@@ -13,12 +13,12 @@ email_action: "Design an uplift-based decision strategy for retention offers, pr
 **Theme:** *Who should get the treatment?*
 
 **Learning Objectives:**
-- Understand propensity vs uplift modeling
-- Distinguish incrementality from prediction
-- Recognize when uplift beats personalization rules
-- Identify risks of misusing uplift models
-- Evaluate uplift models properly
-- Design targeted rollout strategies
+- **propensity vs uplift modeling Understanding**: Understand propensity vs uplift modeling
+- **incrementality from prediction Analysis**: Distinguish incrementality from prediction
+- **Recognize When**: Recognize when uplift beats personalization rules
+- **Identify Risks**: Identify risks of misusing uplift models
+- **uplift models properly Evaluation**: Evaluate uplift models properly
+- **targeted rollout strategies Development**: Design targeted rollout strategies
 
 ---
 

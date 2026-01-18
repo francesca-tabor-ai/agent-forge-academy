@@ -11,12 +11,12 @@ order: 7
 
 **Duration:** Week 7  
 **Learning Objectives:**
-- Define clear escalation paths before incidents occur
-- Align AI risk response with legal and compliance teams
-- Understand when hallucinations trigger legal exposure
-- Identify regulatory sensitivity by industry
-- Learn documentation and evidence capture requirements
-- Understand how to work with external counsel and regulators
+- **Define Clear**: Define clear escalation paths before incidents occur
+- **Align Ai**: Align AI risk response with legal and compliance teams
+- **when hallucinations trigger legal exposure Understanding**: Understand when hallucinations trigger legal exposure
+- **Identify Regulatory**: Identify regulatory sensitivity by industry
+- **documentation and evidence capture requirements Understanding**: Learn documentation and evidence capture requirements
+- **how to work with external counsel and regulators Understanding**: Understand how to work with external counsel and regulators
 
 ---
 
@@ -694,9 +694,9 @@ In this module, you've learned:
 **Key Takeaway:** Legal and regulatory exposure requires proactive planning. Clear escalation frameworks, comprehensive documentation, and strong relationships with legal counsel and regulators are essential for managing AI hallucination risks effectively.
 
 **Next Steps:**
-- Complete Lab 7: AI Incident Escalation Framework
-- Review Module 8: Measurement, KPIs & Reporting
-- Begin developing your escalation framework and legal protocols
+- **Complete Lab**: Complete Lab 7: AI Incident Escalation Framework
+- **Review Module**: Review Module 8: Measurement, KPIs & Reporting
+- **Begin Developing**: Begin developing your escalation framework and legal protocols
 
 ---
 

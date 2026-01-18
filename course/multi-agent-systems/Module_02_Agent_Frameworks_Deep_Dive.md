@@ -11,11 +11,11 @@ email_action: "Pick one framework (LangGraph, CrewAI, or AutoGen) and install it
 
 **Duration:** Weeks 2-3  
 **Learning Objectives:**
-- Evaluate and select appropriate agent frameworks
-- Master LangGraph's graph-based orchestration
-- Implement CrewAI's role-based collaboration
-- Build with AutoGen's conversational approach
-- Compare emerging frameworks (OpenAI SDK, Microsoft, Google ADK)
+- **and select appropriate agent frameworks Evaluation**: Evaluate and select appropriate agent frameworks
+- **LangGraph's graph-based orchestration Understanding**: Master LangGraph's graph-based orchestration
+- **CrewAI's role-based collaboration Implementation**: Implement CrewAI's role-based collaboration
+- **with AutoGen's conversational approach Development**: Build with AutoGen's conversational approach
+- **emerging frameworks (OpenAI SDK, Microsoft, Google ADK) Analysis**: Compare emerging frameworks (OpenAI SDK, Microsoft, Google ADK)
 
 ---
 

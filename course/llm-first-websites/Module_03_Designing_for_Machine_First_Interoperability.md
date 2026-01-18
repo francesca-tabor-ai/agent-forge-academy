@@ -9,10 +9,10 @@ order: 3
 
 **Duration:** Week 3  
 **Learning Objectives:**
-- Design intent-driven APIs that expose goals and constraints
-- Implement explicit uncertainty encoding in all claims
-- Create machine-legible content that can be verified and compared
-- Understand the technical requirements for AI agent interaction
+- **intent-driven APIs that expose goals and constraints Development**: Design intent-driven APIs that expose goals and constraints
+- **explicit uncertainty encoding in all claims Implementation**: Implement explicit uncertainty encoding in all claims
+- **machine-legible content that can be verified and compared Development**: Create machine-legible content that can be verified and compared
+- **the technical requirements for AI agent interaction Understanding**: Understand the technical requirements for AI agent interaction
 
 ---
 
@@ -951,13 +951,13 @@ For every piece of content, ask:
 
 ## Key Takeaways
 
-1. **Intent-driven APIs expose goals** - Not just CRUD operations, but what can be achieved
-2. **Constraints must be explicit** - AI needs to know limits and requirements
-3. **Uncertainty encoding builds trust** - Honest about confidence, validity, and limitations
-4. **Legibility enables verification** - Machines can check facts, compare options, reason about content
-5. **Structure supports reasoning** - Machine-readable formats enable AI comprehension
-6. **Evidence matters** - Verifiable claims with sources increase authority
-7. **Comparability helps decisions** - Enable AI to compare your offering with alternatives
+- **Intent-driven APIs expose goals**: Not just CRUD operations, but what can be achieved
+- **Constraints must be explicit**: AI needs to know limits and requirements
+- **Uncertainty encoding builds trust**: Honest about confidence, validity, and limitations
+- **Legibility enables verification**: Machines can check facts, compare options, reason about content
+- **Structure supports reasoning**: Machine-readable formats enable AI comprehension
+- **Evidence matters**: Verifiable claims with sources increase authority
+- **Comparability helps decisions**: Enable AI to compare your offering with alternatives
 
 ---
 
@@ -985,10 +985,10 @@ For every piece of content, ask:
 ## Next Steps
 
 **After completing this module:**
-1. Review your API designs and content
-2. Test with actual AI systems
-3. Refine based on AI behavior
-4. Move to [Module 4: Systems That Can Act Safely](Module_04_Systems_That_Can_Act_Safely.md)
+- **Review Your Api**: Review your API designs and content
+- **Test With Actual**: Apply test with actual ai systems principles and best practices
+- **Refine Based Behavior**: Refine based on AI behavior
+- **Move [Module Systems**: Move to [Module 4: Systems That Can Act Safely](Module_04_Systems_That_Can_Act_Safely.md)
 
 ---
 

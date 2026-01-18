@@ -19,11 +19,11 @@ order: 0
 
 By completing this course, you will be able to:
 
-- Predict how AI will treat brands in your industry
-- Prevent suppression and misinformation before damage occurs
-- Advise executives with confidence and credibility
-- Build proprietary, defensible AI strategy IP
-- Lead AI visibility as a core strategic function
+- **Predict How**: Predict how AI will treat brands in your industry
+- **Prevent Suppression**: Prevent suppression and misinformation before damage occurs
+- **Advise Executives**: Advise executives with confidence and credibility
+- **proprietary, defensible AI strategy IP Development**: Build proprietary, defensible AI strategy IP
+- **Lead Ai**: Lead AI visibility as a core strategic function
 
 ---
 

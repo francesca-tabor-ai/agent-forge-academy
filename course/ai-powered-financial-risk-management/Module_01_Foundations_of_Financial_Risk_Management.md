@@ -9,10 +9,10 @@ order: 1
 
 **Duration:** Week 1  
 **Learning Objectives:**
-- Understand the four main types of financial risk
-- Learn the regulatory framework governing risk management
-- Compare traditional risk models with AI-enhanced approaches
-- Design a basic risk classification system
+- **the four main types of financial risk Understanding**: Understand the four main types of financial risk
+- **the regulatory framework governing risk management Understanding**: Learn the regulatory framework governing risk management
+- **traditional risk models with AI-enhanced approaches Analysis**: Compare traditional risk models with AI-enhanced approaches
+- **a basic risk classification Development**: Design a basic risk classification system
 
 ---
 
@@ -263,11 +263,11 @@ classifier = RiskClassifier()
 
 ## Key Takeaways
 
-- Financial risk management encompasses four main risk types: credit, market, operational, and liquidity
-- Regulatory frameworks (Basel III, IFRS 9) require sophisticated risk measurement and capital allocation
-- AI-enhanced models offer significant advantages over traditional approaches: better feature engineering, non-linear relationships, real-time adaptation
-- Data infrastructure is critical for effective risk management
-- Risk classification is the foundation for all risk management activities
+- **Financial Risk**: Financial risk management encompasses four main risk types: credit, market, operational, and liquidity
+- **Regulatory Frameworks**: Regulatory frameworks (Basel III, IFRS 9) require sophisticated risk measurement and capital allocation
+- **Ai-Enhanced Models**: AI-enhanced models offer significant advantages over traditional approaches: better feature engineering, non-linear relationships, real-time.
+- **Data Infrastructure**: Data infrastructure is critical for effective risk management
+- **Risk Classification**: Risk classification is the foundation for all risk management activities
 
 ---
 

@@ -9,10 +9,10 @@ order: 8
 
 **Duration:** Week 8  
 **Learning Objectives:**
-- Understand data sourcing and vendor reconciliation
-- Design systems that scale to millions of client-product matches
-- Implement monitoring for drift in risk and ESG data
-- Measure success: compliance, trust, and advisor efficiency
+- **data sourcing and vendor reconciliation Understanding**: Understand data sourcing and vendor reconciliation
+- **systems that scale to millions of client-product matches Development**: Design systems that scale to millions of client-product matches
+- **monitoring for drift in risk and ESG data Implementation**: Implement monitoring for drift in risk and ESG data
+- **Measure Success:**: Measure success: compliance, trust, and advisor efficiency
 
 ---
 
@@ -323,11 +323,11 @@ Design and document a complete Automated Suitability & ESG Preference Matcher fo
 
 ## Key Takeaways
 
-- Production deployment requires robust data sourcing and reconciliation processes
-- Scalability is critical for digital advisory platforms serving millions of clients
-- Monitoring data drift ensures matching quality over time
-- Success measurement must balance compliance, trust, and efficiency
-- A complete system requires careful integration of all components
+- **Production Deployment**: Production deployment requires robust data sourcing and reconciliation processes
+- **Scalability Is**: Scalability is critical for digital advisory platforms serving millions of clients
+- **Monitoring Data**: Monitoring data drift ensures matching quality over time
+- **Success Measurement**: Success measurement must balance compliance, trust, and efficiency
+- **A Complete**: A complete system requires careful integration of all components
 
 ---
 

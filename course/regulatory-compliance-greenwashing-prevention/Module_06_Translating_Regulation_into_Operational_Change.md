@@ -9,10 +9,10 @@ order: 6
 
 **Duration:** Week 6  
 **Learning Objectives:**
-- Distinguish regulatory interpretation vs. implementation
-- Update data models, templates, and controls
-- Manage overlapping and conflicting regimes
-- Implement change management across large organizations
+- **regulatory interpretation Analysis**: Distinguish regulatory interpretation vs. implementation
+- **Update Data**: Update data models, templates, and controls
+- **Manage Overlapping**: Manage overlapping and conflicting regimes
+- **change management across large organizations Implementation**: Implement change management across large organizations
 
 ---
 
@@ -255,10 +255,10 @@ Use AI to generate a comprehensive impact assessment for a regulatory update.
 
 ## Key Takeaways
 
-- Distinguishing interpretation from implementation ensures accurate translation
-- Updating data models, templates, and controls enables compliance
-- Managing overlapping regimes requires conflict detection and resolution
-- Change management ensures successful organizational adoption
+- **Distinguishing Interpretation**: Distinguishing interpretation from implementation ensures accurate translation
+- **Updating Data**: Updating data models, templates, and controls enables compliance
+- **Managing Overlapping**: Managing overlapping regimes requires conflict detection and resolution
+- **Change Management**: Change management ensures successful organizational adoption
 
 ---
 

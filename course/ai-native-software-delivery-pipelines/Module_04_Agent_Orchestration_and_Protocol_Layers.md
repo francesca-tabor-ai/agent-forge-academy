@@ -9,11 +9,11 @@ order: 4
 
 **Duration:** Week 4  
 **Learning Objectives:**
-- Implement Model Context Protocol (MCP) as the "USB-C port" for AI
-- Architect separation of agentic concerns (planning, coding, review)
-- Manage agent swarms using TaskingAI and Claude Flow
-- Coordinate complex tasks across multiple autonomous agents
-- Design scalable agent orchestration systems
+- **Model Context Protocol (MCP) as the "USB-C port" for AI Implementation**: Implement Model Context Protocol (MCP) as the "USB-C port" for AI
+- **Architect Separation**: Architect separation of agentic concerns (planning, coding, review)
+- **Manage Agent**: Manage agent swarms using TaskingAI and Claude Flow
+- **Coordinate Complex**: Coordinate complex tasks across multiple autonomous agents
+- **scalable agent orchestration Development**: Design scalable agent orchestration systems
 
 ---
 

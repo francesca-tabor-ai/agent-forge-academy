@@ -11,11 +11,11 @@ order: 2
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Learn how AI encodes compliance, safety, and credibility by sector
-- Identify hidden constraints shaping AI answers
-- Understand regulated vs unregulated vertical dynamics
-- Map suppression patterns and risk triggers
-- Complete a Vertical Suppression & Risk Map
+- **how AI encodes compliance, safety, and credibility by sector Understanding**: Learn how AI encodes compliance, safety, and credibility by sector
+- **Identify Hidden**: Identify hidden constraints shaping AI answers
+- **regulated vs unregulated vertical dynamics Understanding**: Understand regulated vs unregulated vertical dynamics
+- **Map Suppression**: Map suppression patterns and risk triggers
+- **Complete A**: Complete a Vertical Suppression & Risk Map
 
 ---
 
@@ -523,11 +523,11 @@ Map suppression patterns, risk triggers, and safe language for your vertical to 
 
 ## Key Takeaways
 
-- **AI enforces implicit regulation:** Training data creates regulatory behavior
-- **Regulated vs unregulated matters:** Different rules apply to different verticals
-- **Two types of suppression:** Soft suppression and hard exclusion require different responses
-- **Safe language patterns exist:** Understanding safe language improves visibility
-- **Visibility loss vs suppression:** Different causes require different strategies
+- **AI enforces implicit regulation:**: Training data creates regulatory behavior
+- **Regulated vs unregulated matters:**: Different rules apply to different verticals
+- **Two types of suppression:**: Soft suppression and hard exclusion require different responses
+- **Safe language patterns exist:**: Understanding safe language improves visibility
+- **Visibility loss vs suppression:**: Different causes require different strategies
 
 ---
 

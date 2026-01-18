@@ -9,10 +9,10 @@ order: 8
 
 **Duration:** Week 8  
 **Learning Objectives:**
-- Design dashboards for different user personas
-- Integrate with portfolio and advisory systems
-- Measure impact: alpha, retention, advisor efficiency
-- Plan future roadmap: personalization, voice, and real-time alerts
+- **dashboards for different user personas Development**: Design dashboards for different user personas
+- **with portfolio Integration**: Integrate with portfolio and advisory systems
+- **Measure Impact:**: Measure impact: alpha, retention, advisor efficiency
+- **Plan Future**: Plan future roadmap: personalization, voice, and real-time alerts
 
 ---
 
@@ -180,10 +180,10 @@ Design a complete Predictive "Wealth Insights" Dashboard for a discretionary or 
 
 ## Key Takeaways
 
-- Dashboard design must accommodate different user personas and needs
-- Platform integration enables seamless workflow and data flow
-- Impact measurement demonstrates value and guides improvement
-- Future roadmap includes personalization, voice, and real-time capabilities
+- **Dashboard Design**: Dashboard design must accommodate different user personas and needs
+- **Platform Integration**: Platform integration enables seamless workflow and data flow
+- **Impact Measurement**: Impact measurement demonstrates value and guides improvement
+- **Future Roadmap**: Future roadmap includes personalization, voice, and real-time capabilities
 
 ---
 

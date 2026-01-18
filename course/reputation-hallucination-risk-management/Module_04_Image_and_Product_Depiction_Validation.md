@@ -11,11 +11,11 @@ order: 4
 
 **Duration:** Week 4  
 **Learning Objectives:**
-- Detect and correct AI-generated imagery that misrepresents products
-- Understand why visual hallucinations escalate risk faster than text
-- Identify "impossible" combinations and configurations
-- Understand use-context hallucinations
-- Design image provenance and validation workflows
+- **Detect And**: Detect and correct AI-generated imagery that misrepresents products
+- **why visual hallucinations escalate risk faster than text Understanding**: Understand why visual hallucinations escalate risk faster than text
+- **Identify "Impossible"**: Identify "impossible" combinations and configurations
+- **use-context hallucinations Understanding**: Understand use-context hallucinations
+- **image provenance and validation Development**: Design image provenance and validation workflows
 
 ---
 
@@ -532,9 +532,9 @@ In this module, you've learned:
 **Key Takeaway:** Visual hallucinations require specialized detection systems that go beyond text validation. Product constraints, use contexts, and brand guidelines must be codified and enforced through automated and human validation workflows.
 
 **Next Steps:**
-- Complete Lab 4: Image Validation Checklist
-- Review Module 5: Canonical Ground Truth Systems
-- Begin mapping your product constraints and validation requirements
+- **Complete Lab**: Complete Lab 4: Image Validation Checklist
+- **Review Module**: Review Module 5: Canonical Ground Truth Systems
+- **Begin Mapping**: Begin mapping your product constraints and validation requirements
 
 ---
 

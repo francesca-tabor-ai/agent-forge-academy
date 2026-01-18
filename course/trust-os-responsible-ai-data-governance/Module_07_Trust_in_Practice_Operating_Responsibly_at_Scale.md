@@ -13,11 +13,11 @@ email_action: "Integrate trust controls into an existing ML delivery pipeline. I
 **Theme:** *From policy to daily operations*
 
 **Learning Objectives:**
-- Integrate governance into product and ML workflows
-- Enable developers and analysts with trust tools and practices
-- Design training and cultural adoption programs
-- Measure trust and compliance effectiveness
-- Respond to incidents and public scrutiny effectively
+- **governance into product Integration**: Integrate governance into product and ML workflows
+- **Enable Developers**: Enable developers and analysts with trust tools and practices
+- **training and cultural adoption programs Development**: Design training and cultural adoption programs
+- **Measure Trust**: Measure trust and compliance effectiveness
+- **Respond To**: Respond to incidents and public scrutiny effectively
 
 ---
 
@@ -1097,17 +1097,17 @@ An operationalized Trust OS embedded into day-to-day workflows that includes:
 
 ## Key Takeaways
 
-1. **Integration is essential:** Governance must be integrated into workflows, not added as an afterthought.
+- **Integration is essential:**: Governance must be integrated into workflows, not added as an afterthought
 
-2. **Enablement drives adoption:** Provide tools, training, and support to enable teams to operate responsibly.
+- **Enablement drives adoption:**: Provide tools, training, and support to enable teams to operate responsibly
 
-3. **Culture matters:** Building a culture of trust requires leadership commitment, communication, and recognition.
+- **Culture matters:**: Building a culture of trust requires leadership commitment, communication, and recognition
 
-4. **Measurement enables improvement:** Measure trust and compliance effectiveness to identify issues and drive improvement.
+- **Measurement enables improvement:**: Measure trust and compliance effectiveness to identify issues and drive improvement
 
-5. **Incident response is critical:** Prepare for incidents and public scrutiny with clear plans and processes.
+- **Incident response is critical:**: Prepare for incidents and public scrutiny with clear plans and processes
 
-6. **Trust is operational:** Trust in AI is built through daily operational practices, not just policies.
+- **Trust is operational:**: Trust in AI is built through daily operational practices, not just policies
 
 ---
 

@@ -11,10 +11,10 @@ email_action: "Dockerize a simple Python script—create a Dockerfile and test i
 
 **Duration:** Weeks 4-5  
 **Learning Objectives:**
-- Containerize agents with Docker best practices
-- Deploy to Kubernetes from basics to advanced
-- Use Terraform for infrastructure as code
-- Leverage GKE Agent Sandbox features
+- **Containerize Agents**: Containerize agents with Docker best practices
+- **to Kubernetes from basics to advanced Implementation**: Deploy to Kubernetes from basics to advanced
+- **Use Terraform**: Use Terraform for infrastructure as code
+- **Leverage Gke**: Leverage GKE Agent Sandbox features
 
 ## Topics Covered:
 

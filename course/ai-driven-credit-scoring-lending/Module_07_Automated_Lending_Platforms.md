@@ -9,10 +9,10 @@ order: 7
 
 **Duration:** Week 7  
 **Learning Objectives:**
-- Design end-to-end lending systems
-- Build customer onboarding
-- Automate loan servicing
-- Create loan management systems
+- **end-to-end lending Development**: Design end-to-end lending systems
+- **customer onboarding Development**: Build customer onboarding
+- **Automate Loan**: Apply automate loan servicing in relevant contexts
+- **loan management Development**: Create loan management systems
 
 ---
 

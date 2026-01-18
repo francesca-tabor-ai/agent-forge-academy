@@ -11,11 +11,11 @@ email_action: "Design an observability strategy for an AI system with 5 key metr
 
 **Duration:** Week 8-9  
 **Learning Objectives:**
-- Design what to log in AI systems (and what not to)
-- Monitor hallucinations, refusals, and escalations
-- Detect drift and behavioral change
-- Create incident response playbooks for AI systems
-- Support clinical and regulatory investigations
+- **what to log in AI Development**: Design what to log in AI systems (and what not to)
+- **Monitor Hallucinations,**: Monitor hallucinations, refusals, and escalations
+- **Detect Drift**: Detect drift and behavioral change
+- **incident response playbooks for AI Development**: Create incident response playbooks for AI systems
+- **Support Clinical**: Support clinical and regulatory investigations
 
 ---
 
@@ -900,11 +900,11 @@ Create a comprehensive observability and incident response plan.
 - Well-defined incident response procedures
 
 **Next Steps:**
-- Design logging strategy for your system
-- Implement monitoring for key metrics
-- Set up alerting for critical conditions
-- Create incident response playbooks
-- Test incident response procedures
+- **logging strategy for your Development**: Design logging strategy for your system
+- **monitoring for key metrics Implementation**: Implement monitoring for key metrics
+- **alerting for critical conditions Implementation**: Set up alerting for critical conditions
+- **incident response playbooks Development**: Create incident response playbooks
+- **Test Incident**: Test incident response procedures
 
 ---
 

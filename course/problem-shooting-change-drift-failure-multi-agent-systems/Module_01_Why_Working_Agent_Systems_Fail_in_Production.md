@@ -11,11 +11,11 @@ email_action: "Identify one 'working' system in your environment that might be s
 
 **Duration:** Week 1  
 **Learning Objectives:**
-- Understand why agent failures differ from traditional system failures
-- Learn the failure taxonomy for multi-agent systems
-- Recognize non-determinism as a production liability
-- Identify silent degradation vs hard failure patterns
-- Understand the compound cost of retries, hallucinations, and human cleanup
+- **why agent failures differ from traditional system failures Understanding**: Understand why agent failures differ from traditional system failures
+- **the failure taxonomy for multi-agent systems Understanding**: Learn the failure taxonomy for multi-agent systems
+- **Recognize Non-Determinism**: Recognize non-determinism as a production liability
+- **Identify Silent**: Identify silent degradation vs hard failure patterns
+- **the compound cost of retries, hallucinations, and human cleanup Understanding**: Understand the compound cost of retries, hallucinations, and human cleanup
 
 ---
 

@@ -12,12 +12,12 @@ email_action: "Build your full agent org map—from CSO to teams to specialists.
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Translate a sales org into an agent architecture
-- Define managers, specialists, and executors
-- Decide what escalates to a human (and what never should)
-- Understand hierarchical vs mesh agent systems
-- Learn about latency, autonomy, and trust thresholds
-- Design the human "executive loop"
+- **Translate A**: Translate a sales org into an agent architecture
+- **Define Managers,**: Define managers, specialists, and executors
+- **Decide What**: Decide what escalates to a human (and what never should)
+- **hierarchical vs mesh agent systems Understanding**: Understand hierarchical vs mesh agent systems
+- **about latency, autonomy, and trust thresholds Understanding**: Learn about latency, autonomy, and trust thresholds
+- **the human "executive loop" Development**: Design the human "executive loop"
 
 ---
 

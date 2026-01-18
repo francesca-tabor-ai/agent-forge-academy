@@ -9,11 +9,11 @@ order: 4
 
 **Duration:** Week 4  
 **Learning Objectives:**
-- Integrate with Amazon Selling Partner API for 3D asset management
-- Automate ASIN mapping and catalog synchronization
-- Utilize Amazon Seller app for mobile 3D scanning
-- Build 3D Readiness Index to identify high-ROI SKUs
-- Implement automated workflows for catalog management
+- **with Amazon Selling Partner API for 3D asset management Integration**: Integrate with Amazon Selling Partner API for 3D asset management
+- **Automate Asin**: Automate ASIN mapping and catalog synchronization
+- **Utilize Amazon**: Utilize Amazon Seller app for mobile 3D scanning
+- **3D Readiness Index to identify high-ROI SKUs Development**: Build 3D Readiness Index to identify high-ROI SKUs
+- **automated workflows for catalog management Implementation**: Implement automated workflows for catalog management
 
 ---
 
@@ -567,10 +567,10 @@ Build integration with Amazon SP-API to sync 3D assets to product catalog.
 
 ## Next Steps
 
-- Complete Lab 4: Amazon Integration
-- Review Module 5: Advanced Monetization
-- Explore video shopping opportunities
-- Prepare for advanced features
+- **Complete Lab**: Complete Lab 4: Amazon Integration
+- **Review Module**: Review Module 5: Advanced Monetization
+- **Explore Video**: Explore video shopping opportunities
+- **Prepare For**: Prepare for advanced features
 
 ---
 

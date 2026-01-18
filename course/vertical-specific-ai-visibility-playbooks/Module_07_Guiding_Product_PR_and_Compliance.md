@@ -11,11 +11,11 @@ order: 7
 
 **Duration:** Week 7  
 **Learning Objectives:**
-- Translate playbooks into operational guidance
-- Align teams without slowing execution
-- Create vertical-specific guidance for product, PR, and compliance teams
-- Develop actionable briefs that drive results
-- Complete Vertical-Specific Guidance Briefs
+- **Translate Playbooks**: Translate playbooks into operational guidance
+- **Align Teams**: Align teams without slowing execution
+- **vertical-specific guidance for product, PR, and compliance teams Development**: Create vertical-specific guidance for product, PR, and compliance teams
+- **actionable briefs that drive results Development**: Develop actionable briefs that drive results
+- **Complete Vertical-Specific**: Complete Vertical-Specific Guidance Briefs
 
 ---
 
@@ -413,21 +413,21 @@ order: 7
 **E-commerce Example:**
 
 **Growth Opportunity:**
-- Aggressive product claims
-- Increase visibility
-- Competitive positioning
-- Market expansion
+- **Aggressive Product**: Apply aggressive product claims in relevant contexts
+- **Increase Visibility**: Implement increase visibility effectively across relevant use cases
+- **Competitive Positioning**: Implement competitive positioning effectively across relevant use cases
+- **Market Expansion**: Implement market expansion effectively across relevant use cases
 
 **Risk:**
-- False advertising
-- Consumer protection violations
-- Reputation damage
-- Legal liability
+- **False Advertising**: Implement false advertising effectively across relevant use cases
+- **Consumer Protection**: Apply consumer protection violations in relevant contexts
+- **Reputation Damage**: Implement reputation damage effectively across relevant use cases
+- **Legal Liability**: Implement legal liability effectively across relevant use cases
 
 **Trade-Off:**
-- **Decision:** Accurate claims, honest positioning
-- **Rationale:** Risk manageable, growth sustainable
-- **Outcome:** Steady growth, manageable risk
+- **Decision:**: Accurate claims, honest positioning
+- **Rationale:**: Risk manageable, growth sustainable
+- **Outcome:**: Steady growth, manageable risk
 
 ---
 
@@ -599,11 +599,11 @@ Create actionable guidance briefs for product, PR, and compliance teams that tra
 
 ## Key Takeaways
 
-- **Product data is foundational:** Accurate, complete data drives citations
-- **PR builds authority:** Strategic PR creates citation opportunities
-- **Compliance is non-negotiable:** Safe content design is essential
-- **Trade-offs are necessary:** Balance growth and risk strategically
-- **Cross-functional alignment is critical:** Teams must work together
+- **Product data is foundational:**: Accurate, complete data drives citations
+- **PR builds authority:**: Strategic PR creates citation opportunities
+- **Compliance is non-negotiable:**: Safe content design is essential
+- **Trade-offs are necessary:**: Balance growth and risk strategically
+- **Cross-functional alignment is critical:**: Teams must work together
 
 ---
 

@@ -11,11 +11,11 @@ order: 8
 
 **Duration:** Week 8  
 **Learning Objectives:**
-- Advise leadership on AI-driven threats and opportunities
-- Frame AI visibility as strategic risk, not marketing noise
-- Understand competitive win/loss narratives inside AI answers
-- Develop scenario planning by vertical
-- Complete an Executive AI Threat Brief
+- **Advise Leadership**: Advise leadership on AI-driven threats and opportunities
+- **Frame Ai**: Frame AI visibility as strategic risk, not marketing noise
+- **competitive win/loss narratives inside AI answers Understanding**: Understand competitive win/loss narratives inside AI answers
+- **scenario planning by vertical Development**: Develop scenario planning by vertical
+- **Complete An**: Complete an Executive AI Threat Brief
 
 ---
 
@@ -540,11 +540,11 @@ Create a board-level executive brief that frames AI visibility as strategic risk
 
 ## Key Takeaways
 
-- **Win/loss narratives matter:** AI responses create competitive stories
-- **Scenario planning is essential:** Prepare for different futures
-- **Material risk is real:** AI visibility can be strategically material
-- **Budget justification requires strategic framing:** Risk management, not marketing
-- **Executive communication is critical:** Board-level narrative matters
+- **Win/loss narratives matter:**: AI responses create competitive stories
+- **Scenario planning is essential:**: Prepare for different futures
+- **Material risk is real:**: AI visibility can be strategically material
+- **Budget justification requires strategic framing:**: Risk management, not marketing
+- **Executive communication is critical:**: Board-level narrative matters
 
 ---
 

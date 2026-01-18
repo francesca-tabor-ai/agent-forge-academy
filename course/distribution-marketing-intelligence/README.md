@@ -19,15 +19,15 @@ order: 0
 
 By completing this course, you will be able to:
 
-- Design AI-driven distribution intelligence tools for asset managers
-- Understand why traditional distribution analytics no longer work
-- Leverage alternative data for distribution insights
-- Build predictive inflow forecasting models
-- Create automated peer benchmarking engines
-- Translate insights into actionable distribution strategies
-- Generate narrative performance explanations
-- Ensure governance, compliance, and trust in distribution AI
-- Build scalable distribution intelligence platforms
+- **AI-driven distribution intelligence tools for asset managers Development**: Design AI-driven distribution intelligence tools for asset managers
+- **why traditional distribution analytics no longer work Understanding**: Understand why traditional distribution analytics no longer work
+- **Leverage Alternative**: Leverage alternative data for distribution insights
+- **predictive inflow forecasting models Development**: Build predictive inflow forecasting models
+- **automated peer benchmarking engines Development**: Create automated peer benchmarking engines
+- **Translate Insights**: Translate insights into actionable distribution strategies
+- **Generate Narrative**: Generate narrative performance explanations
+- **Ensure Governance,**: Ensure governance, compliance, and trust in distribution AI
+- **scalable distribution intelligence platforms Development**: Build scalable distribution intelligence platforms
 
 ---
 

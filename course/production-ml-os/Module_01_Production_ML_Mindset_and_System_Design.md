@@ -14,10 +14,10 @@ email_action: "Review a failing ML system in your organization and identify 3 ar
 
 **Duration:** Week 1  
 **Learning Objectives:**
-- Understand why most ML systems fail in production
-- Differentiate between research, analytics, and production ML
-- Design ML systems for reliability, not just accuracy
-- Identify common architectural patterns for production ML
+- **why most ML systems fail in production Understanding**: Understand why most ML systems fail in production
+- **between research, analytics, Analysis**: Differentiate between research, analytics, and production ML
+- **ML Development**: Design ML systems for reliability, not just accuracy
+- **Identify Common**: Identify common architectural patterns for production ML
 
 ---
 
@@ -339,16 +339,16 @@ Request → Check Cache → [Hit: Return] [Miss: Real-time Inference] → Cache 
 
 ### Key Takeaways
 
-1. **Production ML is software engineering** - Reliability, scalability, and maintainability matter as much as accuracy
-2. **Different ML types have different requirements** - Research, analytics, and production ML serve different purposes
-3. **Architecture patterns exist** - Choose patterns based on latency, throughput, and consistency requirements
-4. **Design for failure** - Systems will fail; design them to fail safely
+- **Production ML is software engineering**: Reliability, scalability, and maintainability matter as much as accuracy
+- **Different ML types have different requirements**: Research, analytics, and production ML serve different purposes
+- **Architecture patterns exist**: Choose patterns based on latency, throughput, and consistency requirements
+- **Design for failure**: Systems will fail; design them to fail safely
 
 ### Next Steps
 
-- Complete the hands-on exercise
-- Review production ML case studies
-- Move to Module 2 to learn about serving patterns
+- **Complete The**: Complete the hands-on exercise
+- **Review Production**: Review production ML case studies
+- **Move To**: Move to Module 2 to learn about serving patterns
 
 ---
 

@@ -11,11 +11,11 @@ order: 6
 **Theme:** *Insights only matter if people believe them*
 
 **Learning Objectives:**
-- Frame insights for executive audiences
-- Structure compelling data stories
-- Write effective insight summaries and recommendations
-- Handle pushback and ambiguity
-- Create decision memos vs dashboards
+- **Frame Insights**: Frame insights for executive audiences
+- **Structure Compelling**: Structure compelling data stories
+- **Write Effective**: Write effective insight summaries and recommendations
+- **Handle Pushback**: Handle pushback and ambiguity
+- **decision memos vs dashboards Development**: Create decision memos vs dashboards
 
 ---
 
@@ -217,9 +217,9 @@ Revenue dropped 15% ($1.7M → $1.45M) in January due to 40% reduction in paid s
 3. **This month:** Develop traffic diversification strategy
 
 **Next Steps:**
-- Marketing: Restore budget by Friday
-- Analytics: Monitor traffic and revenue daily
-- Finance: Update Q1 forecast
+- **Marketing: Restore**: Marketing: Restore budget by Friday
+- **Analytics: Monitor**: Analytics: Monitor traffic and revenue daily
+- **Finance: Update**: Finance: Update Q1 forecast
 
 **Confidence:** High (90%)
 
@@ -434,9 +434,9 @@ Not all insights are welcomed. Executives may push back, question your analysis,
 - **This month:** Monitor competitor activity
 
 **Next Steps:** 
-- Engineering: Check payment logs
-- Analytics: Segment conversion by traffic source
-- Market research: Monitor competitor launches
+- **Engineering: Check**: Engineering: Check payment logs
+- **Analytics: Segment**: Analytics: Segment conversion by traffic source
+- **Market Research:**: Market research: Monitor competitor launches
 
 We'll update recommendations as we learn more."
 
@@ -598,11 +598,11 @@ Simulate handling pushback scenarios:
 
 ## Key Takeaways
 
-1. **Executive Framing:** Lead with impact, use business language, focus on decisions
-2. **Data Stories:** Structure as narrative with context, conflict, resolution
-3. **Recommendations:** Specific, prioritized, actionable, measurable, owned
-4. **Handle Pushback:** Listen, acknowledge, provide evidence, propose solutions
-5. **Right Format:** Memos for decisions, dashboards for monitoring
+- **Executive Framing:**: Lead with impact, use business language, focus on decisions
+- **Data Stories:**: Structure as narrative with context, conflict, resolution
+- **Recommendations:**: Specific, prioritized, actionable, measurable, owned
+- **Handle Pushback:**: Listen, acknowledge, provide evidence, propose solutions
+- **Right Format:**: Memos for decisions, dashboards for monitoring
 
 ---
 

@@ -11,11 +11,11 @@ order: 3
 
 **Duration:** Week 3  
 **Learning Objectives:**
-- Build attribution models that capture AI's influence
-- Connect off-site AI interactions to on-site behavior
-- Understand AI referral patterns (explicit, implicit, dark)
-- Instrument AI-originated sessions
-- Design tracking schema and data requirements
+- **attribution models that capture AI's influence Development**: Build attribution models that capture AI's influence
+- **off-site AI interactions Integration**: Connect off-site AI interactions to on-site behavior
+- **AI referral patterns Understanding**: Understand AI referral patterns (explicit, implicit, dark)
+- **Instrument Ai-Originated**: Apply instrument ai-originated sessions in relevant contexts
+- **tracking schema and data requirements Development**: Design tracking schema and data requirements
 
 ---
 
@@ -716,12 +716,12 @@ Define the complete data architecture needed for AI attribution.
 
 ## Key Takeaways
 
-- **Three referral types:** Explicit (trackable), Implicit (inferred), Dark (invisible)
-- **Instrumentation is critical:** Technical implementation enables measurement
-- **Proxy signals fill gaps:** When direct tracking isn't possible, use inference
-- **Attribution windows matter:** AI needs longer windows (60-90 days) than traditional channels
-- **Data architecture is foundational:** Proper schema enables accurate attribution
-- **Measurement requires multiple approaches:** Combine direct tracking, inference, and market analysis
+- **Three referral types:**: Explicit (trackable), Implicit (inferred), Dark (invisible)
+- **Instrumentation is critical:**: Technical implementation enables measurement
+- **Proxy signals fill gaps:**: When direct tracking isn't possible, use inference
+- **Attribution windows matter:**: AI needs longer windows (60-90 days) than traditional channels
+- **Data architecture is foundational:**: Proper schema enables accurate attribution
+- **Measurement requires multiple approaches:**: Combine direct tracking, inference, and market analysis
 
 ---
 

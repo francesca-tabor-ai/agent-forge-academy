@@ -9,11 +9,11 @@ order: 2
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Understand HubSpot's object model and relationships
-- Design properties for scale and performance
-- Build pipelines, lifecycle stages, and qualification logic
-- Create workflow design patterns
-- Implement routing and ownership logic
+- **HubSpot's object model and relationships Understanding**: Understand HubSpot's object model and relationships
+- **properties for scale and performance Development**: Design properties for scale and performance
+- **pipelines, lifecycle stages, and qualification logic Development**: Build pipelines, lifecycle stages, and qualification logic
+- **workflow design patterns Development**: Create workflow design patterns
+- **routing and ownership logic Implementation**: Implement routing and ownership logic
 
 ---
 
@@ -652,20 +652,20 @@ Build a workflow that automatically routes deals to the right owner based on com
 
 ## Key Takeaways
 
-- **HubSpot is a programmable system, not just a CRM**  
-- **Property design impacts scalability and automation**  
-- **Pipeline stages should reflect your sales process**  
-- **Workflow patterns enable automation at scale**  
-- **Routing logic ensures leads and deals go to the right owners**
+- **HubSpot is a programmable system, not just a CRM**: **HubSpot is a programmable system, not just a CRM**: **HubSpot is a programmable system, not just a CRM**
+- **Property design impacts scalability and automation**: **Property design impacts scalability and automation**: **Property design impacts scalability and automation**
+- **Pipeline stages should reflect your sales process**: **Pipeline stages should reflect your sales process**: **Pipeline stages should reflect your sales process**
+- **Workflow patterns enable automation at scale**: **Workflow patterns enable automation at scale**: **Workflow patterns enable automation at scale**
+- **Routing logic ensures leads and deals go to the right owners**: **Routing logic ensures leads and deals go to the right owners**: **Routing logic ensures leads and deals go to the right owners**
 
 ---
 
 ## Next Steps
 
-- Complete the hands-on exercise: Build HubSpot data model
-- Implement deal routing workflow
-- Review Module 3: Data Quality, Validation & Enrichment at Scale
-- Join course community discussions
+- **Complete The**: Complete the hands-on exercise: Build HubSpot data model
+- **deal routing workflow Implementation**: Implement deal routing workflow
+- **Review Module**: Review Module 3: Data Quality, Validation & Enrichment at Scale
+- **Join Course**: Join course community discussions
 
 ---
 

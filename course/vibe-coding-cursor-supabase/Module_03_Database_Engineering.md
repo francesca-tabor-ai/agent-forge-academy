@@ -11,11 +11,11 @@ email_action: "If you haven't already, install Supabase locally with Docker—ru
 
 **Duration:** Week 3  
 **Learning Objectives:**
-- Set up local Supabase development environment
-- Understand schema-first development approach
-- Create and manage database migrations
-- Integrate MCP for AI database introspection
-- Design effective database schemas
+- **local Supabase development environment Implementation**: Set up local Supabase development environment
+- **schema-first development approach Understanding**: Understand schema-first development approach
+- **and manage database migrations Development**: Create and manage database migrations
+- **MCP for AI database introspection Integration**: Integrate MCP for AI database introspection
+- **effective database schemas Development**: Design effective database schemas
 
 ---
 

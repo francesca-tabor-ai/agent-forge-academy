@@ -9,11 +9,11 @@ order: 4
 
 **Duration:** Week 4  
 **Learning Objectives:**
-- Implement semantic search with nearText, nearVector, and nearObject
-- Understand keyword vs semantic search trade-offs
-- Build hybrid search with alpha tuning
-- Apply filters and metadata constraints
-- Compare search result quality
+- **semantic search with nearText, nearVector, and nearObject Implementation**: Implement semantic search with nearText, nearVector, and nearObject
+- **keyword vs semantic search trade-offs Understanding**: Understand keyword vs semantic search trade-offs
+- **hybrid search with alpha tuning Development**: Build hybrid search with alpha tuning
+- **Apply Filters**: Apply filters and metadata constraints
+- **search result quality Analysis**: Compare search result quality
 
 ---
 
@@ -869,16 +869,16 @@ def search_with_filters(query, category=None, author=None, date_from=None):
 ## Summary
 
 **Key Takeaways:**
-- nearText, nearVector, and nearObject serve different use cases
-- Hybrid search combines keyword and semantic search
-- Alpha parameter controls the balance
-- Filters add precision to semantic search
-- Evaluation is essential for optimization
+- **Neartext, Nearvector,**: NearText, nearVector, and nearObject serve different use cases
+- **Hybrid Search**: Hybrid search combines keyword and semantic search
+- **Alpha Parameter**: Alpha parameter controls the balance
+- **Filters Add**: Filters add precision to semantic search
+- **Evaluation Is**: Evaluation is essential for optimization
 
 **What's Next:**
-- Module 5: Explore modules and integrations
-- Connect external embedding models
-- Work with multimodal data
+- **Module 5:**: Module 5: Explore modules and integrations
+- **external embedding models Integration**: Connect external embedding models
+- **Work With**: Work with multimodal data
 
 ---
 

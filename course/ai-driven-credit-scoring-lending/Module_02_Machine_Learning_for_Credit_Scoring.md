@@ -9,10 +9,10 @@ order: 2
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Implement gradient boosting models
-- Build neural networks
-- Create ensemble methods
-- Optimize model performance
+- **gradient boosting models Implementation**: Implement gradient boosting models
+- **neural networks Development**: Build neural networks
+- **ensemble methods Development**: Create ensemble methods
+- **Optimize Model**: Apply optimize model performance in relevant contexts
 
 ---
 

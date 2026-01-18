@@ -10,10 +10,10 @@ order: 10
 
 **Duration:** Week 10  
 **Learning Objectives:**
-- Move AI visibility from pilot to institutional capability
-- Plan budget phasing and maturity stages
-- Prepare for paid AI placements
-- Expand into attribution and risk management
+- **Move Ai**: Move AI visibility from pilot to institutional capability
+- **Plan Budget**: Plan budget phasing and maturity stages
+- **Prepare For**: Prepare for paid AI placements
+- **Expand Into**: Expand into attribution and risk management
 
 ---
 
@@ -561,17 +561,17 @@ Create a comprehensive 12-month AI Visibility Strategy with executive presentati
 
 ## Key Takeaways
 
-- **Maturity stages:** Progress from experimental to institutional capability over 12 months
+- **Maturity stages:**: Progress from experimental to institutional capability over 12 months
 
-- **Budget phasing:** Align investment with maturity stages and expected returns
+- **Budget phasing:**: Align investment with maturity stages and expected returns
 
-- **Paid AI placements:** Prepare for future paid opportunities while building organic foundation
+- **Paid AI placements:**: Prepare for future paid opportunities while building organic foundation
 
-- **Attribution and risk:** Expand beyond visibility to revenue attribution and comprehensive risk management
+- **Attribution and risk:**: Expand beyond visibility to revenue attribution and comprehensive risk management
 
-- **12-month roadmap:** Structured approach to building institutional AI visibility capability
+- **12-month roadmap:**: Structured approach to building institutional AI visibility capability
 
-- **Capstone project:** Comprehensive strategy and executive presentation demonstrate mastery
+- **Capstone project:**: Comprehensive strategy and executive presentation demonstrate mastery
 
 ---
 

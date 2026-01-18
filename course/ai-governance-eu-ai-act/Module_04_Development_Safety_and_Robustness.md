@@ -9,10 +9,10 @@ order: 4
 
 **Duration:** Week 4  
 **Learning Objectives:**
-- Create comprehensive technical documentation and model cards
-- Engineer systems for robustness and predictability
-- Protect against cyberattacks and adversarial threats
-- Implement copyright and intellectual property compliance
+- **comprehensive technical documentation and model cards Development**: Create comprehensive technical documentation and model cards
+- **Engineer Systems**: Engineer systems for robustness and predictability
+- **Protect Against**: Protect against cyberattacks and adversarial threats
+- **copyright and intellectual property compliance Implementation**: Implement copyright and intellectual property compliance
 
 ---
 
@@ -865,9 +865,9 @@ In this module, you've learned:
  **Copyright Compliance:** Implementing IP and copyright compliance
 
 **Next Steps:**
-- Complete Lab 4
-- Review Module 5: Transparency and Human Agency
-- Begin planning transparency and oversight mechanisms
+- **Complete Lab**: Apply complete lab 4 in relevant contexts
+- **Review Module**: Review Module 5: Transparency and Human Agency
+- **Begin Planning**: Begin planning transparency and oversight mechanisms
 
 ---
 

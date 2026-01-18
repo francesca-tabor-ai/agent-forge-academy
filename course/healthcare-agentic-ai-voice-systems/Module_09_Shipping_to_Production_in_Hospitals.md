@@ -11,11 +11,11 @@ email_action: "Plan a safe deployment for a hospital AI system with feature flag
 
 **Duration:** Week 9-10  
 **Learning Objectives:**
-- Design feature flags and staged rollout
-- Implement shadow mode and silent testing
-- Create kill switches and rollback strategies
-- Plan change management in clinical settings
-- Support CQC inspections and assurance reviews
+- **feature flags and staged rollout Development**: Design feature flags and staged rollout
+- **shadow mode and silent testing Implementation**: Implement shadow mode and silent testing
+- **kill switches and rollback strategies Development**: Create kill switches and rollback strategies
+- **Plan Change**: Plan change management in clinical settings
+- **Support Cqc**: Support CQC inspections and assurance reviews
 
 ---
 
@@ -819,11 +819,11 @@ Create a comprehensive production rollout and rollback plan.
 - Plan rollback before you need it
 
 **Next Steps:**
-- Design feature flag strategy for your system
-- Plan shadow mode implementation
-- Create kill switch mechanisms
-- Develop change management plan
-- Test rollback procedures
+- **feature flag strategy for your Development**: Design feature flag strategy for your system
+- **Plan Shadow**: Plan shadow mode implementation
+- **kill switch mechanisms Development**: Create kill switch mechanisms
+- **change management plan Development**: Develop change management plan
+- **Test Rollback**: Apply test rollback procedures in relevant contexts
 
 ---
 

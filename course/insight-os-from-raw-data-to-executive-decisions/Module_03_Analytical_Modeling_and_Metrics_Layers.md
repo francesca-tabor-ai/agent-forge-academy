@@ -11,11 +11,11 @@ order: 3
 **Theme:** *Making insights repeatable*
 
 **Learning Objectives:**
-- Understand raw vs transformed data layers
-- Design metrics layers and semantic models
-- Work with dimensions, facts, and grain
-- Create single source of truth designs
-- Apply Analytics Engineering concepts
+- **raw vs transformed data layers Understanding**: Understand raw vs transformed data layers
+- **metrics layers and semantic models Development**: Design metrics layers and semantic models
+- **Work With**: Work with dimensions, facts, and grain
+- **single source of truth designs Development**: Create single source of truth designs
+- **Apply Analytics**: Apply Analytics Engineering concepts
 
 ---
 
@@ -714,11 +714,11 @@ For all three models:
 
 ## Key Takeaways
 
-1. **Layered Architecture:** Raw → Staging → Transformed → Metrics
-2. **Metrics Layer:** Centralized, reusable metric definitions
-3. **Dimensional Modeling:** Facts, dimensions, and grain
-4. **Single Source of Truth:** One definition, one calculation, one source
-5. **Analytics Engineering:** Software engineering practices for data
+- **Layered Architecture:**: Raw → Staging → Transformed → Metrics
+- **Metrics Layer:**: Centralized, reusable metric definitions
+- **Dimensional Modeling:**: Facts, dimensions, and grain
+- **Single Source of Truth:**: One definition, one calculation, one source
+- **Analytics Engineering:**: Software engineering practices for data
 
 ---
 

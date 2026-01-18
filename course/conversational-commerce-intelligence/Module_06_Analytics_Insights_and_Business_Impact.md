@@ -9,10 +9,10 @@ order: 6
 
 **Duration:** Week 6  
 **Learning Objectives:**
-- Measure key performance indicators (KPIs) for CCIS
-- Track revenue attribution from customer conversations
-- Use intent heatmaps to visualize demand patterns
-- Close the intelligence loop from conversations to product innovation
+- **Measure Key**: Measure key performance indicators (KPIs) for CCIS
+- **Track Revenue**: Track revenue attribution from customer conversations
+- **Use Intent**: Use intent heatmaps to visualize demand patterns
+- **Close The**: Close the intelligence loop from conversations to product innovation
 
 ---
 
@@ -501,11 +501,11 @@ Build an analytics dashboard that tracks CCIS KPIs and implements revenue attrib
 
 ## Key Takeaways
 
-1. **Metrics drive improvement:** Track KPIs to measure success and identify issues
-2. **Revenue attribution proves value:** Connect conversations to business outcomes
-3. **Heatmaps reveal patterns:** Visualize demand and identify opportunities
-4. **Intelligence loop creates value:** Transform conversations into business insights
-5. **Data informs strategy:** Use analytics to guide product, marketing, and operations decisions
+- **Metrics drive improvement:**: Track KPIs to measure success and identify issues
+- **Revenue attribution proves value:**: Connect conversations to business outcomes
+- **Heatmaps reveal patterns:**: Visualize demand and identify opportunities
+- **Intelligence loop creates value:**: Transform conversations into business insights
+- **Data informs strategy:**: Use analytics to guide product, marketing, and operations decisions
 
 ---
 
@@ -531,14 +531,14 @@ Build an analytics dashboard that tracks CCIS KPIs and implements revenue attrib
 ## Next Steps
 
 **Ready for Module 7?**
-- Review Module 7: The Roadmap to Future-Proofing
-- Prepare to design CCIS-ready organizations
-- Understand future commerce technologies
+- **Review Module**: Review Module 7: The Roadmap to Future-Proofing
+- **Prepare To**: Prepare to design CCIS-ready organizations
+- **future commerce technologies Understanding**: Understand future commerce technologies
 
 **Questions to Consider:**
-- What KPIs matter most for your business?
-- How do you currently measure conversation value?
-- What insights could you extract from customer conversations?
+- **What Kpis**: What KPIs matter most for your business?
+- **How Do**: How do you currently measure conversation value?
+- **What Insights**: What insights could you extract from customer conversations?
 
 ---
 

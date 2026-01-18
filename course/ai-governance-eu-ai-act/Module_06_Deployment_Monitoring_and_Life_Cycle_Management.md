@@ -9,10 +9,10 @@ order: 6
 
 **Duration:** Week 6  
 **Learning Objectives:**
-- Understand conformity assessment procedures and CE marking requirements
-- Conduct Fundamental Rights Impact Assessments (FRIA) for high-risk systems
-- Implement post-market monitoring systems for continuous oversight
-- Establish incident management procedures for serious incidents
+- **conformity assessment procedures and CE marking requirements Understanding**: Understand conformity assessment procedures and CE marking requirements
+- **Conduct Fundamental**: Conduct Fundamental Rights Impact Assessments (FRIA) for high-risk systems
+- **post-market monitoring Implementation**: Implement post-market monitoring systems for continuous oversight
+- **Establish Incident**: Establish incident management procedures for serious incidents
 
 ---
 
@@ -962,10 +962,10 @@ In this module, you've learned:
  **Incident Management:** Managing serious incidents within 15-day requirements
 
 **Next Steps:**
-- Complete Lab 6
-- Review all modules
-- Prepare for capstone project
-- Begin implementing your compliance framework
+- **Complete Lab**: Apply complete lab 6 in relevant contexts
+- **Review All**: Apply review all modules in relevant contexts
+- **Prepare For**: Prepare for capstone project
+- **Begin Implementing**: Begin implementing your compliance framework
 
 ---
 

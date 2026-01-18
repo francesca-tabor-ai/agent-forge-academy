@@ -9,10 +9,10 @@ order: 7
 
 **Duration:** Week 7  
 **Learning Objectives:**
-- Ensure traceability of AI findings
-- Provide "show me the source" for detected inconsistencies
-- Prepare for regulatory inspections
-- Document decisions and overrides
+- **Ensure Traceability**: Ensure traceability of AI findings
+- **Provide "Show**: Provide "show me the source" for detected inconsistencies
+- **Prepare For**: Prepare for regulatory inspections
+- **Document Decisions**: Document decisions and overrides
 
 ---
 
@@ -231,10 +231,10 @@ Create a comprehensive, audit-ready report that explains an AI-detected greenwas
 
 ## Key Takeaways
 
-- Traceability of AI findings enables audit and regulatory trust
-- "Show me the source" provides transparency and accountability
-- Preparation for regulatory inspections ensures compliance confidence
-- Documenting decisions and overrides maintains audit trail integrity
+- **Traceability Of**: Traceability of AI findings enables audit and regulatory trust
+- **"Show Me**: "Show me the source" provides transparency and accountability
+- **Preparation For**: Preparation for regulatory inspections ensures compliance confidence
+- **Documenting Decisions**: Documenting decisions and overrides maintains audit trail integrity
 
 ---
 

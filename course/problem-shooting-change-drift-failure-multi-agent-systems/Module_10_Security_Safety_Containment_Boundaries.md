@@ -11,11 +11,11 @@ email_action: "What's the worst thing an attacker could do with your agent syste
 
 **Duration:** Week 10  
 **Learning Objectives:**
-- Understand agents as potential attack surfaces
-- Prevent tool and prompt injection at system level
-- Implement least-privilege agents
-- Build auditability and post-incident forensics
-- Design kill switches and containment strategies
+- **agents as potential attack surfaces Understanding**: Understand agents as potential attack surfaces
+- **Prevent Tool**: Prevent tool and prompt injection at system level
+- **least-privilege agents Implementation**: Implement least-privilege agents
+- **auditability and post-incident forensics Development**: Build auditability and post-incident forensics
+- **kill switches and containment strategies Development**: Design kill switches and containment strategies
 
 ---
 

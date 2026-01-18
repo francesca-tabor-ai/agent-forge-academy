@@ -9,10 +9,10 @@ order: 6
 
 **Duration:** Week 6  
 **Learning Objectives:**
-- Translate quantitative data into human narratives
-- Explain performance in different market regimes
-- Tailor messages for advisors vs. end clients
-- Generate dynamic narratives vs. static factsheets
+- **Translate Quantitative**: Translate quantitative data into human narratives
+- **Explain Performance**: Explain performance in different market regimes
+- **Tailor Messages**: Tailor messages for advisors vs. end clients
+- **Generate Dynamic**: Generate dynamic narratives vs. static factsheets
 
 ---
 
@@ -242,10 +242,10 @@ Create three different performance narratives for the same fund, tailored to dif
 
 ## Key Takeaways
 
-- Translating quantitative data into human narratives makes performance accessible
-- Explaining performance in different market regimes provides context and understanding
-- Tailoring messages for advisors vs. end clients improves engagement
-- Dynamic narratives provide real-time, personalized content vs. static factsheets
+- **Translating Quantitative**: Translating quantitative data into human narratives makes performance accessible
+- **Explaining Performance**: Explaining performance in different market regimes provides context and understanding
+- **Tailoring Messages**: Tailoring messages for advisors vs. end clients improves engagement
+- **Dynamic Narratives**: Dynamic narratives provide real-time, personalized content vs. static factsheets
 
 ---
 

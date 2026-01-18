@@ -11,12 +11,12 @@ order: 9
 **Theme:** *End-to-end applied ML system*
 
 **Learning Objectives:**
-- Frame a real business problem as an ML problem
-- Engineer production-ready features
-- Train and evaluate predictive models
-- Assess bias and stability
-- Translate predictions into actionable decisions
-- Communicate results to stakeholders
+- **Frame A**: Frame a real business problem as an ML problem
+- **Engineer Production-Ready**: Apply engineer production-ready features in relevant contexts
+- **Train And**: Train and evaluate predictive models
+- **bias Evaluation**: Assess bias and stability
+- **Translate Predictions**: Translate predictions into actionable decisions
+- **Communicate Results**: Communicate results to stakeholders
 
 ---
 

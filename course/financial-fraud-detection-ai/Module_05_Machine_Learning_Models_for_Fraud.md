@@ -9,10 +9,10 @@ order: 5
 
 **Duration:** Week 5  
 **Learning Objectives:**
-- Build supervised fraud classifiers
-- Implement unsupervised anomaly detection
-- Create ensemble methods
-- Handle class imbalance
+- **supervised fraud classifiers Development**: Build supervised fraud classifiers
+- **unsupervised anomaly detection Implementation**: Implement unsupervised anomaly detection
+- **ensemble methods Development**: Create ensemble methods
+- **Handle Class**: Apply handle class imbalance in relevant contexts
 
 ---
 

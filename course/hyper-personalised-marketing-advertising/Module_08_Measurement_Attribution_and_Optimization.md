@@ -10,11 +10,11 @@ description: KPIs, incrementality, multi-touch attribution, and AI-driven experi
 
 By the end of this module, you will be able to:
 
-- Define appropriate KPIs for hyper-personalised marketing
-- Understand incrementality and lift measurement approaches
-- Evaluate multi-touch attribution models
-- Compare A/B testing with AI-driven experimentation
-- Design a personalization measurement framework
+- **Define Appropriate**: Define appropriate KPIs for hyper-personalised marketing
+- **incrementality and lift measurement approaches Understanding**: Understand incrementality and lift measurement approaches
+- **multi-touch attribution models Evaluation**: Evaluate multi-touch attribution models
+- **A/B testing with AI-driven experimentation Analysis**: Compare A/B testing with AI-driven experimentation
+- **a personalization measurement framework Development**: Design a personalization measurement framework
 
 ## Introduction
 
@@ -409,12 +409,12 @@ Submit a 4-5 page measurement framework document including:
 
 ## Key Takeaways
 
-- Hyper-personalised marketing requires both traditional and personalization-specific KPIs
-- Incrementality measurement reveals the true value of personalization beyond correlation
-- Multi-touch attribution models, especially data-driven, provide more accurate credit assignment
-- AI-driven experimentation enables faster, more scalable optimization than traditional A/B testing
-- A comprehensive measurement framework combines KPIs, attribution, incrementality, and experimentation
-- Successful measurement requires clear objectives, appropriate methodologies, and actionable insights
+- **Hyper-Personalised Marketing**: Hyper-personalised marketing requires both traditional and personalization-specific KPIs
+- **Incrementality Measurement**: Incrementality measurement reveals the true value of personalization beyond correlation
+- **Multi-Touch Attribution**: Multi-touch attribution models, especially data-driven, provide more accurate credit assignment
+- **Ai-Driven Experimentation**: AI-driven experimentation enables faster, more scalable optimization than traditional A/B testing
+- **A Comprehensive**: A comprehensive measurement framework combines KPIs, attribution, incrementality, and experimentation
+- **Successful Measurement**: Successful measurement requires clear objectives, appropriate methodologies, and actionable insights
 
 ## Additional Resources
 

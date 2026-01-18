@@ -9,10 +9,10 @@ order: 4
 
 **Duration:** Week 4  
 **Learning Objectives:**
-- Implement pre-approved language libraries
-- Design guardrails to prevent implicit advice
-- Manage version control and audit trails
-- Handle hallucination and over-confidence in AI outputs
+- **pre-approved language libraries Implementation**: Implement pre-approved language libraries
+- **guardrails to prevent implicit advice Development**: Design guardrails to prevent implicit advice
+- **Manage Version**: Manage version control and audit trails
+- **Handle Hallucination**: Handle hallucination and over-confidence in AI outputs
 
 ---
 
@@ -165,10 +165,10 @@ Create a comprehensive compliance approval workflow for AI-generated client comm
 
 ## Key Takeaways
 
-- Pre-approved language libraries ensure regulatory compliance
-- Guardrails prevent implicit advice in AI-generated content
-- Version control and audit trails maintain compliance documentation
-- Hallucination and over-confidence require systematic detection and mitigation
+- **Pre-Approved Language**: Pre-approved language libraries ensure regulatory compliance
+- **Guardrails Prevent**: Guardrails prevent implicit advice in AI-generated content
+- **Version Control**: Version control and audit trails maintain compliance documentation
+- **Hallucination And**: Hallucination and over-confidence require systematic detection and mitigation
 
 ---
 

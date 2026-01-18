@@ -13,12 +13,12 @@ email_action: "Define guardrails for a high-risk experiment, including detection
 **Theme:** *Preventing harm while moving fast*
 
 **Learning Objectives:**
-- Design effective guardrail metrics
-- Detect unintended consequences
-- Understand long-term vs short-term effects
-- Recognize ethical considerations in experimentation
-- Plan decision reversibility and rollback strategies
-- Build safe experimentation practices
+- **effective guardrail metrics Development**: Design effective guardrail metrics
+- **Detect Unintended**: Apply detect unintended consequences in relevant contexts
+- **long-term vs short-term effects Understanding**: Understand long-term vs short-term effects
+- **Recognize Ethical**: Recognize ethical considerations in experimentation
+- **Plan Decision**: Plan decision reversibility and rollback strategies
+- **safe experimentation practices Development**: Build safe experimentation practices
 
 ---
 

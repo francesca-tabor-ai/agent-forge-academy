@@ -9,11 +9,11 @@ order: 3
 
 **Duration:** Week 3  
 **Learning Objectives:**
-- Understand glTF/GLB as the "JPEG of 3D"
-- Convert glTF files to USDZ for iOS Safari compatibility
-- Implement compression techniques (Draco, Meshopt) for 50-90% size reduction
-- Optimize 3D models for instantaneous loading in complex scenes
-- Ensure cross-platform compatibility (Web, iOS, Android)
+- **glTF/GLB as the "JPEG of 3D" Understanding**: Understand glTF/GLB as the "JPEG of 3D"
+- **Convert Gltf**: Convert glTF files to USDZ for iOS Safari compatibility
+- **compression techniques (Draco, Meshopt) for 50-90% size reduction Implementation**: Implement compression techniques (Draco, Meshopt) for 50-90% size reduction
+- **Optimize 3D**: Optimize 3D models for instantaneous loading in complex scenes
+- **Ensure Cross-Platform**: Ensure cross-platform compatibility (Web, iOS, Android)
 
 ---
 
@@ -581,10 +581,10 @@ Optimize a 3D model using compression techniques and convert to multiple formats
 
 ## Next Steps
 
-- Complete Lab 3: Model Optimization
-- Review Module 4: Amazon Integration
-- Set up Amazon Seller account (if applicable)
-- Prepare for API integration
+- **Complete Lab**: Complete Lab 3: Model Optimization
+- **Review Module**: Review Module 4: Amazon Integration
+- **Amazon Seller account (if applicable) Implementation**: Set up Amazon Seller account (if applicable)
+- **Prepare For**: Prepare for API integration
 
 ---
 

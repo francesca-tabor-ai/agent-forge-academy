@@ -11,11 +11,11 @@ order: 7
 
 **Duration:** Week 7  
 **Learning Objectives:**
-- Ensure product truth is consistent across every channel AI reads
-- Understand Amazon vs DTC vs marketplace content divergence
-- Recognize how inconsistencies erode AI trust
-- Design canonical product truth models
-- Implement syncing updates across platforms
+- **Ensure Product**: Ensure product truth is consistent across every channel AI reads
+- **Amazon vs DTC vs marketplace content divergence Understanding**: Understand Amazon vs DTC vs marketplace content divergence
+- **Recognize How**: Recognize how inconsistencies erode AI trust
+- **canonical product truth models Development**: Design canonical product truth models
+- **syncing updates across platforms Implementation**: Implement syncing updates across platforms
 
 ---
 
@@ -408,16 +408,16 @@ In this module, you've learned:
 - **Sync Strategy:** Update propagation and consistency maintenance
 
 **Key Takeaways:**
-- Inconsistencies across channels erode AI trust
-- Canonical product truth ensures consistency
-- Sync strategy maintains truth across channels
-- Regular audits identify and fix issues
-- Single source of truth simplifies management
+- **Inconsistencies Across**: Inconsistencies across channels erode AI trust
+- **Canonical Product**: Canonical product truth ensures consistency
+- **Sync Strategy**: Sync strategy maintains truth across channels
+- **Regular Audits**: Regular audits identify and fix issues
+- **Single Source**: Single source of truth simplifies management
 
 **Next Steps:**
-- Complete Lab 7: Product Truth Canonical Schema
-- Review Module 8: Measurement & KPIs
-- Begin designing measurement framework
+- **Complete Lab**: Complete Lab 7: Product Truth Canonical Schema
+- **Review Module**: Review Module 8: Measurement & KPIs
+- **Begin Designing**: Begin designing measurement framework
 
 ---
 

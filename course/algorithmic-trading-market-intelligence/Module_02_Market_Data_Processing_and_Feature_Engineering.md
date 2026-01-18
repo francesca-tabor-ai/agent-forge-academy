@@ -9,10 +9,10 @@ order: 2
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Process high-frequency market data
-- Extract technical indicators
-- Integrate alternative data sources
-- Build feature engineering pipelines
+- **Process High-Frequency**: Process high-frequency market data
+- **Extract Technical**: Apply extract technical indicators in relevant contexts
+- **alternative data sources Integration**: Integrate alternative data sources
+- **feature engineering Development**: Build feature engineering pipelines
 
 ---
 

@@ -9,10 +9,10 @@ order: 5
 
 **Duration:** Week 5  
 **Learning Objectives:**
-- Understand AWS Kiro and its three-phase workflow
-- Learn GitHub Spec Kit for greenfield projects
-- Master OpenSpec for brownfield maintenance
-- Explore BMAD Method for enterprise orchestration
+- **AWS Kiro and its three-phase workflow Understanding**: Understand AWS Kiro and its three-phase workflow
+- **GitHub Spec Kit for greenfield projects Understanding**: Learn GitHub Spec Kit for greenfield projects
+- **OpenSpec for brownfield maintenance Understanding**: Master OpenSpec for brownfield maintenance
+- **Explore Bmad**: Explore BMAD Method for enterprise orchestration
 
 ---
 
@@ -1018,11 +1018,11 @@ Set up and use one SDDD tool (AWS Kiro, GitHub Spec Kit, OpenSpec, or BMAD) for 
 
 ## Key Takeaways
 
-1. **AWS Kiro:** Three-phase workflow (Requirements, Design, Tasks) for production readiness
-2. **GitHub Spec Kit:** Structured templates and workflows for greenfield projects
-3. **OpenSpec:** Incremental SDDD adoption for brownfield codebases
-4. **BMAD Method:** Enterprise orchestration with specialized AI team roles
-5. **Tool Selection:** Choose tools based on project needs and context
+- **AWS Kiro:**: Three-phase workflow (Requirements, Design, Tasks) for production readiness
+- **GitHub Spec Kit:**: Structured templates and workflows for greenfield projects
+- **OpenSpec:**: Incremental SDDD adoption for brownfield codebases
+- **BMAD Method:**: Enterprise orchestration with specialized AI team roles
+- **Tool Selection:**: Choose tools based on project needs and context
 
 ---
 

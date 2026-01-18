@@ -9,11 +9,11 @@ order: 1
 
 **Duration:** Week 1  
 **Learning Objectives:**
-- Identify advisor pain points: provider requests and suitability reports
-- Understand the cost of fragmented regulatory requirements
-- Compare manual compliance vs. scalable compliance
-- Recognize the risk of shortcuts and "checkbox" behavior
-- Map workflows to identify friction points
+- **Identify Advisor**: Identify advisor pain points: provider requests and suitability reports
+- **the cost of fragmented regulatory requirements Understanding**: Understand the cost of fragmented regulatory requirements
+- **manual compliance Analysis**: Compare manual compliance vs. scalable compliance
+- **Recognize The**: Recognize the risk of shortcuts and "checkbox" behavior
+- **Map Workflows**: Map workflows to identify friction points
 
 ---
 
@@ -245,11 +245,11 @@ Advice Workflow:
 
 ## Key Takeaways
 
-- Compliance has become a major time sink for advisors due to increasing regulatory requirements
-- Fragmented regulatory requirements across jurisdictions increase complexity and cost
-- Manual compliance processes don't scale and lead to shortcuts and checkbox behavior
-- Automation is essential to maintain quality while reducing time burden
-- Workflow mapping reveals specific friction points for targeted automation
+- **Compliance Has**: Compliance has become a major time sink for advisors due to increasing regulatory requirements
+- **Fragmented Regulatory**: Fragmented regulatory requirements across jurisdictions increase complexity and cost
+- **Manual Compliance**: Manual compliance processes don't scale and lead to shortcuts and checkbox behavior
+- **Automation Is**: Automation is essential to maintain quality while reducing time burden
+- **Workflow Mapping**: Workflow mapping reveals specific friction points for targeted automation
 
 ---
 

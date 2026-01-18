@@ -19,12 +19,12 @@ order: 0
 
 By completing this course, you will be able to:
 
-- Explain vector databases and similarity search concepts
-- Design schemas and data models in Weaviate
-- Ingest, index, and query multimodal data
-- Implement semantic and hybrid search
-- Build RAG pipelines using Weaviate + LLMs
-- Deploy and scale Weaviate in production environments
+- **Explain Vector**: Explain vector databases and similarity search concepts
+- **schemas and data models in Weaviate Development**: Design schemas and data models in Weaviate
+- **Ingest, Index,**: Ingest, index, and query multimodal data
+- **semantic and hybrid search Implementation**: Implement semantic and hybrid search
+- **RAG Development**: Build RAG pipelines using Weaviate + LLMs
+- **and scale Weaviate in production environments Implementation**: Deploy and scale Weaviate in production environments
 
 ---
 

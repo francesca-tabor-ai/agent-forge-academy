@@ -9,10 +9,10 @@ order: 3
 
 **Duration:** Week 3  
 **Learning Objectives:**
-- Pre-check emails, reports, and presentations
-- Identify prohibited language and missing disclosures
-- Distinguish personalization vs. regulated advice
-- Design exception-based human escalation
+- **Pre-Check Emails,**: Pre-check emails, reports, and presentations
+- **Identify Prohibited**: Identify prohibited language and missing disclosures
+- **personalization Analysis**: Distinguish personalization vs. regulated advice
+- **exception-based human escalation Development**: Design exception-based human escalation
 
 ---
 
@@ -239,10 +239,10 @@ Compliance Checklist:
 
 ## Key Takeaways
 
-- Automated pre-checking significantly reduces compliance review cycles
-- Prohibited language and missing disclosures can be systematically detected
-- Clear boundaries between personalization and advice are essential
-- Exception-based escalation ensures quality while maintaining efficiency
+- **Automated Pre-Checking**: Automated pre-checking significantly reduces compliance review cycles
+- **Prohibited Language**: Prohibited language and missing disclosures can be systematically detected
+- **Clear Boundaries**: Clear boundaries between personalization and advice are essential
+- **Exception-Based Escalation**: Exception-based escalation ensures quality while maintaining efficiency
 
 ---
 

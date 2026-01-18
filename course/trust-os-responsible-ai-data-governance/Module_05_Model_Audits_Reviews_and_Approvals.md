@@ -13,11 +13,11 @@ email_action: "Design a model approval workflow for one type of model in your or
 **Theme:** *Governing models across their lifecycle*
 
 **Learning Objectives:**
-- Understand model documentation standards
-- Design pre-deployment approval processes
-- Learn periodic audit and re-certification procedures
-- Master post-deployment compliance monitoring
-- Handle third-party and vendor models
+- **model documentation standards Understanding**: Understand model documentation standards
+- **pre-deployment approval processes Development**: Design pre-deployment approval processes
+- **periodic audit and re-certification procedures Understanding**: Learn periodic audit and re-certification procedures
+- **post-deployment compliance monitoring Understanding**: Master post-deployment compliance monitoring
+- **Handle Third-Party**: Handle third-party and vendor models
 
 ---
 
@@ -1160,17 +1160,17 @@ A comprehensive model governance and audit framework that includes:
 
 ## Key Takeaways
 
-1. **Documentation is foundational:** Comprehensive documentation enables effective review, approval, and audit.
+- **Documentation is foundational:**: Comprehensive documentation enables effective review, approval, and audit
 
-2. **Approval processes must be systematic:** Structured approval processes ensure consistent, thorough review and reduce risk.
+- **Approval processes must be systematic:**: Structured approval processes ensure consistent, thorough review and reduce risk
 
-3. **Audits are essential:** Regular audits verify compliance, performance, and fairness throughout model lifecycle.
+- **Audits are essential:**: Regular audits verify compliance, performance, and fairness throughout model lifecycle
 
-4. **Monitoring is continuous:** Post-deployment monitoring detects issues early and enables rapid response.
+- **Monitoring is continuous:**: Post-deployment monitoring detects issues early and enables rapid response
 
-5. **Third-party models require special attention:** Vendor models need additional assessment and ongoing oversight.
+- **Third-party models require special attention:**: Vendor models need additional assessment and ongoing oversight
 
-6. **Governance must be repeatable:** Standardized processes, templates, and workflows enable scalable governance.
+- **Governance must be repeatable:**: Standardized processes, templates, and workflows enable scalable governance
 
 ---
 

@@ -9,10 +9,10 @@ order: 4
 
 **Duration:** Week 4  
 **Learning Objectives:**
-- Understand why chat is the wrong abstraction for decisions
-- Design state machines to gate actions and prevent skipped safeguards
-- Implement action boundaries and refusal patterns
-- Create outcome loops that close policy-to-reality gaps
+- **why chat is the wrong abstraction for decisions Understanding**: Understand why chat is the wrong abstraction for decisions
+- **state machines to gate actions and prevent skipped safeguards Development**: Design state machines to gate actions and prevent skipped safeguards
+- **action boundaries and refusal Implementation**: Implement action boundaries and refusal patterns
+- **outcome loops that close policy-to-reality gaps Development**: Create outcome loops that close policy-to-reality gaps
 
 ---
 
@@ -818,13 +818,13 @@ Update when gaps exceed thresholds.
 
 ## Key Takeaways
 
-1. **State machines enforce safety** - Discrete states prevent skipped safeguards
-2. **Confirmation gates protect users** - Explicit confirmation for irreversible actions
-3. **Systems can refuse** - Right to refuse when confidence is low or constraints aren't met
-4. **Outcome loops close gaps** - Real results feed back into policy
-5. **Guards prevent errors** - Conditions must be met before transitions
-6. **Timeouts prevent hanging** - Automatic cancellation if user doesn't respond
-7. **Audit trails enable accountability** - Every state transition is logged
+- **State machines enforce safety**: Discrete states prevent skipped safeguards
+- **Confirmation gates protect users**: Explicit confirmation for irreversible actions
+- **Systems can refuse**: Right to refuse when confidence is low or constraints aren't met
+- **Outcome loops close gaps**: Real results feed back into policy
+- **Guards prevent errors**: Conditions must be met before transitions
+- **Timeouts prevent hanging**: Automatic cancellation if user doesn't respond
+- **Audit trails enable accountability**: Every state transition is logged
 
 ---
 
@@ -851,10 +851,10 @@ Update when gaps exceed thresholds.
 ## Next Steps
 
 **After completing this module:**
-1. Review your state machines and boundaries
-2. Test with real scenarios
-3. Monitor outcomes
-4. Move to [Module 5: Visibility & Observability](Module_05_Visibility_and_Observability.md)
+- **Review Your State**: Review your state machines and boundaries
+- **Test With Real**: Apply test with real scenarios principles and best practices
+- **Monitor Outcomes**: Implement monitor outcomes effectively across relevant use cases
+- **Move [Module Visibility**: Move to [Module 5: Visibility & Observability](Module_05_Visibility_and_Observability.md)
 
 ---
 

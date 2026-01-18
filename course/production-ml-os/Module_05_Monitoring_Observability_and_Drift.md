@@ -14,10 +14,10 @@ email_action: "Define an observability dashboard for a live ML system with data,
 
 **Duration:** Week 5  
 **Learning Objectives:**
-- Monitor data, model, system, and business metrics
-- Detect input data drift and concept drift
-- Design alerting thresholds
-- Tie ML metrics to business KPIs
+- **Monitor Data,**: Monitor data, model, system, and business metrics
+- **Detect Input**: Detect input data drift and concept drift
+- **alerting thresholds Development**: Apply design alerting thresholds in relevant contexts
+- **Tie Ml**: Tie ML metrics to business KPIs
 
 ---
 
@@ -512,16 +512,16 @@ def compute_business_impact(ml_metrics, business_metrics):
 
 ### Key Takeaways
 
-1. **Monitor everything** - Data, model, system, and business metrics
-2. **Detect drift early** - Input drift and concept drift require different approaches
-3. **Alert intelligently** - Reduce noise, focus on business impact
-4. **Connect to business** - ML metrics must tie to business KPIs
+- **Monitor everything**: Data, model, system, and business metrics
+- **Detect drift early**: Input drift and concept drift require different approaches
+- **Alert intelligently**: Reduce noise, focus on business impact
+- **Connect to business**: ML metrics must tie to business KPIs
 
 ### Next Steps
 
-- Complete the observability dashboard exercise
-- Review monitoring tools and practices
-- Move to Module 6 to learn about ML CI/CD
+- **Complete The**: Complete the observability dashboard exercise
+- **Review Monitoring**: Review monitoring tools and practices
+- **Move To**: Move to Module 6 to learn about ML CI/CD
 
 ---
 

@@ -9,11 +9,11 @@ order: 3
 
 **Duration:** Week 3  
 **Learning Objectives:**
-- Implement efficient batch ingestion patterns
-- Understand HNSW indexing fundamentals
-- Configure consistency and replication
-- Handle large-scale dataset ingestion
-- Benchmark and optimize query performance
+- **efficient batch ingestion Implementation**: Implement efficient batch ingestion patterns
+- **HNSW indexing fundamentals Understanding**: Understand HNSW indexing fundamentals
+- **Configure Consistency**: Configure consistency and replication
+- **Handle Large-Scale**: Handle large-scale dataset ingestion
+- **Benchmark And**: Benchmark and optimize query performance
 
 ---
 
@@ -738,16 +738,16 @@ for config in configs:
 ## Summary
 
 **Key Takeaways:**
-- Batch ingestion is essential for performance
-- HNSW parameters balance quality and speed
-- Consistency and replication affect availability
-- Large-scale ingestion requires careful planning
-- Monitoring and validation are critical
+- **Batch Ingestion**: Batch ingestion is essential for performance
+- **Hnsw Parameters**: HNSW parameters balance quality and speed
+- **Consistency And**: Consistency and replication affect availability
+- **Large-Scale Ingestion**: Large-scale ingestion requires careful planning
+- **Monitoring And**: Monitoring and validation are critical
 
 **What's Next:**
-- Module 4: Learn semantic and hybrid search
-- Implement advanced query patterns
-- Combine vector and keyword search
+- **Module 4:**: Module 4: Learn semantic and hybrid search
+- **advanced query Implementation**: Implement advanced query patterns
+- **Combine Vector**: Combine vector and keyword search
 
 ---
 

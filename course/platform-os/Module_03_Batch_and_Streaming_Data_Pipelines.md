@@ -13,11 +13,11 @@ email_action: "Map your data sources: which need real-time processing vs batch? 
 **Theme:** *Moving data reliably*
 
 **Learning Objectives:**
-- Understand batch processing fundamentals
-- Learn streaming architectures and use cases
-- Differentiate event-driven vs micro-batch systems
-- Master data freshness, SLAs, and failure handling
-- Design backfill and replay strategies
+- **batch processing fundamentals Understanding**: Understand batch processing fundamentals
+- **streaming architectures and use cases Understanding**: Learn streaming architectures and use cases
+- **event-driven Analysis**: Differentiate event-driven vs micro-batch systems
+- **data freshness, SLAs, and failure handling Understanding**: Master data freshness, SLAs, and failure handling
+- **backfill and replay strategies Development**: Design backfill and replay strategies
 
 ---
 
@@ -688,11 +688,11 @@ A pipeline design that includes:
 
 ### Key Takeaways
 
-1. **Batch processing** is ideal for comprehensive, cost-effective processing of large volumes
-2. **Streaming processing** enables real-time and near-real-time use cases
-3. **Event-driven vs micro-batch** is a trade-off between latency and throughput
-4. **SLAs and failure handling** are critical for production pipelines
-5. **Backfills and replay** must be designed into pipelines from the start
+- **Batch processing**: Is ideal for comprehensive, cost-effective processing of large volumes
+- **Streaming processing**: Enables real-time and near-real-time use cases
+- **Event-driven vs micro-batch**: Is a trade-off between latency and throughput
+- **SLAs and failure handling**: Are critical for production pipelines
+- **Backfills and replay**: Must be designed into pipelines from the start
 
 ### Next Steps
 

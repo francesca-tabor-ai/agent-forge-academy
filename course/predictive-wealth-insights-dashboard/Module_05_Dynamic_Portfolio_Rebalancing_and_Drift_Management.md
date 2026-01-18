@@ -9,10 +9,10 @@ order: 5
 
 **Duration:** Week 5  
 **Learning Objectives:**
-- Implement overnight drift monitoring for DPM portfolios
-- Design threshold-based vs. AI-suggested rebalancing
-- Consider liquidity, tax, and transaction costs
-- Scale rebalancing across thousands of portfolios
+- **overnight drift monitoring for DPM portfolios Implementation**: Implement overnight drift monitoring for DPM portfolios
+- **threshold-based vs. AI-suggested rebalancing Development**: Design threshold-based vs. AI-suggested rebalancing
+- **liquidity, tax, Evaluation**: Consider liquidity, tax, and transaction costs
+- **Scale Rebalancing**: Scale rebalancing across thousands of portfolios
 
 ---
 
@@ -155,10 +155,10 @@ Design drift thresholds and rebalancing triggers for a model portfolio.
 
 ## Key Takeaways
 
-- Overnight drift monitoring enables proactive portfolio management
-- Threshold-based and AI-suggested rebalancing serve different use cases
-- Cost, tax, and liquidity considerations are critical for efficient rebalancing
-- Scalability requires efficient algorithms and processing strategies
+- **Overnight Drift**: Overnight drift monitoring enables proactive portfolio management
+- **Threshold-Based And**: Threshold-based and AI-suggested rebalancing serve different use cases
+- **Cost, Tax,**: Cost, tax, and liquidity considerations are critical for efficient rebalancing
+- **Scalability Requires**: Scalability requires efficient algorithms and processing strategies
 
 ---
 

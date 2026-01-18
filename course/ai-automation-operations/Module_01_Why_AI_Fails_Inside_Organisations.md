@@ -11,11 +11,11 @@ order: 1
 
 **Duration:** Week 1  
 **Learning Objectives:**
-- Understand why technically sound AI systems fail socially
-- Reframe AI automation as operational hygiene, not workforce replacement
-- Recognize the psychology of job threat and resistance
-- Identify where resistance actually originates
-- Create an Automation Risk & Resistance Map
+- **why technically sound AI systems fail socially Understanding**: Understand why technically sound AI systems fail socially
+- **Reframe Ai**: Reframe AI automation as operational hygiene, not workforce replacement
+- **Recognize The**: Recognize the psychology of job threat and resistance
+- **Identify Where**: Identify where resistance actually originates
+- **an Automation Risk & Resistance Map Development**: Create an Automation Risk & Resistance Map
 
 ---
 
@@ -570,12 +570,12 @@ Conduct a detailed assessment of stakeholder sensitivity to automation initiativ
 
 ## Key Takeaways
 
-- **Language matters:** "Efficiency" language triggers threat response; "enablement" language creates safety
-- **Augmentation, not substitution:** AI should enhance human capability, not replace it
-- **Resistance has sources:** Leadership communication, past failures, industry context, role uncertainty, loss of identity
-- **Proactive mitigation:** Identify resistance risks early and address them before they become problems
-- **Human-in-the-loop:** Always preserve human authority and judgment
-- **Trust is foundational:** Build trust through transparency, job security, and support
+- **Language matters:**: "Efficiency" language triggers threat response; "enablement" language creates safety
+- **Augmentation, not substitution:**: AI should enhance human capability, not replace it
+- **Resistance has sources:**: Leadership communication, past failures, industry context, role uncertainty, loss of identity
+- **Proactive mitigation:**: Identify resistance risks early and address them before they become problems
+- **Human-in-the-loop:**: Always preserve human authority and judgment
+- **Trust is foundational:**: Build trust through transparency, job security, and support
 
 ---
 

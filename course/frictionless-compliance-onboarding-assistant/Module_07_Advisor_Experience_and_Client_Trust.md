@@ -9,10 +9,10 @@ order: 7
 
 **Duration:** Week 7  
 **Learning Objectives:**
-- Build advisor confidence in AI-generated compliance outputs
-- Explain AI-assisted onboarding to clients
-- Ensure transparency and consent
-- Maintain human accountability
+- **advisor confidence in AI-generated compliance outputs Development**: Build advisor confidence in AI-generated compliance outputs
+- **Explain Ai-Assisted**: Explain AI-assisted onboarding to clients
+- **Ensure Transparency**: Ensure transparency and consent
+- **Maintain Human**: Apply maintain human accountability in relevant contexts
 
 ---
 
@@ -147,10 +147,10 @@ Create a clear, transparent explanation of AI-assisted onboarding for clients.
 
 ## Key Takeaways
 
-- Advisor confidence requires quality, transparency, and support
-- Client trust requires clear communication and transparency
-- Consent management ensures regulatory compliance
-- Human accountability must be maintained despite automation
+- **Advisor Confidence**: Advisor confidence requires quality, transparency, and support
+- **Client Trust**: Client trust requires clear communication and transparency
+- **Consent Management**: Consent management ensures regulatory compliance
+- **Human Accountability**: Human accountability must be maintained despite automation
 
 ---
 

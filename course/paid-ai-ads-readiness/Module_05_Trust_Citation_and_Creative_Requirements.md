@@ -9,12 +9,12 @@ order: 5
 
 **Duration:** Week 5  
 **Learning Objectives:**
-- Define what creative means in an AI-native ad world
-- Understand how trust assets become media inputs
-- Learn citation eligibility and suppression risk
-- Master trust signals: evidence, reviews, authority, data freshness
-- Design creative formats: conversational responses, visual summaries, comparison snippets
-- Understand why bad creative damages organic visibility too
+- **Define What**: Define what creative means in an AI-native ad world
+- **how trust assets become media inputs Understanding**: Understand how trust assets become media inputs
+- **citation eligibility and suppression risk Understanding**: Learn citation eligibility and suppression risk
+- **Trust Signals:**: Master trust signals: evidence, reviews, authority, data freshness
+- **Design Creative**: Design creative formats: conversational responses, visual summaries, comparison snippets
+- **why bad creative damages organic visibility too Understanding**: Understand why bad creative damages organic visibility too
 
 ---
 
@@ -702,15 +702,15 @@ Create comprehensive gap analysis:
 
 ## Key Takeaways
 
-- **Citation eligibility is prerequisite:** Must meet quality, authority, evidence, freshness requirements
+- **Citation eligibility is prerequisite:**: Must meet quality, authority, evidence, freshness requirements
 
-- **Trust signals are media inputs:** Evidence, reviews, authority, and freshness directly impact recommendations
+- **Trust signals are media inputs:**: Evidence, reviews, authority, and freshness directly impact recommendations
 
-- **Creative is different in AI-native ads:** Conversational responses, visual summaries, comparison snippets replace traditional ads
+- **Creative is different in AI-native ads:**: Conversational responses, visual summaries, comparison snippets replace traditional ads
 
-- **Bad creative damages both organic and paid:** Quality investment pays double, suppression affects both channels
+- **Bad creative damages both organic and paid:**: Quality investment pays double, suppression affects both channels
 
-- **Persona-specific analysis is critical:** Trust signals and creative must align with personas
+- **Persona-specific analysis is critical:**: Trust signals and creative must align with personas
 
 ---
 

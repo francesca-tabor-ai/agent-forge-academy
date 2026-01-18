@@ -11,11 +11,11 @@ email_action: "Think of a recent agent failure—could you replay it exactly? Wh
 
 **Duration:** Week 4  
 **Learning Objectives:**
-- Capture full agent trajectories
-- Replay decisions with partial determinism
-- Understand golden traces vs golden answers
-- Learn what "reproducible" means for agents
-- Build replay harnesses for debugging
+- **Capture Full**: Capture full agent trajectories
+- **Replay Decisions**: Replay decisions with partial determinism
+- **golden traces vs golden answers Understanding**: Understand golden traces vs golden answers
+- **what "reproducible" means for agents Understanding**: Learn what "reproducible" means for agents
+- **replay harnesses for debugging Development**: Build replay harnesses for debugging
 
 ---
 

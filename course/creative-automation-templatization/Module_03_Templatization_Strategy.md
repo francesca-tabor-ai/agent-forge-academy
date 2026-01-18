@@ -14,11 +14,11 @@ Effective templatization requires strategic thinking about architecture, hierarc
 
 ## Learning Objectives
 
-- Design template architecture and hierarchy
-- Distinguish static vs. dynamic templates
-- Implement rules-based design logic
-- Manage multiple sizes, ratios, and formats from a single source
-- Establish versioning and template governance
+- **template architecture and hierarchy Development**: Design template architecture and hierarchy
+- **static Analysis**: Distinguish static vs. dynamic templates
+- **rules-based design logic Implementation**: Implement rules-based design logic
+- **Manage Multiple**: Manage multiple sizes, ratios, and formats from a single source
+- **Establish Versioning**: Establish versioning and template governance
 
 ---
 
@@ -453,18 +453,18 @@ Template Library Structure:
 
 ### Key Takeaways
 
-1. **Template hierarchy** organizes templates from master to specific variants
-2. **Static vs. dynamic** templates serve different use cases
-3. **Rules-based logic** enables flexible, compliant templates
-4. **Single source approach** generates multiple formats efficiently
-5. **Versioning and governance** ensure template quality and maintainability
+- **Template hierarchy**: Organizes templates from master to specific variants
+- **Static vs. dynamic**: Templates serve different use cases
+- **Rules-based logic**: Enables flexible, compliant templates
+- **Single source approach**: Generates multiple formats efficiently
+- **Versioning and governance**: Ensure template quality and maintainability
 
 ### Next Steps
 
-- Design a template hierarchy for your use case
-- Create rules for a sample template
-- Plan versioning strategy for your template library
-- Move to Module 4 to learn about Adobe ecosystem tools
+- **a template hierarchy for your use case Development**: Design a template hierarchy for your use case
+- **rules for a sample template Development**: Create rules for a sample template
+- **Plan Versioning**: Plan versioning strategy for your template library
+- **Move To**: Move to Module 4 to learn about Adobe ecosystem tools
 
 ---
 

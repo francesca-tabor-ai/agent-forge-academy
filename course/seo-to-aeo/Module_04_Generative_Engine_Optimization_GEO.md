@@ -12,9 +12,9 @@ Generative Engine Optimization (GEO) focuses on increasing your citation density
 
 ## Learning Objectives
 
-- Implement citation density enhancement techniques
-- Improve machine parseability and fluency
-- Build community and third-party validation for LLM trust
+- **citation density enhancement techniques Implementation**: Implement citation density enhancement techniques
+- **Improve Machine**: Improve machine parseability and fluency
+- **community and third-party validation for LLM trust Development**: Build community and third-party validation for LLM trust
 
 ---
 
@@ -479,8 +479,8 @@ Track:
 
 Generative Engine Optimization focuses on:
 
-1. **Citation density**: Using authoritative quotations and statistics to increase visibility
-2. **Machine parseability**: Simplifying language and structure for AI extraction
-3. **Third-party validation**: Building presence on high-trust platforms like Reddit, LinkedIn, and Wikipedia
+- **Citation density**: Using authoritative quotations and statistics to increase visibility
+- **Machine parseability**: Simplifying language and structure for AI extraction
+- **Third-party validation**: Building presence on high-trust platforms like Reddit, LinkedIn, and Wikipedia
 
 These strategies work together to increase your likelihood of being cited in AI-generated responses, which is the new measure of visibility in the AI era.

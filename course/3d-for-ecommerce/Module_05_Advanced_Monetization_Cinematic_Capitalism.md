@@ -9,11 +9,11 @@ order: 5
 
 **Duration:** Week 5  
 **Learning Objectives:**
-- Understand video shopping patent and infrastructure
-- Implement AI object recognition for frame-by-frame product detection
-- Build dynamic product placement system with real-time swapping
-- Generate virtual influencers and UGC using Ready Player Me API
-- Create spatial shopping feeds that integrate video and commerce
+- **video shopping patent and infrastructure Understanding**: Understand video shopping patent and infrastructure
+- **AI object recognition for frame-by-frame product detection Implementation**: Implement AI object recognition for frame-by-frame product detection
+- **dynamic product placement Development**: Build dynamic product placement system with real-time swapping
+- **Generate Virtual**: Generate virtual influencers and UGC using Ready Player Me API
+- **spatial shopping feeds that integrate video and commerce Development**: Create spatial shopping feeds that integrate video and commerce
 
 ---
 
@@ -627,10 +627,10 @@ Create a prototype video shopping experience with AI-powered product detection.
 
 ## Next Steps
 
-- Complete Lab 5: Video Shopping Prototype
-- Review Module 6: Implementation Roadmap
-- Plan MVP development
-- Prepare for final project
+- **Complete Lab**: Complete Lab 5: Video Shopping Prototype
+- **Review Module**: Review Module 6: Implementation Roadmap
+- **Plan Mvp**: Apply plan mvp development in relevant contexts
+- **Prepare For**: Prepare for final project
 
 ---
 

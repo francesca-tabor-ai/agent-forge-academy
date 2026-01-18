@@ -9,12 +9,12 @@ order: 2
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Map real AI personas that drive recommendations
-- Replace audience segments with intent-led models
-- Understand persona formation inside LLMs
-- Identify intent escalation paths (research → comparison → decision)
-- Distinguish pre-purchase vs post-purchase AI intents
-- Analyze how personas differ by model and surface
+- **Map Real**: Map real AI personas that drive recommendations
+- **Replace Audience**: Replace audience segments with intent-led models
+- **persona formation inside LLMs Understanding**: Understand persona formation inside LLMs
+- **Identify Intent**: Identify intent escalation paths (research → comparison → decision)
+- **pre-purchase Analysis**: Distinguish pre-purchase vs post-purchase AI intents
+- **Analyze How**: Analyze how personas differ by model and surface
 
 ---
 
@@ -289,22 +289,22 @@ AI Recommendation:
 - **Best For:** Research, education, complex decisions
 
 **Claude (Anthropic):**
-- **Persona Style:** Thoughtful, balanced, nuanced
-- **Recommendation Format:** Comparative analysis, trade-offs
-- **Trust Signals:** Multiple perspectives, ethical considerations
-- **Best For:** Consideration, comparison, values-based decisions
+- **Persona Style:**: Thoughtful, balanced, nuanced
+- **Recommendation Format:**: Comparative analysis, trade-offs
+- **Trust Signals:**: Multiple perspectives, ethical considerations
+- **Best For:**: Consideration, comparison, values-based decisions
 
 **Perplexity:**
-- **Persona Style:** Research-focused, citation-heavy
-- **Recommendation Format:** Source-backed, data-driven
-- **Trust Signals:** Citations, recent data, expert sources
-- **Best For:** Research, validation, fact-checking
+- **Persona Style:**: Research-focused, citation-heavy
+- **Recommendation Format:**: Source-backed, data-driven
+- **Trust Signals:**: Citations, recent data, expert sources
+- **Best For:**: Research, validation, fact-checking
 
 **Google AI Overviews:**
-- **Persona Style:** Quick, comprehensive, authoritative
-- **Recommendation Format:** Synthesized answers, top options
-- **Trust Signals:** Google authority, source citations
-- **Best For:** Quick research, top-of-funnel discovery
+- **Persona Style:**: Quick, comprehensive, authoritative
+- **Recommendation Format:**: Synthesized answers, top options
+- **Trust Signals:**: Google authority, source citations
+- **Best For:**: Quick research, top-of-funnel discovery
 
 ### Surface-Specific Personas
 
@@ -470,15 +470,15 @@ Create two deliverables:
 
 ## Key Takeaways
 
-- **AI personas are dynamic and intent-driven:** Formed in real-time, adapt to conversation, focus on solving problems
+- **AI personas are dynamic and intent-driven:**: Formed in real-time, adapt to conversation, focus on solving problems
 
-- **Intent escalation follows predictable paths:** Research → Consideration → Decision → Purchase
+- **Intent escalation follows predictable paths:**: Research → Consideration → Decision → Purchase
 
-- **Pre-purchase and post-purchase intents require different strategies:** Different goals, bidding, creative, measurement
+- **Pre-purchase and post-purchase intents require different strategies:**: Different goals, bidding, creative, measurement
 
-- **Personas differ by model and surface:** Adapt strategies to ChatGPT vs. Claude vs. Perplexity, Search vs. Chat vs. Shopping
+- **Personas differ by model and surface:**: Adapt strategies to ChatGPT vs. Claude vs. Perplexity, Search vs. Chat vs. Shopping
 
-- **Revenue mapping is critical:** Prioritize intents and personas by revenue potential, not just volume
+- **Revenue mapping is critical:**: Prioritize intents and personas by revenue potential, not just volume
 
 ---
 

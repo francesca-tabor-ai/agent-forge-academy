@@ -11,12 +11,12 @@ order: 7
 
 **Duration:** Week 7  
 **Learning Objectives:**
-- Measure AI-driven efficiency improvements
-- Prepare for future paid AI spend
-- Calculate cost per qualified AI-driven outcome
-- Understand efficiency vs scale trade-offs
-- Benchmark AI visibility investment
-- Build ROI baselines for paid AI ads
+- **Measure Ai-Driven**: Measure AI-driven efficiency improvements
+- **Prepare For**: Prepare for future paid AI spend
+- **Calculate Cost**: Calculate cost per qualified AI-driven outcome
+- **efficiency vs scale trade-offs Understanding**: Understand efficiency vs scale trade-offs
+- **Benchmark Ai**: Benchmark AI visibility investment
+- **ROI baselines for paid AI ads Development**: Build ROI baselines for paid AI ads
 
 ---
 
@@ -625,12 +625,12 @@ Benchmark your AI investment efficiency against industry standards and identify 
 
 ## Key Takeaways
 
-- **Cost per qualified outcome matters:** Focus on quality, not just volume
-- **Efficiency vs. scale trade-off:** Balance based on stage and goals
-- **Benchmarking is essential:** Compare to industry and competitors
-- **ROI baselines prepare for paid AI:** Measure organic performance now
-- **AI is highly efficient:** Lower cost per outcome than most channels
-- **Optimization opportunities exist:** Identify and prioritize improvements
+- **Cost per qualified outcome matters:**: Focus on quality, not just volume
+- **Efficiency vs. scale trade-off:**: Balance based on stage and goals
+- **Benchmarking is essential:**: Compare to industry and competitors
+- **ROI baselines prepare for paid AI:**: Measure organic performance now
+- **AI is highly efficient:**: Lower cost per outcome than most channels
+- **Optimization opportunities exist:**: Identify and prioritize improvements
 
 ---
 

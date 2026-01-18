@@ -11,13 +11,13 @@ order: 9
 
 **Duration:** Week 9  
 **Learning Objectives:**
-- Institutionalise AI brand risk management
-- Avoid reactive, one-off fixes
-- Design organizational structure and roles
-- Integrate with brand, comms, product, and data teams
-- Establish vendor and tooling governance
-- Plan crisis simulations and tabletop exercises
-- Develop a comprehensive capstone project
+- **Institutionalise Ai**: Institutionalise AI brand risk management
+- **Avoid Reactive,**: Avoid reactive, one-off fixes
+- **organizational structure and roles Development**: Design organizational structure and roles
+- **with brand, comms, product, Integration**: Integrate with brand, comms, product, and data teams
+- **Establish Vendor**: Establish vendor and tooling governance
+- **Plan Crisis**: Plan crisis simulations and tabletop exercises
+- **a comprehensive capstone project Development**: Develop a comprehensive capstone project
 
 ---
 
@@ -612,10 +612,10 @@ In this module, you've learned:
 - You're ready to implement AI brand risk management in your organization
 
 **Next Steps:**
-- Complete the Capstone Project
-- Begin implementation planning
-- Engage stakeholders
-- Start building your AI Brand Risk & Integrity Program
+- **Complete The**: Complete the Capstone Project
+- **Begin Implementation**: Apply begin implementation planning in relevant contexts
+- **Engage Stakeholders**: Implement engage stakeholders effectively across relevant use cases
+- **Start Building**: Start building your AI Brand Risk & Integrity Program
 
 ---
 
@@ -624,7 +624,7 @@ In this module, you've learned:
 You now have the knowledge and tools to prevent, detect, and neutralize AI-generated brand misinformation. Remember: AI hallucinations are predictable system failures that require systematic prevention, not just reactive correction.
 
 **Continue Learning:**
-- Stay updated on AI developments
-- Participate in industry forums
-- Share learnings with peers
-- Continuously improve your program
+- **Stay Updated**: Stay updated on AI developments
+- **Participate In**: Participate in industry forums
+- **Share Learnings**: Share learnings with peers
+- **Continuously Improve**: Continuously improve your program

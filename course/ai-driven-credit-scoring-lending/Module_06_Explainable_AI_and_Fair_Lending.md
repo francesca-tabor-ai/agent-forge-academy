@@ -9,10 +9,10 @@ order: 6
 
 **Duration:** Week 6  
 **Learning Objectives:**
-- Implement model explainability
-- Ensure fair lending compliance
-- Detect and mitigate bias
-- Create regulatory reports
+- **model explainability Implementation**: Implement model explainability
+- **Ensure Fair**: Ensure fair lending compliance
+- **Detect And**: Detect and mitigate bias
+- **regulatory reports Development**: Create regulatory reports
 
 ---
 

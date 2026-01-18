@@ -9,10 +9,10 @@ order: 1
 
 **Duration:** Week 1  
 **Learning Objectives:**
-- Understand how discovery and choice have moved into AI reasoning
-- Differentiate between ranking and judgment in AI systems
-- Learn to shift from User Experience (UX) to Reasoning Experience (RX)
-- Recognize why traditional SEO and emotional branding fail with AI intermediaries
+- **how discovery and choice have moved into AI reasoning Understanding**: Understand how discovery and choice have moved into AI reasoning
+- **between ranking Analysis**: Differentiate between ranking and judgment in AI systems
+- **to shift from User Experience Understanding**: Learn to shift from User Experience (UX) to Reasoning Experience (RX)
+- **Recognize Why**: Recognize why traditional SEO and emotional branding fail with AI intermediaries
 
 ---
 
@@ -399,13 +399,13 @@ Serving the area for 20 years. 5-star rated!</p>
 
 ## Key Takeaways
 
-1. **Discovery has moved upstream** into AI reasoning—users may never visit your site
-2. **AI intermediaries are selective**—they filter, prioritize, and synthesize, not just rank
-3. **Judgment matters more than ranking**—being cited as authority is more valuable than being #1
-4. **UX optimizes for clicks, RX optimizes for comprehension**—different goals require different approaches
-5. **Structure enables reasoning**—clear ontologies and taxonomies help AI understand your domain
-6. **Evidence builds authority**—verifiable claims and citations increase trust
-7. **Metrics must change**—presence, citation, and influence replace page views and clicks
+- **Discovery has moved upstream**: Into AI reasoning—users may never visit your site
+- **AI intermediaries are selective**: —they filter, prioritize, and synthesize, not just rank
+- **Judgment matters more than ranking**: —being cited as authority is more valuable than being #1
+- **UX optimizes for clicks, RX optimizes for comprehension**: —different goals require different approaches
+- **Structure enables reasoning**: —clear ontologies and taxonomies help AI understand your domain
+- **Evidence builds authority**: —verifiable claims and citations increase trust
+- **Metrics must change**: —presence, citation, and influence replace page views and clicks
 
 ---
 
@@ -431,10 +431,10 @@ Serving the area for 20 years. 5-star rated!</p>
 ## Next Steps
 
 **After completing this module:**
-1. Review your findings from exercises
-2. Identify your domain's key entities
-3. Start thinking about knowledge structure
-4. Move to [Module 2: Knowledge as Infrastructure](Module_02_Knowledge_as_Infrastructure.md)
+- **Review Your Findings**: Apply review your findings from exercises principles and best practices
+- **Your Domain'S Key Entities**: Identify your domain's key entities
+- **Start Thinking About**: Apply start thinking about knowledge structure principles and best practices
+- **Move [Module Knowledge**: Move to [Module 2: Knowledge as Infrastructure](Module_02_Knowledge_as_Infrastructure.md)
 
 ---
 

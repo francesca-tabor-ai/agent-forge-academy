@@ -11,11 +11,11 @@ order: 3
 **Theme:** *From notebook features to production features*
 
 **Learning Objectives:**
-- Engineer time-aware features correctly
-- Build rolling windows, decay functions, and recency features
-- Create aggregations across users, products, and events
-- Understand offline vs online features
-- Design scalable feature pipelines
+- **Engineer Time-Aware**: Engineer time-aware features correctly
+- **rolling windows, decay functions, and recency features Development**: Build rolling windows, decay functions, and recency features
+- **aggregations across users, products, and events Development**: Create aggregations across users, products, and events
+- **offline vs online features Understanding**: Understand offline vs online features
+- **scalable feature Development**: Design scalable feature pipelines
 
 ---
 
@@ -578,17 +578,17 @@ Build scalable feature engineering pipelines for three prediction problems.
 
 **Key Takeaways:**
 
-1. **Time-Aware Engineering:** Always use temporal cutoffs
-2. **Multiple Windows:** Capture behavior at different time scales
-3. **Decay Functions:** Weight recent events more heavily
-4. **Aggregations:** Summarize across users, products, events
-5. **Offline vs Online:** Balance freshness and performance
-6. **Feature Stores:** Centralize feature management for production
+- **Time-Aware Engineering:**: Always use temporal cutoffs
+- **Multiple Windows:**: Capture behavior at different time scales
+- **Decay Functions:**: Weight recent events more heavily
+- **Aggregations:**: Summarize across users, products, events
+- **Offline vs Online:**: Balance freshness and performance
+- **Feature Stores:**: Centralize feature management for production
 
 **Next Steps:**
-- Module 4: Choose and train predictive models
-- Learn model selection strategies
-- Build benchmark models
+- **Module 4:**: Module 4: Choose and train predictive models
+- **model selection strategies Understanding**: Learn model selection strategies
+- **benchmark models Development**: Build benchmark models
 
 ---
 

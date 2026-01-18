@@ -19,14 +19,14 @@ order: 0
 
 By completing this course, you will be able to:
 
-- Design predictive wealth insights dashboards that forecast flows and detect portfolio drift
-- Leverage alternative data sources for early investment signals
-- Build forecasting models for fund flows and investor demand
-- Transform complex signals into advisor-ready insights
-- Implement dynamic portfolio rebalancing and drift management systems
-- Define appropriate levels of automation with human-in-the-loop governance
-- Ensure explainability, risk management, and model governance
-- Deploy enterprise-scale predictive wealth insights platforms
+- **predictive wealth insights dashboards that forecast flows and detect portfolio drift Development**: Design predictive wealth insights dashboards that forecast flows and detect portfolio drift
+- **Leverage Alternative**: Leverage alternative data sources for early investment signals
+- **forecasting models for fund flows and investor demand Development**: Build forecasting models for fund flows and investor demand
+- **Transform Complex**: Transform complex signals into advisor-ready insights
+- **dynamic portfolio rebalancing and drift management Implementation**: Implement dynamic portfolio rebalancing and drift management systems
+- **Define Appropriate**: Define appropriate levels of automation with human-in-the-loop governance
+- **Ensure Explainability,**: Ensure explainability, risk management, and model governance
+- **enterprise-scale predictive wealth insights platforms Implementation**: Deploy enterprise-scale predictive wealth insights platforms
 
 ---
 

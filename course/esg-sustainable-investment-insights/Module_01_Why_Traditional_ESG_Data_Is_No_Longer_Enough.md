@@ -9,11 +9,11 @@ order: 1
 
 **Duration:** Week 1  
 **Learning Objectives:**
-- Understand why ESG ratings lag real-world events
-- Recognize the gap between controversy and formal disclosure
-- Understand regulatory pressure on ESG credibility
-- Learn ESG as a risk signal, not just a score
-- Identify ESG risks that don't appear in standard datasets
+- **why ESG ratings lag real-world events Understanding**: Understand why ESG ratings lag real-world events
+- **Recognize The**: Recognize the gap between controversy and formal disclosure
+- **regulatory pressure on ESG credibility Understanding**: Understand regulatory pressure on ESG credibility
+- **ESG as a risk signal, not just a score Understanding**: Learn ESG as a risk signal, not just a score
+- **Identify Esg**: Identify ESG risks that don't appear in standard datasets
 
 ---
 
@@ -210,10 +210,10 @@ Analyze real-world ESG events and identify which risks would be missed by tradit
 
 ## Key Takeaways
 
-- ESG ratings lag real-world events by 3-6 months, creating significant risk exposure
-- The gap between controversy and formal disclosure can be 30-90 days
-- Regulatory pressure requires more credible, timely ESG intelligence
-- ESG should be treated as a risk signal, not just a backward-looking score
+- **Esg Ratings**: ESG ratings lag real-world events by 3-6 months, creating significant risk exposure
+- **The Gap**: The gap between controversy and formal disclosure can be 30-90 days
+- **Regulatory Pressure**: Regulatory pressure requires more credible, timely ESG intelligence
+- **Esg Should**: ESG should be treated as a risk signal, not just a backward-looking score
 
 ---
 

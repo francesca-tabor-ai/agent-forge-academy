@@ -9,10 +9,10 @@ order: 8
 
 **Duration:** Week 8  
 **Learning Objectives:**
-- Design position limits and risk controls
-- Build real-time risk monitoring
-- Implement drawdown management
-- Create risk dashboards
+- **position limits and risk controls Development**: Design position limits and risk controls
+- **real-time risk monitoring Development**: Build real-time risk monitoring
+- **drawdown management Implementation**: Implement drawdown management
+- **risk dashboards Development**: Create risk dashboards
 
 ---
 

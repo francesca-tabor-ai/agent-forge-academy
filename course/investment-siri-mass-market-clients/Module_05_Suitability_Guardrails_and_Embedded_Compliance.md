@@ -9,10 +9,10 @@ order: 5
 
 **Duration:** Week 5  
 **Learning Objectives:**
-- Implement embedded suitability logic for retail clients
-- Conduct risk profiling through conversational inputs
-- Apply jurisdiction-aware compliance constraints
-- Design escalation to human advisors when thresholds are crossed
+- **embedded suitability logic for retail clients Implementation**: Implement embedded suitability logic for retail clients
+- **Conduct Risk**: Conduct risk profiling through conversational inputs
+- **Apply Jurisdiction-Aware**: Apply jurisdiction-aware compliance constraints
+- **escalation to human advisors when thresholds are crossed Development**: Design escalation to human advisors when thresholds are crossed
 
 ---
 
@@ -208,10 +208,10 @@ Design comprehensive guardrails that prevent the AI from providing unsuitable re
 
 ## Key Takeaways
 
-- Embedded suitability logic ensures regulatory compliance by design
-- Conversational risk profiling makes assessment accessible and natural
-- Jurisdiction-aware compliance handles regulatory variations automatically
-- Escalation mechanisms ensure human oversight when needed
+- **Embedded Suitability**: Embedded suitability logic ensures regulatory compliance by design
+- **Conversational Risk**: Conversational risk profiling makes assessment accessible and natural
+- **Jurisdiction-Aware Compliance**: Jurisdiction-aware compliance handles regulatory variations automatically
+- **Escalation Mechanisms**: Escalation mechanisms ensure human oversight when needed
 
 ---
 

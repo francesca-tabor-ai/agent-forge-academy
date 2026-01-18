@@ -12,11 +12,11 @@ email_action: "Create 1 moodboard-driven workflow and 2 divergent art directions
 
 **Duration:** Week 3  
 **Learning Objectives:**
-- Understand moodboards as data, not inspiration
-- Learn to feed visual references correctly
-- Design one art direction = one sub-workflow
-- Avoid cross-contamination between styles
-- Build moodboard-driven workflows
+- **moodboards as data, not inspiration Understanding**: Understand moodboards as data, not inspiration
+- **to feed visual references correctly Understanding**: Learn to feed visual references correctly
+- **one art direction = one sub-workflow Development**: Design one art direction = one sub-workflow
+- **Avoid Cross-Contamination**: Avoid cross-contamination between styles
+- **moodboard-driven Development**: Build moodboard-driven workflows
 
 ---
 

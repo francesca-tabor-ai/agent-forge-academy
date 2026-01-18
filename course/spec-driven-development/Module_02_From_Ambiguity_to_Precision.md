@@ -9,10 +9,10 @@ order: 2
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Learn to capture requirements in high-level specifications
-- Master the clarification loop methodology
-- Understand how to codify governing principles
-- Practice writing clear, actionable specifications
+- **to capture requirements in high-level specifications Understanding**: Learn to capture requirements in high-level specifications
+- **the clarification loop methodology Understanding**: Master the clarification loop methodology
+- **how to codify governing principles Understanding**: Understand how to codify governing principles
+- **Practice Writing**: Practice writing clear, actionable specifications
 
 ---
 
@@ -1122,11 +1122,11 @@ Create a complete specification document for a feature, then use the clarificati
 
 ## Key Takeaways
 
-1. **Specify First:** Capture requirements in structured markdown specifications
-2. **Clarification Loop:** Use AI to surface gaps and resolve ambiguities
-3. **Governing Principles:** Codify non-negotiable standards
-4. **Iterative Refinement:** Continue clarifying until specification is complete
-5. **Documentation:** Specifications are living documents that evolve
+- **Specify First:**: Capture requirements in structured markdown specifications
+- **Clarification Loop:**: Use AI to surface gaps and resolve ambiguities
+- **Governing Principles:**: Codify non-negotiable standards
+- **Iterative Refinement:**: Continue clarifying until specification is complete
+- **Documentation:**: Specifications are living documents that evolve
 
 ---
 

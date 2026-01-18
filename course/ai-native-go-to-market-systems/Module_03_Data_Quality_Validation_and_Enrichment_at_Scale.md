@@ -9,11 +9,11 @@ order: 3
 
 **Duration:** Week 3  
 **Learning Objectives:**
-- Identify common GTM data failure modes
-- Design validation rules and conditional logic
-- Implement enrichment strategies (real-time vs batch)
-- Build de-duplication and normalization workflows
-- Create "garbage in, garbage out" prevention systems
+- **Identify Common**: Identify common GTM data failure modes
+- **validation rules and conditional logic Development**: Design validation rules and conditional logic
+- **enrichment strategies (real-time vs batch) Implementation**: Implement enrichment strategies (real-time vs batch)
+- **de-duplication and normalization Development**: Build de-duplication and normalization workflows
+- **"garbage in, garbage out" prevention Development**: Create "garbage in, garbage out" prevention systems
 
 ---
 
@@ -659,20 +659,20 @@ Build an alert system that notifies you when data quality degrades.
 
 ## Key Takeaways
 
-- **Data quality is a system property, not a manual task**  
-- **Validation rules prevent bad data from entering**  
-- **Enrichment strategies depend on volume and value**  
-- **De-duplication keeps records clean and accurate**  
-- **Monitoring and alerts catch issues before they impact business**
+- **Data quality is a system property, not a manual task**: **Data quality is a system property, not a manual task**: **Data quality is a system property, not a manual task**
+- **Validation rules prevent bad data from entering**: **Validation rules prevent bad data from entering**: **Validation rules prevent bad data from entering**
+- **Enrichment strategies depend on volume and value**: **Enrichment strategies depend on volume and value**: **Enrichment strategies depend on volume and value**
+- **De-duplication keeps records clean and accurate**: **De-duplication keeps records clean and accurate**: **De-duplication keeps records clean and accurate**
+- **Monitoring and alerts catch issues before they impact business**: **Monitoring and alerts catch issues before they impact business**: **Monitoring and alerts catch issues before they impact business**
 
 ---
 
 ## Next Steps
 
-- Complete the hands-on exercise: Build enrichment and validation workflows
-- Set up data quality alerts
-- Review Module 4: Event-Based & Trigger-Based GTM Automation
-- Join course community discussions
+- **Complete The**: Complete the hands-on exercise: Build enrichment and validation workflows
+- **data quality alerts Implementation**: Set up data quality alerts
+- **Review Module**: Review Module 4: Event-Based & Trigger-Based GTM Automation
+- **Join Course**: Join course community discussions
 
 ---
 

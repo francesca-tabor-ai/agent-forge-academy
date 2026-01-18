@@ -9,11 +9,11 @@ order: 1
 
 **Duration:** Week 1  
 **Learning Objectives:**
-- Understand why vector databases exist and their role in modern AI applications
-- Explain embeddings and similarity search concepts
-- Design AI-native application architecture
-- Explore Weaviate features and capabilities
-- Set up local Weaviate instance
+- **why vector databases exist and their role in modern AI applications Understanding**: Understand why vector databases exist and their role in modern AI applications
+- **Explain Embeddings**: Explain embeddings and similarity search concepts
+- **AI-native application architecture Development**: Design AI-native application architecture
+- **Explore Weaviate**: Explore Weaviate features and capabilities
+- **local Weaviate instance Implementation**: Set up local Weaviate instance
 
 ---
 
@@ -585,15 +585,15 @@ curl http://localhost:8080/v1/objects
 ## Summary
 
 **Key Takeaways:**
-- Vector databases solve the similarity search problem
-- Embeddings capture semantic meaning
-- AI-native applications integrate vector search at the core
-- Weaviate provides production-ready vector database capabilities
+- **Vector Databases**: Vector databases solve the similarity search problem
+- **Embeddings Capture**: Embeddings capture semantic meaning
+- **Ai-Native Applications**: AI-native applications integrate vector search at the core
+- **Weaviate Provides**: Weaviate provides production-ready vector database capabilities
 
 **What's Next:**
-- Module 2: Learn Weaviate core concepts (objects, classes, schemas)
-- Start building your first Weaviate application
-- Understand schema design principles
+- **Module 2:**: Module 2: Learn Weaviate core concepts (objects, classes, schemas)
+- **Start Building**: Start building your first Weaviate application
+- **schema design principles Understanding**: Understand schema design principles
 
 ---
 

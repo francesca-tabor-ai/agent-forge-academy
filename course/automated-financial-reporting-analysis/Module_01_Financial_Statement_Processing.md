@@ -9,10 +9,10 @@ order: 1
 
 **Duration:** Week 1  
 **Learning Objectives:**
-- Extract data from PDF financial statements
-- Parse and normalize financial data
-- Build data extraction pipelines
-- Handle various document formats
+- **Extract Data**: Extract data from PDF financial statements
+- **Parse And**: Parse and normalize financial data
+- **data extraction Development**: Build data extraction pipelines
+- **Handle Various**: Handle various document formats
 
 ---
 

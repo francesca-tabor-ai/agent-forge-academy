@@ -9,10 +9,10 @@ order: 3
 
 **Duration:** Week 3  
 **Learning Objectives:**
-- Understand ESG preference categories under MiFID II
-- Learn environmental, social, and governance objectives
-- Design client preference hierarchies (hard exclusions vs. soft preferences)
-- Avoid "tick-box" ESG suitability
+- **ESG preference categories under MiFID II Understanding**: Understand ESG preference categories under MiFID II
+- **environmental, social, and governance objectives Understanding**: Learn environmental, social, and governance objectives
+- **client preference hierarchies (hard exclusions vs. soft preferences) Development**: Design client preference hierarchies (hard exclusions vs. soft preferences)
+- **Avoid "Tick-Box"**: Avoid "tick-box" ESG suitability
 
 ---
 
@@ -290,11 +290,11 @@ Create detailed ESG preference trees for three different client profiles with va
 
 ## Key Takeaways
 
-- ESG preferences must be systematically captured and structured for automated matching
-- Hard exclusions and soft preferences require different handling in matching algorithms
-- Avoiding tick-box approaches requires comprehensive, personalized preference assessment
-- Preference hierarchies enable nuanced matching while maintaining regulatory compliance
-- Continuous engagement ensures preferences remain aligned with client values
+- **Esg Preferences**: ESG preferences must be systematically captured and structured for automated matching
+- **Hard Exclusions**: Hard exclusions and soft preferences require different handling in matching algorithms
+- **Avoiding Tick-Box**: Avoiding tick-box approaches requires comprehensive, personalized preference assessment
+- **Preference Hierarchies**: Preference hierarchies enable nuanced matching while maintaining regulatory compliance
+- **Continuous Engagement**: Continuous engagement ensures preferences remain aligned with client values
 
 ---
 

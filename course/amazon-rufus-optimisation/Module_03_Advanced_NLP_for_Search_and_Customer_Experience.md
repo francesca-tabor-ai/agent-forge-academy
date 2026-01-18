@@ -9,11 +9,11 @@ order: 3
 
 **Duration:** Week 3  
 **Learning Objectives:**
-- Implement hybrid review summarization (extractive + abstractive)
-- Build Seq2Seq models for query rewriting
-- Design behavioral ghosting systems for search auto-completion
-- Enhance search interfaces with NLP techniques
-- Process and summarize massive volumes of user-generated content
+- **hybrid review summarization (extractive + abstractive) Implementation**: Implement hybrid review summarization (extractive + abstractive)
+- **Seq2Seq models for query rewriting Development**: Build Seq2Seq models for query rewriting
+- **behavioral ghosting Development**: Design behavioral ghosting systems for search auto-completion
+- **Enhance Search**: Enhance search interfaces with NLP techniques
+- **Process And**: Process and summarize massive volumes of user-generated content
 
 ---
 
@@ -990,28 +990,28 @@ class SearchBoxWithGhosting:
 ## Key Takeaways
 
 **Hybrid Review Summarization:**
-- Extractive step identifies informative sentences
-- Abstractive step generates coherent summaries
-- Works across multiple languages
-- Maintains factual accuracy
+- **Extractive Step**: Extractive step identifies informative sentences
+- **Abstractive Step**: Abstractive step generates coherent summaries
+- **Works Across**: Works across multiple languages
+- **Maintains Factual**: Apply maintains factual accuracy in relevant contexts
 
 **Query Rewriting:**
-- Seq2Seq models rewrite negation queries
-- Bridges vocabulary gap between users and products
-- Improves search relevance
-- Handles "no X" → "Y" transformations
+- **Seq2Seq Models**: Seq2Seq models rewrite negation queries
+- **Bridges Vocabulary**: Bridges vocabulary gap between users and products
+- **Improves Search**: Apply improves search relevance in relevant contexts
+- **Handles "No**: Handles "no X" → "Y" transformations
 
 **Behavioral Ghosting:**
-- Inline auto-completion reduces typing
-- Uses session context for predictions
-- Prevents misspellings
-- Improves user experience
+- **Inline Auto-Completion**: Inline auto-completion reduces typing
+- **Uses Session**: Uses session context for predictions
+- **Prevents Misspellings**: Implement prevents misspellings effectively across relevant use cases
+- **Improves User**: Apply improves user experience in relevant contexts
 
 **NLP for E-Commerce:**
-- Process massive volumes of user content
-- Enhance search interfaces
-- Improve customer experience
-- Reduce user effort
+- **Process Massive**: Process massive volumes of user content
+- **Enhance Search**: Apply enhance search interfaces in relevant contexts
+- **Improve Customer**: Apply improve customer experience in relevant contexts
+- **Reduce User**: Apply reduce user effort in relevant contexts
 
 ---
 

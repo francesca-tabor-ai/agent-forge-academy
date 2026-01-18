@@ -9,11 +9,11 @@ order: 7
 
 **Duration:** Week 7  
 **Learning Objectives:**
-- Design agent specialization and division of labor
-- Implement researcher, drafter, critic, verifier patterns
-- Enable inter-agent communication and coordination
-- Manage disagreement and consensus
-- Build multi-agent legal systems
+- **agent specialization and division of labor Development**: Design agent specialization and division of labor
+- **researcher, drafter, critic, verifier Implementation**: Implement researcher, drafter, critic, verifier patterns
+- **Enable Inter-Agent**: Enable inter-agent communication and coordination
+- **Manage Disagreement**: Manage disagreement and consensus
+- **multi-agent legal Development**: Build multi-agent legal systems
 
 ---
 
@@ -306,15 +306,15 @@ Design and implement a multi-agent system for contract review using specializati
 
 ## Key Takeaways
 
-1. **Agent specialization enables expertise and efficiency** - divide complex tasks among specialized agents.
+- **Agent specialization enables expertise and efficiency**: Divide complex tasks among specialized agents
 
-2. **Researcher, drafter, critic, verifier patterns** provide a proven framework for legal document workflows.
+- **Researcher, drafter, critic, verifier patterns**: Provide a proven framework for legal document workflows
 
-3. **Inter-agent communication and coordination** are critical for multi-agent system success.
+- **Inter-agent communication and coordination**: Are critical for multi-agent system success
 
-4. **Disagreement management is essential** - design mechanisms to detect, handle, and resolve conflicts.
+- **Disagreement management is essential**: Design mechanisms to detect, handle, and resolve conflicts
 
-5. **Multi-agent systems enable complex legal workflows** that single agents cannot handle effectively.
+- **Multi-agent systems enable complex legal workflows**: That single agents cannot handle effectively
 
 ---
 
@@ -336,10 +336,10 @@ Design and implement a multi-agent system for contract review using specializati
 
 ## Next Steps
 
-- Complete Lab 7
-- Review Module 8: Orchestration, State, and Control in Legal Systems
-- Join course discussion forum
-- Attend office hours if you have questions
+- **Complete Lab**: Apply complete lab 7 in relevant contexts
+- **Review Module**: Review Module 8: Orchestration, State, and Control in Legal Systems
+- **Join Course**: Join course discussion forum
+- **Attend Office**: Attend office hours if you have questions
 
 ---
 

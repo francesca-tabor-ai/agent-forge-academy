@@ -9,10 +9,10 @@ order: 6
 
 **Duration:** Week 6  
 **Learning Objectives:**
-- Understand rules engines vs. machine learning models
-- Design matching logic: risk × ESG × client constraints
-- Implement explainability and audit trails
-- Design human-in-the-loop governance models
+- **rules engines vs. machine learning models Understanding**: Understand rules engines vs. machine learning models
+- **Design Matching**: Design matching logic: risk × ESG × client constraints
+- **explainability and audit trails Implementation**: Implement explainability and audit trails
+- **human-in-the-loop governance models Development**: Design human-in-the-loop governance models
 
 ---
 
@@ -330,11 +330,11 @@ Design the system architecture for a complete ESG suitability matching engine.
 
 ## Key Takeaways
 
-- Rules engines and ML models serve complementary roles in matching systems
-- Multi-dimensional matching requires careful score combination and weighting
-- Explainability and audit trails are essential for regulatory compliance
-- Human-in-the-loop governance ensures quality while maintaining efficiency
-- System architecture must balance automation with human oversight
+- **Rules Engines**: Rules engines and ML models serve complementary roles in matching systems
+- **Multi-Dimensional Matching**: Multi-dimensional matching requires careful score combination and weighting
+- **Explainability And**: Explainability and audit trails are essential for regulatory compliance
+- **Human-In-The-Loop Governance**: Human-in-the-loop governance ensures quality while maintaining efficiency
+- **System Architecture**: System architecture must balance automation with human oversight
 
 ---
 

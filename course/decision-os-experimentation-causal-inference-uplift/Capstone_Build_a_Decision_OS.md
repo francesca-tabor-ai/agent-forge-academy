@@ -462,22 +462,22 @@ By completing this capstone, you will demonstrate ability to:
 
 ## Next Steps
 
-1. **Choose Project Option**
+- **Choose Project Option**: Real business decision - Case study analysis - Simulated scenario - Real business decision - Case study analysis - Simulated scenario - Real business decision - Case study analysis - Simulated scenario - Real business decision - Case study analysis - Simulated scenario
    - Real business decision
    - Case study analysis
    - Simulated scenario
 
-2. **Identify Decision/Scenario**
+- **Identify Decision/Scenario**: Define the decision - Gather context - Assess feasibility - Define the decision - Gather context - Assess feasibility - Define the decision - Gather context - Assess feasibility - Define the decision - Gather context - Assess feasibility
    - Define the decision
    - Gather context
    - Assess feasibility
 
-3. **Begin Phase 1**
+- **Begin Phase 1**: Start decision framing - Document business context - Define metrics - Start decision framing - Document business context - Define metrics - Start decision framing - Document business context - Define metrics - Start decision framing - Document business context - Define metrics
    - Start decision framing
    - Document business context
    - Define metrics
 
-4. **Engage Support**
+- **Engage Support**: Attend office hours - Join discussion forums - Seek peer feedback - Attend office hours - Join discussion forums - Seek peer feedback - Attend office hours - Join discussion forums - Seek peer feedback - Attend office hours - Join discussion forums - Seek peer feedback
    - Attend office hours
    - Join discussion forums
    - Seek peer feedback

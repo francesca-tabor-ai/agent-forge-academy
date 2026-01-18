@@ -14,10 +14,10 @@ email_action: "Design serving architectures for churn prediction, fraud detectio
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Understand batch vs real-time inference trade-offs
-- Design serving architectures for different use cases
-- Choose serving patterns based on business SLAs
-- Implement synchronous and asynchronous serving
+- **batch vs real-time inference trade-offs Understanding**: Understand batch vs real-time inference trade-offs
+- **serving architectures for different use cases Development**: Design serving architectures for different use cases
+- **Choose Serving**: Choose serving patterns based on business SLAs
+- **synchronous and asynchronous serving Implementation**: Implement synchronous and asynchronous serving
 
 ---
 
@@ -409,16 +409,16 @@ Device → [Simple Model on Edge] → [Complex Model in Cloud] → Result
 
 ### Key Takeaways
 
-1. **Batch vs Real-time:** Choose based on latency, freshness, and cost requirements
-2. **Sync vs Async:** Match to user expectations and processing time
-3. **Edge vs Cloud:** Balance latency, privacy, and complexity
-4. **SLA-driven design:** Start with business requirements, then choose pattern
+- **Batch vs Real-time:**: Choose based on latency, freshness, and cost requirements
+- **Sync vs Async:**: Match to user expectations and processing time
+- **Edge vs Cloud:**: Balance latency, privacy, and complexity
+- **SLA-driven design:**: Start with business requirements, then choose pattern
 
 ### Next Steps
 
-- Complete the serving architecture exercises
-- Review serving patterns in production systems
-- Move to Module 3 to learn about feature stores and pipelines
+- **Complete The**: Complete the serving architecture exercises
+- **Review Serving**: Review serving patterns in production systems
+- **Move To**: Move to Module 3 to learn about feature stores and pipelines
 
 ---
 

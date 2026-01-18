@@ -10,10 +10,10 @@ order: 2
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Learn how different AI systems source, cite, and suppress information
-- Identify where your brand is most vulnerable or advantaged
-- Understand platform-specific optimization strategies
-- Prioritize platforms by revenue impact
+- **how different AI systems source, cite, and suppress information Understanding**: Learn how different AI systems source, cite, and suppress information
+- **Identify Where**: Identify where your brand is most vulnerable or advantaged
+- **platform-specific optimization strategies Understanding**: Understand platform-specific optimization strategies
+- **Prioritize Platforms**: Prioritize platforms by revenue impact
 
 ---
 
@@ -384,15 +384,15 @@ For each P0 and P1 platform:
 
 ## Key Takeaways
 
-- **Platforms differ significantly:** Each AI platform has unique sourcing, citation, and visibility dynamics
+- **Platforms differ significantly:**: Each AI platform has unique sourcing, citation, and visibility dynamics
 
-- **Optimization strategies vary:** What works for ChatGPT may not work for Perplexity
+- **Optimization strategies vary:**: What works for ChatGPT may not work for Perplexity
 
-- **Prioritization is critical:** Focus on platforms with highest revenue impact and manageable optimization difficulty
+- **Prioritization is critical:**: Focus on platforms with highest revenue impact and manageable optimization difficulty
 
-- **Competitive displacement is real:** Especially on citation-heavy platforms like Perplexity
+- **Competitive displacement is real:**: Especially on citation-heavy platforms like Perplexity
 
-- **UGC matters:** Reddit, forums, and user-generated content serve as trust substrates for AI models
+- **UGC matters:**: Reddit, forums, and user-generated content serve as trust substrates for AI models
 
 ---
 

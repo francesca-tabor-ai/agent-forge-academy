@@ -9,11 +9,11 @@ order: 5
 
 **Duration:** Week 5  
 **Learning Objectives:**
-- Understand retrieval-augmented generation (RAG) for legal knowledge
-- Work with statutes, cases, contracts, and policies
-- Implement citations, provenance, and traceability
-- Avoid false authority in legal outputs
-- Build RAG systems for legal documents
+- **retrieval-augmented generation Understanding**: Understand retrieval-augmented generation (RAG) for legal knowledge
+- **Work With**: Work with statutes, cases, contracts, and policies
+- **citations, provenance, and traceability Implementation**: Implement citations, provenance, and traceability
+- **Avoid False**: Avoid false authority in legal outputs
+- **RAG Development**: Build RAG systems for legal documents
 
 ---
 
@@ -274,15 +274,15 @@ Build a retrieval-augmented generation system for legal documents with proper ci
 
 ## Key Takeaways
 
-1. **RAG grounds LLM outputs in real documents** - essential for legal accuracy and verifiability.
+- **RAG grounds LLM outputs in real documents**: Essential for legal accuracy and verifiability
 
-2. **Legal documents require specialized processing** - chunking, metadata, and indexing strategies matter.
+- **Legal documents require specialized processing**: Chunking, metadata, and indexing strategies matter
 
-3. **Citations, provenance, and traceability** are critical for legal defensibility and verification.
+- **Citations, provenance, and traceability**: Are critical for legal defensibility and verification
 
-4. **False authority is a major risk** - implement verification, confidence thresholds, and human review.
+- **False authority is a major risk**: Implement verification, confidence thresholds, and human review
 
-5. **RAG systems must be designed for legal use** - accuracy, verifiability, and professional standards are essential.
+- **RAG systems must be designed for legal use**: Accuracy, verifiability, and professional standards are essential
 
 ---
 
@@ -304,10 +304,10 @@ Build a retrieval-augmented generation system for legal documents with proper ci
 
 ## Next Steps
 
-- Complete Lab 5
-- Review Module 6: Building Legal AI Agents
-- Join course discussion forum
-- Attend office hours if you have questions
+- **Complete Lab**: Apply complete lab 5 in relevant contexts
+- **Review Module**: Review Module 6: Building Legal AI Agents
+- **Join Course**: Join course discussion forum
+- **Attend Office**: Attend office hours if you have questions
 
 ---
 

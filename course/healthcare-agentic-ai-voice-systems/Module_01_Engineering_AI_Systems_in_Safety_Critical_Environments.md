@@ -11,11 +11,11 @@ email_action: "Read one healthcare AI incident report and identify three system-
 
 **Duration:** Week 1-2  
 **Learning Objectives:**
-- Understand why healthcare AI engineering fundamentally differs from startup AI engineering
-- Distinguish between engineering accountability and clinical accountability
-- Recognize safety as a system property, not just a model property
-- Design systems that can withstand scrutiny from regulators, lawyers, and clinicians
-- Adopt incident thinking: assume things will go wrong
+- **why healthcare AI engineering fundamentally differs from startup AI engineering Understanding**: Understand why healthcare AI engineering fundamentally differs from startup AI engineering
+- **between engineering accountability Analysis**: Distinguish between engineering accountability and clinical accountability
+- **Recognize Safety**: Recognize safety as a system property, not just a model property
+- **systems that can withstand scrutiny from regulators, lawyers, and clinicians Development**: Design systems that can withstand scrutiny from regulators, lawyers, and clinicians
+- **Adopt Incident**: Adopt incident thinking: assume things will go wrong
 
 ---
 
@@ -557,10 +557,10 @@ Create a document that establishes engineering safety principles for your AI sys
 - Comprehensive observability is essential
 
 **Next Steps:**
-- Apply safety principles to system design
-- Conduct failure mode analysis
-- Establish accountability boundaries
-- Design for auditability and explainability
+- **Apply Safety**: Apply safety principles to system design
+- **Conduct Failure**: Conduct failure mode analysis
+- **Establish Accountability**: Apply establish accountability boundaries in relevant contexts
+- **for auditability and explainability Development**: Design for auditability and explainability
 
 ---
 

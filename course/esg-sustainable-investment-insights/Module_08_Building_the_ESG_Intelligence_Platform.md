@@ -9,10 +9,10 @@ order: 8
 
 **Duration:** Week 8  
 **Learning Objectives:**
-- Integrate controversy monitoring and PAI analytics
-- Design dashboards for ESG, risk, and investment teams
-- Measure impact: risk mitigation, engagement outcomes
-- Plan future roadmap: predictive ESG risk modeling
+- **controversy monitoring Integration**: Integrate controversy monitoring and PAI analytics
+- **dashboards for ESG, risk, and investment teams Development**: Design dashboards for ESG, risk, and investment teams
+- **Measure Impact:**: Measure impact: risk mitigation, engagement outcomes
+- **Plan Future**: Plan future roadmap: predictive ESG risk modeling
 
 ---
 
@@ -237,10 +237,10 @@ Design a complete ESG & Sustainable Investment Intelligence platform for a globa
 
 ## Key Takeaways
 
-- Integrating controversy monitoring and PAI analytics creates comprehensive ESG intelligence
-- Team-specific dashboards provide relevant insights for each function
-- Measuring impact demonstrates value and guides improvement
-- Future roadmap includes predictive risk modeling and proactive engagement
+- **Integrating Controversy**: Integrating controversy monitoring and PAI analytics creates comprehensive ESG intelligence
+- **Team-Specific Dashboards**: Team-specific dashboards provide relevant insights for each function
+- **Measuring Impact**: Measuring impact demonstrates value and guides improvement
+- **Future Roadmap**: Future roadmap includes predictive risk modeling and proactive engagement
 
 ---
 

@@ -11,11 +11,11 @@ email_action: "Write your first RLS policy—create a simple policy that lets us
 
 **Duration:** Week 5  
 **Learning Objectives:**
-- Understand database-enforced security
-- Write effective RLS policies
-- Implement least-privilege access
-- Test authorization in Supabase
-- Move security logic from application to database
+- **database-enforced security Understanding**: Understand database-enforced security
+- **Write Effective**: Write effective RLS policies
+- **least-privilege access Implementation**: Implement least-privilege access
+- **Test Authorization**: Test authorization in Supabase
+- **Move Security**: Move security logic from application to database
 
 ---
 

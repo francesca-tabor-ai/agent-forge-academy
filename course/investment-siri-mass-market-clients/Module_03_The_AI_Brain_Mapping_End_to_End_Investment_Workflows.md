@@ -9,10 +9,10 @@ order: 3
 
 **Duration:** Week 3  
 **Learning Objectives:**
-- Understand the "AI brain" concept for asset managers
-- Connect product data, risk, ESG, and performance
-- Eliminate administrative friction across workflows
-- Turn complexity into simple client responses
+- **the "AI brain" concept for asset managers Understanding**: Understand the "AI brain" concept for asset managers
+- **product data, risk, ESG, Integration**: Connect product data, risk, ESG, and performance
+- **Eliminate Administrative**: Eliminate administrative friction across workflows
+- **Turn Complexity**: Turn complexity into simple client responses
 
 ---
 
@@ -211,10 +211,10 @@ Map a complete investment workflow and identify where AI can intervene to add va
 
 ## Key Takeaways
 
-- The AI brain orchestrates complex investment ecosystems into simple interactions
-- Connecting product, risk, ESG, and performance data creates comprehensive intelligence
-- Eliminating administrative friction improves efficiency and client experience
-- Turning complexity into simple responses makes advice accessible to all clients
+- **The Ai**: The AI brain orchestrates complex investment ecosystems into simple interactions
+- **Connecting Product,**: Connecting product, risk, ESG, and performance data creates comprehensive intelligence
+- **Eliminating Administrative**: Eliminating administrative friction improves efficiency and client experience
+- **Turning Complexity**: Turning complexity into simple responses makes advice accessible to all clients
 
 ---
 

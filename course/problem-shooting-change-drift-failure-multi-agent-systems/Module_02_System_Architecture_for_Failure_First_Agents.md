@@ -11,11 +11,11 @@ email_action: "Identify one place in your agent system where intelligence should
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Design systems that expect to be wrong
-- Understand agents as control systems, not LLM wrappers
-- Distinguish explicit state, implicit state, and where bugs hide
-- Learn multi-agent topologies and their failure signatures
-- Identify where intelligence should not live
+- **systems that expect to be wrong Development**: Design systems that expect to be wrong
+- **agents as control systems, not LLM wrappers Understanding**: Understand agents as control systems, not LLM wrappers
+- **explicit state, implicit state, Analysis**: Distinguish explicit state, implicit state, and where bugs hide
+- **multi-agent topologies and their failure signatures Understanding**: Learn multi-agent topologies and their failure signatures
+- **Identify Where**: Identify where intelligence should not live
 
 ---
 

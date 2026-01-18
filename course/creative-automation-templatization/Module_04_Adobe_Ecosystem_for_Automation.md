@@ -14,11 +14,11 @@ Adobe Creative Cloud provides a comprehensive suite of tools for creative automa
 
 ## Learning Objectives
 
-- Use Adobe Creative Cloud Libraries for scalable assets
-- Apply Photoshop, Illustrator, InDesign, and After Effects in templated workflows
-- Implement Smart Objects, Variables, Data Sets, and Expressions
-- Create motion templates and dynamic animations
-- Automate export and batch processing
+- **Use Adobe**: Use Adobe Creative Cloud Libraries for scalable assets
+- **Apply Photoshop,**: Apply Photoshop, Illustrator, InDesign, and After Effects in templated workflows
+- **Smart Objects, Variables, Data Sets, and Expressions Implementation**: Implement Smart Objects, Variables, Data Sets, and Expressions
+- **motion templates and dynamic animations Development**: Create motion templates and dynamic animations
+- **Automate Export**: Automate export and batch processing
 
 ---
 
@@ -529,18 +529,18 @@ for (var i = 1; i <= comps.length; i++) {
 
 ### Key Takeaways
 
-1. **Creative Cloud Libraries** provide centralized, synced asset management
-2. **Adobe applications** each serve specific roles in templated workflows
-3. **Smart Objects, Variables, Data Sets** enable non-destructive, data-driven templates
-4. **Expressions** automate animations and create dynamic relationships
-5. **Export automation** scales template output efficiently
+- **Creative Cloud Libraries**: Provide centralized, synced asset management
+- **Adobe applications**: Each serve specific roles in templated workflows
+- **Smart Objects, Variables, Data Sets**: Enable non-destructive, data-driven templates
+- **Expressions**: Automate animations and create dynamic relationships
+- **Export automation**: Scales template output efficiently
 
 ### Next Steps
 
-- Set up a Creative Cloud Library for your brand assets
-- Create a sample template using Variables and Data Sets
-- Experiment with After Effects expressions
-- Move to Module 5 to learn about workflow integration and DAM
+- **a Creative Cloud Library for your brand assets Implementation**: Set up a Creative Cloud Library for your brand assets
+- **a sample template using Variables and Data Sets Development**: Create a sample template using Variables and Data Sets
+- **Experiment With**: Experiment with After Effects expressions
+- **Move To**: Move to Module 5 to learn about workflow integration and DAM
 
 ---
 

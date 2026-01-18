@@ -11,12 +11,12 @@ order: 3
 
 **Duration:** Week 3  
 **Learning Objectives:**
-- Systematically extract real buyer questions surfaced by AI
-- Detect blind spots between brand content and AI queries
-- Understand Rufus question patterns
-- Learn review-based objection mining techniques
-- Recognize forum skepticism and edge-case use questions
-- Distinguish pre-purchase vs post-purchase AI questions
+- **Systematically Extract**: Systematically extract real buyer questions surfaced by AI
+- **Detect Blind**: Detect blind spots between brand content and AI queries
+- **Rufus question patterns Understanding**: Understand Rufus question patterns
+- **review-based objection mining techniques Understanding**: Learn review-based objection mining techniques
+- **Recognize Forum**: Recognize forum skepticism and edge-case use questions
+- **pre-purchase Analysis**: Distinguish pre-purchase vs post-purchase AI questions
 
 ---
 
@@ -394,15 +394,15 @@ In this module, you've learned:
 - **Pre vs. Post:** Different questions at different purchase stages
 
 **Key Takeaways:**
-- Most brands don't know what questions buyers actually ask
-- AI surfaces questions your content doesn't answer
-- Questions reveal content gaps and opportunities
-- You need a systematic question collection process
+- **Most Brands**: Most brands don't know what questions buyers actually ask
+- **Ai Surfaces**: AI surfaces questions your content doesn't answer
+- **Questions Reveal**: Questions reveal content gaps and opportunities
+- **You Need**: You need a systematic question collection process
 
 **Next Steps:**
-- Complete Lab 3: AI Product Question Repository
-- Review Module 4: Scoring Product Pages for AI Trust
-- Begin evaluating your PDPs through an AI lens
+- **Complete Lab**: Complete Lab 3: AI Product Question Repository
+- **Review Module**: Review Module 4: Scoring Product Pages for AI Trust
+- **Begin Evaluating**: Begin evaluating your PDPs through an AI lens
 
 ---
 

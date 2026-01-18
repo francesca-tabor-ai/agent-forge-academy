@@ -19,15 +19,15 @@ order: 0
 
 By completing this course, you will be able to:
 
-- Design AI-powered ESG intelligence tools for asset managers
-- Understand why traditional ESG data is insufficient
-- Implement real-time ESG controversy monitoring
-- Turn ESG alerts into actionable investment decisions
-- Operationalize double materiality in practice
-- Build double materiality analyzers for PAI calculations
-- Ensure data quality, methodology, and auditability
-- Manage governance, ethics, and reputational risk
-- Build scalable ESG intelligence platforms
+- **AI-powered ESG intelligence tools for asset managers Development**: Design AI-powered ESG intelligence tools for asset managers
+- **why traditional ESG data is insufficient Understanding**: Understand why traditional ESG data is insufficient
+- **real-time ESG controversy monitoring Implementation**: Implement real-time ESG controversy monitoring
+- **Turn Esg**: Turn ESG alerts into actionable investment decisions
+- **Operationalize Double**: Operationalize double materiality in practice
+- **double materiality analyzers for PAI calculations Development**: Build double materiality analyzers for PAI calculations
+- **Ensure Data**: Ensure data quality, methodology, and auditability
+- **Manage Governance,**: Manage governance, ethics, and reputational risk
+- **scalable ESG intelligence platforms Development**: Build scalable ESG intelligence platforms
 
 ---
 

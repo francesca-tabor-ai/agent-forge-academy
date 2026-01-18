@@ -9,11 +9,11 @@ order: 6
 
 **Duration:** Week 6  
 **Learning Objectives:**
-- Understand RAG design patterns
-- Implement effective context chunking strategies
-- Engineer prompts for retrieval
-- Build complete RAG chatbots
-- Evaluate RAG system performance
+- **RAG design patterns Understanding**: Understand RAG design patterns
+- **effective context chunking strategies Implementation**: Implement effective context chunking strategies
+- **Engineer Prompts**: Engineer prompts for retrieval
+- **complete RAG chatbots Development**: Build complete RAG chatbots
+- **RAG system performance Evaluation**: Evaluate RAG system performance
 
 ---
 
@@ -769,16 +769,16 @@ print(f"Faithfulness: {results['faithfulness']:.3f}")
 ## Summary
 
 **Key Takeaways:**
-- RAG combines retrieval and generation
-- Chunking strategy is critical
-- Prompt engineering affects quality
-- Evaluation is essential for improvement
-- Multiple RAG patterns exist for different use cases
+- **Rag Combines**: RAG combines retrieval and generation
+- **Chunking Strategy**: Chunking strategy is critical
+- **Prompt Engineering**: Prompt engineering affects quality
+- **Evaluation Is**: Evaluation is essential for improvement
+- **Multiple Rag**: Multiple RAG patterns exist for different use cases
 
 **What's Next:**
-- Module 7: Deploy and scale in production
-- Learn security and monitoring
-- Understand deployment options
+- **Module 7:**: Module 7: Deploy and scale in production
+- **security and monitoring Understanding**: Learn security and monitoring
+- **deployment options Understanding**: Understand deployment options
 
 ---
 

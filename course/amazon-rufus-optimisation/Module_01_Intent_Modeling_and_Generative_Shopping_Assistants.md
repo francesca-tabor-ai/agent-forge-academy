@@ -9,11 +9,11 @@ order: 1
 
 **Duration:** Week 1  
 **Learning Objectives:**
-- Understand how AI interprets user intent beyond keyword matching
-- Learn the COSMO algorithm for common sense mining
-- Study the architecture of Amazon's Rufus generative shopping assistant
-- Analyze the paradigm shift from keywords to intent signals
-- Understand how AI controls the "digital shelf"
+- **how AI interprets user intent beyond keyword matching Understanding**: Understand how AI interprets user intent beyond keyword matching
+- **the COSMO algorithm for common sense mining Understanding**: Learn the COSMO algorithm for common sense mining
+- **the architecture of Amazon's Rufus generative shopping assistant Understanding**: Study the architecture of Amazon's Rufus generative shopping assistant
+- **Analyze The**: Analyze the paradigm shift from keywords to intent signals
+- **how AI controls the "digital shelf" Understanding**: Understand how AI controls the "digital shelf"
 
 ---
 
@@ -819,27 +819,27 @@ def rank_products_by_intent(
 ## Key Takeaways
 
 **Intent Modeling:**
-- COSMO algorithm extracts knowledge triples from behavior patterns
-- Triples capture implicit needs and relationships
-- LLMs enable common sense reasoning about user intent
+- **Cosmo Algorithm**: COSMO algorithm extracts knowledge triples from behavior patterns
+- **Triples Capture**: Triples capture implicit needs and relationships
+- **Llms Enable**: LLMs enable common sense reasoning about user intent
 
 **Rufus Architecture:**
-- Multi-source knowledge retrieval (listings, reviews, Q&A)
-- LLM-based response generation
-- Personalization based on user history and behavior
-- Conversational product discovery
+- **Multi-Source Knowledge**: Multi-source knowledge retrieval (listings, reviews, Q&A)
+- **Llm-Based Response**: Apply llm-based response generation in relevant contexts
+- **Personalization Based**: Personalization based on user history and behavior
+- **Conversational Product**: Apply conversational product discovery in relevant contexts
 
 **Intent-Driven Search:**
-- AI controls digital shelf based on intent alignment
-- Use case matching > keyword matching
-- Real-world validation through reviews
-- Semantic similarity enables better discovery
+- **Ai Controls**: AI controls digital shelf based on intent alignment
+- **Use Case**: Use case matching > keyword matching
+- **Real-World Validation**: Real-world validation through reviews
+- **Semantic Similarity**: Semantic similarity enables better discovery
 
 **The Shift:**
-- From keyword matching to intent understanding
-- From seller-controlled to AI-controlled visibility
-- From keyword optimization to use case alignment
-- From static listings to conversational discovery
+- **From Keyword**: From keyword matching to intent understanding
+- **From Seller-Controlled**: From seller-controlled to AI-controlled visibility
+- **From Keyword**: From keyword optimization to use case alignment
+- **From Static**: From static listings to conversational discovery
 
 ---
 

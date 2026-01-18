@@ -11,11 +11,11 @@ email_action: "Conduct an FMEA on one component of an AI system, identifying 5 f
 
 **Duration:** Week 5-6  
 **Learning Objectives:**
-- Conduct hazard analysis for AI systems
-- Perform Failure Mode and Effects Analysis (FMEA) for agents
-- Design safe degradation and graceful failure
-- Implement confidence thresholds and refusal behaviors
-- Log and learn from "near misses"
+- **Conduct Hazard**: Conduct hazard analysis for AI systems
+- **Perform Failure**: Perform Failure Mode and Effects Analysis (FMEA) for agents
+- **safe degradation and graceful failure Development**: Design safe degradation and graceful failure
+- **confidence thresholds and refusal behaviors Implementation**: Implement confidence thresholds and refusal behaviors
+- **Log And**: Log and learn from "near misses"
 
 ---
 
@@ -790,11 +790,11 @@ Monitoring:
 - Learn from near misses to prevent incidents
 
 **Next Steps:**
-- Conduct hazard analysis for your system
-- Perform FMEA on critical components
-- Design degradation and failure handling
-- Implement confidence thresholds and refusal behaviors
-- Set up near miss logging and analysis
+- **Conduct Hazard**: Conduct hazard analysis for your system
+- **Perform Fmea**: Perform FMEA on critical components
+- **degradation and failure handling Development**: Design degradation and failure handling
+- **confidence thresholds and refusal behaviors Implementation**: Implement confidence thresholds and refusal behaviors
+- **near miss logging and analysis Implementation**: Set up near miss logging and analysis
 
 ---
 

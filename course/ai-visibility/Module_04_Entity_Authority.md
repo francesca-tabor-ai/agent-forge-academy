@@ -9,10 +9,10 @@ order: 4
 
 **Duration:** Week 4  
 **Learning Objectives:**
-- Understand the shift from link authority to entity authority
-- Engineer community signals on Reddit, Quora, and similar platforms
-- Align content with E-E-A-T (Experience, Expertise, Authoritativeness, Trustworthiness) as an AI algorithm
-- Build brand mentions in high-signal sources that AI models trust
+- **the shift from link authority to entity authority Understanding**: Understand the shift from link authority to entity authority
+- **Engineer Community**: Engineer community signals on Reddit, Quora, and similar platforms
+- **Align Content**: Align content with E-E-A-T (Experience, Expertise, Authoritativeness, Trustworthiness) as an AI algorithm
+- **brand mentions in high-signal sources that AI models trust Development**: Build brand mentions in high-signal sources that AI models trust
 
 ---
 

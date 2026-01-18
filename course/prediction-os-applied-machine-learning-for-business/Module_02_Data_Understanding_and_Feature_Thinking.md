@@ -11,11 +11,11 @@ order: 2
 **Theme:** *Garbage in, garbage out — but smarter*
 
 **Learning Objectives:**
-- Understand data-generating processes
-- Differentiate between static and dynamic features
-- Identify behavioral, temporal, and aggregate features
-- Detect and eliminate feature leakage
-- Balance feature interpretability vs performance
+- **data-generating processes Understanding**: Understand data-generating processes
+- **between static Analysis**: Differentiate between static and dynamic features
+- **Identify Behavioral,**: Identify behavioral, temporal, and aggregate features
+- **Detect And**: Detect and eliminate feature leakage
+- **Balance Feature**: Balance feature interpretability vs performance
 
 ---
 
@@ -620,16 +620,16 @@ Perform exploratory feature analysis and identify potential leakage issues.
 
 **Key Takeaways:**
 
-1. **Data-Generating Processes:** Understand how data is created
-2. **Static vs Dynamic:** Use both for comprehensive features
-3. **Feature Types:** Behavioral, temporal, and aggregate features serve different purposes
-4. **Leakage Prevention:** Always use features from before prediction window
-5. **Interpretability Trade-offs:** Balance performance and explainability based on use case
+- **Data-Generating Processes:**: Understand how data is created
+- **Static vs Dynamic:**: Use both for comprehensive features
+- **Feature Types:**: Behavioral, temporal, and aggregate features serve different purposes
+- **Leakage Prevention:**: Always use features from before prediction window
+- **Interpretability Trade-offs:**: Balance performance and explainability based on use case
 
 **Next Steps:**
-- Module 3: Engineer features at scale
-- Learn time-aware feature engineering
-- Build production-ready feature pipelines
+- **Module 3:**: Module 3: Engineer features at scale
+- **time-aware feature engineering Understanding**: Learn time-aware feature engineering
+- **production-ready feature Development**: Build production-ready feature pipelines
 
 ---
 

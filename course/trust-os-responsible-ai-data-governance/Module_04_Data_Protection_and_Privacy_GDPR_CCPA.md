@@ -13,11 +13,11 @@ email_action: "Map personal data flows for one system in your organization. Iden
 **Theme:** *Compliance as an engineering requirement*
 
 **Learning Objectives:**
-- Understand core principles of GDPR and CCPA
-- Learn lawful basis for data processing
-- Master consent, purpose limitation, and data minimization
-- Operationalize data subject rights
-- Implement privacy-by-design and privacy-by-default
+- **core principles of GDPR and CCPA Understanding**: Understand core principles of GDPR and CCPA
+- **lawful basis for data processing Understanding**: Learn lawful basis for data processing
+- **consent, purpose limitation, and data minimization Understanding**: Master consent, purpose limitation, and data minimization
+- **Operationalize Data**: Operationalize data subject rights
+- **privacy-by-design and privacy-by-default Implementation**: Implement privacy-by-design and privacy-by-default
 
 ---
 
@@ -1056,17 +1056,17 @@ A comprehensive privacy impact assessment that includes:
 
 ## Key Takeaways
 
-1. **GDPR and CCPA have different requirements:** Understand both regulations and their specific requirements for your organization.
+- **GDPR and CCPA have different requirements:**: Understand both regulations and their specific requirements for your organization
 
-2. **Lawful basis is fundamental:** Every processing activity must have a lawful basis under GDPR—choose and document carefully.
+- **Lawful basis is fundamental:**: Every processing activity must have a lawful basis under GDPR—choose and document carefully
 
-3. **Data subject rights are operational requirements:** Rights must be operationalized with processes, systems, and timelines.
+- **Data subject rights are operational requirements:**: Rights must be operationalized with processes, systems, and timelines
 
-4. **Privacy-by-design is essential:** Build privacy into systems from the start, not as an afterthought.
+- **Privacy-by-design is essential:**: Build privacy into systems from the start, not as an afterthought
 
-5. **Privacy-by-default protects users:** Default settings should provide maximum privacy protection.
+- **Privacy-by-default protects users:**: Default settings should provide maximum privacy protection
 
-6. **Compliance is continuous:** Regular reviews, updates, and monitoring are required to maintain compliance.
+- **Compliance is continuous:**: Regular reviews, updates, and monitoring are required to maintain compliance
 
 ---
 

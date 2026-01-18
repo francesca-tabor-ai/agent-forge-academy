@@ -9,10 +9,10 @@ order: 1
 
 **Duration:** Week 1-2  
 **Learning Objectives:**
-- Understand the node-based interface philosophy
-- Set up ComfyUI in your local environment
-- Master the five core nodes for image generation
-- Learn model management and organization
+- **the node-based interface philosophy Understanding**: Understand the node-based interface philosophy
+- **ComfyUI in your local environment Implementation**: Set up ComfyUI in your local environment
+- **the five core nodes for image generation Understanding**: Master the five core nodes for image generation
+- **model management and organization Understanding**: Learn model management and organization
 
 ---
 
@@ -311,10 +311,10 @@ You've learned:
 - ✅ How to manage and organize AI models
 
 **Next Steps:**
-- Practice building basic workflows
-- Experiment with different checkpoints
-- Download and test various models
-- Prepare for Module 2: Enhancing the Local Workflow
+- **Practice Building**: Practice building basic workflows
+- **Experiment With**: Experiment with different checkpoints
+- **Download And**: Download and test various models
+- **Prepare For**: Prepare for Module 2: Enhancing the Local Workflow
 
 ---
 

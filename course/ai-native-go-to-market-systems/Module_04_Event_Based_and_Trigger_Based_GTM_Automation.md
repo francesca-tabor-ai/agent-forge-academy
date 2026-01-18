@@ -9,11 +9,11 @@ order: 4
 
 **Duration:** Week 4  
 **Learning Objectives:**
-- Understand external triggers (funding, hiring, org changes, intent)
-- Recognize internal triggers (product usage, deal activity, lifecycle changes)
-- Design event-based workflows
-- Avoid automation loops and conflicts
-- Build monitoring for event-driven systems
+- **external triggers Understanding**: Understand external triggers (funding, hiring, org changes, intent)
+- **Recognize Internal**: Recognize internal triggers (product usage, deal activity, lifecycle changes)
+- **event-based Development**: Apply design event-based workflows in relevant contexts
+- **Avoid Automation**: Avoid automation loops and conflicts
+- **monitoring for event-driven Development**: Build monitoring for event-driven systems
 
 ---
 
@@ -694,20 +694,20 @@ Build a workflow that automatically enrolls accounts into outbound sequences bas
 
 ## Key Takeaways
 
-- **Event-driven GTM is more responsive than stage-driven**  
-- **External events (funding, hiring, intent) indicate buying signals**  
-- **Internal triggers (usage, activity) show engagement and risk**  
-- **Design workflows to be idempotent and conflict-free**  
-- **Monitor workflows to catch issues before they impact business**
+- **Event-driven GTM is more responsive than stage-driven**: **Event-driven GTM is more responsive than stage-driven**: **Event-driven GTM is more responsive than stage-driven**
+- **External events (funding, hiring, intent) indicate buying signals**: **External events (funding, hiring, intent) indicate buying signals**: **External events (funding, hiring, intent) indicate buying signals**
+- **Internal triggers (usage, activity) show engagement and risk**: **Internal triggers (usage, activity) show engagement and risk**: **Internal triggers (usage, activity) show engagement and risk**
+- **Design workflows to be idempotent and conflict-free**: **Design workflows to be idempotent and conflict-free**: **Design workflows to be idempotent and conflict-free**
+- **Monitor workflows to catch issues before they impact business**: **Monitor workflows to catch issues before they impact business**: **Monitor workflows to catch issues before they impact business**
 
 ---
 
 ## Next Steps
 
-- Complete the hands-on exercise: Build event-driven workflow
-- Set up workflow monitoring
-- Review Module 5: Outbound Systems & AI-Augmented Prospecting
-- Join course community discussions
+- **Complete The**: Complete the hands-on exercise: Build event-driven workflow
+- **workflow monitoring Implementation**: Set up workflow monitoring
+- **Review Module**: Review Module 5: Outbound Systems & AI-Augmented Prospecting
+- **Join Course**: Join course community discussions
 
 ---
 

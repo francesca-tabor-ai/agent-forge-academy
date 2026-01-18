@@ -14,11 +14,11 @@ Creative automation enables performance marketers to test, iterate, and optimize
 
 ## Learning Objectives
 
-- Apply creative automation for A/B and multivariate testing
-- Implement rapid iteration and learning loops
-- Align creative structure with media platforms
-- Establish measurement frameworks for automated creative
-- Scale high-performing creative systems
+- **Apply Creative**: Apply creative automation for A/B and multivariate testing
+- **rapid iteration and learning loops Implementation**: Implement rapid iteration and learning loops
+- **Align Creative**: Align creative structure with media platforms
+- **Establish Measurement**: Establish measurement frameworks for automated creative
+- **Scale High-Performing**: Scale high-performing creative systems
 
 ---
 
@@ -489,18 +489,18 @@ Rollout
 
 ### Key Takeaways
 
-1. **Creative automation** enables A/B and multivariate testing at scale
-2. **Rapid iteration** accelerates learning and optimization
-3. **Platform alignment** ensures creative effectiveness across channels
-4. **Measurement frameworks** provide data-driven insights
-5. **Scaling systems** amplify high-performing creative across campaigns
+- **Creative automation**: Enables A/B and multivariate testing at scale
+- **Rapid iteration**: Accelerates learning and optimization
+- **Platform alignment**: Ensures creative effectiveness across channels
+- **Measurement frameworks**: Provide data-driven insights
+- **Scaling systems**: Amplify high-performing creative across campaigns
 
 ### Next Steps
 
-- Design an A/B testing framework using templates
-- Create a measurement dashboard
-- Establish rapid iteration processes
-- Move to Module 11 to learn about documentation and operational excellence
+- **an A/B testing framework using templates Development**: Design an A/B testing framework using templates
+- **a measurement dashboard Development**: Create a measurement dashboard
+- **Establish Rapid**: Establish rapid iteration processes
+- **Move To**: Move to Module 11 to learn about documentation and operational excellence
 
 ---
 

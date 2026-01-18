@@ -9,10 +9,10 @@ order: 3
 
 **Duration:** Week 3  
 **Learning Objectives:**
-- Move beyond generic fund factsheets
-- Tailor narratives to client goals and time horizons
-- Explain volatility in plain language
-- Align tone: reassurance vs. opportunity
+- **Move Beyond**: Move beyond generic fund factsheets
+- **Tailor Narratives**: Tailor narratives to client goals and time horizons
+- **Explain Volatility**: Explain volatility in plain language
+- **Align Tone:**: Align tone: reassurance vs. opportunity
 
 ---
 
@@ -184,10 +184,10 @@ Create three personalized performance narratives for the same fund, each tailore
 
 ## Key Takeaways
 
-- Personalized narratives significantly improve client engagement compared to generic factsheets
-- Goal and time horizon alignment makes performance relevant to clients
-- Plain language explanations improve understanding and trust
-- Tone alignment with client profile enhances communication effectiveness
+- **Personalized Narratives**: Personalized narratives significantly improve client engagement compared to generic factsheets
+- **Goal And**: Goal and time horizon alignment makes performance relevant to clients
+- **Plain Language**: Plain language explanations improve understanding and trust
+- **Tone Alignment**: Tone alignment with client profile enhances communication effectiveness
 
 ---
 

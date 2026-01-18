@@ -13,12 +13,12 @@ email_action: "Design an A/B test for a conversion funnel change, including samp
 **Theme:** *Trusting the basics*
 
 **Learning Objectives:**
-- Understand randomization, control, and treatment design
-- Master unit of randomization and interference
-- Calculate sample size, power, and Minimum Detectable Effect (MDE)
-- Design guardrails vs success metrics
-- Identify and avoid common A/B testing failure modes
-- Design production-ready experiments
+- **randomization, control, and treatment design Understanding**: Understand randomization, control, and treatment design
+- **unit of randomization and interference Understanding**: Master unit of randomization and interference
+- **Calculate Sample**: Calculate sample size, power, and Minimum Detectable Effect (MDE)
+- **guardrails vs success metrics Development**: Design guardrails vs success metrics
+- **Identify And**: Identify and avoid common A/B testing failure modes
+- **production-ready experiments Development**: Apply design production-ready experiments in relevant contexts
 
 ---
 

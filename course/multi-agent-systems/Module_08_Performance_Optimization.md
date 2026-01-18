@@ -11,10 +11,10 @@ email_action: "Identify one expensive API call in your project—add a simple in
 
 **Duration:** Weeks 9-10  
 **Learning Objectives:**
-- Profile and identify performance bottlenecks
-- Implement caching strategies
-- Optimize prompts and model selection
-- Reduce latency and costs
+- **Profile And**: Profile and identify performance bottlenecks
+- **caching strategies Implementation**: Implement caching strategies
+- **Optimize Prompts**: Optimize prompts and model selection
+- **Reduce Latency**: Reduce latency and costs
 
 ## Topics Covered:
 

@@ -9,12 +9,12 @@ order: 3
 
 **Duration:** Week 3  
 **Learning Objectives:**
-- Use organic AI visibility as a proxy for future paid readiness
-- Identify which intents will be auctionable first
-- Understand share of AI answers as a leading indicator
-- Analyze why organic dominance predicts paid efficiency
-- Identify competitive displacement inside AI answers
-- Recognize weak signals of future monetisation
+- **Use Organic**: Use organic AI visibility as a proxy for future paid readiness
+- **Identify Which**: Identify which intents will be auctionable first
+- **share of AI answers as a leading indicator Understanding**: Understand share of AI answers as a leading indicator
+- **Analyze Why**: Analyze why organic dominance predicts paid efficiency
+- **Identify Competitive**: Identify competitive displacement inside AI answers
+- **Recognize Weak**: Recognize weak signals of future monetisation
 
 ---
 
@@ -510,15 +510,15 @@ Create comprehensive baseline report:
 
 ## Key Takeaways
 
-- **Share of AI answers is a leading indicator:** High organic share predicts high paid efficiency
+- **Share of AI answers is a leading indicator:**: High organic share predicts high paid efficiency
 
-- **Organic dominance creates paid advantage:** Trust signals, intent coverage, and competitive moat transfer to paid
+- **Organic dominance creates paid advantage:**: Trust signals, intent coverage, and competitive moat transfer to paid
 
-- **Competitive displacement is real:** Monitor for displacement risks and opportunities
+- **Competitive displacement is real:**: Monitor for displacement risks and opportunities
 
-- **Weak signals matter:** Early indicators of monetization help you prepare ahead of launch
+- **Weak signals matter:**: Early indicators of monetization help you prepare ahead of launch
 
-- **Baseline measurement is critical:** Establish share baseline and priority intents before paid launch
+- **Baseline measurement is critical:**: Establish share baseline and priority intents before paid launch
 
 ---
 

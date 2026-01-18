@@ -11,11 +11,11 @@ email_action: "Begin designing your capstone system architecture with safety mec
 
 **Duration:** Week 10-14  
 **Learning Objectives:**
-- Design a complete agentic or voice-based AI system for hospital deployment
-- Integrate all course concepts into a cohesive system
-- Create production-ready documentation
-- Defend system design to stakeholders
-- Demonstrate engineering ownership
+- **a complete agentic or voice-based AI Development**: Design a complete agentic or voice-based AI system for hospital deployment
+- **all course concepts into a cohesive system Integration**: Integrate all course concepts into a cohesive system
+- **production-ready documentation Development**: Create production-ready documentation
+- **Defend System**: Defend system design to stakeholders
+- **Demonstrate Engineering**: Apply demonstrate engineering ownership in relevant contexts
 
 ---
 
@@ -659,11 +659,11 @@ Design and defend an agentic or voice-based AI system suitable for hospital depl
 - Practice presentation
 
 **Next Steps:**
-- Choose your use case
-- Begin architecture design
-- Plan your timeline
-- Start documentation early
-- Practice your defense
+- **Choose Your**: Choose your use case
+- **Begin Architecture**: Apply begin architecture design in relevant contexts
+- **Plan Your**: Apply plan your timeline in relevant contexts
+- **Start Documentation**: Apply start documentation early in relevant contexts
+- **Practice Your**: Apply practice your defense in relevant contexts
 
 ---
 

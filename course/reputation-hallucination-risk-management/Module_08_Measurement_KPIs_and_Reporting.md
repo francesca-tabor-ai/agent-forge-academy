@@ -11,12 +11,12 @@ order: 8
 
 **Duration:** Week 8  
 **Learning Objectives:**
-- Measure effectiveness of hallucination management
-- Report AI risk credibly to executives and boards
-- Understand key metrics: detection rate, correction time, accuracy scores
-- Distinguish between incidents avoided vs incidents resolved
-- Identify leading vs lagging risk indicators
-- Design executive dashboards and reporting formats
+- **Measure Effectiveness**: Measure effectiveness of hallucination management
+- **Report Ai**: Report AI risk credibly to executives and boards
+- **Key Metrics:**: Understand key metrics: detection rate, correction time, accuracy scores
+- **between incidents avoided Analysis**: Distinguish between incidents avoided vs incidents resolved
+- **Identify Leading**: Identify leading vs lagging risk indicators
+- **executive dashboards and reporting formats Development**: Design executive dashboards and reporting formats
 
 ---
 
@@ -635,9 +635,9 @@ In this module, you've learned:
 **Key Takeaway:** Effective measurement requires a balanced approach: leading indicators for prevention, lagging indicators for accountability, and clear reporting to drive action. The goal is not just to measure problems, but to prevent them.
 
 **Next Steps:**
-- Complete Lab 8: AI Brand Integrity Dashboard
-- Review Module 9: Operating Model & Governance
-- Begin implementing your measurement framework
+- **Complete Lab**: Complete Lab 8: AI Brand Integrity Dashboard
+- **Review Module**: Review Module 9: Operating Model & Governance
+- **Begin Implementing**: Begin implementing your measurement framework
 
 ---
 

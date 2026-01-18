@@ -9,11 +9,11 @@ order: 1
 
 **Duration:** Week 1  
 **Learning Objectives:**
-- Understand what a GTM Engineer is (and is not)
-- Recognize why traditional RevOps breaks at scale
-- Distinguish event-driven vs stage-driven GTM systems
-- Embrace velocity over perfection in ambiguous environments
-- Take ownership of outcomes, not just tools
+- **what a GTM Engineer is Understanding**: Understand what a GTM Engineer is (and is not)
+- **Recognize Why**: Recognize why traditional RevOps breaks at scale
+- **event-driven Analysis**: Distinguish event-driven vs stage-driven GTM systems
+- **Embrace Velocity**: Embrace velocity over perfection in ambiguous environments
+- **Take Ownership**: Take ownership of outcomes, not just tools
 
 ---
 
@@ -547,20 +547,20 @@ Identify one manual workflow you can automate this week using tools you already 
 
 ## Key Takeaways
 
-- **GTM Engineers are system builders, not tool administrators**  
-- **Traditional RevOps breaks at scale due to manual processes and data quality issues**  
-- **Event-driven GTM is more responsive than stage-driven GTM**  
-- **Velocity over perfection: ship fast, iterate faster**  
-- **Own outcomes, not tools: measure impact, not activity**
+- **GTM Engineers are system builders, not tool administrators**: **GTM Engineers are system builders, not tool administrators**: **GTM Engineers are system builders, not tool administrators**
+- **Traditional RevOps breaks at scale due to manual processes and data quality issues**: **Traditional RevOps breaks at scale due to manual processes and data quality issues**: **Traditional RevOps breaks at scale due to manual.
+- **Event-driven GTM is more responsive than stage-driven GTM**: **Event-driven GTM is more responsive than stage-driven GTM**: **Event-driven GTM is more responsive than stage-driven GTM**
+- **Velocity over perfection: ship fast, iterate faster**: **Velocity over perfection: ship fast, iterate faster**: **Velocity over perfection: ship fast, iterate faster**
+- **Own outcomes, not tools: measure impact, not activity**: **Own outcomes, not tools: measure impact, not activity**: **Own outcomes, not tools: measure impact, not activity**
 
 ---
 
 ## Next Steps
 
-- Complete the hands-on exercise: GTM stack mapping
-- Ship your first automation
-- Review Module 2: HubSpot as a Programmable System
-- Join course community discussions
+- **Complete The**: Complete the hands-on exercise: GTM stack mapping
+- **Ship Your**: Ship your first automation
+- **Review Module**: Review Module 2: HubSpot as a Programmable System
+- **Join Course**: Join course community discussions
 
 ---
 

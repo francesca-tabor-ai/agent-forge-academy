@@ -9,10 +9,10 @@ order: 5
 
 **Duration:** Week 5  
 **Learning Objectives:**
-- Understand Principal Adverse Impact (PAI) indicators
-- Gather data from alternative and proxy sources
-- Build estimation models with confidence scoring
-- Handle data gaps and assumptions transparently
+- **Principal Adverse Impact Understanding**: Understand Principal Adverse Impact (PAI) indicators
+- **Gather Data**: Gather data from alternative and proxy sources
+- **estimation models with confidence scoring Development**: Build estimation models with confidence scoring
+- **Handle Data**: Handle data gaps and assumptions transparently
 
 ---
 
@@ -233,10 +233,10 @@ Create a comprehensive data pipeline for calculating two specific PAI indicators
 
 ## Key Takeaways
 
-- PAI indicators require comprehensive data collection and calculation
-- Alternative and proxy sources fill gaps in corporate disclosure
-- Estimation models with confidence scoring enable calculations with incomplete data
-- Transparent handling of data gaps and assumptions ensures regulatory compliance
+- **Pai Indicators**: PAI indicators require comprehensive data collection and calculation
+- **Alternative And**: Alternative and proxy sources fill gaps in corporate disclosure
+- **Estimation Models**: Estimation models with confidence scoring enable calculations with incomplete data
+- **Transparent Handling**: Transparent handling of data gaps and assumptions ensures regulatory compliance
 
 ---
 

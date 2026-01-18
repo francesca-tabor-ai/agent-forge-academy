@@ -9,10 +9,10 @@ order: 5
 
 **Duration:** Week 5  
 **Learning Objectives:**
-- Implement regulatory guardrails for FDA and FALCPA compliance
-- Design human-in-the-loop workflows for sensitive content
-- Ensure GDPR/CCPA privacy compliance
-- Build risk management systems for CCIS
+- **regulatory guardrails for FDA and FALCPA compliance Implementation**: Implement regulatory guardrails for FDA and FALCPA compliance
+- **human-in-the-loop Development**: Design human-in-the-loop workflows for sensitive content
+- **Ensure Gdpr/Ccpa**: Ensure GDPR/CCPA privacy compliance
+- **risk management Development**: Build risk management systems for CCIS
 
 ---
 
@@ -481,11 +481,11 @@ Build a compliance validation system that checks AI responses against FDA/FALCPA
 
 ## Key Takeaways
 
-1. **Compliance is non-negotiable:** Regulatory violations have serious consequences
-2. **Validation prevents errors:** Automated checks catch issues before they reach customers
-3. **Human review is essential:** Some decisions require expert judgment
-4. **Privacy is a right:** GDPR/CCPA compliance protects customers and builds trust
-5. **Security is foundational:** Protect data throughout its lifecycle
+- **Compliance is non-negotiable:**: Regulatory violations have serious consequences
+- **Validation prevents errors:**: Automated checks catch issues before they reach customers
+- **Human review is essential:**: Some decisions require expert judgment
+- **Privacy is a right:**: GDPR/CCPA compliance protects customers and builds trust
+- **Security is foundational:**: Protect data throughout its lifecycle
 
 ---
 
@@ -512,14 +512,14 @@ Build a compliance validation system that checks AI responses against FDA/FALCPA
 ## Next Steps
 
 **Ready for Module 6?**
-- Review Module 6: Analytics, Insights, & Business Impact
-- Prepare to measure CCIS performance
-- Understand revenue attribution
+- **Review Module**: Review Module 6: Analytics, Insights, & Business Impact
+- **Prepare To**: Prepare to measure CCIS performance
+- **revenue attribution Understanding**: Understand revenue attribution
 
 **Questions to Consider:**
-- What regulatory requirements apply to your industry?
-- Which queries require human review?
-- How do you currently handle customer privacy?
+- **What Regulatory**: What regulatory requirements apply to your industry?
+- **Which Queries**: Which queries require human review?
+- **How Do**: How do you currently handle customer privacy?
 
 ---
 

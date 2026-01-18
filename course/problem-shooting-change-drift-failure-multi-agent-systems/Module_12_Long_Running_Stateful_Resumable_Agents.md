@@ -11,11 +11,11 @@ email_action: "What happens if your agent system crashes mid-task? Can it resume
 
 **Duration:** Week 12  
 **Learning Objectives:**
-- Design systems that survive time
-- Distinguish durable vs ephemeral memory
-- Handle state corruption and recovery
-- Implement checkpointing and resumability
-- Handle real-world change mid-task
+- **systems that survive time Development**: Design systems that survive time
+- **durable Analysis**: Distinguish durable vs ephemeral memory
+- **Handle State**: Handle state corruption and recovery
+- **checkpointing and resumability Implementation**: Implement checkpointing and resumability
+- **Handle Real-World**: Handle real-world change mid-task
 
 ---
 

@@ -9,10 +9,10 @@ order: 5
 
 **Duration:** Week 5  
 **Learning Objectives:**
-- Build pricing models
-- Determine interest rates
-- Analyze profitability
-- Optimize pricing strategies
+- **pricing models Development**: Build pricing models
+- **Determine Interest**: Apply determine interest rates in relevant contexts
+- **Analyze Profitability**: Implement analyze profitability effectively across relevant use cases
+- **Optimize Pricing**: Apply optimize pricing strategies in relevant contexts
 
 ---
 

@@ -19,12 +19,12 @@ order: 0
 
 By completing this course, you will be able to:
 
-- Build AI-powered trading algorithms using machine learning and deep learning
-- Design market prediction models for price forecasting and trend detection
-- Implement real-time execution engines with order management systems
-- Create sentiment analysis systems using news and social media data
-- Develop portfolio optimization strategies with reinforcement learning
-- Deploy high-frequency trading systems with low-latency requirements
+- **AI-powered trading algorithms using machine learning and deep learning Development**: Build AI-powered trading algorithms using machine learning and deep learning
+- **market prediction models for price forecasting and trend detection Development**: Design market prediction models for price forecasting and trend detection
+- **real-time execution engines with order management Implementation**: Implement real-time execution engines with order management systems
+- **sentiment analysis Development**: Create sentiment analysis systems using news and social media data
+- **portfolio optimization strategies with reinforcement learning Development**: Develop portfolio optimization strategies with reinforcement learning
+- **high-frequency trading Implementation**: Deploy high-frequency trading systems with low-latency requirements
 
 ---
 

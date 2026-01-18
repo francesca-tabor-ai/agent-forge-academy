@@ -9,11 +9,11 @@ order: 8
 
 **Duration:** Week 8  
 **Learning Objectives:**
-- Understand pipeline health metrics
-- Distinguish activity vs outcome metrics
-- Build automation monitoring and alerts
-- Debug broken GTM workflows
-- Identify leading vs lagging indicators
+- **pipeline health metrics Understanding**: Understand pipeline health metrics
+- **activity Analysis**: Distinguish activity vs outcome metrics
+- **automation monitoring and alerts Development**: Build automation monitoring and alerts
+- **Debug Broken**: Debug broken GTM workflows
+- **Identify Leading**: Identify leading vs lagging indicators
 
 ---
 
@@ -715,20 +715,20 @@ Build a system that monitors automation health and alerts on issues.
 
 ## Key Takeaways
 
-- **Pipeline health metrics show overall GTM performance**  
-- **Activity metrics predict outcomes; outcome metrics confirm results**  
-- **Automation monitoring catches issues before they impact business**  
-- **Systematic debugging process resolves issues quickly**  
-- **Leading and lagging indicators together provide complete picture**
+- **Pipeline health metrics show overall GTM performance**: **Pipeline health metrics show overall GTM performance**: **Pipeline health metrics show overall GTM performance**
+- **Activity metrics predict outcomes; outcome metrics confirm results**: **Activity metrics predict outcomes; outcome metrics confirm results**: **Activity metrics predict outcomes; outcome metrics confirm results**
+- **Automation monitoring catches issues before they impact business**: **Automation monitoring catches issues before they impact business**: **Automation monitoring catches issues before they impact business**
+- **Systematic debugging process resolves issues quickly**: **Systematic debugging process resolves issues quickly**: **Systematic debugging process resolves issues quickly**
+- **Leading and lagging indicators together provide complete picture**: **Leading and lagging indicators together provide complete picture**: **Leading and lagging indicators together provide complete picture**
 
 ---
 
 ## Next Steps
 
-- Complete the hands-on exercise: Build dashboards and health checks
-- Set up automation monitoring
-- Review Module 9: Partnering with Sales, Marketing & CS
-- Join course community discussions
+- **Complete The**: Complete the hands-on exercise: Build dashboards and health checks
+- **automation monitoring Implementation**: Set up automation monitoring
+- **Review Module**: Review Module 9: Partnering with Sales, Marketing & CS
+- **Join Course**: Join course community discussions
 
 ---
 

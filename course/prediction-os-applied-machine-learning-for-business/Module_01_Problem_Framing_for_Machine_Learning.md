@@ -11,11 +11,11 @@ order: 1
 **Theme:** *What should we predict — and why?*
 
 **Learning Objectives:**
-- Understand the difference between prediction, explanation, and optimization
-- Map business decisions to ML problems effectively
-- Define targets, labels, and prediction horizons correctly
-- Choose the right ML approach for the problem
-- Identify and avoid common framing failures
+- **the difference between prediction, explanation, and optimization Understanding**: Understand the difference between prediction, explanation, and optimization
+- **Map Business**: Map business decisions to ML problems effectively
+- **Define Targets,**: Define targets, labels, and prediction horizons correctly
+- **Choose The**: Choose the right ML approach for the problem
+- **Identify And**: Identify and avoid common framing failures
 
 ---
 
@@ -526,17 +526,17 @@ For each problem, provide:
 
 **Key Takeaways:**
 
-1. **Prediction vs Explanation vs Optimization:** Know which goal you're serving
-2. **Decision-First Thinking:** Always start with the business decision
-3. **Target Definition:** Measurable, actionable, timely, stable
-4. **Label Creation:** Historical > Proxy > Synthetic (with validation)
-5. **Problem Type Selection:** Match ML approach to prediction type
-6. **Common Failures:** Proxy targets, leaky labels, irrelevant predictions, wrong granularity, ignoring actionability
+- **Prediction vs Explanation vs Optimization:**: Know which goal you're serving
+- **Decision-First Thinking:**: Always start with the business decision
+- **Target Definition:**: Measurable, actionable, timely, stable
+- **Label Creation:**: Historical > Proxy > Synthetic (with validation)
+- **Problem Type Selection:**: Match ML approach to prediction type
+- **Common Failures:**: Proxy targets, leaky labels, irrelevant predictions, wrong granularity, ignoring actionability
 
 **Next Steps:**
-- Module 2: Understand data and think about features
-- Learn to identify feature leakage
-- Build feature blueprints
+- **Module 2:**: Module 2: Understand data and think about features
+- **to identify feature leakage Understanding**: Learn to identify feature leakage
+- **feature blueprints Development**: Build feature blueprints
 
 ---
 

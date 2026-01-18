@@ -10,10 +10,10 @@ order: 2
 **Duration:** Week 2  
 **Tool Focus:** RenderOps  
 **Learning Objectives:**
-- Design deterministic video production pipelines
-- Implement governance-as-code principles
-- Build centralized orchestrator for content routing
-- Connect pipelines to source truth systems (PIM, legal databases)
+- **deterministic video production Development**: Design deterministic video production pipelines
+- **governance-as-code principles Implementation**: Implement governance-as-code principles
+- **centralized orchestrator for content routing Development**: Build centralized orchestrator for content routing
+- **pipelines Integration**: Connect pipelines to source truth systems (PIM, legal databases)
 
 ---
 
@@ -769,22 +769,22 @@ class ScriptRejectionHandler:
 ## Key Takeaways
 
 **Deterministic Assembly:**
-- Pre-approved envelopes enable automated production
-- Deterministic outputs ensure reproducibility
-- Governance-as-code enforces rules automatically
-- Humans define truth, automation executes
+- **Pre-Approved Envelopes**: Pre-approved envelopes enable automated production
+- **Deterministic Outputs**: Deterministic outputs ensure reproducibility
+- **Governance-As-Code Enforces**: Governance-as-code enforces rules automatically
+- **Humans Define**: Humans define truth, automation executes
 
 **Orchestrator Role:**
-- Central control plane routes content appropriately
-- Class A content uses rigid Blender pipelines
-- Batch processing automates low-risk content
-- Risk-based routing optimizes resources
+- **Central Control**: Central control plane routes content appropriately
+- **Class A**: Class A content uses rigid Blender pipelines
+- **Batch Processing**: Batch processing automates low-risk content
+- **Risk-Based Routing**: Risk-based routing optimizes resources
 
 **Source Truth Ingestion:**
-- PIM integration verifies product claims
-- Legal database ensures approved language
-- Unverified claims trigger rejection
-- Source attribution provides traceability
+- **Pim Integration**: PIM integration verifies product claims
+- **Legal Database**: Legal database ensures approved language
+- **Unverified Claims**: Unverified claims trigger rejection
+- **Source Attribution**: Source attribution provides traceability
 
 ---
 

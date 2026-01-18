@@ -20,12 +20,12 @@ order: 0
 
 By completing this course, you will be able to:
 
-- Lead **data and AI organizations as strategic business functions**, aligning technology, people, and investment with enterprise outcomes
-- Design and execute data & AI strategies that drive measurable business impact
-- Build operating models that scale across teams and regions
-- Translate strategy into execution through KPIs, OKRs, and portfolios
-- Prioritize investments across analytics, ML, GenAI, and platforms
-- Communicate AI value credibly to executives, boards, and stakeholders
+- **Lead **: Datadata and AI organizations as strategic business functions**, aligning technology, people, and investment with enterprise outcomes
+- **and execute data & AI strategies that drive measurable business impact Development**: Design and execute data & AI strategies that drive measurable business impact
+- **operating models that scale across teams and regions Development**: Build operating models that scale across teams and regions
+- **Translate Strategy**: Translate strategy into execution through KPIs, OKRs, and portfolios
+- **Prioritize Investments**: Prioritize investments across analytics, ML, GenAI, and platforms
+- **Communicate Ai**: Communicate AI value credibly to executives, boards, and stakeholders
 
 ---
 

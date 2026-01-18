@@ -10,11 +10,11 @@ order: 8
 **Duration:** Weeks 8-10 (2-3 weeks)  
 **Theme:** End-to-end AI-powered user experience  
 **Learning Objectives:**
-- Apply all course concepts to a real-world project
-- Design a complete AI Product OS from opportunity to measurement
-- Integrate AI product thinking, UX design, decisioning, GenAI, trust, ethics, and measurement
-- Create a comprehensive product proposal
-- Defend the design in a product leadership review
+- **Apply All**: Apply all course concepts to a real-world project
+- **a complete AI Product OS from opportunity to measurement Development**: Design a complete AI Product OS from opportunity to measurement
+- **AI product thinking, UX design, decisioning, GenAI, trust, ethics, Integration**: Integrate AI product thinking, UX design, decisioning, GenAI, trust, ethics, and measurement
+- **a comprehensive product proposal Development**: Create a comprehensive product proposal
+- **Defend The**: Defend the design in a product leadership review
 
 ---
 
@@ -616,24 +616,24 @@ capstone-project/
 
 ### Career Opportunities
 
-- **AI Product Manager:** Lead AI product initiatives
-- **Senior Product Manager (AI):** Drive AI product strategy
-- **Product Lead (AI/ML):** Build AI product teams
-- **Head of AI Product:** Define AI product vision
+- **AI Product Manager:**: Lead AI product initiatives
+- **Senior Product Manager (AI):**: Drive AI product strategy
+- **Product Lead (AI/ML):**: Build AI product teams
+- **Head of AI Product:**: Define AI product vision
 
 ### Continuing Education
 
-- Advanced AI product courses
-- Technical AI/ML courses
-- UX design for AI
-- Ethics and responsible AI
+- **Advanced Ai**: Advanced AI product courses
+- **Technical Ai/Ml**: Apply technical ai/ml courses in relevant contexts
+- **Ux Design**: UX design for AI
+- **Ethics And**: Ethics and responsible AI
 
 ### Portfolio Building
 
-- Add capstone to portfolio
-- Share on LinkedIn
-- Write case study
-- Present at meetups
+- **Add Capstone**: Add capstone to portfolio
+- **Share On**: Apply share on linkedin in relevant contexts
+- **Write Case**: Apply write case study in relevant contexts
+- **Present At**: Apply present at meetups in relevant contexts
 
 ---
 

@@ -9,10 +9,10 @@ order: 7
 
 **Duration:** Week 7  
 **Learning Objectives:**
-- Answer "Why did the AI flag this?"
-- Provide source attribution and evidence trails
-- Manage overrides and disagreements
-- Meet regulatory and internal audit expectations
+- **Answer "Why**: Answer "Why did the AI flag this?"
+- **Provide Source**: Provide source attribution and evidence trails
+- **Manage Overrides**: Manage overrides and disagreements
+- **Meet Regulatory**: Meet regulatory and internal audit expectations
 
 ---
 
@@ -233,10 +233,10 @@ Create a comprehensive, explainable AI summary that explains why a product risk 
 
 ## Key Takeaways
 
-- Explaining "why" the AI flagged something builds trust and enables validation
-- Source attribution and evidence trails ensure auditability
-- Managing overrides and disagreements maintains accountability
-- Meeting regulatory and audit expectations ensures compliance and trust
+- **Explaining "Why"**: Explaining "why" the AI flagged something builds trust and enables validation
+- **Source Attribution**: Source attribution and evidence trails ensure auditability
+- **Managing Overrides**: Managing overrides and disagreements maintains accountability
+- **Meeting Regulatory**: Meeting regulatory and audit expectations ensures compliance and trust
 
 ---
 

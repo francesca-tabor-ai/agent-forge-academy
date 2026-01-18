@@ -11,11 +11,11 @@ order: 7
 **Theme:** *Scaling insight without becoming a bottleneck*
 
 **Learning Objectives:**
-- Understand what self-serve analytics really means
-- Design guardrails vs freedom balance
-- Establish metrics ownership and governance
-- Transition from report factory to enabler
-- Work effectively with Product, Data Science & Engineering
+- **what self-serve analytics really means Understanding**: Understand what self-serve analytics really means
+- **guardrails vs freedom balance Development**: Design guardrails vs freedom balance
+- **Establish Metrics**: Establish metrics ownership and governance
+- **Transition From**: Transition from report factory to enabler
+- **Work Effectively**: Work effectively with Product, Data Science & Engineering
 
 ---
 
@@ -616,11 +616,11 @@ Design collaboration model with Product, Data Science, Engineering:
 
 ## Key Takeaways
 
-1. **Self-Serve Defined:** Enable users to answer questions, not just SQL access
-2. **Guardrails Balance:** Freedom to explore, quality maintained
-3. **Ownership Matters:** Clear ownership and governance for metrics
-4. **Analyst as Enabler:** Focus on strategic work, enable self-serve
-5. **Collaboration:** Work effectively with Product, Data Science, Engineering
+- **Self-Serve Defined:**: Enable users to answer questions, not just SQL access
+- **Guardrails Balance:**: Freedom to explore, quality maintained
+- **Ownership Matters:**: Clear ownership and governance for metrics
+- **Analyst as Enabler:**: Focus on strategic work, enable self-serve
+- **Collaboration:**: Work effectively with Product, Data Science, Engineering
 
 ---
 

@@ -9,10 +9,10 @@ order: 6
 
 **Duration:** Week 6  
 **Learning Objectives:**
-- Understand cost-to-serve economics of digital advice
-- Handle millions of simultaneous interactions
-- Implement continuous learning from client behavior
-- Design operational resilience and system oversight
+- **cost-to-serve economics of digital advice Understanding**: Understand cost-to-serve economics of digital advice
+- **Handle Millions**: Handle millions of simultaneous interactions
+- **continuous learning from client behavior Implementation**: Implement continuous learning from client behavior
+- **operational resilience and Development**: Design operational resilience and system oversight
 
 ---
 
@@ -241,10 +241,10 @@ Calculate and compare the cost savings of AI-led advice versus traditional human
 
 ## Key Takeaways
 
-- AI-native advice achieves 80-90% cost reduction compared to human advisors
-- Scalable architecture enables handling millions of simultaneous interactions
-- Continuous learning improves advice quality over time
-- Operational resilience ensures reliable service delivery
+- **Ai-Native Advice**: AI-native advice achieves 80-90% cost reduction compared to human advisors
+- **Scalable Architecture**: Scalable architecture enables handling millions of simultaneous interactions
+- **Continuous Learning**: Continuous learning improves advice quality over time
+- **Operational Resilience**: Operational resilience ensures reliable service delivery
 
 ---
 

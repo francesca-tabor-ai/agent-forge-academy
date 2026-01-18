@@ -9,10 +9,10 @@ order: 1
 
 **Duration:** Week 1  
 **Learning Objectives:**
-- Understand market microstructure and order types
-- Learn execution strategies and routing algorithms
-- Master backtesting frameworks and performance metrics
-- Build a basic backtesting system
+- **market microstructure and order types Understanding**: Understand market microstructure and order types
+- **execution strategies and routing algorithms Understanding**: Learn execution strategies and routing algorithms
+- **backtesting frameworks and performance metrics Understanding**: Master backtesting frameworks and performance metrics
+- **a basic backtesting Development**: Build a basic backtesting system
 
 ---
 

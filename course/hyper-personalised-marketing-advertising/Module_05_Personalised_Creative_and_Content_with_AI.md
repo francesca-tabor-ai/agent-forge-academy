@@ -10,11 +10,11 @@ description: DCO, AI-generated content, and brand governance
 
 By the end of this module, you will be able to:
 
-- Understand Dynamic Creative Optimization (DCO) and its applications
-- Evaluate AI-generated copy, visuals, and video for marketing use
-- Design personalization strategies across emails, ads, and landing pages
-- Maintain brand voice and creative governance in AI-generated content
-- Develop a personalized creative strategy
+- **Dynamic Creative Optimization Understanding**: Understand Dynamic Creative Optimization (DCO) and its applications
+- **AI-generated copy, visuals, Evaluation**: Evaluate AI-generated copy, visuals, and video for marketing use
+- **personalization strategies across emails, ads, and landing pages Development**: Design personalization strategies across emails, ads, and landing pages
+- **Maintain Brand**: Maintain brand voice and creative governance in AI-generated content
+- **a personalized creative strategy Development**: Develop a personalized creative strategy
 
 ## Introduction
 
@@ -456,11 +456,11 @@ Submit a 5-7 page strategy document including:
 
 ## Key Takeaways
 
-- Dynamic Creative Optimization enables real-time, personalized ad assembly at scale
-- AI can generate copy, visuals, and video, but requires human oversight and brand governance
-- Personalization should be tailored to each channel while maintaining cross-channel consistency
-- Brand voice and creative governance are critical for maintaining brand integrity with AI
-- Successful AI-powered creative strategies balance automation with human creativity and oversight
+- **Dynamic Creative**: Dynamic Creative Optimization enables real-time, personalized ad assembly at scale
+- **Ai Can**: AI can generate copy, visuals, and video, but requires human oversight and brand governance
+- **Personalization Should**: Personalization should be tailored to each channel while maintaining cross-channel consistency
+- **Brand Voice**: Brand voice and creative governance are critical for maintaining brand integrity with AI
+- **Successful Ai-Powered**: Successful AI-powered creative strategies balance automation with human creativity and oversight
 
 ## Additional Resources
 

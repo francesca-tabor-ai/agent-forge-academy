@@ -19,12 +19,12 @@ order: 0
 
 By completing this course, you will be able to:
 
-- Build real-time fraud detection systems using machine learning
-- Implement transaction monitoring and anomaly detection
-- Design identity verification systems with biometrics and document analysis
-- Create network analysis systems for fraud ring detection
-- Develop compliance monitoring systems for AML and KYC
-- Deploy production fraud detection pipelines with low latency
+- **real-time fraud detection Development**: Build real-time fraud detection systems using machine learning
+- **transaction monitoring and anomaly detection Implementation**: Implement transaction monitoring and anomaly detection
+- **identity verification Development**: Design identity verification systems with biometrics and document analysis
+- **network analysis Development**: Create network analysis systems for fraud ring detection
+- **compliance monitoring Development**: Develop compliance monitoring systems for AML and KYC
+- **production fraud detection pipelines with low latency Implementation**: Deploy production fraud detection pipelines with low latency
 
 ---
 

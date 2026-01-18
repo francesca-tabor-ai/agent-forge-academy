@@ -9,10 +9,10 @@ order: 6
 
 **Duration:** Week 6  
 **Learning Objectives:**
-- Understand the rise of agentic commerce and autonomous AI buying agents
-- Build infrastructure (Smart Product Cards) to make inventory transactable for AI agents
-- Apply the VisAlchemy framework for high-quality, data-driven visual asset creation
-- Prepare for the next evolution of AI-driven commerce
+- **the rise of agentic commerce and autonomous AI buying agents Understanding**: Understand the rise of agentic commerce and autonomous AI buying agents
+- **infrastructure (Smart Product Cards) to make inventory transactable for AI agents Development**: Build infrastructure (Smart Product Cards) to make inventory transactable for AI agents
+- **Apply The**: Apply the VisAlchemy framework for high-quality, data-driven visual asset creation
+- **Prepare For**: Prepare for the next evolution of AI-driven commerce
 
 ---
 
@@ -730,11 +730,11 @@ Prepare for agentic commerce by building Smart Product Cards and create high-qua
 - Future frontiers: agentic commerce and visual ideation
 
 **Next Steps:**
-1. Complete the implementation project
-2. Continue monitoring and optimization
-3. Stay updated on AI visibility trends
-4. Build your AI Visibility expertise
-5. Share your knowledge with others
+- **Complete Implementation Project**: Complete the implementation project
+- **Continue Monitoring Optimization**: Continue monitoring and optimization
+- **Stay Updated Visibility**: Stay updated on AI visibility trends
+- **Your Ai Visibility Expertise**: Build your AI Visibility expertise
+- **Share Your Knowledge**: Apply share your knowledge with others principles and best practices
 
 **Remember:**
 The future of search is AI. The time to adapt is now. You're equipped with the knowledge and tools to succeed in the AI visibility era.

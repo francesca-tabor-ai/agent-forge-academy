@@ -12,13 +12,13 @@ email_action: "Auto-generate a proposal + FAQ from a discovery call."
 
 **Duration:** Week 7  
 **Learning Objectives:**
-- Remove scheduling, content, and proposal drag
-- Keep enablement always current
-- Eliminate "where is the doc?" moments forever
-- Understand meeting logistics agents
-- Learn dynamic proposal generation
-- Implement sequence and playbook versioning
-- Design FAQ agents trained on live objections
+- **Remove Scheduling,**: Remove scheduling, content, and proposal drag
+- **Keep Enablement**: Keep enablement always current
+- **Eliminate "Where**: Eliminate "where is the doc?" moments forever
+- **meeting logistics agents Understanding**: Understand meeting logistics agents
+- **dynamic proposal generation Understanding**: Learn dynamic proposal generation
+- **sequence and playbook versioning Implementation**: Implement sequence and playbook versioning
+- **FAQ agents trained on live objections Development**: Design FAQ agents trained on live objections
 
 ---
 

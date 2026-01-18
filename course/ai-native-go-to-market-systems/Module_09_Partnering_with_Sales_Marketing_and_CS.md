@@ -9,11 +9,11 @@ order: 9
 
 **Duration:** Week 9  
 **Learning Objectives:**
-- Work effectively with Sales leadership
-- Turn complaints into requirements
-- Say "no" while still shipping value
-- Create documentation that scales beyond you
-- Build trust and credibility with stakeholders
+- **Work Effectively**: Work effectively with Sales leadership
+- **Turn Complaints**: Turn complaints into requirements
+- **Say "No"**: Say "no" while still shipping value
+- **documentation that scales beyond you Development**: Create documentation that scales beyond you
+- **trust and credibility with stakeholders Development**: Build trust and credibility with stakeholders
 
 ---
 
@@ -592,20 +592,20 @@ Take one pain point from your interview and ship a fix this week.
 
 ## Key Takeaways
 
-- **Work with Sales/Marketing/CS by speaking their language and focusing on outcomes**  
-- **Turn complaints into requirements by understanding root causes and proposing solutions**  
-- **Say "no" effectively by offering alternatives and explaining trade-offs**  
-- **Documentation that scales preserves knowledge and enables others**  
-- **Building trust through delivery, proactivity, and results creates strong partnerships**
+- **Work with Sales/Marketing/CS by speaking their language and focusing on outcomes**: **Work with Sales/Marketing/CS by speaking their language and focusing on outcomes**: **Work with Sales/Marketing/CS by speaking their.
+- **Turn complaints into requirements by understanding root causes and proposing solutions**: **Turn complaints into requirements by understanding root causes and proposing solutions**: **Turn complaints into requirements by.
+- **Say "no" effectively by offering alternatives and explaining trade-offs**: **Say "no" effectively by offering alternatives and explaining trade-offs**: **Say "no" effectively by offering alternatives and explaining.
+- **Documentation that scales preserves knowledge and enables others**: **Documentation that scales preserves knowledge and enables others**: **Documentation that scales preserves knowledge and enables others**
+- **Building trust through delivery, proactivity, and results creates strong partnerships**: **Building trust through delivery, proactivity, and results creates strong partnerships**: **Building trust through delivery, proactivity,.
 
 ---
 
 ## Next Steps
 
-- Complete the hands-on exercise: Interview Sales leader and ship fix
-- Update your documentation
-- Review Module 10: Capstone – Build a Mini AI-Native GTM Engine
-- Join course community discussions
+- **Complete The**: Complete the hands-on exercise: Interview Sales leader and ship fix
+- **Update Your**: Apply update your documentation in relevant contexts
+- **Review Module**: Review Module 10: Capstone – Build a Mini AI-Native GTM Engine
+- **Join Course**: Join course community discussions
 
 ---
 

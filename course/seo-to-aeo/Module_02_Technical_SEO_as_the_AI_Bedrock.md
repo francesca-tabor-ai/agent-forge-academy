@@ -12,9 +12,9 @@ While the search landscape is changing, the technical foundations of SEO remain 
 
 ## Learning Objectives
 
-- Implement E-E-A-T as a credibility algorithm for AI systems
-- Use structured data to provide ground truth and prevent hallucinations
-- Master robots.txt and llms.txt for AI agent access control
+- **E-E-A-T as a credibility algorithm for AI Implementation**: Implement E-E-A-T as a credibility algorithm for AI systems
+- **Use Structured**: Use structured data to provide ground truth and prevent hallucinations
+- **robots.txt and llms.txt for AI agent access control Understanding**: Master robots.txt and llms.txt for AI agent access control
 
 ---
 
@@ -384,8 +384,8 @@ Track which bots access your content:
 
 Technical SEO fundamentals form the bedrock for AI visibility:
 
-1. **E-E-A-T** provides the credibility algorithm that AI systems use
-2. **Structured data** offers ground truth that prevents hallucinations
-3. **robots.txt and llms.txt** control access and guide AI agents
+- **E-E-A-T**: Provides the credibility algorithm that AI systems use
+- **Structured data**: Offers ground truth that prevents hallucinations
+- **robots.txt and llms.txt**: Control access and guide AI agents
 
 These technical foundations enable the optimization strategies covered in the next modules. Without proper technical SEO, advanced AEO and GEO tactics won't be effective.

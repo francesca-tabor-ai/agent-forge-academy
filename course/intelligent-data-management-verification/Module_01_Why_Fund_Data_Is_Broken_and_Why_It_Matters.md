@@ -9,11 +9,11 @@ order: 1
 
 **Duration:** Week 1  
 **Learning Objectives:**
-- Understand the explosion of fund data fields (from dozens to thousands)
-- Recognize reliance on manual spreadsheets and email workflows
-- Understand regulatory consequences of inconsistent data
-- Learn the concept of the "Golden Source" of fund data
-- Map current fund data flows and identify failure points
+- **the explosion of fund data fields Understanding**: Understand the explosion of fund data fields (from dozens to thousands)
+- **Recognize Reliance**: Recognize reliance on manual spreadsheets and email workflows
+- **regulatory consequences of inconsistent data Understanding**: Understand regulatory consequences of inconsistent data
+- **the concept of the "Golden Source" of fund data Understanding**: Learn the concept of the "Golden Source" of fund data
+- **Map Current**: Map current fund data flows and identify failure points
 
 ---
 
@@ -200,10 +200,10 @@ Analyze current fund data management processes and identify where failures occur
 
 ## Key Takeaways
 
-- Fund data fields have exploded from dozens to thousands, creating complexity
-- Manual spreadsheets and email workflows are error-prone and don't scale
-- Inconsistent data has serious regulatory consequences
-- The "Golden Source" concept provides a foundation for data quality
+- **Fund Data**: Fund data fields have exploded from dozens to thousands, creating complexity
+- **Manual Spreadsheets**: Manual spreadsheets and email workflows are error-prone and don't scale
+- **Inconsistent Data**: Inconsistent data has serious regulatory consequences
+- **The "Golden**: The "Golden Source" concept provides a foundation for data quality
 
 ---
 

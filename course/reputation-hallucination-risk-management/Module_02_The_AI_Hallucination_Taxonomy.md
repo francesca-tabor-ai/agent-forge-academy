@@ -11,10 +11,10 @@ order: 2
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Classify hallucinations by severity, surface, and consequence
-- Prioritize which errors require immediate action
-- Understand the difference between benign, escalatory, and litigable errors
-- Build a severity scoring framework for your organization
+- **Classify Hallucinations**: Classify hallucinations by severity, surface, and consequence
+- **Prioritize Which**: Prioritize which errors require immediate action
+- **the difference between benign, escalatory, and litigable errors Understanding**: Understand the difference between benign, escalatory, and litigable errors
+- **a severity scoring framework for your organization Development**: Build a severity scoring framework for your organization
 
 ---
 
@@ -484,9 +484,9 @@ In this module, you've learned:
 **Key Takeaway:** Not all hallucinations are created equal. A systematic taxonomy and severity framework enables prioritization and appropriate response.
 
 **Next Steps:**
-- Complete Lab 2: Hallucination Risk Taxonomy
-- Review Module 3: Monitoring AI Outputs at Scale
-- Begin thinking about detection systems for each hallucination type
+- **Complete Lab**: Complete Lab 2: Hallucination Risk Taxonomy
+- **Review Module**: Review Module 3: Monitoring AI Outputs at Scale
+- **Begin Thinking**: Begin thinking about detection systems for each hallucination type
 
 ---
 

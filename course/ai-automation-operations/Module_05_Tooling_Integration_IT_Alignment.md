@@ -11,13 +11,13 @@ order: 5
 
 **Duration:** Week 5  
 **Learning Objectives:**
-- Integrate AI tools without shadow IT or security risk
-- Align with IT and data governance requirements
-- Evaluate tool selection criteria
-- Understand data access and permissions
-- Design security, logging, and compliance frameworks
-- Make vendor vs internal tooling tradeoffs
-- Create Tooling & Integration Architecture and IT approval checklist
+- **AI Integration**: Integrate AI tools without shadow IT or security risk
+- **Align With**: Align with IT and data governance requirements
+- **tool selection criteria Evaluation**: Evaluate tool selection criteria
+- **data access and permissions Understanding**: Understand data access and permissions
+- **security, logging, and compliance frameworks Development**: Design security, logging, and compliance frameworks
+- **Make Vendor**: Make vendor vs internal tooling tradeoffs
+- **Tooling & Integration Architecture and IT approval checklist Development**: Create Tooling & Integration Architecture and IT approval checklist
 
 ---
 
@@ -614,12 +614,12 @@ Create a comprehensive checklist for getting IT approval for AI automation tools
 
 ## Key Takeaways
 
-- **Tool selection matters:** Clear criteria and systematic evaluation lead to better decisions
-- **Security is foundational:** Security, logging, and compliance must be designed in from the start
-- **IT alignment is critical:** Working with IT, not around IT, ensures sustainable solutions
-- **Build vs buy:** Strategic decisions about vendor vs internal tooling based on requirements
-- **Data governance:** Proper data classification and access controls enable safe automation
-- **Approval process:** Clear checklist and process streamline IT approval
+- **Tool selection matters:**: Clear criteria and systematic evaluation lead to better decisions
+- **Security is foundational:**: Security, logging, and compliance must be designed in from the start
+- **IT alignment is critical:**: Working with IT, not around IT, ensures sustainable solutions
+- **Build vs buy:**: Strategic decisions about vendor vs internal tooling based on requirements
+- **Data governance:**: Proper data classification and access controls enable safe automation
+- **Approval process:**: Clear checklist and process streamline IT approval
 
 ---
 

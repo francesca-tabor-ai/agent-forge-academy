@@ -11,11 +11,11 @@ order: 4
 **Theme:** *Choosing the right model for the job*
 
 **Learning Objectives:**
-- Establish baselines before complex models
-- Understand tree-based models (GBMs, Random Forests)
-- Apply linear models with regularization
-- Use time-series models (ARIMA, Prophet, ML-based)
-- Know when (and when not) to use deep learning
+- **Establish Baselines**: Establish baselines before complex models
+- **tree-based models Understanding**: Understand tree-based models (GBMs, Random Forests)
+- **Apply Linear**: Apply linear models with regularization
+- **Use Time-Series**: Use time-series models (ARIMA, Prophet, ML-based)
+- **Know When**: Know when (and when not) to use deep learning
 
 ---
 
@@ -618,17 +618,17 @@ Train and compare multiple model types for three prediction problems.
 
 **Key Takeaways:**
 
-1. **Start Simple:** Always establish baselines first
-2. **Tree-Based Models:** GBMs are often best for tabular data
-3. **Linear Models:** Great for interpretability and baselines
-4. **Time Series:** ARIMA, Prophet, or ML-based depending on complexity
-5. **Deep Learning:** Use for unstructured data, large datasets, complex patterns
-6. **Choose Wisely:** Match model complexity to problem and data
+- **Start Simple:**: Always establish baselines first
+- **Tree-Based Models:**: GBMs are often best for tabular data
+- **Linear Models:**: Great for interpretability and baselines
+- **Time Series:**: ARIMA, Prophet, or ML-based depending on complexity
+- **Deep Learning:**: Use for unstructured data, large datasets, complex patterns
+- **Choose Wisely:**: Match model complexity to problem and data
 
 **Next Steps:**
-- Module 5: Evaluate models properly
-- Learn to assess bias and stability
-- Build trustworthy evaluation reports
+- **Module 5:**: Module 5: Evaluate models properly
+- **to assess bias and stability Understanding**: Learn to assess bias and stability
+- **trustworthy evaluation reports Development**: Build trustworthy evaluation reports
 
 ---
 

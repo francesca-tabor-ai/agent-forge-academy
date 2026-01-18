@@ -12,13 +12,13 @@ email_action: "Launch one prospect through 5 channels + 3 languages autonomously
 
 **Duration:** Week 4  
 **Learning Objectives:**
-- Deploy channel-specific outreach agents
-- Design a Global BDR layer that never sleeps
-- Maintain message quality across languages and formats
-- Understand email vs voice vs video vs event outreach agents
-- Learn cultural and linguistic context handling
-- Implement personalisation at scale without hallucination
-- Design lead handoff protocols between agents
+- **channel-specific outreach agents Implementation**: Deploy channel-specific outreach agents
+- **a Global BDR layer that never sleeps Development**: Design a Global BDR layer that never sleeps
+- **Maintain Message**: Maintain message quality across languages and formats
+- **email vs voice vs video vs event outreach agents Understanding**: Understand email vs voice vs video vs event outreach agents
+- **cultural and linguistic context handling Understanding**: Learn cultural and linguistic context handling
+- **personalisation at scale without hallucination Implementation**: Implement personalisation at scale without hallucination
+- **lead handoff protocols between agents Development**: Design lead handoff protocols between agents
 
 ---
 

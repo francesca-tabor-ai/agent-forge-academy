@@ -10,12 +10,12 @@ order: 7
 **Duration:** Week 7  
 **Theme:** Closing the Loop  
 **Learning Objectives:**
-- Ensure persona insights improve AI recommendations
-- Align growth efforts with AI visibility infrastructure
-- Update content and product truth layers
-- Create persona-based intent clusters
-- Avoid fragmentation across teams
-- Measure AI recommendation frequency by persona
+- **Ensure Persona**: Ensure persona insights improve AI recommendations
+- **Align Growth**: Align growth efforts with AI visibility infrastructure
+- **Update Content**: Update content and product truth layers
+- **persona-based intent clusters Development**: Create persona-based intent clusters
+- **Avoid Fragmentation**: Avoid fragmentation across teams
+- **Measure Ai**: Measure AI recommendation frequency by persona
 
 ---
 
@@ -614,20 +614,20 @@ Create a feedback loop that feeds persona insights back into AI visibility syste
 
 **Key Takeaways:**
 
-1. **Truth Layer Updates:** Updating content and product truth layers with persona-aligned information improves AI visibility and recommendation frequency.
+- **Truth Layer Updates:**: Updating content and product truth layers with persona-aligned information improves AI visibility and recommendation frequency
 
-2. **Intent Clusters:** Creating persona-based intent clusters helps AI systems understand persona needs and improves recommendation accuracy.
+- **Intent Clusters:**: Creating persona-based intent clusters helps AI systems understand persona needs and improves recommendation accuracy
 
-3. **Team Alignment:** Preventing fragmentation across teams through centralized definitions, consistent messaging, and aligned strategies improves AI visibility.
+- **Team Alignment:**: Preventing fragmentation across teams through centralized definitions, consistent messaging, and aligned strategies improves AI visibility
 
-4. **Measurement:** Measuring AI recommendation frequency by persona, intent, and content helps identify opportunities and optimize efforts.
+- **Measurement:**: Measuring AI recommendation frequency by persona, intent, and content helps identify opportunities and optimize efforts
 
-5. **Feedback Loop:** Creating a systematic feedback loop that feeds persona insights back into AI visibility systems ensures continuous improvement.
+- **Feedback Loop:**: Creating a systematic feedback loop that feeds persona insights back into AI visibility systems ensures continuous improvement
 
 **Next Steps:**
-- Module 8: Learn to measure persona-level impact credibly
-- Understand persona-level conversion and retention
-- Build skills in persona monetisation measurement
+- **Module 8:**: Module 8: Learn to measure persona-level impact credibly
+- **persona-level conversion and retention Understanding**: Understand persona-level conversion and retention
+- **skills in persona monetisation measurement Development**: Build skills in persona monetisation measurement
 
 ---
 

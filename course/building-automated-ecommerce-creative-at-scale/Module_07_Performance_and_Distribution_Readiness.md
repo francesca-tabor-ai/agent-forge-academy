@@ -12,11 +12,11 @@ email_action: "Apply to Meta ads, TikTok variations, seasonal storefront refresh
 
 **Duration:** Week 7  
 **Learning Objectives:**
-- Balance creative volume vs creative diversity
-- Localize without reshoots
-- Plan aspect ratios & placements
-- Feed paid media systems at scale
-- Apply to real-world use cases
+- **Balance Creative**: Balance creative volume vs creative diversity
+- **Localize Without**: Apply localize without reshoots in relevant contexts
+- **Plan Aspect**: Plan aspect ratios & placements
+- **Feed Paid**: Feed paid media systems at scale
+- **Apply To**: Apply to real-world use cases
 
 ---
 

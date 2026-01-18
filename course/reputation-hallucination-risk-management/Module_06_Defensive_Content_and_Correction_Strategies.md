@@ -11,12 +11,12 @@ order: 6
 
 **Duration:** Week 6  
 **Learning Objectives:**
-- Learn how to correct AI misinformation indirectly but effectively
-- Avoid overreaction that amplifies risk
-- Understand defensive content patterns that AI respects
-- Know when to publish clarifications vs updates vs comparisons
-- Learn authority reinforcement strategies
-- Avoid the "Streisand effect" in AI contexts
+- **how to correct AI misinformation indirectly but effectively Understanding**: Learn how to correct AI misinformation indirectly but effectively
+- **Avoid Overreaction**: Avoid overreaction that amplifies risk
+- **defensive content patterns that AI respects Understanding**: Understand defensive content patterns that AI respects
+- **Know When**: Know when to publish clarifications vs updates vs comparisons
+- **authority reinforcement strategies Understanding**: Learn authority reinforcement strategies
+- **Avoid The**: Avoid the "Streisand effect" in AI contexts
 
 ---
 
@@ -576,9 +576,9 @@ In this module, you've learned:
 **Key Takeaway:** Effective correction requires a calibrated approach that matches response intensity to error severity. Defensive content and authority reinforcement prevent errors proactively, while correction playbooks ensure effective response when errors occur.
 
 **Next Steps:**
-- Complete Lab 6: AI Correction Playbook
-- Review Module 7: Legal, Regulatory & Escalation Protocols
-- Begin developing your correction playbooks and defensive content strategy
+- **Complete Lab**: Complete Lab 6: AI Correction Playbook
+- **Review Module**: Review Module 7: Legal, Regulatory & Escalation Protocols
+- **Begin Developing**: Begin developing your correction playbooks and defensive content strategy
 
 ---
 

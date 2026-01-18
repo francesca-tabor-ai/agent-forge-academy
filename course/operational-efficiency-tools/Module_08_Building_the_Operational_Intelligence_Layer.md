@@ -9,10 +9,10 @@ order: 8
 
 **Duration:** Week 8  
 **Learning Objectives:**
-- Integrate NLI and AI-PDD into core systems
-- Measure impact: time saved, errors reduced
-- Scale across teams and jurisdictions
-- Plan future roadmap: self-service operations at scale
+- **NLI Integration**: Integrate NLI and AI-PDD into core systems
+- **Measure Impact:**: Measure impact: time saved, errors reduced
+- **Scale Across**: Scale across teams and jurisdictions
+- **Plan Future**: Plan future roadmap: self-service operations at scale
 
 ---
 
@@ -232,10 +232,10 @@ Design a complete Operational Efficiency Toolset combining Natural Language Data
 
 ## Key Takeaways
 
-- Integrating NLI and AI-PDD creates a unified operational intelligence platform
-- Measuring impact demonstrates value and guides improvement
-- Scaling across teams and jurisdictions enables organization-wide efficiency
-- Future roadmap includes self-service operations and continuous automation
+- **Integrating Nli**: Integrating NLI and AI-PDD creates a unified operational intelligence platform
+- **Measuring Impact**: Measuring impact demonstrates value and guides improvement
+- **Scaling Across**: Scaling across teams and jurisdictions enables organization-wide efficiency
+- **Future Roadmap**: Future roadmap includes self-service operations and continuous automation
 
 ---
 

@@ -14,10 +14,10 @@ email_action: "Build a production ML system with serving, features, monitoring, 
 
 **Duration:** Weeks 9-10  
 **Learning Objectives:**
-- Design and implement a complete production ML system
-- Integrate all course concepts
-- Demonstrate system reliability
-- Pass production readiness defense
+- **and implement a complete production ML Development**: Design and implement a complete production ML system
+- **all course concepts Integration**: Integrate all course concepts
+- **Demonstrate System**: Apply demonstrate system reliability in relevant contexts
+- **Pass Production**: Pass production readiness defense
 
 ---
 
@@ -503,22 +503,22 @@ project/
 
 ## Next Steps
 
-1. **Choose Your Project**
+- **Choose Your Project**: Select use case - Review requirements - Plan timeline - Select use case - Review requirements - Plan timeline - Select use case - Review requirements - Plan timeline - Select use case - Review requirements - Plan timeline
    - Select use case
    - Review requirements
    - Plan timeline
 
-2. **Start Designing**
+- **Start Designing**: Architecture design - Technology selection - Implementation plan - Architecture design - Technology selection - Implementation plan - Architecture design - Technology selection - Implementation plan - Architecture design - Technology selection - Implementation plan
    - Architecture design
    - Technology selection
    - Implementation plan
 
-3. **Begin Implementation**
+- **Begin Implementation**: Set up repository - Build core components - Iterate and improve - Set up repository - Build core components - Iterate and improve - Set up repository - Build core components - Iterate and improve - Set up repository - Build core components - Iterate and improve
    - Set up repository
    - Build core components
    - Iterate and improve
 
-4. **Prepare for Defense**
+- **Prepare for Defense**: Complete documentation - Practice presentation - Prepare for questions - Complete documentation - Practice presentation - Prepare for questions - Complete documentation - Practice presentation - Prepare for questions - Complete documentation - Practice presentation - Prepare for questions
    - Complete documentation
    - Practice presentation
    - Prepare for questions

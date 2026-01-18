@@ -14,10 +14,10 @@ Simple prompts work for straightforward tasks, but complex reasoning requires so
 
 ## Learning Objectives
 
-- Implement Chain of Thought (CoT) prompting for step-by-step reasoning
-- Apply Self-Consistency through multiple sampling and voting
-- Use Step-Back prompting to activate general principles
-- Design Tree of Thoughts (ToT) frameworks for deliberate problem-solving
+- **Chain of Thought (CoT) prompting for step-by-step reasoning Implementation**: Implement Chain of Thought (CoT) prompting for step-by-step reasoning
+- **Apply Self-Consistency**: Apply Self-Consistency through multiple sampling and voting
+- **Use Step-Back**: Use Step-Back prompting to activate general principles
+- **Tree of Thoughts (ToT) frameworks for deliberate problem-solving Development**: Design Tree of Thoughts (ToT) frameworks for deliberate problem-solving
 
 ---
 
@@ -431,10 +431,10 @@ Problem: [Your problem]"
 
 ### Key Takeaways
 
-1. **Chain of Thought**: Force explicit reasoning with "think step-by-step"
-2. **Self-Consistency**: Generate multiple solutions and vote
-3. **Step-Back**: Consider general principles before specific problems
-4. **Tree of Thoughts**: Explore multiple reasoning paths simultaneously
+- **Chain of Thought**: Force explicit reasoning with "think step-by-step"
+- **Self-Consistency**: Generate multiple solutions and vote
+- **Step-Back**: Consider general principles before specific problems
+- **Tree of Thoughts**: Explore multiple reasoning paths simultaneously
 
 ### Technique Selection Guide
 
@@ -448,9 +448,9 @@ Problem: [Your problem]"
 
 ### Next Steps
 
-- Practice implementing each technique on problems in your domain
-- Experiment with combining techniques
-- Move to Module 4 to learn about agentic systems and tool integration
+- **Practice Implementing**: Practice implementing each technique on problems in your domain
+- **Experiment With**: Experiment with combining techniques
+- **Move To**: Move to Module 4 to learn about agentic systems and tool integration
 
 ---
 

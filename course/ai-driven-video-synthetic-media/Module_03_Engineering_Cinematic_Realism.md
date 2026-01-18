@@ -10,10 +10,10 @@ order: 3
 **Duration:** Week 3  
 **Tool Focus:** CinePrompt  
 **Learning Objectives:**
-- Replace artistic adjectives with technical optical parameters
-- Control motion physics for viewer trust
-- Enforce visual grammar for information delivery
-- Mitigate the "Uncanny Valley" through technical precision
+- **Replace Artistic**: Replace artistic adjectives with technical optical parameters
+- **Control Motion**: Control motion physics for viewer trust
+- **Enforce Visual**: Enforce visual grammar for information delivery
+- **Mitigate The**: Mitigate the "Uncanny Valley" through technical precision
 
 ---
 
@@ -657,22 +657,22 @@ class VisualHierarchyEnforcer:
 ## Key Takeaways
 
 **Optical Parameters:**
-- Replace descriptive prompts with technical JSON parameters
-- F-stop controls depth of field and bokeh
-- Focal length affects perspective and distortion
-- Physically accurate parameters produce consistent results
+- **Replace Descriptive**: Replace descriptive prompts with technical JSON parameters
+- **F-Stop Controls**: F-stop controls depth of field and bokeh
+- **Focal Length**: Focal length affects perspective and distortion
+- **Physically Accurate**: Physically accurate parameters produce consistent results
 
 **Motion Constraints:**
-- Static cameras increase viewer trust
-- Neutral lighting ensures stability
-- Global motion constraints prevent uncanny effects
-- Stability creates professional appearance
+- **Static Cameras**: Static cameras increase viewer trust
+- **Neutral Lighting**: Neutral lighting ensures stability
+- **Global Motion**: Global motion constraints prevent uncanny effects
+- **Stability Creates**: Stability creates professional appearance
 
 **Visual Grammar:**
-- Locked camera distances ensure consistency
-- Fixed body postures create predictability
-- Information-first design prioritizes content
-- Speaking diagrams deliver information clearly
+- **Locked Camera**: Locked camera distances ensure consistency
+- **Fixed Body**: Fixed body postures create predictability
+- **Information-First Design**: Information-first design prioritizes content
+- **Speaking Diagrams**: Speaking diagrams deliver information clearly
 
 ---
 

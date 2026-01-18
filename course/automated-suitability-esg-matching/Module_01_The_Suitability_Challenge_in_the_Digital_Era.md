@@ -9,11 +9,11 @@ order: 1
 
 **Duration:** Week 1  
 **Learning Objectives:**
-- Understand why traditional suitability frameworks break down at scale
-- Identify cognitive overload challenges in advisory workflows
-- Learn the evolution from manual questionnaires to algorithmic matching
-- Recognize the gap between regulatory expectations and real-world workflows
-- Understand the shift from "product push" to "preference-led advice"
+- **why traditional suitability frameworks break down at scale Understanding**: Understand why traditional suitability frameworks break down at scale
+- **Identify Cognitive**: Identify cognitive overload challenges in advisory workflows
+- **the evolution from manual questionnaires to algorithmic matching Understanding**: Learn the evolution from manual questionnaires to algorithmic matching
+- **Recognize The**: Recognize the gap between regulatory expectations and real-world workflows
+- **the shift from "product push" to "preference-led advice" Understanding**: Understand the shift from "product push" to "preference-led advice"
 
 ---
 
@@ -235,11 +235,11 @@ Client Communication
 
 ## Key Takeaways
 
-- Traditional suitability frameworks break down at scale due to cognitive overload and manual processes
-- Algorithmic matching enables scalability while maintaining regulatory compliance
-- There's a significant gap between regulatory expectations and real-world advisory workflows
-- The industry is shifting from product-push to preference-led advice models
-- Automation is essential for digital advisory platforms to operate at scale
+- **Traditional Suitability**: Traditional suitability frameworks break down at scale due to cognitive overload and manual processes
+- **Algorithmic Matching**: Algorithmic matching enables scalability while maintaining regulatory compliance
+- **There'S A**: There's a significant gap between regulatory expectations and real-world advisory workflows
+- **The Industry**: The industry is shifting from product-push to preference-led advice models
+- **Automation Is**: Automation is essential for digital advisory platforms to operate at scale
 
 ---
 

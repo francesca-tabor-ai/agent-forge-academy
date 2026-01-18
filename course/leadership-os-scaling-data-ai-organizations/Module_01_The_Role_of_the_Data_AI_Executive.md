@@ -10,11 +10,11 @@ order: 1
 **Duration:** Week 1  
 **Theme:** From technical leader to enterprise leader  
 **Learning Objectives:**
-- Understand the evolution of the Data & AI leadership role
-- Differentiate between owning outcomes vs delivering capabilities
-- Learn how to partner effectively with Product, Engineering, Finance, and Operations
-- Recognize Data & AI as a competitive advantage
-- Identify and avoid common leadership failure modes
+- **the evolution of the Data & AI leadership role Understanding**: Understand the evolution of the Data & AI leadership role
+- **between owning outcomes Analysis**: Differentiate between owning outcomes vs delivering capabilities
+- **how to partner effectively with Product, Engineering, Finance, and Operations Understanding**: Learn how to partner effectively with Product, Engineering, Finance, and Operations
+- **Recognize Data**: Recognize Data & AI as a competitive advantage
+- **Identify And**: Identify and avoid common leadership failure modes
 
 ---
 
@@ -461,20 +461,20 @@ Evaluate your current leadership scope and identify gaps relative to enterprise-
 
 **Key Takeaways:**
 
-1. **Evolution:** Data & AI leadership has evolved from technical management to strategic business leadership.
+- **Evolution:**: Data & AI leadership has evolved from technical management to strategic business leadership
 
-2. **Outcomes Over Capabilities:** Focus on business outcomes, not just technical delivery. Own the result, not just the project.
+- **Outcomes Over Capabilities:**: Focus on business outcomes, not just technical delivery. Own the result, not just the project
 
-3. **Partnerships:** Success requires deep partnerships with Product, Engineering, Finance, and Operations. Build these relationships proactively.
+- **Partnerships:**: Success requires deep partnerships with Product, Engineering, Finance, and Operations. Build these relationships proactively
 
-4. **Competitive Advantage:** Position data & AI as a competitive differentiator, not a cost center. Build moats through data, models, platforms, and organization.
+- **Competitive Advantage:**: Position data & AI as a competitive differentiator, not a cost center. Build moats through data, models, platforms, and organization
 
-5. **Failure Modes:** Avoid common pitfalls: technical tunnel vision, over-promising, isolation, neglecting talent, inability to scale, poor communication.
+- **Failure Modes:**: Avoid common pitfalls: technical tunnel vision, over-promising, isolation, neglecting talent, inability to scale, poor communication
 
 **Next Steps:**
-- Module 2: Learn how to design data & AI strategies aligned to business goals
-- Understand horizon planning and build vs buy decisions
-- Align GenAI, ML, analytics, and platforms
+- **Module 2:**: Module 2: Learn how to design data & AI strategies aligned to business goals
+- **horizon planning and build vs buy decisions Understanding**: Understand horizon planning and build vs buy decisions
+- **Align Genai,**: Align GenAI, ML, analytics, and platforms
 
 ---
 

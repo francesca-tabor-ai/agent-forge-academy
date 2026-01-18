@@ -13,11 +13,11 @@ email_action: "Assess your platform adoption: what's your current usage? What ba
 **Theme:** *Platforms succeed through adoption*
 
 **Learning Objectives:**
-- Understand platform team structures and responsibilities
-- Design self-service vs managed capabilities
-- Master developer experience and documentation
-- Measure platform success and adoption
-- Plan roadmapping and platform evolution
+- **platform team structures and responsibilities Understanding**: Understand platform team structures and responsibilities
+- **self-service vs managed capabilities Development**: Design self-service vs managed capabilities
+- **developer experience and documentation Understanding**: Master developer experience and documentation
+- **Measure Platform**: Measure platform success and adoption
+- **Plan Roadmapping**: Plan roadmapping and platform evolution
 
 ---
 
@@ -862,11 +862,11 @@ A platform operating model that includes:
 
 ### Key Takeaways
 
-1. **Platform team structure** must match organization size and needs
-2. **Self-service vs managed** requires balance based on complexity and risk
-3. **Developer experience** is critical for adoption
-4. **Success metrics** must measure adoption, quality, and impact
-5. **Roadmapping** requires balancing user needs, business priorities, and technical evolution
+- **Platform team structure**: Must match organization size and needs
+- **Self-service vs managed**: Requires balance based on complexity and risk
+- **Developer experience**: Is critical for adoption
+- **Success metrics**: Must measure adoption, quality, and impact
+- **Roadmapping**: Requires balancing user needs, business priorities, and technical evolution
 
 ### Next Steps
 

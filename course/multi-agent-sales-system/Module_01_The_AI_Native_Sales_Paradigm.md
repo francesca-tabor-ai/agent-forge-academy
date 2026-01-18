@@ -12,12 +12,12 @@ email_action: "Decompose your current sales org into tasks, decisions, and signa
 
 **Duration:** Week 1  
 **Learning Objectives:**
-- Understand why traditional sales orgs break at scale
-- Reframe sales as an agentic system, not a department
-- Define what "hyper-specialisation" actually means in AI terms
-- Learn the economics of agents vs humans
-- Understand the "background execution" principle
-- Map sales as a graph of decisions, not roles
+- **why traditional sales orgs break at scale Understanding**: Understand why traditional sales orgs break at scale
+- **Reframe Sales**: Reframe sales as an agentic system, not a department
+- **Define What**: Define what "hyper-specialisation" actually means in AI terms
+- **the economics of agents vs humans Understanding**: Learn the economics of agents vs humans
+- **the "background execution" principle Understanding**: Understand the "background execution" principle
+- **Map Sales**: Map sales as a graph of decisions, not roles
 
 ---
 

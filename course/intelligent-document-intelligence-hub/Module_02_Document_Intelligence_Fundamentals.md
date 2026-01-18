@@ -9,10 +9,10 @@ order: 2
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Understand OCR for scanned and non-printable documents
-- Learn Natural Language Processing (NLP) for financial text
-- Master table extraction and layout awareness
-- Handle challenges with legal and regulatory language
+- **OCR for scanned and non-printable documents Understanding**: Understand OCR for scanned and non-printable documents
+- **Natural Language Processing Understanding**: Learn Natural Language Processing (NLP) for financial text
+- **table extraction and layout awareness Understanding**: Master table extraction and layout awareness
+- **Handle Challenges**: Handle challenges with legal and regulatory language
 
 ---
 
@@ -266,11 +266,11 @@ Compare human and AI extraction of key prospectus sections to understand strengt
 
 ## Key Takeaways
 
-- OCR technologies enable processing of scanned and non-printable documents
-- Financial NLP requires domain-specific models and terminology
-- Table extraction and layout awareness are critical for structured data
-- Legal and regulatory language presents unique challenges requiring contextual understanding
-- Human and AI extraction have complementary strengths
+- **Ocr Technologies**: OCR technologies enable processing of scanned and non-printable documents
+- **Financial Nlp**: Financial NLP requires domain-specific models and terminology
+- **Table Extraction**: Table extraction and layout awareness are critical for structured data
+- **Legal And**: Legal and regulatory language presents unique challenges requiring contextual understanding
+- **Human And**: Human and AI extraction have complementary strengths
 
 ---
 

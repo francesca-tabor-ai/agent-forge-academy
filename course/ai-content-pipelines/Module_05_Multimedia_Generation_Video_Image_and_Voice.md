@@ -9,10 +9,10 @@ order: 5
 
 **Duration:** Week 5  
 **Learning Objectives:**
-- Achieve visual consistency using character references and mood boards
-- Build AI video pipelines with Runway, Sora, and Seed Dance
-- Implement speech-to-speech voice generation for authentic voiceovers
-- Create complete multimedia content pipelines
+- **Achieve Visual**: Achieve visual consistency using character references and mood boards
+- **AI video Development**: Build AI video pipelines with Runway, Sora, and Seed Dance
+- **speech-to-speech voice generation for authentic voiceovers Implementation**: Implement speech-to-speech voice generation for authentic voiceovers
+- **complete multimedia content Development**: Create complete multimedia content pipelines
 
 ---
 

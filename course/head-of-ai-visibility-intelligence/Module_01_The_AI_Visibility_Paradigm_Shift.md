@@ -10,10 +10,10 @@ order: 1
 
 **Duration:** Week 1  
 **Learning Objectives:**
-- Understand why AI visibility is a new category, not an SEO extension
-- Reframe marketing from "traffic acquisition" to "answer inclusion"
-- Recognize the collapse of traditional marketing silos
-- Differentiate between human-facing and AI-facing content
+- **why AI visibility is a new category, not an SEO extension Understanding**: Understand why AI visibility is a new category, not an SEO extension
+- **Reframe Marketing**: Reframe marketing from "traffic acquisition" to "answer inclusion"
+- **Recognize The**: Recognize the collapse of traditional marketing silos
+- **between human-facing Analysis**: Differentiate between human-facing and AI-facing content
 
 ---
 
@@ -337,15 +337,15 @@ Create a comprehensive map of your brand's current AI visibility landscape to id
 
 ## Key Takeaways
 
-- **AI visibility is a new category:** Not SEO 2.0, but a fundamental shift in how brands are discovered and perceived
+- **AI visibility is a new category:**: Not SEO 2.0, but a fundamental shift in how brands are discovered and perceived
 
-- **Rankings disappear:** Confidence and inclusion replace position-based metrics
+- **Rankings disappear:**: Confidence and inclusion replace position-based metrics
 
-- **Marketing silos collapse:** SEO, PR, content, and CRO all contribute to unified AI perception
+- **Marketing silos collapse:**: SEO, PR, content, and CRO all contribute to unified AI perception
 
-- **Human vs AI content matters:** Understanding the distinction enables dual optimization
+- **Human vs AI content matters:**: Understanding the distinction enables dual optimization
 
-- **System thinking required:** AI visibility is a system, not a tactic
+- **System thinking required:**: AI visibility is a system, not a tactic
 
 ---
 

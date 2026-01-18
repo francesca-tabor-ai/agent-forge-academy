@@ -11,12 +11,12 @@ order: 8
 
 **Duration:** Week 8  
 **Learning Objectives:**
-- Measure product content performance through an AI lens
-- Tie trust improvements to commercial outcomes
-- Understand AI product answer completeness score
-- Measure conversion uplift from AI-referred traffic
-- Track returns and negative review reduction
-- Use question coverage as a leading indicator
+- **Measure Product**: Measure product content performance through an AI lens
+- **Tie Trust**: Tie trust improvements to commercial outcomes
+- **AI product answer completeness score Understanding**: Understand AI product answer completeness score
+- **Measure Conversion**: Measure conversion uplift from AI-referred traffic
+- **Track Returns**: Track returns and negative review reduction
+- **Use Question**: Use question coverage as a leading indicator
 
 ---
 
@@ -443,16 +443,16 @@ In this module, you've learned:
 - **Question Coverage:** Leading indicator of commercial success
 
 **Key Takeaways:**
-- Measure content through an AI lens
-- Answer completeness predicts commercial success
-- AI traffic converts better when content is trustworthy
-- Question coverage is a leading indicator
-- Dashboard enables data-driven decisions
+- **Measure Content**: Measure content through an AI lens
+- **Answer Completeness**: Answer completeness predicts commercial success
+- **Ai Traffic**: AI traffic converts better when content is trustworthy
+- **Question Coverage**: Question coverage is a leading indicator
+- **Dashboard Enables**: Dashboard enables data-driven decisions
 
 **Next Steps:**
-- Complete Lab 8: AI Product Content Dashboard
-- Review Module 9: Operating Model & Team Integration
-- Begin planning organizational implementation
+- **Complete Lab**: Complete Lab 8: AI Product Content Dashboard
+- **Review Module**: Review Module 9: Operating Model & Team Integration
+- **Begin Planning**: Begin planning organizational implementation
 
 ---
 

@@ -12,13 +12,13 @@ email_action: "Build an agent that detects pipeline anomalies and proposes fixes
 
 **Duration:** Week 5  
 **Learning Objectives:**
-- Turn RevOps into a self-healing system
-- Centralise truth without human bottlenecks
-- Automate competitive intelligence and monitoring
-- Understand CRM agents (HubSpot, Smartlead, Slack)
-- Learn data warehouse as memory, not storage
-- Implement competitive signal ingestion
-- Design agent-driven alerts and corrections
+- **Turn Revops**: Turn RevOps into a self-healing system
+- **Centralise Truth**: Centralise truth without human bottlenecks
+- **Automate Competitive**: Automate competitive intelligence and monitoring
+- **CRM agents Understanding**: Understand CRM agents (HubSpot, Smartlead, Slack)
+- **data warehouse as memory, not storage Understanding**: Learn data warehouse as memory, not storage
+- **competitive signal ingestion Implementation**: Implement competitive signal ingestion
+- **agent-driven alerts and corrections Development**: Design agent-driven alerts and corrections
 
 ---
 

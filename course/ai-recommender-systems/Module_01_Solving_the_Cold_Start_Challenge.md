@@ -10,10 +10,10 @@ order: 1
 **Duration:** Week 1  
 **Startup Tool Focus:** ColdStart.ai  
 **Learning Objectives:**
-- Understand the three core cold start scenarios
-- Master preference elicitation strategies
-- Learn active learning techniques
-- Implement cross-domain recommendation systems
+- **the three core cold start scenarios Understanding**: Understand the three core cold start scenarios
+- **preference elicitation strategies Understanding**: Master preference elicitation strategies
+- **active learning techniques Understanding**: Learn active learning techniques
+- **cross-domain recommendation Implementation**: Implement cross-domain recommendation systems
 
 ---
 
@@ -917,15 +917,15 @@ Build a cold start recommendation system using preference elicitation and active
 
 **Key Takeaways:**
 
-1. **Cold Start has three forms:** New users, new items, new systems
-2. **Preference elicitation is critical:** Onboarding surveys, rating prompts, demographics
-3. **Active learning accelerates learning:** Select informative items to rate
-4. **Cross-domain transfer helps:** Leverage data from related domains
+- **Cold Start has three forms:**: New users, new items, new systems
+- **Preference elicitation is critical:**: Onboarding surveys, rating prompts, demographics
+- **Active learning accelerates learning:**: Select informative items to rate
+- **Cross-domain transfer helps:**: Leverage data from related domains
 
 **Next Steps:**
-- Module 2: Collaborative Filtering & Matrix Factorization
-- Learn how to work with interaction matrices
-- Master similarity-based recommendation algorithms
+- **Module 2:**: Module 2: Collaborative Filtering & Matrix Factorization
+- **how to work with interaction matrices Understanding**: Learn how to work with interaction matrices
+- **similarity-based recommendation algorithms Understanding**: Master similarity-based recommendation algorithms
 
 ---
 

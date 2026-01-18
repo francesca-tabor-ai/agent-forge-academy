@@ -11,11 +11,11 @@ order: 6
 
 **Duration:** Week 6  
 **Learning Objectives:**
-- Codify learnings into repeatable playbooks
-- Create assets that are hard for competitors to copy
-- Structure playbooks for maximum value
-- Develop update and governance models
-- Complete a Draft Vertical AI Visibility Playbook
+- **Codify Learnings**: Codify learnings into repeatable playbooks
+- **assets that are hard for competitors to copy Development**: Create assets that are hard for competitors to copy
+- **Structure Playbooks**: Structure playbooks for maximum value
+- **update and governance models Development**: Develop update and governance models
+- **Complete A**: Complete a Draft Vertical AI Visibility Playbook
 
 ---
 
@@ -527,11 +527,11 @@ Create a comprehensive, defensible vertical AI visibility playbook that codifies
 
 ## Key Takeaways
 
-- **Four pillars are essential:** Rewards, suppression, conversion, and risk
-- **Defensible IP matters:** Proprietary insights create competitive advantage
-- **Playbooks must evolve:** Update processes are critical
-- **Protection is necessary:** Information security and competitive defense
-- **Governance ensures sustainability:** Update and approval processes
+- **Four pillars are essential:**: Rewards, suppression, conversion, and risk
+- **Defensible IP matters:**: Proprietary insights create competitive advantage
+- **Playbooks must evolve:**: Update processes are critical
+- **Protection is necessary:**: Information security and competitive defense
+- **Governance ensures sustainability:**: Update and approval processes
 
 ---
 

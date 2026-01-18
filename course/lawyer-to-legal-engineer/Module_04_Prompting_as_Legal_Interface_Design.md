@@ -9,11 +9,11 @@ order: 4
 
 **Duration:** Week 4  
 **Learning Objectives:**
-- Understand prompts as instructions, constraints, and contracts
-- Master role prompting and structured outputs
-- Control reasoning and verbosity
-- Implement prompt testing, versioning, and regression
-- Design effective prompts for legal use cases
+- **prompts as instructions, constraints, and contracts Understanding**: Understand prompts as instructions, constraints, and contracts
+- **role prompting and structured outputs Understanding**: Master role prompting and structured outputs
+- **Control Reasoning**: Control reasoning and verbosity
+- **prompt testing, versioning, and regression Implementation**: Implement prompt testing, versioning, and regression
+- **effective prompts for legal use cases Development**: Design effective prompts for legal use cases
 
 ---
 
@@ -390,15 +390,15 @@ Design, test, version, and evaluate prompts for a legal use case, implementing b
 
 ## Key Takeaways
 
-1. **Prompts serve three roles: instructions, constraints, and contracts** - design them accordingly.
+- **Prompts serve three roles: instructions, constraints, and contracts**: Design them accordingly
 
-2. **Role prompting and structured outputs** create consistent, reliable results.
+- **Role prompting and structured outputs**: Create consistent, reliable results
 
-3. **Control reasoning and verbosity** based on use case and audience needs.
+- **Control reasoning and verbosity**: Based on use case and audience needs
 
-4. **Prompt testing, versioning, and regression** are essential for production systems.
+- **Prompt testing, versioning, and regression**: Are essential for production systems
 
-5. **Treat prompts as code** - test, version, and maintain them systematically.
+- **Treat prompts as code**: Test, version, and maintain them systematically
 
 ---
 
@@ -419,10 +419,10 @@ Design, test, version, and evaluate prompts for a legal use case, implementing b
 
 ## Next Steps
 
-- Complete Lab 4
-- Review Module 5: Legal Knowledge Retrieval and Grounding
-- Join course discussion forum
-- Attend office hours if you have questions
+- **Complete Lab**: Apply complete lab 4 in relevant contexts
+- **Review Module**: Review Module 5: Legal Knowledge Retrieval and Grounding
+- **Join Course**: Join course discussion forum
+- **Attend Office**: Attend office hours if you have questions
 
 ---
 

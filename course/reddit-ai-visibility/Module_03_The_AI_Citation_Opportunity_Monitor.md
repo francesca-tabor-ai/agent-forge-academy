@@ -9,10 +9,10 @@ order: 3
 
 **Duration:** Week 3  
 **Learning Objectives:**
-- Set up intelligent scanning with Mastra framework
-- Classify Reddit posts into opportunity types
-- Generate compliance-aware responses with GPT-5
-- Integrate human-in-the-loop workflows with Slack
+- **intelligent scanning with Mastra framework Implementation**: Set up intelligent scanning with Mastra framework
+- **Classify Reddit**: Classify Reddit posts into opportunity types
+- **Generate Compliance-Aware**: Generate compliance-aware responses with GPT-5
+- **human-in-the-loop workflows Integration**: Integrate human-in-the-loop workflows with Slack
 
 ---
 

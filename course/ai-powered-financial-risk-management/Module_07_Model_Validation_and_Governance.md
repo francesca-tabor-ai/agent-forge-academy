@@ -9,10 +9,10 @@ order: 7
 
 **Duration:** Week 7  
 **Learning Objectives:**
-- Understand model risk management framework
-- Implement backtesting and performance monitoring
-- Design model governance processes
-- Ensure regulatory compliance
+- **model risk management framework Understanding**: Understand model risk management framework
+- **backtesting and performance monitoring Implementation**: Implement backtesting and performance monitoring
+- **model governance processes Development**: Design model governance processes
+- **Ensure Regulatory**: Apply ensure regulatory compliance in relevant contexts
 
 ---
 
@@ -78,10 +78,10 @@ Build a comprehensive model validation and governance system.
 
 ## Key Takeaways
 
-- Model validation is critical for regulatory compliance
-- Continuous monitoring is essential
-- Documentation must be comprehensive
-- Governance processes ensure model quality
+- **Model Validation**: Model validation is critical for regulatory compliance
+- **Continuous Monitoring**: Continuous monitoring is essential
+- **Documentation Must**: Documentation must be comprehensive
+- **Governance Processes**: Governance processes ensure model quality
 
 ---
 

@@ -9,10 +9,10 @@ order: 3
 
 **Duration:** Week 3  
 **Learning Objectives:**
-- Calculate financial ratios automatically
-- Perform trend analysis
-- Benchmark against industry
-- Generate ratio reports
+- **Calculate Financial**: Calculate financial ratios automatically
+- **Perform Trend**: Apply perform trend analysis in relevant contexts
+- **Benchmark Against**: Apply benchmark against industry in relevant contexts
+- **Generate Ratio**: Apply generate ratio reports in relevant contexts
 
 ---
 

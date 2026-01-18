@@ -9,10 +9,10 @@ order: 2
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Build clear ontologies for core entities
-- Create controlled taxonomies to eliminate ambiguity
-- Design evidence graphs that separate facts, patterns, and anecdotes
-- Understand how structure enables machine intelligence
+- **clear ontologies for core entities Development**: Build clear ontologies for core entities
+- **controlled taxonomies to eliminate ambiguity Development**: Create controlled taxonomies to eliminate ambiguity
+- **evidence graphs that separate facts, patterns, and anecdotes Development**: Design evidence graphs that separate facts, patterns, and anecdotes
+- **how structure enables machine intelligence Understanding**: Understand how structure enables machine intelligence
 
 ---
 
@@ -860,13 +860,13 @@ Product X appears to be a good choice. Individual experiences vary.
 
 ## Key Takeaways
 
-1. **Ontologies define reality** - They tell machines what exists and what can happen
-2. **Taxonomies eliminate ambiguity** - Controlled vocabularies prevent silent failures
-3. **Evidence graphs separate knowledge types** - Facts, patterns, and anecdotes serve different purposes
-4. **Structure enables intelligence** - Clear organization helps machines reason accurately
-5. **Machine-readable formats matter** - JSON-LD, RDF, and SKOS enable AI comprehension
-6. **Validation prevents errors** - Enforcing ontologies and taxonomies catches mistakes early
-7. **Version control is essential** - Knowledge evolves, track changes
+- **Ontologies define reality**: They tell machines what exists and what can happen
+- **Taxonomies eliminate ambiguity**: Controlled vocabularies prevent silent failures
+- **Evidence graphs separate knowledge types**: Facts, patterns, and anecdotes serve different purposes
+- **Structure enables intelligence**: Clear organization helps machines reason accurately
+- **Machine-readable formats matter**: JSON-LD, RDF, and SKOS enable AI comprehension
+- **Validation prevents errors**: Enforcing ontologies and taxonomies catches mistakes early
+- **Version control is essential**: Knowledge evolves, track changes
 
 ---
 
@@ -894,10 +894,10 @@ Product X appears to be a good choice. Individual experiences vary.
 ## Next Steps
 
 **After completing this module:**
-1. Review your ontology, taxonomy, and evidence graph
-2. Test with AI systems
-3. Refine based on feedback
-4. Move to [Module 3: Designing for Machine-First Interoperability](Module_03_Designing_for_Machine_First_Interoperability.md)
+- **Review Your Ontology,**: Review your ontology, taxonomy, and evidence graph
+- **Test With Systems**: Test with AI systems
+- **Refine Based Feedback**: Refine based on feedback
+- **Move [Module Designing**: Move to [Module 3: Designing for Machine-First Interoperability](Module_03_Designing_for_Machine_First_Interoperability.md)
 
 ---
 

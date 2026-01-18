@@ -9,11 +9,11 @@ order: 8
 
 **Duration:** Week 8  
 **Learning Objectives:**
-- Design workflow graphs and execution logic
-- Distinguish deterministic vs. agent-driven routing
-- Implement state persistence and auditability
-- Design systems lawyers can explain
-- Build orchestrated legal workflow systems
+- **workflow graphs and execution logic Development**: Design workflow graphs and execution logic
+- **deterministic Analysis**: Distinguish deterministic vs. agent-driven routing
+- **state persistence and auditability Implementation**: Implement state persistence and auditability
+- **systems lawyers can explain Development**: Design systems lawyers can explain
+- **orchestrated legal Development**: Build orchestrated legal workflow systems
 
 ---
 
@@ -374,15 +374,15 @@ Build an orchestrated legal workflow system with state persistence, auditability
 
 ## Key Takeaways
 
-1. **Workflow graphs represent legal processes** - design clear, understandable workflows.
+- **Workflow graphs represent legal processes**: Design clear, understandable workflows
 
-2. **Choose routing approach wisely** - deterministic for structure, agent-driven for flexibility, hybrid for balance.
+- **Choose routing approach wisely**: Deterministic for structure, agent-driven for flexibility, hybrid for balance
 
-3. **State persistence enables resumability and debugging** - essential for production systems.
+- **State persistence enables resumability and debugging**: Essential for production systems
 
-4. **Auditability is critical for legal systems** - maintain complete, queryable audit trails.
+- **Auditability is critical for legal systems**: Maintain complete, queryable audit trails
 
-5. **Explainability enables lawyer trust and professional responsibility** - design systems lawyers can explain.
+- **Explainability enables lawyer trust and professional responsibility**: Design systems lawyers can explain
 
 ---
 
@@ -404,10 +404,10 @@ Build an orchestrated legal workflow system with state persistence, auditability
 
 ## Next Steps
 
-- Complete Lab 8
-- Review Module 9: Evaluation, Testing, and Red-Teaming Legal AI
-- Join course discussion forum
-- Attend office hours if you have questions
+- **Complete Lab**: Apply complete lab 8 in relevant contexts
+- **Review Module**: Review Module 9: Evaluation, Testing, and Red-Teaming Legal AI
+- **Join Course**: Join course discussion forum
+- **Attend Office**: Attend office hours if you have questions
 
 ---
 

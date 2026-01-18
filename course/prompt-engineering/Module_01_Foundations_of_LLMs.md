@@ -14,10 +14,10 @@ Before you can effectively engineer prompts, you need to understand how Large La
 
 ## Learning Objectives
 
-- Understand LLMs as prediction engines
-- Master tokenization and context window limitations
-- Configure output parameters for desired results
-- Apply the Little Red Riding Hood Principle for stable completions
+- **LLMs as prediction engines Understanding**: Understand LLMs as prediction engines
+- **tokenization and context window limitations Understanding**: Master tokenization and context window limitations
+- **Configure Output**: Configure output parameters for desired results
+- **Apply The**: Apply the Little Red Riding Hood Principle for stable completions
 
 ---
 
@@ -251,17 +251,17 @@ This matches common educational content patterns in training data.
 
 ### Key Takeaways
 
-1. **LLMs are prediction engines** - They predict next tokens based on training patterns
-2. **Tokens are the currency** - Understand tokenization and context limits
-3. **Output parameters matter** - Temperature, Top-K, and Top-P control behavior
-4. **Pattern matching works** - Structure prompts like common training data
+- **LLMs are prediction engines**: They predict next tokens based on training patterns
+- **Tokens are the currency**: Understand tokenization and context limits
+- **Output parameters matter**: Temperature, Top-K, and Top-P control behavior
+- **Pattern matching works**: Structure prompts like common training data
 
 ### Next Steps
 
-- Practice estimating token counts for different texts
-- Experiment with temperature settings for different tasks
-- Rewrite prompts to match common educational patterns
-- Move to Module 2 to learn structured prompting frameworks
+- **Practice Estimating**: Practice estimating token counts for different texts
+- **Experiment With**: Experiment with temperature settings for different tasks
+- **Rewrite Prompts**: Rewrite prompts to match common educational patterns
+- **Move To**: Move to Module 2 to learn structured prompting frameworks
 
 ---
 

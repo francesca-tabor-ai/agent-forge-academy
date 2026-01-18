@@ -9,11 +9,11 @@ order: 1
 
 **Duration:** Week 1  
 **Learning Objectives:**
-- Understand why fund prospectuses exceed 300 pages
-- Recognize cognitive fatigue and hidden "red flags" in manual review
-- Distinguish between unstructured vs. structured fund information
-- Learn regulatory expectations for due diligence
-- Identify critical risk information in prospectus structure
+- **why fund prospectuses exceed 300 pages Understanding**: Understand why fund prospectuses exceed 300 pages
+- **Recognize Cognitive**: Recognize cognitive fatigue and hidden "red flags" in manual review
+- **between unstructured Analysis**: Distinguish between unstructured vs. structured fund information
+- **regulatory expectations for due diligence Understanding**: Learn regulatory expectations for due diligence
+- **Identify Critical**: Identify critical risk information in prospectus structure
 
 ---
 
@@ -302,11 +302,11 @@ Table of Contents
 
 ## Key Takeaways
 
-- Fund prospectuses exceed 300 pages due to regulatory requirements and information density
-- Human cognitive limitations lead to missed red flags and systematic errors
-- Unstructured narrative information requires different processing than structured data
-- Regulatory expectations demand comprehensive, documented due diligence
-- Critical risk information is often hidden in non-obvious locations
+- **Fund Prospectuses**: Fund prospectuses exceed 300 pages due to regulatory requirements and information density
+- **Human Cognitive**: Human cognitive limitations lead to missed red flags and systematic errors
+- **Unstructured Narrative**: Unstructured narrative information requires different processing than structured data
+- **Regulatory Expectations**: Regulatory expectations demand comprehensive, documented due diligence
+- **Critical Risk**: Critical risk information is often hidden in non-obvious locations
 
 ---
 

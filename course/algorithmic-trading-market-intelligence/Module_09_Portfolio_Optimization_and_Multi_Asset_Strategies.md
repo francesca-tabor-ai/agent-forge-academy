@@ -9,10 +9,10 @@ order: 9
 
 **Duration:** Week 9  
 **Learning Objectives:**
-- Construct multi-asset portfolios
-- Model cross-asset correlations
-- Implement factor models
-- Design risk parity strategies
+- **Construct Multi-Asset**: Apply construct multi-asset portfolios in relevant contexts
+- **Model Cross-Asset**: Apply model cross-asset correlations in relevant contexts
+- **factor models Implementation**: Implement factor models
+- **risk parity strategies Development**: Design risk parity strategies
 
 ---
 

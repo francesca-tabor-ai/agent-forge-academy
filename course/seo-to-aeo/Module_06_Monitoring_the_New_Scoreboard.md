@@ -12,9 +12,9 @@ Traditional SEO metrics like traffic and clicks are becoming less relevant in th
 
 ## Learning Objectives
 
-- Identify and track new KPIs for AI visibility
-- Monitor visibility decay and model volatility
-- Measure attribution in fragmented customer journeys
+- **Identify And**: Identify and track new KPIs for AI visibility
+- **Monitor Visibility**: Monitor visibility decay and model volatility
+- **Measure Attribution**: Measure attribution in fragmented customer journeys
 
 ---
 
@@ -574,8 +574,8 @@ Use analytics to identify:
 
 Monitoring AI visibility requires:
 
-1. **New KPIs**: AI Visibility Score, Citation Frequency, Mention Share, and more
-2. **Decay Tracking**: Monthly volatility monitoring to detect and prevent visibility loss
-3. **Fragmented Attribution**: Multi-touch models to measure AI's influence on conversions
+- **New KPIs**: AI Visibility Score, Citation Frequency, Mention Share, and more
+- **Decay Tracking**: Monthly volatility monitoring to detect and prevent visibility loss
+- **Fragmented Attribution**: Multi-touch models to measure AI's influence on conversions
 
 The new scoreboard focuses on visibility, citations, and influence rather than just traffic and clicks. Regular monitoring and proactive optimization are essential to maintain and grow AI visibility in this volatile landscape.

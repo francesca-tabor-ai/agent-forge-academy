@@ -11,11 +11,11 @@ order: 2
 **Theme:** *Turning data into answers*
 
 **Learning Objectives:**
-- Develop an analytical SQL mindset (vs transactional SQL)
-- Master time-based analysis and cohort tracking
-- Perform funnel analysis
-- Use window functions for trends and rankings
-- Avoid common SQL pitfalls in analytics
+- **an analytical SQL mindset (vs transactional SQL) Development**: Develop an analytical SQL mindset (vs transactional SQL)
+- **time-based analysis and cohort tracking Understanding**: Master time-based analysis and cohort tracking
+- **Perform Funnel**: Apply perform funnel analysis in relevant contexts
+- **Use Window**: Use window functions for trends and rankings
+- **Avoid Common**: Avoid common SQL pitfalls in analytics
 
 ---
 
@@ -805,12 +805,12 @@ For each query above:
 
 ## Key Takeaways
 
-1. **Analytical Mindset:** Think in aggregations and patterns, not individual rows
-2. **Time Functions:** Master date truncation, intervals, and time-based grouping
-3. **Cohort Analysis:** Track groups of users over time to understand retention
-4. **Funnel Analysis:** Identify drop-off points to optimize conversion
-5. **Window Functions:** Powerful tool for rankings, trends, and comparisons
-6. **Avoid Pitfalls:** Validate data, handle NULLs, avoid double counting
+- **Analytical Mindset:**: Think in aggregations and patterns, not individual rows
+- **Time Functions:**: Master date truncation, intervals, and time-based grouping
+- **Cohort Analysis:**: Track groups of users over time to understand retention
+- **Funnel Analysis:**: Identify drop-off points to optimize conversion
+- **Window Functions:**: Powerful tool for rankings, trends, and comparisons
+- **Avoid Pitfalls:**: Validate data, handle NULLs, avoid double counting
 
 ---
 

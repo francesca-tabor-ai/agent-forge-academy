@@ -9,10 +9,10 @@ order: 3
 
 **Duration:** Week 3  
 **Learning Objectives:**
-- Calculate Value at Risk (VaR) and Expected Shortfall (ES)
-- Implement AI-driven portfolio optimization
-- Build real-time risk monitoring systems
-- Design dynamic rebalancing strategies
+- **Calculate Value**: Calculate Value at Risk (VaR) and Expected Shortfall (ES)
+- **AI-driven portfolio optimization Implementation**: Implement AI-driven portfolio optimization
+- **real-time risk monitoring Development**: Build real-time risk monitoring systems
+- **dynamic rebalancing strategies Development**: Design dynamic rebalancing strategies
 
 ---
 
@@ -92,10 +92,10 @@ Create a portfolio optimization system with real-time risk monitoring.
 
 ## Key Takeaways
 
-- VaR and ES are fundamental market risk metrics
-- AI enhances portfolio optimization beyond traditional methods
-- Real-time monitoring is essential for active risk management
-- Dynamic rebalancing improves risk-adjusted returns
+- **Var And**: VaR and ES are fundamental market risk metrics
+- **Ai Enhances**: AI enhances portfolio optimization beyond traditional methods
+- **Real-Time Monitoring**: Real-time monitoring is essential for active risk management
+- **Dynamic Rebalancing**: Dynamic rebalancing improves risk-adjusted returns
 
 ---
 

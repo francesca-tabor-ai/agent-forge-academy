@@ -10,10 +10,10 @@ order: 6
 
 **Duration:** Week 6  
 **Learning Objectives:**
-- Decide what to fix, where, and how fast
-- Avoid content spam and misaligned fixes
-- Align fixes with AI trust mechanisms
-- Prioritize remediation efforts effectively
+- **Decide What**: Decide what to fix, where, and how fast
+- **Avoid Content**: Avoid content spam and misaligned fixes
+- **Align Fixes**: Align fixes with AI trust mechanisms
+- **Prioritize Remediation**: Prioritize remediation efforts effectively
 
 ---
 
@@ -516,15 +516,15 @@ Create a comprehensive remediation playbook with prioritization matrix to guide 
 
 ## Key Takeaways
 
-- **Four remediation categories:** Content gaps, product data gaps, evidence gaps, and PR/authority gaps require different approaches
+- **Four remediation categories:**: Content gaps, product data gaps, evidence gaps, and PR/authority gaps require different approaches
 
-- **Align fixes with AI trust:** Authority, recency, completeness, and consistency signals matter
+- **Align fixes with AI trust:**: Authority, recency, completeness, and consistency signals matter
 
-- **Avoid content spam:** Quality over quantity - comprehensive, authoritative, unique content
+- **Avoid content spam:**: Quality over quantity - comprehensive, authoritative, unique content
 
-- **Avoid misaligned fixes:** Root cause analysis ensures you fix the right thing, the right way, at the right time
+- **Avoid misaligned fixes:**: Root cause analysis ensures you fix the right thing, the right way, at the right time
 
-- **Prioritization matrix:** Impact × Speed × Risk framework enables effective resource allocation
+- **Prioritization matrix:**: Impact × Speed × Risk framework enables effective resource allocation
 
 ---
 

@@ -10,11 +10,11 @@ description: Data types, CDPs, and data governance for personalization
 
 By the end of this module, you will be able to:
 
-- Distinguish between first-party, second-party, and third-party data sources
-- Understand different types of customer data (behavioral, contextual, transactional, psychographic)
-- Evaluate Customer Data Platform (CDP) capabilities and use cases
-- Identify data quality, bias, and governance challenges
-- Design a customer data architecture for personalization
+- **between first-party, second-party, Analysis**: Distinguish between first-party, second-party, and third-party data sources
+- **different types of customer data Understanding**: Understand different types of customer data (behavioral, contextual, transactional, psychographic)
+- **Customer Data Platform (CDP) capabilities Evaluation**: Evaluate Customer Data Platform (CDP) capabilities and use cases
+- **Identify Data**: Identify data quality, bias, and governance challenges
+- **a customer data architecture for personalization Development**: Design a customer data architecture for personalization
 
 ## Introduction
 
@@ -414,11 +414,11 @@ Submit a data architecture diagram and 3-4 page document including:
 
 ## Key Takeaways
 
-- First-party data is becoming increasingly critical as third-party data becomes restricted
-- Different data types (behavioral, contextual, transactional, psychographic) serve different personalization purposes
-- CDPs provide the infrastructure to unify and activate customer data
-- Data quality, bias, and governance are critical considerations for responsible personalization
-- A well-designed data architecture is foundational to effective personalization
+- **First-Party Data**: First-party data is becoming increasingly critical as third-party data becomes restricted
+- **Different Data**: Different data types (behavioral, contextual, transactional, psychographic) serve different personalization purposes
+- **Cdps Provide**: CDPs provide the infrastructure to unify and activate customer data
+- **Data Quality,**: Data quality, bias, and governance are critical considerations for responsible personalization
+- **A Well-Designed**: A well-designed data architecture is foundational to effective personalization
 
 ## Additional Resources
 

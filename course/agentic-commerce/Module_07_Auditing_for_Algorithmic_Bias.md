@@ -9,10 +9,10 @@ order: 7
 
 **Duration:** Week 7  
 **Learning Objectives:**
-- Understand the ACES Framework for bias auditing
-- Identify position and ranking biases
-- Develop strategies to counteract model shocks
-- Build comprehensive bias detection and mitigation systems
+- **the ACES Framework for bias auditing Understanding**: Understand the ACES Framework for bias auditing
+- **Identify Position**: Identify position and ranking biases
+- **strategies to counteract model shocks Development**: Develop strategies to counteract model shocks
+- **comprehensive bias detection and mitigation Development**: Build comprehensive bias detection and mitigation systems
 
 ---
 
@@ -726,14 +726,14 @@ Conduct a comprehensive bias audit using the ACES framework, identifying positio
 
 ## Key Takeaways
 
-1. **ACES Framework:** Essential for bias auditing
-2. **Choice Homogeneity:** Reduces consumer choice
-3. **Competitive Neutrality:** Critical for fair markets
-4. **Position Bias:** Agents favor certain positions
-5. **Ranking Bias:** Agents favor top-ranked items
-6. **Tag Bias:** Agents favor tagged products
-7. **Model Shocks:** Can instantly reshuffle markets
-8. **Mitigation:** Requires proactive preparation and rapid response
+- **ACES Framework:**: Essential for bias auditing
+- **Choice Homogeneity:**: Reduces consumer choice
+- **Competitive Neutrality:**: Critical for fair markets
+- **Position Bias:**: Agents favor certain positions
+- **Ranking Bias:**: Agents favor top-ranked items
+- **Tag Bias:**: Agents favor tagged products
+- **Model Shocks:**: Can instantly reshuffle markets
+- **Mitigation:**: Requires proactive preparation and rapid response
 
 ---
 

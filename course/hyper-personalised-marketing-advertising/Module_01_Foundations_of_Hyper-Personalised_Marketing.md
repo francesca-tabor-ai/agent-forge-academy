@@ -10,11 +10,11 @@ description: Evolution from mass marketing to AI-powered personalization
 
 By the end of this module, you will be able to:
 
-- Trace the evolution from mass marketing to hyper-personalisation
-- Identify the limitations of traditional personalization approaches
-- Understand the role of AI in scaling relevance and automation
-- Map the modern personalization ecosystem
-- Conduct a personalization audit of a real brand or platform
+- **Trace The**: Trace the evolution from mass marketing to hyper-personalisation
+- **Identify The**: Identify the limitations of traditional personalization approaches
+- **the role of AI in scaling relevance and automation Understanding**: Understand the role of AI in scaling relevance and automation
+- **Map The**: Map the modern personalization ecosystem
+- **Conduct A**: Conduct a personalization audit of a real brand or platform
 
 ## Introduction
 
@@ -218,11 +218,11 @@ Submit a 2-3 page audit report including:
 
 ## Key Takeaways
 
-- Marketing has evolved from mass communication to individual-level personalization
-- Traditional approaches face scalability and adaptability limitations
-- AI enables real-time, automated personalization at scale
-- The modern ecosystem requires integrated data, AI, activation, and measurement layers
-- Personalization maturity varies significantly across brands and industries
+- **Marketing Has**: Marketing has evolved from mass communication to individual-level personalization
+- **Traditional Approaches**: Traditional approaches face scalability and adaptability limitations
+- **Ai Enables**: AI enables real-time, automated personalization at scale
+- **The Modern**: The modern ecosystem requires integrated data, AI, activation, and measurement layers
+- **Personalization Maturity**: Personalization maturity varies significantly across brands and industries
 
 ## Additional Resources
 

@@ -9,10 +9,10 @@ order: 3
 
 **Duration:** Week 3  
 **Learning Objectives:**
-- Implement OCR for document extraction
-- Build document verification systems
-- Create biometric authentication
-- Design liveness detection
+- **OCR for document extraction Implementation**: Implement OCR for document extraction
+- **document verification Development**: Build document verification systems
+- **biometric authentication Development**: Create biometric authentication
+- **liveness detection Development**: Apply design liveness detection in relevant contexts
 
 ---
 

@@ -10,11 +10,11 @@ order: 7
 **Duration:** Week 7  
 **Theme:** Leadership beyond structure  
 **Learning Objectives:**
-- Build a data-driven culture
-- Develop talent and succession planning
-- Design incentives and performance management
-- Partner with risk, legal, and compliance
-- Sustain momentum as the organization scales
+- **a data-driven culture Development**: Build a data-driven culture
+- **talent and succession planning Development**: Develop talent and succession planning
+- **incentives and performance management Development**: Design incentives and performance management
+- **Partner With**: Partner with risk, legal, and compliance
+- **Sustain Momentum**: Sustain momentum as the organization scales
 
 ---
 
@@ -630,20 +630,20 @@ Design a comprehensive leadership plan for scaling culture and talent in a growi
 
 **Key Takeaways:**
 
-1. **Data-Driven Culture:** Build culture through leadership, accessibility, rewards, barrier removal, and feedback loops. Evolve from data availability to data culture.
+- **Data-Driven Culture:**: Build culture through leadership, accessibility, rewards, barrier removal, and feedback loops. Evolve from data availability to data culture
 
-2. **Talent Development:** Develop talent at individual, team, and organizational levels. Create career paths (IC and management). Plan for succession.
+- **Talent Development:**: Develop talent at individual, team, and organizational levels. Create career paths (IC and management). Plan for succession
 
-3. **Incentives and Performance:** Align incentives with outcomes. Balance individual and team. Measure what matters. Focus on growth.
+- **Incentives and Performance:**: Align incentives with outcomes. Balance individual and team. Measure what matters. Focus on growth
 
-4. **Partnerships:** Partner with risk, legal, and compliance. Understand their concerns. Involve early. Collaborate, don't compete.
+- **Partnerships:**: Partner with risk, legal, and compliance. Understand their concerns. Involve early. Collaborate, don't compete
 
-5. **Scaling:** Design for scale. Reinforce culture. Evolve processes. Maintain momentum. Build strong middle management.
+- **Scaling:**: Design for scale. Reinforce culture. Evolve processes. Maintain momentum. Build strong middle management
 
 **Next Steps:**
-- Capstone Project: Apply all learnings to build an end-to-end Leadership OS
-- Design strategy, operating model, KPIs, portfolio, communication, and culture
-- Defend strategy in executive/board review
+- **Capstone Project:**: Capstone Project: Apply all learnings to build an end-to-end Leadership OS
+- **strategy, operating model, KPIs, portfolio, communication, and culture Development**: Design strategy, operating model, KPIs, portfolio, communication, and culture
+- **Defend Strategy**: Defend strategy in executive/board review
 
 ---
 

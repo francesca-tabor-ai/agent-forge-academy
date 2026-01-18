@@ -11,12 +11,12 @@ order: 3
 
 **Duration:** Week 3  
 **Learning Objectives:**
-- Design workflows where humans retain authority
-- Implement review, approval, and override patterns
-- Set confidence thresholds and escalation rules
-- Design versioning and rollback mechanisms
-- Ensure auditability and accountability
-- Create Human-in-the-Loop Workflow Diagrams and escalation logic
+- **workflows where humans retain authority Development**: Design workflows where humans retain authority
+- **review, approval, and override Implementation**: Implement review, approval, and override patterns
+- **Confidence Thresholds**: Set confidence thresholds and escalation rules
+- **versioning and rollback mechanisms Development**: Design versioning and rollback mechanisms
+- **Ensure Auditability**: Ensure auditability and accountability
+- **Human-in-the-Loop Development**: Create Human-in-the-Loop Workflow Diagrams and escalation logic
 
 ---
 
@@ -691,12 +691,12 @@ Design detailed escalation and approval logic for automation systems, ensuring a
 
 ## Key Takeaways
 
-- **Authority matters:** Humans must retain final authority over automated decisions
-- **Patterns exist:** Review, approval, and override patterns provide proven approaches
-- **Confidence guides:** Confidence thresholds determine when humans should be involved
-- **Versioning enables safety:** Versioning and rollback support safe experimentation
-- **Auditability builds trust:** Complete audit trails enable accountability and learning
-- **Design for control:** Workflows should be designed to preserve human control and build trust
+- **Authority matters:**: Humans must retain final authority over automated decisions
+- **Patterns exist:**: Review, approval, and override patterns provide proven approaches
+- **Confidence guides:**: Confidence thresholds determine when humans should be involved
+- **Versioning enables safety:**: Versioning and rollback support safe experimentation
+- **Auditability builds trust:**: Complete audit trails enable accountability and learning
+- **Design for control:**: Workflows should be designed to preserve human control and build trust
 
 ---
 

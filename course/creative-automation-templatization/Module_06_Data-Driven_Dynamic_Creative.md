@@ -14,11 +14,11 @@ Dynamic creative uses real-time data to personalize marketing messages at scale.
 
 ## Learning Objectives
 
-- Connect to data sources: product feeds, CSVs, APIs
-- Understand Dynamic Creative Optimization (DCO) fundamentals
-- Implement personalization logic (audience, region, product, language)
-- Handle errors and edge cases
-- Optimize performance of dynamic creative systems
+- **To Data**: Connect to data sources: product feeds, CSVs, APIs
+- **Dynamic Creative Optimization Understanding**: Understand Dynamic Creative Optimization (DCO) fundamentals
+- **personalization logic (audience, region, product, language) Implementation**: Implement personalization logic (audience, region, product, language)
+- **Handle Errors**: Handle errors and edge cases
+- **Optimize Performance**: Optimize performance of dynamic creative systems
 
 ---
 
@@ -557,18 +557,18 @@ Layer 4: Static assets (CDN, long TTL)
 
 ### Key Takeaways
 
-1. **Data sources** (feeds, CSVs, APIs) provide content for dynamic creative
-2. **DCO** optimizes creative performance through personalization and testing
-3. **Personalization logic** considers audience, region, product, and language
-4. **Error handling** ensures robust systems with fallbacks and validation
-5. **Performance optimization** balances real-time generation with efficiency
+- **Data sources**: (feeds, CSVs, APIs) provide content for dynamic creative
+- **DCO**: Optimizes creative performance through personalization and testing
+- **Personalization logic**: Considers audience, region, product, and language
+- **Error handling**: Ensures robust systems with fallbacks and validation
+- **Performance optimization**: Balances real-time generation with efficiency
 
 ### Next Steps
 
-- Identify data sources for your use case
-- Design personalization rules
-- Plan error handling strategy
-- Move to Module 7 to learn about generative AI in creative automation
+- **Identify Data**: Identify data sources for your use case
+- **personalization rules Development**: Apply design personalization rules in relevant contexts
+- **Plan Error**: Plan error handling strategy
+- **Move To**: Move to Module 7 to learn about generative AI in creative automation
 
 ---
 

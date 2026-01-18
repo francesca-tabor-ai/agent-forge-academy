@@ -9,10 +9,10 @@ order: 4
 
 **Duration:** Week 4  
 **Learning Objectives:**
-- Build NLP systems for financial text
-- Analyze news and social media sentiment
-- Measure market impact of sentiment
-- Integrate alternative data sources
+- **NLP Development**: Build NLP systems for financial text
+- **Analyze News**: Analyze news and social media sentiment
+- **Measure Market**: Measure market impact of sentiment
+- **alternative data sources Integration**: Integrate alternative data sources
 
 ---
 

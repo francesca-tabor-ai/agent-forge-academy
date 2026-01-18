@@ -13,12 +13,12 @@ email_action: "Identify 3 business decisions in your organization that require c
 **Theme:** *Why experimentation exists*
 
 **Learning Objectives:**
-- Distinguish correlation from causation in business systems
-- Understand why intuition and observational data fail
-- Recognize experimentation as a decision tool, not just research
-- Evaluate the cost of false positives vs false negatives
-- Position experimentation relative to prediction models
-- Classify problems as experimentable, quasi-experimentable, or observational
+- **correlation from causation in business systems Analysis**: Distinguish correlation from causation in business systems
+- **why intuition and observational data fail Understanding**: Understand why intuition and observational data fail
+- **Recognize Experimentation**: Recognize experimentation as a decision tool, not just research
+- **the cost of false positives vs false negatives Evaluation**: Evaluate the cost of false positives vs false negatives
+- **Position Experimentation**: Position experimentation relative to prediction models
+- **Classify Problems**: Classify problems as experimentable, quasi-experimentable, or observational
 
 ---
 

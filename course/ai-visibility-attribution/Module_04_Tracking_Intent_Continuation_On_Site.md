@@ -11,11 +11,11 @@ order: 4
 
 **Duration:** Week 4  
 **Learning Objectives:**
-- Measure whether the site resolves the intent AI created
-- Distinguish curiosity from qualified demand
-- Understand landing-state vs AI-prompt alignment
-- Track question continuation signals
-- Identify engagement patterns unique to AI-referred users
+- **Measure Whether**: Measure whether the site resolves the intent AI created
+- **curiosity from qualified demand Analysis**: Distinguish curiosity from qualified demand
+- **landing-state vs AI-prompt alignment Understanding**: Understand landing-state vs AI-prompt alignment
+- **Track Question**: Track question continuation signals
+- **Identify Engagement**: Identify engagement patterns unique to AI-referred users
 
 ---
 
@@ -670,12 +670,12 @@ Design the technical implementation for tracking intent continuation on-site.
 
 ## Key Takeaways
 
-- **Alignment matters:** Landing pages must match AI prompts for intent continuation
-- **Continuation signals exist:** On-site search, FAQ, deep dives indicate intent continuation
-- **AI users behave differently:** Faster, more focused, higher quality engagement
-- **Resolution vs. drop-off:** Distinguish successful intent resolution from abandonment
-- **Scoring enables measurement:** Intent continuation scores quantify on-site success
-- **Instrumentation is required:** Technical implementation enables tracking
+- **Alignment matters:**: Landing pages must match AI prompts for intent continuation
+- **Continuation signals exist:**: On-site search, FAQ, deep dives indicate intent continuation
+- **AI users behave differently:**: Faster, more focused, higher quality engagement
+- **Resolution vs. drop-off:**: Distinguish successful intent resolution from abandonment
+- **Scoring enables measurement:**: Intent continuation scores quantify on-site success
+- **Instrumentation is required:**: Technical implementation enables tracking
 
 ---
 

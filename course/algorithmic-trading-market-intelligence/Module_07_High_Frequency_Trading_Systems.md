@@ -9,10 +9,10 @@ order: 7
 
 **Duration:** Week 7  
 **Learning Objectives:**
-- Design low-latency architectures
-- Implement market making strategies
-- Understand co-location and infrastructure
-- Optimize for microsecond performance
+- **low-latency architectures Development**: Apply design low-latency architectures in relevant contexts
+- **market making strategies Implementation**: Implement market making strategies
+- **co-location and infrastructure Understanding**: Understand co-location and infrastructure
+- **Optimize For**: Optimize for microsecond performance
 
 ---
 

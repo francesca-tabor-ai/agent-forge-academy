@@ -11,11 +11,11 @@ email_action: "Deploy your project to Supabase Cloud—push your local database 
 
 **Duration:** Week 8  
 **Learning Objectives:**
-- Link local repository to Supabase Cloud
-- Push migrations safely to production
-- Master the AI-powered debug loop
-- Rapidly iterate on features
-- Learn to abandon bad ideas earlier
+- **local repository Integration**: Link local repository to Supabase Cloud
+- **Push Migrations**: Push migrations safely to production
+- **the AI-powered debug loop Understanding**: Master the AI-powered debug loop
+- **Rapidly Iterate**: Rapidly iterate on features
+- **to abandon bad ideas earlier Understanding**: Learn to abandon bad ideas earlier
 
 ---
 
@@ -692,10 +692,10 @@ Prompt: "Add filter buttons for 'all', 'active', 'completed' tasks"
 -  Deployment and iteration
 
 **Next Steps:**
-- Build your own AI-native application
-- Share your projects
-- Continue learning and iterating
-- Help others learn
+- **your own AI-native application Development**: Build your own AI-native application
+- **Share Your**: Apply share your projects in relevant contexts
+- **Continue Learning**: Continue learning and iterating
+- **Help Others**: Apply help others learn in relevant contexts
 
 **Remember:**
 > "The best code is code you don't have to write. The best features are ones that solve real problems. The best applications are built through rapid iteration."

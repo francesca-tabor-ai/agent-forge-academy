@@ -9,10 +9,10 @@ order: 3
 
 **Duration:** Week 3  
 **Learning Objectives:**
-- Extract net derivative exposure and leverage disclosures
-- Understand loss absorption features and capital hierarchy
-- Identify high-yield and illiquid asset allocations
-- Detect embedded optionality and tail risks
+- **Extract Net**: Extract net derivative exposure and leverage disclosures
+- **loss absorption features and capital hierarchy Understanding**: Understand loss absorption features and capital hierarchy
+- **Identify High-Yield**: Identify high-yield and illiquid asset allocations
+- **Detect Embedded**: Detect embedded optionality and tail risks
 
 ---
 
@@ -307,11 +307,11 @@ Risk Metrics Extraction Checklist:
 
 ## Key Takeaways
 
-- Complex risk signals require sophisticated extraction techniques combining pattern matching and NLP
-- Derivative exposure and leverage disclosures are critical but often buried in dense text
-- Loss absorption features and capital hierarchy require understanding of financial structures
-- High-yield and illiquid asset allocations need careful extraction and validation
-- Embedded optionality and tail risks require pattern recognition and contextual understanding
+- **Complex Risk**: Complex risk signals require sophisticated extraction techniques combining pattern matching and NLP
+- **Derivative Exposure**: Derivative exposure and leverage disclosures are critical but often buried in dense text
+- **Loss Absorption**: Loss absorption features and capital hierarchy require understanding of financial structures
+- **High-Yield And**: High-yield and illiquid asset allocations need careful extraction and validation
+- **Embedded Optionality**: Embedded optionality and tail risks require pattern recognition and contextual understanding
 
 ---
 

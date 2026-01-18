@@ -14,11 +14,11 @@ Creative automation represents a fundamental shift in how marketing and design t
 
 ## Learning Objectives
 
-- Define creative automation and understand its scope
-- Distinguish templatization from traditional design workflows
-- Identify key benefits: scalability, consistency, speed, and cost efficiency
-- Recognize common use cases across industries
-- Understand roles and responsibilities in automated creative ecosystems
+- **Define Creative**: Define creative automation and understand its scope
+- **templatization from traditional design workflows Analysis**: Distinguish templatization from traditional design workflows
+- **Identify Key**: Identify key benefits: scalability, consistency, speed, and cost efficiency
+- **Recognize Common**: Recognize common use cases across industries
+- **roles and responsibilities in automated creative ecosystems Understanding**: Understand roles and responsibilities in automated creative ecosystems
 
 ---
 
@@ -296,18 +296,18 @@ Global campaign needs 20 languages × 5 formats × 3 sizes = 300 assets. Templat
 
 ### Key Takeaways
 
-1. **Creative automation** uses technology to generate marketing assets at scale while maintaining quality
-2. **Templatization** replaces manual design with automated, data-driven generation
-3. **Benefits** include scalability, consistency, speed, and cost efficiency
-4. **Use cases** span performance marketing, localization, and dynamic content
-5. **Success requires** collaboration across creative, technical, and operational roles
+- **Creative automation**: Uses technology to generate marketing assets at scale while maintaining quality
+- **Templatization**: Replaces manual design with automated, data-driven generation
+- **Benefits**: Include scalability, consistency, speed, and cost efficiency
+- **Use cases**: Span performance marketing, localization, and dynamic content
+- **Success requires**: Collaboration across creative, technical, and operational roles
 
 ### Next Steps
 
-- Identify automation opportunities in your current workflows
-- Assess existing creative production processes
-- Map out data sources available for automation
-- Move to Module 2 to learn about design systems and modular thinking
+- **Identify Automation**: Identify automation opportunities in your current workflows
+- **existing creative production processes Evaluation**: Assess existing creative production processes
+- **Map Out**: Map out data sources available for automation
+- **Move To**: Move to Module 2 to learn about design systems and modular thinking
 
 ---
 

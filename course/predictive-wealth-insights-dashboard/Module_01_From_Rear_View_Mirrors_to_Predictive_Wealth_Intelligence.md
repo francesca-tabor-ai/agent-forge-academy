@@ -9,11 +9,11 @@ order: 1
 
 **Duration:** Week 1  
 **Learning Objectives:**
-- Understand limits of backward-looking performance reporting
-- Learn why inflows and client behavior move before markets
-- Recognize the shift from data-bridge to insight partner
-- Understand regulatory boundaries of predictive analytics
-- Identify decisions that rely on lagging indicators
+- **limits of backward-looking performance reporting Understanding**: Understand limits of backward-looking performance reporting
+- **why inflows and client behavior move before markets Understanding**: Learn why inflows and client behavior move before markets
+- **Recognize The**: Recognize the shift from data-bridge to insight partner
+- **regulatory boundaries of predictive analytics Understanding**: Understand regulatory boundaries of predictive analytics
+- **Identify Decisions**: Identify decisions that rely on lagging indicators
 
 ---
 
@@ -180,10 +180,10 @@ Analyze current decision-making processes and identify where lagging indicators 
 
 ## Key Takeaways
 
-- Traditional dashboards focus on backward-looking data with limited predictive value
-- Client behavior and fund flows move before markets, providing early signals
-- The shift from data-bridge to insight partner creates competitive advantage
-- Regulatory boundaries must be carefully managed in predictive analytics
+- **Traditional Dashboards**: Traditional dashboards focus on backward-looking data with limited predictive value
+- **Client Behavior**: Client behavior and fund flows move before markets, providing early signals
+- **The Shift**: The shift from data-bridge to insight partner creates competitive advantage
+- **Regulatory Boundaries**: Regulatory boundaries must be carefully managed in predictive analytics
 
 ---
 

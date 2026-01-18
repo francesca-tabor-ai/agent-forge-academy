@@ -11,11 +11,11 @@ email_action: "Review a sample LLM system architecture and identify 3 hardening 
 
 **Duration:** Week 7-8  
 **Learning Objectives:**
-- Design RAG systems with approved clinical content
-- Select models and constraint strategies
-- Implement prompt versioning and change control
-- Design tool calling with sandboxing
-- Prevent cross-context leakage
+- **RAG Development**: Design RAG systems with approved clinical content
+- **Select Models**: Select models and constraint strategies
+- **prompt versioning and change control Implementation**: Implement prompt versioning and change control
+- **tool calling with sandboxing Development**: Design tool calling with sandboxing
+- **Prevent Cross-Context**: Apply prevent cross-context leakage in relevant contexts
 
 ---
 
@@ -900,11 +900,11 @@ Create a comprehensive architecture hardening document.
 - Isolate contexts to prevent leakage
 
 **Next Steps:**
-- Implement RAG with approved content sources
-- Add model selection and constraint strategies
-- Set up prompt versioning and change control
-- Implement tool sandboxing
-- Design context isolation mechanisms
+- **RAG with approved content sources Implementation**: Implement RAG with approved content sources
+- **Add Model**: Add model selection and constraint strategies
+- **prompt versioning and change control Implementation**: Set up prompt versioning and change control
+- **tool sandboxing Implementation**: Implement tool sandboxing
+- **context isolation mechanisms Development**: Design context isolation mechanisms
 
 ---
 

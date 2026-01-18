@@ -11,12 +11,12 @@ order: 5
 **Theme:** *Credit vs causality*
 
 **Learning Objectives:**
-- Understand rules-based vs data-driven attribution
-- Learn incrementality and causal lift concepts
-- Compare A/B testing vs observational attribution
-- Identify common attribution failure modes
-- Align attribution with business goals
-- Build attribution and incrementality models
+- **rules-based vs data-driven attribution Understanding**: Understand rules-based vs data-driven attribution
+- **incrementality and causal lift concepts Understanding**: Learn incrementality and causal lift concepts
+- **A/B testing Analysis**: Compare A/B testing vs observational attribution
+- **Identify Common**: Identify common attribution failure modes
+- **Align Attribution**: Align attribution with business goals
+- **attribution and incrementality models Development**: Build attribution and incrementality models
 
 ---
 
@@ -268,16 +268,16 @@ def measure_incrementality_synthetic_control(geo_data, treatment_start_date):
 #### A/B Testing: The Gold Standard
 
 **Best For:**
-- Measuring incrementality
-- Causal inference
-- Testing specific hypotheses
-- New channels or campaigns
+- **Measuring Incrementality**: Implement measuring incrementality effectively across relevant use cases
+- **Causal Inference**: Implement causal inference effectively across relevant use cases
+- **Testing Specific**: Apply testing specific hypotheses in relevant contexts
+- **New Channels**: New channels or campaigns
 
 **Limitations:**
-- Requires experimentation capability
-- Takes time (weeks/months)
-- Can't test everything
-- May miss long-term effects
+- **Requires Experimentation**: Apply requires experimentation capability in relevant contexts
+- **Takes Time**: Apply takes time (weeks/months) in relevant contexts
+- **Can'T Test**: Apply can't test everything in relevant contexts
+- **May Miss**: May miss long-term effects
 
 **Example:**
 
@@ -314,16 +314,16 @@ def ab_test_incrementality(campaign_data):
 #### Observational Attribution: Faster, But Limited
 
 **Best For:**
-- Quick insights
-- Historical analysis
-- When experiments aren't feasible
-- Understanding customer journeys
+- **Quick Insights**: Implement quick insights effectively across relevant use cases
+- **Historical Analysis**: Implement historical analysis effectively across relevant use cases
+- **When Experiments**: When experiments aren't feasible
+- **Understanding Customer**: Apply understanding customer journeys in relevant contexts
 
 **Limitations:**
-- Correlation, not causation
-- Can be biased
-- Doesn't measure incrementality
-- May mislead decisions
+- **Correlation, Not**: Apply correlation, not causation in relevant contexts
+- **Can Be**: Apply can be biased in relevant contexts
+- **Doesn'T Measure**: Apply doesn't measure incrementality in relevant contexts
+- **May Mislead**: Apply may mislead decisions in relevant contexts
 
 **Example: Markov Chain Attribution**
 
@@ -583,16 +583,16 @@ A defensible channel impact assessment that:
 
 **Key Takeaways:**
 
-1. **Attribution ≠ Incrementality:** Attribution gives credit, incrementality measures causality
-2. **Data-Driven > Rules-Based:** Use actual data, not assumptions
-3. **A/B Testing is Gold Standard:** For incrementality, use experiments
-4. **Watch for Failure Modes:** Last-touch bias, correlation/causation, interactions
-5. **Align with Goals:** Different goals require different attribution
+- **Attribution ≠ Incrementality:**: Attribution gives credit, incrementality measures causality
+- **Data-Driven > Rules-Based:**: Use actual data, not assumptions
+- **A/B Testing is Gold Standard:**: For incrementality, use experiments
+- **Watch for Failure Modes:**: Last-touch bias, correlation/causation, interactions
+- **Align with Goals:**: Different goals require different attribution
 
 **Next Steps:**
-- Module 6: Learn pricing and promotion optimization
-- Understand price elasticity and demand curves
-- Design pricing experiments
+- **Module 6:**: Module 6: Learn pricing and promotion optimization
+- **price elasticity and demand curves Understanding**: Understand price elasticity and demand curves
+- **pricing experiments Development**: Apply design pricing experiments in relevant contexts
 
 ---
 

@@ -9,11 +9,11 @@ order: 6
 
 **Duration:** Week 6  
 **Learning Objectives:**
-- Understand what makes an agent an agent
-- Design agents with goals, memory, tools, and planning
-- Build single-agent legal use cases
-- Implement guardrails for autonomous legal tasks
-- Create production-ready legal agents
+- **what makes an agent an agent Understanding**: Understand what makes an agent an agent
+- **agents with goals, memory, tools, and planning Development**: Design agents with goals, memory, tools, and planning
+- **single-agent legal use cases Development**: Build single-agent legal use cases
+- **guardrails for autonomous legal tasks Implementation**: Implement guardrails for autonomous legal tasks
+- **production-ready legal agents Development**: Create production-ready legal agents
 
 ---
 
@@ -376,15 +376,15 @@ Build a single-agent legal assistant with goals, memory, tools, planning, and ap
 
 ## Key Takeaways
 
-1. **Agents have goals, memory, tools, and planning** - these components enable autonomous task execution.
+- **Agents have goals, memory, tools, and planning**: These components enable autonomous task execution
 
-2. **Single-agent systems are powerful** for focused legal tasks like contract review, research, and drafting.
+- **Single-agent systems are powerful**: For focused legal tasks like contract review, research, and drafting
 
-3. **Guardrails are essential** - implement scope, quality, safety, and legal guardrails for autonomous systems.
+- **Guardrails are essential**: Implement scope, quality, safety, and legal guardrails for autonomous systems
 
-4. **Agent design must balance autonomy and control** - enable automation while maintaining oversight.
+- **Agent design must balance autonomy and control**: Enable automation while maintaining oversight
 
-5. **Legal agents require special considerations** - professional responsibility, ethics, and human review are critical.
+- **Legal agents require special considerations**: Professional responsibility, ethics, and human review are critical
 
 ---
 
@@ -406,10 +406,10 @@ Build a single-agent legal assistant with goals, memory, tools, planning, and ap
 
 ## Next Steps
 
-- Complete Lab 6
-- Review Module 7: Multi-Agent System Architecture for Law
-- Join course discussion forum
-- Attend office hours if you have questions
+- **Complete Lab**: Apply complete lab 6 in relevant contexts
+- **Review Module**: Review Module 7: Multi-Agent System Architecture for Law
+- **Join Course**: Join course discussion forum
+- **Attend Office**: Attend office hours if you have questions
 
 ---
 

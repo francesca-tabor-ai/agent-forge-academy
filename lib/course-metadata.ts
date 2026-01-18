@@ -460,6 +460,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     slug: 'mastering-node-based-generative-ai',
     title: 'Mastering Node-Based Generative AI',
     category: 'Creative AI',
+    imageUrl: 'https://www.hyperakt.com/_next/image?url=https%3A%2F%2Fwww.hyperakt.com%2Fassets%2Fimages%2Fthe-nonprofit-distinction-struggle-2%2FCraft.jpg&w=3840&q=75',
     outcome: 'Master the art of node-based generative AI systems, from visual programming interfaces to production-ready creative AI applications.',
     build: 'Complete node-based generative AI system with visual programming interface, custom node creation, workflow orchestration, real-time generation, and production deployment.',
     bestFor: ['AI engineers', 'Creative technologists', 'Designers', 'Developers building creative AI tools'],

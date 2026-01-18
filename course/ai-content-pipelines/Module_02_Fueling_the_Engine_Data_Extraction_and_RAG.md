@@ -9,10 +9,10 @@ order: 2
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Understand Retrieval-Augmented Generation (RAG) fundamentals
-- Master document extraction and parsing techniques
-- Learn chunking, embedding, and vector database strategies
-- Build a production-ready RAG system
+- **Retrieval-Augmented Generation Understanding**: Understand Retrieval-Augmented Generation (RAG) fundamentals
+- **document extraction and parsing techniques Understanding**: Master document extraction and parsing techniques
+- **chunking, embedding, and vector database strategies Understanding**: Learn chunking, embedding, and vector database strategies
+- **a production-ready RAG Development**: Build a production-ready RAG system
 
 ---
 

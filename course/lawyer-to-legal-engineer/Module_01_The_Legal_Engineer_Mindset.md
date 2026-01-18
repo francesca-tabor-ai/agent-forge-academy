@@ -9,11 +9,11 @@ order: 1
 
 **Duration:** Week 1  
 **Learning Objectives:**
-- Understand how legal reasoning translates to system design
-- Identify what lawyers uniquely contribute to AI systems
-- Distinguish between legal judgment and delegated cognition
-- Recognize failure modes of naïve legal automation
-- Develop the legal engineer mindset
+- **how legal reasoning translates to system design Understanding**: Understand how legal reasoning translates to system design
+- **Identify What**: Identify what lawyers uniquely contribute to AI systems
+- **between legal judgment Analysis**: Distinguish between legal judgment and delegated cognition
+- **Recognize Failure**: Recognize failure modes of naïve legal automation
+- **the legal engineer mindset Development**: Develop the legal engineer mindset
 
 ---
 
@@ -377,15 +377,15 @@ Analyze a real legal workflow, identify automation opportunities, and design a s
 
 ## Key Takeaways
 
-1. **Legal reasoning and system design share fundamental similarities** - both involve breaking down complex problems, applying structured analysis, and considering edge cases.
+- **Legal reasoning and system design share fundamental similarities**: Both involve breaking down complex problems, applying structured analysis, and considering edge cases
 
-2. **Lawyers uniquely contribute domain expertise, system thinking, and risk awareness** to AI system design.
+- **Lawyers uniquely contribute domain expertise, system thinking, and risk awareness**: To AI system design
 
-3. **Legal judgment and delegated cognition exist on a spectrum** - legal engineers must design systems that delegate appropriately while maintaining oversight.
+- **Legal judgment and delegated cognition exist on a spectrum**: Legal engineers must design systems that delegate appropriately while maintaining oversight
 
-4. **Naïve legal automation fails in predictable ways** - understanding these failure modes helps design better systems.
+- **Naïve legal automation fails in predictable ways**: Understanding these failure modes helps design better systems
 
-5. **The legal engineer mindset combines legal expertise, technical skills, and hybrid thinking** to build defensible, ethical AI systems.
+- **The legal engineer mindset combines legal expertise, technical skills, and hybrid thinking**: To build defensible, ethical AI systems
 
 ---
 
@@ -405,10 +405,10 @@ Analyze a real legal workflow, identify automation opportunities, and design a s
 
 ## Next Steps
 
-- Complete Lab 1
-- Review Module 2: Decomposing Legal Work into Machine-Executable Tasks
-- Join course discussion forum
-- Attend office hours if you have questions
+- **Complete Lab**: Apply complete lab 1 in relevant contexts
+- **Review Module**: Review Module 2: Decomposing Legal Work into Machine-Executable Tasks
+- **Join Course**: Join course discussion forum
+- **Attend Office**: Attend office hours if you have questions
 
 ---
 

@@ -11,12 +11,12 @@ order: 7
 **Theme:** *Validating growth ideas before scaling*
 
 **Learning Objectives:**
-- Understand growth experimentation frameworks
-- Define success metrics and guardrails
-- Interpret noisy growth experiments
-- Scale wins and kill false positives
-- Institutionalize growth learning
-- Build experiment roadmaps
+- **growth experimentation frameworks Understanding**: Understand growth experimentation frameworks
+- **Define Success**: Define success metrics and guardrails
+- **Interpret Noisy**: Interpret noisy growth experiments
+- **Scale Wins**: Scale wins and kill false positives
+- **Institutionalize Growth**: Apply institutionalize growth learning in relevant contexts
+- **experiment roadmaps Development**: Build experiment roadmaps
 
 ---
 
@@ -637,16 +637,16 @@ A growth experimentation plan tied to revenue outcomes that:
 
 **Key Takeaways:**
 
-1. **Framework Matters:** Use ICE/RICE to prioritize systematically
-2. **Metrics & Guardrails:** Define success and prevent harm
-3. **Statistical Rigor:** Interpret results correctly, avoid false positives
-4. **Scale Carefully:** Validate wins before scaling, kill false positives
-5. **Learn Systematically:** Document and build experiment library
+- **Framework Matters:**: Use ICE/RICE to prioritize systematically
+- **Metrics & Guardrails:**: Define success and prevent harm
+- **Statistical Rigor:**: Interpret results correctly, avoid false positives
+- **Scale Carefully:**: Validate wins before scaling, kill false positives
+- **Learn Systematically:**: Document and build experiment library
 
 **Next Steps:**
-- Module 8: Learn to communicate growth impact to leadership
-- Translate analytics into financial impact
-- Build executive-ready narratives
+- **Module 8:**: Module 8: Learn to communicate growth impact to leadership
+- **Translate Analytics**: Translate analytics into financial impact
+- **executive-ready narratives Development**: Build executive-ready narratives
 
 ---
 

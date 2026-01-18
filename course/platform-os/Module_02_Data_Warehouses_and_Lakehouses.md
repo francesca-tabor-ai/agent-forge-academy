@@ -13,11 +13,11 @@ email_action: "Analyze your current data storage: what percentage is structured 
 **Theme:** *Analytical storage at scale*
 
 **Learning Objectives:**
-- Understand OLTP vs OLAP vs analytical workloads
-- Differentiate between warehouses, data lakes, and lakehouses
-- Learn table formats, partitioning, and data layout strategies
-- Master schema evolution and data versioning
-- Optimize storage for performance and cost
+- **OLTP vs OLAP vs analytical workloads Understanding**: Understand OLTP vs OLAP vs analytical workloads
+- **between warehouses, data lakes, Analysis**: Differentiate between warehouses, data lakes, and lakehouses
+- **table formats, partitioning, and data layout strategies Understanding**: Learn table formats, partitioning, and data layout strategies
+- **schema evolution and data versioning Understanding**: Master schema evolution and data versioning
+- **Optimize Storage**: Optimize storage for performance and cost
 
 ---
 
@@ -705,11 +705,11 @@ A storage architecture design that includes:
 
 ### Key Takeaways
 
-1. **Workload type matters:** OLTP, OLAP, and analytical workloads have different requirements
-2. **Storage choice depends on use case:** Warehouses for BI, lakes for flexibility, lakehouses for both
-3. **Partitioning and layout** significantly impact query performance
-4. **Schema evolution** is essential for long-lived platforms
-5. **Performance optimization** requires understanding query patterns and data characteristics
+- **Workload type matters:**: OLTP, OLAP, and analytical workloads have different requirements
+- **Storage choice depends on use case:**: Warehouses for BI, lakes for flexibility, lakehouses for both
+- **Partitioning and layout**: Significantly impact query performance
+- **Schema evolution**: Is essential for long-lived platforms
+- **Performance optimization**: Requires understanding query patterns and data characteristics
 
 ### Next Steps
 

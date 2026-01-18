@@ -9,10 +9,10 @@ order: 3
 
 **Duration:** Week 3  
 **Learning Objectives:**
-- Understand the Agentic Commerce Protocol (ACP)
-- Implement Decentralized Identifiers (DIDs) and Verifiable Credentials
-- Compare secure payment rails (SPT vs. AP2)
-- Build secure agent-mediated transaction infrastructure
+- **the Agentic Commerce Protocol Understanding**: Understand the Agentic Commerce Protocol (ACP)
+- **Decentralized Identifiers (DIDs) and Verifiable Credentials Implementation**: Implement Decentralized Identifiers (DIDs) and Verifiable Credentials
+- **secure payment rails (SPT Analysis**: Compare secure payment rails (SPT vs. AP2)
+- **secure agent-mediated transaction infrastructure Development**: Build secure agent-mediated transaction infrastructure
 
 ---
 
@@ -615,12 +615,12 @@ Implement a basic Agentic Commerce Protocol (ACP) integration for agent-mediated
 
 ## Key Takeaways
 
-1. **ACP:** Open standard for agent-mediated transactions
-2. **DIDs:** Decentralized identity for agents
-3. **VCs:** Verifiable credentials for trust
-4. **SPT:** Stripe's payment token solution
-5. **AP2:** Google's agent payment protocol
-6. **Security:** Critical for agent-mediated commerce
+- **ACP:**: Open standard for agent-mediated transactions
+- **DIDs:**: Decentralized identity for agents
+- **VCs:**: Verifiable credentials for trust
+- **SPT:**: Stripe's payment token solution
+- **AP2:**: Google's agent payment protocol
+- **Security:**: Critical for agent-mediated commerce
 
 ---
 

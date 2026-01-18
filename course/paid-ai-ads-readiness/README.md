@@ -19,12 +19,12 @@ order: 0
 
 By completing this course, you will be able to:
 
-- Anticipate paid AI ad mechanics before platforms formalise them
-- Position brands as first movers in scarce AI inventory
-- Translate trust and content into media advantage
-- Educate agencies and internal teams confidently
-- Protect budgets from reactive, inefficient spend
-- Design, simulate, and operationalise AI-native media strategies ahead of paid AI ad inventory launches
+- **Anticipate Paid**: Anticipate paid AI ad mechanics before platforms formalise them
+- **Position Brands**: Position brands as first movers in scarce AI inventory
+- **Translate Trust**: Translate trust and content into media advantage
+- **Educate Agencies**: Educate agencies and internal teams confidently
+- **Protect Budgets**: Protect budgets from reactive, inefficient spend
+- **Design, Simulate,**: Design, simulate, and operationalise AI-native media strategies ahead of paid AI ad inventory launches
 
 ---
 

@@ -9,10 +9,10 @@ order: 6
 
 **Duration:** Week 6  
 **Learning Objectives:**
-- Design reporting pipeline architecture
-- Implement scheduling and automation
-- Build REST APIs
-- Deploy production systems
+- **reporting Development**: Design reporting pipeline architecture
+- **scheduling and automation Implementation**: Implement scheduling and automation
+- **REST APIs Development**: Build REST APIs
+- **production Implementation**: Deploy production systems
 
 ---
 

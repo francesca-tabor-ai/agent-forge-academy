@@ -9,10 +9,10 @@ order: 2
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Master the Lurk-Comment-Post lifecycle
-- Understand the 80/20 rule for community engagement
-- Develop persona-based engagement strategies
-- Craft high-authority threads that LLMs prefer
+- **the Lurk-Comment-Post lifecycle Understanding**: Master the Lurk-Comment-Post lifecycle
+- **the 80/20 rule for community engagement Understanding**: Understand the 80/20 rule for community engagement
+- **persona-based engagement strategies Development**: Develop persona-based engagement strategies
+- **Craft High-Authority**: Craft high-authority threads that LLMs prefer
 
 ---
 

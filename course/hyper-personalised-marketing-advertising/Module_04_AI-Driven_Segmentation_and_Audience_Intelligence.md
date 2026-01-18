@@ -10,11 +10,11 @@ description: Dynamic segmentation and lookalike modeling
 
 By the end of this module, you will be able to:
 
-- Understand dynamic and real-time segmentation approaches
-- Explain micro-segmentation and personalization at scale
-- Apply lookalike modeling and audience expansion techniques
-- Implement context-aware and intent-based targeting
-- Build AI-informed personas from behavioral signals
+- **dynamic and real-time segmentation approaches Understanding**: Understand dynamic and real-time segmentation approaches
+- **Explain Micro-Segmentation**: Explain micro-segmentation and personalization at scale
+- **Apply Lookalike**: Apply lookalike modeling and audience expansion techniques
+- **context-aware and intent-based targeting Implementation**: Implement context-aware and intent-based targeting
+- **AI-informed personas from behavioral signals Development**: Build AI-informed personas from behavioral signals
 
 ## Introduction
 
@@ -388,12 +388,12 @@ Submit a persona report including:
 
 ## Key Takeaways
 
-- Dynamic segmentation enables real-time, behavior-based audience creation
-- Micro-segmentation uses AI to create highly granular, personalized segments at scale
-- Lookalike modeling helps find new customers similar to your best existing customers
-- Context-aware targeting personalizes based on current situation and environment
-- Intent-based targeting identifies and prioritizes customers ready to purchase
-- AI-informed personas combine behavioral data with human insights for effective personalization
+- **Dynamic Segmentation**: Dynamic segmentation enables real-time, behavior-based audience creation
+- **Micro-Segmentation Uses**: Micro-segmentation uses AI to create highly granular, personalized segments at scale
+- **Lookalike Modeling**: Lookalike modeling helps find new customers similar to your best existing customers
+- **Context-Aware Targeting**: Context-aware targeting personalizes based on current situation and environment
+- **Intent-Based Targeting**: Intent-based targeting identifies and prioritizes customers ready to purchase
+- **Ai-Informed Personas**: AI-informed personas combine behavioral data with human insights for effective personalization
 
 ## Additional Resources
 

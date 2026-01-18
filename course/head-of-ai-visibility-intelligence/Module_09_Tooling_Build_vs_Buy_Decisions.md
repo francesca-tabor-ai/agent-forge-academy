@@ -10,10 +10,10 @@ order: 9
 
 **Duration:** Week 9  
 **Learning Objectives:**
-- Evaluate AI visibility tools realistically
-- Know what must be proprietary vs outsourced
-- Design tech stack without vendor lock-in
-- Make informed build vs buy decisions
+- **AI visibility tools realistically Evaluation**: Evaluate AI visibility tools realistically
+- **Know What**: Know what must be proprietary vs outsourced
+- **tech stack without vendor lock-in Development**: Design tech stack without vendor lock-in
+- **Make Informed**: Make informed build vs buy decisions
 
 ---
 
@@ -447,17 +447,17 @@ Design a tech stack blueprint with build/buy recommendations and vendor lock-in 
 
 ## Key Takeaways
 
-- **Audits vs continuous:** Choose the right approach for your needs - audits for strategy, continuous for operations
+- **Audits vs continuous:**: Choose the right approach for your needs - audits for strategy, continuous for operations
 
-- **Vendor evaluation:** Understand vendor strengths and blind spots to make informed decisions
+- **Vendor evaluation:**: Understand vendor strengths and blind spots to make informed decisions
 
-- **Build when strategic:** Build proprietary capabilities that provide competitive advantage
+- **Build when strategic:**: Build proprietary capabilities that provide competitive advantage
 
-- **Data governance matters:** Ensure data ownership, IP protection, and compliance
+- **Data governance matters:**: Ensure data ownership, IP protection, and compliance
 
-- **Avoid lock-in:** Design modular architecture, ensure data portability, maintain internal capabilities
+- **Avoid lock-in:**: Design modular architecture, ensure data portability, maintain internal capabilities
 
-- **Hybrid approach:** Build core capabilities, buy supporting infrastructure
+- **Hybrid approach:**: Build core capabilities, buy supporting infrastructure
 
 ---
 

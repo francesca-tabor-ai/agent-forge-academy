@@ -9,11 +9,11 @@ order: 2
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Understand the "domain gap" between real-world images and catalog photos
-- Build "shop the look" visual search pipelines
-- Implement data synthesis techniques for computer vision
-- Design visual re-ranking and de-duplication systems
-- Create robust visual discovery systems
+- **the "domain gap" between real-world images and catalog photos Understanding**: Understand the "domain gap" between real-world images and catalog photos
+- **"shop the look" visual search Development**: Build "shop the look" visual search pipelines
+- **data synthesis techniques for computer vision Implementation**: Implement data synthesis techniques for computer vision
+- **visual re-ranking and de-duplication Development**: Design visual re-ranking and de-duplication systems
+- **robust visual discovery Development**: Create robust visual discovery systems
 
 ---
 
@@ -888,28 +888,28 @@ def calculate_diversity(candidate: Dict, selected: List[Dict]) -> float:
 ## Key Takeaways
 
 **Visual Search:**
-- "Shop the look" enables users to find products from photos
-- Object localization identifies products in cluttered images
-- Feature extraction creates visual representations
-- Similarity matching finds catalog products
+- **"Shop The**: "Shop the look" enables users to find products from photos
+- **Object Localization**: Object localization identifies products in cluttered images
+- **Feature Extraction**: Feature extraction creates visual representations
+- **Similarity Matching**: Similarity matching finds catalog products
 
 **Data Synthesis:**
-- 3D model superimposition teaches viewpoint invariance
-- Style transfer bridges domain gaps
-- Domain adaptation improves robustness
-- Synthetic data is cost-effective and scalable
+- **3D Model**: 3D model superimposition teaches viewpoint invariance
+- **Style Transfer**: Style transfer bridges domain gaps
+- **Domain Adaptation**: Domain adaptation improves robustness
+- **Synthetic Data**: Synthetic data is cost-effective and scalable
 
 **Re-ranking and De-duping:**
-- Multi-factor ranking improves relevance
-- Graph-based de-duplication removes near-duplicates
-- Diversity filtering ensures variety
-- Non-visual factors enhance results
+- **Multi-Factor Ranking**: Multi-factor ranking improves relevance
+- **Graph-Based De-Duplication**: Graph-based de-duplication removes near-duplicates
+- **Diversity Filtering**: Diversity filtering ensures variety
+- **Non-Visual Factors**: Non-visual factors enhance results
 
 **The Domain Gap:**
-- Real-world images differ from catalog photos
-- Data synthesis helps bridge the gap
-- Robust models handle diverse conditions
-- Better user experience with accurate visual search
+- **Real-World Images**: Real-world images differ from catalog photos
+- **Data Synthesis**: Data synthesis helps bridge the gap
+- **Robust Models**: Robust models handle diverse conditions
+- **Better User**: Better user experience with accurate visual search
 
 ---
 

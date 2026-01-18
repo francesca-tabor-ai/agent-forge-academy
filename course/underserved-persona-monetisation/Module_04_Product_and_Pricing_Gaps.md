@@ -10,12 +10,12 @@ order: 4
 **Duration:** Week 4  
 **Theme:** Where the Offer Actually Breaks  
 **Learning Objectives:**
-- Identify how products, bundles, or pricing fail underserved personas
-- Partner with product teams on concrete changes
-- Distinguish feature gaps vs perception gaps
-- Understand packaging, sizing, and format mismatches
-- Recognize price-performance misalignment
-- Decide when to create SKUs vs reposition existing ones
+- **Identify How**: Identify how products, bundles, or pricing fail underserved personas
+- **Partner With**: Partner with product teams on concrete changes
+- **feature gaps Analysis**: Distinguish feature gaps vs perception gaps
+- **packaging, sizing, and format mismatches Understanding**: Understand packaging, sizing, and format mismatches
+- **Recognize Price-Performance**: Apply recognize price-performance misalignment in relevant contexts
+- **Decide When**: Decide when to create SKUs vs reposition existing ones
 
 ---
 
@@ -457,20 +457,20 @@ For each persona:
 
 **Key Takeaways:**
 
-1. **Gap Types:** Distinguishing feature gaps (real) from perception gaps (imagined) helps prioritize product development vs messaging improvements.
+- **Gap Types:**: Distinguishing feature gaps (real) from perception gaps (imagined) helps prioritize product development vs messaging improvements
 
-2. **Packaging, Sizing, Format:** Mismatches in how products are packaged, sized, or delivered can prevent personas from buying, even if features fit.
+- **Packaging, Sizing, Format:**: Mismatches in how products are packaged, sized, or delivered can prevent personas from buying, even if features fit
 
-3. **Price-Performance Alignment:** Pricing must align with persona's budget, value perception, and willingness to pay to convert high-intent personas.
+- **Price-Performance Alignment:**: Pricing must align with persona's budget, value perception, and willingness to pay to convert high-intent personas
 
-4. **SKU vs Repositioning:** Creating new SKUs makes sense when personas are large and needs are different; repositioning works when features fit but messaging doesn't.
+- **SKU vs Repositioning:**: Creating new SKUs makes sense when personas are large and needs are different; repositioning works when features fit but messaging doesn't
 
-5. **Gap Analysis:** Systematic analysis of product–persona gaps helps create concrete recommendations for product, pricing, and positioning changes.
+- **Gap Analysis:**: Systematic analysis of product–persona gaps helps create concrete recommendations for product, pricing, and positioning changes
 
 **Next Steps:**
-- Module 5: Learn to build messaging that resonates with AI and humans
-- Understand how to write for persona constraints and outcomes
-- Build skills in persona-aligned messaging
+- **Module 5:**: Module 5: Learn to build messaging that resonates with AI and humans
+- **how to write for persona constraints and outcomes Understanding**: Understand how to write for persona constraints and outcomes
+- **skills in persona-aligned messaging Development**: Build skills in persona-aligned messaging
 
 ---
 

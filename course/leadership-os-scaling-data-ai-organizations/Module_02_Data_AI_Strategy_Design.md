@@ -10,11 +10,11 @@ order: 2
 **Duration:** Week 2  
 **Theme:** Strategy before solutions  
 **Learning Objectives:**
-- Understand the difference between business strategy and data & AI strategy
-- Learn how to identify high-value AI and analytics bets
-- Master horizon planning (now / next / later)
-- Make informed build vs buy vs partner decisions
-- Align GenAI, ML, analytics, and data platforms
+- **the difference between business strategy and data & AI strategy Understanding**: Understand the difference between business strategy and data & AI strategy
+- **how to identify high-value AI and analytics bets Understanding**: Learn how to identify high-value AI and analytics bets
+- **horizon planning Understanding**: Master horizon planning (now / next / later)
+- **Make Informed**: Make informed build vs buy vs partner decisions
+- **Align Genai,**: Align GenAI, ML, analytics, and data platforms
 
 ---
 
@@ -481,20 +481,20 @@ Design a comprehensive 3-year data & AI strategy for a business context (your ow
 
 **Key Takeaways:**
 
-1. **Strategy Alignment:** Data & AI strategy must be derived from and aligned with business strategy. Start with business problems, not technology solutions.
+- **Strategy Alignment:**: Data & AI strategy must be derived from and aligned with business strategy. Start with business problems, not technology solutions
 
-2. **High-Value Bets:** Focus on opportunities with clear business impact, feasibility, strategic importance, competitive advantage, and scalability.
+- **High-Value Bets:**: Focus on opportunities with clear business impact, feasibility, strategic importance, competitive advantage, and scalability
 
-3. **Horizon Planning:** Balance short-term execution (Horizon 1), medium-term capability building (Horizon 2), and long-term exploration (Horizon 3).
+- **Horizon Planning:**: Balance short-term execution (Horizon 1), medium-term capability building (Horizon 2), and long-term exploration (Horizon 3)
 
-4. **Build vs Buy vs Partner:** Make decisions based on strategic importance, time to market, cost, capability, and risk. Build the core, buy the rest.
+- **Build vs Buy vs Partner:**: Make decisions based on strategic importance, time to market, cost, capability, and risk. Build the core, buy the rest
 
-5. **Capability Alignment:** Align GenAI, ML, analytics, and data platforms. Build foundation first, use cases drive technology, integrate and reuse.
+- **Capability Alignment:**: Align GenAI, ML, analytics, and data platforms. Build foundation first, use cases drive technology, integrate and reuse
 
 **Next Steps:**
-- Module 3: Learn how to design operating models and organizational structures
-- Understand centralized, federated, and hybrid models
-- Design teams, roles, and decision rights
+- **Module 3:**: Module 3: Learn how to design operating models and organizational structures
+- **centralized, federated, and hybrid models Understanding**: Understand centralized, federated, and hybrid models
+- **teams, roles, and decision rights Development**: Design teams, roles, and decision rights
 
 ---
 

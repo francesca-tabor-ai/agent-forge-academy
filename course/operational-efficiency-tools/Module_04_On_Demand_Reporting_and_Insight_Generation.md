@@ -9,10 +9,10 @@ order: 4
 
 **Duration:** Week 4  
 **Learning Objectives:**
-- Generate summaries, comparisons, and trend views
-- Design role-based reporting (ops, product, compliance)
-- Implement confidence indicators and source traceability
-- Enable exporting insights for downstream workflows
+- **Generate Summaries,**: Generate summaries, comparisons, and trend views
+- **role-based reporting (ops, product, compliance) Development**: Design role-based reporting (ops, product, compliance)
+- **confidence indicators and source traceability Implementation**: Implement confidence indicators and source traceability
+- **Enable Exporting**: Enable exporting insights for downstream workflows
 
 ---
 
@@ -249,10 +249,10 @@ Identify and define a comprehensive set of daily operational questions that can 
 
 ## Key Takeaways
 
-- On-demand reporting replaces static reports with conversational intelligence
-- Role-based reporting provides relevant insights for each team
-- Confidence indicators and source traceability ensure reliability
-- Exporting insights enables integration with downstream workflows
+- **On-Demand Reporting**: On-demand reporting replaces static reports with conversational intelligence
+- **Role-Based Reporting**: Role-based reporting provides relevant insights for each team
+- **Confidence Indicators**: Confidence indicators and source traceability ensure reliability
+- **Exporting Insights**: Exporting insights enables integration with downstream workflows
 
 ---
 

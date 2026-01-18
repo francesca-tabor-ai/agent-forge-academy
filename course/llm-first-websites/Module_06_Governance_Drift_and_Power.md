@@ -9,10 +9,10 @@ order: 6
 
 **Duration:** Week 6  
 **Learning Objectives:**
-- Detect and manage knowledge drift and silent decay
-- Understand why AI failures are usually organizational
-- Implement ethics as enforced governance, not theater
-- Design systems for long-term sustainability
+- **Detect And**: Detect and manage knowledge drift and silent decay
+- **why AI failures are usually organizational Understanding**: Understand why AI failures are usually organizational
+- **ethics as enforced governance, not theater Implementation**: Implement ethics as enforced governance, not theater
+- **systems for long-term sustainability Development**: Design systems for long-term sustainability
 
 ---
 
@@ -723,13 +723,13 @@ Monitor for ethical violations.
 
 ## Key Takeaways
 
-1. **Silent decay is inevitable** - Knowledge drifts over time, must be detected and managed
-2. **Drift detection is critical** - Version comparison, outcome analysis, external validation
-3. **Graceful degradation helps** - When drift can't be fixed immediately, degrade gracefully
-4. **AI failures are organizational** - Fragmented responsibility, siloed data, no processes
-5. **Own knowledge quality** - Clear ownership, update processes, quality gates
-6. **Ethics must be enforced** - Do-not-infer lists, refusal patterns, boundaries, monitoring
-7. **Governance enables sustainability** - Long-term success requires organizational change
+- **Silent decay is inevitable**: Knowledge drifts over time, must be detected and managed
+- **Drift detection is critical**: Version comparison, outcome analysis, external validation
+- **Graceful degradation helps**: When drift can't be fixed immediately, degrade gracefully
+- **AI failures are organizational**: Fragmented responsibility, siloed data, no processes
+- **Own knowledge quality**: Clear ownership, update processes, quality gates
+- **Ethics must be enforced**: Do-not-infer lists, refusal patterns, boundaries, monitoring
+- **Governance enables sustainability**: Long-term success requires organizational change
 
 ---
 
@@ -756,10 +756,10 @@ Monitor for ethical violations.
 ## Next Steps
 
 **After completing this module:**
-1. Review your governance framework
-2. Implement drift detection
-3. Establish ethical boundaries
-4. **Complete Final Project** - Build end-to-end RX system
+- **Review Your Governance**: Apply review your governance framework principles and best practices
+- **Drift Detection Implementation**: Implement drift detection
+- **Ethical Boundaries Configuration**: Establish ethical boundaries
+- **Complete Final Project**: Build end-to-end RX system
 
 ---
 

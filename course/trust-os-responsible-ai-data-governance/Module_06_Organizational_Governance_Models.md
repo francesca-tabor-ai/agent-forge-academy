@@ -13,11 +13,11 @@ email_action: "Design a governance operating model for a multi-team organization
 **Theme:** *Governance that scales with the organization*
 
 **Learning Objectives:**
-- Understand centralized vs federated governance models
-- Design roles and responsibilities using RACI models
-- Learn how to establish AI ethics committees and review boards
-- Design policy enforcement mechanisms
-- Balance autonomy and oversight effectively
+- **centralized vs federated governance models Understanding**: Understand centralized vs federated governance models
+- **roles and responsibilities using RACI models Development**: Design roles and responsibilities using RACI models
+- **how to establish AI ethics committees and review boards Understanding**: Learn how to establish AI ethics committees and review boards
+- **policy enforcement mechanisms Development**: Design policy enforcement mechanisms
+- **Balance Autonomy**: Balance autonomy and oversight effectively
 
 ---
 
@@ -1348,17 +1348,17 @@ A comprehensive organizational governance blueprint that includes:
 
 ## Key Takeaways
 
-1. **One size does not fit all:** Choose governance model based on organization context, risk profile, and culture.
+- **One size does not fit all:**: Choose governance model based on organization context, risk profile, and culture
 
-2. **Balance is key:** Effective governance balances centralized oversight with team autonomy.
+- **Balance is key:**: Effective governance balances centralized oversight with team autonomy
 
-3. **Roles must be clear:** RACI models ensure clear responsibilities and accountabilities.
+- **Roles must be clear:**: RACI models ensure clear responsibilities and accountabilities
 
-4. **Committees add value:** Ethics committees and review boards provide expert oversight and independent review.
+- **Committees add value:**: Ethics committees and review boards provide expert oversight and independent review
 
-5. **Enforcement is essential:** Policy enforcement mechanisms ensure compliance and build culture.
+- **Enforcement is essential:**: Policy enforcement mechanisms ensure compliance and build culture
 
-6. **Governance evolves:** Start with appropriate model and evolve as organization matures and context changes.
+- **Governance evolves:**: Start with appropriate model and evolve as organization matures and context changes
 
 ---
 

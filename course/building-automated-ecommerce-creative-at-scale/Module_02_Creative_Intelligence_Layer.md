@@ -12,11 +12,11 @@ email_action: "Build a Visual Prompt Enhancement System that outputs photorealis
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Turn briefs into structured creative inputs
-- Use LLMs for concept ideation and visual language translation
-- Design prompt systems, not prompts
-- Understand guardrails: what the model can and cannot invent
-- Build a reusable system prompt
+- **Turn Briefs**: Turn briefs into structured creative inputs
+- **Use Llms**: Use LLMs for concept ideation and visual language translation
+- **prompt Development**: Design prompt systems, not prompts
+- **Guardrails: What**: Understand guardrails: what the model can and cannot invent
+- **a reusable Development**: Build a reusable system prompt
 
 ---
 

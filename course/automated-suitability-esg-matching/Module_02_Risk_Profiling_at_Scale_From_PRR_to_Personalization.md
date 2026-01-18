@@ -9,10 +9,10 @@ order: 2
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Understand risk capacity vs. risk tolerance vs. risk willingness
-- Learn how to translate client answers into machine-readable risk profiles
-- Master mapping PRR bands to client risk buckets
-- Handle edge cases: portfolio diversification and mixed-risk products
+- **risk capacity vs. risk tolerance vs. risk willingness Understanding**: Understand risk capacity vs. risk tolerance vs. risk willingness
+- **how to translate client answers into machine-readable risk profiles Understanding**: Learn how to translate client answers into machine-readable risk profiles
+- **mapping PRR bands to client risk buckets Understanding**: Master mapping PRR bands to client risk buckets
+- **Handle Edge**: Handle edge cases: portfolio diversification and mixed-risk products
 
 ---
 
@@ -298,11 +298,11 @@ class RiskMatcher:
 
 ## Key Takeaways
 
-- Risk capacity, tolerance, and willingness are distinct concepts that must be reconciled
-- Client questionnaire responses can be systematically converted into machine-readable risk profiles
-- PRR-to-client matching requires clear logic and handles various edge cases
-- Portfolio diversification and mixed-risk products require special consideration
-- Automated risk matching enables scalability while maintaining regulatory compliance
+- **Risk Capacity,**: Risk capacity, tolerance, and willingness are distinct concepts that must be reconciled
+- **Client Questionnaire**: Client questionnaire responses can be systematically converted into machine-readable risk profiles
+- **Prr-To-Client Matching**: PRR-to-client matching requires clear logic and handles various edge cases
+- **Portfolio Diversification**: Portfolio diversification and mixed-risk products require special consideration
+- **Automated Risk**: Automated risk matching enables scalability while maintaining regulatory compliance
 
 ---
 

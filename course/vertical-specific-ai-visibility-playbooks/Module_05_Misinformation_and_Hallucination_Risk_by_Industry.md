@@ -11,11 +11,11 @@ order: 5
 
 **Duration:** Week 5  
 **Learning Objectives:**
-- Detect and prioritise AI-generated misinformation risks
-- Understand which errors are tolerable vs existential
-- Identify industry-specific hallucination patterns
-- Distinguish product misrepresentation vs advisory errors
-- Complete a Vertical AI Risk Register
+- **Detect And**: Detect and prioritise AI-generated misinformation risks
+- **which errors are tolerable vs existential Understanding**: Understand which errors are tolerable vs existential
+- **Identify Industry-Specific**: Identify industry-specific hallucination patterns
+- **product misrepresentation Analysis**: Distinguish product misrepresentation vs advisory errors
+- **Complete A**: Complete a Vertical AI Risk Register
 
 ---
 
@@ -554,11 +554,11 @@ Create a comprehensive risk register to identify, prioritize, and mitigate AI-ge
 
 ## Key Takeaways
 
-- **Hallucinations are industry-specific:** Different verticals have different error patterns
-- **Advisory errors are more dangerous:** Higher risk than product misrepresentation
-- **Thresholds matter:** Legal, regulatory, and reputational thresholds define risk levels
-- **Early warning is critical:** Monitoring systems prevent escalation
-- **Risk mitigation is mandatory:** Proactive strategies are essential
+- **Hallucinations are industry-specific:**: Different verticals have different error patterns
+- **Advisory errors are more dangerous:**: Higher risk than product misrepresentation
+- **Thresholds matter:**: Legal, regulatory, and reputational thresholds define risk levels
+- **Early warning is critical:**: Monitoring systems prevent escalation
+- **Risk mitigation is mandatory:**: Proactive strategies are essential
 
 ---
 

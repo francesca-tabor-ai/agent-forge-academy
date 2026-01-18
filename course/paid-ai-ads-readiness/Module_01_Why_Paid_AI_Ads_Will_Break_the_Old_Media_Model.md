@@ -9,11 +9,11 @@ order: 1
 
 **Duration:** Week 1  
 **Learning Objectives:**
-- Understand why paid AI placements will not resemble search or social ads
-- Reframe media buying around intent resolution, not clicks
-- Analyze how AI recommendations differ fundamentally from traditional ads
-- Identify the shift from "rank + bid" to "confidence + trust"
-- Learn from early AI recommendation surfaces
+- **why paid AI placements will not resemble search or social ads Understanding**: Understand why paid AI placements will not resemble search or social ads
+- **Reframe Media**: Reframe media buying around intent resolution, not clicks
+- **Analyze How**: Analyze how AI recommendations differ fundamentally from traditional ads
+- **Identify The**: Identify the shift from "rank + bid" to "confidence + trust"
+- **from early AI recommendation surfaces Understanding**: Learn from early AI recommendation surfaces
 
 ---
 
@@ -471,15 +471,15 @@ Create a comprehensive brief with:
 
 ## Key Takeaways
 
-- **AI recommendations are fundamentally different from ads:** Integration vs. display, intent resolution vs. keyword matching
+- **AI recommendations are fundamentally different from ads:**: Integration vs. display, intent resolution vs. keyword matching
 
-- **Keywords collapse into intent clusters:** Semantic understanding reduces complexity while improving performance
+- **Keywords collapse into intent clusters:**: Semantic understanding reduces complexity while improving performance
 
-- **The model shifts from "rank + bid" to "confidence + trust":** Quality and authority matter more than bid alone
+- **The model shifts from "rank + bid" to "confidence + trust":**: Quality and authority matter more than bid alone
 
-- **Early AI surfaces teach us:** Citation ≠ click, trust signals win, context is king, evidence required
+- **Early AI surfaces teach us:**: Citation ≠ click, trust signals win, context is king, evidence required
 
-- **Preparation is critical:** First-mover advantage in building trust signals and intent coverage
+- **Preparation is critical:**: First-mover advantage in building trust signals and intent coverage
 
 ---
 

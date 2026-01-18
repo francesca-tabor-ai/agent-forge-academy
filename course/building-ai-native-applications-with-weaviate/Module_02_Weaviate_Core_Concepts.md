@@ -9,12 +9,12 @@ order: 2
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Understand Weaviate's object model
-- Design and create schemas programmatically
-- Configure classes and properties
-- Work with vectorizers vs. user-provided vectors
-- Choose appropriate distance metrics
-- Insert and retrieve objects
+- **Weaviate's object model Understanding**: Understand Weaviate's object model
+- **and create schemas programmatically Development**: Design and create schemas programmatically
+- **Configure Classes**: Configure classes and properties
+- **Work With**: Work with vectorizers vs. user-provided vectors
+- **Choose Appropriate**: Choose appropriate distance metrics
+- **Insert And**: Insert and retrieve objects
 
 ---
 
@@ -393,9 +393,9 @@ client.data_object.create(
 - -1 = opposite direction
 
 **Best For:**
-- Text embeddings (most common)
-- Normalized vectors
-- When magnitude doesn't matter
+- **Text Embeddings**: Text embeddings (most common)
+- **Normalized Vectors**: Implement normalized vectors effectively across relevant use cases
+- **When Magnitude**: When magnitude doesn't matter
 
 **Formula:**
 ```
@@ -423,9 +423,9 @@ cos(θ) = (A · B) / (||A|| × ||B||)
 - Works well with normalized vectors
 
 **Best For:**
-- Normalized embeddings
-- When magnitude matters
-- Some embedding models
+- **Normalized Embeddings**: Implement normalized embeddings effectively across relevant use cases
+- **When Magnitude**: Apply when magnitude matters in relevant contexts
+- **Some Embedding**: Apply some embedding models in relevant contexts
 
 **Formula:**
 ```
@@ -450,9 +450,9 @@ A · B = Σ(Ai × Bi)
 - Larger = more different
 
 **Best For:**
-- Image embeddings
-- When distance is intuitive
-- Some specific models
+- **Image Embeddings**: Implement image embeddings effectively across relevant use cases
+- **When Distance**: When distance is intuitive
+- **Some Specific**: Apply some specific models in relevant contexts
 
 **Formula:**
 ```
@@ -792,16 +792,16 @@ else:
 ## Summary
 
 **Key Takeaways:**
-- Classes define structure, objects are instances
-- Properties store data with specific types
-- Vectorizers automate embedding generation
-- Distance metrics affect search results
-- Schema design impacts performance and functionality
+- **Classes Define**: Classes define structure, objects are instances
+- **Properties Store**: Properties store data with specific types
+- **Vectorizers Automate**: Vectorizers automate embedding generation
+- **Distance Metrics**: Distance metrics affect search results
+- **Schema Design**: Schema design impacts performance and functionality
 
 **What's Next:**
-- Module 3: Learn data ingestion patterns and indexing
-- Optimize for large-scale datasets
-- Understand HNSW indexing
+- **Module 3:**: Module 3: Learn data ingestion patterns and indexing
+- **Optimize For**: Optimize for large-scale datasets
+- **HNSW indexing Understanding**: Understand HNSW indexing
 
 ---
 

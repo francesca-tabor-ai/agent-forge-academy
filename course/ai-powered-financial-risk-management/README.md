@@ -19,12 +19,12 @@ order: 0
 
 By completing this course, you will be able to:
 
-- Build AI-driven risk assessment models for credit, market, and operational risk
-- Design real-time portfolio optimization systems using machine learning
-- Implement predictive analytics for default probability and loss forecasting
-- Create automated risk monitoring dashboards with anomaly detection
-- Deploy stress testing and scenario analysis frameworks powered by AI
-- Integrate regulatory compliance (Basel III, IFRS 9) into risk models
+- **AI-driven risk assessment models for credit, market, and operational risk Development**: Build AI-driven risk assessment models for credit, market, and operational risk
+- **real-time portfolio optimization Development**: Design real-time portfolio optimization systems using machine learning
+- **predictive analytics for default probability and loss forecasting Implementation**: Implement predictive analytics for default probability and loss forecasting
+- **automated risk monitoring dashboards with anomaly detection Development**: Create automated risk monitoring dashboards with anomaly detection
+- **stress testing and scenario analysis frameworks powered by AI Implementation**: Deploy stress testing and scenario analysis frameworks powered by AI
+- **regulatory compliance (Basel III, IFRS 9) into risk models Integration**: Integrate regulatory compliance (Basel III, IFRS 9) into risk models
 
 ---
 

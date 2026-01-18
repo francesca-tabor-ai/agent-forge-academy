@@ -11,12 +11,12 @@ order: 6
 
 **Duration:** Week 6  
 **Learning Objectives:**
-- Tie AI influence to commercial outcomes executives care about
-- Avoid overclaiming while defending AI's value
-- Build AI-assisted revenue models
-- Measure pipeline influence in B2B contexts
-- Calculate LTV lift from pre-qualified AI demand
-- Choose between conservative vs aggressive attribution methodologies
+- **Tie Ai**: Tie AI influence to commercial outcomes executives care about
+- **Avoid Overclaiming**: Avoid overclaiming while defending AI's value
+- **AI-assisted revenue models Development**: Build AI-assisted revenue models
+- **Measure Pipeline**: Measure pipeline influence in B2B contexts
+- **Calculate Ltv**: Calculate LTV lift from pre-qualified AI demand
+- **Choose Between**: Choose between conservative vs aggressive attribution methodologies
 
 ---
 
@@ -671,12 +671,12 @@ Create a narrative that explains AI attribution in terms finance executives unde
 
 ## Key Takeaways
 
-- **Multiple revenue models exist:** Full credit, proportional, incremental, assisted
-- **Choose model by audience:** Conservative for CFOs, balanced for executives, aggressive for advocacy
-- **B2B requires pipeline metrics:** Pipeline creation, velocity, win rate, deal size
-- **LTV lift is significant:** AI users have 20-50% higher LTV
-- **Credibility matters:** Conservative approaches are more defensible
-- **Finance alignment is critical:** Use finance language and conservative methodologies
+- **Multiple revenue models exist:**: Full credit, proportional, incremental, assisted
+- **Choose model by audience:**: Conservative for CFOs, balanced for executives, aggressive for advocacy
+- **B2B requires pipeline metrics:**: Pipeline creation, velocity, win rate, deal size
+- **LTV lift is significant:**: AI users have 20-50% higher LTV
+- **Credibility matters:**: Conservative approaches are more defensible
+- **Finance alignment is critical:**: Use finance language and conservative methodologies
 
 ---
 

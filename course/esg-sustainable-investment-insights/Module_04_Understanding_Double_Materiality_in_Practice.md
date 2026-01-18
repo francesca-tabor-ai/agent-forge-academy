@@ -9,10 +9,10 @@ order: 4
 
 **Duration:** Week 4  
 **Learning Objectives:**
-- Distinguish financial materiality vs. impact materiality
-- Understand regulatory expectations under SFDR and CSRD
-- Map impacts across asset classes and regions
-- Address challenges of incomplete corporate disclosure
+- **financial materiality Analysis**: Distinguish financial materiality vs. impact materiality
+- **regulatory expectations under SFDR and CSRD Understanding**: Understand regulatory expectations under SFDR and CSRD
+- **Map Impacts**: Map impacts across asset classes and regions
+- **Address Challenges**: Address challenges of incomplete corporate disclosure
 
 ---
 
@@ -245,10 +245,10 @@ Create a comprehensive double materiality mapping for a multi-asset portfolio ac
 
 ## Key Takeaways
 
-- Financial and impact materiality represent two distinct but related dimensions
-- SFDR and CSRD require comprehensive double materiality assessment
-- Mapping impacts across asset classes and regions provides portfolio-level insights
-- Incomplete disclosure requires estimation strategies with appropriate confidence levels
+- **Financial And**: Financial and impact materiality represent two distinct but related dimensions
+- **Sfdr And**: SFDR and CSRD require comprehensive double materiality assessment
+- **Mapping Impacts**: Mapping impacts across asset classes and regions provides portfolio-level insights
+- **Incomplete Disclosure**: Incomplete disclosure requires estimation strategies with appropriate confidence levels
 
 ---
 

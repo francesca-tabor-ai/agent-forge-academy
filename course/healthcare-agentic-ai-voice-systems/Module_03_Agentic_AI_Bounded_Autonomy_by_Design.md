@@ -11,11 +11,11 @@ email_action: "Design an agent with 3 clear task boundaries and 2 escalation poi
 
 **Duration:** Week 3-4  
 **Learning Objectives:**
-- Understand agent vs workflow vs orchestration
-- Design task decomposition for agentic systems
-- Implement permission models and role-based execution
-- Design explicit escalation paths to humans
-- Build systems that handle partial failure and recovery
+- **agent vs workflow vs orchestration Understanding**: Understand agent vs workflow vs orchestration
+- **task decomposition for agentic Development**: Design task decomposition for agentic systems
+- **permission models and role-based execution Implementation**: Implement permission models and role-based execution
+- **explicit escalation paths to humans Development**: Design explicit escalation paths to humans
+- **systems that handle partial failure and recovery Development**: Build systems that handle partial failure and recovery
 
 ---
 
@@ -678,10 +678,10 @@ Escalation Point 2: Patient non-adherence pattern
 - Design for failure: assume things will go wrong
 
 **Next Steps:**
-- Apply task decomposition to your agent design
-- Implement permission models and role-based access
-- Design explicit escalation workflows
-- Plan for partial failure and recovery
+- **Apply Task**: Apply task decomposition to your agent design
+- **permission models and role-based access Implementation**: Implement permission models and role-based access
+- **explicit escalation Development**: Design explicit escalation workflows
+- **Plan For**: Plan for partial failure and recovery
 
 ---
 

@@ -11,12 +11,12 @@ order: 3
 
 **Duration:** Week 3  
 **Learning Objectives:**
-- Build continuous hallucination detection systems
-- Separate signal from stochastic AI variance
-- Monitor AI text outputs by intent cluster
-- Detect visual hallucinations and synthetic imagery
-- Identify competitive hijacking inside AI answers
-- Establish early-warning indicators before virality
+- **continuous hallucination detection Development**: Build continuous hallucination detection systems
+- **Separate Signal**: Separate signal from stochastic AI variance
+- **Monitor Ai**: Monitor AI text outputs by intent cluster
+- **Detect Visual**: Detect visual hallucinations and synthetic imagery
+- **Identify Competitive**: Identify competitive hijacking inside AI answers
+- **Establish Early-Warning**: Establish early-warning indicators before virality
 
 ---
 
@@ -523,9 +523,9 @@ In this module, you've learned:
 **Key Takeaway:** Effective monitoring requires a layered approach: real-time validation for high-risk outputs, sampling for medium-risk, and feedback loops to catch what automated systems miss.
 
 **Next Steps:**
-- Complete Lab 3: AI Hallucination Monitoring Framework
-- Review Module 4: Image & Product Depiction Validation
-- Begin planning implementation of monitoring systems
+- **Complete Lab**: Complete Lab 3: AI Hallucination Monitoring Framework
+- **Review Module**: Review Module 4: Image & Product Depiction Validation
+- **Begin Planning**: Begin planning implementation of monitoring systems
 
 ---
 

@@ -9,10 +9,10 @@ order: 3
 
 **Duration:** Week 5-6  
 **Learning Objectives:**
-- Navigate fal.ai dashboard and manage credits
-- Explore the Model Gallery and playgrounds
-- Build custom workflow UIs with JSON
-- Work with multiple media modalities (video, audio, 3D)
+- **Navigate Fal.Ai**: Navigate fal.ai dashboard and manage credits
+- **Explore The**: Explore the Model Gallery and playgrounds
+- **custom Development**: Build custom workflow UIs with JSON
+- **Work With**: Work with multiple media modalities (video, audio, 3D)
 
 ---
 
@@ -493,10 +493,10 @@ You've learned:
 - ✅ Working with video, audio, and 3D generation
 
 **Next Steps:**
-- Build custom workflows on fal.ai
-- Experiment with multi-modal generation
-- Optimize for cost and quality
-- Prepare for Module 4: Advanced Creative Pipelines
+- **custom Development**: Build custom workflows on fal.ai
+- **Experiment With**: Experiment with multi-modal generation
+- **Optimize For**: Optimize for cost and quality
+- **Prepare For**: Prepare for Module 4: Advanced Creative Pipelines
 
 ---
 

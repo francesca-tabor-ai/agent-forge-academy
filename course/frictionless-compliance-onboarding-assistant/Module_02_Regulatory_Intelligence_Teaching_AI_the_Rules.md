@@ -9,10 +9,10 @@ order: 2
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Understand jurisdictional rule variation (GDPR, marketing rules, disclosure standards)
-- Learn encoding regulatory logic into machines
-- Compare static rules vs. adaptive learning models
-- Design systems for keeping regulatory libraries current
+- **jurisdictional rule variation Understanding**: Understand jurisdictional rule variation (GDPR, marketing rules, disclosure standards)
+- **encoding regulatory logic into machines Understanding**: Learn encoding regulatory logic into machines
+- **static rules Analysis**: Compare static rules vs. adaptive learning models
+- **systems for keeping regulatory libraries current Development**: Design systems for keeping regulatory libraries current
 
 ---
 
@@ -212,10 +212,10 @@ Regulatory Rules Matrix:
 
 ## Key Takeaways
 
-- Jurisdictional rule variation requires flexible regulatory intelligence systems
-- Regulatory logic can be encoded using rule engines and machine learning
-- Static rules and adaptive models serve complementary roles
-- Keeping regulatory libraries current requires systematic update processes
+- **Jurisdictional Rule**: Jurisdictional rule variation requires flexible regulatory intelligence systems
+- **Regulatory Logic**: Regulatory logic can be encoded using rule engines and machine learning
+- **Static Rules**: Static rules and adaptive models serve complementary roles
+- **Keeping Regulatory**: Keeping regulatory libraries current requires systematic update processes
 
 ---
 

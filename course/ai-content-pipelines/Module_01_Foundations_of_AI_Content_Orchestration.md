@@ -9,10 +9,10 @@ order: 1
 
 **Duration:** Week 1  
 **Learning Objectives:**
-- Understand the shift from "AI in Media" to "Media in AI"
-- Master the four-stage pipeline framework (Initialization, Planning, Execution, Verification)
-- Learn phased implementation strategies from pilot to enterprise
-- Design measurable KPIs for content pipeline success
+- **the shift from "AI in Media" to "Media in AI" Understanding**: Understand the shift from "AI in Media" to "Media in AI"
+- **the four-stage pipeline framework Understanding**: Master the four-stage pipeline framework (Initialization, Planning, Execution, Verification)
+- **phased implementation strategies from pilot to enterprise Understanding**: Learn phased implementation strategies from pilot to enterprise
+- **measurable KPIs for content Development**: Design measurable KPIs for content pipeline success
 
 ---
 

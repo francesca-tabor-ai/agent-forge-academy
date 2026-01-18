@@ -9,10 +9,10 @@ order: 2
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Analyze platform traffic and fund search behavior
-- Understand investment forum sentiment and narratives
-- Compare social media mood vs. actual flows
-- Consider bias, representativeness, and ethical considerations
+- **Analyze Platform**: Analyze platform traffic and fund search behavior
+- **investment forum sentiment and narratives Understanding**: Understand investment forum sentiment and narratives
+- **social media mood Analysis**: Compare social media mood vs. actual flows
+- **bias, representativeness, Evaluation**: Consider bias, representativeness, and ethical considerations
 
 ---
 
@@ -232,10 +232,10 @@ Create a comprehensive mapping of alternative data sources to potential fund inf
 
 ## Key Takeaways
 
-- Platform traffic and search behavior provide early signals of investor intent
-- Investment forum sentiment reveals narratives that drive investment decisions
-- Social media mood correlates with flows but requires careful interpretation
-- Bias and representativeness must be carefully managed for ethical use
+- **Platform Traffic**: Platform traffic and search behavior provide early signals of investor intent
+- **Investment Forum**: Investment forum sentiment reveals narratives that drive investment decisions
+- **Social Media**: Social media mood correlates with flows but requires careful interpretation
+- **Bias And**: Bias and representativeness must be carefully managed for ethical use
 
 ---
 

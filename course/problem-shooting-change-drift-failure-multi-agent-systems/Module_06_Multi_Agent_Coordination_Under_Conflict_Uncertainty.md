@@ -11,11 +11,11 @@ email_action: "Think of a multi-agent system—what happens when two agents disa
 
 **Duration:** Week 6  
 **Learning Objectives:**
-- Handle agent disagreement, stalling, and false consensus
-- Design communication protocols and shared state
-- Prevent deadlocks, livelocks, and runaway collaboration
-- Implement arbitration, voting, and escalation policies
-- Build budget-aware coordination
+- **Handle Agent**: Handle agent disagreement, stalling, and false consensus
+- **communication protocols and shared state Development**: Design communication protocols and shared state
+- **Prevent Deadlocks,**: Prevent deadlocks, livelocks, and runaway collaboration
+- **arbitration, voting, and escalation policies Implementation**: Implement arbitration, voting, and escalation policies
+- **budget-aware coordination Development**: Build budget-aware coordination
 
 ---
 

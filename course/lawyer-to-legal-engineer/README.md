@@ -20,16 +20,16 @@ order: 0
 
 By completing this course, you will be able to:
 
-- Transform legal reasoning into system design principles
-- Decompose legal work into machine-executable tasks with proper guardrails
-- Understand how LLMs work and their implications for legal reasoning
-- Design prompts as legal interfaces with proper testing and versioning
-- Build retrieval-augmented generation (RAG) systems for legal knowledge
-- Create single and multi-agent AI systems for legal use cases
-- Orchestrate legal AI systems with proper state management and auditability
-- Evaluate, test, and red-team legal AI systems
-- Navigate ethics, risk, and professional responsibility in legal AI
-- Deploy AI systems in real legal organizations
+- **Transform Legal**: Transform legal reasoning into system design principles
+- **Decompose Legal**: Decompose legal work into machine-executable tasks with proper guardrails
+- **how LLMs work and their implications for legal reasoning Understanding**: Understand how LLMs work and their implications for legal reasoning
+- **prompts as legal interfaces with proper testing and versioning Development**: Design prompts as legal interfaces with proper testing and versioning
+- **retrieval-augmented generation (RAG) Development**: Build retrieval-augmented generation (RAG) systems for legal knowledge
+- **single and multi-agent AI Development**: Create single and multi-agent AI systems for legal use cases
+- **Orchestrate Legal**: Orchestrate legal AI systems with proper state management and auditability
+- **Evaluate, Test,**: Evaluate, test, and red-team legal AI systems
+- **Navigate Ethics,**: Navigate ethics, risk, and professional responsibility in legal AI
+- **AI Implementation**: Deploy AI systems in real legal organizations
 
 ---
 

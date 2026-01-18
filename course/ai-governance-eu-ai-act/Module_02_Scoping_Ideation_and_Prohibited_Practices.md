@@ -9,10 +9,10 @@ order: 2
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Integrate compliance by design into the ideation phase
-- Identify and avoid prohibited practices that are non-negotiable red lines
-- Determine if content pipelines fall into high-risk domains
-- Conduct compliance assessments for AI content pipeline use cases
+- **compliance by design into the ideation phase Integration**: Integrate compliance by design into the ideation phase
+- **Identify And**: Identify and avoid prohibited practices that are non-negotiable red lines
+- **Determine If**: Determine if content pipelines fall into high-risk domains
+- **Conduct Compliance**: Conduct compliance assessments for AI content pipeline use cases
 
 ---
 
@@ -624,9 +624,9 @@ In this module, you've learned:
  **Assessment Frameworks:** Practical tools for compliance assessment
 
 **Next Steps:**
-- Complete Lab 2
-- Review Module 3: Data Strategy and Pipeline Governance
-- Begin planning data governance for your content pipeline
+- **Complete Lab**: Apply complete lab 2 in relevant contexts
+- **Review Module**: Review Module 3: Data Strategy and Pipeline Governance
+- **Begin Planning**: Begin planning data governance for your content pipeline
 
 ---
 

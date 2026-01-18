@@ -9,11 +9,11 @@ order: 1
 
 **Duration:** Week 1  
 **Learning Objectives:**
-- Understand why products increasingly look the same
-- Distinguish between personalization and recommendation
-- Learn regulatory boundaries: information vs. advice
-- Recognize client expectations shaped by consumer tech
-- Identify where personalization adds value without triggering suitability risk
+- **why products increasingly look the same Understanding**: Understand why products increasingly look the same
+- **between personalization Analysis**: Distinguish between personalization and recommendation
+- **Regulatory Boundaries:**: Learn regulatory boundaries: information vs. advice
+- **Recognize Client**: Recognize client expectations shaped by consumer tech
+- **Identify Where**: Identify where personalization adds value without triggering suitability risk
 
 ---
 
@@ -286,11 +286,11 @@ Analyze different communication scenarios and identify where personalization can
 
 ## Key Takeaways
 
-- Products look the same due to regulatory standardization and market forces
-- Personalization (information) differs from recommendation (advice) with different regulatory implications
-- Regulatory boundaries between information and advice must be carefully managed
-- Client expectations from consumer tech create opportunities for hyper-personalization
-- Personalization can add significant value while staying within regulatory boundaries
+- **Products Look**: Products look the same due to regulatory standardization and market forces
+- **Personalization (Information)**: Personalization (information) differs from recommendation (advice) with different regulatory implications
+- **Regulatory Boundaries**: Regulatory boundaries between information and advice must be carefully managed
+- **Client Expectations**: Client expectations from consumer tech create opportunities for hyper-personalization
+- **Personalization Can**: Personalization can add significant value while staying within regulatory boundaries
 
 ---
 

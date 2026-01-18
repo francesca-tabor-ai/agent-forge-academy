@@ -10,11 +10,11 @@ order: 3
 **Duration:** Week 3  
 **Theme:** Turning intelligence into action  
 **Learning Objectives:**
-- Understand rule-based vs ML-driven decisioning
-- Design personalization architectures and evaluate trade-offs
-- Choose between real-time and batch decisioning
-- Implement experimentation and guardrails in AI decisions
-- Design failure handling for user-facing AI systems
+- **rule-based vs ML-driven decisioning Understanding**: Understand rule-based vs ML-driven decisioning
+- **personalization architectures and evaluate trade-offs Development**: Design personalization architectures and evaluate trade-offs
+- **Choose Between**: Choose between real-time and batch decisioning
+- **experimentation and guardrails in AI decisions Implementation**: Implement experimentation and guardrails in AI decisions
+- **failure handling for user-facing AI Development**: Design failure handling for user-facing AI systems
 
 ---
 
@@ -782,22 +782,22 @@ Design a complete decisioning architecture for a personalized user journey. Incl
 
 **Key Takeaways:**
 
-1. **Decisioning Spectrum:** Choose rule-based, ML-driven, or hybrid based on complexity, data, and requirements.
+- **Decisioning Spectrum:**: Choose rule-based, ML-driven, or hybrid based on complexity, data, and requirements
 
-2. **Personalization Trade-offs:** Balance accuracy, diversity, privacy, and latency based on user and business needs.
+- **Personalization Trade-offs:**: Balance accuracy, diversity, privacy, and latency based on user and business needs
 
-3. **Timing Decisions:** Use real-time for user-facing, batch for complex computations, hybrid for best of both.
+- **Timing Decisions:**: Use real-time for user-facing, batch for complex computations, hybrid for best of both
 
-4. **Experimentation:** Validate AI decisions through A/B tests, bandits, and staged rollouts.
+- **Experimentation:**: Validate AI decisions through A/B tests, bandits, and staged rollouts
 
-5. **Guardrails:** Implement safety, fairness, business, and quality guardrails to prevent harmful outcomes.
+- **Guardrails:**: Implement safety, fairness, business, and quality guardrails to prevent harmful outcomes
 
-6. **Failure Handling:** Design graceful degradation, fallbacks, and user-friendly error handling.
+- **Failure Handling:**: Design graceful degradation, fallbacks, and user-friendly error handling
 
 **Next Steps:**
-- Module 4: Learn GenAI product patterns
-- Understand how to apply generative AI responsibly
-- Design GenAI features with clear user value
+- **Module 4:**: Module 4: Learn GenAI product patterns
+- **how to apply generative AI responsibly Understanding**: Understand how to apply generative AI responsibly
+- **GenAI features with clear user value Development**: Design GenAI features with clear user value
 
 ---
 

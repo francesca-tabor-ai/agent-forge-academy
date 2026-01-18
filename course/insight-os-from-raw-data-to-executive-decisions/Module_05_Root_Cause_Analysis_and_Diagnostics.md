@@ -11,11 +11,11 @@ order: 5
 **Theme:** *Why did this happen?*
 
 **Learning Objectives:**
-- Distinguish diagnostic analytics from descriptive analytics
-- Apply drill-down strategies effectively
-- Use segmentation and slicing for diagnosis
-- Understand correlation vs causation (at analyst level)
-- Write clear analytical narratives
+- **diagnostic analytics from descriptive analytics Analysis**: Distinguish diagnostic analytics from descriptive analytics
+- **Apply Drill-Down**: Apply drill-down strategies effectively
+- **Use Segmentation**: Use segmentation and slicing for diagnosis
+- **correlation vs causation Understanding**: Understand correlation vs causation (at analyst level)
+- **Write Clear**: Write clear analytical narratives
 
 ---
 
@@ -638,11 +638,11 @@ For all three investigations:
 
 ## Key Takeaways
 
-1. **Diagnostic vs Descriptive:** Move from "what" to "why"
-2. **Drill-Down Strategies:** Start broad, go narrow, use multiple dimensions
-3. **Segmentation:** Identify which groups drive changes
-4. **Correlation ≠ Causation:** Test hypotheses, consider alternatives
-5. **Analytical Narratives:** Tell a story that explains and recommends
+- **Diagnostic vs Descriptive:**: Move from "what" to "why"
+- **Drill-Down Strategies:**: Start broad, go narrow, use multiple dimensions
+- **Segmentation:**: Identify which groups drive changes
+- **Correlation ≠ Causation:**: Test hypotheses, consider alternatives
+- **Analytical Narratives:**: Tell a story that explains and recommends
 
 ---
 

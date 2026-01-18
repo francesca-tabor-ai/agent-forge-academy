@@ -9,11 +9,11 @@ order: 2
 
 **Duration:** Week 2  
 **Learning Objectives:**
-- Translate legal workflows into system components
-- Distinguish between deterministic and probabilistic legal tasks
-- Design task boundaries, escalation points, and human review checkpoints
-- Design systems for defensibility, not perfection
-- Create machine-executable task specifications
+- **Translate Legal**: Translate legal workflows into system components
+- **between deterministic Analysis**: Distinguish between deterministic and probabilistic legal tasks
+- **task boundaries, escalation points, and human review checkpoints Development**: Design task boundaries, escalation points, and human review checkpoints
+- **systems for defensibility, not perfection Development**: Design systems for defensibility, not perfection
+- **machine-executable task specifications Development**: Create machine-executable task specifications
 
 ---
 
@@ -368,15 +368,15 @@ Take a complex legal task and decompose it into machine-executable components wi
 
 ## Key Takeaways
 
-1. **Legal workflows must be decomposed into discrete, machine-executable tasks** with clear boundaries and interfaces.
+- **Legal workflows must be decomposed into discrete, machine-executable tasks**: With clear boundaries and interfaces
 
-2. **Distinguish between deterministic and probabilistic tasks** - design each type appropriately.
+- **Distinguish between deterministic and probabilistic tasks**: Design each type appropriately
 
-3. **Design escalation points and human review checkpoints** at appropriate moments in the workflow.
+- **Design escalation points and human review checkpoints**: At appropriate moments in the workflow
 
-4. **Design for defensibility, not perfection** - focus on transparency, explainability, and human oversight.
+- **Design for defensibility, not perfection**: Focus on transparency, explainability, and human oversight
 
-5. **Task decomposition is the foundation** for building effective legal AI systems.
+- **Task decomposition is the foundation**: For building effective legal AI systems
 
 ---
 
@@ -396,10 +396,10 @@ Take a complex legal task and decompose it into machine-executable components wi
 
 ## Next Steps
 
-- Complete Lab 2
-- Review Module 3: How Large Language Models Actually Work (for Lawyers)
-- Join course discussion forum
-- Attend office hours if you have questions
+- **Complete Lab**: Apply complete lab 2 in relevant contexts
+- **Review Module**: Review Module 3: How Large Language Models Actually Work (for Lawyers)
+- **Join Course**: Join course discussion forum
+- **Attend Office**: Attend office hours if you have questions
 
 ---
 

@@ -20,11 +20,11 @@ order: 0
 
 By completing this course, you will be able to:
 
-- Identify high-intent personas surfaced by AI before competitors do
-- Monetise demand that AI already understands
-- Align product, pricing, and messaging around truth
-- Improve AI recommendation frequency organically
-- Drive durable growth rooted in real customer needs
+- **Identify High-Intent**: Identify high-intent personas surfaced by AI before competitors do
+- **Monetise Demand**: Monetise demand that AI already understands
+- **Align Product,**: Align product, pricing, and messaging around truth
+- **Improve Ai**: Improve AI recommendation frequency organically
+- **Drive Durable**: Drive durable growth rooted in real customer needs
 
 ---
 
