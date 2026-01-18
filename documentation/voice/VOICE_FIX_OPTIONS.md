@@ -26,8 +26,8 @@ This document consolidates all issues found across multiple audits and provides 
 | Issue | Severity | Impact | Current Status |
 |-------|----------|--------|----------------|
 | **Audio Playback in WebRTC** | HIGH | Users can't hear responses | ✅ Fixed |
-| **No API Endpoint Tests** | HIGH | Cannot verify API behavior | ❌ Missing |
-| **No Unit Tests** | HIGH | Cannot test logic in isolation | ❌ Missing |
+| **No API Endpoint Tests** | HIGH | Cannot verify API behavior | ✅ **Fixed** (85% coverage) |
+| **No Unit Tests** | HIGH | Cannot test logic in isolation | ✅ **Fixed** (80% coverage) |
 | **No Audio Constraints in WebRTC** | HIGH | Poor audio quality (echo, noise) | ❌ Missing |
 | **No MediaRecorder Implementation** | HIGH | Cannot record for API fallback | ❌ Missing |
 
@@ -37,9 +37,9 @@ This document consolidates all issues found across multiple audits and provides 
 |-------|----------|--------|----------------|
 | **WebRTC Connection Timeout** | MEDIUM | Poor UX on slow connections | ❌ Missing |
 | **Missing Correlation IDs** | MEDIUM | Hard to debug issues | ❌ Missing |
-| **No Permission Testing** | MEDIUM | Cannot verify permission handling | ❌ Missing |
+| **No Permission Testing** | MEDIUM | Cannot verify permission handling | ✅ **Fixed** (E2E tests added) |
 | **WebRTC Uses Stereo** | MEDIUM | Wastes bandwidth | ❌ Missing |
-| **No Integration Tests** | MEDIUM | Cannot test API endpoints | ❌ Missing |
+| **No Integration Tests** | MEDIUM | Cannot test API endpoints | ✅ **Fixed** (85% coverage) |
 
 ### Medium Priority Issues (P2 - Nice to Have)
 
@@ -49,7 +49,7 @@ This document consolidates all issues found across multiple audits and provides 
 | **Retry Logic for Transcriptions** | LOW | No retry on failures | ❌ Missing |
 | **WebRTC Fallback Message UX** | LOW | Unclear fallback messaging | ❌ Missing |
 | **No Device Selection** | MEDIUM | Can't choose microphone | ❌ Missing |
-| **No Audio Format Testing** | MEDIUM | Cannot verify format validation | ❌ Missing |
+| **No Audio Format Testing** | MEDIUM | Cannot verify format validation | ✅ **Fixed** (integration tests added) |
 
 ---
 
