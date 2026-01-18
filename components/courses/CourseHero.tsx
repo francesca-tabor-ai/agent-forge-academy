@@ -4,6 +4,23 @@ import Link from 'next/link';
 import { Share2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
+/**
+ * Standard CourseHero Component Pattern
+ * 
+ * This is the SINGLE REUSABLE component for all course landing pages.
+ * All course landing pages MUST use this component - no per-course hacks.
+ * 
+ * Standard Structure:
+ * 1. Hero wrapper with reliable height (min-height at all breakpoints)
+ * 2. Background image layer (full-bleed, bg-cover bg-center)
+ * 3. Fallback background color (bg-gray-900) if image fails
+ * 4. Gradient overlay for text readability
+ * 5. Constrained inner content container (max-w-7xl, responsive padding)
+ * 6. Title + metadata + actions
+ * 
+ * This ensures consistent UI across all courses and prevents layout issues.
+ */
+
 interface CourseHeroProps {
   title: string;
   imageUrl: string;
@@ -21,11 +38,13 @@ interface CourseHeroProps {
 
 /**
  * Default fallback image URL (matches course-image-resolver.ts)
+ * This ensures every course always has a background image, even if track image fails
  */
 const DEFAULT_FALLBACK_IMAGE = 'https://wallpaperaccess.com/full/340554.png';
 
 /**
  * Validate if an image URL is valid
+ * Filters out placeholder strings and invalid URLs
  */
 function isValidImageUrl(url: string | null | undefined): boolean {
   if (!url || typeof url !== 'string') return false;
@@ -98,11 +117,22 @@ export function CourseHero({
   };
 
   return (
-    <div className="relative w-full min-h-[240px] sm:min-h-[280px] md:min-h-[320px] lg:min-h-[360px] overflow-hidden">
-      {/* Background Image - Full-bleed with error handling */}
+    <div 
+      className="relative w-full min-h-[240px] sm:min-h-[280px] md:min-h-[320px] lg:min-h-[360px] overflow-hidden"
+      role="banner"
+      aria-label="Course hero banner"
+    >
+      {/* 
+        STANDARD PATTERN: Background Image Layer
+        - Full-bleed background image (absolute inset-0)
+        - bg-cover bg-center ensures image fills container
+        - bg-gray-900 provides fallback background color if image fails
+        - Always renders, even if image URL is invalid
+      */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-gray-900"
         style={{ backgroundImage: `url(${currentImageUrl})` }}
+        aria-hidden="true"
       >
         {/* Hidden img element to detect load errors */}
         <img
@@ -114,11 +144,24 @@ export function CourseHero({
         />
       </div>
       
-      {/* Gradient Overlay - transparent top to dark bottom */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black/90" />
+      {/* 
+        STANDARD PATTERN: Gradient Overlay for Readability
+        - Ensures text is always readable over any background image
+        - Transparent top to dark bottom gradient
+        - Applied as separate layer (absolute inset-0)
+      */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black/90" aria-hidden="true" />
       
-      {/* Content Container - Hero block with generous padding */}
-      <div className="relative h-full min-h-[240px] sm:min-h-[280px] md:min-h-[320px] lg:min-h-[360px] flex flex-col justify-end">
+      {/* 
+        STANDARD PATTERN: Content Container
+        - Reliable height: min-height matches wrapper at all breakpoints
+        - Flex layout: flex-col justify-end (content at bottom)
+        - Constrained width: max-w-7xl mx-auto (centered, max width)
+        - Responsive padding: px-4 sm:px-6 md:px-8 lg:px-12 (horizontal)
+        - Responsive padding: pb-8 sm:pb-12 md:pb-16 lg:pb-20 (bottom)
+        - Relative positioning: Creates stacking context for content above overlay
+      */}
+      <div className="relative h-full min-h-[240px] sm:min-h-[280px] md:min-h-[320px] lg:min-h-[360px] flex flex-col justify-end z-10">
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 pb-8 sm:pb-12 md:pb-16 lg:pb-20">
         {/* Mobile: Stacked Layout */}
         <div className="md:hidden space-y-6">
