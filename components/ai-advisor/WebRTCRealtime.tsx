@@ -214,6 +214,43 @@ export function WebRTCRealtime({
     };
   }, [disconnect]);
 
+  // Listen for device changes
+  useEffect(() => {
+    if (typeof navigator === 'undefined' || !navigator.mediaDevices || permissionState !== 'granted') {
+      return;
+    }
+
+    const handleDeviceChange = async () => {
+      try {
+        const devices = await enumerateMicrophoneDevices();
+        setAvailableDevices(devices);
+        
+        // If selected device is no longer available, select first device
+        if (selectedDeviceId && !devices.find(d => d.deviceId === selectedDeviceId)) {
+          if (devices.length > 0) {
+            setSelectedDeviceId(devices[0].deviceId);
+            // If connected, disconnect to allow reconnection with new device
+            if (isConnected) {
+              disconnect();
+            }
+          } else {
+            setSelectedDeviceId(null);
+          }
+        } else if (!selectedDeviceId && devices.length > 0) {
+          setSelectedDeviceId(devices[0].deviceId);
+        }
+      } catch (error) {
+        console.warn('[WebRTC] Failed to refresh devices:', error);
+      }
+    };
+
+    navigator.mediaDevices.addEventListener('devicechange', handleDeviceChange);
+    
+    return () => {
+      navigator.mediaDevices.removeEventListener('devicechange', handleDeviceChange);
+    };
+  }, [permissionState, selectedDeviceId, isConnected, disconnect]);
+
   /**
    * Trigger fallback to standard voice
    * Declared early so it can be used in connect and other callbacks
@@ -903,13 +940,34 @@ export function WebRTCRealtime({
         }
         
         setPermissionError(null);
+        
+        // Enumerate devices for device selection
+        if (newState === 'granted') {
+          try {
+            const devices = await enumerateMicrophoneDevices();
+            setAvailableDevices(devices);
+            
+            // Auto-select first device if none selected
+            if (devices.length > 0 && !selectedDeviceId) {
+              setSelectedDeviceId(devices[0].deviceId);
+            }
+          } catch (deviceError) {
+            console.warn('[WebRTC] Failed to enumerate devices:', deviceError);
+          }
+        }
       } catch (permError: any) {
         // Permission check failed - still try getUserMedia (may prompt user)
         console.warn('[WebRTC] Permission check failed, attempting getUserMedia:', permError);
       }
       
+      // Add deviceId if a device is selected
+      const finalAudioConstraints = { ...audioConstraints };
+      if (selectedDeviceId) {
+        (finalAudioConstraints as any).deviceId = { exact: selectedDeviceId };
+      }
+      
       const stream = await navigator.mediaDevices.getUserMedia({
-        audio: audioConstraints,
+        audio: finalAudioConstraints,
       });
       
       // Update permission state after successful getUserMedia
@@ -917,6 +975,19 @@ export function WebRTCRealtime({
         setPermissionState('granted');
         logPermissionStateTransition('webrtc', permissionState, 'granted');
         setPermissionError(null);
+        
+        // Enumerate devices after successful getUserMedia (permission granted)
+        try {
+          const devices = await enumerateMicrophoneDevices();
+          setAvailableDevices(devices);
+          
+          // Auto-select first device if none selected
+          if (devices.length > 0 && !selectedDeviceId) {
+            setSelectedDeviceId(devices[0].deviceId);
+          }
+        } catch (deviceError) {
+          console.warn('[WebRTC] Failed to enumerate devices:', deviceError);
+        }
       }
       localStreamRef.current = stream;
 
@@ -1464,6 +1535,35 @@ export function WebRTCRealtime({
       {error && !showFallbackMessage && !permissionError && (
         <div className="text-xs text-red-600 bg-red-50 border border-red-200 rounded p-2">
           {error}
+        </div>
+      )}
+
+      {/* Device Selection */}
+      {availableDevices.length > 1 && permissionState === 'granted' && (
+        <div className="flex items-center gap-2 mb-3">
+          <label className="text-xs text-gray-600">Microphone:</label>
+          <select
+            value={selectedDeviceId || ''}
+            onChange={(e) => {
+              setSelectedDeviceId(e.target.value);
+              // Disconnect and reconnect with new device if connected
+              if (isConnected) {
+                disconnect();
+                setTimeout(() => {
+                  connect();
+                }, 500);
+              }
+            }}
+            className="text-xs border border-gray-300 rounded px-2 py-1 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            data-testid="webrtc-microphone-device-select"
+            disabled={isConnecting || isConnected}
+          >
+            {availableDevices.map((device) => (
+              <option key={device.deviceId} value={device.deviceId}>
+                {device.label}
+              </option>
+            ))}
+          </select>
         </div>
       )}
 

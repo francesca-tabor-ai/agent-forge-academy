@@ -503,6 +503,39 @@ export function VoiceControls({
     }
   }, []);
 
+  // Listen for device changes
+  useEffect(() => {
+    if (typeof navigator === 'undefined' || !navigator.mediaDevices || permissionState !== 'granted') {
+      return;
+    }
+
+    const handleDeviceChange = async () => {
+      try {
+        const devices = await enumerateMicrophoneDevices();
+        setAvailableDevices(devices);
+        
+        // If selected device is no longer available, select first device
+        if (selectedDeviceId && !devices.find(d => d.deviceId === selectedDeviceId)) {
+          if (devices.length > 0) {
+            setSelectedDeviceId(devices[0].deviceId);
+          } else {
+            setSelectedDeviceId(null);
+          }
+        } else if (!selectedDeviceId && devices.length > 0) {
+          setSelectedDeviceId(devices[0].deviceId);
+        }
+      } catch (error) {
+        console.warn('[VoiceControls] Failed to refresh devices:', error);
+      }
+    };
+
+    navigator.mediaDevices.addEventListener('devicechange', handleDeviceChange);
+    
+    return () => {
+      navigator.mediaDevices.removeEventListener('devicechange', handleDeviceChange);
+    };
+  }, [permissionState, selectedDeviceId]);
+
   // Check browser support on mount with error handling
   useEffect(() => {
     try {
@@ -1632,6 +1665,31 @@ export function VoiceControls({
           </button>
         </div>
       </div>
+
+      {/* Device Selection */}
+      {availableDevices.length > 1 && permissionState === 'granted' && (
+        <div className="flex items-center gap-2 mb-2">
+          <label className="text-xs text-gray-600">Microphone:</label>
+          <select
+            value={selectedDeviceId || ''}
+            onChange={(e) => {
+              setSelectedDeviceId(e.target.value);
+              // Stop current recording if active
+              if (isListening) {
+                stopListening();
+              }
+            }}
+            className="text-xs border border-gray-300 rounded px-2 py-1 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            data-testid="microphone-device-select"
+          >
+            {availableDevices.map((device) => (
+              <option key={device.deviceId} value={device.deviceId}>
+                {device.label}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
 
       {/* Voice Controls */}
       <div className="flex items-center gap-3">
