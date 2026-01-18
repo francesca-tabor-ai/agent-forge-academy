@@ -731,7 +731,8 @@ export function WebRTCRealtime({
       // Set up connection timeout
       connectionTimeoutRef.current = setTimeout(() => {
         if (isConnecting && !isConnected) {
-          console.warn('WebRTC connection timeout');
+          const correlationId = correlationIdRef.current || 'unknown';
+          console.warn('[WebRTC] Connection timeout', { correlationId });
           const timeoutError = 'Connection timed out. Please check your internet connection and try again.';
           setError(timeoutError);
           setHasFailed(true);
@@ -740,6 +741,7 @@ export function WebRTCRealtime({
           
           // Log timeout (without storing raw audio)
           safeLogger.warn('WebRTC connection timeout', {
+            correlationId,
             timestamp: new Date().toISOString(),
             hasAudio: false,
             sessionId: sessionRef.current?.session_id,
@@ -748,8 +750,8 @@ export function WebRTCRealtime({
           // Cleanup on timeout
           disconnect();
           
-          // Trigger fallback on timeout
-          triggerFallback();
+          // Trigger fallback on timeout with reason
+          triggerFallback('Connection timeout after 10 seconds');
         }
       }, CONNECTION_TIMEOUT);
 
