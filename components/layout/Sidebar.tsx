@@ -79,20 +79,12 @@ export default function Sidebar({ role, isExpanded, isMobile }: SidebarProps) {
   const navItems = getNavItems();
 
   return (
-    <div className="flex flex-col h-full overflow-hidden">
-      {/* Header */}
-      <div className="p-4 sm:p-6 border-b flex-shrink-0" style={{ backgroundColor: 'var(--ca-navy)', borderColor: 'var(--ca-neutral-300)' }}>
-        {isExpanded ? (
-          <h1 className="text-lg font-semibold text-white">AI Growth Hub</h1>
-        ) : (
-          <div className="flex items-center justify-center">
-            <span className="text-white text-xl font-bold">A</span>
-          </div>
-        )}
-      </div>
-      
-      {/* Navigation */}
-      <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+    <div className="flex flex-col h-full overflow-hidden bg-white">
+      {/* Navigation - Primary navigation area, no duplicate branding */}
+      <nav 
+        className="flex-1 p-4 space-y-1 overflow-y-auto"
+        aria-label="Primary navigation"
+      >
         {navItems.map((item) => {
           const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
           const Icon = item.icon;

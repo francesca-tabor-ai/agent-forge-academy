@@ -37,10 +37,11 @@ export function LayoutWrapper({ children, role }: LayoutWrapperProps) {
   const sidebarWidthExpanded = 280; // ~280px
   const sidebarWidthCollapsed = 72; // ~72px (icon-only)
   const sidebarWidth = isSidebarExpanded ? sidebarWidthExpanded : sidebarWidthCollapsed;
+  const headerHeight = 48; // Match header height
 
   return (
     <div className="flex flex-col h-screen" style={{ backgroundColor: 'var(--ca-bg-warm)' }}>
-      {/* Header */}
+      {/* Top App Header - Global, thin, clearly separated */}
       <Header isSidebarExpanded={isSidebarExpanded} onToggleSidebar={toggleSidebar} />
       
       {/* Body: Sidebar + Main Content using CSS Grid for desktop */}
@@ -52,7 +53,7 @@ export function LayoutWrapper({ children, role }: LayoutWrapperProps) {
           transition: isMobile ? undefined : 'grid-template-columns 300ms ease-in-out',
         }}
       >
-        {/* Sidebar - normal flow on desktop, fixed overlay on mobile */}
+        {/* Left Sidebar - Primary navigation, clearly separated */}
         <aside
           className={`
             bg-white border-r flex flex-col transition-all duration-300 ease-in-out
@@ -64,8 +65,8 @@ export function LayoutWrapper({ children, role }: LayoutWrapperProps) {
             ...(isMobile ? {
               width: !isSidebarExpanded ? '0px' : `${sidebarWidthExpanded}px`,
               transform: !isSidebarExpanded ? 'translateX(-100%)' : 'translateX(0)',
-              top: '56px', // Account for header height on mobile
-              height: 'calc(100vh - 56px)',
+              top: `${headerHeight}px`, // Account for header height on mobile
+              height: `calc(100vh - ${headerHeight}px)`,
             } : {
               // Desktop: no positioning, purely in grid flow
               width: '100%',
@@ -73,6 +74,7 @@ export function LayoutWrapper({ children, role }: LayoutWrapperProps) {
             }),
             borderColor: 'var(--ca-neutral-300)',
           }}
+          aria-label="Primary navigation sidebar"
         >
           <Sidebar 
             role={role} 
@@ -81,13 +83,15 @@ export function LayoutWrapper({ children, role }: LayoutWrapperProps) {
           />
         </aside>
 
-        {/* Main Content - never overlaps on desktop due to grid layout */}
+        {/* Main Content Area - Course + lessons, clearly separated */}
         <main 
           className="overflow-y-auto"
           style={{
             width: isMobile ? '100%' : 'auto',
             minWidth: 0, // Prevents grid overflow
+            backgroundColor: 'var(--ca-bg-warm)',
           }}
+          role="main"
         >
           <div className="max-w-7xl mx-auto px-6 py-8">
             {children}
@@ -100,7 +104,7 @@ export function LayoutWrapper({ children, role }: LayoutWrapperProps) {
             className="fixed inset-0 bg-black/50 z-30"
             onClick={toggleSidebar}
             aria-hidden="true"
-            style={{ top: '56px' }} // Account for header height
+            style={{ top: `${headerHeight}px` }} // Account for header height
           />
         )}
       </div>
