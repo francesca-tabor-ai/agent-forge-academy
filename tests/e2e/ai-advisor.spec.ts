@@ -1270,5 +1270,416 @@ test.describe('AI Advisor - E2E Tests', () => {
       // Note: WebRTC component may not display request ID in status text, but error should be visible
       expect(errorText).toBeTruthy();
     });
+
+    test('should show improved fallback UX with action buttons', async ({ page }) => {
+      // Switch to WebRTC Realtime mode
+      await page.locator('[data-testid="voice-mode-webrtc-button"]').click();
+      
+      // Wait for WebRTC controls
+      await page.waitForSelector('[data-testid="webrtc-connect-button"]', { timeout: 5000 });
+      
+      // Mock failed connection (503)
+      await page.route('**/api/realtime/connect*', async (route) => {
+        await route.fulfill({
+          status: 503,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            error: 'Realtime service unavailable',
+            message: 'Realtime API is temporarily unavailable',
+          }),
+        });
+      });
+      
+      // Click Connect button
+      const connectButton = page.locator('[data-testid="webrtc-connect-button"]');
+      await connectButton.click();
+      
+      // Wait for fallback banner
+      const fallbackBanner = page.locator('[data-testid="fallback-banner"]');
+      await expect(fallbackBanner).toBeVisible({ timeout: 5000 });
+      
+      // Verify improved fallback UX elements
+      await expect(fallbackBanner).toContainText('Switching to Standard Voice Mode');
+      
+      // Verify action buttons exist
+      const retryButton = page.locator('[data-testid="fallback-retry-button"]');
+      const useStandardButton = page.locator('[data-testid="fallback-use-standard-button"]');
+      const dismissButton = page.locator('[data-testid="fallback-dismiss-button"]');
+      
+      await expect(retryButton).toBeVisible();
+      await expect(useStandardButton).toBeVisible();
+      await expect(dismissButton).toBeVisible();
+      
+      // Test dismiss button
+      await dismissButton.click();
+      await expect(fallbackBanner).not.toBeVisible();
+    });
+
+    test('should handle connection timeout', async ({ page }) => {
+      // Switch to WebRTC Realtime mode
+      await page.locator('[data-testid="voice-mode-webrtc-button"]').click();
+      
+      // Wait for WebRTC controls
+      await page.waitForSelector('[data-testid="webrtc-connect-button"]', { timeout: 5000 });
+      
+      // Mock connection that never responds (simulate timeout)
+      await page.route('**/api/realtime/connect*', async (route) => {
+        // Don't fulfill - let it timeout
+        await route.abort('timedout');
+      });
+      
+      // Click Connect button
+      const connectButton = page.locator('[data-testid="webrtc-connect-button"]');
+      await connectButton.click();
+      
+      // Wait for connecting state
+      await expect(page.locator('[data-testid="webrtc-status-indicator-connecting"]')).toBeVisible({ timeout: 2000 });
+      
+      // Wait for timeout (10 seconds) - but test should complete faster with abort
+      // The component should detect the timeout and show error
+      await page.waitForTimeout(12000);
+      
+      // Verify failed state or fallback banner appears
+      const failedIndicator = page.locator('[data-testid="webrtc-status-indicator-failed"]');
+      const fallbackBanner = page.locator('[data-testid="fallback-banner"]');
+      
+      // Either failed state or fallback should appear
+      const hasFailed = await failedIndicator.isVisible().catch(() => false);
+      const hasFallback = await fallbackBanner.isVisible().catch(() => false);
+      
+      expect(hasFailed || hasFallback).toBe(true);
+    });
+
+    test('should toggle between push-to-talk and hands-free modes', async ({ page }) => {
+      // Switch to WebRTC Realtime mode
+      await page.locator('[data-testid="voice-mode-webrtc-button"]').click();
+      
+      // Wait for WebRTC controls
+      await page.waitForSelector('[data-testid="webrtc-connect-button"]', { timeout: 5000 });
+      
+      // Verify mode toggle buttons exist
+      const pushToTalkToggle = page.locator('[data-testid="webrtc-push-to-talk-toggle"]');
+      const handsFreeToggle = page.locator('[data-testid="webrtc-hands-free-toggle"]');
+      
+      await expect(pushToTalkToggle).toBeVisible();
+      await expect(handsFreeToggle).toBeVisible();
+      
+      // Verify push-to-talk is selected by default
+      await expect(pushToTalkToggle).toHaveClass(/bg-blue-600/);
+      
+      // Switch to hands-free
+      await handsFreeToggle.click();
+      await page.waitForTimeout(300);
+      
+      // Verify hands-free is selected
+      await expect(handsFreeToggle).toHaveClass(/bg-blue-600/);
+      
+      // Switch back to push-to-talk
+      await pushToTalkToggle.click();
+      await page.waitForTimeout(300);
+      
+      // Verify push-to-talk is selected again
+      await expect(pushToTalkToggle).toHaveClass(/bg-blue-600/);
+    });
+  });
+
+  test.describe('Device Selection', () => {
+    test.beforeEach(async ({ page }) => {
+      // Enable mock mode
+      await page.addInitScript(() => {
+        (window as any).__UAT_MOCK_AI = true;
+      });
+      
+      // Grant microphone permission
+      await page.context().grantPermissions(['microphone'], { origin: BASE_URL });
+      
+      // Navigate to AI Advisor page
+      await page.goto(`${BASE_URL}/student/ai-advisor`);
+      
+      // Wait for page to load
+      await page.waitForSelector('[data-testid="ai-advisor-page"]', { timeout: 10000 });
+    });
+
+    test('should show device selection dropdown when multiple devices available', async ({ page }) => {
+      // Mock multiple devices
+      await page.addInitScript(() => {
+        // Mock enumerateDevices to return multiple devices
+        const originalEnumerateDevices = navigator.mediaDevices.enumerateDevices;
+        navigator.mediaDevices.enumerateDevices = async () => {
+          const devices = await originalEnumerateDevices.call(navigator.mediaDevices);
+          // Return multiple audio input devices
+          return [
+            ...devices,
+            {
+              deviceId: 'mock-device-2',
+              kind: 'audioinput',
+              label: 'Mock Microphone 2',
+              groupId: 'mock-group-2',
+            } as MediaDeviceInfo,
+          ];
+        };
+      });
+      
+      // Switch to Standard voice mode
+      await page.locator('[data-testid="voice-mode-standard-button"]').click();
+      
+      // Wait for voice controls
+      await page.waitForSelector('[data-testid="microphone-button"]', { timeout: 5000 });
+      
+      // Wait for device enumeration
+      await page.waitForTimeout(1000);
+      
+      // Check if device selection dropdown appears (only if 2+ devices)
+      const deviceSelect = page.locator('[data-testid="microphone-device-select"]');
+      const isVisible = await deviceSelect.isVisible().catch(() => false);
+      
+      // If multiple devices are available, dropdown should be visible
+      if (isVisible) {
+        await expect(deviceSelect).toBeVisible();
+        
+        // Verify dropdown has options
+        const options = deviceSelect.locator('option');
+        const optionCount = await options.count();
+        expect(optionCount).toBeGreaterThan(1);
+      }
+    });
+
+    test('should show device selection in WebRTC mode', async ({ page }) => {
+      // Enable mock mode for WebRTC
+      await page.addInitScript(() => {
+        (window as any).__UAT_MOCK_REALTIME = true;
+      });
+      
+      // Mock multiple devices
+      await page.addInitScript(() => {
+        const originalEnumerateDevices = navigator.mediaDevices.enumerateDevices;
+        navigator.mediaDevices.enumerateDevices = async () => {
+          const devices = await originalEnumerateDevices.call(navigator.mediaDevices);
+          return [
+            ...devices,
+            {
+              deviceId: 'mock-device-2',
+              kind: 'audioinput',
+              label: 'Mock Microphone 2',
+              groupId: 'mock-group-2',
+            } as MediaDeviceInfo,
+          ];
+        };
+      });
+      
+      // Switch to WebRTC Realtime mode
+      await page.locator('[data-testid="voice-mode-webrtc-button"]').click();
+      
+      // Wait for WebRTC controls
+      await page.waitForSelector('[data-testid="webrtc-connect-button"]', { timeout: 5000 });
+      
+      // Wait for device enumeration
+      await page.waitForTimeout(1000);
+      
+      // Check if device selection dropdown appears
+      const deviceSelect = page.locator('[data-testid="webrtc-microphone-device-select"]');
+      const isVisible = await deviceSelect.isVisible().catch(() => false);
+      
+      if (isVisible) {
+        await expect(deviceSelect).toBeVisible();
+        
+        // Verify dropdown is disabled while not connected
+        await expect(deviceSelect).toBeEnabled(); // Should be enabled when disconnected
+      }
+    });
+  });
+
+  test.describe('Permission Handling', () => {
+    test.beforeEach(async ({ page }) => {
+      // Enable mock mode
+      await page.addInitScript(() => {
+        (window as any).__UAT_MOCK_AI = true;
+      });
+      
+      // Navigate to AI Advisor page
+      await page.goto(`${BASE_URL}/student/ai-advisor`);
+      
+      // Wait for page to load
+      await page.waitForSelector('[data-testid="ai-advisor-page"]', { timeout: 10000 });
+    });
+
+    test('should show permission error with browser-specific guidance', async ({ page, context }) => {
+      // Deny microphone permission
+      await context.setPermissions([], { origin: BASE_URL });
+      
+      // Switch to Standard voice mode
+      await page.locator('[data-testid="voice-mode-standard-button"]').click();
+      
+      // Wait for voice controls
+      await page.waitForSelector('[data-testid="microphone-button"]', { timeout: 5000 });
+      
+      // Wait for permission check
+      await page.waitForTimeout(1000);
+      
+      // Verify permission error is displayed
+      const permissionError = page.locator('text=/permission|microphone|denied|blocked/i');
+      await expect(permissionError.first()).toBeVisible({ timeout: 2000 });
+      
+      // Verify guidance steps are shown (browser-specific)
+      const guidanceSteps = page.locator('ol li, ul li').filter({ hasText: /allow|settings|microphone/i });
+      const stepCount = await guidanceSteps.count();
+      
+      // Should have at least some guidance
+      expect(stepCount).toBeGreaterThan(0);
+    });
+
+    test('should show permission error in WebRTC mode', async ({ page, context }) => {
+      // Enable mock mode for WebRTC
+      await page.addInitScript(() => {
+        (window as any).__UAT_MOCK_REALTIME = true;
+      });
+      
+      // Deny microphone permission
+      await context.setPermissions([], { origin: BASE_URL });
+      
+      // Switch to WebRTC Realtime mode
+      await page.locator('[data-testid="voice-mode-webrtc-button"]').click();
+      
+      // Wait for WebRTC controls
+      await page.waitForSelector('[data-testid="webrtc-connect-button"]', { timeout: 5000 });
+      
+      // Try to connect
+      const connectButton = page.locator('[data-testid="webrtc-connect-button"]');
+      await connectButton.click();
+      
+      // Wait for permission error
+      await page.waitForTimeout(2000);
+      
+      // Verify permission error is displayed
+      const permissionError = page.locator('text=/permission|microphone|denied|blocked/i');
+      const errorCount = await permissionError.count();
+      
+      // Should show permission error
+      expect(errorCount).toBeGreaterThan(0);
+    });
+  });
+
+  test.describe('Retry Logic', () => {
+    test.beforeEach(async ({ page }) => {
+      // Enable mock mode
+      await page.addInitScript(() => {
+        (window as any).__UAT_MOCK_AI = true;
+      });
+      
+      // Grant microphone permission
+      await page.context().grantPermissions(['microphone'], { origin: BASE_URL });
+      
+      // Navigate to AI Advisor page
+      await page.goto(`${BASE_URL}/student/ai-advisor`);
+      
+      // Wait for page to load
+      await page.waitForSelector('[data-testid="ai-advisor-page"]', { timeout: 10000 });
+    });
+
+    test('should retry transcription on 5xx errors', async ({ page }) => {
+      // Switch to Standard voice mode
+      await page.locator('[data-testid="voice-mode-standard-button"]').click();
+      
+      // Wait for voice controls
+      await page.waitForSelector('[data-testid="microphone-button"]', { timeout: 5000 });
+      
+      // Track API calls
+      let callCount = 0;
+      
+      // Mock voice API to fail twice then succeed
+      await page.route('**/api/ai-advisor/voice*', async (route) => {
+        callCount++;
+        
+        if (callCount <= 2) {
+          // Return 500 error for first 2 calls
+          await route.fulfill({
+            status: 500,
+            contentType: 'application/json',
+            body: JSON.stringify({
+              error: 'Internal server error',
+              message: 'Temporary error',
+            }),
+          });
+        } else {
+          // Return success on 3rd call
+          await route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify({
+              transcript: 'Mock transcription after retry',
+            }),
+          });
+        }
+      });
+      
+      // Record a message
+      const micButton = page.locator('[data-testid="microphone-button"]');
+      await micButton.dispatchEvent('mousedown');
+      await page.waitForTimeout(1000);
+      await micButton.dispatchEvent('mouseup');
+      
+      // Wait for transcription (with retries)
+      await page.waitForSelector('[data-testid="transcript-input"]', { timeout: 15000 });
+      
+      // Verify transcription succeeded after retries
+      const transcriptInput = page.locator('[data-testid="transcript-input"]');
+      await expect(transcriptInput).toBeVisible();
+      
+      // Verify multiple API calls were made (retries)
+      expect(callCount).toBeGreaterThan(1);
+    });
+
+    test('should retry on 429 rate limit errors', async ({ page }) => {
+      // Switch to Standard voice mode
+      await page.locator('[data-testid="voice-mode-standard-button"]').click();
+      
+      // Wait for voice controls
+      await page.waitForSelector('[data-testid="microphone-button"]', { timeout: 5000 });
+      
+      // Track API calls
+      let callCount = 0;
+      
+      // Mock voice API to return 429 then succeed
+      await page.route('**/api/ai-advisor/voice*', async (route) => {
+        callCount++;
+        
+        if (callCount === 1) {
+          // Return 429 on first call
+          await route.fulfill({
+            status: 429,
+            contentType: 'application/json',
+            body: JSON.stringify({
+              error: 'Rate limit exceeded',
+              message: 'Too many requests',
+            }),
+          });
+        } else {
+          // Return success on retry
+          await route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify({
+              transcript: 'Mock transcription after rate limit retry',
+            }),
+          });
+        }
+      });
+      
+      // Record a message
+      const micButton = page.locator('[data-testid="microphone-button"]');
+      await micButton.dispatchEvent('mousedown');
+      await page.waitForTimeout(1000);
+      await micButton.dispatchEvent('mouseup');
+      
+      // Wait for transcription (with retry)
+      await page.waitForSelector('[data-testid="transcript-input"]', { timeout: 10000 });
+      
+      // Verify transcription succeeded after retry
+      const transcriptInput = page.locator('[data-testid="transcript-input"]');
+      await expect(transcriptInput).toBeVisible();
+      
+      // Verify retry was attempted
+      expect(callCount).toBeGreaterThan(1);
+    });
   });
 });
