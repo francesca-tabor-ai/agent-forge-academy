@@ -25,7 +25,8 @@
     "lint:content": "tsx scripts/lint-content-guard.ts",
     "lint:all": "npm run lint && npm run lint:content",
     "validate:images": "tsx scripts/validate-course-images.ts",
-    "validate:images:skip-external": "tsx scripts/validate-course-images.ts --skip-external"
+    "validate:images:skip-external": "tsx scripts/validate-course-images.ts --skip-external",
+    "validate:schema": "tsx scripts/validate-schema.ts"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.0.0",
