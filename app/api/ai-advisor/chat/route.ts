@@ -7,6 +7,8 @@ import { getTopJobMatches, formatJobMatchesForLLM } from '@/lib/jobs/advisor-too
 import { generateNextActions, type NextAction } from '@/lib/ai/nextActions';
 import { redactPII, safeLogger } from '@/lib/utils/redactPII';
 import { logRequest, getUserIdFromRequest, getIpAddress, getUserAgent } from '@/lib/utils/request-logger';
+import { createErrorResponse, ErrorClass } from '@/lib/ai-advisor/error-taxonomy';
+import { createErrorResponse, ErrorClass } from '@/lib/ai-advisor/error-taxonomy';
 
 interface ChatRequest {
   message: string;
@@ -751,26 +753,27 @@ export async function POST(request: NextRequest) {
     } = await supabase.auth.getUser();
 
     if (!user) {
-      // Structured logging: unauthorized request
-      safeLogger.warn('[AI_ADVISOR] Unauthorized request', { 
-        requestId, 
-        userId: null,
-        statusCode: 401,
-        errorCode: 'UNAUTHORIZED',
-        stage: 'auth_check',
+      // Use centralized error taxonomy
+      const errorResponse = createErrorResponse(
+        new Error('User not authenticated'),
+        {
+          requestId,
+          errorMessage: 'User not authenticated',
+          stage: 'auth_check',
+        }
+      );
+      
+      safeLogger.warn('[AI_ADVISOR] Unauthorized request', {
+        ...errorResponse.logData,
         path: '/api/ai-advisor/chat',
         method: 'POST',
       });
+      
       return NextResponse.json(
-        { 
-          ok: false,
-          error: { code: 'UNAUTHORIZED', message: 'Session expired — please sign in again.', requestId } 
-        },
-        { 
-          status: 401,
-          headers: {
-            'X-Request-ID': requestId,
-          },
+        errorResponse.response,
+        {
+          status: errorResponse.statusCode,
+          headers: errorResponse.headers,
         }
       );
     }
@@ -797,33 +800,28 @@ export async function POST(request: NextRequest) {
 
     // Check LLM configuration after auth (so we can log userId)
     if (!llmApiKey) {
-      const errorMsg = 'LLM_API_KEY environment variable is required';
+      const errorResponse = createErrorResponse(
+        new Error('LLM_API_KEY environment variable is required'),
+        {
+          requestId,
+          userId: user.id,
+          errorMessage: 'LLM_API_KEY environment variable is required',
+          stage: 'provider_config_check',
+        }
+      );
+      
       safeLogger.error('[AI_ADVISOR] Configuration error', {
-        requestId,
-        userId: user.id,
-        stage: 'provider_config_check',
-        error: errorMsg,
+        ...errorResponse.logData,
         provider: llmProvider,
         model,
-        statusCode: 503,
-        errorCode: 'SERVICE_UNAVAILABLE',
-        message: errorMsg,
         stack: process.env.NODE_ENV === 'development' ? new Error().stack : undefined,
       });
+      
       return NextResponse.json(
-        { 
-          ok: false,
-          error: { 
-            code: 'SERVICE_UNAVAILABLE', 
-            message: 'AI service is not configured. Please contact support.',
-            requestId 
-          } 
-        },
-        { 
-          status: 503,
-          headers: {
-            'X-Request-ID': requestId,
-          },
+        errorResponse.response,
+        {
+          status: errorResponse.statusCode,
+          headers: errorResponse.headers,
         }
       );
     }
@@ -832,28 +830,36 @@ export async function POST(request: NextRequest) {
     let { message, context, studentProfileId, conversationHistory, intent, conversationId } = body;
 
     if (!message || !message.trim()) {
+      const errorResponse = createErrorResponse(
+        new Error('Message is required and must be a non-empty string'),
+        {
+          requestId,
+          userId: user.id,
+          errorMessage: 'Message is required',
+          stage: 'input_validation',
+        }
+      );
+      
       const duration = Date.now() - startTime;
+      safeLogger.warn('[AI_ADVISOR] Validation error', errorResponse.logData);
+      
       await logRequest({
         requestId,
         userId: user.id,
         path: '/api/ai-advisor/chat',
         method: 'POST',
-        status: 400,
+        status: errorResponse.statusCode,
         duration,
-        errorMessage: 'Message is required',
+        errorMessage: errorResponse.logData.message,
         ipAddress: getIpAddress(request),
         userAgent: getUserAgent(request),
       });
+      
       return NextResponse.json(
-        { 
-          ok: false,
-          error: { code: 'BAD_REQUEST', message: 'Message is required', requestId } 
-        },
-        { 
-          status: 400,
-          headers: {
-            'X-Request-ID': requestId,
-          },
+        errorResponse.response,
+        {
+          status: errorResponse.statusCode,
+          headers: errorResponse.headers,
         }
       );
     }
@@ -1168,16 +1174,24 @@ export async function POST(request: NextRequest) {
             const timeoutPromise = new Promise<void>((resolve) => {
               streamTimeout = setTimeout(() => {
                 if (!streamCompleted) {
-                  safeLogger.error('AI Advisor: Stream timeout', { requestId, elapsed: Date.now() - startTime });
+                  const timeoutError = new Error('Stream timeout');
+                  const errorResponse = createErrorResponse(timeoutError, {
+                    requestId,
+                    userId: user.id,
+                    errorMessage: 'Stream timeout',
+                    stage: 'stream_timeout',
+                  });
+                  
+                  safeLogger.error('[AI_ADVISOR] Stream timeout', {
+                    ...errorResponse.logData,
+                    elapsed: Date.now() - startTime,
+                  });
+                  
                   try {
                     controller.enqueue(
                       encoder.encode(`data: ${JSON.stringify({ 
                         ok: false,
-                        error: { 
-                          code: 'TIMEOUT', 
-                          message: 'Response took too long. Please try again.',
-                          requestId 
-                        },
+                        error: errorResponse.response.error,
                         done: true 
                       })}\n\n`)
                     );
@@ -1213,37 +1227,27 @@ export async function POST(request: NextRequest) {
                   });
                 }
               } catch (llmError: any) {
-                const errorMessage = llmError.message || 'LLM provider not configured';
                 const providerErrorLatency = Date.now() - startTime;
-                
-                // Determine appropriate error code
-                let errorCode = 'UPSTREAM_ERROR';
-                let statusCode = 500;
-                if (errorMessage.includes('LLM_API_KEY') || errorMessage.includes('required')) {
-                  errorCode = 'SERVICE_UNAVAILABLE';
-                  statusCode = 503;
-                } else if (errorMessage.includes('401') || errorMessage.includes('Unauthorized')) {
-                  errorCode = 'UNAUTHORIZED';
-                  statusCode = 401;
-                } else if (errorMessage.includes('429') || errorMessage.includes('rate limit')) {
-                  errorCode = 'RATE_LIMIT_EXCEEDED';
-                  statusCode = 429;
-                }
+                const errorMessage = llmError.message || 'LLM provider not configured';
                 
                 // Extract upstream status if available
                 const upstreamStatusMatch = errorMessage.match(/(\d{3})/);
                 const upstreamStatus = upstreamStatusMatch ? parseInt(upstreamStatusMatch[1]) : null;
                 
-                safeLogger.error('[AI_ADVISOR] Provider call failed', { 
+                // Use centralized error taxonomy
+                const errorResponse = createErrorResponse(llmError, {
                   requestId,
                   userId: user.id,
+                  upstreamStatus: upstreamStatus,
+                  errorMessage: errorMessage,
+                  stage: 'provider_call_failed',
+                  originalError: llmError,
+                });
+                
+                safeLogger.error('[AI_ADVISOR] Provider call failed', {
+                  ...errorResponse.logData,
                   provider: llmProvider,
                   model,
-                  stage: 'provider_call_failed',
-                  statusCode,
-                  errorCode,
-                  upstreamStatus,
-                  message: errorMessage,
                   latency: providerErrorLatency,
                   stack: process.env.NODE_ENV === 'development' ? llmError.stack : undefined,
                   timestamp: new Date().toISOString(),
@@ -1253,15 +1257,7 @@ export async function POST(request: NextRequest) {
                 controller.enqueue(
                   encoder.encode(`data: ${JSON.stringify({ 
                     ok: false,
-                    error: { 
-                      code: errorCode, 
-                      message: process.env.NODE_ENV === 'development'
-                        ? errorMessage
-                        : (errorMessage.includes('LLM_API_KEY') 
-                            ? 'AI service is not configured. Please contact support.'
-                            : 'AI service error. Please try again.'),
-                      requestId 
-                    },
+                    error: errorResponse.response.error,
                     done: true 
                   })}\n\n`)
                 );
@@ -1467,57 +1463,33 @@ export async function POST(request: NextRequest) {
               const elapsed = Date.now() - startTime;
               const errorMessage = error?.message || String(error);
               
-              // Determine appropriate error code
-              let errorCode = 'UPSTREAM_ERROR';
-              if (errorMessage.includes('API key') || errorMessage.includes('LLM_API_KEY') || errorMessage.includes('required')) {
-                errorCode = 'SERVICE_UNAVAILABLE';
-              } else if (errorMessage.includes('401') || errorMessage.includes('Unauthorized')) {
-                errorCode = 'UNAUTHORIZED';
-              } else if (errorMessage.includes('429') || errorMessage.includes('rate limit')) {
-                errorCode = 'RATE_LIMIT_EXCEEDED';
-              } else if (errorMessage.includes('timeout') || errorMessage.includes('TIMEOUT')) {
-                errorCode = 'TIMEOUT';
-              }
-              
               // Extract upstream status if available
               const upstreamStatusMatch = errorMessage.match(/(\d{3})/);
               const upstreamStatus = upstreamStatusMatch ? parseInt(upstreamStatusMatch[1]) : null;
               
-              // Determine status code for logging
-              let statusCode = 500;
-              if (errorCode === 'SERVICE_UNAVAILABLE') statusCode = 503;
-              else if (errorCode === 'UNAUTHORIZED') statusCode = 401;
-              else if (errorCode === 'RATE_LIMIT_EXCEEDED') statusCode = 429;
-              else if (errorCode === 'TIMEOUT') statusCode = 504;
-              else if (upstreamStatus) statusCode = upstreamStatus;
-              
-              safeLogger.error('[AI_ADVISOR] Error in streaming LLM response', { 
+              // Use centralized error taxonomy
+              const errorResponse = createErrorResponse(error, {
                 requestId,
                 userId: user.id,
+                upstreamStatus: upstreamStatus,
+                errorMessage: errorMessage,
+                stage: 'streaming_error',
+                originalError: error,
+              });
+              
+              safeLogger.error('[AI_ADVISOR] Error in streaming LLM response', {
+                ...errorResponse.logData,
                 provider: llmProvider,
                 model,
-                stage: 'streaming_error',
-                statusCode,
-                errorCode,
-                upstreamStatus,
-                message: errorMessage,
+                elapsed,
                 stack: process.env.NODE_ENV === 'development' ? error?.stack : undefined,
-                elapsed 
               });
               
               try {
                 controller.enqueue(
                   encoder.encode(`data: ${JSON.stringify({ 
                     ok: false,
-                    error: { 
-                      code: errorCode, 
-                      message: process.env.NODE_ENV === 'development'
-                        ? errorMessage
-                        : (errorMessage.includes('API key') || errorMessage.includes('LLM_API_KEY')
-                            ? 'AI service is not configured. Please contact support.'
-                            : 'Failed to generate response. Please try again.'),
-                      requestId 
-                    },
+                    error: errorResponse.response.error,
                     done: true 
                   })}\n\n`)
                 );
@@ -1904,17 +1876,22 @@ export async function POST(request: NextRequest) {
     }
   } catch (error: any) {
     const elapsed = Date.now() - startTime;
+    
+    // Use centralized error taxonomy
+    const errorResponse = createErrorResponse(error, {
+      requestId,
+      errorMessage: error?.message || String(error),
+      stage: 'top_level_error',
+      originalError: error,
+    });
+    
     // Structured logging: top-level error handler
-    safeLogger.error('[AI_ADVISOR] Error in chat handler', { 
-      requestId, 
+    safeLogger.error('[AI_ADVISOR] Error in chat handler', {
+      ...errorResponse.logData,
       provider: llmProvider,
       model,
-      stage: 'top_level_error',
-      statusCode: 500,
-      errorCode: 'INTERNAL_ERROR',
       path: '/api/ai-advisor/chat',
       method: 'POST',
-      message: error?.message || String(error),
       elapsed,
       stack: process.env.NODE_ENV === 'development' ? error?.stack : undefined,
     });
@@ -1925,28 +1902,19 @@ export async function POST(request: NextRequest) {
       userId: await getUserIdFromRequest(request),
       path: '/api/ai-advisor/chat',
       method: 'POST',
-      status: 500,
+      status: errorResponse.statusCode,
       duration: elapsed,
       errorStack: error?.stack || null,
-      errorMessage: error?.message || 'Failed to process request',
+      errorMessage: errorResponse.logData.message,
       ipAddress: getIpAddress(request),
       userAgent: getUserAgent(request),
     });
 
     return NextResponse.json(
-      { 
-        ok: false,
-        error: { 
-          code: 'INTERNAL_ERROR', 
-          message: 'Failed to process request. Please try again.',
-          requestId 
-        } 
-      },
-      { 
-        status: 500,
-        headers: {
-          'X-Request-ID': requestId,
-        },
+      errorResponse.response,
+      {
+        status: errorResponse.statusCode,
+        headers: errorResponse.headers,
       }
     );
   }
