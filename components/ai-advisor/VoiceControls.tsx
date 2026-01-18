@@ -34,6 +34,12 @@ type RecognitionState = 'idle' | 'listening' | 'processing' | 'error';
 // Browser compatibility check with detailed capability detection
 function isSpeechRecognitionSupported(): boolean {
   if (typeof window === 'undefined') return false;
+  
+  // Safari does NOT support Speech Recognition API
+  if (isSafariOrIOS()) {
+    return false;
+  }
+  
   try {
     return 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window;
   } catch (error) {
@@ -562,11 +568,20 @@ export function VoiceControls({
       }
 
       // Check if speech recognition is available
+      // Note: Safari does NOT support Speech Recognition API - will use MediaRecorder fallback
       if (!capabilities.speechRecognition) {
-        setIsSupported(false);
-        setVoiceUnavailableReason('not-supported');
-        setError('Voice input isn\'t supported in this browser.');
-        return;
+        // Safari users should use MediaRecorder fallback
+        if (isSafariOrIOS()) {
+          console.log('[VoiceControls] Safari detected - Speech Recognition not supported, will use MediaRecorder fallback');
+          // Don't set error - MediaRecorder fallback will work
+          setIsSupported(true); // MediaRecorder is supported
+          // Continue to MediaRecorder initialization
+        } else {
+          setIsSupported(false);
+          setVoiceUnavailableReason('not-supported');
+          setError('Voice input isn\'t supported in this browser.');
+          return;
+        }
       }
 
       // Check if media devices are available
