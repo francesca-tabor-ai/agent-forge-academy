@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 
@@ -21,11 +21,7 @@ export function ProjectsUsingTool({ toolName, studentProfileId }: ProjectsUsingT
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchProjects();
-  }, [toolName, studentProfileId]);
-
-  const fetchProjects = async () => {
+  const fetchProjects = useCallback(async () => {
     try {
       const supabase = createClient();
       
@@ -78,7 +74,11 @@ export function ProjectsUsingTool({ toolName, studentProfileId }: ProjectsUsingT
     } finally {
       setLoading(false);
     }
-  };
+  }, [toolName, studentProfileId]);
+
+  useEffect(() => {
+    fetchProjects();
+  }, [fetchProjects]);
 
   if (loading) {
     return (

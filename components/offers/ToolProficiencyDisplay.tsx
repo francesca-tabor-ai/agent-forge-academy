@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ToolProficiencyBadge } from './ToolProficiencyBadge';
 import { type ProficiencyLevel } from '@/lib/utils/tool-proficiency';
 
@@ -14,11 +14,7 @@ export function ToolProficiencyDisplay({ toolId, toolName, toolSlug }: ToolProfi
   const [proficiency, setProficiency] = useState<{ level: ProficiencyLevel; completedCoursesCount: number } | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchProficiency();
-  }, [toolId, toolName, toolSlug]);
-
-  const fetchProficiency = async () => {
+  const fetchProficiency = useCallback(async () => {
     if (!toolId && !toolSlug) {
       setLoading(false);
       return;
@@ -53,7 +49,11 @@ export function ToolProficiencyDisplay({ toolId, toolName, toolSlug }: ToolProfi
     } finally {
       setLoading(false);
     }
-  };
+  }, [toolId, toolSlug]);
+
+  useEffect(() => {
+    fetchProficiency();
+  }, [fetchProficiency]);
 
   if (loading) {
     return null;

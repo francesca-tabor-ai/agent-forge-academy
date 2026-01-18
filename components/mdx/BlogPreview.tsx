@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 export interface BlogPreviewProps {
   blogId: string;
@@ -37,10 +38,12 @@ export function BlogPreview({
     <article className="blog-preview" aria-labelledby={`blog-title-${blogId}`}>
       {thumbnailUrl && (
         <div className="blog-preview__thumbnail">
-          <img
+          <Image
             src={thumbnailUrl}
             alt={`Thumbnail for ${title}`}
-            loading="lazy"
+            width={400}
+            height={225}
+            className="object-cover"
           />
         </div>
       )}

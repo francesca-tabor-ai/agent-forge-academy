@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import Link from 'next/link';
 import { courseMetadata } from '@/lib/course-metadata';
 import { AddOfferToProjectModal } from './AddOfferToProjectModal';
@@ -106,7 +106,7 @@ export function OffersPageClient({
   };
 
   // Determine offer badges and properties
-  const getOfferProperties = (offer: Offer) => {
+  const getOfferProperties = useCallback((offer: Offer) => {
     const badges: string[] = [];
     let isActiveDiscount = false;
     let isRecommended = false;
@@ -141,7 +141,7 @@ export function OffersPageClient({
     }
 
     return { badges, isActiveDiscount, isRecommended, isLimitedTime };
-  };
+  }, [enrolledCourseSlugs]);
 
   // Get recommendation reason
   const getRecommendationReason = (offer: Offer, projectId?: string): string | null => {
@@ -304,7 +304,7 @@ export function OffersPageClient({
     });
 
     return filtered;
-  }, [offers, selectedCategory, sortBy, searchQuery]);
+  }, [offers, selectedCategory, sortBy, searchQuery, getOfferProperties]);
 
   // Group offers by tool (provider) and aggregate data
   const toolsData = useMemo(() => {

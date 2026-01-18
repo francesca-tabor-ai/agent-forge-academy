@@ -49,7 +49,8 @@ export function ToolLogo({
               onError={() => setImageError(true)}
             />
           ) : (
-            // External URL (Clearbit or other)
+            // External URL (Clearbit or other) - use img for external URLs that may not be in next.config.js
+            // eslint-disable-next-line @next/next/no-img-element
             <img
               src={displayLogoUrl}
               alt={toolName}

@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 export interface VideoCardProps {
   videoId: string;
@@ -32,10 +33,12 @@ export function VideoCard({
     <div className="video-card" role="article" aria-labelledby={`video-title-${videoId}`}>
       <div className="video-card__thumbnail">
         {thumbnailUrl ? (
-          <img
+          <Image
             src={thumbnailUrl}
             alt={`Thumbnail for ${title}`}
-            loading="lazy"
+            width={400}
+            height={225}
+            className="object-cover"
           />
         ) : (
           <div className="video-card__placeholder" aria-hidden="true">
