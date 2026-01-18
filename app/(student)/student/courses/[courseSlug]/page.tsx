@@ -1,7 +1,7 @@
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { redirect, notFound } from 'next/navigation';
 import Link from 'next/link';
-import { loadAllLessons } from '@/lib/lessons';
+import { loadAllLessons, type Lesson } from '@/lib/lessons';
 import { getCourseCover } from '@/lib/courseCovers';
 import { extractCourseMetadata } from '@/lib/course-sync/extract-metadata';
 import { courseMetadata } from '@/lib/course-metadata';
@@ -177,7 +177,7 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
   const bestForItems = parseIntoBullets(bestFor);
 
   // Identify Course Index/Reference Guide lesson
-  const isCourseIndex = (lesson: typeof lessons[0]) => {
+  const isCourseIndex = (lesson: Lesson) => {
     const title = lesson.frontmatter.title?.toLowerCase() || '';
     const slug = lesson.slug.toLowerCase();
     return title.includes('course index') || 
@@ -226,7 +226,7 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
           <div className="space-y-8">
           {/* Course Overview Section */}
           {(courseDescription || outcomeBullets.length > 0 || buildBullets.length > 0 || bestForItems.length > 0) && (
-                  <div>
+            <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Overview</h2>
               <OverviewCards
                 description={courseDescription}
@@ -240,13 +240,13 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
           {/* Modules Section */}
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Modules</h2>
-        
-        {lessons.length === 0 ? (
+            
+            {lessons.length === 0 ? (
           <div className="bg-white border border-gray-200 rounded-xl p-8 text-center shadow-sm">
             <p className="text-gray-600">No lessons available for this course yet.</p>
           </div>
         ) : (
-              <div className="space-y-3">
+          <div className="space-y-3">
                 {/* Quick Start / Course Index */}
                 {courseIndexLesson && (
                   <Link
@@ -314,9 +314,9 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
                   }
                   
                   return (
-              <Link
-                key={lesson.slug}
-                href={`/student/courses/${courseSlug}/lessons/${lesson.slug}`}
+                    <Link
+                      key={lesson.slug}
+                      href={`/student/courses/${courseSlug}/lessons/${lesson.slug}`}
                       className="block bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:border-brand-light hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
                     >
                       <div className="flex items-start justify-between gap-4">
@@ -329,23 +329,23 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 mb-1">
                               <h3 className="text-lg font-bold text-gray-900">
-                      {lesson.frontmatter.title || lesson.slug}
-                    </h3>
+                                {lesson.frontmatter.title || lesson.slug}
+                              </h3>
                             </div>
-                    {lesson.frontmatter.description && (
+                            {lesson.frontmatter.description && (
                               <p className="text-sm text-gray-600 line-clamp-1 mb-2 leading-relaxed">
-                        {lesson.frontmatter.description}
-                      </p>
-                    )}
+                                {lesson.frontmatter.description}
+                              </p>
+                            )}
                             <div className="flex items-center gap-3 text-xs text-gray-500">
-                      {lesson.frontmatter.module && (
+                              {lesson.frontmatter.module && (
                                 <span className="px-2 py-0.5 bg-gray-100 rounded">
                                   Module {lesson.frontmatter.module}
                                 </span>
-                      )}
-                      {lesson.frontmatter.week && (
-                        <span>Week {lesson.frontmatter.week}</span>
-                      )}
+                              )}
+                              {lesson.frontmatter.week && (
+                                <span>Week {lesson.frontmatter.week}</span>
+                              )}
                               <span className="ml-auto">~30 min</span>
                               {enrollment && (
                                 <span className={`px-2 py-0.5 rounded text-xs font-medium ${
@@ -371,6 +371,7 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
                 })}
               </div>
             )}
+          </div>
           </div>
 
           {/* Right Column: Progress Card + Quick Actions */}
