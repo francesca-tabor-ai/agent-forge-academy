@@ -348,4 +348,5 @@ if (require.main === module) {
   });
 }
 
-export { validateAllCourseImages, validateCourseImage, ValidationResult, ValidationOptions };
+export { validateAllCourseImages, validateCourseImage };
+export type { ValidationResult, ValidationOptions };

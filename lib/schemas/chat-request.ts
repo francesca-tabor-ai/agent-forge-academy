@@ -9,9 +9,7 @@ import { z } from 'zod';
  */
 const ConversationMessageSchema = z.object({
   id: z.string().min(1, 'Message ID is required'),
-  role: z.enum(['user', 'assistant', 'human'], {
-    errorMap: () => ({ message: 'Role must be one of: user, assistant, human' }),
-  }),
+  role: z.enum(['user', 'assistant', 'human']),
   content: z.string().min(1, 'Message content is required'),
   timestamp: z.union([
     z.date(),
