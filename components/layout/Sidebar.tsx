@@ -68,10 +68,10 @@ export default function Sidebar({ role, isExpanded, isMobile }: SidebarProps) {
   const navItems = getNavItems();
 
   return (
-    <div className="flex flex-col h-full overflow-hidden bg-white">
+    <div className="flex flex-col h-full overflow-hidden overflow-x-hidden bg-white">
       {/* Navigation - Primary navigation area, no duplicate branding */}
       <nav 
-        className="flex-1 p-4 space-y-1 overflow-y-auto"
+        className="flex-1 p-4 space-y-1 overflow-y-auto overflow-x-hidden"
         aria-label="Primary navigation"
       >
         {navItems.map((item) => {
@@ -84,6 +84,7 @@ export default function Sidebar({ role, isExpanded, isMobile }: SidebarProps) {
               href={item.href}
               className={`
                 flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ease-out relative
+                focus:outline-none focus:ring-2 focus:ring-ca-gold focus:ring-offset-2
                 ${isActive
                   ? 'text-ca-text scale-105'
                   : 'text-ca-neutral-500 hover:text-ca-text hover:scale-105 hover:bg-gray-50'
@@ -92,6 +93,7 @@ export default function Sidebar({ role, isExpanded, isMobile }: SidebarProps) {
               `}
               style={isActive ? { backgroundColor: 'var(--ca-bg-warm)' } : {}}
               title={!isExpanded ? item.label : undefined}
+              aria-current={isActive ? 'page' : undefined}
             >
               <Icon className="w-5 h-5 flex-shrink-0" />
               {isExpanded && (

@@ -38,6 +38,20 @@ export function LayoutWrapper({ children, role }: LayoutWrapperProps) {
     setIsSidebarExpanded((prev) => !prev);
   };
 
+  // Keyboard navigation: Escape key closes sidebar on mobile
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isSidebarExpanded && isMobile) {
+        setIsSidebarExpanded(false);
+      }
+    };
+
+    if (isMobile && isSidebarExpanded) {
+      window.addEventListener('keydown', handleKeyDown);
+      return () => window.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [isSidebarExpanded, isMobile]);
+
   // Sidebar widths
   const sidebarWidthExpanded = 280; // ~280px
   const sidebarWidthCollapsed = 72; // ~72px (icon-only)
@@ -53,12 +67,13 @@ export function LayoutWrapper({ children, role }: LayoutWrapperProps) {
       {/* Desktop: CSS Grid pushes content (sidebar never overlays) */}
       {/* Mobile: Sidebar overlays when revealed via burger */}
       <div 
-        className="flex-1 overflow-hidden"
+        className="flex-1 overflow-hidden overflow-x-hidden"
         style={{
           display: isMobile ? 'flex' : 'grid',
           // Desktop: Grid layout ensures sidebar pushes content, never overlays
           gridTemplateColumns: isMobile ? undefined : `${sidebarWidth}px 1fr`,
           transition: isMobile ? undefined : 'grid-template-columns 300ms ease-in-out',
+          maxWidth: '100%', // Prevent horizontal scrolling
         }}
       >
         {/* Left Sidebar - Single source of navigation */}
@@ -96,15 +111,16 @@ export function LayoutWrapper({ children, role }: LayoutWrapperProps) {
 
         {/* Main Content Area - Course + lessons, clearly separated */}
         <main 
-          className="overflow-y-auto"
+          className="overflow-y-auto overflow-x-hidden"
           style={{
             width: isMobile ? '100%' : 'auto',
             minWidth: 0, // Prevents grid overflow
+            maxWidth: '100%', // Prevents horizontal scrolling
             backgroundColor: 'var(--ca-bg-warm)',
           }}
           role="main"
         >
-          <div className="max-w-7xl mx-auto px-6 py-8">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 w-full">
             {children}
           </div>
         </main>
