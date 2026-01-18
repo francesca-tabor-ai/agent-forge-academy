@@ -1535,64 +1535,37 @@ export async function POST(request: NextRequest) {
           });
         }
       } catch (llmError: any) {
-        const errorMessage = llmError.message || 'LLM provider not configured';
         const providerErrorLatency = Date.now() - startTime;
-        
-        // Determine appropriate status code
-        let statusCode = 500;
-        let errorCode = 'UPSTREAM_ERROR';
-        
-        if (errorMessage.includes('LLM_API_KEY') || errorMessage.includes('required')) {
-          statusCode = 503; // Service Unavailable
-          errorCode = 'SERVICE_UNAVAILABLE';
-        } else if (errorMessage.includes('401') || errorMessage.includes('Unauthorized')) {
-          statusCode = 401;
-          errorCode = 'UNAUTHORIZED';
-        } else if (errorMessage.includes('429') || errorMessage.includes('rate limit')) {
-          statusCode = 429;
-          errorCode = 'RATE_LIMIT_EXCEEDED';
-        } else if (errorMessage.includes('400') || errorMessage.includes('Bad Request')) {
-          statusCode = 400;
-          errorCode = 'BAD_REQUEST';
-        }
+        const errorMessage = llmError.message || 'LLM provider not configured';
         
         // Extract upstream status if available
         const upstreamStatusMatch = errorMessage.match(/(\d{3})/);
         const upstreamStatus = upstreamStatusMatch ? parseInt(upstreamStatusMatch[1]) : null;
         
-        safeLogger.error('[AI_ADVISOR] Provider call failed', { 
-          requestId, 
+        // Use centralized error taxonomy
+        const errorResponse = createErrorResponse(llmError, {
+          requestId,
           userId: user.id,
+          upstreamStatus: upstreamStatus,
+          errorMessage: errorMessage,
+          stage: 'provider_call_failed',
+          originalError: llmError,
+        });
+        
+        safeLogger.error('[AI_ADVISOR] Provider call failed', {
+          ...errorResponse.logData,
           provider: llmProvider,
           model,
-          stage: 'provider_call_failed',
-          statusCode,
-          errorCode,
-          upstreamStatus,
-          message: errorMessage,
           latency: providerErrorLatency,
           stack: process.env.NODE_ENV === 'development' ? llmError.stack : undefined,
           timestamp: new Date().toISOString(),
         });
         
         return NextResponse.json(
-          { 
-            ok: false,
-            error: { 
-              code: errorCode, 
-              message: process.env.NODE_ENV === 'development' 
-                ? errorMessage
-                : (errorMessage.includes('LLM_API_KEY') 
-                    ? 'AI service is not configured. Please contact support.'
-                    : 'AI service error. Please try again.'),
-              requestId 
-            } 
-          },
-          { 
-            status: statusCode,
-            headers: {
-              'X-Request-ID': requestId,
-            },
+          errorResponse.response,
+          {
+            status: errorResponse.statusCode,
+            headers: errorResponse.headers,
           }
         );
       }
@@ -1796,46 +1769,28 @@ export async function POST(request: NextRequest) {
       const elapsed = Date.now() - startTime;
       const errorMessage = error?.message || String(error);
       
-      // Determine appropriate status code and error code
-      let statusCode = 500;
-      let errorCode = 'UPSTREAM_ERROR';
-      
-      if (errorMessage.includes('API key') || errorMessage.includes('LLM_API_KEY') || errorMessage.includes('required')) {
-        statusCode = 503; // Service Unavailable
-        errorCode = 'SERVICE_UNAVAILABLE';
-      } else if (errorMessage.includes('401') || errorMessage.includes('Unauthorized')) {
-        statusCode = 401;
-        errorCode = 'UNAUTHORIZED';
-      } else if (errorMessage.includes('429') || errorMessage.includes('rate limit')) {
-        statusCode = 429;
-        errorCode = 'RATE_LIMIT_EXCEEDED';
-      } else if (errorMessage.includes('400') || errorMessage.includes('Bad Request')) {
-        statusCode = 400;
-        errorCode = 'BAD_REQUEST';
-      } else if (errorMessage.includes('timeout') || errorMessage.includes('TIMEOUT')) {
-        statusCode = 504; // Gateway Timeout
-        errorCode = 'TIMEOUT';
-      }
-      
       // Extract upstream status if available
       const upstreamStatusMatch = errorMessage.match(/(\d{3})/);
       const upstreamStatus = upstreamStatusMatch ? parseInt(upstreamStatusMatch[1]) : null;
       
-      // Structured logging: error with status code and error reason
-      safeLogger.error('[AI_ADVISOR] Error generating LLM response', { 
+      // Use centralized error taxonomy
+      const errorResponse = createErrorResponse(error, {
         requestId,
         userId: user.id,
+        upstreamStatus: upstreamStatus,
+        errorMessage: errorMessage,
+        stage: 'llm_call_failed',
+        originalError: error,
+      });
+      
+      // Structured logging: error with status code and error reason
+      safeLogger.error('[AI_ADVISOR] Error generating LLM response', {
+        ...errorResponse.logData,
         provider: llmProvider,
         model,
-        stage: 'llm_call_failed',
-        statusCode,
-        errorCode,
         path: '/api/ai-advisor/chat',
         method: 'POST',
-        upstreamStatus,
-        message: errorMessage, // Error reason without leaking keys
         elapsed,
-        // Don't log stack in production to avoid leaking sensitive info
         stack: process.env.NODE_ENV === 'development' ? error?.stack : undefined,
       });
       
@@ -1845,32 +1800,19 @@ export async function POST(request: NextRequest) {
         userId: user.id,
         path: '/api/ai-advisor/chat',
         method: 'POST',
-        status: statusCode,
+        status: errorResponse.statusCode,
         duration: elapsed,
         errorStack: error?.stack || null,
-        errorMessage: errorMessage,
+        errorMessage: errorResponse.logData.message,
         ipAddress: getIpAddress(request),
         userAgent: getUserAgent(request),
       });
       
       return NextResponse.json(
-        { 
-          ok: false,
-          error: { 
-            code: errorCode, 
-            message: process.env.NODE_ENV === 'development'
-              ? errorMessage
-              : (errorMessage.includes('API key') || errorMessage.includes('LLM_API_KEY')
-                  ? 'AI service is not configured. Please contact support.'
-                  : 'Failed to generate response. Please try again.'),
-            requestId 
-          } 
-        },
-        { 
-          status: statusCode,
-          headers: {
-            'X-Request-ID': requestId,
-          },
+        errorResponse.response,
+        {
+          status: errorResponse.statusCode,
+          headers: errorResponse.headers,
         }
       );
     }
