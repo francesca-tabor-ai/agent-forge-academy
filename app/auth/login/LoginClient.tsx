@@ -147,7 +147,7 @@ export default function LoginClient() {
           textAlign: 'center',
         }}
       >
-        <p style={{ color: '#666', marginBottom: '0.5rem' }}>Don't have an account?</p>
+        <p style={{ color: '#666', marginBottom: '0.5rem' }}>Don&apos;t have an account?</p>
         <Link
           href="/auth/signup"
           style={{

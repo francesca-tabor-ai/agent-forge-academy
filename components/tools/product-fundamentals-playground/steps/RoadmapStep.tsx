@@ -184,7 +184,7 @@ export function RoadmapStep({ state, dispatch }: RoadmapStepProps) {
       {!canProceed && (
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
           <p className="text-sm text-yellow-800">
-            <strong>Cannot proceed:</strong> All roadmap items must be linked to at least one problem statement and include a "Why now / why this order?" rationale.
+            <strong>Cannot proceed:</strong> All roadmap items must be linked to at least one problem statement and include a &quot;Why now / why this order?&quot; rationale.
           </p>
         </div>
       )}

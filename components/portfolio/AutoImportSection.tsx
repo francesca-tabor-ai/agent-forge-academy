@@ -9,6 +9,19 @@ interface AutoImportSectionProps {
 }
 
 export function AutoImportSection({ studentProfileId, hasExistingData }: AutoImportSectionProps) {
+  // All hooks must be called unconditionally at the top level
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+  const [progress, setProgress] = useState<string>('');
+  
+  const cvFileInputRef = useRef<HTMLInputElement>(null);
+  const [cvFile, setCvFile] = useState<File | null>(null);
+  const [linkedinUrl, setLinkedinUrl] = useState('');
+  const [githubUrl, setGithubUrl] = useState('');
+  const [githubToken, setGithubToken] = useState(''); // Optional GitHub token for private repos
+
   // Defensive UI guard: Check if Supabase env vars are available at runtime
   // This error will only appear in misconfigured environments
   const supabaseReady =
@@ -26,17 +39,6 @@ export function AutoImportSection({ studentProfileId, hasExistingData }: AutoImp
       </section>
     );
   }
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
-  const [progress, setProgress] = useState<string>('');
-  
-  const cvFileInputRef = useRef<HTMLInputElement>(null);
-  const [cvFile, setCvFile] = useState<File | null>(null);
-  const [linkedinUrl, setLinkedinUrl] = useState('');
-  const [githubUrl, setGithubUrl] = useState('');
-  const [githubToken, setGithubToken] = useState(''); // Optional GitHub token for private repos
 
   const MAX_CV_SIZE = 10 * 1024 * 1024; // 10MB
   const ALLOWED_CV_TYPES = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];

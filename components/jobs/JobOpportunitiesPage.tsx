@@ -679,7 +679,7 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
             </div>
             <div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                We couldn't load jobs right now
+                We couldn&apos;t load jobs right now
               </h3>
               <p className="text-sm text-gray-600 mb-2">{error.message}</p>
               {error.message.includes('Error ID:') && (
@@ -831,7 +831,7 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
             <div className="flex items-center gap-2 flex-wrap">
               {searchQuery && (
                 <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded-full border border-gray-300">
-                  Search: "{searchQuery}"
+                  Search: &quot;{searchQuery}&quot;
                   <button
                     onClick={() => updateURLParams({ search: null })}
                     className="hover:text-gray-900 text-base leading-none focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-1 rounded"

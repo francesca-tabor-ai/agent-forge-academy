@@ -78,7 +78,7 @@ export function OverviewCards({
       {build.length > 0 && (
         <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
           <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3">
-            You'll Build
+            You&apos;ll Build
           </h3>
           <ul className="space-y-2.5 max-w-prose">
             {visibleBuild.map((bullet, index) => (

@@ -923,8 +923,8 @@ export function OffersPageClient({
                     <div>
                       <div className="text-xs font-medium text-gray-700 mb-1">Setup Guide:</div>
                       <ol className="text-xs text-gray-600 space-y-1 list-decimal list-inside">
-                        <li>Click "Claim Offer" to get your discount code</li>
-                        <li>Visit the provider's website</li>
+                        <li>Click &quot;Claim Offer&quot; to get your discount code</li>
+                        <li>Visit the provider&apos;s website</li>
                         <li>Sign up using the discount code</li>
                         <li>Verify eligibility if required</li>
                         <li>Start building!</li>

@@ -51,7 +51,7 @@ export function CancelSubscriptionModal({
         <div className="bg-white rounded-lg max-w-md w-full p-6 space-y-4">
           <h2 className="text-xl font-semibold text-gray-900">Cancel Subscription</h2>
           <p className="text-sm text-gray-600">
-            We're sorry to see you go. What's the main reason for canceling?
+            We&apos;re sorry to see you go. What&apos;s the main reason for canceling?
           </p>
           <div className="space-y-2">
             {cancellationReasons.map((reason) => (
@@ -128,7 +128,7 @@ export function CancelSubscriptionModal({
         <div className="space-y-3">
           <p className="text-sm text-gray-700">
             Your subscription will remain active until <strong>{formatDate(renewalDate)}</strong>.
-            You'll continue to have full access to:
+            You&apos;ll continue to have full access to:
           </p>
           <ul className="list-disc list-inside text-sm text-gray-700 space-y-1 ml-2">
             <li>All enrolled courses</li>
@@ -137,7 +137,7 @@ export function CancelSubscriptionModal({
             <li>AI Advisor access</li>
           </ul>
           <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
-            <p className="text-sm font-medium text-red-900 mb-1">What you'll lose:</p>
+            <p className="text-sm font-medium text-red-900 mb-1">What you&apos;ll lose:</p>
             <ul className="list-disc list-inside text-sm text-red-700 space-y-1 ml-2">
               <li>Job access and matched opportunities</li>
               <li>AI Advisor usage</li>
@@ -146,7 +146,7 @@ export function CancelSubscriptionModal({
             </ul>
           </div>
           <p className="text-sm text-gray-600 pt-2">
-            After {formatDate(renewalDate)}, your access will end and you won't be charged again.
+            After {formatDate(renewalDate)}, your access will end and you won&apos;t be charged again.
           </p>
         </div>
         <div className="flex gap-3 pt-4">

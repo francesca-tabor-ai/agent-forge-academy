@@ -396,13 +396,13 @@ export default async function ToolDetailPage({ params }: { params: Promise<{ slu
                           {offer.discount_code ? (
               <>
                 <li>Copy the discount code above</li>
-                              <li>Click "Claim Offer" to visit the provider's website</li>
+                              <li>Click &quot;Claim Offer&quot; to visit the provider&apos;s website</li>
                 <li>Apply the code during checkout or signup</li>
               </>
             ) : (
               <>
-                              <li>Click "Claim Offer" below</li>
-                <li>Follow the provider's signup or checkout process</li>
+                              <li>Click &quot;Claim Offer&quot; below</li>
+                <li>Follow the provider&apos;s signup or checkout process</li>
                 <li>The discount will be applied automatically if eligible</li>
               </>
             )}

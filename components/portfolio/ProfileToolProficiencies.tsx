@@ -67,7 +67,7 @@ export function ProfileToolProficiencies({ studentProfileId }: ProfileToolProfic
     <div className="bg-white border border-gray-200 rounded-lg p-6">
       <h2 className="text-xl font-semibold text-gray-900 mb-4">Tool Proficiencies</h2>
       <p className="text-sm text-gray-600 mb-4">
-        Based on courses you've completed
+        Based on courses you&apos;ve completed
       </p>
       <div className="flex flex-wrap gap-3">
         {sortedProficiencies.map((proficiency) => (

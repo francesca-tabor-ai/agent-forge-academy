@@ -77,7 +77,7 @@ export function CoursePaywall({ courseTitle, courseSlug, segments }: CoursePaywa
           {/* Alternative Actions */}
           <div className="pt-6 border-t border-gray-200">
             <p className="text-sm text-gray-500 mb-4">
-              Already have a subscription? Make sure you're logged in with the correct account.
+              Already have a subscription? Make sure you&apos;re logged in with the correct account.
             </p>
             <Link
               href="/student/courses"

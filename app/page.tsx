@@ -64,11 +64,11 @@ export default async function Home() {
       <section className="bg-brand-dark py-12 sm:py-16 lg:py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-lg sm:text-xl md:text-2xl text-gray-200 leading-relaxed font-light">
-            Built for professionals, builders, marketers, and leaders who know static skills won't survive the AI shift.
+            Built for professionals, builders, marketers, and leaders who know static skills won&apos;t survive the AI shift.
           </p>
           <p className="mt-6 text-base sm:text-lg md:text-xl text-gray-300 leading-relaxed">
-            AI Growth Hub isn't about trends or theory.<br />
-            It's about relearning how work gets done in an AI-first world.
+            AI Growth Hub isn&apos;t about trends or theory.<br />
+            It&apos;s about relearning how work gets done in an AI-first world.
           </p>
         </div>
       </section>
@@ -80,7 +80,7 @@ export default async function Home() {
             Why relearning matters now
           </h2>
           <p className="text-xl sm:text-2xl text-gray-700 mb-12 font-light">
-            AI isn't just a new tool — it's changing:
+            AI isn&apos;t just a new tool — it&apos;s changing:
           </p>
           
           <div className="grid md:grid-cols-2 gap-6 mb-16">
@@ -99,7 +99,7 @@ export default async function Home() {
           </div>
 
           <p className="text-lg text-gray-600 mb-12">
-            Traditional education can't keep up.<br />
+            Traditional education can&apos;t keep up.<br />
             AI Growth Hub exists to fill that gap.
           </p>
 
@@ -139,7 +139,7 @@ export default async function Home() {
             <div className="bg-white p-6 rounded-lg shadow-sm card-interactive">
               <h3 className="text-xl font-bold text-brand-dark mb-3 font-playfair">Foundations & Literacy</h3>
               <p className="text-gray-700">
-                Understand how AI works, how it's governed, and how to use it responsibly and effectively.
+                Understand how AI works, how it&apos;s governed, and how to use it responsibly and effectively.
               </p>
             </div>
             <div className="bg-white p-6 rounded-lg shadow-sm card-interactive">
@@ -158,7 +158,7 @@ export default async function Home() {
 
           <div>
             <h3 className="text-2xl sm:text-3xl font-bold text-brand-dark mb-8 font-playfair">
-              Example Courses You'll Learn
+              Example Courses You&apos;ll Learn
             </h3>
             <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
               {[
@@ -299,19 +299,19 @@ export default async function Home() {
           <div className="grid md:grid-cols-3 gap-8">
             <div className="bg-gray-50 p-6 rounded-lg card-interactive">
               <p className="text-gray-700 italic mb-4">
-                "This isn't another AI course — it's a way to keep my skills relevant as my role changes."
+                &quot;This isn&apos;t another AI course — it&apos;s a way to keep my skills relevant as my role changes.&quot;
               </p>
               <p className="text-sm text-gray-600 font-medium">— Product Manager</p>
             </div>
             <div className="bg-gray-50 p-6 rounded-lg card-interactive">
               <p className="text-gray-700 italic mb-4">
-                "AI Growth Hub helped me move from curiosity to confidently applying AI in real client work."
+                &quot;AI Growth Hub helped me move from curiosity to confidently applying AI in real client work.&quot;
               </p>
               <p className="text-sm text-gray-600 font-medium">— Consultant</p>
             </div>
             <div className="bg-gray-50 p-6 rounded-lg card-interactive">
               <p className="text-gray-700 italic mb-4">
-                "The agentic systems content alone paid for the subscription."
+                &quot;The agentic systems content alone paid for the subscription.&quot;
               </p>
               <p className="text-sm text-gray-600 font-medium">— Software Engineer</p>
             </div>
@@ -328,7 +328,7 @@ export default async function Home() {
           <div className="space-y-6 mb-12">
             <div className="flex items-start gap-4">
               <span className="text-2xl mt-1">✓</span>
-              <p className="text-lg text-gray-700">You feel your current skills won't last the next 5 years</p>
+              <p className="text-lg text-gray-700">You feel your current skills won&apos;t last the next 5 years</p>
             </div>
             <div className="flex items-start gap-4">
               <span className="text-2xl mt-1">✓</span>
@@ -336,7 +336,7 @@ export default async function Home() {
             </div>
             <div className="flex items-start gap-4">
               <span className="text-2xl mt-1">✓</span>
-              <p className="text-lg text-gray-700">You're tired of one-off courses that go stale</p>
+              <p className="text-lg text-gray-700">You&apos;re tired of one-off courses that go stale</p>
             </div>
             <div className="flex items-start gap-4">
               <span className="text-2xl mt-1">✓</span>
@@ -356,7 +356,7 @@ export default async function Home() {
             Relearn once. Keep relearning forever.
           </h2>
           <p className="text-xl sm:text-2xl text-gray-200 mb-8 font-light">
-            AI isn't slowing down — and neither should your education.
+            AI isn&apos;t slowing down — and neither should your education.
           </p>
           <p className="text-xl sm:text-2xl text-gray-200 mb-12 font-light">
             Join AI Growth Hub today and future-proof your career.

@@ -209,7 +209,7 @@ export function ChatPanel({ messages, isLoading, chatEndRef, activeContext, onAp
               <div className="inline-block p-3 rounded-lg bg-yellow-50 border border-yellow-200 text-gray-900">
                 <div className="text-sm text-yellow-800">
                   <p className="font-medium mb-1">⚠️ No response returned</p>
-                  <p className="text-xs">The AI didn't return any content. Please try again or contact support if this persists.</p>
+                  <p className="text-xs">The AI didn&apos;t return any content. Please try again or contact support if this persists.</p>
                 </div>
               </div>
             ) : null}

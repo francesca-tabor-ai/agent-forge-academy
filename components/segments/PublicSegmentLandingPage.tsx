@@ -287,7 +287,7 @@ export default function PublicSegmentLandingPage({ segment, courses, config }: P
       <section className="bg-gray-50 py-16 sm:py-20 lg:py-24">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-brand-dark mb-8 text-center font-playfair">
-            What You'll Learn
+            What You&apos;ll Learn
           </h2>
           <div className="grid md:grid-cols-2 gap-8">
             <div>
@@ -302,7 +302,7 @@ export default function PublicSegmentLandingPage({ segment, courses, config }: P
               </ul>
             </div>
             <div>
-              <h3 className="text-xl font-bold text-brand-dark mb-4">What You'll Build</h3>
+              <h3 className="text-xl font-bold text-brand-dark mb-4">What You&apos;ll Build</h3>
               <ul className="space-y-3 text-gray-700">
                 {courses.slice(0, 5).map((course, idx) => (
                   <li key={course.slug} className="flex items-start gap-3">
@@ -326,19 +326,19 @@ export default function PublicSegmentLandingPage({ segment, courses, config }: P
             {/* Placeholder testimonials */}
             <div className="bg-gray-50 p-6 rounded-lg">
               <p className="text-gray-700 italic mb-4">
-                "The {segment.displayName} courses have transformed how I approach my work. Highly recommended!"
+                &quot;The {segment.displayName} courses have transformed how I approach my work. Highly recommended!&quot;
               </p>
               <p className="text-sm text-gray-600 font-medium">— Student</p>
             </div>
             <div className="bg-gray-50 p-6 rounded-lg">
               <p className="text-gray-700 italic mb-4">
-                "Practical, actionable content that I could apply immediately. Worth every penny."
+                &quot;Practical, actionable content that I could apply immediately. Worth every penny.&quot;
               </p>
               <p className="text-sm text-gray-600 font-medium">— Professional</p>
             </div>
             <div className="bg-gray-50 p-6 rounded-lg">
               <p className="text-gray-700 italic mb-4">
-                "The best investment I've made in my career development. The courses are constantly updated."
+                &quot;The best investment I&apos;ve made in my career development. The courses are constantly updated.&quot;
               </p>
               <p className="text-sm text-gray-600 font-medium">— Learner</p>
             </div>
@@ -358,7 +358,7 @@ export default function PublicSegmentLandingPage({ segment, courses, config }: P
                 What courses are included in {segment.displayName}?
               </h3>
               <p className="text-gray-200">
-                You'll have access to {courses.length} live course{courses.length !== 1 ? 's' : ''} specifically curated for {segment.displayName}. All courses are regularly updated with the latest content and best practices.
+                You&apos;ll have access to {courses.length} live course{courses.length !== 1 ? 's' : ''} specifically curated for {segment.displayName}. All courses are regularly updated with the latest content and best practices.
               </p>
             </div>
             <div className="bg-white/10 rounded-lg p-6">
@@ -366,12 +366,12 @@ export default function PublicSegmentLandingPage({ segment, courses, config }: P
                 Can I cancel my subscription?
               </h3>
               <p className="text-gray-200">
-                Yes, you can cancel your subscription at any time. You'll continue to have access until the end of your current billing period.
+                Yes, you can cancel your subscription at any time. You&apos;ll continue to have access until the end of your current billing period.
               </p>
             </div>
             <div className="bg-white/10 rounded-lg p-6">
               <h3 className="text-xl font-bold text-white mb-3">
-                What's the difference between monthly and annual billing?
+                What&apos;s the difference between monthly and annual billing?
               </h3>
               <p className="text-gray-200">
                 Annual billing saves you {formatPrice(annualSavings)} per year compared to monthly billing. Both plans give you the same access to all courses.

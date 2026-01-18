@@ -57,9 +57,9 @@ export function NewProjectForm() {
         {showGuide && (
           <div className="mt-3 p-4 bg-blue-50 border border-blue-200 rounded-md text-sm text-gray-700 space-y-3">
             <div>
-              <strong>Title:</strong> Use format: <em>What it is + who it's for + key tech</em>
+              <strong>Title:</strong> Use format: <em>What it is + who it&apos;s for + key tech</em>
               <br />
-              <span className="text-gray-600">Example: "RAG Support Bot for E-commerce (FastAPI + Pinecone)"</span>
+              <span className="text-gray-600">Example: &quot;RAG Support Bot for E-commerce (FastAPI + Pinecone)&quot;</span>
             </div>
             <div>
               <strong>Description:</strong> Include these 5 bullets:
@@ -78,7 +78,7 @@ export function NewProjectForm() {
               <strong>Demo URL:</strong> Link to a live demo or video (Loom/YouTube is fine).
             </div>
             <div className="pt-2 border-t border-blue-200">
-              <strong>💡 Tip:</strong> If you're unsure, submit now and improve later — you can edit this project anytime.
+              <strong>💡 Tip:</strong> If you&apos;re unsure, submit now and improve later — you can edit this project anytime.
             </div>
           </div>
         )}
@@ -105,7 +105,7 @@ export function NewProjectForm() {
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ca-gold focus:border-transparent"
           />
           <p className="mt-1 text-xs text-gray-500">
-            Format: What it is + who it's for + key tech
+            Format: What it is + who it&apos;s for + key tech
           </p>
         </div>
 

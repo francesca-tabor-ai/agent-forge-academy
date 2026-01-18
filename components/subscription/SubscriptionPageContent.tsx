@@ -267,7 +267,7 @@ export function SubscriptionPageContent({ subscriptionData, userEmail, showSucce
         <div className="rounded-lg bg-blue-50 border border-blue-200 p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-2">No Active Subscription</h2>
           <p className="text-sm text-gray-600 mb-4">
-            You don't have an active subscription. Choose a plan to get started.
+            You don&apos;t have an active subscription. Choose a plan to get started.
           </p>
           <button
             onClick={() => setShowChangePlanModal(true)}

@@ -185,7 +185,7 @@ export function PersonasProblemsStep({ state, dispatch }: PersonasProblemsStepPr
       {!canProceed && (
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
           <p className="text-sm text-yellow-800">
-            <strong>Cannot proceed:</strong> You must have at least one problem statement, and all problem statements must include a "Why this matters" rationale.
+            <strong>Cannot proceed:</strong> You must have at least one problem statement, and all problem statements must include a &quot;Why this matters&quot; rationale.
           </p>
         </div>
       )}
@@ -252,7 +252,7 @@ export function PersonasProblemsStep({ state, dispatch }: PersonasProblemsStepPr
             </div>
           ))}
           {state.personas.length === 0 && (
-            <p className="text-sm text-gray-500 italic">No personas yet. Click "Add Persona" to create one.</p>
+            <p className="text-sm text-gray-500 italic">No personas yet. Click &quot;Add Persona&quot; to create one.</p>
           )}
         </div>
 
@@ -374,7 +374,7 @@ export function PersonasProblemsStep({ state, dispatch }: PersonasProblemsStepPr
                     </div>
                   ) : (
                     <div className="mt-3 p-2 bg-red-50 border border-red-200 rounded text-sm text-red-700">
-                      <strong>Missing:</strong> "Why this matters" rationale is required
+                      <strong>Missing:</strong> &quot;Why this matters&quot; rationale is required
                     </div>
                   )}
                   {problem.linkedPersonaIds && problem.linkedPersonaIds.length > 0 && (
@@ -411,7 +411,7 @@ export function PersonasProblemsStep({ state, dispatch }: PersonasProblemsStepPr
             </div>
           ))}
           {state.problems.length === 0 && (
-            <p className="text-sm text-gray-500 italic">No problem statements yet. Click "Add Problem" to create one.</p>
+            <p className="text-sm text-gray-500 italic">No problem statements yet. Click &quot;Add Problem&quot; to create one.</p>
           )}
         </div>
 

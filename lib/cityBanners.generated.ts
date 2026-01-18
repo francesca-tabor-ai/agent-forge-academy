@@ -4,7 +4,7 @@
  * This file is auto-generated from documentation/images/cities.md
  * DO NOT EDIT MANUALLY - changes will be overwritten
  * 
- * Generated at: 2026-01-18T11:17:15.439Z
+ * Generated at: 2026-01-18T12:24:45.167Z
  * Total cities: 49
  */
 
@@ -16,7 +16,7 @@
 export const CITY_BANNER_MAP: Record<string, string> = {
   'abu dhabi': 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80',   // Abu Dhabi, UAE
   'amsterdam': 'https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=1920&q=80',   // Amsterdam, Netherlands
-  'athens': 'https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=1920&q=80',   // Athens, Greece
+  'athens': 'https://images.unsplash.com/photo-1529260830199-42c24126f198?w=1920&q=80',   // Athens, Greece
   'auckland': 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80',   // Auckland, New Zealand
   'austin': 'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=1920&q=80',   // Austin, USA
   'bangalore': 'https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=1920&q=80',   // Bangalore, India
@@ -30,9 +30,9 @@ export const CITY_BANNER_MAP: Record<string, string> = {
   'delhi': 'https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=1920&q=80',   // Delhi, India
   'dubai': 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80',   // Dubai, UAE
   'dublin': 'https://images.unsplash.com/photo-1515595967223-f341ab1d24f1?w=1920&q=80',   // Dublin, Ireland
-  'edinburgh': 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80',   // Edinburgh, UK
+  'edinburgh': 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1920&q=80',   // Edinburgh, UK
   'geneva': 'https://images.unsplash.com/photo-1520962880247-cfaf541c8724?w=1920&q=80',   // Geneva, Switzerland
-  'hong kong': 'https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=1920&q=80',   // Hong Kong, Hong Kong
+  'hong kong': 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=1920&q=80',   // Hong Kong, Hong Kong
   'lisbon': 'https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=1920&q=80',   // Lisbon, Portugal
   'london': 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=1920&q=80',   // London, UK
   'los angeles': 'https://images.unsplash.com/photo-1515895306158-7f4f5e83b3b1?w=1920&q=80',   // Los Angeles, USA
@@ -43,7 +43,7 @@ export const CITY_BANNER_MAP: Record<string, string> = {
   'milan': 'https://images.unsplash.com/photo-1520175480921-4edfa2983e0f?w=1920&q=80',   // Milan, Italy
   'montreal': 'https://images.unsplash.com/photo-1514890547357-a9ee288728e0?w=1920&q=80',   // Montreal, Canada
   'mumbai': 'https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=1920&q=80',   // Mumbai, India
-  'munich': 'https://images.unsplash.com/photo-1555993530-7e0b0a0a0a0a?w=1920&q=80',   // Munich, Germany
+  'munich': 'https://images.unsplash.com/photo-1587330979470-3585ac7c98ed?w=1920&q=80',   // Munich, Germany
   'new york': 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=1920&q=80',   // New York, USA
   'osaka': 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1920&q=80',   // Osaka, Japan
   'oslo': 'https://images.unsplash.com/photo-1527004013197-933c4bb611b3?w=1920&q=80',   // Oslo, Norway

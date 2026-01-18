@@ -13,6 +13,13 @@ interface UploadSuccessState {
 }
 
 export function CVUpload({ onUploadSuccess }: CVUploadProps) {
+  // All hooks must be called unconditionally at the top level
+  const [uploading, setUploading] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<UploadSuccessState | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   // Defensive UI guard: Check if Supabase env vars are available at runtime
   // This error will only appear in misconfigured environments
   const supabaseReady =
@@ -28,11 +35,6 @@ export function CVUpload({ onUploadSuccess }: CVUploadProps) {
       </div>
     );
   }
-  const [uploading, setUploading] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<UploadSuccessState | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const MAX_SIZE = 10 * 1024 * 1024; // 10MB
 

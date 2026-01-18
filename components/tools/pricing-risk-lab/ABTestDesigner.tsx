@@ -586,7 +586,7 @@ export function ABTestDesigner() {
 
         {!expectedOutcomes && (
           <p className="text-sm text-gray-500 italic">
-            Click "Simulate Expected Outcome" to see projected results.
+            Click &quot;Simulate Expected Outcome&quot; to see projected results.
           </p>
         )}
       </div>

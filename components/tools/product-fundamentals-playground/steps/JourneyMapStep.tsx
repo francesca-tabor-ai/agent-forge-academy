@@ -287,7 +287,7 @@ export function JourneyMapStep({ state, dispatch }: JourneyMapStepProps) {
         ))}
         {state.journey.length === 0 && (
           <div className="text-center py-12 border-2 border-dashed border-gray-300 rounded-lg">
-            <p className="text-gray-500">No journey stages yet. Click "Add Stage" to create one.</p>
+            <p className="text-gray-500">No journey stages yet. Click &quot;Add Stage&quot; to create one.</p>
           </div>
         )}
       </div>

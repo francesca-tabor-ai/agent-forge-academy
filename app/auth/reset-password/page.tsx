@@ -48,7 +48,7 @@ export default function ResetPasswordPage() {
         >
           <h2 style={{ color: '#3c3', marginBottom: '1rem' }}>Check your email</h2>
           <p style={{ color: '#666', marginBottom: '1rem' }}>
-            We've sent a password reset link to {email}
+            We&apos;ve sent a password reset link to {email}
           </p>
           <p style={{ color: '#666', fontSize: '0.9rem' }}>
             Click the link in the email to reset your password.
@@ -74,7 +74,7 @@ export default function ResetPasswordPage() {
     <main style={{ padding: '2rem', maxWidth: '400px', margin: '0 auto' }}>
       <h1>Reset Password</h1>
       <p style={{ marginBottom: '2rem', color: '#666' }}>
-        Enter your email address and we'll send you a link to reset your password.
+        Enter your email address and we&apos;ll send you a link to reset your password.
       </p>
 
       {error && (

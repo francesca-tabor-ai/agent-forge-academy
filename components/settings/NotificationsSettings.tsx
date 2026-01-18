@@ -142,7 +142,7 @@ export function NotificationsSettings({
           <div>
             <h3 className="text-lg font-medium text-gray-900 mb-2">Preferred Send Time</h3>
             <p className="text-sm text-gray-600 mb-4">
-              Choose when you'd like to receive weekly emails
+              Choose when you&apos;d like to receive weekly emails
             </p>
           </div>
 

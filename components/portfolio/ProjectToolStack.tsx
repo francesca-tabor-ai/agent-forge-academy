@@ -200,7 +200,7 @@ export function ProjectToolStack({ projectId, initialTools = [] }: ProjectToolSt
       {loading && tools.length === 0 ? (
         <p className="text-sm text-gray-500">Loading tools...</p>
       ) : tools.length === 0 ? (
-        <p className="text-sm text-gray-500">No tools added yet. Click "Add tool" to get started.</p>
+        <p className="text-sm text-gray-500">No tools added yet. Click &quot;Add tool&quot; to get started.</p>
       ) : (
         <div className="flex flex-wrap gap-3">
           {tools.map(tool => (

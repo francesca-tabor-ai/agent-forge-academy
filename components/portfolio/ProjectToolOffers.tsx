@@ -94,7 +94,7 @@ export function ProjectToolOffers({ projectId }: ProjectToolOffersProps) {
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
         <h3 className="text-sm font-semibold text-blue-900 mb-2">Relevant Offers</h3>
         <p className="text-sm text-blue-700 mb-3">
-          You're using {tools.length} tool{tools.length > 1 ? 's' : ''} in this project. 
+          You&apos;re using {tools.length} tool{tools.length > 1 ? 's' : ''} in this project. 
           Add tools to your project to see relevant offers!
         </p>
         <Link

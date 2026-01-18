@@ -142,7 +142,7 @@ export function AddOfferToProjectModal({
           </div>
         ) : projects.length === 0 ? (
           <div className="py-8 text-center space-y-4">
-            <p className="text-sm text-gray-600">You don't have any projects yet.</p>
+            <p className="text-sm text-gray-600">You don&apos;t have any projects yet.</p>
             <button
               onClick={handleCreateProject}
               className="px-4 py-2 bg-brand-light text-white text-sm font-medium rounded-lg hover:bg-brand-light/90 transition-colors"

@@ -1293,7 +1293,7 @@ export function WebRTCRealtime({
         )}
         {isMuted && isConnected && voiceMode === 'hands-free' && (
           <p className="mt-1 text-amber-600">
-            Microphone is muted. Click "Unmuted" to start speaking.
+            Microphone is muted. Click &quot;Unmuted&quot; to start speaking.
           </p>
         )}
         {!voiceOutputEnabled && isConnected && (

@@ -229,7 +229,7 @@ export function JobOpportunitiesSection({ studentProfileId }: JobOpportunitiesSe
         ) : (
           <div className="text-center py-12 mb-8">
             <p className="text-sm text-gray-500 mb-2">
-              We'll recommend jobs once you complete a course or add a project.
+              We&apos;ll recommend jobs once you complete a course or add a project.
             </p>
             <div className="flex items-center justify-center gap-4 mt-6">
               <Link

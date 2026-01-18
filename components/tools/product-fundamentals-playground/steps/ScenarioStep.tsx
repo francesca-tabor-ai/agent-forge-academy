@@ -279,7 +279,7 @@ export function ScenarioStep({ state, dispatch }: ScenarioStepProps) {
           </li>
           <li className="flex items-start gap-2">
             <span className="text-green-600 mt-0.5">✓</span>
-            <span>Specific target user segment (not "everyone")</span>
+            <span>Specific target user segment (not &quot;everyone&quot;)</span>
           </li>
           <li className="flex items-start gap-2">
             <span className="text-green-600 mt-0.5">✓</span>
@@ -287,7 +287,7 @@ export function ScenarioStep({ state, dispatch }: ScenarioStepProps) {
           </li>
           <li className="flex items-start gap-2">
             <span className="text-green-600 mt-0.5">✓</span>
-            <span>Prompt describes the "what" and "why", not just features</span>
+            <span>Prompt describes the &quot;what&quot; and &quot;why&quot;, not just features</span>
           </li>
           <li className="flex items-start gap-2">
             <span className="text-green-600 mt-0.5">✓</span>

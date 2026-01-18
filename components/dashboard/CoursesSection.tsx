@@ -395,7 +395,7 @@ export async function CoursesSection({ courses, enrollments, studentProfileId }:
                               Upcoming Capstone Project
                             </p>
                             <p className="text-sm text-yellow-700 mb-2">
-                              You're approaching the final assessment. Complete the remaining {lessonsRemaining} lesson{lessonsRemaining !== 1 ? 's' : ''} to unlock the capstone project.
+                              You&apos;re approaching the final assessment. Complete the remaining {lessonsRemaining} lesson{lessonsRemaining !== 1 ? 's' : ''} to unlock the capstone project.
                             </p>
                             <p className="text-xs text-yellow-600">
                               Estimated time to capstone: ~{estimatedTimeRemaining}
@@ -415,7 +415,7 @@ export async function CoursesSection({ courses, enrollments, studentProfileId }:
                               Course Completed!
                             </p>
                             <p className="text-xs text-green-700">
-                              Great work! You've completed all {totalLessons} lessons. View your certificate and continue learning.
+                              Great work! You&apos;ve completed all {totalLessons} lessons. View your certificate and continue learning.
                             </p>
                           </div>
                         </div>
@@ -461,7 +461,7 @@ export async function CoursesSection({ courses, enrollments, studentProfileId }:
             <div className="text-4xl mb-4">📚</div>
             <h3 className="text-lg font-semibold text-gray-900 mb-2">Start Your Learning Journey</h3>
             <p className="text-gray-600 mb-4">
-              You don't have any active courses. Browse our curriculum and start building your AI skills.
+              You don&apos;t have any active courses. Browse our curriculum and start building your AI skills.
             </p>
             <p className="text-sm text-gray-500 mb-6">
               Choose from courses covering AI fundamentals, agentic systems, commerce, and more.

@@ -98,7 +98,7 @@ export function ChangePlanModal({
           {selectedPlan && (
             <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
               <p className="text-xs text-gray-700">
-                <strong>Proration:</strong> You'll be charged a prorated amount based on the
+                <strong>Proration:</strong> You&apos;ll be charged a prorated amount based on the
                 remaining time in your billing cycle. The difference will be applied immediately.
               </p>
             </div>
