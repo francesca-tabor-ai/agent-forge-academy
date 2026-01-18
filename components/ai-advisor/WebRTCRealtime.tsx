@@ -260,7 +260,13 @@ export function WebRTCRealtime({
       clearInterval(silenceTimeoutIntervalRef.current);
     }
 
-    // Check every minute if there's been any speech activity
+    // Use shorter check interval for hands-free mode (30s) vs push-to-talk (60s)
+    const checkInterval = voiceMode === 'hands-free' ? 30 * 1000 : 60 * 1000;
+    const timeoutDuration = voiceMode === 'hands-free' 
+      ? HANDS_FREE_TIMEOUT  // 3 minutes for hands-free
+      : PUSH_TO_TALK_TIMEOUT; // 5 minutes for push-to-talk
+
+    // Check periodically if there's been any speech activity
     silenceTimeoutIntervalRef.current = setInterval(() => {
       if (!isConnected || !peerConnectionRef.current) {
         return; // Not connected, don't check
@@ -268,20 +274,31 @@ export function WebRTCRealtime({
 
       const timeSinceLastSpeech = Date.now() - lastSpeechTimeRef.current;
       
-      if (timeSinceLastSpeech > SILENCE_TIMEOUT_DURATION) {
-        console.log('Silence timeout: No speech activity for', Math.round(timeSinceLastSpeech / 1000 / 60), 'minutes');
+      if (timeSinceLastSpeech > timeoutDuration) {
+        const durationMinutes = Math.round(timeSinceLastSpeech / 1000 / 60);
+        console.log(`[WebRTC] Silence timeout: No speech activity for ${durationMinutes} minutes (mode: ${voiceMode})`);
+        
         // Log silence timeout (without storing raw audio)
         safeLogger.info('Realtime session closed due to silence timeout', {
-          durationMinutes: Math.round(timeSinceLastSpeech / 1000 / 60),
+          durationMinutes,
+          voiceMode,
           timestamp: new Date().toISOString(),
+          hasAudio: false,
         });
         
         // Close session gracefully
-        setError('Session closed due to inactivity');
+        setError(`Session closed due to inactivity (${durationMinutes} minutes without speech)`);
         disconnect();
+      } else if (voiceMode === 'hands-free' && timeSinceLastSpeech > timeoutDuration * 0.8) {
+        // Warn user when approaching timeout in hands-free mode (80% of timeout)
+        const remainingSeconds = Math.round((timeoutDuration - timeSinceLastSpeech) / 1000);
+        if (remainingSeconds > 0 && remainingSeconds <= 30) {
+          console.log(`[WebRTC] Approaching silence timeout: ${remainingSeconds}s remaining`);
+          // Could show a subtle warning to user here if needed
+        }
       }
-    }, 60 * 1000); // Check every minute
-  }, [isConnected, disconnect]);
+    }, checkInterval);
+  }, [isConnected, disconnect, voiceMode]);
 
   /**
    * Get ephemeral session credentials from backend
@@ -504,6 +521,23 @@ export function WebRTCRealtime({
       const errorMsg = message.error?.message || 'Failed to transcribe user audio';
       setError(errorMsg);
       if (onError) onError(errorMsg);
+      
+      // In hands-free mode, update speech time even on failure (user attempted to speak)
+      if (voiceMode === 'hands-free') {
+        lastSpeechTimeRef.current = Date.now();
+      }
+    } else if (message.type === 'conversation.item.input_audio_buffer.speech_started') {
+      // User started speaking (turn detection event)
+      if (voiceMode === 'hands-free') {
+        lastSpeechTimeRef.current = Date.now();
+        console.log('[WebRTC] Speech started detected (hands-free mode)');
+      }
+    } else if (message.type === 'conversation.item.input_audio_buffer.speech_stopped') {
+      // User stopped speaking (turn detection event)
+      if (voiceMode === 'hands-free') {
+        lastSpeechTimeRef.current = Date.now();
+        console.log('[WebRTC] Speech stopped detected (hands-free mode)');
+      }
     }
     
     // Assistant transcript events
@@ -1134,6 +1168,9 @@ export function WebRTCRealtime({
     
     // Update speech time when toggling mute (user interaction)
     lastSpeechTimeRef.current = Date.now();
+    
+    // Update speech time when toggling mute (user interaction)
+    lastSpeechTimeRef.current = Date.now();
 
     const audioTracks = localStreamRef.current.getAudioTracks();
     const newMutedState = !isMuted;
@@ -1307,8 +1344,19 @@ export function WebRTCRealtime({
               localStreamRef.current.getAudioTracks().forEach((track) => {
                 track.enabled = true;
               });
+              setIsMuted(false);
+              
+              // Update speech time when switching modes
+              lastSpeechTimeRef.current = Date.now();
+              
+              // Log mode switch (without storing raw audio)
+              safeLogger.info('Switched to hands-free mode', {
+                timestamp: new Date().toISOString(),
+                hasAudio: false,
+              });
+              
+              console.log('[WebRTC] Switched to hands-free mode: Microphone enabled');
             }
-            setIsMuted(false);
           }}
           className={`px-2 py-1 text-xs rounded transition-colors ${
             voiceMode === 'hands-free'
