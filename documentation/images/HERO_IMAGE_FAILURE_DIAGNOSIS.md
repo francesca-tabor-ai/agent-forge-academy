@@ -53,32 +53,57 @@ See [BUCKET_B_RENDERING_DIAGNOSIS.md](./BUCKET_B_RENDERING_DIAGNOSIS.md) for det
 |-------------|----------------|----------|-------|-----|
 | *No courses in this bucket* | | | | |
 
-## Bucket C: Rendering Issue
+## Bucket C: CSS/Layout Hides the Image
 
-**Symptoms**: Category exists and matches TRACK_COVERS, but image not showing
+**Symptoms**: Image exists and is rendered, but not visible due to CSS/layout issues
 
-| Course Slug | Category | Source | Issue | Fix |
-|-------------|----------|--------|-------|-----|
-| ai-driven-credit-scoring-lending | Trust & Regulation | _COURSE_METADATA.md | Category exists and matches TRACK_COVERS, but image not showing | Check image rendering logic and fallback handling |
-| ai-powered-financial-risk-management | Trust & Regulation | _COURSE_METADATA.md | Category exists and matches TRACK_COVERS, but image not showing | Check image rendering logic and fallback handling |
-| algorithmic-trading-market-intelligence | Trust & Regulation | _COURSE_METADATA.md | Category exists and matches TRACK_COVERS, but image not showing | Check image rendering logic and fallback handling |
-| automated-financial-reporting-analysis | Trust & Regulation | _COURSE_METADATA.md | Category exists and matches TRACK_COVERS, but image not showing | Check image rendering logic and fallback handling |
-| automated-suitability-esg-matching | Trust & Regulation | _COURSE_METADATA.md | Category exists and matches TRACK_COVERS, but image not showing | Check image rendering logic and fallback handling |
-| distribution-marketing-intelligence | Trust & Regulation | _COURSE_METADATA.md | Category exists and matches TRACK_COVERS, but image not showing | Check image rendering logic and fallback handling |
-| esg-sustainable-investment-insights | Trust & Regulation | _COURSE_METADATA.md | Category exists and matches TRACK_COVERS, but image not showing | Check image rendering logic and fallback handling |
-| financial-fraud-detection-ai | Trust & Regulation | _COURSE_METADATA.md | Category exists and matches TRACK_COVERS, but image not showing | Check image rendering logic and fallback handling |
-| frictionless-compliance-onboarding-assistant | Trust & Regulation | _COURSE_METADATA.md | Category exists and matches TRACK_COVERS, but image not showing | Check image rendering logic and fallback handling |
-| hyper-personalized-client-communication | Trust & Regulation | _COURSE_METADATA.md | Category exists and matches TRACK_COVERS, but image not showing | Check image rendering logic and fallback handling |
-| intelligent-data-management-verification | Trust & Regulation | _COURSE_METADATA.md | Category exists and matches TRACK_COVERS, but image not showing | Check image rendering logic and fallback handling |
-| intelligent-document-intelligence-hub | Trust & Regulation | _COURSE_METADATA.md | Category exists and matches TRACK_COVERS, but image not showing | Check image rendering logic and fallback handling |
-| investment-siri-mass-market-clients | Trust & Regulation | _COURSE_METADATA.md | Category exists and matches TRACK_COVERS, but image not showing | Check image rendering logic and fallback handling |
-| multi-agent-sales-system | Agentic Systems | _COURSE_METADATA.md | Category exists and matches TRACK_COVERS, but image not showing | Check image rendering logic and fallback handling |
-| operational-efficiency-tools | Trust & Regulation | _COURSE_METADATA.md | Category exists and matches TRACK_COVERS, but image not showing | Check image rendering logic and fallback handling |
-| predictive-wealth-insights-dashboard | Trust & Regulation | _COURSE_METADATA.md | Category exists and matches TRACK_COVERS, but image not showing | Check image rendering logic and fallback handling |
-| regulatory-compliance-greenwashing-prevention | Trust & Regulation | _COURSE_METADATA.md | Category exists and matches TRACK_COVERS, but image not showing | Check image rendering logic and fallback handling |
+**Analysis**: Found 7 potential CSS/layout issues:
+
+1. ⚠️ **Z-index conflict**: Header and hero both use `z-50` - header might cover hero
+2. ⚠️ **Complex responsive positioning**: `md:left-1/2 md:-ml-[50vw]` could cause layout issues
+3. ⚠️ **Overflow clipping**: `overflow-x-hidden` on wrapper might clip hero content
+4. ⚠️ **Negative margin**: `-mt-8` could cause positioning issues
+5. ⚠️ **Sticky positioning**: Could conflict with other sticky elements
+6. ⚠️ **Sidebar overlay**: On mobile, sidebar has `z-40` (lower than hero, but check desktop)
+7. ⚠️ **Hero overflow-hidden**: Could clip background image if positioning is off
+
+**Most Likely Issue**: Z-index conflict - header (`z-50`) and hero wrapper (`z-50`) are at same level.
+
+See [BUCKET_C_CSS_LAYOUT_DIAGNOSIS.md](./BUCKET_C_CSS_LAYOUT_DIAGNOSIS.md) for detailed analysis.
+
+| Course Slug | Category | Source | CSS Issue | Fix |
+|-------------|----------|--------|-----------|-----|
+| ai-driven-credit-scoring-lending | Trust & Regulation | _COURSE_METADATA.md | Z-index conflict (header z-50 covers hero z-50) | Increase hero z-index to z-[60] |
+| ai-powered-financial-risk-management | Trust & Regulation | _COURSE_METADATA.md | Z-index conflict (header z-50 covers hero z-50) | Increase hero z-index to z-[60] |
+| algorithmic-trading-market-intelligence | Trust & Regulation | _COURSE_METADATA.md | Z-index conflict (header z-50 covers hero z-50) | Increase hero z-index to z-[60] |
+| automated-financial-reporting-analysis | Trust & Regulation | _COURSE_METADATA.md | Z-index conflict (header z-50 covers hero z-50) | Increase hero z-index to z-[60] |
+| automated-suitability-esg-matching | Trust & Regulation | _COURSE_METADATA.md | Z-index conflict (header z-50 covers hero z-50) | Increase hero z-index to z-[60] |
+| distribution-marketing-intelligence | Trust & Regulation | _COURSE_METADATA.md | Z-index conflict (header z-50 covers hero z-50) | Increase hero z-index to z-[60] |
+| esg-sustainable-investment-insights | Trust & Regulation | _COURSE_METADATA.md | Z-index conflict (header z-50 covers hero z-50) | Increase hero z-index to z-[60] |
+| financial-fraud-detection-ai | Trust & Regulation | _COURSE_METADATA.md | Z-index conflict (header z-50 covers hero z-50) | Increase hero z-index to z-[60] |
+| frictionless-compliance-onboarding-assistant | Trust & Regulation | _COURSE_METADATA.md | Z-index conflict (header z-50 covers hero z-50) | Increase hero z-index to z-[60] |
+| hyper-personalized-client-communication | Trust & Regulation | _COURSE_METADATA.md | Z-index conflict (header z-50 covers hero z-50) | Increase hero z-index to z-[60] |
+| intelligent-data-management-verification | Trust & Regulation | _COURSE_METADATA.md | Z-index conflict (header z-50 covers hero z-50) | Increase hero z-index to z-[60] |
+| intelligent-document-intelligence-hub | Trust & Regulation | _COURSE_METADATA.md | Z-index conflict (header z-50 covers hero z-50) | Increase hero z-index to z-[60] |
+| investment-siri-mass-market-clients | Trust & Regulation | _COURSE_METADATA.md | Z-index conflict (header z-50 covers hero z-50) | Increase hero z-index to z-[60] |
+| multi-agent-sales-system | Agentic Systems | _COURSE_METADATA.md | Z-index conflict (header z-50 covers hero z-50) | Increase hero z-index to z-[60] |
+| operational-efficiency-tools | Trust & Regulation | _COURSE_METADATA.md | Z-index conflict (header z-50 covers hero z-50) | Increase hero z-index to z-[60] |
+| predictive-wealth-insights-dashboard | Trust & Regulation | _COURSE_METADATA.md | Z-index conflict (header z-50 covers hero z-50) | Increase hero z-index to z-[60] |
+| regulatory-compliance-greenwashing-prevention | Trust & Regulation | _COURSE_METADATA.md | Z-index conflict (header z-50 covers hero z-50) | Increase hero z-index to z-[60] |
+
+**Note**: All 17 courses share the same CourseHero component and page layout, so they all have the same CSS issues. The most likely issue is the z-index conflict where the header (`z-50`) might be covering the hero (`z-50`).
 
 ## Summary
 
 - **Bucket A (Missing Data)**: 0 courses
-- **Bucket B (Invalid Data)**: 0 courses
-- **Bucket C (Rendering Issue)**: 17 courses
+  - All courses have category in `_COURSE_METADATA.md`
+  - Risk: 16/17 courses not in `course-metadata.ts` (no fallback if extraction fails)
+- **Bucket B (Rendering Not Implemented)**: 0 courses
+  - ✅ Rendering IS fully implemented
+  - CourseHero component has backgroundImage rendering
+  - Course landing page properly passes imageUrl
+- **Bucket C (CSS/Layout Hides Image)**: 17 courses
+  - All have valid category data
+  - Rendering is implemented
+  - **Most likely issue**: Z-index conflict (header z-50 covers hero z-50)
+  - Other potential issues: Complex positioning, overflow clipping, negative margins
