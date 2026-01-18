@@ -112,6 +112,10 @@ export function WebRTCRealtime({
   const lastSpeechTimeRef = useRef<number>(Date.now());
   const silenceTimeoutIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const SILENCE_TIMEOUT_DURATION = 5 * 60 * 1000; // 5 minutes without speech = close session
+  
+  // Connection timeout: track connection establishment timeout
+  const connectionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const CONNECTION_TIMEOUT = 10000; // 10 seconds for connection establishment
 
   /**
    * Disconnect and cleanup
@@ -128,6 +132,12 @@ export function WebRTCRealtime({
     if (silenceTimeoutIntervalRef.current) {
       clearInterval(silenceTimeoutIntervalRef.current);
       silenceTimeoutIntervalRef.current = null;
+    }
+
+    // Clear connection timeout
+    if (connectionTimeoutRef.current) {
+      clearTimeout(connectionTimeoutRef.current);
+      connectionTimeoutRef.current = null;
     }
 
     // Stop local stream
