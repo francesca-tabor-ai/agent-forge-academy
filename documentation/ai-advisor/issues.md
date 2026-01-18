@@ -279,8 +279,8 @@
 
 **Fix Options:**
 - ✅ **A (Implemented):** Structured logging for RAG failures
-- **B (Recommended):** User notification when retrieval fails
-- **C (Future):** Fallback to ask user to select/change context
+- ✅ **B (Implemented):** User notification when retrieval fails (via system prompt and response metadata)
+- **C (Future):** UI-level notification banner when retrievalEmpty flag is present
 
 **Owner:** Backend Team  
 **ETA:** TBD

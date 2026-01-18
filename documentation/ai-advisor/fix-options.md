@@ -207,9 +207,9 @@
 
 ---
 
-### B3: Add Fallback Behavior When Retrieval Is Empty ⚠️ **TODO**
+### B3: Add Fallback Behavior When Retrieval Is Empty ✅ **DONE**
 
-**Status:** ⚠️ Not Started  
+**Status:** ✅ Implemented  
 **Effort:** 4 hours  
 **Risk:** Low
 
@@ -220,13 +220,14 @@
 - Provide actionable guidance
 
 **Files:**
-- `app/api/ai-advisor/chat/route.ts` (update)
-- `components/ai-advisor/AIAdvisor.tsx` (update)
+- `app/api/ai-advisor/chat/route.ts` (updated)
 
 **Impact:**
 - Better user experience
 - Clear guidance when context is missing
 - Prevents confusion
+- System prompt includes fallback instructions
+- Response metadata includes retrievalEmpty flag
 
 ---
 
