@@ -116,7 +116,8 @@ async function retrieveWithKeywordSearch(
  */
 export async function retrieveChunks(
   query: string,
-  options: RetrieveOptions = {}
+  options: RetrieveOptions = {},
+  requestId?: string
 ): Promise<RetrievedChunk[]> {
   const supabase = await createUserSupabaseClient();
   const useVectorSearch = options.useVectorSearch !== false; // Default to true
@@ -134,22 +135,58 @@ export async function retrieveChunks(
 
       if (sampleChunk && sampleChunk.embedding) {
         // Generate query embedding
+        const embeddingStart = Date.now();
         const embeddingProvider = getEmbeddingProvider();
         const queryEmbedding = await embeddingProvider.embed(query);
+        const embeddingLatency = Date.now() - embeddingStart;
+        
+        if (requestId) {
+          console.log(`[RAG] [${requestId}] Query embedding generated`, {
+            queryLength: query.length,
+            embeddingDimensions: queryEmbedding.length,
+            latency: embeddingLatency,
+          });
+        }
 
         // Try vector search
+        const vectorSearchStart = Date.now();
         const vectorResults = await retrieveWithVectorSearch(supabase, queryEmbedding, options);
+        const vectorSearchLatency = Date.now() - vectorSearchStart;
+        
+        if (requestId) {
+          console.log(`[RAG] [${requestId}] Vector search completed`, {
+            resultsCount: vectorResults.length,
+            latency: vectorSearchLatency,
+            scores: vectorResults.map(r => r.score).filter(Boolean),
+          });
+        }
+        
         if (vectorResults.length > 0) {
           return vectorResults;
         }
       }
     } catch (error) {
-      console.warn('Vector search failed, falling back to keyword search:', error);
+      if (requestId) {
+        console.warn(`[RAG] [${requestId}] Vector search failed, falling back to keyword search:`, error);
+      } else {
+        console.warn('Vector search failed, falling back to keyword search:', error);
+      }
     }
   }
 
   // Fall back to keyword search
-  return retrieveWithKeywordSearch(supabase, query, options);
+  const keywordSearchStart = Date.now();
+  const keywordResults = await retrieveWithKeywordSearch(supabase, query, options);
+  const keywordSearchLatency = Date.now() - keywordSearchStart;
+  
+  if (requestId) {
+    console.log(`[RAG] [${requestId}] Keyword search completed`, {
+      resultsCount: keywordResults.length,
+      latency: keywordSearchLatency,
+    });
+  }
+  
+  return keywordResults;
 }
 
 /**
