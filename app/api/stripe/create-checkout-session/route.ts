@@ -91,29 +91,31 @@ export async function POST(request: NextRequest) {
       .eq('user_id', user.id)
       .single();
 
-    let stripeCustomerId: string;
+    let stripeCustomerId: string | undefined;
 
     if (existingCustomer?.stripe_customer_id) {
       // Retrieve existing customer
-      stripeCustomerId = existingCustomer.stripe_customer_id;
-      try {
-        await stripe.customers.retrieve(stripeCustomerId);
-      } catch (error: any) {
-        // Customer might have been deleted in Stripe, create a new one
-        const newCustomer = await stripe.customers.create({
-          email: profile.email,
-          metadata: {
-            user_id: user.id,
-          },
-        });
-        stripeCustomerId = newCustomer.id;
+      stripeCustomerId = existingCustomer.stripe_customer_id ?? undefined;
+      if (stripeCustomerId) {
+        try {
+          await stripe.customers.retrieve(stripeCustomerId);
+        } catch (error: any) {
+          // Customer might have been deleted in Stripe, create a new one
+          const newCustomer = await stripe.customers.create({
+            email: profile.email,
+            metadata: {
+              user_id: user.id,
+            },
+          });
+          stripeCustomerId = newCustomer.id;
 
-        // Update stripe_customers table (use service role to bypass RLS)
-        const serverSupabase = createServerSupabaseClient();
-        await serverSupabase
-          .from('stripe_customers')
-          .update({ stripe_customer_id: stripeCustomerId })
-          .eq('user_id', user.id);
+          // Update stripe_customers table (use service role to bypass RLS)
+          const serverSupabase = createServerSupabaseClient();
+          await serverSupabase
+            .from('stripe_customers')
+            .update({ stripe_customer_id: stripeCustomerId })
+            .eq('user_id', user.id);
+        }
       }
     } else {
       // Create new Stripe customer
@@ -135,19 +137,27 @@ export async function POST(request: NextRequest) {
         });
     }
 
+    // Ensure URLs are always strings
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    const finalSuccessUrl = successUrl || `${baseUrl}/student/subscription?success=true`;
+    const finalCancelUrl = cancelUrl || `${baseUrl}/student/subscription?canceled=true`;
+
+    // Coerce null to undefined for Stripe (SessionCreateParams rejects null)
+    const customerId = stripeCustomerId ?? undefined;
+
     // Create checkout session
     const session = await stripe.checkout.sessions.create({
-      customer: stripeCustomerId,
+      ...(customerId ? { customer: customerId } : { customer_email: profile.email ?? undefined }),
       payment_method_types: ['card'],
       line_items: [
         {
-          price: plan.stripe_price_id,
+          price: plan.stripe_price_id, // TypeScript now knows this is string (not null)
           quantity: 1,
         },
       ],
       mode: 'subscription',
-      success_url: successUrl || `${process.env.NEXT_PUBLIC_APP_URL}/student/subscription?success=true`,
-      cancel_url: cancelUrl || `${process.env.NEXT_PUBLIC_APP_URL}/student/subscription?canceled=true`,
+      success_url: finalSuccessUrl,
+      cancel_url: finalCancelUrl,
       allow_promotion_codes: true,
       client_reference_id: user.id,
       metadata: {

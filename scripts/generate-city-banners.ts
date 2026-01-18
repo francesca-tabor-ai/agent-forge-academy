@@ -1,6 +1,6 @@
 #!/usr/bin/env tsx
 /**
- * Generate city banners TypeScript file from content/cities.md
+ * Generate city banners TypeScript file from documentation/images/cities.md
  * 
  * Parses the cities.md file and generates lib/cityBanners.generated.ts
  * Fails build if duplicate city keys exist
@@ -18,7 +18,7 @@ interface CityEntry {
   lineNumber: number;
 }
 
-const CITIES_MD_PATH = path.join(process.cwd(), 'content', 'cities.md');
+const CITIES_MD_PATH = path.join(process.cwd(), 'documentation', 'images', 'cities.md');
 const OUTPUT_PATH = path.join(process.cwd(), 'lib', 'cityBanners.generated.ts');
 
 function parseCitiesMd(content: string): CityEntry[] {
@@ -115,7 +115,7 @@ function generateTypeScript(entries: CityEntry[]): string {
   let output = `/**
  * City Banner Image Mapping (Generated)
  * 
- * This file is auto-generated from content/cities.md
+ * This file is auto-generated from documentation/images/cities.md
  * DO NOT EDIT MANUALLY - changes will be overwritten
  * 
  * Generated at: ${timestamp}
@@ -155,7 +155,7 @@ export const CITY_BANNER_MAP: Record<string, string> = {
 }
 
 async function main() {
-  console.log('🏙️  Generating city banners from content/cities.md...\n');
+  console.log('🏙️  Generating city banners from documentation/images/cities.md...\n');
 
   // Read cities.md
   if (!fs.existsSync(CITIES_MD_PATH)) {

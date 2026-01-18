@@ -62,6 +62,10 @@ const BEST_FOR_OPTIONS = [
   'Growth Team',
   'Sales Team',
   'CX Team',
+  'E-Commerce',
+  'RevOps',
+  'B2B Sales',
+  'DevOps',
 ];
 
 const SORT_OPTIONS = [
