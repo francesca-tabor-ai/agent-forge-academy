@@ -471,7 +471,8 @@ async function buildLLMMessages(
   intent?: AdvisorIntent,
   tools?: { useRAG: boolean; useJobsMatching: boolean; usePortfolioFetch: boolean; useCourseContext: boolean },
   supabase?: any,
-  studentProfileId?: string | null
+  studentProfileId?: string | null,
+  requestId?: string
 ): Promise<{
   messages: LLMMessage[];
   retrievedChunks: Array<{ courseSlug: string; lessonSlug: string; chunkIndex: number; score?: number }>;
@@ -497,11 +498,38 @@ async function buildLLMMessages(
   );
 
   if (shouldRetrieveChunks) {
+    const retrievalStart = Date.now();
     try {
+      safeLogger.info('[AI_ADVISOR] Retrieval query', {
+        requestId: requestId || 'unknown',
+        query: redactPII(message, { maxLength: 200 }),
+        courseSlug: courseSlug || null,
+        limit: 5,
+        minScore: 0.5,
+        stage: 'retrieval_query',
+        timestamp: new Date().toISOString(),
+      });
+      
       const chunks = await retrieveChunks(message, {
         limit: 5,
         courseSlug: courseSlug || undefined,
         minScore: 0.5,
+      }, requestId);
+
+      const retrievalLatency = Date.now() - retrievalStart;
+      
+      safeLogger.info('[AI_ADVISOR] Retrieval results', {
+        requestId: requestId || 'unknown',
+        k: chunks.length,
+        scores: chunks.map(c => c.score).filter(Boolean),
+        docIds: chunks.map(c => ({ 
+          courseSlug: c.courseSlug, 
+          lessonSlug: c.lessonSlug, 
+          chunkIndex: c.chunkIndex 
+        })),
+        latency: retrievalLatency,
+        stage: 'retrieval_complete',
+        timestamp: new Date().toISOString(),
       });
 
       if (chunks.length > 0) {
@@ -525,7 +553,13 @@ async function buildLLMMessages(
         );
       }
     } catch (error) {
-      safeLogger.warn('RAG retrieval failed, continuing without course content', error);
+      const retrievalLatency = Date.now() - retrievalStart;
+      safeLogger.warn('[AI_ADVISOR] RAG retrieval failed, continuing without course content', { 
+        requestId: requestId || 'unknown',
+        error: error instanceof Error ? error.message : String(error),
+        latency: retrievalLatency,
+        stage: 'retrieval_failed',
+      });
       // Continue without RAG context if retrieval fails
     }
   }
@@ -787,24 +821,32 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Log request details
-      // Structured logging: request received
-      safeLogger.info('[AI_ADVISOR] Request received', {
-        requestId,
-        userId: user.id,
-        provider: llmProvider,
-        model,
-        path: '/api/ai-advisor/chat',
-        method: 'POST',
-        hasContext: !!context,
-        hasConversationHistory: conversationHistory?.length > 0,
-        intent: intent || 'general',
-        messageLength: message.length,
-        activeCourseId: context?.course?.id || null,
-        activeProjectId: context?.project?.id || null,
-        activeJobId: context?.job?.id || null,
-        stage: 'request_processing',
-      });
+    // Log request details with full payload (redacted)
+    const requestPayload = {
+      message: redactPII(message, { maxLength: 200 }),
+      context: {
+        course: context?.course ? { id: context.course.id, slug: context.course.slug, title: redactPII(context.course.title) } : null,
+        project: context?.project ? { id: context.project.id, title: redactPII(context.project.title) } : null,
+        job: context?.job ? { id: context.job.id, title: redactPII(context.job.title), company: redactPII(context.job.company) } : null,
+      },
+      studentProfileId: studentProfileId ? '***' : null,
+      conversationHistoryLength: conversationHistory?.length || 0,
+      intent: intent || null,
+      conversationId: conversationId || null,
+    };
+    
+    safeLogger.info('[AI_ADVISOR] Request received', {
+      requestId,
+      userId: user.id,
+      provider: llmProvider,
+      model,
+      path: '/api/ai-advisor/chat',
+      method: 'POST',
+      payload: requestPayload,
+      messageLength: message.length,
+      stage: 'request_received',
+      timestamp: new Date().toISOString(),
+    });
 
     // Check for sensitive information
     if (containsSensitiveInfo(message)) {
@@ -893,6 +935,7 @@ export async function POST(request: NextRequest) {
 
     // Load active context from database (needed for intent classification and later)
     // Make this non-blocking - if it fails, continue with null context
+    const contextLoadStart = Date.now();
     let activeContext: { activeCourseId: string | null; activeProjectId: string | null; activeJobId: string | null } = {
       activeCourseId: null,
       activeProjectId: null,
@@ -900,12 +943,29 @@ export async function POST(request: NextRequest) {
     };
     try {
       activeContext = await loadActiveContext(supabase, studentProfileId);
+      const contextLoadLatency = Date.now() - contextLoadStart;
+      safeLogger.info('[AI_ADVISOR] Context resolved', {
+        requestId,
+        userId: user.id,
+        activeContext,
+        latency: contextLoadLatency,
+        stage: 'context_resolved',
+        timestamp: new Date().toISOString(),
+      });
     } catch (error) {
-      safeLogger.warn('AI Advisor: Failed to load active context, continuing without it', { requestId, error });
+      const contextLoadLatency = Date.now() - contextLoadStart;
+      safeLogger.warn('[AI_ADVISOR] Failed to load active context, continuing without it', { 
+        requestId, 
+        userId: user.id,
+        error: error instanceof Error ? error.message : String(error),
+        latency: contextLoadLatency,
+        stage: 'context_load_failed',
+      });
     }
 
     // Fetch context data (needed for intent classification and later)
     // Make this non-blocking - if it fails, continue with minimal context
+    const contextDataStart = Date.now();
     let contextData: {
       courseData: any;
       projectData: any;
@@ -925,8 +985,28 @@ export async function POST(request: NextRequest) {
     };
     try {
       contextData = await fetchContextData(context, supabase, studentProfileId, activeContext);
+      const contextDataLatency = Date.now() - contextDataStart;
+      safeLogger.info('[AI_ADVISOR] Context data fetched', {
+        requestId,
+        userId: user.id,
+        hasCourseData: !!contextData.courseData,
+        hasProjectData: !!contextData.projectData,
+        hasJobData: !!contextData.jobData,
+        hasUserProfile: !!contextData.userProfile,
+        activeContextIds: contextData.activeContextIds,
+        latency: contextDataLatency,
+        stage: 'context_data_fetched',
+        timestamp: new Date().toISOString(),
+      });
     } catch (error) {
-      safeLogger.warn('AI Advisor: Failed to fetch context data, continuing with minimal context', { requestId, error });
+      const contextDataLatency = Date.now() - contextDataStart;
+      safeLogger.warn('[AI_ADVISOR] Failed to fetch context data, continuing with minimal context', { 
+        requestId, 
+        userId: user.id,
+        error: error instanceof Error ? error.message : String(error),
+        latency: contextDataLatency,
+        stage: 'context_data_fetch_failed',
+      });
       // Use fallback context from request
       contextData.activeContextIds = {
         courseId: context?.course?.id || null,
@@ -1003,6 +1083,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Build LLM messages (with RAG context if applicable, based on intent)
+    const promptAssemblyStart = Date.now();
     const { messages: llmMessages, retrievedChunks } = await buildLLMMessages(
       message,
       context,
@@ -1011,8 +1092,27 @@ export async function POST(request: NextRequest) {
       inferredIntent,
       tools,
       supabase,
-      studentProfileId
+      studentProfileId,
+      requestId // Pass requestId for logging
     );
+    const promptAssemblyLatency = Date.now() - promptAssemblyStart;
+    
+    safeLogger.info('[AI_ADVISOR] Prompt assembled', {
+      requestId,
+      userId: user.id,
+      systemPromptLength: llmMessages[0]?.content?.length || 0,
+      totalMessages: llmMessages.length,
+      retrievedChunksCount: retrievedChunks.length,
+      retrievedChunks: retrievedChunks.map(chunk => ({
+        courseSlug: chunk.courseSlug,
+        lessonSlug: chunk.lessonSlug,
+        chunkIndex: chunk.chunkIndex,
+        score: chunk.score,
+      })),
+      latency: promptAssemblyLatency,
+      stage: 'prompt_assembled',
+      timestamp: new Date().toISOString(),
+    });
 
     // Handle streaming response
     if (stream) {
@@ -1075,6 +1175,7 @@ export async function POST(request: NextRequest) {
                 }
               } catch (llmError: any) {
                 const errorMessage = llmError.message || 'LLM provider not configured';
+                const providerErrorLatency = Date.now() - startTime;
                 
                 // Determine appropriate error code
                 let errorCode = 'UPSTREAM_ERROR';
@@ -1090,7 +1191,11 @@ export async function POST(request: NextRequest) {
                   statusCode = 429;
                 }
                 
-                safeLogger.error('[AI_ADVISOR] LLM provider error', { 
+                // Extract upstream status if available
+                const upstreamStatusMatch = errorMessage.match(/(\d{3})/);
+                const upstreamStatus = upstreamStatusMatch ? parseInt(upstreamStatusMatch[1]) : null;
+                
+                safeLogger.error('[AI_ADVISOR] Provider call failed', { 
                   requestId,
                   userId: user.id,
                   provider: llmProvider,
@@ -1098,8 +1203,11 @@ export async function POST(request: NextRequest) {
                   stage: 'provider_call_failed',
                   statusCode,
                   errorCode,
+                  upstreamStatus,
                   message: errorMessage,
+                  latency: providerErrorLatency,
                   stack: process.env.NODE_ENV === 'development' ? llmError.stack : undefined,
+                  timestamp: new Date().toISOString(),
                 });
                 
                 // Send error to client
@@ -1125,6 +1233,18 @@ export async function POST(request: NextRequest) {
               
               const llmStartTime = Date.now();
               
+              safeLogger.info('[AI_ADVISOR] Provider call started', {
+                requestId,
+                userId: user.id,
+                provider: actualProvider,
+                model,
+                isFallback,
+                messagesCount: llmMessages.length,
+                systemPromptLength: llmMessages[0]?.content?.length || 0,
+                stage: 'provider_call_started',
+                timestamp: new Date().toISOString(),
+              });
+              
               // Stream response chunks with timeout
               const streamPromise = (async () => {
                 for await (const chunk of llm.generateStream(llmMessages, {
@@ -1143,15 +1263,21 @@ export async function POST(request: NextRequest) {
 
                   if (chunk.done) {
                     const llmLatency = Date.now() - llmStartTime;
-      safeLogger.info('AI Advisor: Stream completed', { 
-        requestId,
-        userId: user.id,
-        provider: actualProvider,
-        model,
-        llmLatency,
-        responseLength: fullResponse.length,
-        isFallback,
-      });
+                    const totalLatency = Date.now() - startTime;
+                    
+                    safeLogger.info('[AI_ADVISOR] Provider response received', { 
+                      requestId,
+                      userId: user.id,
+                      provider: actualProvider,
+                      model,
+                      providerLatency: llmLatency,
+                      totalLatency,
+                      responseLength: fullResponse.length,
+                      isFallback,
+                      finishReason: chunk.finishReason,
+                      stage: 'provider_response_received',
+                      timestamp: new Date().toISOString(),
+                    });
 
                     // Guard: Ensure response is not empty
                     if (!fullResponse || !fullResponse.trim()) {
@@ -1259,6 +1385,18 @@ export async function POST(request: NextRequest) {
                     }
 
                     // Send final chunk with next actions
+                    const responseReturnLatency = Date.now() - startTime;
+                    safeLogger.info('[AI_ADVISOR] Response returned', {
+                      requestId,
+                      userId: user.id,
+                      totalLatency: responseReturnLatency,
+                      responseLength: fullResponse.length,
+                      nextActionsCount: nextActions.length,
+                      conversationId: convId,
+                      stage: 'response_returned',
+                      timestamp: new Date().toISOString(),
+                    });
+                    
                     controller.enqueue(
                       encoder.encode(`data: ${JSON.stringify({ 
                         content: '', 
@@ -1378,6 +1516,7 @@ export async function POST(request: NextRequest) {
         }
       } catch (llmError: any) {
         const errorMessage = llmError.message || 'LLM provider not configured';
+        const providerErrorLatency = Date.now() - startTime;
         
         // Determine appropriate status code
         let statusCode = 500;
@@ -1397,7 +1536,11 @@ export async function POST(request: NextRequest) {
           errorCode = 'BAD_REQUEST';
         }
         
-        safeLogger.error('[AI_ADVISOR] LLM provider error', { 
+        // Extract upstream status if available
+        const upstreamStatusMatch = errorMessage.match(/(\d{3})/);
+        const upstreamStatus = upstreamStatusMatch ? parseInt(upstreamStatusMatch[1]) : null;
+        
+        safeLogger.error('[AI_ADVISOR] Provider call failed', { 
           requestId, 
           userId: user.id,
           provider: llmProvider,
@@ -1405,8 +1548,11 @@ export async function POST(request: NextRequest) {
           stage: 'provider_call_failed',
           statusCode,
           errorCode,
+          upstreamStatus,
           message: errorMessage,
+          latency: providerErrorLatency,
           stack: process.env.NODE_ENV === 'development' ? llmError.stack : undefined,
+          timestamp: new Date().toISOString(),
         });
         
         return NextResponse.json(
@@ -1432,21 +1578,39 @@ export async function POST(request: NextRequest) {
       }
 
       const llmStartTime = Date.now();
+      
+      safeLogger.info('[AI_ADVISOR] Provider call started', {
+        requestId,
+        userId: user.id,
+        provider: actualProvider,
+        model,
+        isFallback,
+        messagesCount: llmMessages.length,
+        systemPromptLength: llmMessages[0]?.content?.length || 0,
+        stage: 'provider_call_started',
+        timestamp: new Date().toISOString(),
+      });
+      
       const llmResponse = await llm.generate(llmMessages, {
         temperature: 0.7,
         maxTokens: 2000,
       });
       const llmLatency = Date.now() - llmStartTime;
+      const totalLatency = Date.now() - startTime;
 
-      safeLogger.info('[AI_ADVISOR] Response generated', { 
+      safeLogger.info('[AI_ADVISOR] Provider response received', { 
         requestId, 
         userId: user.id,
         provider: actualProvider,
         model,
-        stage: 'response_complete',
-        llmLatency,
+        providerLatency: llmLatency,
+        totalLatency,
         responseLength: llmResponse.content.length,
         isFallback,
+        finishReason: llmResponse.finishReason,
+        usage: llmResponse.usage,
+        stage: 'provider_response_received',
+        timestamp: new Date().toISOString(),
       });
 
       // Guard: Ensure response is not empty
@@ -1557,6 +1721,18 @@ export async function POST(request: NextRequest) {
       }
 
       const totalLatency = Date.now() - startTime;
+      
+      safeLogger.info('[AI_ADVISOR] Response returned', {
+        requestId,
+        userId: user.id,
+        totalLatency,
+        responseLength: responseContent.length,
+        nextActionsCount: nextActions.length,
+        conversationId: convId,
+        stage: 'response_returned',
+        timestamp: new Date().toISOString(),
+      });
+      
       // Structured logging: request completed successfully
       safeLogger.info('[AI_ADVISOR] Request completed', { 
         requestId, 
@@ -1569,6 +1745,7 @@ export async function POST(request: NextRequest) {
         path: '/api/ai-advisor/chat',
         method: 'POST',
         conversationId: convId,
+        timestamp: new Date().toISOString(),
       });
 
       // Log successful request
