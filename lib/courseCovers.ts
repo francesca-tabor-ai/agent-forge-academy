@@ -66,8 +66,14 @@ function getIndustryImageUrl(industry: string): string {
   }
   
   // Fallback to external URL
-  return INDUSTRY_EXTERNAL_URLS[industry] || '/course-covers/industry/default.jpg';
+  return INDUSTRY_EXTERNAL_URLS[industry] || DEFAULT_FALLBACK_IMAGE;
 }
+
+/**
+ * Default fallback image URL (external, always accessible)
+ * Used when no track/category image is found
+ */
+const DEFAULT_FALLBACK_IMAGE = 'https://wallpaperaccess.com/full/340554.png';
 
 /**
  * Industry cover image mapping
@@ -86,7 +92,7 @@ export const INDUSTRY_COVERS: Record<string, string> = {
   DevTools: getIndustryImageUrl('DevTools'),
   "Retail / CPG": getIndustryImageUrl('Retail / CPG'),
   Marketplaces: getIndustryImageUrl('Marketplaces'),
-  Default: "/course-covers/industry/default.jpg",
+  Default: DEFAULT_FALLBACK_IMAGE, // Use external URL as fallback (more reliable than local file)
 };
 
 /**
@@ -131,7 +137,7 @@ function getTrackImageUrl(track: string): string {
   }
   
   // Fallback to external URL
-  return TRACK_EXTERNAL_URLS[track] || '/course-covers/industry/default.jpg';
+  return TRACK_EXTERNAL_URLS[track] || DEFAULT_FALLBACK_IMAGE;
 }
 
 /**

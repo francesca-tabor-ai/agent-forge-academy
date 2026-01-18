@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { Share2 } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 interface CourseHeroProps {
   title: string;
@@ -18,6 +19,24 @@ interface CourseHeroProps {
   firstLessonSlug?: string | null;
 }
 
+/**
+ * Default fallback image URL (matches course-image-resolver.ts)
+ */
+const DEFAULT_FALLBACK_IMAGE = 'https://wallpaperaccess.com/full/340554.png';
+
+/**
+ * Validate if an image URL is valid
+ */
+function isValidImageUrl(url: string | null | undefined): boolean {
+  if (!url || typeof url !== 'string') return false;
+  const trimmed = url.trim();
+  return trimmed.length > 0 && 
+         trimmed !== 'image' && 
+         trimmed !== 'placeholder' &&
+         !trimmed.startsWith('http://placeholder') &&
+         !trimmed.startsWith('placeholder');
+}
+
 export function CourseHero({
   title,
   imageUrl,
@@ -32,6 +51,37 @@ export function CourseHero({
   nextLessonSlug,
   firstLessonSlug,
 }: CourseHeroProps) {
+  // Validate and handle image loading errors
+  const [imageError, setImageError] = useState(false);
+  const [currentImageUrl, setCurrentImageUrl] = useState<string>(() => {
+    // Validate initial image URL
+    if (isValidImageUrl(imageUrl)) {
+      return imageUrl;
+    }
+    // Use fallback if invalid
+    return DEFAULT_FALLBACK_IMAGE;
+  });
+
+  // Update image URL when prop changes
+  useEffect(() => {
+    if (isValidImageUrl(imageUrl)) {
+      setCurrentImageUrl(imageUrl);
+      setImageError(false);
+    } else {
+      setCurrentImageUrl(DEFAULT_FALLBACK_IMAGE);
+      setImageError(false);
+    }
+  }, [imageUrl]);
+
+  // Handle image load error
+  const handleImageError = () => {
+    if (currentImageUrl !== DEFAULT_FALLBACK_IMAGE) {
+      // Only fallback once to prevent infinite loop
+      setImageError(true);
+      setCurrentImageUrl(DEFAULT_FALLBACK_IMAGE);
+    }
+  };
+
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({
@@ -49,11 +99,20 @@ export function CourseHero({
 
   return (
     <div className="relative w-full min-h-[240px] sm:min-h-[280px] md:min-h-[320px] lg:min-h-[360px] overflow-hidden">
-      {/* Background Image - Full-bleed */}
+      {/* Background Image - Full-bleed with error handling */}
       <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: `url(${imageUrl})` }}
-      />
+        className="absolute inset-0 bg-cover bg-center bg-gray-900"
+        style={{ backgroundImage: `url(${currentImageUrl})` }}
+      >
+        {/* Hidden img element to detect load errors */}
+        <img
+          src={currentImageUrl}
+          alt=""
+          className="hidden"
+          onError={handleImageError}
+          onLoad={() => setImageError(false)}
+        />
+      </div>
       
       {/* Gradient Overlay - transparent top to dark bottom */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black/90" />
