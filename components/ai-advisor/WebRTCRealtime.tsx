@@ -743,7 +743,16 @@ export function WebRTCRealtime({
 
       // Step 4: Add microphone track to PeerConnection
       // Request mic permission once - keep track attached but disabled by default
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      // Use audio constraints for better quality: echo cancellation, noise suppression, mono channel
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true,
+          sampleRate: 48000,
+          channelCount: 1, // Mono for speech (not stereo) - saves bandwidth
+        }
+      });
       localStreamRef.current = stream;
 
       // Add audio tracks - disabled by default (for push-to-talk)
