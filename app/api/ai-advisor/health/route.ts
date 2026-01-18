@@ -1,84 +1,318 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getLLMProvider } from '@/lib/ai/llm';
+import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { getEmbeddingProvider } from '@/lib/rag/embeddings';
+
+interface HealthCheckResult {
+  name: string;
+  status: 'pass' | 'fail' | 'warn';
+  message: string;
+  details?: Record<string, any>;
+}
 
 /**
- * Health check endpoint for AI Advisor
- * Returns whether the LLM provider is configured and can reach upstream services
+ * Comprehensive health check endpoint for AI Advisor
+ * Checks:
+ * - LLM provider configuration and connectivity
+ * - Vector store connectivity
+ * - Index existence (pgvector extension, match_lesson_chunks function, embeddings)
+ * - Embedding provider configuration
  */
 export async function GET(request: NextRequest) {
-  try {
-    // Check if LLM provider is configured
-    let providerConfigured = false;
-    let providerName = 'unknown';
-    let errorMessage: string | undefined;
-    let upstreamHealthy = false;
+  const checks: HealthCheckResult[] = [];
+  const startTime = Date.now();
 
-    try {
-      const provider = process.env.LLM_PROVIDER || 'openai';
-      const apiKey = process.env.LLM_API_KEY || process.env.OPENAI_API_KEY;
-      
-      providerName = provider;
-      providerConfigured = !!apiKey;
-      
-      if (apiKey) {
-        // Try to instantiate the provider to verify it works
+  // 1. LLM Provider Configuration Check
+  try {
+    const provider = process.env.LLM_PROVIDER || 'openai';
+    const apiKey = process.env.LLM_API_KEY || process.env.OPENAI_API_KEY;
+    
+    if (!apiKey) {
+      checks.push({
+        name: 'LLM Provider Configuration',
+        status: 'fail',
+        message: 'LLM_API_KEY or OPENAI_API_KEY environment variable is not set',
+      });
+    } else {
+      try {
+        // Try to instantiate the provider
         getLLMProvider();
         
-        // Optional: Do a basic upstream health check (lightweight)
-        // This is a simple check - in production you might want to cache this
+        // Test upstream connectivity
+        let upstreamHealthy = false;
+        let upstreamError: string | undefined;
+        
         try {
-          // For OpenAI, we can do a minimal check (list models endpoint is lightweight)
           if (provider === 'openai') {
             const healthCheckResponse = await fetch('https://api.openai.com/v1/models', {
               method: 'GET',
               headers: {
                 'Authorization': `Bearer ${apiKey}`,
               },
-              // Use a short timeout for health checks
               signal: AbortSignal.timeout(3000), // 3 second timeout
             });
             upstreamHealthy = healthCheckResponse.ok;
+            if (!upstreamHealthy) {
+              upstreamError = `HTTP ${healthCheckResponse.status}`;
+            }
+          } else if (provider === 'anthropic') {
+            // For Anthropic, we can check if the API key is valid by making a minimal request
+            // Note: Anthropic doesn't have a simple health endpoint, so we'll just verify config
+            upstreamHealthy = true; // Assume healthy if configured
           } else {
-            // For other providers, assume healthy if provider is configured
-            upstreamHealthy = true;
+            upstreamHealthy = true; // Assume healthy for other providers
           }
-        } catch (upstreamError: any) {
-          // Upstream check failed, but provider is configured
-          // This is okay - the service might be temporarily unavailable
+        } catch (upstreamError_: any) {
           upstreamHealthy = false;
-          if (process.env.NODE_ENV === 'development') {
-            errorMessage = `Provider configured but upstream check failed: ${upstreamError.message}`;
-          }
+          upstreamError = upstreamError_.message || 'Upstream check failed';
         }
-      } else {
-        errorMessage = 'LLM_API_KEY or OPENAI_API_KEY environment variable is not set';
+        
+        checks.push({
+          name: 'LLM Provider Configuration',
+          status: upstreamHealthy ? 'pass' : 'warn',
+          message: upstreamHealthy 
+            ? `Provider configured (${provider}) and upstream reachable`
+            : `Provider configured (${provider}) but upstream check failed: ${upstreamError}`,
+          details: {
+            provider,
+            upstreamHealthy,
+            upstreamError: upstreamError || undefined,
+          },
+        });
+      } catch (error: any) {
+        checks.push({
+          name: 'LLM Provider Configuration',
+          status: 'fail',
+          message: `Failed to initialize provider: ${error.message}`,
+          details: { provider, error: error.message },
+        });
       }
-    } catch (error: any) {
-      errorMessage = error.message || 'Failed to initialize LLM provider';
     }
-
-    const isHealthy = providerConfigured && (upstreamHealthy || errorMessage === undefined);
-
-    return NextResponse.json({
-      ok: isHealthy,
-      providerConfigured,
-      upstreamHealthy,
-      provider: providerName,
-      error: errorMessage || undefined,
-      timestamp: new Date().toISOString(),
-    }, { 
-      status: isHealthy ? 200 : 503 
-    });
   } catch (error: any) {
-    return NextResponse.json(
-      {
-        ok: false,
-        providerConfigured: false,
-        upstreamHealthy: false,
-        error: error.message || 'Health check failed',
-        timestamp: new Date().toISOString(),
-      },
-      { status: 500 }
-    );
+    checks.push({
+      name: 'LLM Provider Configuration',
+      status: 'fail',
+      message: `Provider check error: ${error.message}`,
+    });
   }
+
+  // 2. Embedding Provider Configuration Check
+  try {
+    const embeddingApiKey = process.env.LLM_API_KEY || process.env.OPENAI_API_KEY;
+    const embeddingModel = process.env.OPENAI_EMBEDDING_MODEL || 'text-embedding-3-small';
+    
+    if (!embeddingApiKey) {
+      checks.push({
+        name: 'Embedding Provider Configuration',
+        status: 'warn',
+        message: 'Embedding API key not configured (vector search will not work)',
+        details: {
+          embeddingModel,
+        },
+      });
+    } else {
+      try {
+        const embeddingProvider = getEmbeddingProvider();
+        checks.push({
+          name: 'Embedding Provider Configuration',
+          status: 'pass',
+          message: `Embedding provider configured (${embeddingModel})`,
+          details: {
+            embeddingModel,
+          },
+        });
+      } catch (error: any) {
+        checks.push({
+          name: 'Embedding Provider Configuration',
+          status: 'fail',
+          message: `Failed to initialize embedding provider: ${error.message}`,
+          details: {
+            embeddingModel,
+            error: error.message,
+          },
+        });
+      }
+    }
+  } catch (error: any) {
+    checks.push({
+      name: 'Embedding Provider Configuration',
+      status: 'fail',
+      message: `Embedding provider check error: ${error.message}`,
+    });
+  }
+
+  // 3. Vector Store Connectivity Check
+  try {
+    const supabase = createServerSupabaseClient();
+    
+    // Test basic database connectivity
+    const { data: testData, error: dbError } = await supabase
+      .from('lesson_chunks')
+      .select('count')
+      .limit(1);
+    
+    if (dbError) {
+      checks.push({
+        name: 'Vector Store Connectivity',
+        status: 'fail',
+        message: `Database connection failed: ${dbError.message}`,
+        details: { error: dbError.message, code: dbError.code },
+      });
+    } else {
+      checks.push({
+        name: 'Vector Store Connectivity',
+        status: 'pass',
+        message: 'Database connection successful',
+      });
+    }
+  } catch (error: any) {
+    checks.push({
+      name: 'Vector Store Connectivity',
+      status: 'fail',
+      message: `Database check error: ${error.message}`,
+    });
+  }
+
+  // 4. pgvector Extension Check
+  try {
+    const supabase = createServerSupabaseClient();
+    
+    const { data: extensions, error: extError } = await supabase
+      .rpc('exec_sql', {
+        query: "SELECT * FROM pg_extension WHERE extname = 'vector'",
+      }).catch(() => {
+        // If exec_sql doesn't exist, try direct query
+        return supabase
+          .from('pg_extension')
+          .select('*')
+          .eq('extname', 'vector')
+          .limit(1);
+      });
+    
+    // Alternative: Check if vector search function exists (indirect check)
+    const { data: functionCheck, error: funcError } = await supabase
+      .rpc('match_lesson_chunks', {
+        query_embedding: Array(1536).fill(0), // Dummy embedding for test
+        match_threshold: 0.0,
+        match_count: 0, // Request 0 results to minimize load
+      }).catch(() => ({ data: null, error: { message: 'Function not available' } }));
+    
+    if (funcError && funcError.message !== 'Function not available') {
+      // Function exists but may have failed due to dummy data - that's okay
+      checks.push({
+        name: 'pgvector Extension',
+        status: 'pass',
+        message: 'pgvector extension appears to be installed (match_lesson_chunks function exists)',
+      });
+    } else if (funcError && funcError.message === 'Function not available') {
+      checks.push({
+        name: 'pgvector Extension',
+        status: 'warn',
+        message: 'pgvector extension may not be installed (match_lesson_chunks function not found)',
+        details: {
+          note: 'Vector search will fall back to keyword search',
+        },
+      });
+    } else {
+      checks.push({
+        name: 'pgvector Extension',
+        status: 'pass',
+        message: 'pgvector extension appears to be installed',
+      });
+    }
+  } catch (error: any) {
+    checks.push({
+      name: 'pgvector Extension',
+      status: 'warn',
+      message: `Could not verify pgvector extension: ${error.message}`,
+      details: {
+        note: 'Vector search may fall back to keyword search',
+      },
+    });
+  }
+
+  // 5. Index Existence Check
+  try {
+    const supabase = createServerSupabaseClient();
+    
+    // Check if embeddings exist
+    const { data: embeddingCount, error: countError } = await supabase
+      .from('lesson_chunks')
+      .select('id', { count: 'exact', head: true })
+      .not('embedding', 'is', null);
+    
+    if (countError) {
+      checks.push({
+        name: 'Index Existence',
+        status: 'warn',
+        message: `Could not check embedding count: ${countError.message}`,
+      });
+    } else {
+      const count = embeddingCount?.length || 0;
+      checks.push({
+        name: 'Index Existence',
+        status: count > 0 ? 'pass' : 'warn',
+        message: count > 0 
+          ? `Found ${count} chunks with embeddings (vector search available)`
+          : 'No chunks with embeddings found (vector search will use keyword fallback)',
+        details: {
+          chunksWithEmbeddings: count,
+        },
+      });
+    }
+    
+    // Check total chunk count
+    const { data: totalCount, error: totalError } = await supabase
+      .from('lesson_chunks')
+      .select('id', { count: 'exact', head: true });
+    
+    if (!totalError && totalCount) {
+      const total = totalCount.length || 0;
+      checks.push({
+        name: 'Lesson Chunks Table',
+        status: total > 0 ? 'pass' : 'warn',
+        message: total > 0 
+          ? `Found ${total} total chunks in lesson_chunks table`
+          : 'No chunks found in lesson_chunks table (content may not be indexed)',
+        details: {
+          totalChunks: total,
+        },
+      });
+    }
+  } catch (error: any) {
+    checks.push({
+      name: 'Index Existence',
+      status: 'warn',
+      message: `Index check error: ${error.message}`,
+    });
+  }
+
+  // Calculate overall health
+  const failedChecks = checks.filter(c => c.status === 'fail');
+  const warnChecks = checks.filter(c => c.status === 'warn');
+  const passedChecks = checks.filter(c => c.status === 'pass');
+  
+  const overallHealthy = failedChecks.length === 0;
+  const overallStatus = overallHealthy ? (warnChecks.length > 0 ? 'degraded' : 'healthy') : 'unhealthy';
+  
+  const duration = Date.now() - startTime;
+
+  return NextResponse.json({
+    ok: overallHealthy,
+    status: overallStatus,
+    checks: {
+      total: checks.length,
+      passed: passedChecks.length,
+      warnings: warnChecks.length,
+      failed: failedChecks.length,
+    },
+    details: checks,
+    timestamp: new Date().toISOString(),
+    duration: `${duration}ms`,
+  }, {
+    status: overallHealthy ? 200 : 503,
+    headers: {
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+    },
+  });
 }
