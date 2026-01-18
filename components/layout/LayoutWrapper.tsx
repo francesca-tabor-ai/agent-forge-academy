@@ -43,16 +43,23 @@ export function LayoutWrapper({ children, role }: LayoutWrapperProps) {
       {/* Header */}
       <Header isSidebarExpanded={isSidebarExpanded} onToggleSidebar={toggleSidebar} />
       
-      {/* Body: Sidebar + Main Content */}
-      <div className="flex flex-1 overflow-hidden">
+      {/* Body: Sidebar + Main Content using CSS Grid for desktop */}
+      <div 
+        className="flex-1 overflow-hidden"
+        style={{
+          display: isMobile ? 'flex' : 'grid',
+          gridTemplateColumns: isMobile ? undefined : `${sidebarWidth}px 1fr`,
+          transition: isMobile ? undefined : 'grid-template-columns 300ms ease-in-out',
+        }}
+      >
         {/* Sidebar */}
         <aside
           className={`
             bg-white border-r flex flex-col transition-all duration-300 ease-in-out
-            ${isMobile ? 'fixed inset-y-0 left-0 z-40' : 'relative'}
+            ${isMobile ? 'fixed inset-y-0 left-0 z-40' : ''}
           `}
           style={{
-            width: isMobile && !isSidebarExpanded ? '0px' : `${sidebarWidth}px`,
+            width: isMobile && !isSidebarExpanded ? '0px' : isMobile ? `${sidebarWidthExpanded}px` : '100%',
             borderColor: 'var(--ca-neutral-300)',
             transform: isMobile && !isSidebarExpanded ? 'translateX(-100%)' : 'translateX(0)',
             top: isMobile ? '56px' : '0', // Account for header height on mobile
@@ -66,12 +73,12 @@ export function LayoutWrapper({ children, role }: LayoutWrapperProps) {
           />
         </aside>
 
-        {/* Main Content - shifts on mobile when sidebar is open */}
+        {/* Main Content - never overlaps on desktop due to grid layout */}
         <main 
-          className="flex-1 overflow-y-auto transition-all duration-300 ease-in-out"
+          className="overflow-y-auto"
           style={{
-            marginLeft: isMobile && isSidebarExpanded ? `${sidebarWidthExpanded}px` : '0',
             width: isMobile ? '100%' : 'auto',
+            minWidth: 0, // Prevents grid overflow
           }}
         >
           <div className="max-w-7xl mx-auto px-6 py-8">
