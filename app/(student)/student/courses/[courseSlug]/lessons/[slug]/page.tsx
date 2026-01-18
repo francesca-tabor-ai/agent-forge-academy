@@ -10,6 +10,69 @@ import { CoursePaywall } from '@/components/courses/CoursePaywall';
 import { extractCourseMetadata } from '@/lib/course-sync/extract-metadata';
 import { courseMetadata } from '@/lib/course-metadata';
 
+/**
+ * Strips leading headings from markdown content that duplicate lesson metadata.
+ * This prevents duplication since lesson title, description, and module info are already
+ * rendered in the header section above.
+ * 
+ * Removes:
+ * - Leading H1 that matches lesson title
+ * - Leading H2 that contains "Module" and lesson title
+ */
+function stripLeadingH1(content: string, lessonTitle: string): string {
+  const lines = content.split('\n');
+  let startIndex = 0;
+  
+  // Skip leading blank lines
+  while (startIndex < lines.length && lines[startIndex]?.trim() === '') {
+    startIndex++;
+  }
+  
+  if (startIndex >= lines.length) {
+    return content;
+  }
+  
+  const firstLine = lines[startIndex]?.trim() || '';
+  
+  // Check if first line is an H1 heading
+  const h1Match = firstLine.match(/^#\s+(.+)$/);
+  if (h1Match) {
+    const h1Title = h1Match[1].trim();
+    // If the H1 matches the lesson title (case-insensitive, allowing for minor variations),
+    // remove it along with any following blank lines
+    if (h1Title.toLowerCase() === lessonTitle.toLowerCase() || 
+        h1Title.toLowerCase().includes(lessonTitle.toLowerCase()) ||
+        lessonTitle.toLowerCase().includes(h1Title.toLowerCase())) {
+      startIndex++;
+      // Remove any immediately following blank lines
+      while (startIndex < lines.length && lines[startIndex]?.trim() === '') {
+        startIndex++;
+      }
+      return lines.slice(startIndex).join('\n');
+    }
+  }
+  
+  // Check if first line is an H2 heading with "Module" pattern
+  const h2Match = firstLine.match(/^##\s+(.+)$/);
+  if (h2Match) {
+    const h2Title = h2Match[1].trim();
+    // Check if it contains "Module" and the lesson title
+    const lowerH2 = h2Title.toLowerCase();
+    const lowerTitle = lessonTitle.toLowerCase();
+    if ((lowerH2.includes('module') || lowerH2.includes('module:')) && 
+        (lowerH2.includes(lowerTitle) || lowerTitle.includes(h2Title.split(':')[1]?.trim() || ''))) {
+      startIndex++;
+      // Remove any immediately following blank lines
+      while (startIndex < lines.length && lines[startIndex]?.trim() === '') {
+        startIndex++;
+      }
+      return lines.slice(startIndex).join('\n');
+    }
+  }
+  
+  return content;
+}
+
 interface CourseLessonPageProps {
   params: Promise<{ courseSlug: string; slug: string }>;
 }
@@ -114,7 +177,9 @@ export default async function CourseLessonPage({ params }: CourseLessonPageProps
         {/* Lesson content */}
         <div className="bg-white border border-gray-200 rounded-lg p-8">
           <div className="text-base" style={{ fontSize: '17px', lineHeight: '1.6' }}>
-            <LessonContent content={lesson.content} />
+            {/* Lesson metadata is rendered in the header section above.
+                Strip any leading H1 from markdown content to prevent duplication. */}
+            <LessonContent content={stripLeadingH1(lesson.content, lesson.frontmatter.title || lesson.slug)} />
           </div>
           <LessonCompletionButton lessonId={slug} />
           {/* Bottom navigation button */}
