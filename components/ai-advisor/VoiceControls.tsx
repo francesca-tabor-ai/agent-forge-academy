@@ -1,6 +1,15 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import {
+  checkMicrophonePermission,
+  getPermissionGuidance,
+  enumerateMicrophoneDevices,
+  isSafariOrIOS,
+  getSafariAudioConstraints,
+  logPermissionStateTransition,
+  type PermissionState,
+} from '@/lib/utils/microphonePermissions';
 
 export interface VoiceControlsProps {
   onTranscript: (text: string) => void;
@@ -362,6 +371,7 @@ export function VoiceControls({
   const [isEditingTranscript, setIsEditingTranscript] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [permissionError, setPermissionError] = useState<string | null>(null);
+  const [permissionState, setPermissionState] = useState<PermissionState | null>(null);
   const [isSupported, setIsSupported] = useState(false);
   const [recordingDuration, setRecordingDuration] = useState(0);
   const [voiceUnavailableReason, setVoiceUnavailableReason] = useState<string | null>(null);
@@ -776,7 +786,15 @@ export function VoiceControls({
             setVoiceUnavailableReason('audio-capture');
           } else if (errorType === 'not-allowed' || errorType === 'service-not-allowed') {
             setError('Microphone permission denied');
-            setPermissionError('Microphone access is required. Please enable microphone permissions in your browser settings and refresh the page.');
+            
+            // Update permission state and get guidance
+            const previousState = permissionState;
+            const newState: PermissionState = 'denied';
+            setPermissionState(newState);
+            logPermissionStateTransition('standard', previousState, newState, 'NotAllowedError');
+            
+            const guidance = getPermissionGuidance(newState, 'NotAllowedError');
+            setPermissionError(guidance.message);
             setVoiceUnavailableReason('permission');
           } else if (errorType === 'aborted') {
             // User or system aborted, don't show error

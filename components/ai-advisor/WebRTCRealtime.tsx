@@ -93,6 +93,8 @@ export function WebRTCRealtime({
   const [hasFailed, setHasFailed] = useState(false); // Track if WebRTC has failed
   const [showFallbackMessage, setShowFallbackMessage] = useState(false); // Show fallback message
   const [fallbackReason, setFallbackReason] = useState<string | null>(null); // Reason for fallback
+  const [permissionState, setPermissionState] = useState<PermissionState | null>(null); // Microphone permission state
+  const [permissionError, setPermissionError] = useState<string | null>(null); // Permission error message
   
   // Track partial transcripts for real-time display
   const [partialUserTranscript, setPartialUserTranscript] = useState('');
@@ -861,15 +863,49 @@ export function WebRTCRealtime({
       // Step 4: Add microphone track to PeerConnection
       // Request mic permission once - keep track attached but disabled by default
       // Use audio constraints for better quality: echo cancellation, noise suppression, mono channel
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: {
-          echoCancellation: true,
-          noiseSuppression: true,
-          autoGainControl: true,
-          sampleRate: 48000,
-          channelCount: 1, // Mono for speech (not stereo) - saves bandwidth
+      // Use Safari-specific constraints if on Safari/iOS
+      const baseConstraints: MediaTrackConstraints = {
+        echoCancellation: true,
+        noiseSuppression: true,
+        autoGainControl: true,
+        sampleRate: 48000,
+        channelCount: 1, // Mono for speech (not stereo) - saves bandwidth
+      };
+      
+      const audioConstraints = isSafariOrIOS() 
+        ? { ...baseConstraints, ...getSafariAudioConstraints() }
+        : baseConstraints;
+      
+      // Check permission before requesting
+      const previousState = permissionState;
+      try {
+        const permissionResult = await checkMicrophonePermission();
+        const newState = permissionResult.state;
+        setPermissionState(newState);
+        logPermissionStateTransition('webrtc', previousState, newState);
+        
+        if (newState !== 'granted') {
+          const guidance = getPermissionGuidance(newState, permissionResult.errorName);
+          setPermissionError(guidance.message);
+          throw new Error(guidance.message);
         }
+        
+        setPermissionError(null);
+      } catch (permError: any) {
+        // Permission check failed - still try getUserMedia (may prompt user)
+        console.warn('[WebRTC] Permission check failed, attempting getUserMedia:', permError);
+      }
+      
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: audioConstraints,
       });
+      
+      // Update permission state after successful getUserMedia
+      if (permissionState !== 'granted') {
+        setPermissionState('granted');
+        logPermissionStateTransition('webrtc', permissionState, 'granted');
+        setPermissionError(null);
+      }
       localStreamRef.current = stream;
 
       // Add audio tracks - disabled by default (for push-to-talk)
