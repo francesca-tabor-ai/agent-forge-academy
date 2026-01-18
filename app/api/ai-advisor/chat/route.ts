@@ -789,9 +789,95 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Payload size validation
+    const MAX_PAYLOAD_SIZE = 1 * 1024 * 1024; // 1MB
+    const contentLength = request.headers.get('content-length');
+    if (contentLength && parseInt(contentLength, 10) > MAX_PAYLOAD_SIZE) {
+      const errorResponse = createErrorResponse(
+        new Error('Request payload too large'),
+        {
+          requestId,
+          userId: user.id,
+          errorMessage: `Payload size (${contentLength} bytes) exceeds maximum (${MAX_PAYLOAD_SIZE} bytes)`,
+          stage: 'input_validation',
+        }
+      );
+      
+      const duration = Date.now() - startTime;
+      safeLogger.warn('[AI_ADVISOR] Validation error - payload too large', {
+        ...errorResponse.logData,
+        payloadSize: contentLength,
+        maxSize: MAX_PAYLOAD_SIZE,
+      });
+      
+      await logRequest({
+        requestId,
+        userId: user.id,
+        path: '/api/ai-advisor/chat',
+        method: 'POST',
+        status: errorResponse.statusCode,
+        duration,
+        errorMessage: errorResponse.logData.message,
+        ipAddress: getIpAddress(request),
+        userAgent: getUserAgent(request),
+      });
+      
+      return NextResponse.json(
+        {
+          ok: false,
+          error: {
+            code: 'ValidationError',
+            message: 'Request payload is too large. Please reduce the size of your message or conversation history.',
+            requestId,
+          },
+        },
+        {
+          status: 413, // Payload Too Large
+          headers: errorResponse.headers,
+        }
+      );
+    }
+
     const body: ChatRequest = await request.json();
     let { message, context, studentProfileId, conversationHistory, intent, conversationId } = body;
 
+    // Basic type validation
+    if (typeof message !== 'string') {
+      const errorResponse = createErrorResponse(
+        new Error('Message must be a string'),
+        {
+          requestId,
+          userId: user.id,
+          errorMessage: 'Message must be a string',
+          stage: 'input_validation',
+        }
+      );
+      
+      const duration = Date.now() - startTime;
+      safeLogger.warn('[AI_ADVISOR] Validation error - invalid message type', errorResponse.logData);
+      
+      await logRequest({
+        requestId,
+        userId: user.id,
+        path: '/api/ai-advisor/chat',
+        method: 'POST',
+        status: errorResponse.statusCode,
+        duration,
+        errorMessage: errorResponse.logData.message,
+        ipAddress: getIpAddress(request),
+        userAgent: getUserAgent(request),
+      });
+      
+      return NextResponse.json(
+        errorResponse.response,
+        {
+          status: errorResponse.statusCode,
+          headers: errorResponse.headers,
+        }
+      );
+    }
+
+    // Message validation: required and non-empty
     if (!message || !message.trim()) {
       const errorResponse = createErrorResponse(
         new Error('Message is required and must be a non-empty string'),
@@ -825,6 +911,103 @@ export async function POST(request: NextRequest) {
           headers: errorResponse.headers,
         }
       );
+    }
+
+    // Message length validation (max 10,000 characters)
+    const MAX_MESSAGE_LENGTH = 10000;
+    if (message.length > MAX_MESSAGE_LENGTH) {
+      const errorResponse = createErrorResponse(
+        new Error('Message exceeds maximum length'),
+        {
+          requestId,
+          userId: user.id,
+          errorMessage: `Message length (${message.length} chars) exceeds maximum (${MAX_MESSAGE_LENGTH} chars)`,
+          stage: 'input_validation',
+        }
+      );
+      
+      const duration = Date.now() - startTime;
+      safeLogger.warn('[AI_ADVISOR] Validation error - message too long', {
+        ...errorResponse.logData,
+        messageLength: message.length,
+        maxLength: MAX_MESSAGE_LENGTH,
+      });
+      
+      await logRequest({
+        requestId,
+        userId: user.id,
+        path: '/api/ai-advisor/chat',
+        method: 'POST',
+        status: errorResponse.statusCode,
+        duration,
+        errorMessage: errorResponse.logData.message,
+        ipAddress: getIpAddress(request),
+        userAgent: getUserAgent(request),
+      });
+      
+      return NextResponse.json(
+        {
+          ok: false,
+          error: {
+            code: 'ValidationError',
+            message: `Message is too long (${message.length} characters). Maximum length is ${MAX_MESSAGE_LENGTH} characters. Please shorten your message.`,
+            requestId,
+          },
+        },
+        {
+          status: 400,
+          headers: errorResponse.headers,
+        }
+      );
+    }
+
+    // Conversation history validation and limit (max 20 messages)
+    const MAX_CONVERSATION_HISTORY = 20;
+    if (conversationHistory && !Array.isArray(conversationHistory)) {
+      const errorResponse = createErrorResponse(
+        new Error('Conversation history must be an array'),
+        {
+          requestId,
+          userId: user.id,
+          errorMessage: 'Conversation history must be an array',
+          stage: 'input_validation',
+        }
+      );
+      
+      const duration = Date.now() - startTime;
+      safeLogger.warn('[AI_ADVISOR] Validation error - invalid conversation history type', errorResponse.logData);
+      
+      await logRequest({
+        requestId,
+        userId: user.id,
+        path: '/api/ai-advisor/chat',
+        method: 'POST',
+        status: errorResponse.statusCode,
+        duration,
+        errorMessage: errorResponse.logData.message,
+        ipAddress: getIpAddress(request),
+        userAgent: getUserAgent(request),
+      });
+      
+      return NextResponse.json(
+        errorResponse.response,
+        {
+          status: errorResponse.statusCode,
+          headers: errorResponse.headers,
+        }
+      );
+    }
+
+    // Limit conversation history to last 20 messages
+    if (conversationHistory && conversationHistory.length > MAX_CONVERSATION_HISTORY) {
+      safeLogger.warn('[AI_ADVISOR] Conversation history truncated', {
+        requestId,
+        userId: user.id,
+        originalLength: conversationHistory.length,
+        truncatedLength: MAX_CONVERSATION_HISTORY,
+        stage: 'input_validation',
+      });
+      conversationHistory = conversationHistory.slice(-MAX_CONVERSATION_HISTORY);
     }
 
     // Log request details with full payload (redacted)
