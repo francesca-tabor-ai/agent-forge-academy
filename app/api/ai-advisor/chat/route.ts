@@ -8,25 +8,7 @@ import { generateNextActions, type NextAction } from '@/lib/ai/nextActions';
 import { redactPII, safeLogger } from '@/lib/utils/redactPII';
 import { logRequest, getUserIdFromRequest, getIpAddress, getUserAgent } from '@/lib/utils/request-logger';
 import { createErrorResponse, ErrorClass } from '@/lib/ai-advisor/error-taxonomy';
-import { createErrorResponse, ErrorClass } from '@/lib/ai-advisor/error-taxonomy';
-
-interface ChatRequest {
-  message: string;
-  context?: {
-    course?: { id: string; slug: string; title: string };
-    project?: { id: string; title: string };
-    job?: { id: string; title: string; company: string };
-  };
-  studentProfileId: string | null;
-  conversationHistory: Array<{
-    id: string;
-    role: 'user' | 'assistant' | 'human';
-    content: string;
-    timestamp: Date;
-  }>;
-  intent?: string; // For quick actions: 'architecture_review', 'risks_and_improvements', 'rewrite_description', etc.
-  conversationId?: string; // For conversation persistence
-}
+import { safeValidateChatRequest, formatZodError, type ChatRequest } from '@/lib/schemas/chat-request';
 
 /**
  * Load active context from advisor_context table
@@ -929,177 +911,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Extract validated data
+    // Extract validated data (Zod schema already validated all fields)
     const { message, context, studentProfileId, conversationHistory, intent, conversationId } = validationResult.data;
-
-    // Basic type validation (redundant but kept for safety)
-    if (typeof message !== 'string') {
-      const errorResponse = createErrorResponse(
-        new Error('Message must be a string'),
-        {
-          requestId,
-          userId: user.id,
-          errorMessage: 'Message must be a string',
-          stage: 'input_validation',
-        }
-      );
-      
-      const duration = Date.now() - startTime;
-      safeLogger.warn('[AI_ADVISOR] Validation error - invalid message type', errorResponse.logData);
-      
-      await logRequest({
-        requestId,
-        userId: user.id,
-        path: '/api/ai-advisor/chat',
-        method: 'POST',
-        status: errorResponse.statusCode,
-        duration,
-        errorMessage: errorResponse.logData.message,
-        ipAddress: getIpAddress(request),
-        userAgent: getUserAgent(request),
-      });
-      
-      return NextResponse.json(
-        errorResponse.response,
-        {
-          status: errorResponse.statusCode,
-          headers: errorResponse.headers,
-        }
-      );
-    }
-
-    // Message validation: required and non-empty
-    if (!message || !message.trim()) {
-      const errorResponse = createErrorResponse(
-        new Error('Message is required and must be a non-empty string'),
-        {
-          requestId,
-          userId: user.id,
-          errorMessage: 'Message is required',
-          stage: 'input_validation',
-        }
-      );
-      
-      const duration = Date.now() - startTime;
-      safeLogger.warn('[AI_ADVISOR] Validation error', errorResponse.logData);
-      
-      await logRequest({
-        requestId,
-        userId: user.id,
-        path: '/api/ai-advisor/chat',
-        method: 'POST',
-        status: errorResponse.statusCode,
-        duration,
-        errorMessage: errorResponse.logData.message,
-        ipAddress: getIpAddress(request),
-        userAgent: getUserAgent(request),
-      });
-      
-      return NextResponse.json(
-        errorResponse.response,
-        {
-          status: errorResponse.statusCode,
-          headers: errorResponse.headers,
-        }
-      );
-    }
-
-    // Message length validation (max 10,000 characters)
-    const MAX_MESSAGE_LENGTH = 10000;
-    if (message.length > MAX_MESSAGE_LENGTH) {
-      const errorResponse = createErrorResponse(
-        new Error('Message exceeds maximum length'),
-        {
-          requestId,
-          userId: user.id,
-          errorMessage: `Message length (${message.length} chars) exceeds maximum (${MAX_MESSAGE_LENGTH} chars)`,
-          stage: 'input_validation',
-        }
-      );
-      
-      const duration = Date.now() - startTime;
-      safeLogger.warn('[AI_ADVISOR] Validation error - message too long', {
-        ...errorResponse.logData,
-        messageLength: message.length,
-        maxLength: MAX_MESSAGE_LENGTH,
-      });
-      
-      await logRequest({
-        requestId,
-        userId: user.id,
-        path: '/api/ai-advisor/chat',
-        method: 'POST',
-        status: errorResponse.statusCode,
-        duration,
-        errorMessage: errorResponse.logData.message,
-        ipAddress: getIpAddress(request),
-        userAgent: getUserAgent(request),
-      });
-      
-      return NextResponse.json(
-        {
-          ok: false,
-          error: {
-            code: 'ValidationError',
-            message: `Message is too long (${message.length} characters). Maximum length is ${MAX_MESSAGE_LENGTH} characters. Please shorten your message.`,
-            requestId,
-          },
-        },
-        {
-          status: 400,
-          headers: errorResponse.headers,
-        }
-      );
-    }
-
-    // Conversation history validation and limit (max 20 messages)
-    const MAX_CONVERSATION_HISTORY = 20;
-    if (conversationHistory && !Array.isArray(conversationHistory)) {
-      const errorResponse = createErrorResponse(
-        new Error('Conversation history must be an array'),
-        {
-          requestId,
-          userId: user.id,
-          errorMessage: 'Conversation history must be an array',
-          stage: 'input_validation',
-        }
-      );
-      
-      const duration = Date.now() - startTime;
-      safeLogger.warn('[AI_ADVISOR] Validation error - invalid conversation history type', errorResponse.logData);
-      
-      await logRequest({
-        requestId,
-        userId: user.id,
-        path: '/api/ai-advisor/chat',
-        method: 'POST',
-        status: errorResponse.statusCode,
-        duration,
-        errorMessage: errorResponse.logData.message,
-        ipAddress: getIpAddress(request),
-        userAgent: getUserAgent(request),
-      });
-      
-      return NextResponse.json(
-        errorResponse.response,
-        {
-          status: errorResponse.statusCode,
-          headers: errorResponse.headers,
-        }
-      );
-    }
-
-    // Limit conversation history to last 20 messages
-    if (conversationHistory && conversationHistory.length > MAX_CONVERSATION_HISTORY) {
-      safeLogger.warn('[AI_ADVISOR] Conversation history truncated', {
-        requestId,
-        userId: user.id,
-        originalLength: conversationHistory.length,
-        truncatedLength: MAX_CONVERSATION_HISTORY,
-        stage: 'input_validation',
-      });
-      conversationHistory = conversationHistory.slice(-MAX_CONVERSATION_HISTORY);
-    }
+    
+    // All validation is handled by Zod schema:
+    // - Message: required, non-empty, max 10,000 chars
+    // - Context: optional, strict structure validation
+    // - Conversation history: array, max 20 messages, message structure validation
+    // - Other fields: type validation
 
     // Log request details with full payload (redacted)
     const requestPayload = {
