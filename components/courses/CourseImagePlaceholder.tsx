@@ -34,7 +34,6 @@ const GRADIENT_MAP: Record<string, { from: string; to: string }> = {
   // Standard Industries
   'E-commerce': { from: 'from-pink-500', to: 'to-pink-700' },
   'SaaS': { from: 'from-blue-500', to: 'to-blue-700' },
-  'Trust & Regulation': { from: 'from-gray-600', to: 'to-gray-800' },
   'Media & Content': { from: 'from-orange-500', to: 'to-orange-700' },
   'Legal & Compliance': { from: 'from-slate-600', to: 'to-slate-800' },
   'B2B Sales / RevOps': { from: 'from-red-500', to: 'to-red-700' },
