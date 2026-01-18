@@ -160,9 +160,18 @@ export function checkRateLimits(
  */
 export function cleanupExpiredEntries(): void {
   const now = Date.now();
-  for (const [key, entry] of rateLimitStore.entries()) {
+  
+  // Clean up user rate limit store
+  for (const [key, entry] of userRateLimitStore.entries()) {
     if (now > entry.resetAt) {
-      rateLimitStore.delete(key);
+      userRateLimitStore.delete(key);
+    }
+  }
+  
+  // Clean up IP rate limit store
+  for (const [key, entry] of ipRateLimitStore.entries()) {
+    if (now > entry.resetAt) {
+      ipRateLimitStore.delete(key);
     }
   }
 }
