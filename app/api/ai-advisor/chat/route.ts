@@ -743,6 +743,76 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Rate limiting: Check both per-user and per-IP limits
+    const ipAddress = getIpAddress(request);
+    const rateLimitResult = checkRateLimits(
+      user.id,
+      ipAddress,
+      {
+        maxRequests: 10,  // 10 requests per minute per user
+        windowMs: 60 * 1000, // 1 minute
+      },
+      {
+        maxRequests: 20,  // 20 requests per minute per IP
+        windowMs: 60 * 1000, // 1 minute
+      }
+    );
+
+    if (!rateLimitResult.allowed) {
+      const retryAfter = Math.ceil((rateLimitResult.resetAt - Date.now()) / 1000);
+      const errorResponse = createErrorResponse(
+        new Error('Rate limit exceeded'),
+        {
+          requestId,
+          userId: user.id,
+          errorMessage: `Rate limit exceeded. ${retryAfter} seconds until reset.`,
+          stage: 'rate_limit_check',
+        }
+      );
+
+      safeLogger.warn('[AI_ADVISOR] Rate limit exceeded', {
+        ...errorResponse.logData,
+        ipAddress,
+        limit: rateLimitResult.limit,
+        remaining: rateLimitResult.remaining,
+        resetAt: new Date(rateLimitResult.resetAt).toISOString(),
+        retryAfter,
+      });
+
+      await logRequest({
+        requestId,
+        userId: user.id,
+        path: '/api/ai-advisor/chat',
+        method: 'POST',
+        status: 429,
+        duration: Date.now() - startTime,
+        errorMessage: 'Rate limit exceeded',
+        ipAddress,
+        userAgent: getUserAgent(request),
+      });
+
+      return NextResponse.json(
+        {
+          ok: false,
+          error: {
+            code: 'RateLimitError',
+            message: 'Too many requests. Please wait a moment and try again.',
+            requestId,
+          },
+        },
+        {
+          status: 429,
+          headers: {
+            'X-Request-ID': requestId,
+            'X-RateLimit-Limit': rateLimitResult.limit.toString(),
+            'X-RateLimit-Remaining': rateLimitResult.remaining.toString(),
+            'X-RateLimit-Reset': rateLimitResult.resetAt.toString(),
+            'Retry-After': retryAfter.toString(),
+          },
+        }
+      );
+    }
+
     // Check LLM configuration after auth (so we can log userId)
     if (!llmApiKey) {
       const errorResponse = createErrorResponse(
