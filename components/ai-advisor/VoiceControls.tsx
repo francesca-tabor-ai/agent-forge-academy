@@ -205,12 +205,56 @@ function createMockAudioBlob(): Blob {
 }
 
 /**
- * Send audio to voice API for transcription (mock mode or API fallback)
+ * Check if an error is retryable
+ */
+function isRetryableError(status: number, error: any): boolean {
+  // Retry on network errors (no status) or 5xx errors
+  if (!status || status >= 500) {
+    return true;
+  }
+  
+  // Retry on rate limit (429)
+  if (status === 429) {
+    return true;
+  }
+  
+  // Retry on timeout (504)
+  if (status === 504) {
+    return true;
+  }
+  
+  // Don't retry on 4xx errors (except 429)
+  if (status >= 400 && status < 500) {
+    return false;
+  }
+  
+  // Retry on network errors
+  if (error?.message?.includes('network') || error?.message?.includes('fetch')) {
+    return true;
+  }
+  
+  return false;
+}
+
+/**
+ * Calculate delay for exponential backoff
+ */
+function calculateRetryDelay(attempt: number, baseDelay: number = 1000, maxDelay: number = 10000): number {
+  const delay = Math.min(baseDelay * Math.pow(2, attempt), maxDelay);
+  // Add jitter to prevent thundering herd
+  const jitter = Math.random() * 0.3 * delay; // Up to 30% jitter
+  return Math.floor(delay + jitter);
+}
+
+/**
+ * Send audio to voice API for transcription with retry logic
  */
 async function transcribeAudioViaAPI(
   audioBlob: Blob,
   studentProfileId: string | null,
-  context?: any
+  context?: any,
+  correlationId?: string,
+  maxRetries: number = 3
 ): Promise<string> {
   const formData = new FormData();
   formData.append('audio', audioBlob, 'audio.webm');
@@ -221,25 +265,79 @@ async function transcribeAudioViaAPI(
     formData.append('context', JSON.stringify(context));
   }
 
-  const response = await fetch('/api/ai-advisor/voice', {
-    method: 'POST',
-    body: formData,
-  });
-
-  if (!response.ok) {
-    // Extract request ID from error response if available
-    const errorData = await response.json().catch(() => ({}));
-    const errorMessage = errorData.message || errorData.error || `Voice API error: ${response.status}`;
-    const requestId = errorData.requestId;
-    
-    const error = new Error(requestId ? `${errorMessage} (Request ID: ${requestId})` : errorMessage);
-    (error as any).response = response;
-    (error as any).requestId = requestId;
-    throw error;
+  const headers: HeadersInit = {};
+  if (correlationId) {
+    headers['X-Correlation-ID'] = correlationId;
   }
 
-  const data = await response.json();
-  return data.transcript || '';
+  let lastError: any;
+  
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      const response = await fetch('/api/ai-advisor/voice', {
+        method: 'POST',
+        headers,
+        body: formData,
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        return data.transcript || '';
+      }
+
+      // Extract error information
+      const errorData = await response.json().catch(() => ({}));
+      const errorMessage = errorData.message || errorData.error || `Voice API error: ${response.status}`;
+      const requestId = errorData.requestId;
+      
+      const error = new Error(requestId ? `${errorMessage} (Request ID: ${requestId})` : errorMessage);
+      (error as any).response = response;
+      (error as any).requestId = requestId;
+      (error as any).status = response.status;
+      
+      // Check if error is retryable
+      if (!isRetryableError(response.status, error) || attempt === maxRetries) {
+        throw error;
+      }
+      
+      lastError = error;
+      
+      // Calculate delay before retry
+      const delay = calculateRetryDelay(attempt);
+      console.log(`[VoiceControls] Transcription attempt ${attempt + 1} failed, retrying in ${delay}ms`, {
+        correlationId,
+        status: response.status,
+        attempt: attempt + 1,
+        maxRetries,
+      });
+      
+      // Wait before retrying
+      await new Promise(resolve => setTimeout(resolve, delay));
+      
+    } catch (error: any) {
+      // If it's the last attempt or not retryable, throw immediately
+      if (attempt === maxRetries || !isRetryableError(error?.status || error?.response?.status, error)) {
+        throw error;
+      }
+      
+      lastError = error;
+      
+      // Calculate delay before retry
+      const delay = calculateRetryDelay(attempt);
+      console.log(`[VoiceControls] Transcription attempt ${attempt + 1} failed, retrying in ${delay}ms`, {
+        correlationId,
+        error: error?.message,
+        attempt: attempt + 1,
+        maxRetries,
+      });
+      
+      // Wait before retrying
+      await new Promise(resolve => setTimeout(resolve, delay));
+    }
+  }
+  
+  // Should never reach here, but TypeScript needs it
+  throw lastError || new Error('Transcription failed after all retries');
 }
 
 export function VoiceControls({
@@ -1105,6 +1203,8 @@ export function VoiceControls({
           transcript = await transcribeAudioViaAPI(mockAudioBlob, studentProfileId, context);
         } catch (error: any) {
           // Handle API errors with request ID extraction
+          console.error('[VoiceControls] API transcription error after retries', { correlationId, error });
+          
           let errorMessage = 'Failed to transcribe audio. Please try again or use text input.';
           
           // Extract request ID from error if available
@@ -1112,6 +1212,14 @@ export function VoiceControls({
             errorMessage = `${error.message || errorMessage} (Request ID: ${error.requestId})`;
           } else if (error.message) {
             errorMessage = error.message;
+          }
+          
+          // Include correlation ID in error message
+          errorMessage += ` (Correlation ID: ${correlationId})`;
+          
+          // Add retry information if applicable
+          if (error.status && isRetryableError(error.status, error)) {
+            errorMessage += ' (Retries exhausted)';
           }
           
           setError(errorMessage);
