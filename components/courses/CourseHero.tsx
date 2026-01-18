@@ -43,6 +43,12 @@ interface CourseHeroProps {
 const DEFAULT_FALLBACK_IMAGE = 'https://wallpaperaccess.com/full/340554.png';
 
 /**
+ * Gradient fallback pattern - always visible as last resort
+ * This ensures the hero is NEVER blank, even if all images fail
+ */
+const GRADIENT_FALLBACK = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+
+/**
  * Validate if an image URL is valid
  * Filters out placeholder strings and invalid URLs
  */
@@ -71,7 +77,9 @@ export function CourseHero({
   firstLessonSlug,
 }: CourseHeroProps) {
   // Validate and handle image loading errors
+  // Multiple fallback layers ensure hero is NEVER blank
   const [imageError, setImageError] = useState(false);
+  const [fallbackAttempted, setFallbackAttempted] = useState(false);
   const [currentImageUrl, setCurrentImageUrl] = useState<string>(() => {
     // Validate initial image URL
     if (isValidImageUrl(imageUrl)) {
@@ -86,18 +94,26 @@ export function CourseHero({
     if (isValidImageUrl(imageUrl)) {
       setCurrentImageUrl(imageUrl);
       setImageError(false);
+      setFallbackAttempted(false);
     } else {
       setCurrentImageUrl(DEFAULT_FALLBACK_IMAGE);
       setImageError(false);
+      setFallbackAttempted(false);
     }
   }, [imageUrl]);
 
-  // Handle image load error
+  // Handle image load error - switches to fallback
+  // This ensures if the image URL fails to load, we use the default fallback
   const handleImageError = () => {
-    if (currentImageUrl !== DEFAULT_FALLBACK_IMAGE) {
-      // Only fallback once to prevent infinite loop
+    if (!fallbackAttempted && currentImageUrl !== DEFAULT_FALLBACK_IMAGE) {
+      // First error: switch to default fallback image
       setImageError(true);
+      setFallbackAttempted(true);
       setCurrentImageUrl(DEFAULT_FALLBACK_IMAGE);
+    } else if (fallbackAttempted && currentImageUrl === DEFAULT_FALLBACK_IMAGE) {
+      // Second error: default fallback also failed, but gradient background will show
+      // Don't update URL again to prevent infinite loop
+      setImageError(true);
     }
   };
 
@@ -123,26 +139,64 @@ export function CourseHero({
       aria-label="Course hero banner"
     >
       {/* 
+        STANDARD PATTERN: Fallback Background Layer (Always Visible)
+        - Gradient/neutral background that's ALWAYS visible
+        - Ensures hero is NEVER blank, even if all images fail
+        - This is the last resort fallback
+      */}
+      <div
+        className="absolute inset-0"
+        style={{ 
+          background: GRADIENT_FALLBACK,
+        }}
+        aria-hidden="true"
+      />
+
+      {/* 
         STANDARD PATTERN: Background Image Layer
         - Full-bleed background image (absolute inset-0)
         - bg-cover bg-center ensures image fills container
-        - bg-gray-900 provides fallback background color if image fails
-        - Always renders, even if image URL is invalid
+        - Renders on top of gradient fallback
+        - If image fails, gradient fallback shows through
       */}
       <div
-        className="absolute inset-0 bg-cover bg-center bg-gray-900"
-        style={{ backgroundImage: `url(${currentImageUrl})` }}
+        className="absolute inset-0 bg-cover bg-center"
+        style={{ 
+          backgroundImage: `url(${currentImageUrl})`,
+          // Ensure gradient shows through if image fails
+          backgroundColor: imageError ? 'transparent' : undefined,
+        }}
         aria-hidden="true"
       >
-        {/* Hidden img element to detect load errors */}
+        {/* 
+          Hidden img element to detect load errors
+          - onError handler switches to fallback image
+          - If fallback also fails, gradient background is visible
+        */}
         <img
           src={currentImageUrl}
           alt=""
           className="hidden"
           onError={handleImageError}
-          onLoad={() => setImageError(false)}
+          onLoad={() => {
+            setImageError(false);
+            setFallbackAttempted(false);
+          }}
         />
       </div>
+      
+      {/* 
+        Additional solid color fallback (if gradient fails)
+        - bg-gray-900 provides neutral background
+        - Only visible if both image and gradient fail (unlikely)
+      */}
+      <div
+        className="absolute inset-0 bg-gray-900"
+        style={{ 
+          opacity: imageError && fallbackAttempted ? 1 : 0,
+        }}
+        aria-hidden="true"
+      />
       
       {/* 
         STANDARD PATTERN: Gradient Overlay for Readability

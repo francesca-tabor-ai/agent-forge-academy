@@ -12,10 +12,19 @@ All course landing pages MUST use the same `CourseHero` component structure:
 ┌─────────────────────────────────────────────────┐
 │ Hero Wrapper (min-height, overflow-hidden)      │
 │ ┌─────────────────────────────────────────────┐ │
+│ │ Gradient Fallback Layer (absolute inset-0)  │ │
+│ │ - ALWAYS visible (base layer)               │ │
+│ │ - linear-gradient(135deg, #667eea, #764ba2) │ │
+│ └─────────────────────────────────────────────┘ │
+│ ┌─────────────────────────────────────────────┐ │
 │ │ Background Image Layer (absolute inset-0)   │ │
 │ │ - bg-cover bg-center                         │ │
-│ │ - bg-gray-900 (fallback background)         │ │
 │ │ - backgroundImage: url(imageUrl)             │ │
+│ │ - Renders on top of gradient                 │ │
+│ └─────────────────────────────────────────────┘ │
+│ ┌─────────────────────────────────────────────┐ │
+│ │ Solid Color Fallback (absolute inset-0)     │ │
+│ │ - bg-gray-900 (only if all images fail)     │ │
 │ └─────────────────────────────────────────────┘ │
 │ ┌─────────────────────────────────────────────┐ │
 │ │ Gradient Overlay (absolute inset-0)         │ │
@@ -51,42 +60,83 @@ All course landing pages MUST use the same `CourseHero` component structure:
 
 **Why**: Prevents hero from collapsing to 0 height if image fails to load.
 
-### 2. Background Image Layer
+### 2. Gradient Fallback Layer (Always Visible)
+
+**Requirement**: Gradient background that's ALWAYS visible as base layer.
+
+```tsx
+<div
+  className="absolute inset-0"
+  style={{ 
+    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+  }}
+/>
+```
+
+**Properties**:
+- `absolute inset-0`: Full-bleed positioning
+- `background`: CSS gradient (purple to blue)
+- Always renders as base layer
+
+**Why**: Ensures hero is NEVER blank, even if all images fail to load.
+
+### 3. Background Image Layer
 
 **Requirement**: Image rendered as background layer (not `<img>` tag).
 
 ```tsx
 <div
-  className="absolute inset-0 bg-cover bg-center bg-gray-900"
+  className="absolute inset-0 bg-cover bg-center"
   style={{ backgroundImage: `url(${currentImageUrl})` }}
 >
+  <img
+    src={currentImageUrl}
+    alt=""
+    className="hidden"
+    onError={handleImageError}
+    onLoad={handleImageLoad}
+  />
+</div>
 ```
 
 **Properties**:
 - `absolute inset-0`: Full-bleed positioning
 - `bg-cover bg-center`: Image fills container, centered
-- `bg-gray-900`: Fallback background color (always visible)
 - `backgroundImage`: CSS background-image property
+- Hidden `<img>` tag: Detects load errors via `onError` handler
 
-**Why**: Background layer allows for overlay, better control, and fallback handling.
+**Why**: Background layer allows for overlay, better control, and fallback handling. Hidden `<img>` tag enables error detection.
 
-### 3. Fallback Background
+### 4. Multi-Layer Fallback System
 
-**Requirement**: Must have fallback background color if no image.
+**Requirement**: Multiple fallback layers ensure hero is NEVER blank.
 
-```tsx
-className="... bg-gray-900"
-```
+**Fallback Chain** (in order of priority):
+1. **Gradient Fallback** (always visible as base layer)
+   - `linear-gradient(135deg, #667eea 0%, #764ba2 100%)`
+   - Always renders, ensures hero is never blank
+2. **Course-specific `imageUrl`** (if valid)
+   - Renders on top of gradient
+   - If invalid, skips to next step
+3. **Default fallback image URL** (`DEFAULT_FALLBACK_IMAGE`)
+   - Used if `imageUrl` is invalid or fails to load
+   - Triggered by `onError` handler
+4. **Solid color fallback** (`bg-gray-900`)
+   - Only visible if both image and gradient fail (unlikely)
+   - Last resort fallback
 
-**Fallback Chain**:
-1. Course-specific `imageUrl` (if valid)
-2. Track/Category image from `TRACK_COVERS`
-3. Default fallback image URL
-4. `bg-gray-900` background color (always visible)
+**Error Handling**:
+- `onError` handler: Switches to `DEFAULT_FALLBACK_IMAGE` if image fails
+- URL validation: Checks if `imageUrl` is valid before using
+- Prevents infinite loops: Only falls back once per error
 
-**Why**: Ensures hero is never completely blank, even if all images fail.
+**Why**: Multiple layers ensure hero is NEVER blank, even if:
+- Image URL is missing
+- Image URL is invalid
+- Image fails to load
+- Default fallback image also fails
 
-### 4. Gradient Overlay for Readability
+### 5. Gradient Overlay for Readability
 
 **Requirement**: Gradient overlay ensures text is readable over any background.
 
@@ -101,7 +151,7 @@ className="... bg-gray-900"
 
 **Why**: Ensures white text is always readable, regardless of background image brightness.
 
-### 5. Constrained Inner Content Container
+### 6. Constrained Inner Content Container
 
 **Requirement**: Content must be in a constrained, centered container.
 
@@ -183,15 +233,45 @@ const courseCoverImage = getCourseCover(course || {
 2. Track/Category image from `TRACK_COVERS[category]`
 3. Default fallback image
 
-## Error Handling
+## Error Handling & Fallback System
 
-The component includes automatic error handling:
+The component includes **multiple layers of fallback** to ensure the hero is NEVER blank:
 
-1. **URL Validation**: Validates imageUrl before using it
-2. **Fallback Image**: Uses `DEFAULT_FALLBACK_IMAGE` if URL is invalid
-3. **Load Error Detection**: Detects image load failures
-4. **Automatic Fallback**: Falls back to default image on error
-5. **Background Color**: `bg-gray-900` always visible as last resort
+### Fallback Layers (Bottom to Top)
+
+1. **Gradient Fallback** (Base Layer - Always Visible)
+   - `linear-gradient(135deg, #667eea 0%, #764ba2 100%)`
+   - Always renders as the base layer
+   - Ensures hero is never completely blank
+
+2. **Background Image Layer**
+   - Course-specific `imageUrl` (if valid)
+   - Renders on top of gradient
+   - If invalid, component uses `DEFAULT_FALLBACK_IMAGE`
+
+3. **Default Fallback Image**
+   - `DEFAULT_FALLBACK_IMAGE` constant
+   - Triggered by `onError` handler if image fails to load
+   - Also used if `imageUrl` is invalid from the start
+
+4. **Solid Color Fallback** (Last Resort)
+   - `bg-gray-900` background color
+   - Only visible if both image and gradient fail (unlikely)
+
+### Error Detection
+
+- **URL Validation**: `isValidImageUrl()` checks if URL is valid before using
+- **Load Error Detection**: Hidden `<img>` tag with `onError` handler
+- **Automatic Fallback**: Switches to `DEFAULT_FALLBACK_IMAGE` on error
+- **Prevents Infinite Loops**: Only falls back once per error
+
+### Why Multiple Layers?
+
+This multi-layer approach ensures:
+- ✅ Hero is NEVER blank (gradient always visible)
+- ✅ Graceful degradation (falls back smoothly)
+- ✅ No layout shifts (min-height prevents collapse)
+- ✅ Works offline (gradient is CSS, no network required)
 
 ## Responsive Behavior
 
@@ -232,8 +312,10 @@ The component uses proper z-index stacking:
 When adding or modifying CourseHero:
 
 - [ ] Hero has min-height at all breakpoints
-- [ ] Background image renders correctly
-- [ ] Fallback background color visible if image fails
+- [ ] Gradient fallback is always visible (base layer)
+- [ ] Background image renders correctly on top of gradient
+- [ ] onError handler switches to fallback image
+- [ ] Hero is NEVER blank (test with invalid URL, network offline)
 - [ ] Gradient overlay ensures text readability
 - [ ] Content container is constrained (max-w-7xl)
 - [ ] Responsive padding works at all breakpoints
@@ -241,15 +323,17 @@ When adding or modifying CourseHero:
 - [ ] Z-index stacking is correct (hero above header)
 - [ ] No layout shifts when image loads
 - [ ] Works with all image sources (track, fallback, invalid)
+- [ ] Multiple fallback layers work correctly
 
 ## Common Mistakes to Avoid
 
-1. **Don't use `<img>` tag**: Use background-image instead
+1. **Don't use `<img>` tag for display**: Use background-image instead (hidden `<img>` is OK for error detection)
 2. **Don't skip min-height**: Always set min-height at all breakpoints
-3. **Don't forget fallback**: Always have bg-gray-900 as last resort
+3. **Don't forget gradient fallback**: Gradient must always be visible as base layer
 4. **Don't skip overlay**: Gradient overlay is required for readability
 5. **Don't use per-course hacks**: Use this component for all courses
-6. **Don't skip error handling**: Always validate and handle image errors
+6. **Don't skip error handling**: Always validate and handle image errors with `onError`
+7. **Don't leave hero blank**: Multiple fallback layers ensure hero is NEVER blank
 
 ## Maintenance
 
@@ -263,5 +347,5 @@ When fixing hero image issues:
 
 ---
 
-**Last Updated**: Phase 3 - Standard Pattern Implementation
-**Status**: ✅ Complete - Ready for use across all course pages
+**Last Updated**: Phase 3 - Enhanced Fallback System (Multi-Layer)
+**Status**: ✅ Complete - Hero is NEVER blank, multiple fallback layers enforced
