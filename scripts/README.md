@@ -2,6 +2,41 @@
 
 This directory contains utility scripts for the Agent Forge Academy project.
 
+## Schema Cache Refresh
+
+### `refresh-schema-cache.sh`
+
+Refreshes the Supabase/PostgREST schema cache after database migrations.
+
+**When to use:** After running migrations that add, rename, or modify columns.
+
+### Usage
+
+```bash
+# Local development
+./scripts/refresh-schema-cache.sh local
+
+# Staging environment
+./scripts/refresh-schema-cache.sh staging
+
+# Production environment
+./scripts/refresh-schema-cache.sh production
+```
+
+### What it does
+
+- **Local:** Restarts Supabase local instance (refreshes all caches)
+- **Staging/Production:** Attempts API refresh, falls back to manual instructions
+
+### Requirements
+
+- Local: Supabase CLI installed (`npm install -g supabase`)
+- Staging/Production: `SUPABASE_SERVICE_ROLE_KEY` in `.env` (optional, will show manual instructions if missing)
+
+### See Also
+
+- [Schema Cache Refresh Guide](../documentation/setup-config/SCHEMA_CACHE_REFRESH.md) - Comprehensive documentation
+
 ## Content Guard Linter
 
 ### `lint-content-guard.ts`

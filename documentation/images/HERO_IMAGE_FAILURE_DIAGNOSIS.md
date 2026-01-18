@@ -26,7 +26,26 @@ Total Courses with Missing Images: 17
 - Ensure `extractCourseMetadata()` always succeeds, OR
 - Make category a required field in database schema
 
-## Bucket B: Invalid Data
+## Bucket B: Rendering Not Implemented
+
+**Symptoms**: Image exists in data but no `<img>` / background layer rendered, course hero component is text-only
+
+**Analysis**: ✅ **Rendering IS implemented**
+
+- CourseHero component has backgroundImage rendering code
+- CourseHero accepts `imageUrl` prop
+- Course landing page passes `imageUrl` to CourseHero via `getCourseCover()`
+- All 17 courses would pass imageUrl to component (none would be null)
+
+**Result**: Bucket B does NOT apply. Rendering is fully implemented.
+
+See [BUCKET_B_RENDERING_DIAGNOSIS.md](./BUCKET_B_RENDERING_DIAGNOSIS.md) for detailed analysis.
+
+| Course Slug | Rendering Implemented? | ImageUrl Passed? | Notes |
+|-------------|------------------------|------------------|-------|
+| *All courses* | ✅ Yes | ✅ Yes | CourseHero component has full image rendering implementation |
+
+## Bucket C: Invalid Data (Category Mismatch)
 
 **Symptoms**: Category exists but doesn't match TRACK_COVERS
 

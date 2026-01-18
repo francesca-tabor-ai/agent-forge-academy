@@ -28,6 +28,11 @@ END $$;
 COMMENT ON COLUMN student_profiles.city IS 'Normalized city name (lowercase key, e.g., "london") parsed from location field';
 COMMENT ON COLUMN student_profiles.country IS 'Country name (e.g., "UK") parsed from location field';
 
--- Note: After running this migration, refresh Supabase schema cache:
--- 1. In Supabase Dashboard: Settings → API → Refresh schema cache
--- 2. Or restart local Supabase instance if using local development
+-- ⚠️ IMPORTANT: After running this migration, refresh Supabase schema cache!
+-- 
+-- Quick options:
+-- 1. Supabase Dashboard: Settings → API → Refresh schema cache
+-- 2. Local: Run `./scripts/refresh-schema-cache.sh local`
+-- 3. See full guide: documentation/setup-config/SCHEMA_CACHE_REFRESH.md
+--
+-- This step is REQUIRED after adding/modifying columns in PostgREST-backed APIs.
