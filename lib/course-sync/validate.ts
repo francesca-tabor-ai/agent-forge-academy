@@ -80,11 +80,63 @@ export function validateCourseMetadata(
     }
   }
 
+  // Hero image validation guardrail
+  // Course must have either:
+  // 1. imageUrl or thumbnail_url (direct image)
+  // 2. category (for track-based fallback)
+  // 3. allow_fallback: true (explicitly allow fallback)
+  const hasImageUrl = metadata.imageUrl && typeof metadata.imageUrl === 'string' && metadata.imageUrl.trim().length > 0;
+  const hasThumbnailUrl = metadata.thumbnail_url && typeof metadata.thumbnail_url === 'string' && metadata.thumbnail_url.trim().length > 0;
+  const hasCategory = metadata.category && typeof metadata.category === 'string' && metadata.category.trim().length > 0;
+  const allowFallback = metadata.allow_fallback === true || metadata.allow_fallback === 'true' || metadata.allowFallback === true || metadata.allowFallback === 'true';
+
+  // Validate image URLs if provided
+  if (hasImageUrl) {
+    const imageUrl = String(metadata.imageUrl).trim();
+    if (!isValidImageUrl(imageUrl)) {
+      errors.push({
+        field: 'imageUrl',
+        message: `imageUrl is invalid or appears to be a placeholder: "${imageUrl}"`,
+      });
+    }
+  }
+
+  if (hasThumbnailUrl) {
+    const thumbnailUrl = String(metadata.thumbnail_url).trim();
+    if (!isValidImageUrl(thumbnailUrl)) {
+      errors.push({
+        field: 'thumbnail_url',
+        message: `thumbnail_url is invalid or appears to be a placeholder: "${thumbnailUrl}"`,
+      });
+    }
+  }
+
+  // Guardrail: Require hero image source unless fallback is explicitly enabled
+  if (!hasImageUrl && !hasThumbnailUrl && !hasCategory && !allowFallback) {
+    errors.push({
+      field: 'heroImage',
+      message: 'Course must have either imageUrl, thumbnail_url, or category (for track-based fallback). If none are available, set allow_fallback: true to explicitly enable fallback.',
+    });
+  }
+
   return {
     valid: errors.length === 0,
     errors,
     warnings,
   };
+}
+
+/**
+ * Validates if an image URL is valid (not a placeholder)
+ */
+function isValidImageUrl(url: string): boolean {
+  if (!url || typeof url !== 'string') return false;
+  const trimmed = url.trim();
+  return trimmed.length > 0 &&
+         trimmed !== 'image' &&
+         trimmed !== 'placeholder' &&
+         !trimmed.startsWith('http://placeholder') &&
+         !trimmed.startsWith('placeholder');
 }
 
 /**
