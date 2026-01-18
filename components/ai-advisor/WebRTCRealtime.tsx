@@ -92,6 +92,7 @@ export function WebRTCRealtime({
   const [voiceOutputEnabled, setVoiceOutputEnabled] = useState(true); // Voice output toggle (default: on)
   const [hasFailed, setHasFailed] = useState(false); // Track if WebRTC has failed
   const [showFallbackMessage, setShowFallbackMessage] = useState(false); // Show fallback message
+  const [fallbackReason, setFallbackReason] = useState<string | null>(null); // Reason for fallback
   
   // Track partial transcripts for real-time display
   const [partialUserTranscript, setPartialUserTranscript] = useState('');
@@ -203,10 +204,13 @@ export function WebRTCRealtime({
    * Trigger fallback to standard voice
    * Declared early so it can be used in connect and other callbacks
    */
-  const triggerFallback = useCallback(() => {
-    console.log('WebRTC failed, triggering fallback to standard voice');
+  const triggerFallback = useCallback((reason?: string) => {
+    const correlationId = correlationIdRef.current || 'unknown';
+    console.log('[WebRTC] Failed, triggering fallback to standard voice', { correlationId, reason });
+    
     setHasFailed(true);
     setShowFallbackMessage(true);
+    setFallbackReason(reason || 'Connection failed');
     
     // Disconnect only if not in mock mode (mock mode doesn't have real connections)
     const mockMode = isMockRealtimeEnabled();
@@ -218,9 +222,20 @@ export function WebRTCRealtime({
       setIsConnecting(false);
     }
     
-    // Call fallback callback if provided
+    // Log fallback (without storing raw audio)
+    safeLogger.info('WebRTC fallback triggered', {
+      correlationId,
+      reason: reason || 'unknown',
+      timestamp: new Date().toISOString(),
+      hasAudio: false,
+    });
+    
+    // Call fallback callback if provided (with small delay for smooth transition)
     if (onFallback) {
-      onFallback();
+      // Small delay to allow user to see the message before switching
+      setTimeout(() => {
+        onFallback();
+      }, 1000);
     }
   }, [onFallback, disconnect]);
 
@@ -828,7 +843,7 @@ export function WebRTCRealtime({
         if (onError) onError(errorMsg);
         
         // Trigger fallback on data channel error
-        triggerFallback();
+        triggerFallback('Data channel error');
       };
       
       dataChannel.onclose = () => {
@@ -837,7 +852,7 @@ export function WebRTCRealtime({
         if (isConnected) {
           // Unexpected close - trigger fallback
           setError('Data channel closed unexpectedly');
-          triggerFallback();
+          triggerFallback('Data channel closed unexpectedly');
         }
       };
 
@@ -922,7 +937,7 @@ export function WebRTCRealtime({
           
           // Trigger fallback on connection failure
           if (state === 'failed') {
-            triggerFallback();
+            triggerFallback(`ICE connection ${state}`);
           }
         }
       };
@@ -990,7 +1005,9 @@ export function WebRTCRealtime({
         
         // For 400/503 errors, trigger fallback instead of showing error
         if (shouldFallback && onFallback) {
+          const correlationId = correlationIdRef.current || 'unknown';
           safeLogger.warn('WebRTC connection failed, falling back to standard voice', {
+            correlationId,
             status: sdpResponse.status,
             error: errorText,
             requestId,
@@ -998,10 +1015,11 @@ export function WebRTCRealtime({
             sessionId: session?.session_id,
           });
           setHasFailed(true);
-          setShowFallbackMessage(true);
           setError(userFriendlyError); // Store error with request ID for display
-          onFallback();
           setIsConnecting(false);
+          
+          // Trigger fallback with reason
+          triggerFallback(`API error (${sdpResponse.status})`);
           return; // Exit early, don't set error state
         }
         
@@ -1062,8 +1080,9 @@ export function WebRTCRealtime({
       setIsConnecting(false);
       if (onError) onError(errorMessage);
       
-      // Trigger fallback on connection failure
-      triggerFallback();
+      // Trigger fallback on connection failure with reason
+      const reason = err instanceof Error ? err.message : 'Connection error';
+      triggerFallback(reason);
     }
   }, [disabled, isConnecting, isConnected, getSessionCredentials, onError, sendSystemConfig, handleToolCall, handleRealtimeMessage, voiceMode, voiceOutputEnabled, triggerFallback, startTimeoutDetection, startSilenceTimeoutDetection]);
 
@@ -1081,6 +1100,7 @@ export function WebRTCRealtime({
     
     setHasFailed(false);
     setShowFallbackMessage(false);
+    setFallbackReason(null);
     setError(null);
     disconnect();
     
@@ -1243,22 +1263,68 @@ export function WebRTCRealtime({
       {/* Fallback Message */}
       {showFallbackMessage && (
         <div 
-          className="bg-yellow-50 border border-yellow-200 rounded-lg p-3" 
+          className="bg-blue-50 border border-blue-200 rounded-lg p-4 shadow-sm" 
           data-testid="fallback-banner"
           data-testid-fallback-triggered="true"
         >
-          <div className="flex items-start gap-2">
-            <div className="text-yellow-600 text-sm font-medium">
-              ⚠️ Realtime unavailable, switching to standard voice
+          <div className="flex items-start gap-3">
+            <div className="flex-shrink-0 mt-0.5">
+              <svg
+                className="w-5 h-5 text-blue-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
             </div>
-            <button
-              type="button"
-              onClick={() => setShowFallbackMessage(false)}
-              className="ml-auto text-yellow-600 hover:text-yellow-800"
-              aria-label="Dismiss"
-            >
-              ×
-            </button>
+            <div className="flex-1 min-w-0">
+              <div className="text-blue-900 font-medium text-sm mb-1">
+                Switching to Standard Voice Mode
+              </div>
+              <p className="text-blue-700 text-xs mb-3">
+                {fallbackReason 
+                  ? `Realtime connection unavailable (${fallbackReason}). You can continue using voice with standard mode, or try reconnecting.`
+                  : 'Realtime connection unavailable. You can continue using voice with standard mode, or try reconnecting.'}
+              </p>
+              <div className="flex items-center gap-2 flex-wrap">
+                <button
+                  type="button"
+                  onClick={reconnect}
+                  className="px-3 py-1.5 text-xs font-medium bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+                  data-testid="fallback-retry-button"
+                >
+                  Try Realtime Again
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowFallbackMessage(false);
+                    if (onFallback) {
+                      onFallback();
+                    }
+                  }}
+                  className="px-3 py-1.5 text-xs font-medium bg-white text-blue-700 border border-blue-300 rounded-md hover:bg-blue-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+                  data-testid="fallback-use-standard-button"
+                >
+                  Use Standard Voice
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowFallbackMessage(false)}
+                  className="px-3 py-1.5 text-xs text-blue-600 hover:text-blue-800 transition-colors"
+                  aria-label="Dismiss"
+                  data-testid="fallback-dismiss-button"
+                >
+                  Dismiss
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
