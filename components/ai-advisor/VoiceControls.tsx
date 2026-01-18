@@ -177,6 +177,16 @@ function isMockModeEnabled(): boolean {
 }
 
 /**
+ * Generate a correlation ID for voice interactions
+ * Format: voice_<timestamp>_<random>
+ */
+function generateCorrelationId(): string {
+  const timestamp = Date.now();
+  const random = Math.random().toString(36).substring(2, 9);
+  return `voice_${timestamp}_${random}`;
+}
+
+/**
  * Create a mock audio blob for testing
  */
 function createMockAudioBlob(): Blob {
@@ -844,6 +854,11 @@ export function VoiceControls({
    * Fallback to API transcription using MediaRecorder
    */
   const fallbackToAPITranscription = useCallback(async () => {
+    // Generate correlation ID for this transcription
+    const correlationId = generateCorrelationId();
+    correlationIdRef.current = correlationId;
+    console.log('[VoiceControls] Starting API transcription fallback', { correlationId });
+    
     try {
       setRecognitionState('processing');
       setPartialTranscript('');
@@ -851,6 +866,7 @@ export function VoiceControls({
       // Stop MediaRecorder and get audio blob
       const audioBlob = await stopMediaRecorder();
       if (!audioBlob) {
+        console.error('[VoiceControls] No audio blob for transcription', { correlationId });
         setError('No audio recorded. Please try again.');
         setRecognitionState('error');
         setIsListening(false);
@@ -858,7 +874,7 @@ export function VoiceControls({
       }
 
       // Send to voice API for transcription
-      const transcript = await transcribeAudioViaAPI(audioBlob, studentProfileId, context);
+      const transcript = await transcribeAudioViaAPI(audioBlob, studentProfileId, context, correlationId);
       
       if (transcript && transcript.trim()) {
         const fullText = transcript.trim();
@@ -891,7 +907,8 @@ export function VoiceControls({
         setError('No transcription received. Please try again.');
       }
     } catch (error: any) {
-      console.error('Error in API transcription fallback:', error);
+      const correlationId = correlationIdRef.current || 'unknown';
+      console.error('[VoiceControls] Error in API transcription fallback', { correlationId, error });
       
       // Extract request ID from error if available
       let errorMessage = 'Failed to transcribe audio. Please try again or use text input.';
@@ -899,6 +916,11 @@ export function VoiceControls({
         errorMessage = `${error.message || errorMessage} (Request ID: ${error.requestId})`;
       } else if (error.message) {
         errorMessage = error.message;
+      }
+      
+      // Include correlation ID in error message
+      if (correlationId !== 'unknown') {
+        errorMessage += ` (Correlation ID: ${correlationId})`;
       }
       
       setError(errorMessage);
