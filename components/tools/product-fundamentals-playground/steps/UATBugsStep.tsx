@@ -299,7 +299,7 @@ export function UATBugsStep({ state, dispatch }: UATBugsStepProps) {
           ))}
           {state.bugs.length === 0 && (
             <div className="text-center py-8 border-2 border-dashed border-gray-300 rounded-lg">
-              <p className="text-gray-500">No bugs logged yet. Click "Log Bug" to create one.</p>
+              <p className="text-gray-500">No bugs logged yet. Click &quot;Log Bug&quot; to create one.</p>
             </div>
           )}
         </div>
@@ -411,7 +411,7 @@ export function UATBugsStep({ state, dispatch }: UATBugsStepProps) {
                   <option value="">Select decision</option>
                   <option value="fix-now">Fix Now</option>
                   <option value="fix-later">Fix Later</option>
-                  <option value="wont-fix">Won't Fix</option>
+                  <option value="wont-fix">Won&apos;t Fix</option>
                   <option value="duplicate">Duplicate</option>
                   <option value="not-a-bug">Not a Bug</option>
                 </select>
@@ -462,7 +462,7 @@ export function UATBugsStep({ state, dispatch }: UATBugsStepProps) {
                   {blockerBugs.length} Blocker Bug{blockerBugs.length > 1 ? 's' : ''} Unresolved
                 </div>
                 <div className="text-sm text-red-700 mb-3">
-                  The following blocker bugs are not marked as "Fix Now":
+                  The following blocker bugs are not marked as &quot;Fix Now&quot;:
                 </div>
                 <ul className="list-disc list-inside space-y-1 text-sm text-red-700 mb-3">
                   {blockerBugs.map(bug => (

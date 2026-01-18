@@ -52,7 +52,7 @@ export function SprintPlanStep({ state, dispatch }: SprintPlanStepProps) {
         },
       });
     }
-  }, [sprintGoal, capacityPoints, overCapacityJustification]);
+  }, [sprintGoal, capacityPoints, overCapacityJustification, state.stories, state.sprints, dispatch]);
 
   const handleAddStory = () => {
     setEditingStoryId('new');
@@ -289,7 +289,7 @@ export function SprintPlanStep({ state, dispatch }: SprintPlanStepProps) {
           ))}
           {state.stories.length === 0 && (
             <div className="text-center py-8 border-2 border-dashed border-gray-300 rounded-lg">
-              <p className="text-gray-500">No stories yet. Click "Add Story" to create one.</p>
+              <p className="text-gray-500">No stories yet. Click &quot;Add Story&quot; to create one.</p>
             </div>
           )}
         </div>
