@@ -4,12 +4,32 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
+import { 
+  LayoutDashboard, 
+  BookOpen, 
+  Briefcase, 
+  BriefcaseIcon, 
+  Bot, 
+  Wrench, 
+  CreditCard,
+  Users,
+  FileQuestion,
+  FolderOpen,
+  UserCheck,
+  BarChart3,
+  Database,
+  Upload,
+  LogOut
+} from 'lucide-react';
+import type { UserRole } from '@/lib/types/roles';
 
 interface SidebarProps {
-  role: 'student' | 'instructor' | 'recruiter' | 'admin' | null;
+  role: UserRole | null;
+  isExpanded: boolean;
+  isMobile: boolean;
 }
 
-export default function Sidebar({ role }: SidebarProps) {
+export default function Sidebar({ role, isExpanded, isMobile }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -24,32 +44,32 @@ export default function Sidebar({ role }: SidebarProps) {
     switch (role) {
       case 'student':
         return [
-          { href: '/student/dashboard', label: 'Dashboard' },
-          { href: '/student/courses', label: 'Courses' },
-          { href: '/student/portfolio', label: 'Portfolio' },
-          { href: '/student/jobs', label: 'Job Opportunities' },
-          { href: '/student/ai-advisor', label: 'AI Advisor' },
-          { href: '/student/tools', label: 'Tools' },
-          { href: '/student/subscription', label: 'Subscription' },
+          { href: '/student/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+          { href: '/student/courses', label: 'Courses', icon: BookOpen },
+          { href: '/student/portfolio', label: 'Portfolio', icon: Briefcase },
+          { href: '/student/jobs', label: 'Job Opportunities', icon: BriefcaseIcon },
+          { href: '/student/ai-advisor', label: 'AI Advisor', icon: Bot },
+          { href: '/student/tools', label: 'Tools', icon: Wrench },
+          { href: '/student/subscription', label: 'Subscription', icon: CreditCard },
         ];
       case 'instructor':
         return [
-          { href: '/tutor/dashboard', label: 'Dashboard' },
-          { href: '/tutor/questions', label: 'Questions' },
+          { href: '/tutor/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+          { href: '/tutor/questions', label: 'Questions', icon: FileQuestion },
         ];
       case 'recruiter':
         return [
-          { href: '/recruiter/directory', label: 'Directory' },
-          { href: '/recruiter/contacts', label: 'Contact Requests' },
+          { href: '/recruiter/directory', label: 'Directory', icon: Users },
+          { href: '/recruiter/contacts', label: 'Contact Requests', icon: UserCheck },
         ];
       case 'admin':
         return [
-          { href: '/admin', label: 'Overview' },
-          { href: '/admin/users', label: 'Users' },
-          { href: '/admin/subscriptions', label: 'Subscriptions' },
-          { href: '/admin/api-tester', label: 'API Tester' },
-          { href: '/admin/logs', label: 'Logs' },
-          { href: '/admin/bulk-upload', label: 'Bulk Upload' },
+          { href: '/admin', label: 'Overview', icon: BarChart3 },
+          { href: '/admin/users', label: 'Users', icon: Users },
+          { href: '/admin/subscriptions', label: 'Subscriptions', icon: CreditCard },
+          { href: '/admin/api-tester', label: 'API Tester', icon: Database },
+          { href: '/admin/logs', label: 'Logs', icon: FolderOpen },
+          { href: '/admin/bulk-upload', label: 'Bulk Upload', icon: Upload },
         ];
       default:
         return [];
@@ -59,43 +79,68 @@ export default function Sidebar({ role }: SidebarProps) {
   const navItems = getNavItems();
 
   return (
-    <aside className="w-64 bg-white border-r flex flex-col" style={{ borderColor: 'var(--ca-neutral-300)' }}>
-      <div className="p-6 border-b" style={{ backgroundColor: 'var(--ca-navy)', borderColor: 'var(--ca-neutral-300)' }}>
-        <h1 className="text-lg font-semibold text-white">AI Growth Hub</h1>
+    <div className="flex flex-col h-full overflow-hidden">
+      {/* Header */}
+      <div className="p-4 sm:p-6 border-b flex-shrink-0" style={{ backgroundColor: 'var(--ca-navy)', borderColor: 'var(--ca-neutral-300)' }}>
+        {isExpanded ? (
+          <h1 className="text-lg font-semibold text-white">AI Growth Hub</h1>
+        ) : (
+          <div className="flex items-center justify-center">
+            <span className="text-white text-xl font-bold">A</span>
+          </div>
+        )}
       </div>
       
-      <nav className="flex-1 p-4 space-y-1">
+      {/* Navigation */}
+      <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
         {navItems.map((item) => {
           const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
+          const Icon = item.icon;
+          
           return (
             <Link
               key={item.href}
               href={item.href}
-              className={`block px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ease-out relative ${
-                isActive
+              className={`
+                flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ease-out relative
+                ${isActive
                   ? 'text-ca-text scale-105'
                   : 'text-ca-neutral-500 hover:text-ca-text hover:scale-105 hover:bg-gray-50'
-              }`}
+                }
+                ${!isExpanded ? 'justify-center' : ''}
+              `}
               style={isActive ? { backgroundColor: 'var(--ca-bg-warm)' } : {}}
+              title={!isExpanded ? item.label : undefined}
             >
-              {item.label}
-              {isActive && (
-                <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-ca-gold rounded-r-full" />
+              <Icon className="w-5 h-5 flex-shrink-0" />
+              {isExpanded && (
+                <>
+                  <span className="flex-1">{item.label}</span>
+                  {isActive && (
+                    <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-ca-gold rounded-r-full" />
+                  )}
+                </>
               )}
             </Link>
           );
         })}
       </nav>
 
-      <div className="p-4 border-t" style={{ borderColor: 'var(--ca-neutral-300)' }}>
+      {/* Sign Out */}
+      <div className="p-4 border-t flex-shrink-0" style={{ borderColor: 'var(--ca-neutral-300)' }}>
         <button
           onClick={handleSignOut}
-          className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-ca-neutral-500 hover:text-ca-text transition-all duration-200 ease-out hover:scale-105 hover:bg-gray-50 active:scale-95"
+          className={`
+            w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium text-ca-neutral-500 hover:text-ca-text transition-all duration-200 ease-out hover:scale-105 hover:bg-gray-50 active:scale-95
+            ${!isExpanded ? 'justify-center' : ''}
+          `}
+          title={!isExpanded ? 'Sign Out' : undefined}
         >
-          Sign Out
+          <LogOut className="w-5 h-5 flex-shrink-0" />
+          {isExpanded && <span>Sign Out</span>}
         </button>
       </div>
-    </aside>
+    </div>
   );
 }
 

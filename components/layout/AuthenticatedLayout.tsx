@@ -1,6 +1,6 @@
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
-import Sidebar from './Sidebar';
+import { LayoutWrapper } from './LayoutWrapper';
 import { getUserRole } from '@/lib/supabase/server';
 
 interface AuthenticatedLayoutProps {
@@ -33,14 +33,9 @@ export default async function AuthenticatedLayout({
   const role = await getUserRole();
 
   return (
-    <div className="flex h-screen" style={{ backgroundColor: 'var(--ca-bg-warm)' }}>
-      <Sidebar role={role} />
-      <main className="flex-1 overflow-y-auto">
-        <div className="max-w-7xl mx-auto px-6 py-8">
-          {children}
-        </div>
-      </main>
-    </div>
+    <LayoutWrapper role={role}>
+      {children}
+    </LayoutWrapper>
   );
 }
 
