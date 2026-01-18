@@ -35,7 +35,7 @@ export function OverviewCards({
           <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3">
             Description
           </h3>
-          <p className="text-base text-gray-700 leading-relaxed">{description}</p>
+          <p className="text-base text-gray-700 leading-relaxed max-w-prose">{description}</p>
         </div>
       )}
 
@@ -45,7 +45,7 @@ export function OverviewCards({
           <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3">
             Outcome
           </h3>
-          <ul className="space-y-2.5">
+          <ul className="space-y-2.5 max-w-prose">
             {visibleOutcome.map((bullet, index) => (
               <li key={index} className="flex items-start gap-3">
                 <span className="text-brand-light mt-1.5 flex-shrink-0">•</span>
@@ -80,7 +80,7 @@ export function OverviewCards({
           <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3">
             You'll Build
           </h3>
-          <ul className="space-y-2.5">
+          <ul className="space-y-2.5 max-w-prose">
             {visibleBuild.map((bullet, index) => (
               <li key={index} className="flex items-start gap-3">
                 <span className="text-brand-light mt-1.5 flex-shrink-0">•</span>

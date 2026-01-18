@@ -10,6 +10,7 @@ import { CoursePaywall } from '@/components/courses/CoursePaywall';
 import { CourseHero } from '@/components/courses/CourseHero';
 import { OverviewCards } from '@/components/courses/OverviewCards';
 import { ProgressCard } from '@/components/courses/ProgressCard';
+import { QuickActions } from '@/components/courses/QuickActions';
 import { MobileStickyCTA } from '@/components/courses/MobileStickyCTA';
 
 interface CoursePageProps {
@@ -217,10 +218,12 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
         firstLessonSlug={lessons[0]?.slug}
       />
 
-      {/* Layout: 2-column desktop, stacked mobile */}
-      <div className="lg:grid lg:grid-cols-[65%_35%] lg:gap-8">
-        {/* Left Column: Overview + Modules */}
-        <div className="space-y-8">
+      {/* Full width section below hero */}
+      <div className="w-full">
+        {/* Inner grid: wide layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-6 lg:gap-8">
+          {/* Left Column: Overview + Modules */}
+          <div className="space-y-8">
           {/* Course Overview Section */}
           {(courseDescription || outcomeBullets.length > 0 || buildBullets.length > 0 || bestForItems.length > 0) && (
                   <div>
@@ -369,40 +372,49 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
               </div>
             )}
           </div>
-        </div>
 
-        {/* Right Column: Progress Card (desktop) */}
-        <div className="lg:col-span-1">
-          {/* Progress Card - Mobile (top) */}
-          {(enrollment || course?.id) && (
-            <div className="lg:hidden mb-8">
-              <ProgressCard
-                enrollment={enrollment}
-                completedLessons={completedLessons}
-                totalLessons={lessons.length}
-                courseSlug={courseSlug}
-                courseId={course?.id}
-                nextLessonSlug={nextLessonSlug}
-                firstLessonSlug={lessons[0]?.slug}
-                      />
-                    </div>
-          )}
+          {/* Right Column: Progress Card + Quick Actions */}
+          <div className="space-y-6 lg:space-y-8">
+            {/* Progress Card - Mobile (top) */}
+            {(enrollment || course?.id) && (
+              <div className="lg:hidden">
+                <ProgressCard
+                  enrollment={enrollment}
+                  completedLessons={completedLessons}
+                  totalLessons={lessons.length}
+                  courseSlug={courseSlug}
+                  courseId={course?.id}
+                  nextLessonSlug={nextLessonSlug}
+                  firstLessonSlug={lessons[0]?.slug}
+                />
+              </div>
+            )}
 
-          {/* Progress Card - Desktop (sidebar) */}
-          {(enrollment || course?.id) && (
+            {/* Progress Card - Desktop (sidebar) */}
+            {(enrollment || course?.id) && (
+              <div className="hidden lg:block">
+                <ProgressCard
+                  enrollment={enrollment}
+                  completedLessons={completedLessons}
+                  totalLessons={lessons.length}
+                  courseSlug={courseSlug}
+                  courseId={course?.id}
+                  nextLessonSlug={nextLessonSlug}
+                  firstLessonSlug={lessons[0]?.slug}
+                  isSticky={true}
+                />
+              </div>
+            )}
+
+            {/* Quick Actions - Desktop only */}
             <div className="hidden lg:block">
-              <ProgressCard
-                enrollment={enrollment}
-                completedLessons={completedLessons}
-                totalLessons={lessons.length}
+              <QuickActions
                 courseSlug={courseSlug}
                 courseId={course?.id}
-                nextLessonSlug={nextLessonSlug}
-                firstLessonSlug={lessons[0]?.slug}
-                isSticky={true}
+                isEnrolled={!!enrollment}
               />
+            </div>
           </div>
-        )}
         </div>
       </div>
 
