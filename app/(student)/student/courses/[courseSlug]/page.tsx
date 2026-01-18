@@ -192,8 +192,8 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
 
   return (
     <div className="pb-20 lg:pb-8 mb-16 md:mb-0">
-      {/* Hero Banner - Fixed/Sticky Header */}
-      <div className="sticky top-0 z-50 -mx-6 -mt-8 mb-0">
+      {/* Hero Banner - Fixed/Sticky Header - Full-bleed breakout */}
+      <div className="sticky top-0 z-50 w-screen left-1/2 -ml-[50vw] -mt-8 mb-0">
         <CourseHero
           title={courseTitle}
           imageUrl={courseCoverImage}

@@ -51,7 +51,7 @@ export function CourseHero({
 
   return (
     <div className="relative w-full min-h-[180px] sm:min-h-[220px] md:min-h-[260px] overflow-hidden">
-      {/* Background Image */}
+      {/* Background Image - Full-bleed */}
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: `url(${imageUrl})` }}
@@ -60,9 +60,9 @@ export function CourseHero({
       {/* Gradient Overlay - transparent top to dark bottom */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black/90" />
       
-      {/* Back Link - Overlay on top */}
+      {/* Back Link - Overlay on top (positioned relative to full-bleed hero) */}
       {showBackLink && (
-        <div className="absolute top-3 left-3 sm:top-4 sm:left-4 md:top-6 md:left-6 z-10">
+        <div className="absolute top-3 left-4 sm:top-4 sm:left-6 md:top-6 md:left-8 z-10">
           <Link
             href="/student/courses"
             className="text-sm text-white hover:text-white/90 inline-flex items-center gap-1.5 bg-black/40 backdrop-blur-sm px-3 py-2 rounded-lg border border-white/20 transition-colors min-h-[44px] touch-manipulation"
@@ -77,8 +77,9 @@ export function CourseHero({
         </div>
       )}
       
-      {/* Content Container */}
-      <div className="relative h-full min-h-[180px] sm:min-h-[220px] md:min-h-[260px] flex flex-col justify-end p-4 sm:p-6 md:p-8">
+      {/* Content Container - Constrained to site max-width */}
+      <div className="relative h-full min-h-[180px] sm:min-h-[220px] md:min-h-[260px] flex flex-col justify-end">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8 pb-4 sm:pb-6 md:pb-8">
         {/* Mobile: Stacked Layout */}
         <div className="md:hidden space-y-4">
           {/* Title */}
@@ -236,6 +237,7 @@ export function CourseHero({
               </button>
             )}
           </div>
+        </div>
         </div>
       </div>
     </div>
