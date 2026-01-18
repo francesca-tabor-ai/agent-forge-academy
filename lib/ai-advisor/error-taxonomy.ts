@@ -103,6 +103,7 @@ export function mapErrorToTaxonomy(
     errorMessage.includes('TIMEOUT') ||
     errorMessage.includes('timeout') ||
     errorMessage.includes('took too long') ||
+    errorMessage.includes('Request timeout') ||
     errorMessage.includes('504') ||
     error?.name === 'AbortError' ||
     upstreamStatus === 504
@@ -112,6 +113,20 @@ export function mapErrorToTaxonomy(
       statusCode: 504,
       userMessage: 'The AI response is taking longer than expected. Please try again in a moment.',
       logMessage: `Provider timeout: ${errorMessage}`,
+    };
+  }
+
+  // Circuit breaker open
+  if (
+    errorMessage.includes('Circuit breaker is OPEN') ||
+    errorMessage.includes('circuit breaker') ||
+    errorMessage.includes('temporarily unavailable')
+  ) {
+    return {
+      errorClass: ErrorClass.ProviderUnavailable,
+      statusCode: 503,
+      userMessage: 'AI service is temporarily unavailable due to repeated failures. Please try again in a moment.',
+      logMessage: `Circuit breaker open: ${errorMessage}`,
     };
   }
 

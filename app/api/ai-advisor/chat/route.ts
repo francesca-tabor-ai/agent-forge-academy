@@ -1246,6 +1246,7 @@ export async function POST(request: NextRequest) {
                 for await (const chunk of llm.generateStream(llmMessages, {
                   temperature: 0.7,
                   maxTokens: 2000,
+                  timeout: STREAM_TIMEOUT_MS, // Pass timeout to provider
                 })) {
                   if (streamCompleted) break;
                   
