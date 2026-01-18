@@ -310,13 +310,13 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
         {/* Action Buttons */}
         <div className="pt-6 border-t border-gray-200 space-y-3">
           <div className="flex flex-wrap items-center gap-3">
-            <button className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium">
+            <button className="btn-secondary text-sm">
               Generate CV
             </button>
-            <button className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium">
+            <button className="btn-secondary text-sm">
               Cover Letter
             </button>
-            <button className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium">
+            <button className="btn-secondary text-sm">
               Tailor Portfolio
             </button>
           </div>
@@ -326,12 +326,12 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
               href={jobData.external_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-brand-light text-white rounded-lg hover:bg-brand-light/90 transition-colors font-medium"
+              className="btn-primary inline-flex items-center gap-2"
             >
               Apply Now →
             </a>
           ) : (
-            <button className="px-6 py-3 bg-brand-light text-white rounded-lg hover:bg-brand-light/90 transition-colors font-medium">
+            <button className="btn-primary">
               Save Application
             </button>
           )}

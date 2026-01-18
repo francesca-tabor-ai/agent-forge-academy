@@ -151,25 +151,53 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
     ? course.best_for
     : ((metadata as any)?.bestFor || staticMetadata?.bestFor);
 
-  // Helper to parse text into bullet points (handles arrays, comma-separated, newline-separated, or single string)
+  // Helper to parse text into bullet points
+  // Handles: arrays, newline-separated, comma-separated, inline bullets (• separated), or single string
+  // Ensures one idea per bullet - no fragmented lists
   const parseIntoBullets = (input: string | string[] | undefined | null): string[] => {
     if (!input) return [];
-    // If already an array, return it
+    // If already an array, return it (already clean)
     if (Array.isArray(input)) {
       return input.filter(s => s && s.trim().length > 0).map(s => s.trim());
     }
     // If string, parse it
-    const text = String(input);
-    // Try splitting by newlines first
+    const text = String(input).trim();
+    if (!text) return [];
+    
+    // Try splitting by newlines first (most common format)
     if (text.includes('\n')) {
-      return text.split('\n').map(s => s.trim()).filter(s => s.length > 0);
+      return text.split('\n')
+        .map(s => s.trim())
+        .filter(s => s.length > 0)
+        // Also check for inline bullets within each line
+        .flatMap(line => {
+          // Check if line contains inline bullets (• or * separated)
+          if (line.includes('•') || (line.includes('*') && line.match(/\*\s+\w/))) {
+            // Split by bullet character and filter out empty
+            return line.split(/[•*]/)
+              .map(s => s.trim())
+              .filter(s => s.length > 0);
+          }
+          return [line];
+        });
     }
+    
+    // Check for inline bullets (• separated) - e.g., "• Design • build • scale"
+    if (text.includes('•') || (text.includes('*') && text.match(/\*\s+\w/))) {
+      return text.split(/[•*]/)
+        .map(s => s.trim())
+        .filter(s => s.length > 0);
+    }
+    
     // Then try splitting by commas
     if (text.includes(',')) {
-      return text.split(',').map(s => s.trim()).filter(s => s.length > 0);
+      return text.split(',')
+        .map(s => s.trim())
+        .filter(s => s.length > 0);
     }
+    
     // Single item
-    return [text.trim()].filter(s => s.length > 0);
+    return [text].filter(s => s.length > 0);
   };
 
   const outcomeBullets = parseIntoBullets(outcome);
@@ -221,7 +249,7 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
           {/* Course Overview Section */}
           {(courseDescription || outcomeBullets.length > 0 || buildBullets.length > 0 || bestForItems.length > 0) && (
             <div className="pt-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Overview</h2>
+              <h2 className="text-2xl font-semibold text-gray-900 mb-6">Overview</h2>
               <OverviewCards
                 description={courseDescription}
                 outcome={outcomeBullets}
@@ -233,7 +261,7 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
 
           {/* Modules Section */}
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Modules</h2>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-6">Modules</h2>
             
             {lessons.length === 0 ? (
           <div className="bg-white border border-gray-200 rounded-xl p-8 text-center shadow-sm">

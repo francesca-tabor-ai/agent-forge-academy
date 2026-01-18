@@ -195,7 +195,7 @@ export function JobOpportunitiesSection({ studentProfileId }: JobOpportunitiesSe
                   {/* Action Buttons */}
                   <div className="flex items-center gap-2 pt-4 border-t border-gray-100" onClick={(e) => e.preventDefault()}>
                     <button 
-                      className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                      className="btn-secondary text-sm"
                       onClick={(e) => {
                         e.stopPropagation();
                         // TODO: Implement CV generation
@@ -204,7 +204,7 @@ export function JobOpportunitiesSection({ studentProfileId }: JobOpportunitiesSe
                       Generate CV
                     </button>
                     <button 
-                      className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                      className="btn-secondary text-sm"
                       onClick={(e) => {
                         e.stopPropagation();
                         // TODO: Implement cover letter generation
@@ -213,7 +213,7 @@ export function JobOpportunitiesSection({ studentProfileId }: JobOpportunitiesSe
                       Cover Letter
                     </button>
                     <button 
-                      className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                      className="btn-secondary text-sm"
                       onClick={(e) => {
                         e.stopPropagation();
                         // TODO: Implement portfolio tailoring

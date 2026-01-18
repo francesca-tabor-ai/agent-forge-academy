@@ -31,7 +31,7 @@ export function OverviewCards({
   const hasMoreBuild = build.length > MAX_VISIBLE_BUILD;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {/* Description Card */}
       {description && (
         <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
@@ -40,7 +40,7 @@ export function OverviewCards({
             className="w-full md:pointer-events-none flex items-center justify-between p-6 text-left"
             aria-expanded={expandedDescription}
           >
-            <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
+            <h3 className="text-base font-semibold text-gray-900">
               Description
             </h3>
             <ChevronDown
@@ -67,7 +67,7 @@ export function OverviewCards({
             className="w-full md:pointer-events-none flex items-center justify-between p-6 text-left"
             aria-expanded={expandedOutcome}
           >
-            <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
+            <h3 className="text-base font-semibold text-gray-900">
               Outcome
             </h3>
             <ChevronDown
@@ -119,7 +119,7 @@ export function OverviewCards({
             className="w-full md:pointer-events-none flex items-center justify-between p-6 text-left"
             aria-expanded={expandedBuild}
           >
-            <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
+            <h3 className="text-base font-semibold text-gray-900">
               You&apos;ll Build
             </h3>
             <ChevronDown
@@ -171,7 +171,7 @@ export function OverviewCards({
             className="w-full md:pointer-events-none flex items-center justify-between p-6 text-left"
             aria-expanded={expandedBestFor}
           >
-            <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
+            <h3 className="text-base font-semibold text-gray-900">
               Best For
             </h3>
             <ChevronDown
