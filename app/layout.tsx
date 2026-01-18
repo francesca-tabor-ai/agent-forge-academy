@@ -3,6 +3,7 @@ import './globals.css';
 import { GoogleAnalytics } from '@/components/analytics/GoogleAnalytics';
 import { Suspense } from 'react';
 import { ReferralTracking } from '@/components/analytics/ReferralTracking';
+import { ScrollToTop } from '@/components/layout/ScrollToTop';
 
 export const metadata: Metadata = {
   title: 'AI Growth Hub',
@@ -21,6 +22,7 @@ export default function RootLayout({
         <Suspense fallback={null}>
           <ReferralTracking />
         </Suspense>
+        <ScrollToTop />
         {children}
       </body>
     </html>
