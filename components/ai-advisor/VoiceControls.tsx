@@ -441,50 +441,55 @@ export function VoiceControls({
     const mockMode = isMockModeEnabled();
     if (mockMode) {
       setPermissionError(null); // No permission needed in mock mode
+      setPermissionState('granted'); // Assume granted in mock mode
       return;
     }
 
-    const checkMicrophonePermission = async () => {
+    const checkPermission = async () => {
       // Check if MediaDevices API is available
       if (!isMediaDevicesSupported()) {
         setPermissionError('Microphone access not supported in this browser');
+        setPermissionState('unknown');
         return;
       }
 
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        // Permission granted, stop the stream
-        stream.getTracks().forEach(track => {
+        const previousState = permissionState;
+        const result = await checkMicrophonePermission();
+        const newState = result.state;
+        
+        setPermissionState(newState);
+        
+        // Log permission state transition
+        logPermissionStateTransition('standard', previousState, newState, result.errorName);
+        
+        if (newState === 'granted') {
+          setPermissionError(null);
+          
+          // Optionally enumerate devices (for future device selection feature)
           try {
-            track.stop();
-          } catch (error) {
-            console.warn('Error stopping media track:', error);
+            const devices = await enumerateMicrophoneDevices();
+            if (devices.length === 0) {
+              console.warn('[VoiceControls] No microphone devices found');
+            }
+          } catch (deviceError) {
+            // Non-critical - device enumeration can fail
+            console.warn('[VoiceControls] Failed to enumerate devices:', deviceError);
           }
-        });
-        setPermissionError(null);
-      } catch (err: any) {
-        // Handle specific permission errors
-        if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
-          setPermissionError('Microphone permission is blocked. Enable it in your browser settings.');
-        } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
-          setPermissionError('No microphone found. Please connect a microphone and try again.');
-        } else if (err.name === 'NotReadableError' || err.name === 'TrackStartError') {
-          setPermissionError('Microphone is being used by another application. Please close other apps and try again.');
-        } else if (err.name === 'OverconstrainedError') {
-          setPermissionError('Microphone constraints could not be satisfied. Please check your device settings.');
         } else {
-          setPermissionError('Unable to access microphone. Please check your browser settings.');
+          // Get browser-specific guidance
+          const guidance = getPermissionGuidance(newState, result.errorName);
+          setPermissionError(guidance.message);
         }
-        // Don't throw - permission errors are expected and handled gracefully
+      } catch (error: any) {
+        console.error('[VoiceControls] Unexpected error checking microphone permission:', error);
+        setPermissionError('Unable to check microphone permissions');
+        setPermissionState('unknown');
       }
     };
 
     if (typeof navigator !== 'undefined' && navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function') {
-      checkMicrophonePermission().catch((error) => {
-        console.error('Unexpected error checking microphone permission:', error);
-        // Set a generic error but don't break the component
-        setPermissionError('Unable to check microphone permissions');
-      });
+      checkPermission();
     }
   }, []);
 

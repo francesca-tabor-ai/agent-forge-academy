@@ -4,6 +4,14 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { usePathname } from 'next/navigation';
 import { createSystemConfigEvent, REALTIME_TOOLS } from '@/lib/ai/realtime-tools';
 import { safeLogger } from '@/lib/utils/redactPII';
+import {
+  checkMicrophonePermission,
+  getPermissionGuidance,
+  isSafariOrIOS,
+  getSafariAudioConstraints,
+  logPermissionStateTransition,
+  type PermissionState,
+} from '@/lib/utils/microphonePermissions';
 
 export type VoiceMode = 'push-to-talk' | 'hands-free';
 
