@@ -221,9 +221,15 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
   return (
     <div className="pb-20 lg:pb-8 mb-16 md:mb-0 overflow-x-hidden">
       {/* Hero Banner - Sticky Header */}
-      {/* Desktop: Normal flow within main content area (respects sidebar grid, no overlap) */}
-      {/* Mobile: Full-bleed breakout (sidebar is overlay) */}
-      <div className="sticky top-0 z-[60] mb-0 -mt-8 lg:mt-0 w-full md:w-screen md:left-1/2 md:-ml-[50vw] lg:w-full lg:left-auto lg:ml-0 overflow-x-hidden">
+      {/* 
+        NON-OVERLAPPING LAYOUT RULES:
+        1. Hero sits inside main content flow (respects sidebar grid on desktop)
+        2. Hero accounts for header height (top-[64px] instead of top-0)
+        3. No full-bleed breakout that could overlap sidebar
+        4. Z-index ensures hero is above header but below modals
+        5. Negative margin breaks out of main content padding on mobile only
+      */}
+      <div className="sticky top-[64px] z-[60] mb-0 -mx-4 sm:-mx-6 lg:mx-0 w-full lg:w-auto overflow-x-hidden">
         <CourseHero
           title={courseTitle}
           imageUrl={courseCoverImage}
