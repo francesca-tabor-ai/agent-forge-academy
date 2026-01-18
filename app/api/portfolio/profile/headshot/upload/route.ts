@@ -356,6 +356,8 @@ export async function POST(request: NextRequest) {
           bio: null,
           skills: [],
           location: null,
+          city: null,
+          country: null,
           linkedin_url: null,
           github_url: null,
           website_url: null,
