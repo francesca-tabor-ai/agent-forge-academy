@@ -1841,9 +1841,9 @@ export function VoiceControls({
       )}
 
       {/* Permission Error Display with Actionable Guidance */}
-      {permissionError && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-sm text-red-800">
-          <div className="flex items-start gap-2">
+      {permissionError && permissionState && (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-3">
+          <div className="flex items-start gap-3">
             <svg
               className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5"
               fill="none"
@@ -1858,23 +1858,32 @@ export function VoiceControls({
               />
             </svg>
             <div className="flex-1">
-              <p className="font-medium mb-2">Microphone Access Required</p>
-              <p className="mb-3">{permissionError}</p>
-              <div className="space-y-2 text-xs">
-                <p className="font-medium">How to enable microphone access:</p>
-                <ol className="list-decimal list-inside space-y-1 ml-2">
-                  <li>Look for the microphone icon in your browser&apos;s address bar</li>
-                  <li>Click it and select &quot;Allow&quot; for microphone access</li>
-                  <li>Refresh this page</li>
-                </ol>
-                <button
-                  type="button"
-                  onClick={() => window.location.reload()}
-                  className="mt-2 px-3 py-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-xs font-medium"
-                >
-                  Refresh Page
-                </button>
-              </div>
+              {(() => {
+                const guidance = getPermissionGuidance(permissionState);
+                return (
+                  <>
+                    <p className="font-medium mb-2 text-red-900">{guidance.title}</p>
+                    <p className="mb-3 text-red-700 text-sm">{guidance.message}</p>
+                    {guidance.steps.length > 0 && (
+                      <div className="text-sm">
+                        <p className="font-medium text-red-900 mb-2">How to fix:</p>
+                        <ol className="list-decimal list-inside space-y-1 text-red-700">
+                          {guidance.steps.map((step, index) => (
+                            <li key={index}>{step}</li>
+                          ))}
+                        </ol>
+                        <button
+                          type="button"
+                          onClick={() => window.location.reload()}
+                          className="mt-3 px-3 py-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-xs font-medium"
+                        >
+                          Refresh Page
+                        </button>
+                      </div>
+                    )}
+                  </>
+                );
+              })()}
             </div>
           </div>
         </div>
