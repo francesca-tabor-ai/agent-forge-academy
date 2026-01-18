@@ -908,7 +908,7 @@ export function VoiceControls({
       }
     } catch (error: any) {
       const correlationId = correlationIdRef.current || 'unknown';
-      console.error('[VoiceControls] Error in API transcription fallback', { correlationId, error });
+      console.error('[VoiceControls] Error in API transcription fallback after retries', { correlationId, error });
       
       // Extract request ID from error if available
       let errorMessage = 'Failed to transcribe audio. Please try again or use text input.';
@@ -921,6 +921,11 @@ export function VoiceControls({
       // Include correlation ID in error message
       if (correlationId !== 'unknown') {
         errorMessage += ` (Correlation ID: ${correlationId})`;
+      }
+      
+      // Add retry information if applicable
+      if (error.status && isRetryableError(error.status, error)) {
+        errorMessage += ' (Retries exhausted)';
       }
       
       setError(errorMessage);
