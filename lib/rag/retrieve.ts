@@ -61,14 +61,19 @@ async function retrieveWithVectorSearch(
   options: RetrieveOptions
 ): Promise<RetrievedChunk[]> {
   const limit = options.limit || 5;
-  const courseFilter = options.courseSlug ? `AND course_slug = '${options.courseSlug}'` : '';
+  
+  // STRICT FILTERING: Always filter by course slug if provided to prevent cross-course contamination
+  // If courseSlug is provided, it MUST be used - no fallback to other courses
+  if (!options.courseSlug) {
+    console.warn('[RAG] Vector search called without courseSlug - this may return chunks from multiple courses');
+  }
 
-  // Use pgvector cosine similarity
+  // Use pgvector cosine similarity with strict course filtering
   const { data, error } = await supabase.rpc('match_lesson_chunks', {
     query_embedding: queryEmbedding,
     match_threshold: options.minScore || 0.7,
     match_count: limit,
-    course_filter: options.courseSlug || null,
+    course_filter: options.courseSlug || null, // Strict filter - null means no filter (should be avoided)
   });
 
   if (error) {

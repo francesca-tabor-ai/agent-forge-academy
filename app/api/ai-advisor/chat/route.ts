@@ -535,12 +535,53 @@ async function buildLLMMessages(
       if (chunks.length > 0) {
         const ragContext = formatChunksForContext(chunks);
         systemPrompt += `\n\n**Relevant Course Content (use this to answer questions accurately):**${ragContext}`;
-        systemPrompt += `\n**Instructions:** 
-- Use the relevant course content above to provide accurate, specific answers
-- When referencing content, cite the source using [ref:N] format where N is the chunk number
-- Reference specific modules, lessons, or concepts when relevant
-- If the content doesn't fully answer the question, say so and provide what you can based on the content
-- Always include citations in your response when using information from the course content`;
+        systemPrompt += `\n\n**CRITICAL GROUNDING RULES:**
+
+1. **STRICT CONTENT CONSTRAINT:**
+   - ONLY use information from the retrieved course content above
+   - Do NOT supplement with general knowledge about course topics
+   - Do NOT use information from your training data about these topics
+   - If information is not in the retrieved chunks, you do NOT have it
+
+2. **HALLUCINATION PREVENTION:**
+   - Do NOT make up course-specific facts, module names, lesson titles, or concepts
+   - Do NOT invent course structure or content not in retrieved chunks
+   - Only reference modules, lessons, and concepts that appear in the retrieved chunks
+   - Before stating a course-specific fact, verify it exists in the retrieved content
+   - If you don't know a course-specific detail, say: "I don't have that information in the course content provided"
+
+3. **CITATION POLICY:**
+   - ALWAYS cite sources when using information from course content
+   - Use [ref:N] format where N is the chunk number (e.g., [ref:1], [ref:2])
+   - When directly quoting, use block quotes with citation: > "Quote text" [ref:N]
+   - When paraphrasing, include citation at end of sentence: "Paraphrased content" [ref:N]
+   - When referencing multiple chunks, cite all relevant ones: [ref:1, ref:2]
+   - For specific concepts, use inline citation: "According to [ref:1], agentic RAG is..."
+
+4. **MISSING CONTEXT HANDLING:**
+   - If the retrieved content doesn't contain information needed to answer the question:
+     * First, acknowledge what you CAN answer based on the retrieved content
+     * Then, ask clarifying questions to help retrieve more relevant content
+     * Examples: "I can help with X based on the content, but I need more context about Y. Could you clarify...?"
+   - If the question is ambiguous or could refer to multiple concepts:
+     * Ask which specific aspect they want help with
+     * Example: "Are you asking about X or Y? I can help with both, but need to know which to focus on"
+   - If you cannot answer based on retrieved content:
+     * Say: "I don't have that information in the course content provided"
+     * Ask: "Could you provide more context or rephrase the question?"
+
+5. **PARTIAL ANSWERS:**
+   - If the content partially answers the question:
+     * State what you CAN answer based on retrieved content
+     * Acknowledge what is missing: "The content covers X and Y, but doesn't include Z"
+     * Offer to help with what you can answer, and suggest asking a human advisor for missing information
+
+**Response Format:**
+- Use markdown formatting
+- Include citations for all course content references
+- Use block quotes for direct quotes (> "text" [ref:N])
+- Use inline citations for paraphrased content (text [ref:N])
+- Ask clarifying questions when context is missing`;
 
         // Store chunk metadata for later
         retrievedChunks.push(
