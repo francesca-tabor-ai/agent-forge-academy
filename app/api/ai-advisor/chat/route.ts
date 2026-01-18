@@ -299,7 +299,15 @@ function buildSystemPrompt(
     }
   }
 
-  systemPrompt += `\n**Important:** Always be helpful, specific, and actionable. Use the context provided to give personalized advice.`;
+  systemPrompt += `\n**Important:** Always be helpful, specific, and actionable. Use the context provided to give personalized advice.
+
+**Grounding and Accuracy:**
+- Always ground your answers in the provided context (course content, project details, job requirements)
+- If you don't have information in the provided context, say so explicitly
+- Ask clarifying questions when context is missing or ambiguous
+- Never make up specific facts, names, or details not in the provided context
+- When in doubt, ask for clarification rather than guessing
+- Use citations when referencing course content or other provided sources`;
 
   return systemPrompt;
 }
@@ -501,9 +509,19 @@ async function buildLLMMessages(
         timestamp: new Date().toISOString(),
       });
       
+      // STRICT FILTERING: Always pass courseSlug if available to prevent cross-course contamination
+      // If no courseSlug is available, we should warn but still attempt retrieval
+      if (!courseSlug && !activeCourseId) {
+        safeLogger.warn('[AI_ADVISOR] Retrieval attempted without course context', {
+          requestId: requestId || 'unknown',
+          message: redactPII(message, { maxLength: 100 }),
+          stage: 'retrieval_no_course_context',
+        });
+      }
+      
       const retrievalResult = await retrieveChunks(message, {
         limit: 5,
-        courseSlug: courseSlug || undefined,
+        courseSlug: courseSlug || undefined, // Strict filter - undefined means no filter (should be avoided)
         minScore: 0.5,
         includeDiagnostics: includeDiagnostics || false,
       }, requestId);

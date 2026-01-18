@@ -355,9 +355,9 @@
 
 ---
 
-### C2: Add Per-Course Namespaces and Strict Filtering ⚠️ **TODO**
+### C2: Add Per-Course Namespaces and Strict Filtering ✅ **DONE**
 
-**Status:** ⚠️ Partially Done (course slug filtering exists)  
+**Status:** ✅ Implemented  
 **Effort:** 2 days  
 **Risk:** Low
 
@@ -367,13 +367,15 @@
 - Prevent cross-course contamination
 
 **Files:**
-- `lib/rag/retrieve.ts` (update)
-- Database schema (if needed)
+- `lib/rag/retrieve.ts` (updated)
+- `app/api/ai-advisor/chat/route.ts` (updated)
 
 **Impact:**
 - Better context isolation
 - More accurate answers
 - Prevents confusion
+- Warnings when retrieval attempted without course context
+- Strict course filtering in both vector and keyword search
 
 ---
 
@@ -422,9 +424,9 @@
 
 ---
 
-### C5: Add Prompt Tuning and Safety ⚠️ **PARTIALLY DONE**
+### C5: Add Prompt Tuning and Safety ✅ **DONE**
 
-**Status:** ⚠️ Partially Done (prompt improvements added)  
+**Status:** ✅ Implemented  
 **Effort:** 2-3 days  
 **Risk:** Low
 
@@ -435,13 +437,16 @@
 - Safety guardrails
 
 **Files:**
-- `app/api/ai-advisor/chat/route.ts` (update buildLLMMessages)
-- Prompt templates
+- `app/api/ai-advisor/chat/route.ts` (updated buildLLMMessages and buildSystemPrompt)
 
 **Impact:**
 - Better answer quality
 - Reduced hallucination
 - Improved safety
+- Explicit constraints to only use retrieved content
+- Comprehensive citation policy (quotes vs paraphrasing)
+- Instructions to ask clarifying questions when context is missing
+- Grounding and accuracy guidelines in base system prompt
 
 ---
 

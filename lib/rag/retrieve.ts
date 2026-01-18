@@ -114,9 +114,13 @@ async function retrieveWithKeywordSearch(
     .order('rank', { ascending: false })
     .limit(limit);
 
-  // Filter by course if specified
+  // STRICT FILTERING: Always filter by course slug if provided to prevent cross-course contamination
+  // This ensures answers only use content from the active course
   if (options.courseSlug) {
     queryBuilder = queryBuilder.eq('course_slug', options.courseSlug);
+  } else {
+    // Warn if no course filter - this may return chunks from multiple courses
+    console.warn('[RAG] Keyword search called without courseSlug - this may return chunks from multiple courses');
   }
 
   const { data, error } = await queryBuilder;
