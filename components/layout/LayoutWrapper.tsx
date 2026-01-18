@@ -17,10 +17,15 @@ export function LayoutWrapper({ children, role }: LayoutWrapperProps) {
   // Check if we're on mobile
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 1024); // lg breakpoint
-      // On mobile, start with sidebar closed
-      if (window.innerWidth < 1024) {
+      const isMobileView = window.innerWidth < 1024; // lg breakpoint
+      setIsMobile(isMobileView);
+      // On mobile: hidden by default (collapsed)
+      // On desktop: expanded by default (icons + labels)
+      if (isMobileView) {
         setIsSidebarExpanded(false);
+      } else {
+        // Desktop: always expanded by default
+        setIsSidebarExpanded(true);
       }
     };
 
@@ -44,31 +49,37 @@ export function LayoutWrapper({ children, role }: LayoutWrapperProps) {
       {/* Top App Header - Global, thin, clearly separated */}
       <Header isSidebarExpanded={isSidebarExpanded} onToggleSidebar={toggleSidebar} role={role} />
       
-      {/* Body: Sidebar + Main Content using CSS Grid for desktop */}
+      {/* Body: Sidebar + Main Content */}
+      {/* Desktop: CSS Grid pushes content (sidebar never overlays) */}
+      {/* Mobile: Sidebar overlays when revealed via burger */}
       <div 
         className="flex-1 overflow-hidden"
         style={{
           display: isMobile ? 'flex' : 'grid',
+          // Desktop: Grid layout ensures sidebar pushes content, never overlays
           gridTemplateColumns: isMobile ? undefined : `${sidebarWidth}px 1fr`,
           transition: isMobile ? undefined : 'grid-template-columns 300ms ease-in-out',
         }}
       >
-        {/* Left Sidebar - Primary navigation, clearly separated */}
+        {/* Left Sidebar - Single source of navigation */}
+        {/* Desktop: Expanded by default (icons + labels), collapsible to icons-only */}
+        {/* Mobile: Hidden by default, revealed via burger icon */}
         <aside
           className={`
             bg-white border-r flex flex-col transition-all duration-300 ease-in-out
             ${isMobile ? 'fixed inset-y-0 left-0 z-40' : ''}
           `}
           style={{
-            // Desktop: normal flow, width controlled by grid
-            // Mobile: fixed overlay with explicit width
+            // Desktop: Normal flow in grid, width controlled by grid columns
+            // Sidebar pushes content - never overlays on desktop
+            // Mobile: Fixed overlay when revealed
             ...(isMobile ? {
               width: !isSidebarExpanded ? '0px' : `${sidebarWidthExpanded}px`,
               transform: !isSidebarExpanded ? 'translateX(-100%)' : 'translateX(0)',
               top: `${headerHeight}px`, // Account for header height on mobile
               height: `calc(100vh - ${headerHeight}px)`,
             } : {
-              // Desktop: no positioning, purely in grid flow
+              // Desktop: No positioning, purely in grid flow - pushes content
               width: '100%',
               height: '100%',
             }),
