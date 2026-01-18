@@ -223,7 +223,7 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
       {/* Hero Banner - Sticky Header */}
       {/* Desktop: Normal flow within main content area (respects sidebar grid, no overlap) */}
       {/* Mobile: Full-bleed breakout (sidebar is overlay) */}
-      <div className="sticky top-0 z-50 mb-0 -mt-8 lg:mt-0 w-full md:w-screen md:left-1/2 md:-ml-[50vw] lg:w-full lg:left-auto lg:ml-0 overflow-x-hidden">
+      <div className="sticky top-0 z-[60] mb-0 -mt-8 lg:mt-0 w-full md:w-screen md:left-1/2 md:-ml-[50vw] lg:w-full lg:left-auto lg:ml-0 overflow-x-hidden">
         <CourseHero
           title={courseTitle}
           imageUrl={courseCoverImage}
