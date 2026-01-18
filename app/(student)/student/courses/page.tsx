@@ -141,10 +141,11 @@ export default async function CoursesPage() {
       // Use dynamic metadata description if available, otherwise use database description
       description: dynamicMetadata?.metadata?.description || course.description,
       // Use database industries if it has values, otherwise fall back to metadata industries
+      // Check in order: database -> dynamic metadata -> static metadata
       industries: filterIndustries(
         (course.industries && course.industries.length > 0) 
           ? course.industries 
-          : (dynamicMetadata?.metadata?.industries || [])
+          : (dynamicMetadata?.metadata?.industries || staticMetadata?.industries || [])
       ),
       hasContent: courseSlugSet.has(course.slug),
       category: enhancedMetadata?.category || dynamicMetadata?.metadata?.category,
