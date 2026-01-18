@@ -52,18 +52,26 @@ export function LayoutWrapper({ children, role }: LayoutWrapperProps) {
           transition: isMobile ? undefined : 'grid-template-columns 300ms ease-in-out',
         }}
       >
-        {/* Sidebar */}
+        {/* Sidebar - normal flow on desktop, fixed overlay on mobile */}
         <aside
           className={`
             bg-white border-r flex flex-col transition-all duration-300 ease-in-out
             ${isMobile ? 'fixed inset-y-0 left-0 z-40' : ''}
           `}
           style={{
-            width: isMobile && !isSidebarExpanded ? '0px' : isMobile ? `${sidebarWidthExpanded}px` : '100%',
+            // Desktop: normal flow, width controlled by grid
+            // Mobile: fixed overlay with explicit width
+            ...(isMobile ? {
+              width: !isSidebarExpanded ? '0px' : `${sidebarWidthExpanded}px`,
+              transform: !isSidebarExpanded ? 'translateX(-100%)' : 'translateX(0)',
+              top: '56px', // Account for header height on mobile
+              height: 'calc(100vh - 56px)',
+            } : {
+              // Desktop: no positioning, purely in grid flow
+              width: '100%',
+              height: '100%',
+            }),
             borderColor: 'var(--ca-neutral-300)',
-            transform: isMobile && !isSidebarExpanded ? 'translateX(-100%)' : 'translateX(0)',
-            top: isMobile ? '56px' : '0', // Account for header height on mobile
-            height: isMobile ? 'calc(100vh - 56px)' : '100%',
           }}
         >
           <Sidebar 
