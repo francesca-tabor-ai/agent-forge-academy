@@ -304,7 +304,7 @@ export function OffersPageClient({
     });
 
     return filtered;
-  }, [offers, selectedCategory, sortBy, searchQuery, getOfferProperties]);
+  }, [offers, sortBy, searchQuery, getOfferProperties]);
 
   // Group offers by tool (provider) and aggregate data
   const toolsData = useMemo(() => {

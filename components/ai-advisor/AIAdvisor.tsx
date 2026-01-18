@@ -178,7 +178,7 @@ export function AIAdvisor({
     };
     
     loadContextAndHistory();
-  }, []); // Only run on mount
+  }, [activeCourses, activeProjects, activeJobs]); // Re-run when active context items change
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {

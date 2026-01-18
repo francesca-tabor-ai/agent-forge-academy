@@ -310,7 +310,9 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
   const searchQuery = searchParams.get('search') || '';
   const statusFilter = searchParams.get('status') || 'all';
   const roleTypeFilter = (searchParams.get('roleType') || 'all') as RoleType;
-  const skillFilter = searchParams.get('skills')?.split(',') || [];
+  const skillFilter = useMemo(() => {
+    return searchParams.get('skills')?.split(',') || [];
+  }, [searchParams]);
   const sortBy = (searchParams.get('sort') || 'best-match') as SortOption;
 
   const fetchJobs = useCallback(async (signal?: AbortSignal) => {

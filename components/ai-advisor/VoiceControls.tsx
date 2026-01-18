@@ -326,7 +326,7 @@ export function VoiceControls({
       window.removeEventListener('offline', handleOffline);
       window.removeEventListener('online', handleOnline);
     };
-  }, [isListening]);
+  }, [isListening, voiceUnavailableReason]);
 
   // Check microphone permission on mount with error handling
   useEffect(() => {
@@ -750,7 +750,7 @@ export function VoiceControls({
       setIsSupported(false);
       setError('Failed to initialize voice features. Text chat is still available.');
     }
-  }, [mode, disabled, onTranscript, allowEditBeforeSend]);
+  }, [mode, disabled, onTranscript, allowEditBeforeSend, isOffline, resetSilenceTimer, startListening, stopListening, voiceUnavailableReason]);
 
   /**
    * Start recording with MediaRecorder for API fallback
@@ -875,7 +875,7 @@ export function VoiceControls({
       }
 
       // Send to voice API for transcription
-      const transcript = await transcribeAudioViaAPI(audioBlob, studentProfileId, context, correlationId);
+      const transcript = await transcribeAudioViaAPI(audioBlob, studentProfileId, context);
       
       if (transcript && transcript.trim()) {
         const fullText = transcript.trim();
@@ -1066,7 +1066,7 @@ export function VoiceControls({
         setVoiceUnavailableReason('start-error');
       }
     }
-  }, [disabled, isListening, voiceUnavailableReason, isOffline]);
+  }, [disabled, isListening, voiceUnavailableReason, isOffline, startMediaRecorder]);
 
   const stopListening = useCallback(async () => {
     // If MediaRecorder is active, use API fallback
@@ -1215,7 +1215,7 @@ export function VoiceControls({
       clearTimeout(silenceTimerRef.current);
       silenceTimerRef.current = null;
     }
-  }, [isListening, studentProfileId, context, allowEditBeforeSend, onTranscript]);
+  }, [isListening, studentProfileId, context, allowEditBeforeSend, onTranscript, fallbackToAPITranscription]);
 
   const handleSendEditedTranscript = useCallback(() => {
     const textToSend = editableTranscript.trim();

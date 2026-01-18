@@ -288,7 +288,7 @@ export function WebRTCRealtime({
         disconnect();
       }
     }, 60 * 1000); // Check every minute
-  }, [isConnected, disconnect]);
+  }, [isConnected, disconnect, SILENCE_TIMEOUT_DURATION]);
 
   /**
    * Get ephemeral session credentials from backend
@@ -986,7 +986,7 @@ export function WebRTCRealtime({
       // Trigger fallback on connection failure
       triggerFallback();
     }
-  }, [disabled, isConnecting, isConnected, getSessionCredentials, onError, sendSystemConfig, handleToolCall, handleRealtimeMessage, voiceMode, voiceOutputEnabled, triggerFallback, startTimeoutDetection, startSilenceTimeoutDetection]);
+  }, [disabled, isConnecting, isConnected, getSessionCredentials, onError, sendSystemConfig, handleToolCall, handleRealtimeMessage, voiceMode, voiceOutputEnabled, triggerFallback, startTimeoutDetection, startSilenceTimeoutDetection, connectMock, disconnect, onFallback]);
 
   /**
    * Reconnect to WebRTC
