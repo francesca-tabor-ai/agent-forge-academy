@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ToolLogo } from '../offers/ToolLogo';
 import { X, Plus } from 'lucide-react';
 
@@ -28,12 +28,7 @@ export function ProjectToolStack({ projectId, initialTools = [] }: ProjectToolSt
   const [availableTools, setAvailableTools] = useState<Tool[]>([]);
   const [searchLoading, setSearchLoading] = useState(false);
 
-  // Fetch tools on mount
-  useEffect(() => {
-    fetchProjectTools();
-  }, [projectId]);
-
-  const fetchProjectTools = async () => {
+  const fetchProjectTools = useCallback(async () => {
     setLoading(true);
     try {
       const response = await fetch(`/api/portfolio/projects/${projectId}/tools`);
@@ -47,7 +42,12 @@ export function ProjectToolStack({ projectId, initialTools = [] }: ProjectToolSt
     } finally {
       setLoading(false);
     }
-  };
+  }, [projectId]);
+
+  // Fetch tools on mount
+  useEffect(() => {
+    fetchProjectTools();
+  }, [fetchProjectTools]);
 
   const searchTools = async (query: string) => {
     if (!query.trim()) {

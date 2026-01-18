@@ -126,11 +126,11 @@ export function TradeoffVisualiser() {
   });
 
   // Baseline settings (initial values)
-  const baselineSettings: TradeoffSettings = {
+  const baselineSettings = useMemo<TradeoffSettings>(() => ({
     riskTolerance: 'medium',
     approvalThreshold: 0.90,
     fraudStrictness: 0.5,
-  };
+  }), []);
 
   // Current simulation result
   const [currentResult, setCurrentResult] = useState<SimulationResult | null>(null);

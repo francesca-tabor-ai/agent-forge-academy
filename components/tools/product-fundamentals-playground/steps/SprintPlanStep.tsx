@@ -52,7 +52,18 @@ export function SprintPlanStep({ state, dispatch }: SprintPlanStepProps) {
         },
       });
     }
-  }, [sprintGoal, capacityPoints, overCapacityJustification, state.stories, state.sprints, dispatch]);
+  }, [
+    sprintGoal,
+    capacityPoints,
+    overCapacityJustification,
+    currentSprint.goal,
+    currentSprint.capacityPoints,
+    currentSprint.overCapacityJustification,
+    state.stories,
+    state.sprints,
+    dispatch,
+    sprintIndex,
+  ]);
 
   const handleAddStory = () => {
     setEditingStoryId('new');

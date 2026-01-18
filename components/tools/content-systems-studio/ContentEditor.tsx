@@ -295,7 +295,7 @@ export function ContentEditor({ studio, currentRole }: ContentEditorProps) {
       setLocalFields({});
       setHasChanges(false);
     }
-  }, [currentItem?.id]); // Only reset when item ID changes
+  }, [currentItem]); // Reset when item changes
 
   const handleFieldChange = (fieldId: string, value: FieldValue) => {
     if (!currentItem) return;

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { usePlayground } from '@/lib/tools/product-fundamentals-playground/usePlayground';
 import { usePersistence } from '@/lib/tools/product-fundamentals-playground/usePersistence';
@@ -49,18 +49,7 @@ export function ProductFundamentalsPlaygroundClient() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  // Initialize case from URL or create new
-  useEffect(() => {
-    const urlCaseId = searchParams.get('caseId');
-    if (urlCaseId) {
-      setCaseId(urlCaseId);
-      loadCase(urlCaseId);
-    } else {
-      createNewCase();
-    }
-  }, [searchParams]);
-
-  const createNewCase = async () => {
+  const createNewCase = useCallback(async () => {
     try {
       const response = await fetch('/api/tools/product-fundamentals/cases', {
         method: 'POST',
@@ -87,9 +76,9 @@ export function ProductFundamentalsPlaygroundClient() {
       setIsLoading(false);
       // Gracefully fallback - continue without persistence
     }
-  };
+  }, [state, router]);
 
-  const loadCase = async (id: string) => {
+  const loadCase = useCallback(async (id: string) => {
     try {
       const response = await fetch(`/api/tools/product-fundamentals/cases/${id}`);
 
@@ -114,7 +103,18 @@ export function ProductFundamentalsPlaygroundClient() {
       setIsLoading(false);
       // Gracefully fallback - continue with empty state
     }
-  };
+  }, [dispatch, createNewCase]);
+
+  // Initialize case from URL or create new
+  useEffect(() => {
+    const urlCaseId = searchParams.get('caseId');
+    if (urlCaseId) {
+      setCaseId(urlCaseId);
+      loadCase(urlCaseId);
+    } else {
+      createNewCase();
+    }
+  }, [searchParams, loadCase, createNewCase]);
 
   // Persistence hook
   const { isSaving, lastSaved, error: persistenceError } = usePersistence({

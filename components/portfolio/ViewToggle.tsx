@@ -21,7 +21,7 @@ export function ViewToggle({ onChange, defaultMode = 'list' }: ViewToggleProps) 
     } else {
       onChange(defaultMode);
     }
-  }, []);
+  }, [defaultMode, onChange]);
 
   const handleToggle = (mode: ViewMode) => {
     setViewMode(mode);
