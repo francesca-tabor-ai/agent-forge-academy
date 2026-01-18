@@ -219,7 +219,7 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
           <div className="space-y-8">
           {/* Course Overview Section */}
           {(courseDescription || outcomeBullets.length > 0 || buildBullets.length > 0 || bestForItems.length > 0) && (
-            <div>
+            <div className="pt-6">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Overview</h2>
               <OverviewCards
                 description={courseDescription}
@@ -401,7 +401,7 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
             )}
 
             {/* Quick Actions - Desktop only */}
-            <div className="hidden lg:block">
+            <div className="hidden lg:block pt-4">
               <QuickActions
                 courseSlug={courseSlug}
                 courseId={course?.id}
