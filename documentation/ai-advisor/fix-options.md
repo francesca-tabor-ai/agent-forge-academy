@@ -300,9 +300,9 @@
 
 ---
 
-### B7: Add Rate Limiting ⚠️ **TODO**
+### B7: Add Rate Limiting ✅ **DONE**
 
-**Status:** ⚠️ Not Started  
+**Status:** ✅ Implemented  
 **Effort:** 1 day  
 **Risk:** Medium
 
@@ -310,16 +310,17 @@
 - Per-user rate limiting (10 requests/min)
 - Per-IP rate limiting (20 requests/min)
 - Return 429 with retry-after header
-- Redis-based rate limiting
+- In-memory rate limiting (can be upgraded to Redis)
 
 **Files:**
-- New middleware file (e.g., `lib/middleware/rate-limit.ts`)
-- `app/api/ai-advisor/chat/route.ts` (update)
+- `lib/utils/rateLimit.ts` (rate limiting utilities)
+- `app/api/ai-advisor/chat/route.ts` (integrated)
 
 **Impact:**
 - Prevents abuse
 - Better resource management
 - Fair usage
+- Returns proper rate limit headers (X-RateLimit-*)
 
 ---
 

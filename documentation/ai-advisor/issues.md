@@ -324,7 +324,7 @@
 
 **Severity:** P2  
 **Where:** Server (API route)  
-**Status:** ⚠️ **OPEN**
+**Status:** ✅ **FIXED**
 
 **Repro Steps:**
 1. User sends many requests rapidly
@@ -333,7 +333,7 @@
 4. Other users affected
 
 **Evidence:**
-- **Location:** `app/api/ai-advisor/chat/route.ts` (no rate limiting)
+- **Location:** `app/api/ai-advisor/chat/route.ts:747-815`
 - **Request ID Example:** Multiple requests from same user/IP
 
 **Root Cause:**
@@ -342,12 +342,11 @@
 - No request throttling
 
 **Fix Options:**
-- **A (Quick):** Add basic rate limiting (10 requests/min per user)
-- **B (Recommended):** Add per-IP and per-user rate limiting with Redis
+- ✅ **B (Implemented):** Per-IP and per-user rate limiting (in-memory, can upgrade to Redis)
 - **C (Future):** Adaptive rate limiting based on provider limits
 
 **Owner:** Backend Team  
-**ETA:** TBD
+**ETA:** ✅ Fixed (2025-01-27)
 
 ---
 
