@@ -381,6 +381,7 @@ export function VoiceControls({
     }
   }, []);
 
+
   // Check browser support on mount with error handling
   useEffect(() => {
     try {
@@ -1248,29 +1249,6 @@ export function VoiceControls({
   useEffect(() => {
     isEditingTranscriptRef.current = isEditingTranscript;
   }, [isEditingTranscript]);
-
-  // Silence detection for auto-stop
-  const resetSilenceTimer = useCallback(() => {
-    if (silenceTimerRef.current) {
-      clearTimeout(silenceTimerRef.current);
-    }
-
-    if (mode === 'hands-free' && isListening && !isOffline && !voiceUnavailableReason) {
-      silenceTimerRef.current = setTimeout(() => {
-        const timeSinceLastSpeech = Date.now() - lastSpeechTimeRef.current;
-        // Auto-stop after 3 seconds of silence
-        if (timeSinceLastSpeech > 3000) {
-          stopListening();
-          // Restart after a brief pause ONLY if conditions are still met
-          setTimeout(() => {
-            if (!disabled && !isOffline && !voiceUnavailableReason && mode === 'hands-free') {
-              startListening();
-            }
-          }, 1000);
-        }
-      }, 3000);
-    }
-  }, [mode, isListening, disabled, stopListening, startListening, isOffline, voiceUnavailableReason]);
 
   // Update silence timer when partial transcript changes
   useEffect(() => {
