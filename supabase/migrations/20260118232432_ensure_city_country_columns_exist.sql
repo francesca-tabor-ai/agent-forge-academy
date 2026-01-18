@@ -3,13 +3,14 @@
 -- Fixes schema cache issues by explicitly ensuring columns exist
 -- This addresses the error: "Could not find the 'city' column of 'student_profiles' in the schema cache"
 
--- Add city column (normalized key, e.g., "london")
+-- Add city column (nullable text, e.g., "london")
+-- Using TEXT type as recommended for flexibility
 ALTER TABLE student_profiles
-  ADD COLUMN IF NOT EXISTS city VARCHAR(100);
+  ADD COLUMN IF NOT EXISTS city TEXT;
 
--- Add country column (optional, e.g., "UK")
+-- Add country column (optional, nullable text, e.g., "UK")
 ALTER TABLE student_profiles
-  ADD COLUMN IF NOT EXISTS country VARCHAR(100);
+  ADD COLUMN IF NOT EXISTS country TEXT;
 
 -- Create index on city for faster lookups (for banner image matching)
 -- Only create if it doesn't exist (idempotent)
