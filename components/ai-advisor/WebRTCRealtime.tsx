@@ -642,6 +642,32 @@ export function WebRTCRealtime({
     try {
       setIsConnecting(true);
       setError(null);
+      setHasFailed(false);
+
+      // Set up connection timeout
+      connectionTimeoutRef.current = setTimeout(() => {
+        if (isConnecting && !isConnected) {
+          console.warn('WebRTC connection timeout');
+          const timeoutError = 'Connection timed out. Please check your internet connection and try again.';
+          setError(timeoutError);
+          setHasFailed(true);
+          setIsConnecting(false);
+          if (onError) onError(timeoutError);
+          
+          // Log timeout (without storing raw audio)
+          safeLogger.warn('WebRTC connection timeout', {
+            timestamp: new Date().toISOString(),
+            hasAudio: false,
+            sessionId: sessionRef.current?.session_id,
+          });
+          
+          // Cleanup on timeout
+          disconnect();
+          
+          // Trigger fallback on timeout
+          triggerFallback();
+        }
+      }, CONNECTION_TIMEOUT);
 
       // Step 1: Call /api/realtime/session to get ephemeral credentials
       const session = await getSessionCredentials();
@@ -773,6 +799,12 @@ export function WebRTCRealtime({
         console.log('ICE connection state:', state);
         
         if (state === 'connected' || state === 'completed') {
+          // Clear connection timeout on successful connection
+          if (connectionTimeoutRef.current) {
+            clearTimeout(connectionTimeoutRef.current);
+            connectionTimeoutRef.current = null;
+          }
+          
           setIsConnected(true);
           setIsConnecting(false);
           
@@ -794,6 +826,11 @@ export function WebRTCRealtime({
             lastSpeechTimeRef.current = Date.now();
           }
         } else if (state === 'disconnected' || state === 'failed') {
+          // Clear connection timeout on failure
+          if (connectionTimeoutRef.current) {
+            clearTimeout(connectionTimeoutRef.current);
+            connectionTimeoutRef.current = null;
+          }
           setIsConnected(false);
           const errorMsg = state === 'failed' ? 'Connection failed' : 'Connection lost';
           setError(errorMsg);
@@ -906,7 +943,16 @@ export function WebRTCRealtime({
       
       // Start silence timeout detection
       startSilenceTimeoutDetection();
+      
+      // Note: Connection timeout will be cleared when ICE state becomes 'connected' or 'failed'
+      // The timeout is set at the start of the connect function
     } catch (err) {
+      // Clear connection timeout on error
+      if (connectionTimeoutRef.current) {
+        clearTimeout(connectionTimeoutRef.current);
+        connectionTimeoutRef.current = null;
+      }
+      
       console.error('Error connecting to Realtime API:', err);
       const errorMessage = err instanceof Error ? err.message : 'Failed to connect';
       
