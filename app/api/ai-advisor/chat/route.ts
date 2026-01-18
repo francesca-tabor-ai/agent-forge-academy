@@ -472,10 +472,12 @@ async function buildLLMMessages(
   tools?: { useRAG: boolean; useJobsMatching: boolean; usePortfolioFetch: boolean; useCourseContext: boolean },
   supabase?: any,
   studentProfileId?: string | null,
-  requestId?: string
+  requestId?: string,
+  includeDiagnostics?: boolean
 ): Promise<{
   messages: LLMMessage[];
   retrievedChunks: Array<{ courseSlug: string; lessonSlug: string; chunkIndex: number; score?: number }>;
+  diagnostics?: any; // RetrievalDiagnostics
 }> {
   let systemPrompt = buildSystemPrompt(context, contextData, intent, tools);
   const retrievedChunks: Array<{ courseSlug: string; lessonSlug: string; chunkIndex: number; score?: number }> = [];
@@ -510,11 +512,20 @@ async function buildLLMMessages(
         timestamp: new Date().toISOString(),
       });
       
-      const chunks = await retrieveChunks(message, {
+      const retrievalResult = await retrieveChunks(message, {
         limit: 5,
         courseSlug: courseSlug || undefined,
         minScore: 0.5,
+        includeDiagnostics: includeDiagnostics || false,
       }, requestId);
+      
+      // Handle diagnostics mode
+      const chunks = Array.isArray(retrievalResult) 
+        ? retrievalResult 
+        : retrievalResult.chunks;
+      const diagnostics = Array.isArray(retrievalResult) 
+        ? undefined 
+        : retrievalResult.diagnostics;
 
       const retrievalLatency = Date.now() - retrievalStart;
       
@@ -552,6 +563,8 @@ async function buildLLMMessages(
           }))
         );
       }
+      
+      // Store diagnostics for return if requested (will be included in response if debug mode enabled)
     } catch (error) {
       const retrievalLatency = Date.now() - retrievalStart;
       safeLogger.warn('[AI_ADVISOR] RAG retrieval failed, continuing without course content', { 
@@ -696,6 +709,10 @@ export async function POST(request: NextRequest) {
     : `req_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
   const startTime = Date.now();
 
+  // Check for debug mode (query param or env var, admin only)
+  const url = new URL(request.url);
+  let debugMode = url.searchParams.get('debug') === 'true' || process.env.RAG_DEBUG_MODE === '1';
+
   // Startup guard: Validate LLM configuration early
   const llmProvider = process.env.LLM_PROVIDER || 'openai';
   const llmApiKey = process.env.LLM_API_KEY;
@@ -756,6 +773,26 @@ export async function POST(request: NextRequest) {
           },
         }
       );
+    }
+
+    // Check if user is admin (for debug mode)
+    let isAdmin = false;
+    if (debugMode) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('user_id', user.id)
+        .single();
+      isAdmin = profile?.role === 'admin';
+      
+      if (!isAdmin) {
+        safeLogger.warn('[AI_ADVISOR] Debug mode requested but user is not admin', {
+          requestId,
+          userId: user.id,
+        });
+        // Disable debug mode if not admin
+        debugMode = false;
+      }
     }
 
     // Check LLM configuration after auth (so we can log userId)
@@ -1084,7 +1121,7 @@ export async function POST(request: NextRequest) {
 
     // Build LLM messages (with RAG context if applicable, based on intent)
     const promptAssemblyStart = Date.now();
-    const { messages: llmMessages, retrievedChunks } = await buildLLMMessages(
+    const buildResult = await buildLLMMessages(
       message,
       context,
       conversationHistory,
@@ -1093,8 +1130,10 @@ export async function POST(request: NextRequest) {
       tools,
       supabase,
       studentProfileId,
-      requestId // Pass requestId for logging
+      requestId, // Pass requestId for logging
+      debugMode && isAdmin // Include diagnostics if debug mode and admin
     );
+    const { messages: llmMessages, retrievedChunks, diagnostics: retrievalDiagnostics } = buildResult;
     const promptAssemblyLatency = Date.now() - promptAssemblyStart;
     
     safeLogger.info('[AI_ADVISOR] Prompt assembled', {
@@ -1397,14 +1436,23 @@ export async function POST(request: NextRequest) {
                       timestamp: new Date().toISOString(),
                     });
                     
+                    // Include diagnostics in final chunk if debug mode enabled
+                    const finalChunk: any = { 
+                      content: '', 
+                      done: true, 
+                      conversationId: convId, 
+                      nextActions: nextActions.length > 0 ? nextActions : undefined,
+                      requestId 
+                    };
+                    
+                    if (debugMode && isAdmin && retrievalDiagnostics) {
+                      finalChunk.debug = {
+                        retrieval: retrievalDiagnostics,
+                      };
+                    }
+                    
                     controller.enqueue(
-                      encoder.encode(`data: ${JSON.stringify({ 
-                        content: '', 
-                        done: true, 
-                        conversationId: convId, 
-                        nextActions: nextActions.length > 0 ? nextActions : undefined,
-                        requestId 
-                      })}\n\n`)
+                      encoder.encode(`data: ${JSON.stringify(finalChunk)}\n\n`)
                     );
                     controller.close();
                     streamCompleted = true;
@@ -1766,6 +1814,11 @@ export async function POST(request: NextRequest) {
         conversationId: convId,
         nextActions: nextActions.length > 0 ? nextActions : undefined,
         requestId,
+        ...(debugMode && isAdmin && retrievalDiagnostics ? {
+          debug: {
+            retrieval: retrievalDiagnostics,
+          },
+        } : {}),
       });
     } catch (error: any) {
       const elapsed = Date.now() - startTime;
