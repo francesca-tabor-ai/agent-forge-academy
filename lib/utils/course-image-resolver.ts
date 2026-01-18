@@ -1,24 +1,16 @@
 /**
- * Course image URL resolution with industry and track-based fallbacks
+ * Course image URL resolution with track-based fallbacks
+ * 
+ * Course images always use Track images. Industry and Role images
+ * are reserved for landing pages only.
  */
 
 import type { CourseMetadata as CourseSyncMetadata } from '@/lib/course-sync/types';
 import type { CourseMetadata as DashboardMetadata } from '@/lib/course-metadata';
-import { getCoverFromIndustries, getIndustryCover, INDUSTRY_COVERS, TRACK_COVERS } from '@/lib/courseCovers';
-
-/**
- * Default image URLs by industry
- * Industry images take priority over track images
- * @deprecated Use INDUSTRY_COVERS from @/lib/courseCovers instead
- */
-const INDUSTRY_DEFAULT_IMAGES: Record<string, string> = {
-  'Finance': 'https://www.esri.com/about/newsroom/app/uploads/2022/03/is-spatial-finance-coming-to-your-company-wherenext-article-wide-1920x1080-1.jpg',
-  'Healthcare': 'https://www.sutherlandglobal.com/wp-content/uploads/sites/2/AI-in-Healthcare-859x507-1.jpg',
-};
+import { TRACK_COVERS } from '@/lib/courseCovers';
 
 /**
  * Default image URLs by track/category
- * Tracks take priority over industries (except Healthcare and Finance)
  * @deprecated Use TRACK_COVERS from @/lib/courseCovers instead
  */
 const TRACK_DEFAULT_IMAGES: Record<string, string> = {
@@ -50,20 +42,13 @@ interface CourseWithImage {
 }
 
 /**
- * Priority industries that take precedence over tracks
- */
-const PRIORITY_INDUSTRIES = ['Healthcare', 'Finance'];
-
-/**
  * Resolves the image URL for a course with fallback logic:
  * 1. course.imageUrl (if provided and valid - per-course override)
- * 2. Priority industries (Healthcare/Finance) - take priority over tracks
- * 3. Track-based image (tracks take priority over standard industries)
- * 4. Standard industry-based image
- * 5. Global fallback image
+ * 2. Track-based image (ALWAYS use track image for courses)
+ * 3. Global fallback image
  * 
- * Note: Tracks take priority over industries, EXCEPT Healthcare and Finance
- * industries which take priority over tracks.
+ * Note: Course images always use the Track image. Industry and Role images
+ * are reserved for landing pages only.
  */
 export function resolveCourseImageUrl(course: CourseWithImage): string {
   // Helper to validate URL is not empty, invalid, or a placeholder
@@ -83,44 +68,27 @@ export function resolveCourseImageUrl(course: CourseWithImage): string {
     return course.imageUrl;
   }
 
-  const industries = course.industries || course.metadata?.industries || [];
   const track = course.category || course.metadata?.category;
 
-  // Priority 2: Priority industries (Healthcare/Finance) - take priority over tracks
-  if (industries.length > 0) {
-    const priorityIndustry = industries.find(ind => PRIORITY_INDUSTRIES.includes(ind));
-    if (priorityIndustry) {
-      const industryCover = getIndustryCover(priorityIndustry);
-      if (industryCover && industryCover !== INDUSTRY_COVERS.Default) {
-        return industryCover;
-      }
-    }
-  }
-
-  // Priority 3: Track-based image (tracks take priority over standard industries)
+  // Priority 2: Track-based image (ALWAYS use track for courses)
   // Use TRACK_COVERS from courseCovers (supports local images with external fallback)
   if (track && TRACK_COVERS[track]) {
     return TRACK_COVERS[track];
   }
 
-  // Priority 4: Standard industry-based image (non-priority industries)
-  if (industries.length > 0) {
-    const industryCover = getCoverFromIndustries(industries);
-    if (industryCover && industryCover !== INDUSTRY_COVERS.Default) {
-      return industryCover;
-    }
-  }
-
-  // Priority 5: Global fallback
+  // Priority 3: Global fallback
   return DEFAULT_FALLBACK_IMAGE;
 }
 
 /**
  * Get default image URL for an industry
- * @deprecated Use getIndustryCover from @/lib/courseCovers instead
+ * @deprecated Industry images are now only used for landing pages, not courses.
+ * Use getIndustryCover from @/lib/courseCovers for landing pages.
  */
 export function getDefaultImageForIndustry(industry: string): string {
-  return INDUSTRY_DEFAULT_IMAGES[industry] || INDUSTRY_COVERS[industry] || DEFAULT_FALLBACK_IMAGE;
+  // This function is deprecated - industry images are for landing pages only
+  // Keeping for backward compatibility but should not be used for course images
+  return DEFAULT_FALLBACK_IMAGE;
 }
 
 /**
@@ -133,9 +101,11 @@ export function getDefaultImageForTrack(track: string): string {
 
 /**
  * Get all available industries with their default images
+ * @deprecated Industry images are now only used for landing pages, not courses.
  */
 export function getIndustryImageMap(): Record<string, string> {
-  return { ...INDUSTRY_DEFAULT_IMAGES };
+  // This function is deprecated - industry images are for landing pages only
+  return {};
 }
 
 /**

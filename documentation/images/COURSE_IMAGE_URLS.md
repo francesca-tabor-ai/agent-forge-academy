@@ -2,6 +2,11 @@
 
 This file contains all course tracks (categories), industries, and roles with their hero image URLs.
 
+## Image Usage Policy
+
+- **Course Images**: Always use the **Track** image. Course cards and course detail pages display the track image.
+- **Landing Pages**: Use **Industry** images for industry landing pages and **Role** images for role landing pages.
+
 ## Format
 
 Each entry follows the format: `key | display | image_url`
@@ -15,7 +20,9 @@ Where:
 
 ## TRACKS (Categories)
 
-Tracks take priority over industries (except Healthcare and Finance).
+**Used for**: Course images (course cards, course detail pages)
+
+Tracks are the primary source of images for courses. Every course displays its track image.
 
 ```
 ai-search-visibility | AI Search & Visibility | https://fueled.com/wp-content/uploads/2025/07/AI-Brand-Visibility-Header.webp?w=1920
@@ -35,16 +42,13 @@ audio-voice | Audio & Voice | https://media.bazaarvoice.com/Shutterstock_1159197
 
 ## INDUSTRIES
 
-### Priority Industries (Take Priority Over Tracks)
+**Used for**: Industry landing pages only (NOT for course images)
+
+Industry images are displayed on industry landing pages (`/landing/industry/[slug]`). They are NOT used for course images - courses always use their track image.
 
 ```
 finance | Finance | https://www.esri.com/about/newsroom/app/uploads/2022/03/is-spatial-finance-coming-to-your-company-wherenext-article-wide-1920x1080-1.jpg
 healthcare | Healthcare | https://www.sutherlandglobal.com/wp-content/uploads/sites/2/AI-in-Healthcare-859x507-1.jpg
-```
-
-### Standard Industries (Tracks Take Priority)
-
-```
 ecommerce | E-commerce | https://cdn.shopify.com/s/files/1/0070/7032/articles/Header_7512ee53-c680-44d7-abc2-21ef61095558.png?v=1764713881
 saas | SaaS | https://500apps.com/images/blog/saas-apps.png?v=1677747568403012820
 trust-regulation | Trust & Regulation | https://primathon.in/blog/wp-content/uploads/2024/04/Defining-AI-Ethics-in-the-Modern-World.jpg
@@ -60,6 +64,10 @@ media-publishing | Media & Publishing | https://markerly.com/pulse/wp-content/up
 ---
 
 ## ROLES
+
+**Used for**: Role landing pages only (NOT for course images)
+
+Role images are displayed on role landing pages (`/landing/role/[slug]`). They are NOT used for course images - courses always use their track image.
 
 ```
 engineer | Engineer | https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1920&q=80
@@ -95,7 +103,14 @@ default | Default | https://wallpaperaccess.com/full/340554.png
 
 ## Notes
 
+- **Course Images**: Always use track images via `resolveCourseImageUrl()` or `getCourseCover()`
+- **Landing Page Images**: Use industry/role images via `getIndustryHeroImage()` or `getRoleHeroImage()` from `lib/utils/hero-image-resolver.ts`
 - All image URLs should be absolute URLs (starting with `http://` or `https://`) or relative paths from the public directory (starting with `/`)
 - For local images, place them in `public/images/tracks/`, `public/images/industries/`, or `public/images/roles/`
 - To update images, simply replace the URL in the format above
 - The resolver automatically loads this file and provides functions to get hero images by slug
+
+## Implementation
+
+- Course image resolution: `lib/utils/course-image-resolver.ts` - always uses track images
+- Landing page hero images: `lib/utils/hero-image-resolver.ts` - uses industry/role images

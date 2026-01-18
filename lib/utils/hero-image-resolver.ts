@@ -45,7 +45,7 @@ function parseImageMappings(): ImageMappings {
   };
 
   try {
-    const filePath = join(process.cwd(), 'COURSE_IMAGE_URLS.md');
+    const filePath = join(process.cwd(), 'documentation', 'images', 'COURSE_IMAGE_URLS.md');
     const content = readFileSync(filePath, 'utf-8');
     
     let currentSection: 'tracks' | 'industries' | 'roles' | null = null;

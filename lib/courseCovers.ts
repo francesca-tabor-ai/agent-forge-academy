@@ -192,10 +192,13 @@ interface CourseForCover {
 }
 
 /**
- * Get course cover image URL based on industry or track with fallback
- * Priority: course.industry -> course.track/category -> first industry from array -> default
+ * Get course cover image URL based on track with fallback
+ * Priority: course.track/category -> default
  * 
- * @param course - Course object with industry, industries, track, category, or metadata
+ * Note: Course images always use the Track image. Industry and Role images
+ * are reserved for landing pages only.
+ * 
+ * @param course - Course object with track, category, or metadata
  * @returns Cover image URL for the course
  */
 export function getCourseCover(course: CourseForCover | null | undefined): string {
@@ -203,29 +206,12 @@ export function getCourseCover(course: CourseForCover | null | undefined): strin
     return INDUSTRY_COVERS.Default;
   }
 
-  // Priority 1: Use course.industry (singular) if available
-  if (course.industry) {
-    const cover = getIndustryCover(course.industry);
-    if (cover !== INDUSTRY_COVERS.Default) {
-      return cover;
-    }
-  }
-
-  // Priority 2: Use course.track or course.category (track fallback)
+  // Priority 1: Use course.track or course.category (ALWAYS use track for courses)
   const track = course.track || course.category || course.metadata?.category;
   if (track && TRACK_COVERS[track]) {
     return TRACK_COVERS[track];
   }
 
-  // Priority 3: Use first industry from industries array
-  const industries = course.industries || course.metadata?.industries;
-  if (industries && industries.length > 0) {
-    const cover = getCoverFromIndustries(industries);
-    if (cover !== INDUSTRY_COVERS.Default) {
-      return cover;
-    }
-  }
-
-  // Priority 4: Default fallback
+  // Priority 2: Default fallback
   return INDUSTRY_COVERS.Default;
 }
