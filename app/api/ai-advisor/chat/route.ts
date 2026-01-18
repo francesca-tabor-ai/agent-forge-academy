@@ -299,15 +299,7 @@ function buildSystemPrompt(
     }
   }
 
-  systemPrompt += `\n**Important:** Always be helpful, specific, and actionable. Use the context provided to give personalized advice.
-
-**Grounding and Accuracy:**
-- Always ground your answers in the provided context (course content, project details, job requirements)
-- If you don't have information in the provided context, say so explicitly
-- Ask clarifying questions when context is missing or ambiguous
-- Never make up specific facts, names, or details not in the provided context
-- When in doubt, ask for clarification rather than guessing
-- Use citations when referencing course content or other provided sources`;
+  systemPrompt += `\n**Important:** Always be helpful, specific, and actionable. Use the context provided to give personalized advice.`;
 
   return systemPrompt;
 }
@@ -465,19 +457,13 @@ async function buildLLMMessages(
   tools?: { useRAG: boolean; useJobsMatching: boolean; usePortfolioFetch: boolean; useCourseContext: boolean },
   supabase?: any,
   studentProfileId?: string | null,
-  requestId?: string,
-  includeDiagnostics?: boolean
+  requestId?: string
 ): Promise<{
   messages: LLMMessage[];
   retrievedChunks: Array<{ courseSlug: string; lessonSlug: string; chunkIndex: number; score?: number }>;
-  diagnostics?: any; // RetrievalDiagnostics
-  retrievalEmpty?: boolean; // Flag indicating retrieval was attempted but returned no chunks
-  retrievalEmptyReason?: string; // Reason why retrieval was empty (for user guidance)
 }> {
   let systemPrompt = buildSystemPrompt(context, contextData, intent, tools);
   const retrievedChunks: Array<{ courseSlug: string; lessonSlug: string; chunkIndex: number; score?: number }> = [];
-  let retrievalEmpty = false;
-  let retrievalEmptyReason: string | undefined;
 
   // Retrieve relevant course chunks using RAG based on intent and tools
   const activeCourseId = contextData?.activeContextIds?.courseId || context?.course?.id;
@@ -509,30 +495,11 @@ async function buildLLMMessages(
         timestamp: new Date().toISOString(),
       });
       
-      // STRICT FILTERING: Always pass courseSlug if available to prevent cross-course contamination
-      // If no courseSlug is available, we should warn but still attempt retrieval
-      if (!courseSlug && !activeCourseId) {
-        safeLogger.warn('[AI_ADVISOR] Retrieval attempted without course context', {
-          requestId: requestId || 'unknown',
-          message: redactPII(message, { maxLength: 100 }),
-          stage: 'retrieval_no_course_context',
-        });
-      }
-      
-      const retrievalResult = await retrieveChunks(message, {
+      const chunks = await retrieveChunks(message, {
         limit: 5,
-        courseSlug: courseSlug || undefined, // Strict filter - undefined means no filter (should be avoided)
+        courseSlug: courseSlug || undefined,
         minScore: 0.5,
-        includeDiagnostics: includeDiagnostics || false,
       }, requestId);
-      
-      // Handle diagnostics mode
-      const chunks = Array.isArray(retrievalResult) 
-        ? retrievalResult 
-        : retrievalResult.chunks;
-      const diagnostics = Array.isArray(retrievalResult) 
-        ? undefined 
-        : retrievalResult.diagnostics;
 
       const retrievalLatency = Date.now() - retrievalStart;
       
@@ -553,53 +520,12 @@ async function buildLLMMessages(
       if (chunks.length > 0) {
         const ragContext = formatChunksForContext(chunks);
         systemPrompt += `\n\n**Relevant Course Content (use this to answer questions accurately):**${ragContext}`;
-        systemPrompt += `\n\n**CRITICAL GROUNDING RULES:**
-
-1. **STRICT CONTENT CONSTRAINT:**
-   - ONLY use information from the retrieved course content above
-   - Do NOT supplement with general knowledge about course topics
-   - Do NOT use information from your training data about these topics
-   - If information is not in the retrieved chunks, you do NOT have it
-
-2. **HALLUCINATION PREVENTION:**
-   - Do NOT make up course-specific facts, module names, lesson titles, or concepts
-   - Do NOT invent course structure or content not in retrieved chunks
-   - Only reference modules, lessons, and concepts that appear in the retrieved chunks
-   - Before stating a course-specific fact, verify it exists in the retrieved content
-   - If you don't know a course-specific detail, say: "I don't have that information in the course content provided"
-
-3. **CITATION POLICY:**
-   - ALWAYS cite sources when using information from course content
-   - Use [ref:N] format where N is the chunk number (e.g., [ref:1], [ref:2])
-   - When directly quoting, use block quotes with citation: > "Quote text" [ref:N]
-   - When paraphrasing, include citation at end of sentence: "Paraphrased content" [ref:N]
-   - When referencing multiple chunks, cite all relevant ones: [ref:1, ref:2]
-   - For specific concepts, use inline citation: "According to [ref:1], agentic RAG is..."
-
-4. **MISSING CONTEXT HANDLING:**
-   - If the retrieved content doesn't contain information needed to answer the question:
-     * First, acknowledge what you CAN answer based on the retrieved content
-     * Then, ask clarifying questions to help retrieve more relevant content
-     * Examples: "I can help with X based on the content, but I need more context about Y. Could you clarify...?"
-   - If the question is ambiguous or could refer to multiple concepts:
-     * Ask which specific aspect they want help with
-     * Example: "Are you asking about X or Y? I can help with both, but need to know which to focus on"
-   - If you cannot answer based on retrieved content:
-     * Say: "I don't have that information in the course content provided"
-     * Ask: "Could you provide more context or rephrase the question?"
-
-5. **PARTIAL ANSWERS:**
-   - If the content partially answers the question:
-     * State what you CAN answer based on retrieved content
-     * Acknowledge what is missing: "The content covers X and Y, but doesn't include Z"
-     * Offer to help with what you can answer, and suggest asking a human advisor for missing information
-
-**Response Format:**
-- Use markdown formatting
-- Include citations for all course content references
-- Use block quotes for direct quotes (> "text" [ref:N])
-- Use inline citations for paraphrased content (text [ref:N])
-- Ask clarifying questions when context is missing`;
+        systemPrompt += `\n**Instructions:** 
+- Use the relevant course content above to provide accurate, specific answers
+- When referencing content, cite the source using [ref:N] format where N is the chunk number
+- Reference specific modules, lessons, or concepts when relevant
+- If the content doesn't fully answer the question, say so and provide what you can based on the content
+- Always include citations in your response when using information from the course content`;
 
         // Store chunk metadata for later
         retrievedChunks.push(
@@ -610,53 +536,7 @@ async function buildLLMMessages(
             score: chunk.score,
           }))
         );
-      } else {
-        // Retrieval was attempted but returned no chunks - add fallback behavior
-        retrievalEmpty = true;
-        
-        // Determine reason and provide guidance
-        if (activeCourseId || courseSlug) {
-          // Course context was provided but no chunks found
-          retrievalEmptyReason = courseTitle 
-            ? `The course "${courseTitle}" may not have content indexed yet, or the content may not match your query.`
-            : 'The selected course may not have content indexed yet, or the content may not match your query.';
-          
-          systemPrompt += `\n\n**Important Notice:** No course content was found for your query. This could mean:
-- The course content has not been indexed yet
-- Your query doesn't match any indexed content
-- The course may not have lessons available
-
-**Your Response Should:**
-- Acknowledge that course content is not available
-- Politely explain that you cannot provide course-specific answers without indexed content
-- Suggest the user: "Please try selecting a different course, or contact support if you believe content should be available"
-- Offer to help with general questions if applicable
-- Be helpful and friendly, not dismissive`;
-        } else {
-          // No course context provided
-          retrievalEmptyReason = 'No course was selected. Please select a course to get course-specific answers.';
-          
-          systemPrompt += `\n\n**Important Notice:** No course context was provided. 
-
-**Your Response Should:**
-- Politely explain that course-specific answers require selecting a course
-- Guide the user: "To get course-specific help, please select a course from your dashboard or course list"
-- Offer to help with general questions if applicable
-- Be helpful and friendly`;
-        }
-        
-        safeLogger.warn('[AI_ADVISOR] Retrieval returned empty results', {
-          requestId: requestId || 'unknown',
-          courseSlug: courseSlug || null,
-          activeCourseId: activeCourseId || null,
-          query: redactPII(message, { maxLength: 200 }),
-          reason: retrievalEmptyReason,
-          stage: 'retrieval_empty',
-          timestamp: new Date().toISOString(),
-        });
       }
-      
-      // Store diagnostics for return if requested (will be included in response if debug mode enabled)
     } catch (error) {
       const retrievalLatency = Date.now() - retrievalStart;
       safeLogger.warn('[AI_ADVISOR] RAG retrieval failed, continuing without course content', { 
@@ -665,20 +545,6 @@ async function buildLLMMessages(
         latency: retrievalLatency,
         stage: 'retrieval_failed',
       });
-      
-      // Mark as empty if retrieval failed and course context was expected
-      if (activeCourseId || courseSlug) {
-        retrievalEmpty = true;
-        retrievalEmptyReason = 'Course content retrieval failed. The course content may not be available or indexed yet.';
-        
-        systemPrompt += `\n\n**Important Notice:** Unable to retrieve course content due to a technical issue.
-
-**Your Response Should:**
-- Acknowledge the technical issue
-- Explain that course content is temporarily unavailable
-- Suggest: "Please try again in a moment, or contact support if the issue persists"
-- Offer to help with general questions if applicable`;
-      }
       // Continue without RAG context if retrieval fails
     }
   }
@@ -749,12 +615,7 @@ ${project.demo_url ? `- Demo: ${project.demo_url}` : ''}`;
   // Add current message
   messages.push({ role: 'user', content: message });
 
-  return { 
-    messages, 
-    retrievedChunks,
-    retrievalEmpty: retrievalEmpty || undefined,
-    retrievalEmptyReason: retrievalEmptyReason || undefined,
-  };
+  return { messages, retrievedChunks };
 }
 
 // Check for sensitive information
@@ -819,10 +680,6 @@ export async function POST(request: NextRequest) {
     ? 'mock-req-chat-12345' 
     : `req_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
   const startTime = Date.now();
-
-  // Check for debug mode (query param or env var, admin only)
-  const url = new URL(request.url);
-  let debugMode = url.searchParams.get('debug') === 'true' || process.env.RAG_DEBUG_MODE === '1';
 
   // Startup guard: Validate LLM configuration early
   const llmProvider = process.env.LLM_PROVIDER || 'openai';
@@ -955,26 +812,6 @@ export async function POST(request: NextRequest) {
           },
         }
       );
-    }
-
-    // Check if user is admin (for debug mode)
-    let isAdmin = false;
-    if (debugMode) {
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('user_id', user.id)
-        .single();
-      isAdmin = profile?.role === 'admin';
-      
-      if (!isAdmin) {
-        safeLogger.warn('[AI_ADVISOR] Debug mode requested but user is not admin', {
-          requestId,
-          userId: user.id,
-        });
-        // Disable debug mode if not admin
-        debugMode = false;
-      }
     }
 
     // Check LLM configuration after auth (so we can log userId)
@@ -1153,12 +990,6 @@ export async function POST(request: NextRequest) {
     // - Context: optional, strict structure validation
     // - Conversation history: array, max 20 messages, message structure validation
     // - Other fields: type validation
-
-    // All validation is handled by Zod schema:
-    // - Message: required, non-empty, max 10,000 chars (validated by schema)
-    // - Context: optional, strict structure validation (validated by schema)
-    // - Conversation history: array, max 20 messages, message structure (validated by schema)
-    // - Other fields: type validation (validated by schema)
 
     // Log request details with full payload (redacted)
     const requestPayload = {
@@ -1423,7 +1254,7 @@ export async function POST(request: NextRequest) {
 
     // Build LLM messages (with RAG context if applicable, based on intent)
     const promptAssemblyStart = Date.now();
-    const buildResult = await buildLLMMessages(
+    const { messages: llmMessages, retrievedChunks } = await buildLLMMessages(
       message,
       context,
       conversationHistory,
@@ -1432,10 +1263,8 @@ export async function POST(request: NextRequest) {
       tools,
       supabase,
       studentProfileId,
-      requestId, // Pass requestId for logging
-      debugMode && isAdmin // Include diagnostics if debug mode and admin
+      requestId // Pass requestId for logging
     );
-    const { messages: llmMessages, retrievedChunks, diagnostics: retrievalDiagnostics } = buildResult;
     const promptAssemblyLatency = Date.now() - promptAssemblyStart;
     
     safeLogger.info('[AI_ADVISOR] Prompt assembled', {
@@ -1729,31 +1558,14 @@ export async function POST(request: NextRequest) {
                       timestamp: new Date().toISOString(),
                     });
                     
-                    // Include diagnostics in final chunk if debug mode enabled
-                    const finalChunk: any = { 
-                      content: '', 
-                      done: true, 
-                      conversationId: convId, 
-                      nextActions: nextActions.length > 0 ? nextActions : undefined,
-                      requestId 
-                    };
-                    
-                    if (debugMode && isAdmin && retrievalDiagnostics) {
-                      finalChunk.debug = {
-                        retrieval: retrievalDiagnostics,
-                      };
-                    }
-                    
-                    // Include retrieval empty flag if applicable
-                    if (retrievalEmpty) {
-                      finalChunk.retrievalEmpty = true;
-                      if (retrievalEmptyReason) {
-                        finalChunk.retrievalEmptyReason = retrievalEmptyReason;
-                      }
-                    }
-                    
                     controller.enqueue(
-                      encoder.encode(`data: ${JSON.stringify(finalChunk)}\n\n`)
+                      encoder.encode(`data: ${JSON.stringify({ 
+                        content: '', 
+                        done: true, 
+                        conversationId: convId, 
+                        nextActions: nextActions.length > 0 ? nextActions : undefined,
+                        requestId 
+                      })}\n\n`)
                     );
                     controller.close();
                     streamCompleted = true;
@@ -1840,37 +1652,64 @@ export async function POST(request: NextRequest) {
           });
         }
       } catch (llmError: any) {
-        const providerErrorLatency = Date.now() - startTime;
         const errorMessage = llmError.message || 'LLM provider not configured';
+        const providerErrorLatency = Date.now() - startTime;
+        
+        // Determine appropriate status code
+        let statusCode = 500;
+        let errorCode = 'UPSTREAM_ERROR';
+        
+        if (errorMessage.includes('LLM_API_KEY') || errorMessage.includes('required')) {
+          statusCode = 503; // Service Unavailable
+          errorCode = 'SERVICE_UNAVAILABLE';
+        } else if (errorMessage.includes('401') || errorMessage.includes('Unauthorized')) {
+          statusCode = 401;
+          errorCode = 'UNAUTHORIZED';
+        } else if (errorMessage.includes('429') || errorMessage.includes('rate limit')) {
+          statusCode = 429;
+          errorCode = 'RATE_LIMIT_EXCEEDED';
+        } else if (errorMessage.includes('400') || errorMessage.includes('Bad Request')) {
+          statusCode = 400;
+          errorCode = 'BAD_REQUEST';
+        }
         
         // Extract upstream status if available
         const upstreamStatusMatch = errorMessage.match(/(\d{3})/);
         const upstreamStatus = upstreamStatusMatch ? parseInt(upstreamStatusMatch[1]) : null;
         
-        // Use centralized error taxonomy
-        const errorResponse = createErrorResponse(llmError, {
-          requestId,
+        safeLogger.error('[AI_ADVISOR] Provider call failed', { 
+          requestId, 
           userId: user.id,
-          upstreamStatus: upstreamStatus,
-          errorMessage: errorMessage,
-          stage: 'provider_call_failed',
-          originalError: llmError,
-        });
-        
-        safeLogger.error('[AI_ADVISOR] Provider call failed', {
-          ...errorResponse.logData,
           provider: llmProvider,
           model,
+          stage: 'provider_call_failed',
+          statusCode,
+          errorCode,
+          upstreamStatus,
+          message: errorMessage,
           latency: providerErrorLatency,
           stack: process.env.NODE_ENV === 'development' ? llmError.stack : undefined,
           timestamp: new Date().toISOString(),
         });
         
         return NextResponse.json(
-          errorResponse.response,
-          {
-            status: errorResponse.statusCode,
-            headers: errorResponse.headers,
+          { 
+            ok: false,
+            error: { 
+              code: errorCode, 
+              message: process.env.NODE_ENV === 'development' 
+                ? errorMessage
+                : (errorMessage.includes('LLM_API_KEY') 
+                    ? 'AI service is not configured. Please contact support.'
+                    : 'AI service error. Please try again.'),
+              requestId 
+            } 
+          },
+          { 
+            status: statusCode,
+            headers: {
+              'X-Request-ID': requestId,
+            },
           }
         );
       }
@@ -1892,7 +1731,6 @@ export async function POST(request: NextRequest) {
       const llmResponse = await llm.generate(llmMessages, {
         temperature: 0.7,
         maxTokens: 2000,
-        timeout: 30000, // 30 seconds for non-streaming
       });
       const llmLatency = Date.now() - llmStartTime;
       const totalLatency = Date.now() - startTime;
@@ -2065,42 +1903,51 @@ export async function POST(request: NextRequest) {
         conversationId: convId,
         nextActions: nextActions.length > 0 ? nextActions : undefined,
         requestId,
-        ...(debugMode && isAdmin && retrievalDiagnostics ? {
-          debug: {
-            retrieval: retrievalDiagnostics,
-          },
-        } : {}),
-        ...(retrievalEmpty ? {
-          retrievalEmpty: true,
-          retrievalEmptyReason: retrievalEmptyReason || undefined,
-        } : {}),
       });
     } catch (error: any) {
       const elapsed = Date.now() - startTime;
       const errorMessage = error?.message || String(error);
       
+      // Determine appropriate status code and error code
+      let statusCode = 500;
+      let errorCode = 'UPSTREAM_ERROR';
+      
+      if (errorMessage.includes('API key') || errorMessage.includes('LLM_API_KEY') || errorMessage.includes('required')) {
+        statusCode = 503; // Service Unavailable
+        errorCode = 'SERVICE_UNAVAILABLE';
+      } else if (errorMessage.includes('401') || errorMessage.includes('Unauthorized')) {
+        statusCode = 401;
+        errorCode = 'UNAUTHORIZED';
+      } else if (errorMessage.includes('429') || errorMessage.includes('rate limit')) {
+        statusCode = 429;
+        errorCode = 'RATE_LIMIT_EXCEEDED';
+      } else if (errorMessage.includes('400') || errorMessage.includes('Bad Request')) {
+        statusCode = 400;
+        errorCode = 'BAD_REQUEST';
+      } else if (errorMessage.includes('timeout') || errorMessage.includes('TIMEOUT')) {
+        statusCode = 504; // Gateway Timeout
+        errorCode = 'TIMEOUT';
+      }
+      
       // Extract upstream status if available
       const upstreamStatusMatch = errorMessage.match(/(\d{3})/);
       const upstreamStatus = upstreamStatusMatch ? parseInt(upstreamStatusMatch[1]) : null;
       
-      // Use centralized error taxonomy
-      const errorResponse = createErrorResponse(error, {
+      // Structured logging: error with status code and error reason
+      safeLogger.error('[AI_ADVISOR] Error generating LLM response', { 
         requestId,
         userId: user.id,
-        upstreamStatus: upstreamStatus,
-        errorMessage: errorMessage,
-        stage: 'llm_call_failed',
-        originalError: error,
-      });
-      
-      // Structured logging: error with status code and error reason
-      safeLogger.error('[AI_ADVISOR] Error generating LLM response', {
-        ...errorResponse.logData,
         provider: llmProvider,
         model,
+        stage: 'llm_call_failed',
+        statusCode,
+        errorCode,
         path: '/api/ai-advisor/chat',
         method: 'POST',
+        upstreamStatus,
+        message: errorMessage, // Error reason without leaking keys
         elapsed,
+        // Don't log stack in production to avoid leaking sensitive info
         stack: process.env.NODE_ENV === 'development' ? error?.stack : undefined,
       });
       
@@ -2110,19 +1957,32 @@ export async function POST(request: NextRequest) {
         userId: user.id,
         path: '/api/ai-advisor/chat',
         method: 'POST',
-        status: errorResponse.statusCode,
+        status: statusCode,
         duration: elapsed,
         errorStack: error?.stack || null,
-        errorMessage: errorResponse.logData.message,
+        errorMessage: errorMessage,
         ipAddress: getIpAddress(request),
         userAgent: getUserAgent(request),
       });
       
       return NextResponse.json(
-        errorResponse.response,
-        {
-          status: errorResponse.statusCode,
-          headers: errorResponse.headers,
+        { 
+          ok: false,
+          error: { 
+            code: errorCode, 
+            message: process.env.NODE_ENV === 'development'
+              ? errorMessage
+              : (errorMessage.includes('API key') || errorMessage.includes('LLM_API_KEY')
+                  ? 'AI service is not configured. Please contact support.'
+                  : 'Failed to generate response. Please try again.'),
+            requestId 
+          } 
+        },
+        { 
+          status: statusCode,
+          headers: {
+            'X-Request-ID': requestId,
+          },
         }
       );
     }
