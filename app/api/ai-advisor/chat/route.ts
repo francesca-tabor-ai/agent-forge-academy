@@ -838,10 +838,101 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const body: ChatRequest = await request.json();
-    let { message, context, studentProfileId, conversationHistory, intent, conversationId } = body;
+    // Parse and validate request body with Zod schema
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (error: any) {
+      const errorResponse = createErrorResponse(
+        new Error('Invalid JSON in request body'),
+        {
+          requestId,
+          userId: user.id,
+          errorMessage: 'Request body must be valid JSON',
+          stage: 'input_validation',
+        }
+      );
+      
+      const duration = Date.now() - startTime;
+      safeLogger.warn('[AI_ADVISOR] Validation error - invalid JSON', errorResponse.logData);
+      
+      await logRequest({
+        requestId,
+        userId: user.id,
+        path: '/api/ai-advisor/chat',
+        method: 'POST',
+        status: errorResponse.statusCode,
+        duration,
+        errorMessage: errorResponse.logData.message,
+        ipAddress: getIpAddress(request),
+        userAgent: getUserAgent(request),
+      });
+      
+      return NextResponse.json(
+        errorResponse.response,
+        {
+          status: errorResponse.statusCode,
+          headers: errorResponse.headers,
+        }
+      );
+    }
 
-    // Basic type validation
+    // Validate payload with Zod schema
+    const validationResult = safeValidateChatRequest(body);
+    if (!validationResult.success) {
+      const errorMessage = formatZodError(validationResult.error);
+      const errorResponse = createErrorResponse(
+        new Error(errorMessage),
+        {
+          requestId,
+          userId: user.id,
+          errorMessage: errorMessage,
+          stage: 'input_validation',
+        }
+      );
+      
+      const duration = Date.now() - startTime;
+      safeLogger.warn('[AI_ADVISOR] Validation error - schema validation failed', {
+        ...errorResponse.logData,
+        zodIssues: validationResult.error.issues.map(issue => ({
+          path: issue.path.join('.'),
+          message: issue.message,
+          code: issue.code,
+        })),
+      });
+      
+      await logRequest({
+        requestId,
+        userId: user.id,
+        path: '/api/ai-advisor/chat',
+        method: 'POST',
+        status: errorResponse.statusCode,
+        duration,
+        errorMessage: errorResponse.logData.message,
+        ipAddress: getIpAddress(request),
+        userAgent: getUserAgent(request),
+      });
+      
+      return NextResponse.json(
+        {
+          ok: false,
+          error: {
+            code: 'ValidationError',
+            message: `Invalid request: ${errorMessage}`,
+            requestId,
+          },
+        },
+        {
+          status: 400,
+          headers: errorResponse.headers,
+        }
+      );
+    }
+
+    // Extract validated data
+    const { message, context, studentProfileId, conversationHistory, intent, conversationId } = validationResult.data;
+
+    // Basic type validation (redundant but kept for safety)
     if (typeof message !== 'string') {
       const errorResponse = createErrorResponse(
         new Error('Message must be a string'),
