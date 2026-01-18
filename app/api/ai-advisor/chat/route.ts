@@ -463,9 +463,13 @@ async function buildLLMMessages(
   messages: LLMMessage[];
   retrievedChunks: Array<{ courseSlug: string; lessonSlug: string; chunkIndex: number; score?: number }>;
   diagnostics?: any; // RetrievalDiagnostics
+  retrievalEmpty?: boolean; // Flag indicating retrieval was attempted but returned no chunks
+  retrievalEmptyReason?: string; // Reason why retrieval was empty (for user guidance)
 }> {
   let systemPrompt = buildSystemPrompt(context, contextData, intent, tools);
   const retrievedChunks: Array<{ courseSlug: string; lessonSlug: string; chunkIndex: number; score?: number }> = [];
+  let retrievalEmpty = false;
+  let retrievalEmptyReason: string | undefined;
 
   // Retrieve relevant course chunks using RAG based on intent and tools
   const activeCourseId = contextData?.activeContextIds?.courseId || context?.course?.id;
@@ -558,6 +562,20 @@ async function buildLLMMessages(
         latency: retrievalLatency,
         stage: 'retrieval_failed',
       });
+      
+      // Mark as empty if retrieval failed and course context was expected
+      if (activeCourseId || courseSlug) {
+        retrievalEmpty = true;
+        retrievalEmptyReason = 'Course content retrieval failed. The course content may not be available or indexed yet.';
+        
+        systemPrompt += `\n\n**Important Notice:** Unable to retrieve course content due to a technical issue.
+
+**Your Response Should:**
+- Acknowledge the technical issue
+- Explain that course content is temporarily unavailable
+- Suggest: "Please try again in a moment, or contact support if the issue persists"
+- Offer to help with general questions if applicable`;
+      }
       // Continue without RAG context if retrieval fails
     }
   }
@@ -628,7 +646,12 @@ ${project.demo_url ? `- Demo: ${project.demo_url}` : ''}`;
   // Add current message
   messages.push({ role: 'user', content: message });
 
-  return { messages, retrievedChunks };
+  return { 
+    messages, 
+    retrievedChunks,
+    retrievalEmpty: retrievalEmpty || undefined,
+    retrievalEmptyReason: retrievalEmptyReason || undefined,
+  };
 }
 
 // Check for sensitive information
