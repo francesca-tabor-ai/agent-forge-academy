@@ -402,7 +402,7 @@ export async function GET(request: NextRequest) {
     // Get or create student profile
     let { data: studentProfile } = await supabase
       .from('student_profiles')
-      .select('id, full_name, headline, bio, skills, location, linkedin_url, github_url, website_url, headshot_image_url')
+      .select('id, full_name, headline, bio, skills, location, city, country, linkedin_url, github_url, website_url, headshot_image_url')
       .eq('profile_id', profile.id)
       .single();
 
@@ -417,12 +417,14 @@ export async function GET(request: NextRequest) {
           bio: null,
           skills: [],
           location: null,
+          city: null,
+          country: null,
           linkedin_url: null,
           github_url: null,
           website_url: null,
           headshot_image_url: null,
         })
-        .select('id, full_name, headline, bio, skills, location, linkedin_url, github_url, website_url, headshot_image_url')
+        .select('id, full_name, headline, bio, skills, location, city, country, linkedin_url, github_url, website_url, headshot_image_url')
         .single();
 
       if (createError) {
@@ -738,7 +740,7 @@ export async function PATCH(request: NextRequest) {
           github_url: github_url,
           website_url: website_url,
         })
-        .select('id, full_name, headline, bio, skills, location, linkedin_url, github_url, website_url, headshot_image_url')
+        .select('id, full_name, headline, bio, skills, location, city, country, linkedin_url, github_url, website_url, headshot_image_url')
         .single();
 
       if (createError) {
@@ -834,7 +836,7 @@ export async function PATCH(request: NextRequest) {
         website_url: website_url,
       })
       .eq('id', studentProfile.id)
-      .select('id, full_name, headline, bio, skills, location, linkedin_url, github_url, website_url, headshot_image_url')
+      .select('id, full_name, headline, bio, skills, location, city, country, linkedin_url, github_url, website_url, headshot_image_url')
       .single();
 
     if (error) {

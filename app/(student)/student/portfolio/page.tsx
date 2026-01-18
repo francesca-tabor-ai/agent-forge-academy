@@ -101,7 +101,7 @@ export default async function PortfolioPage() {
     console.error('[PORTFOLIO_PAGE]', { stage: 'fetch_student_profile', reqId, userId, profileId: profile.id });
     const { data: studentProfile, error: studentProfileError } = await supabase
       .from('student_profiles')
-      .select('id, visibility, full_name, bio, headline, skills, location, city, linkedin_url, github_url, website_url, headshot_image_url')
+      .select('id, visibility, full_name, bio, headline, skills, location, city, country, linkedin_url, github_url, website_url, headshot_image_url')
       .eq('profile_id', profile.id)
       .single();
 
