@@ -16,16 +16,24 @@ Where:
 ## Role Images
 
 ```
-engineer | Engineer | 
-tech-lead | Tech Lead | 
-pm | PM | 
-founder | Founder | 
-marketer | Marketer | 
-content-team | Content Team | 
-data-team | Data Team | 
-growth-team | Growth Team | 
-sales-team | Sales Team | 
-cx-team | CX Team | 
+advisor | Advisor | https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1920&q=80
+analyst | Analyst | https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1920&q=80
+architect | Architect | https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1920&q=80
+consultant | Consultant | https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1920&q=80
+data-scientist | Data Scientist | https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1920&q=80
+designer | Designer | https://images.unsplash.com/photo-1561070791-2526d30994b5?w=1920&q=80
+developer | Developer | https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1920&q=80
+director | Director | https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1920&q=80
+engineer | Engineer | https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1920&q=80
+executive | Executive | https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1920&q=80
+founder | Founder | https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1920&q=80
+leader | Leader | https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1920&q=80
+manager | Manager | https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1920&q=80
+marketer | Marketer | https://images.unsplash.com/photo-1551434678-e076c223a692?w=1920&q=80
+officer | Officer | https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1920&q=80
+product-manager | Product Manager | https://images.unsplash.com/photo-1552664730-d307ca884978?w=1920&q=80
+specialist | Specialist | https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1920&q=80
+strategist | Strategist | https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1920&q=80
 ```
 
 ---
