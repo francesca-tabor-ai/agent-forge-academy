@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 interface ErrorProps {
@@ -10,11 +10,24 @@ interface ErrorProps {
 
 export default function PortfolioError({ error, reset }: ErrorProps) {
   const router = useRouter();
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     // Log error for debugging
     console.error('Portfolio page error:', error);
   }, [error]);
+
+  const copyErrorId = async () => {
+    if (error.digest) {
+      try {
+        await navigator.clipboard.writeText(error.digest);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      } catch (err) {
+        console.error('Failed to copy error ID:', err);
+      }
+    }
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6">
@@ -35,25 +48,44 @@ export default function PortfolioError({ error, reset }: ErrorProps) {
               />
             </svg>
           </div>
-          <div>
+          <div className="w-full max-w-md">
             <h2 className="text-xl font-semibold text-gray-900 mb-2">
               Something went wrong
             </h2>
             <p className="text-sm text-gray-600 mb-4">
               We encountered an error while loading your portfolio.
             </p>
-            {/* Show digest in all environments for error tracking */}
+            
+            {/* Error ID with copy button */}
             {error.digest && (
-              <div className="mb-4 p-3 bg-gray-100 rounded text-xs text-left font-mono text-gray-800">
-                <strong>Error ID:</strong> {error.digest}
+              <div className="mb-4 p-4 bg-gray-50 border border-gray-200 rounded-lg">
+                <div className="flex items-center justify-between mb-2">
+                  <label className="text-xs font-semibold text-gray-700 uppercase tracking-wide">
+                    Error ID
+                  </label>
+                  <button
+                    onClick={copyErrorId}
+                    className="text-xs px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors font-medium"
+                  >
+                    {copied ? '✓ Copied' : 'Copy'}
+                  </button>
+                </div>
+                <div className="p-2 bg-white border border-gray-300 rounded text-sm font-mono text-gray-800 break-all">
+                  {error.digest}
+                </div>
+                <p className="mt-2 text-xs text-gray-500 text-left">
+                  Please send this Error ID to support if the problem persists.
+                </p>
               </div>
             )}
+            
             {/* Show full error message in development only */}
             {process.env.NODE_ENV === 'development' && error.message && (
-              <div className="mb-4 p-3 bg-gray-100 rounded text-xs text-left font-mono text-gray-800">
+              <div className="mb-4 p-3 bg-gray-100 rounded text-xs text-left font-mono text-gray-800 break-words">
                 <strong>Error:</strong> {error.message}
               </div>
             )}
+            
             <div className="flex items-center justify-center gap-3">
               <button
                 onClick={reset}

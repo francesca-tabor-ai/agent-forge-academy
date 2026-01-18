@@ -20,15 +20,35 @@ import { getResumeBucketName } from '@/lib/utils/storage';
 
 export default async function PortfolioPage() {
   const reqId = headers().get('x-vercel-id') ?? headers().get('x-request-id') ?? `local-${Date.now()}`;
+  let userId: string | undefined;
 
   try {
+    // Stage 1: Initialize Supabase client
+    console.error('[PORTFOLIO_PAGE]', { 
+      stage: 'init', 
+      reqId,
+      hasSupabaseUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
+      hasAnonKey: !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    });
+
     const supabase = await createUserSupabaseClient();
+    
+    // Stage 2: Authenticate user
+    console.error('[PORTFOLIO_PAGE]', { stage: 'auth', reqId });
     const {
       data: { user },
       error: authError,
     } = await supabase.auth.getUser();
 
     if (authError) {
+      console.error('[PORTFOLIO_PAGE]', {
+        stage: 'auth',
+        reqId,
+        userId: user?.id,
+        error: authError.message,
+        code: authError.status,
+        stack: authError.stack,
+      });
       safeLogger.error('[PortfolioPage] Auth error', {
         reqId,
         error: authError.message,
@@ -41,7 +61,10 @@ export default async function PortfolioPage() {
       redirect('/auth/login');
     }
 
-    // Get user's profile
+    userId = user.id;
+
+    // Stage 3: Fetch profile
+    console.error('[PORTFOLIO_PAGE]', { stage: 'fetch_profile', reqId, userId });
     const { data: profile, error: profileError } = await supabase
       .from('profiles')
       .select('id, role')
@@ -49,6 +72,16 @@ export default async function PortfolioPage() {
       .single();
 
     if (profileError) {
+      console.error('[PORTFOLIO_PAGE]', {
+        stage: 'fetch_profile',
+        reqId,
+        userId,
+        error: profileError.message,
+        code: profileError.code,
+        details: profileError.details,
+        hint: profileError.hint,
+        stack: new Error().stack,
+      });
       safeLogger.error('[PortfolioPage] Profile query error', {
         reqId,
         userId: user.id,
@@ -64,7 +97,8 @@ export default async function PortfolioPage() {
       redirect('/');
     }
 
-    // Get student profile
+    // Stage 4: Fetch student profile
+    console.error('[PORTFOLIO_PAGE]', { stage: 'fetch_student_profile', reqId, userId, profileId: profile.id });
     const { data: studentProfile, error: studentProfileError } = await supabase
       .from('student_profiles')
       .select('id, visibility, full_name, bio, headline, skills, location, city, linkedin_url, github_url, website_url, headshot_image_url')
@@ -73,6 +107,17 @@ export default async function PortfolioPage() {
 
     if (studentProfileError && studentProfileError.code !== 'PGRST116') {
       // PGRST116 is "not found" which is acceptable (student profile might not exist yet)
+      console.error('[PORTFOLIO_PAGE]', {
+        stage: 'fetch_student_profile',
+        reqId,
+        userId,
+        profileId: profile.id,
+        error: studentProfileError.message,
+        code: studentProfileError.code,
+        details: studentProfileError.details,
+        hint: studentProfileError.hint,
+        stack: new Error().stack,
+      });
       safeLogger.error('[PortfolioPage] Student profile query error', {
         reqId,
         userId: user.id,
@@ -117,6 +162,14 @@ export default async function PortfolioPage() {
     let featuredProjects: FeaturedProject[] | null = null;
     
     if (studentProfile) {
+      // Stage 5: Fetch projects
+      console.error('[PORTFOLIO_PAGE]', { 
+        stage: 'fetch_projects', 
+        reqId, 
+        userId, 
+        studentProfileId: studentProfile.id 
+      });
+      
       const { data: projectsData, error: projectsError } = await supabase
         .from('portfolio_projects')
         .select(`
@@ -139,6 +192,17 @@ export default async function PortfolioPage() {
         .order('created_at', { ascending: false });
 
       if (projectsError) {
+        console.error('[PORTFOLIO_PAGE]', {
+          stage: 'fetch_projects',
+          reqId,
+          userId,
+          studentProfileId: studentProfile.id,
+          error: projectsError.message,
+          code: projectsError.code,
+          details: projectsError.details,
+          hint: projectsError.hint,
+          stack: new Error().stack,
+        });
         safeLogger.error('[PortfolioPage] Projects query error', {
           reqId,
           studentProfileId: studentProfile.id,
@@ -217,9 +281,16 @@ export default async function PortfolioPage() {
       }
     }
 
-    // Get CV data
+    // Stage 6: Fetch CV data
     let cv = null;
     if (studentProfile) {
+      console.error('[PORTFOLIO_PAGE]', { 
+        stage: 'fetch_cv', 
+        reqId, 
+        userId, 
+        studentProfileId: studentProfile.id 
+      });
+      
       const { data: cvData, error: cvError } = await supabase
         .from('student_cvs')
         .select('file_name, uploaded_at, visibility, url, file_path')
@@ -229,6 +300,15 @@ export default async function PortfolioPage() {
         .maybeSingle();
 
       if (cvError && cvError.code !== 'PGRST116') {
+        console.error('[PORTFOLIO_PAGE]', {
+          stage: 'fetch_cv',
+          reqId,
+          userId,
+          studentProfileId: studentProfile.id,
+          error: cvError.message,
+          code: cvError.code,
+          stack: new Error().stack,
+        });
         safeLogger.warn('[PortfolioPage] CV query error', {
           reqId,
           studentProfileId: studentProfile.id,
@@ -322,100 +402,136 @@ export default async function PortfolioPage() {
         <GitHubSyncStatus />
       </Suspense>
 
-      {/* LinkedIn-style 2-column layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-[65%_35%] gap-6">
-        {/* Main Column - Profile Content */}
-        <div className="space-y-6">
-          {/* Profile Header - LinkedIn style */}
-          {studentProfile && (
-            <ProfileHeader
-              fullName={studentProfile.full_name || ''}
-              headline={headline || ''}
-              headshotImageUrl={studentProfile.headshot_image_url || null}
-              location={studentProfile.location || null}
-              city={studentProfile.city || null}
-              linkedinUrl={studentProfile.linkedin_url || null}
-              githubUrl={studentProfile.github_url || null}
-              websiteUrl={studentProfile.website_url || null}
-              email={user?.email || ''}
-              visibility={studentProfile.visibility || 'private'}
-              studentProfileId={studentProfile.id}
-            />
-          )}
-
-          {/* About Section */}
-          <AboutSection bio={studentProfile?.bio || null} />
-
-          {/* Featured Projects Section */}
-          {studentProfile && (
-            <FeaturedProjects
-              projects={featuredProjects || []}
-              studentProfileId={studentProfile.id}
-            />
-          )}
-
-          {/* Experience / Projects Section */}
-          <section className="bg-white border border-gray-200 rounded-lg p-6">
-            <ProjectsView projects={projects || []} />
-          </section>
-
-          {/* Skills Section */}
-          <SkillsSection 
-            skills={coreSkills} 
-            studentProfileId={studentProfile?.id}
-          />
-
-          {/* Tool Proficiencies */}
-          {studentProfile?.id && (
-            <ProfileToolProficiencies studentProfileId={studentProfile.id} />
-          )}
+      {/* Show onboarding state if student profile doesn't exist */}
+      {!studentProfile ? (
+        <div className="bg-white border border-gray-200 rounded-lg p-8 text-center">
+          <div className="max-w-md mx-auto space-y-4">
+            <div className="text-gray-400">
+              <svg
+                className="w-16 h-16 mx-auto"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                />
+              </svg>
+            </div>
+            <h2 className="text-xl font-semibold text-gray-900">
+              Complete your profile to get started
+            </h2>
+            <p className="text-gray-600">
+              Create your student profile to start building your portfolio and showcasing your projects.
+            </p>
+            <Link
+              href="/student/portfolio/profile/edit"
+              className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+            >
+              Create Profile
+            </Link>
+          </div>
         </div>
+      ) : (
+        <>
+          {/* LinkedIn-style 2-column layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-[65%_35%] gap-6">
+            {/* Main Column - Profile Content */}
+            <div className="space-y-6">
+              {/* Profile Header - LinkedIn style */}
+              <ProfileHeader
+                fullName={studentProfile.full_name || ''}
+                headline={headline || ''}
+                headshotImageUrl={studentProfile.headshot_image_url || null}
+                location={studentProfile.location || null}
+                city={studentProfile.city || null}
+                linkedinUrl={studentProfile.linkedin_url || null}
+                githubUrl={studentProfile.github_url || null}
+                websiteUrl={studentProfile.website_url || null}
+                email={user?.email || ''}
+                visibility={studentProfile.visibility || 'private'}
+                studentProfileId={studentProfile.id}
+              />
 
-        {/* Right Sidebar - Tools & Actions */}
-        <div className="space-y-6">
-          {/* Recruiter Visibility */}
-          {studentProfile && (
-            <RecruiterVisibilitySection
-              currentVisibility={studentProfile.visibility}
-              hasBio={hasProfile}
-              hasCV={hasCV}
-              projectCount={projects?.length || 0}
-              visibleProjectCount={visibleProjectCount}
-            />
-          )}
+              {/* About Section */}
+              <AboutSection bio={studentProfile?.bio || null} />
 
-          {/* CV & Resume Card */}
-          {studentProfile && (
-            <CVResumeSection
-              studentProfileId={studentProfile.id}
-              cvFileName={cvFileName}
-              cvLastUpdated={cvLastUpdated}
-              cvVisibility={cvVisibility}
-              cvDownloadUrl={cvDownloadUrl}
-              hasCV={hasCV}
-              isDefault={true}
-            />
-          )}
+              {/* Featured Projects Section */}
+              <FeaturedProjects
+                projects={featuredProjects || []}
+                studentProfileId={studentProfile.id}
+              />
 
-          {/* Auto-Import Section */}
-          {studentProfile && (
-            <AutoImportSection
-              studentProfileId={studentProfile.id}
-              hasExistingData={hasProfile || hasCV || (projects && projects.length > 0)}
-            />
-          )}
+              {/* Experience / Projects Section */}
+              <section className="bg-white border border-gray-200 rounded-lg p-6">
+                <ProjectsView projects={projects || []} />
+              </section>
 
-          {/* Portfolio Advisor */}
-          <PortfolioAdvisorSection latestProjectId={projects && projects.length > 0 && projects[0]?.id ? projects[0].id : undefined} />
-        </div>
-      </div>
+              {/* Skills Section */}
+              <SkillsSection 
+                skills={coreSkills} 
+                studentProfileId={studentProfile.id}
+              />
+
+              {/* Tool Proficiencies */}
+              <ProfileToolProficiencies studentProfileId={studentProfile.id} />
+            </div>
+
+            {/* Right Sidebar - Tools & Actions */}
+            <div className="space-y-6">
+              {/* Recruiter Visibility */}
+              <RecruiterVisibilitySection
+                currentVisibility={studentProfile.visibility}
+                hasBio={hasProfile}
+                hasCV={hasCV}
+                projectCount={projects?.length || 0}
+                visibleProjectCount={visibleProjectCount}
+              />
+
+              {/* CV & Resume Card */}
+              <CVResumeSection
+                studentProfileId={studentProfile.id}
+                cvFileName={cvFileName}
+                cvLastUpdated={cvLastUpdated}
+                cvVisibility={cvVisibility}
+                cvDownloadUrl={cvDownloadUrl}
+                hasCV={hasCV}
+                isDefault={true}
+              />
+
+              {/* Auto-Import Section */}
+              <AutoImportSection
+                studentProfileId={studentProfile.id}
+                hasExistingData={hasProfile || hasCV || (projects && projects.length > 0)}
+              />
+
+              {/* Portfolio Advisor */}
+              <PortfolioAdvisorSection latestProjectId={projects && projects.length > 0 && projects[0]?.id ? projects[0].id : undefined} />
+            </div>
+          </div>
+        </>
+      )}
     </div>
     );
   } catch (e) {
     const error = e instanceof Error ? e : new Error(String(e));
     
+    console.error('[PORTFOLIO_PAGE]', {
+      stage: 'top_level_error',
+      reqId,
+      userId,
+      message: error.message,
+      stack: error.stack,
+      name: error.name,
+      cause: error.cause,
+    });
+    
     safeLogger.error('[PortfolioPage] Server render error', {
       reqId,
+      userId,
       message: error.message,
       stack: error.stack,
       name: error.name,
