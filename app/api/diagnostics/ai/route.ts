@@ -21,6 +21,8 @@ export async function GET(request: NextRequest) {
   try {
     const provider = process.env.LLM_PROVIDER || 'openai';
     const apiKey = process.env.LLM_API_KEY;
+    const openaiKey = process.env.OPENAI_API_KEY;
+    const anthropicKey = process.env.ANTHROPIC_API_KEY;
     const model = provider === 'openai' 
       ? (process.env.OPENAI_MODEL || 'gpt-4-turbo-preview')
       : (process.env.ANTHROPIC_MODEL || 'claude-3-opus-20240229');
@@ -30,8 +32,10 @@ export async function GET(request: NextRequest) {
     let fallbackAvailable = false;
     let fallbackProvider: string | undefined;
 
-    // Check if API key exists
+    // Check if API keys exist (check both LLM_API_KEY and provider-specific keys)
     const hasApiKey = !!apiKey;
+    const hasOpenAIKey = !!(apiKey || openaiKey);
+    const hasAnthropicKey = !!(apiKey || anthropicKey);
 
     // Check for fallback provider
     const fallbackProviderEnv = process.env.LLM_FALLBACK_PROVIDER;
@@ -71,13 +75,21 @@ export async function GET(request: NextRequest) {
                     process.env.VERCEL_GIT_COMMIT_SHA?.substring(0, 7) || 
                     undefined;
 
+    // Determine current environment
+    const environment = process.env.VERCEL_ENV || 
+                       (process.env.NODE_ENV === 'production' ? 'production' : 
+                        process.env.NODE_ENV === 'preview' ? 'preview' : 'development');
+
     return NextResponse.json({
       provider,
       model,
       hasApiKey,
+      hasOpenAIKey,
+      hasAnthropicKey,
       providerConfigured,
       fallbackAvailable,
       fallbackProvider: fallbackProvider || undefined,
+      environment,
       version,
       error: errorMessage || undefined,
       timestamp: new Date().toISOString(),
@@ -93,6 +105,8 @@ export async function GET(request: NextRequest) {
         provider: 'unknown',
         model: 'unknown',
         hasApiKey: false,
+        hasOpenAIKey: false,
+        hasAnthropicKey: false,
         providerConfigured: false,
         error: error.message || 'Diagnostics check failed',
         timestamp: new Date().toISOString(),

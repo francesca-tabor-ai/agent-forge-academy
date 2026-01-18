@@ -32,6 +32,9 @@ export interface Message {
   };
   intent?: string; // For quick actions
   nextActions?: NextAction[]; // Structured next actions for UI buttons
+  requestId?: string; // Request ID for error tracking
+  isError?: boolean; // Flag to indicate this is an error message
+  retryMessage?: string; // Message to retry if this is an error
 }
 
 export interface ActiveContext {
@@ -582,6 +585,9 @@ export function AIAdvisor({
           role: 'assistant',
           content: errorContent,
           timestamp: new Date(),
+          requestId: requestId !== 'N/A' ? requestId : undefined,
+          isError: true,
+          retryMessage: messageToSend, // Store the message to retry
         };
         setMessages((prev) => [...prev, errorMessage]);
         setIsLoading(false);
@@ -689,6 +695,7 @@ export function AIAdvisor({
           isLoading={isLoading}
           chatEndRef={chatEndRef}
           activeContext={activeContext}
+          onRetryMessage={handleSendMessage}
           onApplyDescription={async (description: string) => {
             if (!activeContext.project?.id) return;
             

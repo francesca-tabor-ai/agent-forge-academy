@@ -11,10 +11,12 @@ interface ChatPanelProps {
   chatEndRef: React.RefObject<HTMLDivElement>;
   activeContext: ActiveContext;
   onApplyDescription?: (description: string) => Promise<void>;
+  onRetryMessage?: (message: string) => void;
 }
 
-export function ChatPanel({ messages, isLoading, chatEndRef, activeContext, onApplyDescription }: ChatPanelProps) {
+export function ChatPanel({ messages, isLoading, chatEndRef, activeContext, onApplyDescription, onRetryMessage }: ChatPanelProps) {
   const [applying, setApplying] = useState<string | null>(null);
+  const [copiedRequestId, setCopiedRequestId] = useState<string | null>(null);
 
   const formatMessage = (content: string) => {
     // Convert markdown to JSX with proper formatting
@@ -85,6 +87,22 @@ export function ChatPanel({ messages, isLoading, chatEndRef, activeContext, onAp
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
     // Could show a toast notification here
+  };
+
+  const handleCopyRequestId = async (requestId: string) => {
+    try {
+      await navigator.clipboard.writeText(requestId);
+      setCopiedRequestId(requestId);
+      setTimeout(() => setCopiedRequestId(null), 2000);
+    } catch (error) {
+      console.error('Failed to copy request ID:', error);
+    }
+  };
+
+  const handleRetry = (message: string) => {
+    if (onRetryMessage) {
+      onRetryMessage(message);
+    }
   };
 
   const getActionIcon = (type: NextAction['type']): string => {
@@ -178,6 +196,8 @@ export function ChatPanel({ messages, isLoading, chatEndRef, activeContext, onAp
                 className={`inline-block p-3 rounded-lg ${
                   msg.role === 'user'
                     ? 'bg-blue-600 text-white'
+                    : msg.isError
+                    ? 'bg-red-50 border border-red-200 text-red-900'
                     : 'bg-white border border-gray-200 text-gray-900'
                 }`}
               >
@@ -220,6 +240,29 @@ export function ChatPanel({ messages, isLoading, chatEndRef, activeContext, onAp
                 >
                   Copy
                 </button>
+              </div>
+            )}
+
+            {/* Error message actions (Try again, Copy Request ID) */}
+            {msg.isError && msg.role === 'assistant' && (
+              <div className="mt-3 flex flex-wrap gap-2">
+                {msg.retryMessage && onRetryMessage && (
+                  <button
+                    onClick={() => handleRetry(msg.retryMessage!)}
+                    disabled={isLoading}
+                    className="px-3 py-1.5 text-xs bg-blue-600 text-white rounded-lg hover:bg-blue-700 hover:scale-105 active:scale-95 hover:shadow-lg transition-all duration-200 ease-out disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 font-medium"
+                  >
+                    🔄 Try Again
+                  </button>
+                )}
+                {msg.requestId && (
+                  <button
+                    onClick={() => handleCopyRequestId(msg.requestId!)}
+                    className="px-3 py-1.5 text-xs bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 hover:scale-105 active:scale-95 hover:shadow-sm transition-all duration-200 ease-out font-medium"
+                  >
+                    {copiedRequestId === msg.requestId ? '✓ Copied!' : '📋 Copy Request ID'}
+                  </button>
+                )}
               </div>
             )}
 
