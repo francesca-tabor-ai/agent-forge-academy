@@ -1733,7 +1733,7 @@ export async function POST(request: NextRequest) {
         maxTokens: 2000,
       });
       const llmLatency = Date.now() - llmStartTime;
-      const totalLatency = Date.now() - startTime;
+      const providerTotalLatency = Date.now() - startTime;
 
       safeLogger.info('[AI_ADVISOR] Provider response received', { 
         requestId, 
@@ -1741,7 +1741,7 @@ export async function POST(request: NextRequest) {
         provider: actualProvider,
         model,
         providerLatency: llmLatency,
-        totalLatency,
+        totalLatency: providerTotalLatency,
         responseLength: llmResponse.content.length,
         isFallback,
         finishReason: llmResponse.finishReason,

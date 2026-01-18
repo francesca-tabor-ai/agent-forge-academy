@@ -31,6 +31,15 @@ export interface RetrieveOptions {
   useVectorSearch?: boolean; // Force vector search (default: auto-detect)
 }
 
+export interface RetrievalDiagnostics {
+  method: 'vector' | 'keyword';
+  embeddingLatency?: number;
+  searchLatency: number;
+  totalLatency: number;
+  resultsCount: number;
+  scores?: number[];
+}
+
 /**
  * Retrieve chunks using vector similarity search (if embeddings available)
  */
@@ -114,13 +123,27 @@ async function retrieveWithKeywordSearch(
  * Retrieve relevant lesson chunks for a query
  * Automatically uses vector search if available, falls back to keyword search
  */
+// Overload signatures (NO default parameters, end with semicolons)
 export async function retrieveChunks(
   query: string,
-  options: RetrieveOptions = {},
+  options: RetrieveOptions & { includeDiagnostics: true },
   requestId?: string
-): Promise<RetrievedChunk[]> {
+): Promise<{ chunks: RetrievedChunk[]; diagnostics: RetrievalDiagnostics }>;
+export async function retrieveChunks(
+  query: string,
+  options?: RetrieveOptions & { includeDiagnostics?: false },
+  requestId?: string
+): Promise<RetrievedChunk[]>;
+// Implementation (HAS default parameters, has body)
+export async function retrieveChunks(
+  query: string,
+  options: RetrieveOptions & { includeDiagnostics?: boolean } = {},
+  requestId?: string
+): Promise<RetrievedChunk[] | { chunks: RetrievedChunk[]; diagnostics: RetrievalDiagnostics }> {
   const supabase = await createUserSupabaseClient();
   const useVectorSearch = options.useVectorSearch !== false; // Default to true
+  const includeDiagnostics = options.includeDiagnostics === true;
+  const totalStart = Date.now();
 
   // Try vector search first if enabled
   if (useVectorSearch) {
@@ -152,6 +175,7 @@ export async function retrieveChunks(
         const vectorSearchStart = Date.now();
         const vectorResults = await retrieveWithVectorSearch(supabase, queryEmbedding, options);
         const vectorSearchLatency = Date.now() - vectorSearchStart;
+        const totalLatency = Date.now() - totalStart;
         
         if (requestId) {
           console.log(`[RAG] [${requestId}] Vector search completed`, {
@@ -162,6 +186,19 @@ export async function retrieveChunks(
         }
         
         if (vectorResults.length > 0) {
+          if (includeDiagnostics) {
+            return {
+              chunks: vectorResults,
+              diagnostics: {
+                method: 'vector',
+                embeddingLatency,
+                searchLatency: vectorSearchLatency,
+                totalLatency,
+                resultsCount: vectorResults.length,
+                scores: vectorResults.map(r => r.score).filter((s): s is number => s !== undefined),
+              },
+            };
+          }
           return vectorResults;
         }
       }
@@ -178,12 +215,25 @@ export async function retrieveChunks(
   const keywordSearchStart = Date.now();
   const keywordResults = await retrieveWithKeywordSearch(supabase, query, options);
   const keywordSearchLatency = Date.now() - keywordSearchStart;
+  const totalLatency = Date.now() - totalStart;
   
   if (requestId) {
     console.log(`[RAG] [${requestId}] Keyword search completed`, {
       resultsCount: keywordResults.length,
       latency: keywordSearchLatency,
     });
+  }
+  
+  if (includeDiagnostics) {
+    return {
+      chunks: keywordResults,
+      diagnostics: {
+        method: 'keyword',
+        searchLatency: keywordSearchLatency,
+        totalLatency,
+        resultsCount: keywordResults.length,
+      },
+    };
   }
   
   return keywordResults;
