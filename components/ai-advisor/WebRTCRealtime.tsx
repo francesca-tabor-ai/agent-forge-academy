@@ -111,7 +111,10 @@ export function WebRTCRealtime({
   // Silence timeout: track last speech time (user or assistant)
   const lastSpeechTimeRef = useRef<number>(Date.now());
   const silenceTimeoutIntervalRef = useRef<NodeJS.Timeout | null>(null);
-  const SILENCE_TIMEOUT_DURATION = 5 * 60 * 1000; // 5 minutes without speech = close session
+  // Shorter timeout for hands-free mode (3 minutes) vs push-to-talk (5 minutes)
+  const SILENCE_TIMEOUT_DURATION = voiceMode === 'hands-free' 
+    ? 3 * 60 * 1000  // 3 minutes for hands-free
+    : 5 * 60 * 1000; // 5 minutes for push-to-talk
   
   // Connection timeout: track connection establishment timeout
   const connectionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -426,17 +429,40 @@ export function WebRTCRealtime({
     lastEventTimeRef.current = Date.now();
     
     // Update last speech time when we detect speech activity
-    // Track both user and assistant speech
+    // Track both user and assistant speech, including audio events
     const isSpeechEvent = 
+      // User speech events
       message.type === 'conversation.item.input_audio_transcription.delta' ||
       message.type === 'conversation.item.input_audio_transcription.completed' ||
+      message.type === 'conversation.item.input_audio_buffer.speech_started' ||
+      message.type === 'conversation.item.input_audio_buffer.speech_stopped' ||
+      // Assistant speech events
       message.type === 'response.audio_transcript.delta' ||
       message.type === 'response.audio_transcript.done' ||
       message.type === 'response.content.delta' ||
-      message.type === 'response.content.done';
+      message.type === 'response.content.done' ||
+      message.type === 'response.audio.delta' ||
+      message.type === 'response.audio.done' ||
+      // Session events that indicate activity
+      message.type === 'session.updated' ||
+      // Any event with audio content
+      (message.item && (
+        message.item.type === 'message' ||
+        message.item.type === 'input_audio_transcription' ||
+        message.item.type === 'function_call'
+      ));
     
     if (isSpeechEvent) {
       lastSpeechTimeRef.current = Date.now();
+      
+      // Log speech activity in development (without storing raw audio)
+      if (process.env.NODE_ENV === 'development' && voiceMode === 'hands-free') {
+        console.log('[WebRTC] Speech activity detected', {
+          type: message.type,
+          timestamp: new Date().toISOString(),
+          hasAudio: false,
+        });
+      }
     }
     
     // Log events (without storing raw audio)
@@ -840,6 +866,15 @@ export function WebRTCRealtime({
             
             // Update last speech time for hands-free mode
             lastSpeechTimeRef.current = Date.now();
+            
+            // Log hands-free mode activation (without storing raw audio)
+            safeLogger.info('Hands-free mode activated', {
+              timestamp: new Date().toISOString(),
+              hasAudio: false,
+              turnDetectionEnabled: true,
+            });
+            
+            console.log('[WebRTC] Hands-free mode: Microphone enabled, turn detection active');
           }
         } else if (state === 'disconnected' || state === 'failed') {
           // Clear connection timeout on failure
@@ -1097,6 +1132,9 @@ export function WebRTCRealtime({
    */
   const toggleMute = useCallback(() => {
     if (!localStreamRef.current || voiceMode !== 'hands-free') return;
+    
+    // Update speech time when toggling mute (user interaction)
+    lastSpeechTimeRef.current = Date.now();
 
     const audioTracks = localStreamRef.current.getAudioTracks();
     const newMutedState = !isMuted;
