@@ -8,7 +8,6 @@ import { generateNextActions, type NextAction } from '@/lib/ai/nextActions';
 import { redactPII, safeLogger } from '@/lib/utils/redactPII';
 import { logRequest, getUserIdFromRequest, getIpAddress, getUserAgent } from '@/lib/utils/request-logger';
 import { createErrorResponse, ErrorClass } from '@/lib/ai-advisor/error-taxonomy';
-import { createErrorResponse, ErrorClass } from '@/lib/ai-advisor/error-taxonomy';
 
 interface ChatRequest {
   message: string;
