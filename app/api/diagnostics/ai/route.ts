@@ -77,8 +77,7 @@ export async function GET(request: NextRequest) {
 
     // Determine current environment
     const environment = process.env.VERCEL_ENV || 
-                       (process.env.NODE_ENV === 'production' ? 'production' : 
-                        process.env.NODE_ENV === 'preview' ? 'preview' : 'development');
+                       (process.env.NODE_ENV === 'production' ? 'production' : 'development');
 
     return NextResponse.json({
       provider,
