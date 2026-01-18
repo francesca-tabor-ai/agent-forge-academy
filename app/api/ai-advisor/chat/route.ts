@@ -1587,6 +1587,7 @@ export async function POST(request: NextRequest) {
       const llmResponse = await llm.generate(llmMessages, {
         temperature: 0.7,
         maxTokens: 2000,
+        timeout: 30000, // 30 seconds for non-streaming
       });
       const llmLatency = Date.now() - llmStartTime;
       const totalLatency = Date.now() - startTime;
