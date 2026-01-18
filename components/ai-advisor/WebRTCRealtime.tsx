@@ -11,6 +11,7 @@ import {
   isSafariOrIOS,
   getSafariAudioConstraints,
   logPermissionStateTransition,
+  getSafariErrorMessage,
   type PermissionState,
   type MicrophoneDevice,
 } from '@/lib/utils/microphonePermissions';

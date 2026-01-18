@@ -8,6 +8,9 @@ import {
   isSafariOrIOS,
   getSafariAudioConstraints,
   logPermissionStateTransition,
+  isSpeechRecognitionSupported as isSpeechRecognitionSupportedUtil,
+  isMediaRecorderSupportedInSafari,
+  getSafariErrorMessage,
   type PermissionState,
   type MicrophoneDevice,
 } from '@/lib/utils/microphonePermissions';

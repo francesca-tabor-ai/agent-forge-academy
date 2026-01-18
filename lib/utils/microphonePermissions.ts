@@ -323,14 +323,100 @@ export function isSafariOrIOS(): boolean {
 
 /**
  * Get Safari-specific audio constraints
+ * Safari/iOS may require specific constraints and may not support all options
  */
 export function getSafariAudioConstraints(): MediaTrackConstraints {
-  // Safari may require specific constraints
-  return {
+  // Safari/iOS specific constraints
+  // Note: Safari may not support all constraints, so we use only essential ones
+  const constraints: MediaTrackConstraints = {
     echoCancellation: true,
     noiseSuppression: true,
     autoGainControl: true,
   };
+  
+  // iOS Safari may have additional requirements
+  if (typeof navigator !== 'undefined') {
+    const userAgent = navigator.userAgent.toLowerCase();
+    const isIOS = userAgent.includes('iphone') || userAgent.includes('ipad');
+    
+    if (isIOS) {
+      // iOS may require sampleRate to be specified
+      // But we don't force it as it may not be supported
+      // The browser will use its default if not supported
+    }
+  }
+  
+  return constraints;
+}
+
+/**
+ * Check if Speech Recognition API is supported
+ * Note: Safari does NOT support Speech Recognition API
+ */
+export function isSpeechRecognitionSupported(): boolean {
+  if (typeof window === 'undefined') return false;
+  
+  // Safari does not support Speech Recognition API
+  if (isSafariOrIOS()) {
+    return false;
+  }
+  
+  try {
+    return (
+      'webkitSpeechRecognition' in window ||
+      'SpeechRecognition' in window
+    );
+  } catch (error) {
+    return false;
+  }
+}
+
+/**
+ * Check if MediaRecorder is supported
+ * Safari has limited MediaRecorder support
+ */
+export function isMediaRecorderSupportedInSafari(): boolean {
+  if (typeof window === 'undefined') return false;
+  
+  if (!isSafariOrIOS()) {
+    return typeof MediaRecorder !== 'undefined';
+  }
+  
+  // Safari has limited MediaRecorder support
+  // Check if MediaRecorder exists and if it supports required codecs
+  if (typeof MediaRecorder === 'undefined') {
+    return false;
+  }
+  
+  // Safari may not support all codecs
+  // Check for basic support
+  try {
+    const isSupported = MediaRecorder.isTypeSupported('audio/webm') ||
+                       MediaRecorder.isTypeSupported('audio/mp4') ||
+                       MediaRecorder.isTypeSupported('audio/ogg');
+    return isSupported;
+  } catch (error) {
+    return false;
+  }
+}
+
+/**
+ * Get Safari-specific error message
+ */
+export function getSafariErrorMessage(errorName?: string): string {
+  if (errorName === 'NotAllowedError' || errorName === 'PermissionDeniedError') {
+    return 'Microphone permission is required. On Safari, go to Safari → Settings → Websites → Microphone and allow access for this site.';
+  }
+  
+  if (errorName === 'NotFoundError' || errorName === 'DevicesNotFoundError') {
+    return 'No microphone found. Please connect a microphone and refresh the page.';
+  }
+  
+  if (errorName === 'NotReadableError' || errorName === 'TrackStartError') {
+    return 'Microphone is being used by another application. Please close other apps using the microphone and try again.';
+  }
+  
+  return 'Unable to access microphone. Please check Safari settings and ensure microphone access is allowed.';
 }
 
 /**
