@@ -246,10 +246,9 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
         <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-6 lg:gap-8">
           {/* Left Column: Overview + Modules */}
           <div className="space-y-8">
-          {/* Course Overview Section */}
+          {/* Course Overview Section - De-emphasized since hero already shows course info */}
           {(courseDescription || outcomeBullets.length > 0 || buildBullets.length > 0 || bestForItems.length > 0) && (
             <div className="pt-6">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-6">Overview</h2>
               <OverviewCards
                 description={courseDescription}
                 outcome={outcomeBullets}

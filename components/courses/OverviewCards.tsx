@@ -22,8 +22,9 @@ export function OverviewCards({
   const [expandedBuild, setExpandedBuild] = useState(false);
   const [expandedBestFor, setExpandedBestFor] = useState(false);
 
+  // Consistent "Show more" thresholds for long lists
   const MAX_VISIBLE_OUTCOME = 5;
-  const MAX_VISIBLE_BUILD = 6;
+  const MAX_VISIBLE_BUILD = 5; // Make consistent with Outcome
 
   const visibleOutcome = expandedOutcome ? outcome : outcome.slice(0, MAX_VISIBLE_OUTCOME);
   const visibleBuild = expandedBuild ? build : build.slice(0, MAX_VISIBLE_BUILD);
