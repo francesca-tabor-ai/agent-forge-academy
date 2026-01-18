@@ -231,13 +231,30 @@ This document defines the **expected behavior** for hero/course images across th
 
 ---
 
+## Phase 3: Cross-Breakpoint Verification
+
+### Breakpoint Testing
+- **Mobile (≤390px)**: Min height 240px, stacked layout
+- **Tablet (~768px)**: Min height 320px, desktop layout starts
+- **Desktop (≥1280px)**: Min height 360px, horizontal layout
+
+### Common Issues by Breakpoint
+- **Mobile**: Collapsed hero height, image not visible, text overlap
+- **Tablet**: Layout shift, image cropping
+- **Desktop**: Image stretching, blank hero area
+
+See [BREAKPOINT_VERIFICATION_GUIDE.md](./BREAKPOINT_VERIFICATION_GUIDE.md) for detailed testing instructions.
+
 ## Next Steps (Phase 2+)
 
-1. **Audit all courses**: Check which courses have missing/invalid images
-2. **Audit all segments**: Check which segments have missing hero images
-3. **Test image loading**: Verify all image URLs are accessible
-4. **Implement fixes**: Add missing images, fix invalid URLs, ensure fallbacks work
-5. **Create reusable component**: Ensure consistent image handling across all pages
+1. ✅ **Audit all courses**: Check which courses have missing/invalid images (COMPLETE)
+2. ✅ **Create page inventory**: Generated checklist for all course pages (COMPLETE)
+3. ✅ **Cross-breakpoint verification**: Created testing guide and checklist (COMPLETE)
+4. **Manual breakpoint testing**: Test each course at Mobile/Tablet/Desktop viewports
+5. **Audit all segments**: Check which segments have missing hero images
+6. **Test image loading**: Verify all image URLs are accessible
+7. **Implement fixes**: Add missing images, fix invalid URLs, ensure fallbacks work
+8. **Create reusable component**: Ensure consistent image handling across all pages
 
 ---
 
