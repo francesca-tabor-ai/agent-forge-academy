@@ -192,31 +192,24 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
 
   return (
     <div className="pb-20 lg:pb-8">
-      {/* Back link - above banner */}
-      <div className="mb-4">
-        <Link
-          href="/student/courses"
-          className="text-sm text-brand-light hover:text-brand-light/90 inline-flex items-center gap-1"
-        >
-          ← Back to Courses
-        </Link>
+      {/* Hero Banner - Fixed/Sticky Header */}
+      <div className="sticky top-0 z-50 -mx-6">
+        <CourseHero
+          title={courseTitle}
+          imageUrl={courseCoverImage}
+          trackCategory={trackCategory}
+          difficultyLevel={difficultyLevel}
+          durationWeeks={durationWeeks}
+          industries={industries}
+          isEnrolled={!!enrollment}
+          progressPercentage={enrollment?.progress_percentage}
+          courseSlug={courseSlug}
+          courseId={course?.id}
+          nextLessonSlug={nextLessonSlug}
+          firstLessonSlug={lessons[0]?.slug}
+          showBackLink={true}
+        />
       </div>
-
-      {/* Hero Banner */}
-      <CourseHero
-        title={courseTitle}
-        imageUrl={courseCoverImage}
-        trackCategory={trackCategory}
-        difficultyLevel={difficultyLevel}
-        durationWeeks={durationWeeks}
-        industries={industries}
-        isEnrolled={!!enrollment}
-        progressPercentage={enrollment?.progress_percentage}
-        courseSlug={courseSlug}
-        courseId={course?.id}
-        nextLessonSlug={nextLessonSlug}
-        firstLessonSlug={lessons[0]?.slug}
-      />
 
       {/* Full width section below hero */}
       <div className="w-full">

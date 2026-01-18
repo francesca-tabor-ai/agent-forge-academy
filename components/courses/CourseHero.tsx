@@ -16,6 +16,7 @@ interface CourseHeroProps {
   courseId?: string | null;
   nextLessonSlug?: string | null;
   firstLessonSlug?: string | null;
+  showBackLink?: boolean;
 }
 
 export function CourseHero({
@@ -31,6 +32,7 @@ export function CourseHero({
   courseId,
   nextLessonSlug,
   firstLessonSlug,
+  showBackLink = true,
 }: CourseHeroProps) {
   const handleShare = () => {
     if (navigator.share) {
@@ -48,7 +50,7 @@ export function CourseHero({
   };
 
   return (
-    <div className="relative w-full min-h-[180px] sm:min-h-[220px] md:min-h-[260px] rounded-xl overflow-hidden mb-8 -mx-6 shadow-lg">
+    <div className="relative w-full min-h-[180px] sm:min-h-[220px] md:min-h-[260px] overflow-hidden shadow-lg">
       {/* Background Image */}
       <div
         className="absolute inset-0 bg-cover bg-center"
@@ -57,6 +59,18 @@ export function CourseHero({
       
       {/* Gradient Overlay - transparent top to dark bottom */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black/90" />
+      
+      {/* Back Link - Overlay on top */}
+      {showBackLink && (
+        <div className="absolute top-4 left-4 sm:top-6 sm:left-6 z-10">
+          <Link
+            href="/student/courses"
+            className="text-sm text-white hover:text-white/90 inline-flex items-center gap-1 bg-black/30 backdrop-blur-sm px-3 py-1.5 rounded-lg border border-white/20 transition-colors"
+          >
+            ← Back to Courses
+          </Link>
+        </div>
+      )}
       
       {/* Content Container */}
       <div className="relative h-full min-h-[180px] sm:min-h-[220px] md:min-h-[260px] flex flex-col justify-end p-4 sm:p-6 md:p-8">
