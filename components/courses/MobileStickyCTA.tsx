@@ -24,7 +24,7 @@ export function MobileStickyCTA({
   }
 
   return (
-    <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50 p-4">
+    <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-40 p-4 safe-area-inset-bottom">
       <div className="max-w-7xl mx-auto flex items-center gap-4">
         {isEnrolled && progressPercentage !== undefined && (
           <div className="flex-1 min-w-0">
