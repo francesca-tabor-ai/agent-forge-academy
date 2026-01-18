@@ -163,6 +163,10 @@ export function WebRTCRealtime({
       try {
         audioElementRef.current.srcObject = null;
         audioElementRef.current.pause();
+        // Remove from DOM if attached
+        if (audioElementRef.current.parentNode) {
+          audioElementRef.current.parentNode.removeChild(audioElementRef.current);
+        }
       } catch (e) {
         console.warn('Error cleaning up audio element:', e);
       }
@@ -656,6 +660,10 @@ export function WebRTCRealtime({
       const audioElement = document.createElement('audio');
       audioElement.autoplay = true;
       audioElement.muted = !voiceOutputEnabled; // Mute if voice output is disabled
+      // Attach to DOM (hidden) to ensure autoplay works
+      audioElement.style.display = 'none';
+      audioElement.setAttribute('data-webrtc-audio', 'true');
+      document.body.appendChild(audioElement);
       audioElementRef.current = audioElement;
 
       // Handle incoming audio track from PeerConnection
@@ -663,6 +671,13 @@ export function WebRTCRealtime({
         // Attach remote audio stream to audio element
         if (audioElement.srcObject !== event.streams[0]) {
           audioElement.srcObject = event.streams[0];
+          
+          // Attempt to play (required for autoplay policies)
+          audioElement.play().catch((playError) => {
+            console.warn('Audio autoplay blocked:', playError);
+            // User interaction may be required - show message if needed
+            setError('Audio playback requires user interaction. Please click the page to enable audio.');
+          });
         }
       };
 
