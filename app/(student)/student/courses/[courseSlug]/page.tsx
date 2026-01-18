@@ -245,10 +245,10 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
         {/* Inner grid: wide layout */}
         <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-6 lg:gap-8">
           {/* Left Column: Overview + Modules */}
-          <div className="space-y-8">
+          <div className="content-spacing">
           {/* Course Overview Section - De-emphasized since hero already shows course info */}
           {(courseDescription || outcomeBullets.length > 0 || buildBullets.length > 0 || bestForItems.length > 0) && (
-            <div className="pt-6">
+            <div className="section-spacing">
               <OverviewCards
                 description={courseDescription}
                 outcome={outcomeBullets}
@@ -258,9 +258,9 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
             </div>
           )}
 
-          {/* Modules Section */}
-          <div>
-            <h2 className="text-2xl font-semibold text-gray-900 mb-6">Modules</h2>
+          {/* Modules Section - Primary content, keep prominent */}
+          <div className="section-spacing">
+            <h2 className="text-section-header mb-6">Modules</h2>
             
             {lessons.length === 0 ? (
           <div className="bg-white border border-gray-200 rounded-xl p-8 text-center shadow-sm">

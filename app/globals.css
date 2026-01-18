@@ -47,6 +47,42 @@
 }
 
 @layer components {
+  /* Global Typography Scale */
+  /* Page Title - Largest, for main page headings */
+  .text-page-title {
+    @apply text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 font-playfair;
+  }
+
+  /* Section Header - For major section headings */
+  .text-section-header {
+    @apply text-2xl font-semibold text-gray-900 font-playfair;
+  }
+
+  /* Body Text - Default content text */
+  .text-body {
+    @apply text-base text-gray-700 leading-relaxed font-sans;
+  }
+
+  /* Metadata - Muted text for secondary information */
+  .text-metadata {
+    @apply text-sm text-gray-500 font-sans;
+  }
+
+  /* Global Spacing Utilities */
+  /* Section spacing - consistent vertical rhythm */
+  .section-spacing {
+    @apply py-6 md:py-8; /* 24px mobile, 32px desktop */
+  }
+
+  .section-spacing-lg {
+    @apply py-8 md:py-12; /* 32px mobile, 48px desktop */
+  }
+
+  /* Content spacing - between major content blocks */
+  .content-spacing {
+    @apply space-y-6 md:space-y-8; /* 24px mobile, 32px desktop */
+  }
+
   /* Primary Button - Create Academy style (gold CTA, pill shape) */
   .btn-primary {
     background: var(--ca-gold);

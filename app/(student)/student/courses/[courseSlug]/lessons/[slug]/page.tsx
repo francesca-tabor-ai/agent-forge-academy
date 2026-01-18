@@ -133,13 +133,13 @@ export default async function CourseLessonPage({ params }: CourseLessonPageProps
   return (
     <div className="min-h-screen bg-gray-50 pb-20 md:pb-8">
       {/* Constrained width container */}
-      <div className="max-w-[900px] mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
+      <div className="max-w-[900px] mx-auto px-4 sm:px-6 lg:px-8 section-spacing">
         {/* Header section - above the fold */}
         <div className="mb-6 md:mb-8">
-          <div className="flex items-start justify-between mb-4 md:mb-6">
+          <div className="flex items-start justify-between mb-6">
             <Link
               href={`/student/courses/${courseSlug}`}
-              className="text-sm text-brand-light hover:text-brand-light/90 inline-flex items-center gap-1.5 min-h-[44px] touch-manipulation"
+              className="text-metadata text-brand-light hover:text-brand-light/90 inline-flex items-center gap-1.5 min-h-[44px] touch-manipulation"
               aria-label={`Back to ${courseTitle}`}
             >
               <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -159,20 +159,20 @@ export default async function CourseLessonPage({ params }: CourseLessonPageProps
             </div>
           </div>
           
-          {/* Module title (H1) - Responsive typography */}
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-900 mb-3 md:mb-4 leading-tight">
+          {/* Module title (H1) - Page title scale */}
+          <h1 className="text-page-title mb-6 leading-tight">
             {lesson.frontmatter.title || lesson.slug}
           </h1>
           
           {/* Description */}
           {lesson.frontmatter.description && (
-            <p className="text-sm sm:text-base text-gray-600 mb-4 md:mb-6 leading-relaxed">
+            <p className="text-body mb-6">
               {lesson.frontmatter.description}
             </p>
           )}
           
-          {/* Meta information */}
-          <div className="flex flex-wrap items-center gap-2 md:gap-4 text-xs sm:text-sm text-gray-500 mb-4 md:mb-6">
+          {/* Meta information - Muted */}
+          <div className="flex flex-wrap items-center gap-3 text-metadata mb-6">
             <span className="text-brand-light">{courseTitle}</span>
             {lesson.frontmatter.module && (
               <span>Module: {lesson.frontmatter.module}</span>
@@ -182,7 +182,7 @@ export default async function CourseLessonPage({ params }: CourseLessonPageProps
         </div>
 
         {/* Lesson content - Responsive reading width */}
-        <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6 md:p-8">
+        <div className="bg-white border border-gray-200 rounded-lg p-6 md:p-8">
           <div 
             className="prose prose-sm sm:prose-base max-w-none"
             style={{ 
@@ -194,11 +194,11 @@ export default async function CourseLessonPage({ params }: CourseLessonPageProps
                 Strip any leading H1 from markdown content to prevent duplication. */}
             <LessonContent content={stripLeadingH1(lesson.content, lesson.frontmatter.title || lesson.slug)} />
           </div>
-          <div className="mt-6 md:mt-8">
+          <div className="mt-8">
             <LessonCompletionButton lessonId={slug} />
           </div>
           {/* Bottom navigation button */}
-          <div className="mt-6 md:mt-8">
+          <div className="mt-8">
             <NextLessonNavigation
               nextLesson={navigation.nextLesson}
               isLastLesson={navigation.isLastLesson}
