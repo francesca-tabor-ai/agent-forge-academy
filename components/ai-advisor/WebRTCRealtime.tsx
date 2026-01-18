@@ -722,13 +722,16 @@ export function WebRTCRealtime({
       dataChannelRef.current = dataChannel;
 
       dataChannel.onopen = () => {
-        console.log('Data channel opened');
+        const correlationId = correlationIdRef.current || 'unknown';
+        console.log('[WebRTC] Data channel opened', { correlationId });
+        
         // Update last event time
         lastEventTimeRef.current = Date.now();
         lastSpeechTimeRef.current = Date.now(); // Initialize speech time
         
         // Log data channel opened (without storing raw audio)
         safeLogger.info('WebRTC data channel opened', {
+          correlationId,
           timestamp: new Date().toISOString(),
           hasAudio: false, // Never log raw audio
         });
@@ -759,7 +762,8 @@ export function WebRTCRealtime({
       };
 
       dataChannel.onerror = (event) => {
-        console.error('Data channel error:', event);
+        const correlationId = correlationIdRef.current || 'unknown';
+        console.error('[WebRTC] Data channel error', { correlationId, event });
         const errorMsg = 'Data channel error occurred';
         setError(errorMsg);
         if (onError) onError(errorMsg);
@@ -769,7 +773,8 @@ export function WebRTCRealtime({
       };
       
       dataChannel.onclose = () => {
-        console.log('Data channel closed');
+        const correlationId = correlationIdRef.current || 'unknown';
+        console.log('[WebRTC] Data channel closed', { correlationId });
         if (isConnected) {
           // Unexpected close - trigger fallback
           setError('Data channel closed unexpectedly');
@@ -806,7 +811,8 @@ export function WebRTCRealtime({
       // Handle ICE connection state
       pc.oniceconnectionstatechange = () => {
         const state = pc.iceConnectionState;
-        console.log('ICE connection state:', state);
+        const correlationId = correlationIdRef.current || 'unknown';
+        console.log('[WebRTC] ICE connection state changed', { correlationId, state });
         
         if (state === 'connected' || state === 'completed') {
           // Clear connection timeout on successful connection
@@ -885,12 +891,20 @@ export function WebRTCRealtime({
           errorText = await sdpResponse.text().catch(() => errorText);
         }
         
-        console.error('Failed to connect to OpenAI Realtime:', sdpResponse.status, errorText);
+        const correlationId = correlationIdRef.current || 'unknown';
+        console.error('[WebRTC] Failed to connect to OpenAI Realtime', { 
+          correlationId, 
+          status: sdpResponse.status, 
+          error: errorText 
+        });
         
-        // Provide more specific error messages with request ID if available
+        // Provide more specific error messages with request ID and correlation ID if available
         let userFriendlyError = `Failed to connect to OpenAI Realtime API`;
         if (requestId) {
           userFriendlyError += ` (Request ID: ${requestId})`;
+        }
+        if (correlationId !== 'unknown') {
+          userFriendlyError += ` (Correlation ID: ${correlationId})`;
         }
         let shouldFallback = false;
         
@@ -963,11 +977,13 @@ export function WebRTCRealtime({
         connectionTimeoutRef.current = null;
       }
       
-      console.error('Error connecting to Realtime API:', err);
+      const correlationId = correlationIdRef.current || 'unknown';
+      console.error('[WebRTC] Error connecting to Realtime API', { correlationId, error: err });
       const errorMessage = err instanceof Error ? err.message : 'Failed to connect';
       
       // Structured logging: connection error
       safeLogger.error('WebRTC connection error', {
+        correlationId,
         errorMessage: errorMessage, // Error reason without leaking keys
         hasSession: !!sessionRef.current,
         sessionId: sessionRef.current?.session_id,
