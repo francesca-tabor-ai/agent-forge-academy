@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import { ToolLogo } from '../offers/ToolLogo';
@@ -31,11 +31,7 @@ export function ProjectToolOffers({ projectId }: ProjectToolOffersProps) {
   const [offers, setOffers] = useState<Offer[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchToolOffers();
-  }, [projectId]);
-
-  const fetchToolOffers = async () => {
+  const fetchToolOffers = useCallback(async () => {
     try {
       const supabase = createClient();
 
@@ -79,7 +75,11 @@ export function ProjectToolOffers({ projectId }: ProjectToolOffersProps) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [projectId]);
+
+  useEffect(() => {
+    fetchToolOffers();
+  }, [fetchToolOffers]);
 
   if (loading) {
     return null;

@@ -179,7 +179,7 @@ export function TradeoffVisualiser() {
     const result = runSimulationForSettings(baselineSettings);
     setBaselineResult(result);
     setCurrentResult(result);
-  }, [runSimulationForSettings]);
+  }, [runSimulationForSettings, baselineSettings]);
 
   // Update current result when debounced settings change
   useEffect(() => {

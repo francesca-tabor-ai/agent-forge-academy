@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ToolProficiencyBadge } from '../offers/ToolProficiencyBadge';
 import { type ProficiencyLevel } from '@/lib/utils/tool-proficiency';
 import Link from 'next/link';
@@ -21,11 +21,7 @@ export function ProfileToolProficiencies({ studentProfileId }: ProfileToolProfic
   const [proficiencies, setProficiencies] = useState<ToolProficiency[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchProficiencies();
-  }, [studentProfileId]);
-
-  const fetchProficiencies = async () => {
+  const fetchProficiencies = useCallback(async () => {
     try {
       const response = await fetch(`/api/profile/${studentProfileId}/tool-proficiencies`);
       if (!response.ok) {
@@ -40,7 +36,11 @@ export function ProfileToolProficiencies({ studentProfileId }: ProfileToolProfic
     } finally {
       setLoading(false);
     }
-  };
+  }, [studentProfileId]);
+
+  useEffect(() => {
+    fetchProficiencies();
+  }, [fetchProficiencies]);
 
   if (loading) {
     return (

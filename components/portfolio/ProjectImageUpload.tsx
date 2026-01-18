@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import Image from 'next/image';
 
 interface GalleryImage {
   id: string;
@@ -257,10 +258,12 @@ export function ProjectImageUpload({
         {coverImageUrl ? (
           <div className="space-y-2">
             <div className="relative w-full h-48 rounded-lg overflow-hidden border border-gray-200">
-              <img
+              <Image
                 src={coverImageUrl}
                 alt="Cover"
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
               <button
                 type="button"
@@ -311,10 +314,12 @@ export function ProjectImageUpload({
             {sortedImages.map((image, index) => (
               <div key={image.id} className="relative group">
                 <div className="relative w-full h-32 rounded-lg overflow-hidden border border-gray-200">
-                  <img
+                  <Image
                     src={image.url}
                     alt={`Gallery ${index + 1}`}
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 33vw, 20vw"
                   />
                   <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity flex items-center justify-center gap-2">
                     <button

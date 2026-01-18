@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ExpandableDescription } from './ExpandableDescription';
 import { ProjectToolProficiencies } from './ProjectToolProficiencies';
 
@@ -155,14 +156,12 @@ export function ProjectCard({
       >
         {/* Cover Image with Gradient Overlay */}
         <div className="relative w-full h-48 overflow-hidden bg-gray-100">
-          <img
+          <Image
             src={resolvedImageUrl}
             alt={title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-            onError={(e) => {
-              // Fallback to default if image fails to load
-              (e.target as HTMLImageElement).src = '/project-covers/default.jpg';
-            }}
+            fill
+            className="object-cover group-hover:scale-105 transition-transform duration-300"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
           {/* Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ToolProficiencyBadge } from '../offers/ToolProficiencyBadge';
 import { type ProficiencyLevel } from '@/lib/utils/tool-proficiency';
 
@@ -24,11 +24,7 @@ export function ProjectToolProficiencies({ projectId, maxDisplay = 3 }: ProjectT
   const [proficiencies, setProficiencies] = useState<ToolProficiency[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchProficiencies();
-  }, [projectId]);
-
-  const fetchProficiencies = async () => {
+  const fetchProficiencies = useCallback(async () => {
     try {
       // Get tools for this project
       const toolsResponse = await fetch(`/api/portfolio/projects/${projectId}/tools`);
@@ -74,7 +70,11 @@ export function ProjectToolProficiencies({ projectId, maxDisplay = 3 }: ProjectT
     } finally {
       setLoading(false);
     }
-  };
+  }, [projectId]);
+
+  useEffect(() => {
+    fetchProficiencies();
+  }, [fetchProficiencies]);
 
   if (loading || proficiencies.length === 0) {
     return null;
