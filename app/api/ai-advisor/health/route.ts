@@ -148,7 +148,7 @@ export async function GET(request: NextRequest) {
     // Test basic database connectivity
     const { data: testData, error: dbError } = await supabase
       .from('lesson_chunks')
-      .select('count')
+      .select('id')
       .limit(1);
     
     if (dbError) {
@@ -249,8 +249,8 @@ export async function GET(request: NextRequest) {
   try {
     const supabase = createServerSupabaseClient();
     
-    // Check if embeddings exist
-    const { data: embeddingCount, error: countError } = await supabase
+    // Check if embeddings exist (count chunks with embeddings)
+    const { count: embeddingCount, error: countError } = await supabase
       .from('lesson_chunks')
       .select('id', { count: 'exact', head: true })
       .not('embedding', 'is', null);
@@ -262,7 +262,7 @@ export async function GET(request: NextRequest) {
         message: `Could not check embedding count: ${countError.message}`,
       });
     } else {
-      const count = embeddingCount?.length || 0;
+      const count = embeddingCount || 0;
       checks.push({
         name: 'Index Existence',
         status: count > 0 ? 'pass' : 'warn',
@@ -276,12 +276,18 @@ export async function GET(request: NextRequest) {
     }
     
     // Check total chunk count
-    const { data: totalCount, error: totalError } = await supabase
+    const { count: totalCount, error: totalError } = await supabase
       .from('lesson_chunks')
       .select('id', { count: 'exact', head: true });
     
-    if (!totalError && totalCount) {
-      const total = totalCount.length || 0;
+    if (totalError) {
+      checks.push({
+        name: 'Lesson Chunks Table',
+        status: 'warn',
+        message: `Could not check total chunk count: ${totalError.message}`,
+      });
+    } else {
+      const total = totalCount || 0;
       checks.push({
         name: 'Lesson Chunks Table',
         status: total > 0 ? 'pass' : 'warn',
