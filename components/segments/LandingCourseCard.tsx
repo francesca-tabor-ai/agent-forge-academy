@@ -1,8 +1,10 @@
 'use client';
 
+import { useState } from 'react';
 import Image from 'next/image';
 import { resolveCourseImageUrl } from '@/lib/utils/course-image-resolver';
 import type { CourseMetadata } from '@/lib/course-metadata';
+import { CourseImagePlaceholder } from '@/components/courses/CourseImagePlaceholder';
 
 interface LandingCourseCardProps {
   course: CourseMetadata & { slug: string; difficulty?: string | null };
@@ -18,23 +20,45 @@ export function LandingCourseCard({ course }: LandingCourseCardProps) {
   });
 
   // Safety check: ensure imageUrl is never empty or invalid
-  const safeImageUrl = imageUrl && imageUrl.trim() && imageUrl !== 'image' 
-    ? imageUrl 
-    : 'https://wallpaperaccess.com/full/340554.png';
+  const isValidImageUrl = imageUrl && 
+    imageUrl.trim() && 
+    imageUrl !== 'image' && 
+    imageUrl !== 'placeholder' &&
+    !imageUrl.startsWith('http://placeholder');
+  
+  const safeImageUrl = isValidImageUrl ? imageUrl : null;
+  
+  // Track if image fails to load
+  const [imageError, setImageError] = useState(false);
+  
+  // Determine if we should show placeholder
+  const shouldShowPlaceholder = !safeImageUrl || imageError;
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow card-interactive">
       {/* Course Image */}
       <div className="relative h-48 bg-gray-100">
-        <Image
-          src={safeImageUrl}
-          alt={course.title}
-          fill
-          className="object-cover"
-          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-        />
-        {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+        {shouldShowPlaceholder ? (
+          <CourseImagePlaceholder
+            title={course.title}
+            category={course.category}
+            industries={course.industries}
+            className="rounded-none"
+          />
+        ) : (
+          <>
+            <Image
+              src={safeImageUrl}
+              alt={course.title}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              onError={() => setImageError(true)}
+            />
+            {/* Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+          </>
+        )}
         
         {/* Included Badge */}
         <div className="absolute top-3 right-3 z-10">

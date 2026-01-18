@@ -11,6 +11,7 @@ import type { SubscriptionTier } from '@/lib/utils/subscription-types';
 import { resolveCourseImageUrl } from '@/lib/utils/course-image-resolver';
 import { Lock, ChevronDown, ChevronUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { CourseImagePlaceholder } from './CourseImagePlaceholder';
 
 interface ExpandableSectionProps {
   title: string;
@@ -133,8 +134,20 @@ export function CourseCard({
   });
 
   // Safety check: ensure imageUrl is never empty or invalid
-  // Use the resolved imageUrl (which already has fallback logic)
-  const safeImageUrl = imageUrl && imageUrl.trim() && imageUrl !== 'image' ? imageUrl : 'https://wallpaperaccess.com/full/340554.png';
+  // Check if imageUrl is a placeholder or invalid
+  const isValidImageUrl = imageUrl && 
+    imageUrl.trim() && 
+    imageUrl !== 'image' && 
+    imageUrl !== 'placeholder' &&
+    !imageUrl.startsWith('http://placeholder');
+  
+  const safeImageUrl = isValidImageUrl ? imageUrl : null;
+  
+  // Track if image fails to load
+  const [imageError, setImageError] = useState(false);
+  
+  // Determine if we should show placeholder
+  const shouldShowPlaceholder = !safeImageUrl || imageError;
 
   const handleCardClick = (e: React.MouseEvent) => {
     // Don't navigate if clicking on expand button or read more buttons
@@ -188,18 +201,31 @@ export function CourseCard({
         whileHover={!isLocked ? { scale: 1.02 } : {}}
         transition={{ duration: 0.3, ease: 'easeOut' }}
       >
-        {/* Optimized Background Image */}
-        <Image
-          src={safeImageUrl}
-          alt={displayTitle}
-          fill
-          className="object-cover"
-          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          priority={false}
-          loading="lazy"
-        />
-        {/* Gradient Overlay - transparent at top, darker at bottom */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-[1]" />
+        {/* Show placeholder if image is invalid or failed to load */}
+        {shouldShowPlaceholder ? (
+          <CourseImagePlaceholder
+            title={displayTitle}
+            category={course.category || metadata?.category}
+            industries={displayIndustries}
+            className="rounded-lg"
+          />
+        ) : (
+          <>
+            {/* Optimized Background Image */}
+            <Image
+              src={safeImageUrl}
+              alt={displayTitle}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              priority={false}
+              loading="lazy"
+              onError={() => setImageError(true)}
+            />
+            {/* Gradient Overlay - transparent at top, darker at bottom (only for real images) */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-[1]" />
+          </>
+        )}
         
         {/* Top-right: Expand Icon Button - Large tap target for mobile */}
         {hasExpandableContent && (

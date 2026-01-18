@@ -4,7 +4,7 @@
 
 import type { CourseMetadata as CourseSyncMetadata } from '@/lib/course-sync/types';
 import type { CourseMetadata as DashboardMetadata } from '@/lib/course-metadata';
-import { getCoverFromIndustries, getIndustryCover, INDUSTRY_COVERS } from '@/lib/courseCovers';
+import { getCoverFromIndustries, getIndustryCover, INDUSTRY_COVERS, TRACK_COVERS } from '@/lib/courseCovers';
 
 /**
  * Default image URLs by industry
@@ -19,6 +19,7 @@ const INDUSTRY_DEFAULT_IMAGES: Record<string, string> = {
 /**
  * Default image URLs by track/category
  * Tracks take priority over industries (except Healthcare and Finance)
+ * @deprecated Use TRACK_COVERS from @/lib/courseCovers instead
  */
 const TRACK_DEFAULT_IMAGES: Record<string, string> = {
   'Vibe Engineering': 'https://www.windowsnoticias.com/wp-content/uploads/2025/04/0_vOaWDgTmVpMfi9ws.png',
@@ -97,8 +98,9 @@ export function resolveCourseImageUrl(course: CourseWithImage): string {
   }
 
   // Priority 3: Track-based image (tracks take priority over standard industries)
-  if (track && TRACK_DEFAULT_IMAGES[track]) {
-    return TRACK_DEFAULT_IMAGES[track];
+  // Use TRACK_COVERS from courseCovers (supports local images with external fallback)
+  if (track && TRACK_COVERS[track]) {
+    return TRACK_COVERS[track];
   }
 
   // Priority 4: Standard industry-based image (non-priority industries)
@@ -123,9 +125,10 @@ export function getDefaultImageForIndustry(industry: string): string {
 
 /**
  * Get default image URL for a track/category
+ * Uses TRACK_COVERS which supports local images with external fallback
  */
 export function getDefaultImageForTrack(track: string): string {
-  return TRACK_DEFAULT_IMAGES[track] || DEFAULT_FALLBACK_IMAGE;
+  return TRACK_COVERS[track] || TRACK_DEFAULT_IMAGES[track] || DEFAULT_FALLBACK_IMAGE;
 }
 
 /**
