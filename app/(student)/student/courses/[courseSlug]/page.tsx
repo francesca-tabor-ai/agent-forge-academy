@@ -209,7 +209,6 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
           courseId={course?.id}
           nextLessonSlug={nextLessonSlug}
           firstLessonSlug={lessons[0]?.slug}
-          showBackLink={true}
         />
       </div>
 
