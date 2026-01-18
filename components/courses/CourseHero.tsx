@@ -50,7 +50,7 @@ export function CourseHero({
   };
 
   return (
-    <div className="relative w-full min-h-[180px] sm:min-h-[220px] md:min-h-[260px] overflow-hidden shadow-lg">
+    <div className="relative w-full min-h-[180px] sm:min-h-[220px] md:min-h-[260px] overflow-hidden">
       {/* Background Image */}
       <div
         className="absolute inset-0 bg-cover bg-center"
