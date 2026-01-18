@@ -102,7 +102,7 @@ const TRACK_EXTERNAL_URLS: Record<string, string> = {
   "Vibe Engineering": "https://www.windowsnoticias.com/wp-content/uploads/2025/04/0_vOaWDgTmVpMfi9ws.png",
   "Platform Engineering": "https://8allocate.com/wp-content/uploads/2024/01/The-Future-of-Software-Engineering_-Predictions-for-2024.jpg",
   "GTM & Revenue Operations": "https://wp.sfdcdigital.com/en-us/wp-content/uploads/sites/4/2024/08/revenue-ops.jpg?w=1024",
-  "Creative AI": "https://cached.imagescaler.hbpl.co.uk/resize/scaleWidth/815/cached.offlinehbpl.hbpl.co.uk/news/OMC/Human-creativity-v-machine-creativity-20180614032816356.jpg",
+  "Creative AI": "https://www.hyperakt.com/_next/image?url=https%3A%2F%2Fwww.hyperakt.com%2Fassets%2Fimages%2Fthe-nonprofit-distinction-struggle-2%2FCraft.jpg&w=3840&q=75",
   "Audio & Voice": "https://media.bazaarvoice.com/Shutterstock_1159197631.png",
 };
 
