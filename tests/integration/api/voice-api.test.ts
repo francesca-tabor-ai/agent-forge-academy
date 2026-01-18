@@ -411,4 +411,170 @@ describe('Voice API - Integration Tests', () => {
       });
     });
   });
+
+  describe('POST /api/ai-advisor/voice - Context Handling', () => {
+    it('should use course context when provided', async () => {
+      const audioBlob = createMockAudioBlob();
+      const formData = new FormData();
+      formData.append('audio', audioBlob, 'test.webm');
+      formData.append('studentProfileId', testStudentProfileId);
+      formData.append('context', JSON.stringify({
+        course: {
+          id: 'test-course-id',
+          slug: 'test-course',
+          title: 'Test Course',
+        },
+      }));
+
+      const response = await fetch(`${BASE_URL}/api/ai-advisor/voice`, {
+        method: 'POST',
+        headers: {
+          'Cookie': authCookie,
+        },
+        body: formData,
+      });
+
+      expect(response.status).toBe(200);
+      const data = await response.json();
+      expect(data).toHaveProperty('responseText');
+    });
+
+    it('should use project context when provided', async () => {
+      const audioBlob = createMockAudioBlob();
+      const formData = new FormData();
+      formData.append('audio', audioBlob, 'test.webm');
+      formData.append('studentProfileId', testStudentProfileId);
+      formData.append('context', JSON.stringify({
+        project: {
+          id: 'test-project-id',
+          title: 'Test Project',
+        },
+      }));
+
+      const response = await fetch(`${BASE_URL}/api/ai-advisor/voice`, {
+        method: 'POST',
+        headers: {
+          'Cookie': authCookie,
+        },
+        body: formData,
+      });
+
+      expect(response.status).toBe(200);
+      const data = await response.json();
+      expect(data).toHaveProperty('responseText');
+    });
+
+    it('should use job context when provided', async () => {
+      const audioBlob = createMockAudioBlob();
+      const formData = new FormData();
+      formData.append('audio', audioBlob, 'test.webm');
+      formData.append('studentProfileId', testStudentProfileId);
+      formData.append('context', JSON.stringify({
+        job: {
+          id: 'test-job-id',
+          title: 'Test Job',
+          company: 'Test Company',
+        },
+      }));
+
+      const response = await fetch(`${BASE_URL}/api/ai-advisor/voice`, {
+        method: 'POST',
+        headers: {
+          'Cookie': authCookie,
+        },
+        body: formData,
+      });
+
+      expect(response.status).toBe(200);
+      const data = await response.json();
+      expect(data).toHaveProperty('responseText');
+    });
+
+    it('should work without context', async () => {
+      const audioBlob = createMockAudioBlob();
+      const formData = new FormData();
+      formData.append('audio', audioBlob, 'test.webm');
+      formData.append('studentProfileId', testStudentProfileId);
+      // No context provided
+
+      const response = await fetch(`${BASE_URL}/api/ai-advisor/voice`, {
+        method: 'POST',
+        headers: {
+          'Cookie': authCookie,
+        },
+        body: formData,
+      });
+
+      expect(response.status).toBe(200);
+      const data = await response.json();
+      expect(data).toHaveProperty('responseText');
+    });
+  });
+
+  describe('POST /api/ai-advisor/voice - Intent Handling', () => {
+    it('should use intent when provided', async () => {
+      const audioBlob = createMockAudioBlob();
+      const formData = new FormData();
+      formData.append('audio', audioBlob, 'test.webm');
+      formData.append('studentProfileId', testStudentProfileId);
+      formData.append('intent', 'question');
+
+      const response = await fetch(`${BASE_URL}/api/ai-advisor/voice`, {
+        method: 'POST',
+        headers: {
+          'Cookie': authCookie,
+        },
+        body: formData,
+      });
+
+      expect(response.status).toBe(200);
+      const data = await response.json();
+      expect(data).toHaveProperty('responseText');
+    });
+  });
+
+  describe('POST /api/ai-advisor/voice - Conversation Management', () => {
+    it('should create new conversation when conversationId not provided', async () => {
+      const audioBlob = createMockAudioBlob();
+      const formData = new FormData();
+      formData.append('audio', audioBlob, 'test.webm');
+      formData.append('studentProfileId', testStudentProfileId);
+      // No conversationId
+
+      const response = await fetch(`${BASE_URL}/api/ai-advisor/voice`, {
+        method: 'POST',
+        headers: {
+          'Cookie': authCookie,
+        },
+        body: formData,
+      });
+
+      expect(response.status).toBe(200);
+      const data = await response.json();
+      expect(data).toHaveProperty('conversationId');
+      expect(typeof data.conversationId).toBe('string');
+      expect(data.conversationId.length).toBeGreaterThan(0);
+    });
+
+    it('should use existing conversationId when provided', async () => {
+      const audioBlob = createMockAudioBlob();
+      const formData = new FormData();
+      formData.append('audio', audioBlob, 'test.webm');
+      formData.append('studentProfileId', testStudentProfileId);
+      formData.append('conversationId', 'existing-conversation-id');
+
+      const response = await fetch(`${BASE_URL}/api/ai-advisor/voice`, {
+        method: 'POST',
+        headers: {
+          'Cookie': authCookie,
+        },
+        body: formData,
+      });
+
+      expect(response.status).toBe(200);
+      const data = await response.json();
+      expect(data).toHaveProperty('conversationId');
+      expect(data.conversationId).toBe('existing-conversation-id');
+    });
+  });
 });
