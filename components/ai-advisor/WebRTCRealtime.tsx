@@ -111,10 +111,9 @@ export function WebRTCRealtime({
   // Silence timeout: track last speech time (user or assistant)
   const lastSpeechTimeRef = useRef<number>(Date.now());
   const silenceTimeoutIntervalRef = useRef<NodeJS.Timeout | null>(null);
-  // Shorter timeout for hands-free mode (3 minutes) vs push-to-talk (5 minutes)
-  const SILENCE_TIMEOUT_DURATION = voiceMode === 'hands-free' 
-    ? 3 * 60 * 1000  // 3 minutes for hands-free
-    : 5 * 60 * 1000; // 5 minutes for push-to-talk
+  // Base timeout durations (will be adjusted based on voice mode)
+  const HANDS_FREE_TIMEOUT = 3 * 60 * 1000; // 3 minutes for hands-free
+  const PUSH_TO_TALK_TIMEOUT = 5 * 60 * 1000; // 5 minutes for push-to-talk
   
   // Connection timeout: track connection establishment timeout
   const connectionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
