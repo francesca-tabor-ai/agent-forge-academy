@@ -2,8 +2,6 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
-import { useRouter } from 'next/navigation';
 import { 
   LayoutDashboard, 
   BookOpen, 
@@ -18,8 +16,7 @@ import {
   UserCheck,
   BarChart3,
   Database,
-  Upload,
-  LogOut
+  Upload
 } from 'lucide-react';
 import type { UserRole } from '@/lib/types/roles';
 
@@ -31,14 +28,6 @@ interface SidebarProps {
 
 export default function Sidebar({ role, isExpanded, isMobile }: SidebarProps) {
   const pathname = usePathname();
-  const router = useRouter();
-
-  const handleSignOut = async () => {
-    const supabase = createClient();
-    await supabase.auth.signOut();
-    router.push('/auth/login');
-    router.refresh();
-  };
 
   const getNavItems = () => {
     switch (role) {
@@ -117,21 +106,6 @@ export default function Sidebar({ role, isExpanded, isMobile }: SidebarProps) {
           );
         })}
       </nav>
-
-      {/* Sign Out */}
-      <div className="p-4 border-t flex-shrink-0" style={{ borderColor: 'var(--ca-neutral-300)' }}>
-        <button
-          onClick={handleSignOut}
-          className={`
-            w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium text-ca-neutral-500 hover:text-ca-text transition-all duration-200 ease-out hover:scale-105 hover:bg-gray-50 active:scale-95
-            ${!isExpanded ? 'justify-center' : ''}
-          `}
-          title={!isExpanded ? 'Sign Out' : undefined}
-        >
-          <LogOut className="w-5 h-5 flex-shrink-0" />
-          {isExpanded && <span>Sign Out</span>}
-        </button>
-      </div>
     </div>
   );
 }
