@@ -9,6 +9,7 @@ import { redactPII, safeLogger } from '@/lib/utils/redactPII';
 import { logRequest, getUserIdFromRequest, getIpAddress, getUserAgent } from '@/lib/utils/request-logger';
 import { createErrorResponse, ErrorClass } from '@/lib/ai-advisor/error-taxonomy';
 import { safeValidateChatRequest, formatZodError, type ChatRequest } from '@/lib/schemas/chat-request';
+import { checkRateLimits } from '@/lib/utils/rateLimit';
 
 /**
  * Load active context from advisor_context table
