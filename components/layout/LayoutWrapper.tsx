@@ -37,12 +37,12 @@ export function LayoutWrapper({ children, role }: LayoutWrapperProps) {
   const sidebarWidthExpanded = 280; // ~280px
   const sidebarWidthCollapsed = 72; // ~72px (icon-only)
   const sidebarWidth = isSidebarExpanded ? sidebarWidthExpanded : sidebarWidthCollapsed;
-  const headerHeight = 48; // Match header height
+  const headerHeight = 64; // Match header height (~64px)
 
   return (
     <div className="flex flex-col h-screen" style={{ backgroundColor: 'var(--ca-bg-warm)' }}>
       {/* Top App Header - Global, thin, clearly separated */}
-      <Header isSidebarExpanded={isSidebarExpanded} onToggleSidebar={toggleSidebar} />
+      <Header isSidebarExpanded={isSidebarExpanded} onToggleSidebar={toggleSidebar} role={role} />
       
       {/* Body: Sidebar + Main Content using CSS Grid for desktop */}
       <div 
