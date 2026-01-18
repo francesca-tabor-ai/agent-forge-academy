@@ -746,9 +746,10 @@ export async function POST(request: NextRequest) {
 
     // Rate limiting: Check both per-user and per-IP limits
     const ipAddress = getIpAddress(request);
+    const ipForRateLimit = ipAddress ?? `unknown-ip:${user.id}`;
     const rateLimitResult = checkRateLimits(
       user.id,
-      ipAddress,
+      ipForRateLimit,
       {
         maxRequests: 10,  // 10 requests per minute per user
         windowMs: 60 * 1000, // 1 minute
@@ -1733,7 +1734,7 @@ export async function POST(request: NextRequest) {
         maxTokens: 2000,
       });
       const llmLatency = Date.now() - llmStartTime;
-      const providerTotalLatency = Date.now() - startTime;
+      let totalLatency = Date.now() - startTime;
 
       safeLogger.info('[AI_ADVISOR] Provider response received', { 
         requestId, 
@@ -1741,7 +1742,7 @@ export async function POST(request: NextRequest) {
         provider: actualProvider,
         model,
         providerLatency: llmLatency,
-        totalLatency: providerTotalLatency,
+        totalLatency,
         responseLength: llmResponse.content.length,
         isFallback,
         finishReason: llmResponse.finishReason,
@@ -1857,7 +1858,7 @@ export async function POST(request: NextRequest) {
         }
       }
 
-      const totalLatency = Date.now() - startTime;
+      totalLatency = Date.now() - startTime;
       
       safeLogger.info('[AI_ADVISOR] Response returned', {
         requestId,
