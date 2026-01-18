@@ -9,6 +9,7 @@ import {
   getSafariAudioConstraints,
   logPermissionStateTransition,
   type PermissionState,
+  type MicrophoneDevice,
 } from '@/lib/utils/microphonePermissions';
 
 export interface VoiceControlsProps {
@@ -373,6 +374,8 @@ export function VoiceControls({
   const [permissionError, setPermissionError] = useState<string | null>(null);
   const [permissionState, setPermissionState] = useState<PermissionState | null>(null);
   const [isSupported, setIsSupported] = useState(false);
+  const [availableDevices, setAvailableDevices] = useState<MicrophoneDevice[]>([]);
+  const [selectedDeviceId, setSelectedDeviceId] = useState<string | null>(null);
   const [recordingDuration, setRecordingDuration] = useState(0);
   const [voiceUnavailableReason, setVoiceUnavailableReason] = useState<string | null>(null);
   const [isOffline, setIsOffline] = useState(false);
@@ -466,9 +469,16 @@ export function VoiceControls({
         if (newState === 'granted') {
           setPermissionError(null);
           
-          // Optionally enumerate devices (for future device selection feature)
+          // Enumerate devices for device selection
           try {
             const devices = await enumerateMicrophoneDevices();
+            setAvailableDevices(devices);
+            
+            // Auto-select first device if none selected
+            if (devices.length > 0 && !selectedDeviceId) {
+              setSelectedDeviceId(devices[0].deviceId);
+            }
+            
             if (devices.length === 0) {
               console.warn('[VoiceControls] No microphone devices found');
             }
@@ -883,14 +893,26 @@ export function VoiceControls({
 
     try {
       // Get audio stream with constraints for better quality
+      // Use Safari-specific constraints if on Safari/iOS
+      const baseConstraints: MediaTrackConstraints = {
+        echoCancellation: true,
+        noiseSuppression: true,
+        autoGainControl: true,
+        sampleRate: 48000,
+        channelCount: 1, // Mono for speech
+      };
+      
+      const audioConstraints = isSafariOrIOS() 
+        ? { ...baseConstraints, ...getSafariAudioConstraints() }
+        : baseConstraints;
+      
+      // Add deviceId if a device is selected
+      if (selectedDeviceId) {
+        (audioConstraints as any).deviceId = { exact: selectedDeviceId };
+      }
+      
       const stream = await navigator.mediaDevices.getUserMedia({
-        audio: {
-          echoCancellation: true,
-          noiseSuppression: true,
-          autoGainControl: true,
-          sampleRate: 48000,
-          channelCount: 1, // Mono for speech
-        }
+        audio: audioConstraints,
       });
 
       recordingStreamRef.current = stream;

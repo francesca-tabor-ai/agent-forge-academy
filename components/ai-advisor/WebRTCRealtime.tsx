@@ -7,10 +7,12 @@ import { safeLogger } from '@/lib/utils/redactPII';
 import {
   checkMicrophonePermission,
   getPermissionGuidance,
+  enumerateMicrophoneDevices,
   isSafariOrIOS,
   getSafariAudioConstraints,
   logPermissionStateTransition,
   type PermissionState,
+  type MicrophoneDevice,
 } from '@/lib/utils/microphonePermissions';
 
 export type VoiceMode = 'push-to-talk' | 'hands-free';
@@ -103,6 +105,8 @@ export function WebRTCRealtime({
   const [fallbackReason, setFallbackReason] = useState<string | null>(null); // Reason for fallback
   const [permissionState, setPermissionState] = useState<PermissionState | null>(null); // Microphone permission state
   const [permissionError, setPermissionError] = useState<string | null>(null); // Permission error message
+  const [availableDevices, setAvailableDevices] = useState<MicrophoneDevice[]>([]); // Available microphone devices
+  const [selectedDeviceId, setSelectedDeviceId] = useState<string | null>(null); // Selected device ID
   
   // Track partial transcripts for real-time display
   const [partialUserTranscript, setPartialUserTranscript] = useState('');
