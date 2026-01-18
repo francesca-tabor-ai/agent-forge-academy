@@ -116,6 +116,19 @@ export function WebRTCRealtime({
   // Connection timeout: track connection establishment timeout
   const connectionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const CONNECTION_TIMEOUT = 10000; // 10 seconds for connection establishment
+  
+  // Correlation ID for current WebRTC connection
+  const correlationIdRef = useRef<string | null>(null);
+  
+  /**
+   * Generate a correlation ID for WebRTC interactions
+   * Format: webrtc_<timestamp>_<random>
+   */
+  const generateCorrelationId = useCallback((): string => {
+    const timestamp = Date.now();
+    const random = Math.random().toString(36).substring(2, 9);
+    return `webrtc_${timestamp}_${random}`;
+  }, []);
 
   /**
    * Disconnect and cleanup
