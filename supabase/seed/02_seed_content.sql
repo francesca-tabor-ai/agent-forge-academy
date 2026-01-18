@@ -42,7 +42,7 @@ VALUES
   ('a1b2c3d4-e5f6-4789-a012-3456789abc13'::uuid, 'ai-content-pipelines', 'AI-Content Pipelines', 'Scale content production with consistency, governance, and measurement. Build an end-to-end pipeline (brief → research → draft → review → publish → refresh) with QA gates and attribution.', NULL, 1, 'intermediate', true, ARRAY['Media & Publishing', 'SaaS']),
   
   -- Trust & Regulation
-  ('a1b2c3d4-e5f6-4789-a012-3456789abc14'::uuid, 'ai-governance-eu-ai-act', 'AI Governance & the EU AI Act', 'Ship compliant AI systems with real operational controls. Build a governance checklist (risk classification, documentation, human oversight, monitoring, incident response).', NULL, 1, 'intermediate', true, ARRAY['Legal & Compliance', 'SaaS', 'Healthcare', 'Fintech'])
+  ('a1b2c3d4-e5f6-4789-a012-3456789abc14'::uuid, 'ai-governance-eu-ai-act', 'AI Governance & the EU AI Act', 'Ship compliant AI systems with real operational controls. Build a governance checklist (risk classification, documentation, human oversight, monitoring, incident response).', NULL, 1, 'intermediate', true, ARRAY['Legal & Compliance', 'SaaS', 'Healthcare', 'Finance'])
 ON CONFLICT (slug) DO UPDATE SET
   title = EXCLUDED.title,
   description = EXCLUDED.description,

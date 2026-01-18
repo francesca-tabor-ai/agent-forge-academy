@@ -223,7 +223,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     build: 'A governance checklist (risk classification, documentation, human oversight, monitoring, incident response).',
     bestFor: 'Operators, compliance, product leaders in the EU orbit.',
     time: '~3–6 hours',
-    industries: ['Legal & Compliance', 'SaaS', 'Fintech'],
+    industries: ['Legal & Compliance', 'SaaS', 'Finance'],
   },
   'multi-agent-systems': {
     slug: 'multi-agent-systems',
@@ -324,7 +324,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     build: 'Complete Leadership & Strategy Operating System with data & AI strategy design, operating models, KPI trees and OKRs, portfolio prioritization, executive communication, and culture scaling.',
     bestFor: 'Directors and VPs of Data, Analytics, or AI, Heads of Data Science or Machine Learning, Senior Product or Engineering leaders owning AI strategy, and aspiring Chief Data or Chief AI Officers.',
     time: '~6–8 weeks',
-    industries: ['SaaS', 'E-commerce', 'B2B Sales / RevOps', 'Fintech'],
+    industries: ['SaaS', 'E-commerce', 'B2B Sales / RevOps', 'Finance'],
   },
   'ai-product-os': {
     slug: 'ai-product-os',
@@ -374,7 +374,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     build: 'Complete vertical AI visibility program with industry-specific playbooks, risk registers, share of voice dashboards, executive briefings, and operational guidance for product, PR, and compliance teams.',
     bestFor: 'Vertical AI Strategy Directors, Industry AI Visibility Leads, Executive AI Advisors, and senior leaders building proprietary AI strategy IP.',
     time: '~8–10 weeks',
-    industries: ['Fintech', 'E-commerce', 'SaaS', 'Legal & Compliance'],
+    industries: ['Finance', 'E-commerce', 'SaaS', 'Legal & Compliance'],
   },
   'ai-visibility-attribution': {
     slug: 'ai-visibility-attribution',
@@ -434,7 +434,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     build: 'Complete legal AI system with legal workflow decomposition, prompt design for legal interfaces, RAG for legal knowledge, single and multi-agent systems, orchestration and state management, evaluation frameworks, and deployment strategies.',
     bestFor: 'Lawyers transitioning to legal engineering, Legal tech professionals, Legal operations directors, and professionals building AI systems for legal organizations.',
     time: '~11 weeks',
-    industries: ['Legal & Compliance', 'Fintech'],
+    industries: ['Legal & Compliance', 'Finance'],
   },
   'trust-os-responsible-ai-data-governance': {
     slug: 'trust-os-responsible-ai-data-governance',
@@ -444,7 +444,7 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     build: 'Complete Trust OS with responsible AI frameworks, data governance models, compliance systems, explainability mechanisms, risk assessment, and organizational governance models.',
     bestFor: 'AI governance specialists, Compliance leaders, Risk managers, Data privacy professionals, and executives responsible for AI ethics and compliance.',
     time: '~6–8 weeks',
-    industries: ['Legal & Compliance', 'Fintech', 'SaaS'],
+    industries: ['Legal & Compliance', 'Finance', 'SaaS'],
   },
   'reputation-hallucination-risk-management': {
     slug: 'reputation-hallucination-risk-management',

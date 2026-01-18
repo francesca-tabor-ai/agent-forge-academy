@@ -17,7 +17,7 @@ describe('Segment Subscriptions - Regression Tests', () => {
   describe('Landing page course listings', () => {
     it('should have at least one segment of each type', () => {
       const trackSegments = ['agentic-systems', 'ml-engineering', 'platform-engineering'];
-      const industrySegments = ['fintech', 'healthcare', 'saas'];
+      const industrySegments = ['finance', 'healthcare', 'saas'];
       const roleSegments = ['engineer', 'pm', 'founder'];
 
       // Check tracks
@@ -47,7 +47,7 @@ describe('Segment Subscriptions - Regression Tests', () => {
 
     it('should have hero images for all segments', () => {
       const trackSegments = ['agentic-systems', 'ml-engineering'];
-      const industrySegments = ['fintech', 'healthcare'];
+      const industrySegments = ['finance', 'healthcare'];
       const roleSegments = ['engineer', 'pm'];
 
       trackSegments.forEach((key) => {
@@ -94,8 +94,8 @@ describe('Segment Subscriptions - Regression Tests', () => {
       const testCases = [
         { type: 'track' as const, key: 'agentic-systems', period: 'monthly' as const },
         { type: 'track' as const, key: 'agentic-systems', period: 'annual' as const },
-        { type: 'industry' as const, key: 'fintech', period: 'monthly' as const },
-        { type: 'industry' as const, key: 'fintech', period: 'annual' as const },
+        { type: 'industry' as const, key: 'finance', period: 'monthly' as const },
+        { type: 'industry' as const, key: 'finance', period: 'annual' as const },
         { type: 'role' as const, key: 'engineer', period: 'monthly' as const },
         { type: 'role' as const, key: 'engineer', period: 'annual' as const },
       ];

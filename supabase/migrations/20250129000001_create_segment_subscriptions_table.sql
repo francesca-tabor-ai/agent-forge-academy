@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS subscriptions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   segment_type segment_type NOT NULL,
-  segment_key VARCHAR(255) NOT NULL, -- e.g., "agentic-systems", "fintech", "pm"
+  segment_key VARCHAR(255) NOT NULL, -- e.g., "agentic-systems", "finance", "pm"
   stripe_customer_id VARCHAR(255) NOT NULL,
   stripe_subscription_id VARCHAR(255) UNIQUE, -- Stripe subscription ID (can be null initially)
   status VARCHAR(50) NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'canceled', 'past_due')),

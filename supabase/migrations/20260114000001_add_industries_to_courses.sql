@@ -10,4 +10,4 @@ ALTER TABLE courses
 CREATE INDEX IF NOT EXISTS idx_courses_industries ON courses USING GIN (industries);
 
 -- Add comment for documentation
-COMMENT ON COLUMN courses.industries IS 'Array of industry domains this course applies to (e.g., E-commerce, SaaS, Fintech)';
+COMMENT ON COLUMN courses.industries IS 'Array of industry domains this course applies to (e.g., E-commerce, SaaS, Finance)';

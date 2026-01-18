@@ -11,7 +11,7 @@ export const INDUSTRIES = [
   'E-commerce',
   'SaaS',
   'Marketplaces',
-  'Fintech',
+  'Finance',
   'Healthcare',
   'Media & Publishing',
   'DevTools',

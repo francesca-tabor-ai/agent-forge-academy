@@ -11,8 +11,8 @@ export type SegmentType = 'track' | 'industry' | 'role';
 
 export interface Segment {
   type: SegmentType;
-  key: string; // URL-friendly slug (e.g., "agentic-systems", "fintech", "pm")
-  displayName: string; // Human-readable name (e.g., "Agentic Systems", "Fintech", "Product Managers")
+  key: string; // URL-friendly slug (e.g., "agentic-systems", "finance", "pm")
+  displayName: string; // Human-readable name (e.g., "Agentic Systems", "Finance", "Product Managers")
   heroImageUrl: string; // Full-bleed hero image URL
   description: string; // Marketing copy for the landing page
   includedCourseSlugs: string[]; // Course slugs that match this segment

@@ -73,11 +73,11 @@ describe('Segment Subscriptions - Integration Tests', () => {
     });
 
     it('should return only live courses for an industry segment', async () => {
-      const segment = getSegment('industry', 'fintech');
+      const segment = getSegment('industry', 'finance');
       
       expect(segment).toBeDefined();
       expect(segment?.type).toBe('industry');
-      expect(segment?.key).toBe('fintech');
+      expect(segment?.key).toBe('finance');
       
       if (segment && segment.includedCourseSlugs.length > 0) {
         const { data: courses } = await supabase
@@ -150,16 +150,16 @@ describe('Segment Subscriptions - Integration Tests', () => {
     });
 
     it('should return correct monthly price ID for industry segment', () => {
-      const priceId = getStripePriceId('industry', 'fintech', 'monthly');
-      const metadata = getSubscriptionMetadata('industry', 'fintech');
+      const priceId = getStripePriceId('industry', 'finance', 'monthly');
+      const metadata = getSubscriptionMetadata('industry', 'finance');
       
       expect(metadata).toBeDefined();
       expect(priceId).toBe(metadata?.stripeMonthlyPriceId);
     });
 
     it('should return correct annual price ID for industry segment', () => {
-      const priceId = getStripePriceId('industry', 'fintech', 'annual');
-      const metadata = getSubscriptionMetadata('industry', 'fintech');
+      const priceId = getStripePriceId('industry', 'finance', 'annual');
+      const metadata = getSubscriptionMetadata('industry', 'finance');
       
       expect(metadata).toBeDefined();
       expect(priceId).toBe(metadata?.stripeAnnualPriceId);

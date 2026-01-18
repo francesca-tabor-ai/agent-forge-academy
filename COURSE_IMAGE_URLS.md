@@ -49,7 +49,6 @@ ecommerce | E-commerce | https://cdn.shopify.com/s/files/1/0070/7032/articles/He
 saas | SaaS | https://500apps.com/images/blog/saas-apps.png?v=1677747568403012820
 trust-regulation | Trust & Regulation | https://primathon.in/blog/wp-content/uploads/2024/04/Defining-AI-Ethics-in-the-Modern-World.jpg
 media-content | Media & Content | https://markerly.com/pulse/wp-content/uploads/2023/12/teammarkerly_create_a_very_simple_photo_depicting_social_media__dbe58354-7c33-4169-aaf7-1ce358baad7f.png
-fintech | Fintech | https://www.esri.com/about/newsroom/app/uploads/2022/03/is-spatial-finance-coming-to-your-company-wherenext-article-wide-1920x1080-1.jpg
 legal-compliance | Legal & Compliance | https://primathon.in/blog/wp-content/uploads/2024/04/Defining-AI-Ethics-in-the-Modern-World.jpg
 b2b-sales-revops | B2B Sales / RevOps | https://wp.sfdcdigital.com/en-us/wp-content/uploads/sites/4/2024/08/revenue-ops.jpg?w=1024
 devtools | DevTools | https://8allocate.com/wp-content/uploads/2024/01/The-Future-of-Software-Engineering_-Predictions-for-2024.jpg

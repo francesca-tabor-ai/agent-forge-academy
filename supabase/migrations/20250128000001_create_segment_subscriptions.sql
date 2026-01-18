@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS segment_subscriptions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   segment_type segment_type NOT NULL,
-  segment_key VARCHAR(255) NOT NULL, -- e.g., "agentic-systems", "fintech", "pm"
+  segment_key VARCHAR(255) NOT NULL, -- e.g., "agentic-systems", "finance", "pm"
   stripe_subscription_id VARCHAR(255) UNIQUE, -- Stripe subscription ID
   stripe_price_id VARCHAR(255) NOT NULL, -- Stripe price ID (monthly or annual)
   status VARCHAR(50) NOT NULL DEFAULT 'active', -- 'active', 'canceled', 'expired'
@@ -107,5 +107,5 @@ GRANT EXECUTE ON FUNCTION has_segment_course_access(UUID, TEXT) TO authenticated
 
 -- Add comment
 COMMENT ON TABLE segment_subscriptions IS 'Tracks user subscriptions to specific segments (track, industry, role)';
-COMMENT ON COLUMN segment_subscriptions.segment_key IS 'URL-friendly slug for the segment (e.g., "agentic-systems", "fintech", "pm")';
+COMMENT ON COLUMN segment_subscriptions.segment_key IS 'URL-friendly slug for the segment (e.g., "agentic-systems", "finance", "pm")';
 COMMENT ON COLUMN segment_subscriptions.billing_cycle IS 'Billing cycle: "monthly" or "annual"';

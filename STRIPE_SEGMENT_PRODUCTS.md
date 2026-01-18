@@ -186,18 +186,6 @@ Marketing Copy:
 "Content at scale. Access AI Content Pipelines, Creative Automation, and media-specific AI courses."
 ```
 
-### Fintech
-```
-Product ID: prod_industry_fintech
-Monthly Price ID: price_monthly_industry_fintech
-Annual Price ID: price_annual_industry_fintech
-Monthly Price: £59/month
-Annual Price: £590/year (save £118)
-
-Marketing Copy:
-"AI for fintech. Learn financial AI applications, regulatory compliance, and fintech-specific courses."
-```
-
 ### Legal & Compliance
 ```
 Product ID: prod_industry_legal_compliance

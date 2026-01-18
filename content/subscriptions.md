@@ -42,9 +42,8 @@ track | gtm-revenue-operations | GTM & Revenue Operations | prod_xxx | price_mon
 ## INDUSTRY SUBSCRIPTIONS
 
 ```
-industry | finance | Finance | prod_xxx | price_month_xxx | price_year_xxx | £59/mo | £590/yr | GBP | Financial AI; compliance; risk management; fintech solutions
+industry | finance | Finance | prod_xxx | price_month_xxx | price_year_xxx | £59/mo | £590/yr | GBP | Financial AI; compliance; risk management; financial solutions
 industry | healthcare | Healthcare | prod_xxx | price_month_xxx | price_year_xxx | £59/mo | £590/yr | GBP | Healthcare AI; patient care; medical workflows; HIPAA compliance
-industry | fintech | Fintech | prod_xxx | price_month_xxx | price_year_xxx | £59/mo | £590/yr | GBP | Fintech innovation; payment systems; financial products
 industry | ecommerce | E-commerce | prod_xxx | price_month_xxx | price_year_xxx | £49/mo | £490/yr | GBP | E-commerce AI; shopping experiences; conversion optimization
 industry | saas | SaaS | prod_xxx | price_month_xxx | price_year_xxx | £49/mo | £490/yr | GBP | SaaS products; subscription models; product-led growth
 industry | marketplaces | Marketplaces | prod_xxx | price_month_xxx | price_year_xxx | £49/mo | £490/yr | GBP | Marketplace platforms; matching algorithms; two-sided networks
@@ -91,7 +90,7 @@ role | cx-team | CX Team | prod_xxx | price_month_xxx | price_year_xxx | £49/mo
   - Basic tracks (Media & Content Ops, Trust & Regulation, Vibe Engineering): £39/mo
 
 - **Industries**: £39-£59/month depending on industry
-  - Premium industries (Finance, Healthcare, Fintech): £59/mo
+  - Premium industries (Finance, Healthcare): £59/mo
   - Standard industries: £49/mo
   - Basic industries (Media & Publishing): £39/mo
 
