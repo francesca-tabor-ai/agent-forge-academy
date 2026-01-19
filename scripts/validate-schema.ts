@@ -116,7 +116,7 @@ async function validateSchema() {
       console.log(`   ✅ All ${requiredColumns.length} required columns exist`);
       
       // Verify key location columns specifically
-      const locationColumns = ['location', 'city', 'country'];
+      const locationColumns = ['location', 'city', 'country'] as const;
       const locationStatus = locationColumns.map(col => 
         requiredColumns.includes(col) ? '✓' : '✗'
       ).join(' ');
