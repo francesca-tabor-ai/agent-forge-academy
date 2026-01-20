@@ -17,7 +17,8 @@ import {
   BarChart3,
   Database,
   Upload,
-  Rocket
+  Rocket,
+  Bookmark
 } from 'lucide-react';
 import type { UserRole } from '@/lib/types/roles';
 
@@ -39,6 +40,7 @@ export default function Sidebar({ role, isExpanded, isMobile }: SidebarProps) {
           { href: '/student/portfolio', label: 'Portfolio', icon: Briefcase },
           { href: '/student/jobs', label: 'Job Opportunities', icon: BriefcaseIcon },
           { href: '/startups', label: 'Startups', icon: Rocket },
+          { href: '/student/engagement', label: 'My Engagement', icon: Bookmark },
           { href: '/student/ai-advisor', label: 'AI Advisor', icon: Bot },
           { href: '/student/tools', label: 'Tools', icon: Wrench },
           { href: '/student/subscription', label: 'Subscription', icon: CreditCard },
@@ -57,6 +59,7 @@ export default function Sidebar({ role, isExpanded, isMobile }: SidebarProps) {
         return [
           { href: '/admin', label: 'Overview', icon: BarChart3 },
           { href: '/admin/users', label: 'Users', icon: Users },
+          { href: '/admin/startups', label: 'Startups', icon: Rocket },
           { href: '/admin/subscriptions', label: 'Subscriptions', icon: CreditCard },
           { href: '/admin/api-tester', label: 'API Tester', icon: Database },
           { href: '/admin/logs', label: 'Logs', icon: FolderOpen },
