@@ -34,6 +34,8 @@ export function FoundersManagementTab({ onEdit, onDelete }: FoundersManagementTa
       if (response.ok) {
         const data = await response.json();
         setFounders(data.founders || []);
+      } else {
+        console.error('Failed to load founders:', response.statusText);
       }
     } catch (err) {
       console.error('Failed to load founders:', err);
@@ -42,36 +44,46 @@ export function FoundersManagementTab({ onEdit, onDelete }: FoundersManagementTa
     }
   };
 
+  const handleDelete = async (id: string) => {
+    try {
+      await onDelete(id);
+      // Reload after successful delete
+      loadFounders();
+    } catch (err) {
+      // Error already handled by onDelete
+    }
+  };
+
   if (loading) {
     return (
       <div className="text-center py-12">
-        <Loader2 className="w-8 h-8 animate-spin text-gray-400 mx-auto" />
+        <Loader2 className="w-8 h-8 animate-spin text-ca-neutral-400 mx-auto" />
       </div>
     );
   }
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+    <div className="bg-white rounded-lg shadow overflow-hidden">
       <div className="overflow-x-auto">
-        <table className="w-full">
-          <thead className="bg-gray-50 border-b border-gray-200">
+        <table className="min-w-full divide-y" style={{ borderColor: 'var(--ca-neutral-300)' }}>
+          <thead style={{ backgroundColor: 'var(--ca-bg-warm)' }}>
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Bio</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Verified</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+              <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-ca-neutral-700 uppercase tracking-wider">Name</th>
+              <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-ca-neutral-700 uppercase tracking-wider hidden sm:table-cell">Bio</th>
+              <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-ca-neutral-700 uppercase tracking-wider">Verified</th>
+              <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-ca-neutral-700 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white divide-y" style={{ borderColor: 'var(--ca-neutral-300)' }}>
             {founders.map((founder) => (
-              <tr key={founder.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+              <tr key={founder.id} className="hover:bg-gray-50 transition-colors">
+                <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                   {founder.name}
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-500 max-w-md truncate">
+                <td className="px-4 sm:px-6 py-4 text-sm text-ca-neutral-500 max-w-md truncate hidden sm:table-cell">
                   {founder.bio || 'N/A'}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
                   {founder.verified ? (
                     <span className="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-700">
                       Verified
@@ -82,17 +94,21 @@ export function FoundersManagementTab({ onEdit, onDelete }: FoundersManagementTa
                     </span>
                   )}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm font-medium">
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => onEdit(founder)}
-                      className="text-brand-light hover:text-brand-dark"
+                      className="text-ca-gold hover:text-ca-navy transition-colors"
+                      title="Edit founder"
+                      aria-label="Edit founder"
                     >
                       <Edit className="w-4 h-4" />
                     </button>
                     <button
-                      onClick={() => onDelete(founder.id)}
-                      className="text-red-600 hover:text-red-800"
+                      onClick={() => handleDelete(founder.id)}
+                      className="text-red-600 hover:text-red-800 transition-colors"
+                      title="Delete founder"
+                      aria-label="Delete founder"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -105,7 +121,7 @@ export function FoundersManagementTab({ onEdit, onDelete }: FoundersManagementTa
       </div>
       {founders.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-gray-500">No founders found</p>
+          <p className="text-ca-neutral-500 font-sans">No founders found</p>
         </div>
       )}
     </div>

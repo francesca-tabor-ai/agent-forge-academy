@@ -2,6 +2,36 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { requireAdmin } from '@/lib/supabase/server';
 
+export async function GET(request: NextRequest) {
+  const userResult = await requireAdmin();
+  if (userResult instanceof NextResponse) {
+    return userResult;
+  }
+
+  try {
+    const supabase = await createUserSupabaseClient();
+    const { data: tools, error } = await supabase
+      .from('vibe_tools')
+      .select('*')
+      .order('name');
+
+    if (error) {
+      return NextResponse.json(
+        { error: error.message },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json({ tools: tools || [] });
+  } catch (error) {
+    console.error('Error in GET /api/admin/tools:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}
+
 export async function POST(request: NextRequest) {
   const userResult = await requireAdmin();
   if (userResult instanceof NextResponse) {

@@ -86,32 +86,34 @@ export function StartupFormModal({ startup, founders, onClose }: StartupFormModa
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-gray-900">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 animate-fade-in">
+      <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto animate-scale-in">
+        <div className="sticky top-0 bg-white border-b px-6 py-4 flex items-center justify-between z-10" style={{ borderColor: 'var(--ca-neutral-300)' }}>
+          <h2 className="text-xl font-semibold text-gray-900 font-playfair">
             {startup ? 'Edit Startup' : 'Create Startup'}
           </h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600"
+            className="text-ca-neutral-400 hover:text-ca-neutral-600 transition-colors"
+            aria-label="Close modal"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-4 sm:space-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
             {/* Founder */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-ca-neutral-700 mb-2 font-sans">
                 Founder *
               </label>
               <select
                 value={formData.founderId}
                 onChange={(e) => setFormData({ ...formData, founderId: e.target.value })}
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light"
+                className="w-full px-3 py-2 border rounded-lg text-sm"
+                style={{ borderColor: 'var(--ca-neutral-300)' }}
               >
                 <option value="">Select Founder</option>
                 {founders.map((founder) => (
@@ -124,7 +126,7 @@ export function StartupFormModal({ startup, founders, onClose }: StartupFormModa
 
             {/* Name */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-ca-neutral-700 mb-2 font-sans">
                 Name *
               </label>
               <input
@@ -132,33 +134,36 @@ export function StartupFormModal({ startup, founders, onClose }: StartupFormModa
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light"
+                className="w-full px-3 py-2 border rounded-lg text-sm"
+                style={{ borderColor: 'var(--ca-neutral-300)' }}
               />
             </div>
 
             {/* Tagline */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-ca-neutral-700 mb-2 font-sans">
                 Tagline
               </label>
               <input
                 type="text"
                 value={formData.tagline}
                 onChange={(e) => setFormData({ ...formData, tagline: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light"
+                className="w-full px-3 py-2 border rounded-lg text-sm"
+                style={{ borderColor: 'var(--ca-neutral-300)' }}
               />
             </div>
 
             {/* Status */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-ca-neutral-700 mb-2 font-sans">
                 Status *
               </label>
               <select
                 value={formData.status}
                 onChange={(e) => setFormData({ ...formData, status: e.target.value })}
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light"
+                className="w-full px-3 py-2 border rounded-lg text-sm"
+                style={{ borderColor: 'var(--ca-neutral-300)' }}
               >
                 <option value="active">Active</option>
                 <option value="acquired">Acquired</option>
@@ -168,13 +173,14 @@ export function StartupFormModal({ startup, founders, onClose }: StartupFormModa
 
             {/* Revenue Range */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-ca-neutral-700 mb-2 font-sans">
                 Revenue Range
               </label>
               <select
                 value={formData.revenueRange}
                 onChange={(e) => setFormData({ ...formData, revenueRange: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light"
+                className="w-full px-3 py-2 border rounded-lg text-sm"
+                style={{ borderColor: 'var(--ca-neutral-300)' }}
               >
                 <option value="pre_revenue">Pre-revenue</option>
                 <option value="$1_10k">$1K-$10K MRR</option>
@@ -185,7 +191,7 @@ export function StartupFormModal({ startup, founders, onClose }: StartupFormModa
 
             {/* Vibe Score */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-ca-neutral-700 mb-2 font-sans">
                 Vibe Score (1-10)
               </label>
               <input
@@ -194,13 +200,14 @@ export function StartupFormModal({ startup, founders, onClose }: StartupFormModa
                 max="10"
                 value={formData.vibeScore}
                 onChange={(e) => setFormData({ ...formData, vibeScore: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light"
+                className="w-full px-3 py-2 border rounded-lg text-sm"
+                style={{ borderColor: 'var(--ca-neutral-300)' }}
               />
             </div>
 
             {/* Launch Year */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-ca-neutral-700 mb-2 font-sans">
                 Launch Year
               </label>
               <input
@@ -209,19 +216,21 @@ export function StartupFormModal({ startup, founders, onClose }: StartupFormModa
                 max={new Date().getFullYear()}
                 value={formData.launchYear}
                 onChange={(e) => setFormData({ ...formData, launchYear: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light"
+                className="w-full px-3 py-2 border rounded-lg text-sm"
+                style={{ borderColor: 'var(--ca-neutral-300)' }}
               />
             </div>
 
             {/* Pricing Model */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-ca-neutral-700 mb-2 font-sans">
                 Pricing Model
               </label>
               <select
                 value={formData.pricingModel}
                 onChange={(e) => setFormData({ ...formData, pricingModel: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light"
+                className="w-full px-3 py-2 border rounded-lg text-sm"
+                style={{ borderColor: 'var(--ca-neutral-300)' }}
               >
                 <option value="">Select Model</option>
                 <option value="subscription">Subscription</option>
@@ -234,7 +243,7 @@ export function StartupFormModal({ startup, founders, onClose }: StartupFormModa
 
             {/* Target Customer */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-ca-neutral-700 mb-2 font-sans">
                 Target Customer / Niche
               </label>
               <input
@@ -242,40 +251,43 @@ export function StartupFormModal({ startup, founders, onClose }: StartupFormModa
                 value={formData.targetCustomer}
                 onChange={(e) => setFormData({ ...formData, targetCustomer: e.target.value })}
                 placeholder="e.g., Small business owners, Developers"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light"
+                className="w-full px-3 py-2 border rounded-lg text-sm"
+                style={{ borderColor: 'var(--ca-neutral-300)' }}
               />
             </div>
 
             {/* Logo URL */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-ca-neutral-700 mb-2 font-sans">
                 Logo URL
               </label>
               <input
                 type="url"
                 value={formData.logoUrl}
                 onChange={(e) => setFormData({ ...formData, logoUrl: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light"
+                className="w-full px-3 py-2 border rounded-lg text-sm"
+                style={{ borderColor: 'var(--ca-neutral-300)' }}
               />
             </div>
 
             {/* Website URL */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-ca-neutral-700 mb-2 font-sans">
                 Website URL
               </label>
               <input
                 type="url"
                 value={formData.websiteUrl}
                 onChange={(e) => setFormData({ ...formData, websiteUrl: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light"
+                className="w-full px-3 py-2 border rounded-lg text-sm"
+                style={{ borderColor: 'var(--ca-neutral-300)' }}
               />
             </div>
           </div>
 
           {/* Description */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-ca-neutral-700 mb-2 font-sans">
               Description *
             </label>
             <textarea
@@ -283,7 +295,8 @@ export function StartupFormModal({ startup, founders, onClose }: StartupFormModa
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               required
               rows={4}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light"
+              className="w-full px-3 py-2 border rounded-lg text-sm"
+              style={{ borderColor: 'var(--ca-neutral-300)' }}
             />
           </div>
 
@@ -294,26 +307,27 @@ export function StartupFormModal({ startup, founders, onClose }: StartupFormModa
               id="isFeatured"
               checked={formData.isFeatured}
               onChange={(e) => setFormData({ ...formData, isFeatured: e.target.checked })}
-              className="w-4 h-4 text-brand-light border-gray-300 rounded focus:ring-brand-light"
+              className="w-4 h-4 text-ca-gold border-ca-neutral-300 rounded focus:ring-ca-gold"
+              style={{ borderColor: 'var(--ca-neutral-300)' }}
             />
-            <label htmlFor="isFeatured" className="text-sm font-medium text-gray-700">
+            <label htmlFor="isFeatured" className="text-sm font-medium text-ca-neutral-700 font-sans">
               Featured Startup
             </label>
           </div>
 
           {/* Actions */}
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-200">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t" style={{ borderColor: 'var(--ca-neutral-300)' }}>
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+              className="btn-secondary text-sm"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="px-4 py-2 bg-brand-light text-white rounded-lg hover:bg-brand-light/90 transition-colors text-sm font-medium disabled:opacity-50 flex items-center gap-2"
+              className="btn-primary text-sm disabled:opacity-50 flex items-center gap-2"
             >
               {loading && <Loader2 className="w-4 h-4 animate-spin" />}
               {startup ? 'Update' : 'Create'} Startup

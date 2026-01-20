@@ -3,40 +3,42 @@
 import { useState, useEffect } from 'react';
 import { Edit, Trash2, Loader2 } from 'lucide-react';
 
-interface Tool {
+interface Prompt {
   id: string;
-  name: string;
-  category: string;
-  cost_model: string;
-  description?: string;
-  website_url?: string;
+  startup_id: string;
+  prompt_type: string;
+  prompt_text: string;
+  difficulty: string;
+  startups?: {
+    name: string;
+  };
 }
 
-interface ToolsManagementTabProps {
-  onEdit: (tool: Tool) => void;
+interface PromptsManagementTabProps {
+  onEdit: (prompt: Prompt) => void;
   onDelete: (id: string) => Promise<void>;
 }
 
-export function ToolsManagementTab({ onEdit, onDelete }: ToolsManagementTabProps) {
-  const [tools, setTools] = useState<Tool[]>([]);
+export function PromptsManagementTab({ onEdit, onDelete }: PromptsManagementTabProps) {
+  const [prompts, setPrompts] = useState<Prompt[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadTools();
+    loadPrompts();
   }, []);
 
-  const loadTools = async () => {
+  const loadPrompts = async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/admin/tools');
+      const response = await fetch('/api/admin/prompts');
       if (response.ok) {
         const data = await response.json();
-        setTools(data.tools || []);
+        setPrompts(data.prompts || []);
       } else {
-        console.error('Failed to load tools:', response.statusText);
+        console.error('Failed to load prompts:', response.statusText);
       }
     } catch (err) {
-      console.error('Failed to load tools:', err);
+      console.error('Failed to load prompts:', err);
     } finally {
       setLoading(false);
     }
@@ -46,7 +48,7 @@ export function ToolsManagementTab({ onEdit, onDelete }: ToolsManagementTabProps
     try {
       await onDelete(id);
       // Reload after successful delete
-      loadTools();
+      loadPrompts();
     } catch (err) {
       // Error already handled by onDelete
     }
@@ -66,39 +68,43 @@ export function ToolsManagementTab({ onEdit, onDelete }: ToolsManagementTabProps
         <table className="min-w-full divide-y" style={{ borderColor: 'var(--ca-neutral-300)' }}>
           <thead style={{ backgroundColor: 'var(--ca-bg-warm)' }}>
             <tr>
-              <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-ca-neutral-700 uppercase tracking-wider">Name</th>
-              <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-ca-neutral-700 uppercase tracking-wider hidden sm:table-cell">Category</th>
-              <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-ca-neutral-700 uppercase tracking-wider">Cost Model</th>
+              <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-ca-neutral-700 uppercase tracking-wider">Startup</th>
+              <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-ca-neutral-700 uppercase tracking-wider">Type</th>
+              <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-ca-neutral-700 uppercase tracking-wider hidden sm:table-cell">Difficulty</th>
+              <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-ca-neutral-700 uppercase tracking-wider hidden md:table-cell">Preview</th>
               <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-ca-neutral-700 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y" style={{ borderColor: 'var(--ca-neutral-300)' }}>
-            {tools.map((tool) => (
-              <tr key={tool.id} className="hover:bg-gray-50 transition-colors">
+            {prompts.map((prompt) => (
+              <tr key={prompt.id} className="hover:bg-gray-50 transition-colors">
                 <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                  {tool.name}
-                </td>
-                <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-ca-neutral-500 capitalize hidden sm:table-cell">
-                  {tool.category.replace('_', ' ')}
+                  {prompt.startups?.name || 'N/A'}
                 </td>
                 <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-ca-neutral-500 capitalize">
-                  {tool.cost_model.replace('_', ' ')}
+                  {prompt.prompt_type}
+                </td>
+                <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-ca-neutral-500 capitalize hidden sm:table-cell">
+                  {prompt.difficulty}
+                </td>
+                <td className="px-4 sm:px-6 py-4 text-sm text-ca-neutral-500 max-w-md hidden md:table-cell">
+                  <div className="truncate">{prompt.prompt_text.substring(0, 100)}...</div>
                 </td>
                 <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm font-medium">
                   <div className="flex items-center gap-2">
                     <button
-                      onClick={() => onEdit(tool)}
+                      onClick={() => onEdit(prompt)}
                       className="text-ca-gold hover:text-ca-navy transition-colors"
-                      title="Edit tool"
-                      aria-label="Edit tool"
+                      title="Edit prompt"
+                      aria-label="Edit prompt"
                     >
                       <Edit className="w-4 h-4" />
                     </button>
                     <button
-                      onClick={() => handleDelete(tool.id)}
+                      onClick={() => handleDelete(prompt.id)}
                       className="text-red-600 hover:text-red-800 transition-colors"
-                      title="Delete tool"
-                      aria-label="Delete tool"
+                      title="Delete prompt"
+                      aria-label="Delete prompt"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -109,9 +115,9 @@ export function ToolsManagementTab({ onEdit, onDelete }: ToolsManagementTabProps
           </tbody>
         </table>
       </div>
-      {tools.length === 0 && (
+      {prompts.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-ca-neutral-500 font-sans">No tools found</p>
+          <p className="text-ca-neutral-500 font-sans">No prompts found</p>
         </div>
       )}
     </div>

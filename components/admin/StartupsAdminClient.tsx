@@ -1,12 +1,17 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { Plus, Edit, Trash2, Search, Filter, Loader2, Rocket, ExternalLink } from 'lucide-react';
 import { StartupFormModal } from './StartupFormModal';
 import { FounderFormModal } from './FounderFormModal';
 import { ToolFormModal } from './ToolFormModal';
 import { PromptFormModal } from './PromptFormModal';
 import { CourseFormModal } from './CourseFormModal';
+import { FoundersManagementTab } from './FoundersManagementTab';
+import { ToolsManagementTab } from './ToolsManagementTab';
+import { PromptsManagementTab } from './PromptsManagementTab';
+import { CoursesManagementTab } from './CoursesManagementTab';
 
 interface Founder {
   id: string;
@@ -89,13 +94,17 @@ export function StartupsAdminClient({ initialStartups, founders }: StartupsAdmin
   const handleRefresh = async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/admin/startups');
-      if (response.ok) {
-        const data = await response.json();
-        setStartups(data.startups || []);
+      // Refresh based on active tab
+      if (activeTab === 'startups') {
+        const response = await fetch('/api/admin/startups');
+        if (response.ok) {
+          const data = await response.json();
+          setStartups(data.startups || []);
+        }
       }
+      // Other tabs refresh themselves via their own load functions
     } catch (err) {
-      console.error('Failed to refresh startups:', err);
+      console.error('Failed to refresh:', err);
     } finally {
       setLoading(false);
     }
@@ -104,18 +113,18 @@ export function StartupsAdminClient({ initialStartups, founders }: StartupsAdmin
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-semibold text-gray-900 mb-2">Startups Management</h1>
-          <p className="text-base text-gray-600">
+          <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-2 font-playfair">Startups Management</h1>
+          <p className="text-sm sm:text-base text-gray-600 font-sans">
             Manage startups, founders, tools, prompts, and courses
           </p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
           <button
             onClick={handleRefresh}
             disabled={loading}
-            className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium disabled:opacity-50"
+            className="btn-secondary text-sm disabled:opacity-50 flex items-center gap-2"
           >
             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Refresh'}
           </button>
@@ -125,62 +134,67 @@ export function StartupsAdminClient({ initialStartups, founders }: StartupsAdmin
                 setEditingStartup(null);
                 setShowStartupModal(true);
               }}
-              className="px-4 py-2 bg-brand-light text-white rounded-lg hover:bg-brand-light/90 transition-colors text-sm font-medium flex items-center gap-2"
+              className="btn-primary text-sm flex items-center gap-2"
             >
               <Plus className="w-4 h-4" />
-              Add Startup
+              <span className="hidden sm:inline">Add Startup</span>
+              <span className="sm:hidden">Add</span>
             </button>
           )}
           {activeTab === 'founders' && (
             <button
               onClick={() => setShowFounderModal(true)}
-              className="px-4 py-2 bg-brand-light text-white rounded-lg hover:bg-brand-light/90 transition-colors text-sm font-medium flex items-center gap-2"
+              className="btn-primary text-sm flex items-center gap-2"
             >
               <Plus className="w-4 h-4" />
-              Add Founder
+              <span className="hidden sm:inline">Add Founder</span>
+              <span className="sm:hidden">Add</span>
             </button>
           )}
           {activeTab === 'tools' && (
             <button
               onClick={() => setShowToolModal(true)}
-              className="px-4 py-2 bg-brand-light text-white rounded-lg hover:bg-brand-light/90 transition-colors text-sm font-medium flex items-center gap-2"
+              className="btn-primary text-sm flex items-center gap-2"
             >
               <Plus className="w-4 h-4" />
-              Add Tool
+              <span className="hidden sm:inline">Add Tool</span>
+              <span className="sm:hidden">Add</span>
             </button>
           )}
           {activeTab === 'prompts' && (
             <button
               onClick={() => setShowPromptModal(true)}
-              className="px-4 py-2 bg-brand-light text-white rounded-lg hover:bg-brand-light/90 transition-colors text-sm font-medium flex items-center gap-2"
+              className="btn-primary text-sm flex items-center gap-2"
             >
               <Plus className="w-4 h-4" />
-              Add Prompt Template
+              <span className="hidden sm:inline">Add Prompt Template</span>
+              <span className="sm:hidden">Add</span>
             </button>
           )}
           {activeTab === 'courses' && (
             <button
               onClick={() => setShowCourseModal(true)}
-              className="px-4 py-2 bg-brand-light text-white rounded-lg hover:bg-brand-light/90 transition-colors text-sm font-medium flex items-center gap-2"
+              className="btn-primary text-sm flex items-center gap-2"
             >
               <Plus className="w-4 h-4" />
-              Add Course
+              <span className="hidden sm:inline">Add Course</span>
+              <span className="sm:hidden">Add</span>
             </button>
           )}
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="border-b border-gray-200">
-        <nav className="flex space-x-8">
+      <div className="border-b" style={{ borderColor: 'var(--ca-neutral-300)' }}>
+        <nav className="flex space-x-4 sm:space-x-8 overflow-x-auto scrollbar-hide">
           {(['startups', 'founders', 'tools', 'prompts', 'courses'] as const).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors capitalize ${
+              className={`py-3 sm:py-4 px-1 border-b-2 font-medium text-sm transition-colors capitalize whitespace-nowrap ${
                 activeTab === tab
-                  ? 'border-brand-light text-brand-light'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  ? 'border-ca-gold text-ca-gold'
+                  : 'border-transparent text-ca-neutral-500 hover:text-ca-neutral-700 hover:border-ca-neutral-300'
               }`}
             >
               {tab}
@@ -193,69 +207,76 @@ export function StartupsAdminClient({ initialStartups, founders }: StartupsAdmin
       {activeTab === 'startups' && (
         <div className="space-y-4">
           {/* Filters */}
-          <div className="bg-white border border-gray-200 rounded-lg p-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Search startups..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light"
-                />
+          <div className="bg-white rounded-lg shadow overflow-hidden" style={{ borderColor: 'var(--ca-neutral-300)' }}>
+            <div className="p-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-ca-neutral-500" />
+                  <input
+                    type="text"
+                    placeholder="Search startups..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 border rounded-lg text-sm"
+                    style={{ borderColor: 'var(--ca-neutral-300)' }}
+                  />
+                </div>
+                <select
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                  className="w-full px-4 py-2 border rounded-lg text-sm"
+                  style={{ borderColor: 'var(--ca-neutral-300)' }}
+                >
+                  <option value="all">All Status</option>
+                  <option value="active">Active</option>
+                  <option value="acquired">Acquired</option>
+                  <option value="shut_down">Shut Down</option>
+                </select>
               </div>
-              <select
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light"
-              >
-                <option value="all">All Status</option>
-                <option value="active">Active</option>
-                <option value="acquired">Acquired</option>
-                <option value="shut_down">Shut Down</option>
-              </select>
             </div>
           </div>
 
           {/* Startups Table */}
-          <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+          <div className="bg-white rounded-lg shadow overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-gray-50 border-b border-gray-200">
+              <table className="min-w-full divide-y" style={{ borderColor: 'var(--ca-neutral-300)' }}>
+                <thead style={{ backgroundColor: 'var(--ca-bg-warm)' }}>
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Startup</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Founder</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vibe Score</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Revenue</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-ca-neutral-700 uppercase tracking-wider">Startup</th>
+                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-ca-neutral-700 uppercase tracking-wider hidden sm:table-cell">Founder</th>
+                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-ca-neutral-700 uppercase tracking-wider">Status</th>
+                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-ca-neutral-700 uppercase tracking-wider hidden md:table-cell">Vibe</th>
+                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-ca-neutral-700 uppercase tracking-wider hidden lg:table-cell">Revenue</th>
+                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-ca-neutral-700 uppercase tracking-wider">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-white divide-y" style={{ borderColor: 'var(--ca-neutral-300)' }}>
                   {filteredStartups.map((startup) => (
-                    <tr key={startup.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center gap-3">
+                    <tr key={startup.id} className="hover:bg-gray-50 transition-colors">
+                      <td className="px-4 sm:px-6 py-4">
+                        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
                           {startup.logo_url ? (
-                            <img src={startup.logo_url} alt={startup.name} className="w-10 h-10 rounded-lg object-cover" />
+                            <img src={startup.logo_url} alt={startup.name} className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg object-cover flex-shrink-0" />
                           ) : (
-                            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-brand-light to-brand-dark flex items-center justify-center">
-                              <Rocket className="w-5 h-5 text-white" />
+                            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-gradient-to-br from-ca-gold to-ca-navy flex items-center justify-center flex-shrink-0">
+                              <Rocket className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                             </div>
                           )}
-                          <div>
-                            <div className="text-sm font-medium text-gray-900">{startup.name}</div>
+                          <div className="min-w-0 flex-1">
+                            <div className="text-sm font-medium text-gray-900 truncate">{startup.name}</div>
                             {startup.tagline && (
-                              <div className="text-xs text-gray-500">{startup.tagline}</div>
+                              <div className="text-xs text-ca-neutral-500 truncate hidden sm:block">{startup.tagline}</div>
                             )}
+                            <div className="text-xs text-ca-neutral-500 sm:hidden">
+                              {startup.founders?.name || 'N/A'}
+                            </div>
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900 hidden sm:table-cell">
                         {startup.founders?.name || 'N/A'}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
                         <span className={`px-2 py-1 text-xs font-medium rounded-full ${
                           startup.status === 'active' ? 'bg-green-100 text-green-700' :
                           startup.status === 'acquired' ? 'bg-blue-100 text-blue-700' :
@@ -264,28 +285,30 @@ export function StartupsAdminClient({ initialStartups, founders }: StartupsAdmin
                           {startup.status.replace('_', ' ')}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900 hidden md:table-cell">
                         {startup.vibe_score || 'N/A'}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900 hidden lg:table-cell">
                         {startup.revenue_range?.replace('_', ' ') || 'N/A'}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => {
                               setEditingStartup(startup);
                               setShowStartupModal(true);
                             }}
-                            className="text-brand-light hover:text-brand-dark"
+                            className="text-ca-gold hover:text-ca-navy transition-colors"
                             title="Edit"
+                            aria-label="Edit startup"
                           >
                             <Edit className="w-4 h-4" />
                           </button>
                           <button
                             onClick={() => handleDeleteStartup(startup.id)}
-                            className="text-red-600 hover:text-red-800"
+                            className="text-red-600 hover:text-red-800 transition-colors"
                             title="Delete"
+                            aria-label="Delete startup"
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
@@ -294,8 +317,9 @@ export function StartupsAdminClient({ initialStartups, founders }: StartupsAdmin
                               href={startup.website_url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-gray-600 hover:text-gray-800"
+                              className="text-ca-neutral-500 hover:text-ca-neutral-700 transition-colors"
                               title="Visit Website"
+                              aria-label="Visit website"
                             >
                               <ExternalLink className="w-4 h-4" />
                             </a>
@@ -309,18 +333,103 @@ export function StartupsAdminClient({ initialStartups, founders }: StartupsAdmin
             </div>
             {filteredStartups.length === 0 && (
               <div className="text-center py-12">
-                <p className="text-gray-500">No startups found</p>
+                <p className="text-ca-neutral-500 font-sans">No startups found</p>
               </div>
             )}
           </div>
         </div>
       )}
 
-      {/* Other tabs will be implemented similarly */}
-      {activeTab !== 'startups' && (
-        <div className="bg-white border border-gray-200 rounded-lg p-12 text-center">
-          <p className="text-gray-500">Management for {activeTab} coming soon</p>
-        </div>
+      {/* Founders Tab */}
+      {activeTab === 'founders' && (
+        <FoundersManagementTab
+          onEdit={(founder) => {
+            // TODO: Implement edit founder modal
+            console.log('Edit founder:', founder);
+          }}
+          onDelete={async (id) => {
+            if (!confirm('Are you sure you want to delete this founder?')) return;
+            try {
+              const response = await fetch(`/api/admin/founders/${id}`, { method: 'DELETE' });
+              if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'Failed to delete founder');
+              }
+            } catch (err) {
+              alert(err instanceof Error ? err.message : 'Failed to delete founder');
+              throw err; // Re-throw so tab can handle it
+            }
+          }}
+        />
+      )}
+
+      {/* Tools Tab */}
+      {activeTab === 'tools' && (
+        <ToolsManagementTab
+          onEdit={(tool) => {
+            // TODO: Implement edit tool modal
+            console.log('Edit tool:', tool);
+          }}
+          onDelete={async (id) => {
+            if (!confirm('Are you sure you want to delete this tool?')) return;
+            try {
+              const response = await fetch(`/api/admin/tools/${id}`, { method: 'DELETE' });
+              if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'Failed to delete tool');
+              }
+            } catch (err) {
+              alert(err instanceof Error ? err.message : 'Failed to delete tool');
+              throw err; // Re-throw so tab can handle it
+            }
+          }}
+        />
+      )}
+
+      {/* Prompts Tab */}
+      {activeTab === 'prompts' && (
+        <PromptsManagementTab
+          onEdit={(prompt) => {
+            // TODO: Implement edit prompt modal
+            console.log('Edit prompt:', prompt);
+          }}
+          onDelete={async (id) => {
+            if (!confirm('Are you sure you want to delete this prompt?')) return;
+            try {
+              const response = await fetch(`/api/admin/prompts/${id}`, { method: 'DELETE' });
+              if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'Failed to delete prompt');
+              }
+            } catch (err) {
+              alert(err instanceof Error ? err.message : 'Failed to delete prompt');
+              throw err; // Re-throw so tab can handle it
+            }
+          }}
+        />
+      )}
+
+      {/* Courses Tab */}
+      {activeTab === 'courses' && (
+        <CoursesManagementTab
+          onEdit={(course) => {
+            // TODO: Implement edit course modal
+            console.log('Edit course:', course);
+          }}
+          onDelete={async (id) => {
+            if (!confirm('Are you sure you want to delete this course?')) return;
+            try {
+              const response = await fetch(`/api/admin/courses/${id}`, { method: 'DELETE' });
+              if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'Failed to delete course');
+              }
+            } catch (err) {
+              alert(err instanceof Error ? err.message : 'Failed to delete course');
+              throw err; // Re-throw so tab can handle it
+            }
+          }}
+        />
       )}
 
       {/* Modals */}
@@ -339,7 +448,10 @@ export function StartupsAdminClient({ initialStartups, founders }: StartupsAdmin
         <FounderFormModal
           onClose={() => {
             setShowFounderModal(false);
-            handleRefresh();
+            // Force tab remount to refresh data
+            const currentTab = activeTab;
+            setActiveTab('startups');
+            setTimeout(() => setActiveTab(currentTab), 0);
           }}
         />
       )}
@@ -347,7 +459,10 @@ export function StartupsAdminClient({ initialStartups, founders }: StartupsAdmin
         <ToolFormModal
           onClose={() => {
             setShowToolModal(false);
-            handleRefresh();
+            // Force tab remount to refresh data
+            const currentTab = activeTab;
+            setActiveTab('startups');
+            setTimeout(() => setActiveTab(currentTab), 0);
           }}
         />
       )}
@@ -355,7 +470,10 @@ export function StartupsAdminClient({ initialStartups, founders }: StartupsAdmin
         <PromptFormModal
           onClose={() => {
             setShowPromptModal(false);
-            handleRefresh();
+            // Force tab remount to refresh data
+            const currentTab = activeTab;
+            setActiveTab('startups');
+            setTimeout(() => setActiveTab(currentTab), 0);
           }}
         />
       )}
@@ -363,7 +481,10 @@ export function StartupsAdminClient({ initialStartups, founders }: StartupsAdmin
         <CourseFormModal
           onClose={() => {
             setShowCourseModal(false);
-            handleRefresh();
+            // Force tab remount to refresh data
+            const currentTab = activeTab;
+            setActiveTab('startups');
+            setTimeout(() => setActiveTab(currentTab), 0);
           }}
         />
       )}

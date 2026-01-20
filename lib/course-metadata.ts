@@ -518,6 +518,16 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     time: '~6–8 weeks',
     industries: ['Finance', 'SaaS'],
   },
+  'mathematics-of-beauty-cosmetics': {
+    slug: 'mathematics-of-beauty-cosmetics',
+    title: 'The Mathematics of Beauty & Cosmetics',
+    category: 'Economics & Maths',
+    outcome: 'Model beauty as a measurable, optimizable system using geometry, chemistry, optics, psychology, economics, and data science to quantify aesthetic perception, optimize cosmetic formulation, and predict consumer behavior.',
+    build: 'Complete mathematical beauty system with geometric and proportional models, chemical formulation optimization, psychophysical perception models, economic market analysis, data-driven personalization systems, and trend prediction models.',
+    bestFor: ['Product Developers', 'Data Scientists', 'Cosmetic Chemists', 'Beauty Industry Analysts', 'R&D Engineers', 'Marketing Analysts'],
+    time: '~12 weeks',
+    industries: ['Retail / CPG', 'SaaS'],
+  },
 };
 
 // Get category groups for organizing courses
