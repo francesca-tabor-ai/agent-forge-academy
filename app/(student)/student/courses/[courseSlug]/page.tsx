@@ -136,10 +136,12 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
   // Priority: metadata (file system) > static metadata > database
   // This ensures track images are always correct even if database has wrong/null category
   const categoryForImage = metadata?.category || staticMetadata?.category || course?.category;
+  // Map database thumbnail_url (snake_case) to thumbnailUrl (camelCase) for consistency
+  const courseThumbnailUrl = course?.thumbnail_url ? course.thumbnail_url : undefined;
   const courseCoverImage = getCourseCover({
     // Only use database imageUrl/thumbnailUrl if they're valid and metadata doesn't override
     imageUrl: metadata?.imageUrl || staticMetadata?.imageUrl || course?.imageUrl,
-    thumbnailUrl: metadata?.thumbnailUrl || (course?.thumbnail_url ? course.thumbnail_url : undefined), // Map DB thumbnail_url to thumbnailUrl
+    thumbnailUrl: metadata?.thumbnailUrl || courseThumbnailUrl,
     // Always prioritize metadata category (source of truth) over database category
     category: categoryForImage,
     track: categoryForImage, // Also set track field for compatibility
