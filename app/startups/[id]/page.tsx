@@ -129,6 +129,18 @@ export default async function StartupDetailPage({
     ? startup.founders 
     : (startup.founders ? [startup.founders] : []);
 
+  // Normalize business_models to array (query returns array for one-to-many relationship)
+  const businessModelsArray = Array.isArray(startup.business_models)
+    ? startup.business_models
+    : (startup.business_models ? [startup.business_models] : []);
+  const businessModel = businessModelsArray[0] ?? null;
+
+  // Normalize revenue_potential to array (query returns array for one-to-many relationship)
+  const revenuePotentialArray = Array.isArray(startup.revenue_potential)
+    ? startup.revenue_potential
+    : (startup.revenue_potential ? [startup.revenue_potential] : []);
+  const revenuePotential = revenuePotentialArray[0] ?? null;
+
   // Transform data
   const transformedStartup = {
     id: startup.id,
@@ -151,12 +163,12 @@ export default async function StartupDetailPage({
       youtubeUrl: foundersArray[0].youtube_url,
       website: foundersArray[0].website,
     } : null,
-    businessModel: startup.business_models ? {
-      revenueStreams: startup.business_models.revenue_streams,
-      pricingDetails: startup.business_models.pricing_details,
-      distributionChannels: startup.business_models.distribution_channels,
-      keyMetrics: startup.business_models.key_metrics,
-      growthNotes: startup.business_models.growth_notes,
+    businessModel: businessModel ? {
+      revenueStreams: businessModel.revenue_streams,
+      pricingDetails: businessModel.pricing_details,
+      distributionChannels: businessModel.distribution_channels,
+      keyMetrics: businessModel.key_metrics,
+      growthNotes: businessModel.growth_notes,
     } : null,
     buildEstimate: startup.build_estimates?.[0] ? {
       technicalDifficulty: formatTechnicalDifficulty(startup.build_estimates[0].technical_difficulty),
@@ -165,11 +177,11 @@ export default async function StartupDetailPage({
       maintenanceCostUsdMonthly: startup.build_estimates[0].maintenance_cost_usd_monthly,
       soloFriendly: startup.build_estimates[0].solo_friendly,
     } : null,
-    revenuePotential: startup.revenue_potential ? {
-      conservativeMrr: startup.revenue_potential.conservative_mrr,
-      realisticMrr: startup.revenue_potential.realistic_mrr,
-      breakoutMrr: startup.revenue_potential.breakout_mrr,
-      assumptions: startup.revenue_potential.assumptions,
+    revenuePotential: revenuePotential ? {
+      conservativeMrr: revenuePotential.conservative_mrr,
+      realisticMrr: revenuePotential.realistic_mrr,
+      breakoutMrr: revenuePotential.breakout_mrr,
+      assumptions: revenuePotential.assumptions,
     } : null,
     tools: (startup.startup_tools || []).map((st: any) => ({
       id: st.vibe_tools.id,

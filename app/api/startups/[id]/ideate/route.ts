@@ -114,6 +114,18 @@ export async function POST(
       ? startup.founders 
       : (startup.founders ? [startup.founders] : []);
 
+    // Normalize business_models to array (query returns array for one-to-many relationship)
+    const businessModelsArray = Array.isArray(startup.business_models)
+      ? startup.business_models
+      : (startup.business_models ? [startup.business_models] : []);
+    const businessModel = businessModelsArray[0] ?? null;
+
+    // Normalize revenue_potential to array (query returns array for one-to-many relationship)
+    const revenuePotentialArray = Array.isArray(startup.revenue_potential)
+      ? startup.revenue_potential
+      : (startup.revenue_potential ? [startup.revenue_potential] : []);
+    const revenuePotential = revenuePotentialArray[0] ?? null;
+
     // Prepare context for LLM
     const startupContext = {
       name: startup.name,
@@ -124,14 +136,14 @@ export async function POST(
       targetCustomer: startup.target_customer,
       vibeScore: startup.vibe_score,
       founder: foundersArray[0]?.name ?? null,
-      revenueStreams: startup.business_models?.revenue_streams,
+      revenueStreams: businessModel?.revenue_streams ?? null,
       buildTime: startup.build_estimates?.[0]?.estimated_build_time_days,
       buildCost: startup.build_estimates?.[0]?.estimated_build_cost_usd,
       technicalDifficulty: startup.build_estimates?.[0]?.technical_difficulty,
       revenuePotential: {
-        conservative: startup.revenue_potential?.conservative_mrr,
-        realistic: startup.revenue_potential?.realistic_mrr,
-        breakout: startup.revenue_potential?.breakout_mrr,
+        conservative: revenuePotential?.conservative_mrr ?? null,
+        realistic: revenuePotential?.realistic_mrr ?? null,
+        breakout: revenuePotential?.breakout_mrr ?? null,
       },
     };
 
