@@ -13,6 +13,7 @@ export const dynamic = 'force-dynamic';
  * Query parameters:
  * - path: string (optional) - Filter by endpoint path (e.g., '/api/jobs')
  * - status: number (optional) - Filter by status code (e.g., 500)
+ * - requestId: string (optional) - Filter by request ID (e.g., 'req_1768902621265_7sy30ze')
  * - limit: number (optional, default: 100, max: 500) - Number of results
  * - offset: number (optional, default: 0) - Pagination offset
  * 
@@ -34,6 +35,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const pathFilter = searchParams.get('path') || '';
     const statusFilter = searchParams.get('status');
+    const requestIdFilter = searchParams.get('requestId') || '';
     const offset = Math.max(0, parseInt(searchParams.get('offset') || '0', 10));
     const limit = Math.min(500, Math.max(1, parseInt(searchParams.get('limit') || '100', 10)));
 
@@ -58,6 +60,10 @@ export async function GET(request: NextRequest) {
       }
     }
 
+    if (requestIdFilter) {
+      logsQuery = logsQuery.eq('request_id', requestIdFilter);
+    }
+
     // Get total count before pagination
     let countQuery = supabase
       .from('request_logs')
@@ -72,6 +78,10 @@ export async function GET(request: NextRequest) {
       if (!isNaN(statusCode)) {
         countQuery = countQuery.eq('status', statusCode);
       }
+    }
+
+    if (requestIdFilter) {
+      countQuery = countQuery.eq('request_id', requestIdFilter);
     }
 
     const { count, error: countError } = await countQuery;
