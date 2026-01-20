@@ -187,6 +187,8 @@ export function getCoverFromIndustries(industries: string[] | null | undefined):
  * Course object interface for cover image resolution
  */
 interface CourseForCover {
+  imageUrl?: string | null;
+  thumbnail_url?: string | null;
   industry?: string | null;
   industries?: string[] | null;
   track?: string | null;
@@ -198,26 +200,54 @@ interface CourseForCover {
 }
 
 /**
+ * Helper to validate URL is not empty, invalid, or a placeholder
+ */
+function isValidImageUrl(url: string | null | undefined): url is string {
+  if (!url || typeof url !== 'string') return false;
+  const trimmed = url.trim();
+  // Filter out common placeholder values
+  return trimmed.length > 0 && 
+         trimmed !== 'image' && 
+         trimmed !== 'placeholder' &&
+         !trimmed.startsWith('http://placeholder');
+}
+
+/**
  * Get course cover image URL based on track with fallback
- * Priority: course.track/category -> default
+ * Priority: 
+ * 1. course.imageUrl or course.thumbnail_url (per-course override)
+ * 2. course.track/category (ALWAYS use track for courses)
+ * 3. Default fallback
  * 
  * Note: Course images always use the Track image. Industry and Role images
  * are reserved for landing pages only.
  * 
- * @param course - Course object with track, category, or metadata
+ * This function now matches the logic of resolveCourseImageUrl() to ensure
+ * hero images and thumbnail images are the same.
+ * 
+ * @param course - Course object with imageUrl, thumbnail_url, track, category, or metadata
  * @returns Cover image URL for the course
  */
 export function getCourseCover(course: CourseForCover | null | undefined): string {
   if (!course) {
-    return INDUSTRY_COVERS.Default;
+    return DEFAULT_FALLBACK_IMAGE;
   }
 
-  // Priority 1: Use course.track or course.category (ALWAYS use track for courses)
+  // Priority 1: Direct imageUrl or thumbnail_url (per-course override)
+  // Only use if it's a valid URL and not a placeholder
+  if (isValidImageUrl(course.imageUrl)) {
+    return course.imageUrl;
+  }
+  if (isValidImageUrl(course.thumbnail_url)) {
+    return course.thumbnail_url;
+  }
+
+  // Priority 2: Use course.track or course.category (ALWAYS use track for courses)
   const track = course.track || course.category || course.metadata?.category;
   if (track && TRACK_COVERS[track]) {
     return TRACK_COVERS[track];
   }
 
-  // Priority 2: Default fallback
-  return INDUSTRY_COVERS.Default;
+  // Priority 3: Default fallback
+  return DEFAULT_FALLBACK_IMAGE;
 }

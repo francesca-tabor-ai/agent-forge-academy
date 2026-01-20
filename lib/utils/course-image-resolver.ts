@@ -44,11 +44,15 @@ interface CourseWithImage {
 /**
  * Resolves the image URL for a course with fallback logic:
  * 1. course.imageUrl (if provided and valid - per-course override)
- * 2. Track-based image (ALWAYS use track image for courses)
- * 3. Global fallback image
+ * 2. course.thumbnail_url (if provided and valid - per-course override)
+ * 3. Track-based image (ALWAYS use track image for courses)
+ * 4. Global fallback image
  * 
  * Note: Course images always use the Track image. Industry and Role images
  * are reserved for landing pages only.
+ * 
+ * This function matches the logic of getCourseCover() to ensure
+ * hero images and thumbnail images are the same.
  */
 export function resolveCourseImageUrl(course: CourseWithImage): string {
   // Helper to validate URL is not empty, invalid, or a placeholder
@@ -68,15 +72,21 @@ export function resolveCourseImageUrl(course: CourseWithImage): string {
     return course.imageUrl;
   }
 
+  // Priority 2: Direct thumbnail_url (per-course override)
+  // Only use if it's a valid URL and not a placeholder
+  if (isValidUrl(course.thumbnail_url)) {
+    return course.thumbnail_url;
+  }
+
   const track = course.category || course.metadata?.category;
 
-  // Priority 2: Track-based image (ALWAYS use track for courses)
+  // Priority 3: Track-based image (ALWAYS use track for courses)
   // Use TRACK_COVERS from courseCovers (supports local images with external fallback)
   if (track && TRACK_COVERS[track]) {
     return TRACK_COVERS[track];
   }
 
-  // Priority 3: Global fallback
+  // Priority 4: Global fallback
   return DEFAULT_FALLBACK_IMAGE;
 }
 
