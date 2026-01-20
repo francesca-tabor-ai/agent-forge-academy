@@ -36,6 +36,7 @@ platform-engineering | Platform Engineering | https://8allocate.com/wp-content/u
 gtm-revenue-operations | GTM & Revenue Operations | https://wp.sfdcdigital.com/en-us/wp-content/uploads/sites/4/2024/08/revenue-ops.jpg?w=1024
 creative-ai | Creative AI | https://www.hyperakt.com/_next/image?url=https%3A%2F%2Fwww.hyperakt.com%2Fassets%2Fimages%2Fthe-nonprofit-distinction-struggle-2%2FCraft.jpg&w=3840&q=75
 audio-voice | Audio & Voice | https://media.bazaarvoice.com/Shutterstock_1159197631.png
+predictions | Predictions | https://assets.newatlas.com/dims4/default/5a3e663/2147483647/strip/true/crop/6000x4000+0+0/resize/2880x1920!/format/webp/quality/90/?url=https%3A%2F%2Fnewatlas-brightspot.s3.amazonaws.com%2F25%2Fff%2F3f853d4a4583b0ef6008830f1a21%2Fdepositphotos-220004838-xl.jpg
 ```
 
 ---
