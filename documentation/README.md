@@ -53,6 +53,12 @@ Email system implementation and status.
 - `EMAIL_SYSTEM_IMPLEMENTATION_CHECKLIST.md` - Implementation checklist
 - `EMAIL_SYSTEM_STATUS.md` - Current status
 
+### `/interviews`
+Interview preparation guides and frameworks.
+- `UBTIF_GUIDE.md` - Unified Big Tech Interview Framework comprehensive guide
+- `UBTIF_QUICK_REFERENCE.md` - Quick reference cheat sheet for interview prep
+- `UBTIF_SYSTEM_PROMPTS.md` - AI prompts and templates for presenting work experiences
+
 ### `/jobs`
 Job matching and opportunities feature.
 - `JOBS_500_ERROR_FIX.md` - Error fixes
