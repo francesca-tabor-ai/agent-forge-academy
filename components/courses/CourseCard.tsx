@@ -133,7 +133,7 @@ export function CourseCard({
     category: categoryForImage,
     track: categoryForImage, // Also set track field for compatibility
     industries: displayIndustries,
-    metadata: metadata ? { category: categoryForImage } : metadata,
+    metadata: metadata ? { ...metadata, category: categoryForImage } : undefined,
   });
 
   // Safety check: ensure imageUrl is never empty or invalid
