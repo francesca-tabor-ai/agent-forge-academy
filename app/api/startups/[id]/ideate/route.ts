@@ -118,7 +118,7 @@ export async function POST(
       pricingModel: startup.pricing_model,
       targetCustomer: startup.target_customer,
       vibeScore: startup.vibe_score,
-      founder: startup.founders?.name,
+      founder: startup.founders?.[0]?.name ?? null,
       revenueStreams: startup.business_models?.revenue_streams,
       buildTime: startup.build_estimates?.[0]?.estimated_build_time_days,
       buildCost: startup.build_estimates?.[0]?.estimated_build_cost_usd,
