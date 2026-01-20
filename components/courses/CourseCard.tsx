@@ -125,12 +125,15 @@ export function CourseCard({
   
   // Resolve image URL with fallback logic
   // This always returns a valid URL (has fallback to default)
+  // Priority: metadata category (source of truth) > database category
+  const categoryForImage = metadata?.category || course.category;
   const imageUrl = resolveCourseImageUrl({
     imageUrl: course.imageUrl,
     thumbnail_url: course.thumbnail_url,
-    category: course.category || metadata?.category,
+    category: categoryForImage,
+    track: categoryForImage, // Also set track field for compatibility
     industries: displayIndustries,
-    metadata,
+    metadata: metadata ? { category: categoryForImage } : metadata,
   });
 
   // Safety check: ensure imageUrl is never empty or invalid
