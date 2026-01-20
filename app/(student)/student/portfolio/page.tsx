@@ -18,6 +18,22 @@ import { GitHubSyncStatus } from '@/components/portfolio/GitHubSyncStatus';
 import { Suspense } from 'react';
 import { getResumeBucketName } from '@/lib/utils/storage';
 
+// Helper function to safely serialize dates
+function safeDateSerialize(dateValue: any): string | null {
+  if (!dateValue) return null;
+  if (typeof dateValue === 'string') {
+    // Validate it's a valid date string
+    const date = new Date(dateValue);
+    return isNaN(date.getTime()) ? null : date.toISOString();
+  }
+  try {
+    const date = new Date(dateValue);
+    return isNaN(date.getTime()) ? null : date.toISOString();
+  } catch {
+    return null;
+  }
+}
+
 export default async function PortfolioPage() {
   const reqId = headers().get('x-vercel-id') ?? headers().get('x-request-id') ?? `local-${Date.now()}`;
   let userId: string | undefined;
@@ -212,53 +228,95 @@ export default async function PortfolioPage() {
         // Don't throw - just log and continue with empty projects
         projects = [];
       } else {
-        // Fetch skills for each project
-        const projectsWithSkills = await Promise.all(
+        // Fetch skills for each project with error handling
+        const projectsWithSkillsResults = await Promise.allSettled(
           (projectsData || []).map(async (project) => {
-            // Fetch project skills
-            const { data: projectSkills } = await supabase
-              .from('project_skills')
-              .select(`
-                skill_id,
-                skills:skill_id (
-                  id,
-                  name
+            try {
+              // Fetch project skills
+              const { data: projectSkills, error: projectSkillsError } = await supabase
+                .from('project_skills')
+                .select(`
+                  skill_id,
+                  skills:skill_id (
+                    id,
+                    name
+                  )
+                `)
+                .eq('project_id', project.id);
+
+              if (projectSkillsError) {
+                safeLogger.warn('[PortfolioPage] Project skills query error', {
+                  reqId,
+                  projectId: project.id,
+                  error: projectSkillsError.message,
+                  code: projectSkillsError.code,
+                });
+              }
+
+              // Safely extract skills with validation
+              const skills = (projectSkills || [])
+                .map((ps: any) => ps.skills)
+                .filter((skill): skill is { id: string; name: string } => 
+                  skill && 
+                  typeof skill === 'object' && 
+                  typeof skill.id === 'string' && 
+                  typeof skill.name === 'string'
                 )
-              `)
-              .eq('project_id', project.id);
+                .map((skill) => ({
+                  id: skill.id,
+                  name: skill.name,
+                }));
 
-            const skills = (projectSkills || [])
-              .map((ps: any) => ps.skills)
-              .filter(Boolean)
-              .map((skill: any) => ({
-                id: skill.id,
-                name: skill.name,
-              }));
-
-            return {
-              ...project,
-              visibility: (project.visibility as 'private' | 'recruiters_only' | 'public') || 'private',
-              created_at: project.created_at 
-                ? (typeof project.created_at === 'string' 
-                    ? project.created_at 
-                    : new Date(project.created_at).toISOString())
-                : null,
-              updated_at: project.updated_at 
-                ? (typeof project.updated_at === 'string' 
-                    ? project.updated_at 
-                    : new Date(project.updated_at).toISOString())
-                : null,
-              last_synced_at: project.last_synced_at 
-                ? (typeof project.last_synced_at === 'string' 
-                    ? project.last_synced_at 
-                    : new Date(project.last_synced_at).toISOString())
-                : null,
-              skills,
-            };
+              return {
+                ...project,
+                visibility: (project.visibility as 'private' | 'recruiters_only' | 'public') || 'private',
+                created_at: safeDateSerialize(project.created_at),
+                updated_at: safeDateSerialize(project.updated_at),
+                last_synced_at: safeDateSerialize(project.last_synced_at),
+                skills,
+              };
+            } catch (error: any) {
+              safeLogger.error('[PortfolioPage] Error processing project', {
+                reqId,
+                projectId: project.id,
+                error: error?.message || 'Unknown error',
+                stack: error?.stack,
+              });
+              // Return project without skills rather than failing
+              return {
+                ...project,
+                visibility: (project.visibility as 'private' | 'recruiters_only' | 'public') || 'private',
+                created_at: safeDateSerialize(project.created_at),
+                updated_at: safeDateSerialize(project.updated_at),
+                last_synced_at: safeDateSerialize(project.last_synced_at),
+                skills: [],
+              };
+            }
           })
         );
 
-        projects = projectsWithSkills as PortfolioProject[];
+        // Extract fulfilled results, fallback to empty skills for rejected
+        projects = projectsWithSkillsResults.map((result, index) => {
+          if (result.status === 'fulfilled') {
+            return result.value;
+          } else {
+            safeLogger.error('[PortfolioPage] Project processing failed', {
+              reqId,
+              projectIndex: index,
+              error: result.reason?.message || 'Unknown error',
+            });
+            // Fallback: return project with minimal data
+            const project = projectsData?.[index];
+            return {
+              ...project,
+              visibility: (project?.visibility as 'private' | 'recruiters_only' | 'public') || 'private',
+              created_at: safeDateSerialize(project?.created_at),
+              updated_at: safeDateSerialize(project?.updated_at),
+              last_synced_at: safeDateSerialize(project?.last_synced_at),
+              skills: [],
+            } as PortfolioProject;
+          }
+        }) as PortfolioProject[];
       }
 
       const { data: featuredData, error: featuredError } = await supabase
@@ -277,7 +335,7 @@ export default async function PortfolioPage() {
         });
         featuredProjects = [];
       } else {
-        featuredProjects = featuredData;
+        featuredProjects = featuredData || [];
       }
     }
 
@@ -380,11 +438,7 @@ export default async function PortfolioPage() {
     const coreSkills = (studentProfile?.skills as string[]) || [];
     const cvFileName = cv?.file_name || null;
     // Serialize Date to ISO string to avoid serialization issues
-    const cvLastUpdated = cv?.uploaded_at 
-      ? (typeof cv.uploaded_at === 'string' 
-          ? cv.uploaded_at 
-          : new Date(cv.uploaded_at).toISOString())
-      : null;
+    const cvLastUpdated = safeDateSerialize(cv?.uploaded_at);
     const cvVisibility = cv?.visibility || null;
 
     // Calculate visible project count
@@ -477,7 +531,9 @@ export default async function PortfolioPage() {
               />
 
               {/* Tool Proficiencies */}
-              <ProfileToolProficiencies studentProfileId={studentProfile.id} />
+              {studentProfile?.id && (
+                <ProfileToolProficiencies studentProfileId={studentProfile.id} />
+              )}
             </div>
 
             {/* Right Sidebar - Tools & Actions */}
