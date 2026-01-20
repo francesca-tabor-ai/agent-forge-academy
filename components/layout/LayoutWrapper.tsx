@@ -120,7 +120,7 @@ export function LayoutWrapper({ children, role }: LayoutWrapperProps) {
           }}
           role="main"
         >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 w-full">
+          <div className="max-w-7xl mx-auto px-4 lg:px-6 xl:px-8 py-6 md:py-8 w-full">
             {children}
           </div>
         </main>

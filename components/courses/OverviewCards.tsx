@@ -32,13 +32,13 @@ export function OverviewCards({
   const hasMoreBuild = build.length > MAX_VISIBLE_BUILD;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
       {/* Description Card */}
       {description && (
         <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
           <button
             onClick={() => setExpandedDescription(!expandedDescription)}
-            className="w-full md:pointer-events-none flex items-center justify-between p-6 text-left"
+            className="w-full md:pointer-events-none flex items-center justify-between p-5 md:p-6 text-left"
             aria-expanded={expandedDescription}
           >
             <h3 className="text-base font-semibold text-gray-900">
@@ -51,7 +51,7 @@ export function OverviewCards({
             />
           </button>
           <div
-            className={`px-6 pb-6 transition-all md:block ${
+            className={`px-5 md:px-6 pb-5 md:pb-6 transition-all md:block ${
               expandedDescription ? 'block' : 'hidden md:block'
             }`}
           >
@@ -65,7 +65,7 @@ export function OverviewCards({
         <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
           <button
             onClick={() => setExpandedOutcome(!expandedOutcome)}
-            className="w-full md:pointer-events-none flex items-center justify-between p-6 text-left"
+            className="w-full md:pointer-events-none flex items-center justify-between p-5 md:p-6 text-left"
             aria-expanded={expandedOutcome}
           >
             <h3 className="text-base font-semibold text-gray-900">
@@ -78,11 +78,11 @@ export function OverviewCards({
             />
           </button>
           <div
-            className={`px-6 pb-6 transition-all md:block ${
+            className={`px-5 md:px-6 pb-5 md:pb-6 transition-all md:block ${
               expandedOutcome ? 'block' : 'hidden md:block'
             }`}
           >
-            <ul className="space-y-2.5 max-w-prose">
+            <ul className="space-y-2 max-w-prose">
               {visibleOutcome.map((bullet, index) => (
                 <li key={index} className="flex items-start gap-3">
                   <span className="text-brand-light mt-1.5 flex-shrink-0">•</span>
@@ -117,7 +117,7 @@ export function OverviewCards({
         <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
           <button
             onClick={() => setExpandedBuild(!expandedBuild)}
-            className="w-full md:pointer-events-none flex items-center justify-between p-6 text-left"
+            className="w-full md:pointer-events-none flex items-center justify-between p-5 md:p-6 text-left"
             aria-expanded={expandedBuild}
           >
             <h3 className="text-base font-semibold text-gray-900">
@@ -130,11 +130,11 @@ export function OverviewCards({
             />
           </button>
           <div
-            className={`px-6 pb-6 transition-all md:block ${
+            className={`px-5 md:px-6 pb-5 md:pb-6 transition-all md:block ${
               expandedBuild ? 'block' : 'hidden md:block'
             }`}
           >
-            <ul className="space-y-2.5 max-w-prose">
+            <ul className="space-y-2 max-w-prose">
               {visibleBuild.map((bullet, index) => (
                 <li key={index} className="flex items-start gap-3">
                   <span className="text-brand-light mt-1.5 flex-shrink-0">•</span>
@@ -169,7 +169,7 @@ export function OverviewCards({
         <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
           <button
             onClick={() => setExpandedBestFor(!expandedBestFor)}
-            className="w-full md:pointer-events-none flex items-center justify-between p-6 text-left"
+            className="w-full md:pointer-events-none flex items-center justify-between p-5 md:p-6 text-left"
             aria-expanded={expandedBestFor}
           >
             <h3 className="text-base font-semibold text-gray-900">
@@ -182,7 +182,7 @@ export function OverviewCards({
             />
           </button>
           <div
-            className={`px-6 pb-6 transition-all md:block ${
+            className={`px-5 md:px-6 pb-5 md:pb-6 transition-all md:block ${
               expandedBestFor ? 'block' : 'hidden md:block'
             }`}
           >

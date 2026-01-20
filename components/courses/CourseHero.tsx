@@ -216,16 +216,16 @@ export function CourseHero({
         - Relative positioning: Creates stacking context for content above overlay
       */}
       <div className="relative h-full min-h-[240px] sm:min-h-[280px] md:min-h-[320px] lg:min-h-[360px] flex flex-col justify-end z-10">
-        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 pb-8 sm:pb-12 md:pb-16 lg:pb-20">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-6 sm:py-8 md:py-10 lg:py-12">
         {/* Mobile: Stacked Layout */}
-        <div className="md:hidden space-y-6">
+        <div className="md:hidden space-y-4">
           {/* Title - Largest, clear hierarchy */}
           <h1 className="text-3xl sm:text-4xl font-bold text-white line-clamp-3 break-words leading-tight drop-shadow-lg">
             {title}
           </h1>
           
           {/* Metadata Row - Pill-style, muted */}
-          <div className="flex flex-wrap items-center gap-2.5">
+          <div className="flex flex-wrap items-center gap-2">
             {trackCategory && (
               <span className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white/90 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 whitespace-nowrap">
                 {trackCategory}
@@ -247,7 +247,7 @@ export function CourseHero({
           </div>
           
           {/* Actions */}
-          <div className="flex gap-3 pt-2">
+          <div className="flex gap-2 pt-2">
             {isEnrolled ? (
               <>
                 <Link
@@ -298,14 +298,14 @@ export function CourseHero({
         <div className="hidden md:block">
           <div className="flex items-end justify-between gap-8">
             {/* Left: Title and Metadata */}
-            <div className="flex-1 min-w-0">
+            <div className="flex-1 min-w-0 space-y-4">
               {/* Course Title - Largest, clear typographic scale */}
-              <h1 className="text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-6 lg:mb-8 line-clamp-3 break-words leading-tight drop-shadow-lg">
+              <h1 className="text-5xl lg:text-6xl xl:text-7xl font-bold text-white line-clamp-3 break-words leading-tight drop-shadow-lg">
                 {title}
               </h1>
               
               {/* Metadata Row - Pill-style, muted text beneath title */}
-              <div className="flex flex-wrap items-center gap-3 lg:gap-4">
+              <div className="flex flex-wrap items-center gap-3">
                 {trackCategory && (
                   <span className="inline-flex items-center px-4 py-2 text-sm font-medium text-white/90 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 whitespace-nowrap">
                     {trackCategory}
@@ -328,7 +328,7 @@ export function CourseHero({
             </div>
 
             {/* Right: Primary Action (Share) - Aligned right */}
-            <div className="flex-shrink-0 flex flex-col gap-3">
+            <div className="flex-shrink-0 flex flex-col gap-3 lg:gap-4">
               {isEnrolled ? (
                 <>
                   <Link

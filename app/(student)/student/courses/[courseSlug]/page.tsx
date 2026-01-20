@@ -131,7 +131,22 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
 
   const courseTitle = course?.title || metadata?.title || staticMetadata?.title || courseSlug.replace(/-/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase());
   const courseDescription = course?.description || metadata?.description || null;
-  const courseCoverImage = getCourseCover(course || { category: metadata?.category || staticMetadata?.category, industries: metadata?.industries || staticMetadata?.industries });
+  
+  // Merge course data with metadata to ensure correct category/image resolution
+  // Priority: metadata (file system) > static metadata > database
+  // This ensures track images are always correct even if database has wrong/null category
+  const categoryForImage = metadata?.category || staticMetadata?.category || course?.category;
+  const courseCoverImage = getCourseCover({
+    // Only use database imageUrl/thumbnail_url if they're valid and metadata doesn't override
+    imageUrl: metadata?.imageUrl || staticMetadata?.imageUrl || course?.imageUrl,
+    thumbnail_url: metadata?.thumbnail_url || staticMetadata?.thumbnail_url || course?.thumbnail_url,
+    // Always prioritize metadata category (source of truth) over database category
+    category: categoryForImage,
+    track: categoryForImage, // Also set track field for compatibility
+    industries: metadata?.industries || staticMetadata?.industries || course?.industries,
+    // Include metadata object for fallback
+    metadata: metadata ? { category: categoryForImage } : undefined,
+  });
 
   // Prepare metadata for display
   const durationWeeks = course?.duration_weeks || metadata?.duration_weeks;
@@ -251,10 +266,10 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
         {/* Inner grid: wide layout */}
         <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-6 lg:gap-8">
           {/* Left Column: Overview + Modules */}
-          <div className="content-spacing">
+          <div className="space-y-8">
           {/* Course Overview Section - De-emphasized since hero already shows course info */}
           {(courseDescription || outcomeBullets.length > 0 || buildBullets.length > 0 || bestForItems.length > 0) && (
-            <div className="section-spacing">
+            <div>
               <OverviewCards
                 description={courseDescription}
                 outcome={outcomeBullets}
@@ -265,20 +280,20 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
           )}
 
           {/* Modules Section - Primary content, keep prominent */}
-          <div className="section-spacing">
-            <h2 className="text-section-header mb-6">Modules</h2>
+          <div>
+            <h2 className="text-section-header mb-4">Modules</h2>
             
             {lessons.length === 0 ? (
           <div className="bg-white border border-gray-200 rounded-xl p-8 text-center shadow-sm">
             <p className="text-gray-600">No lessons available for this course yet.</p>
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-4">
                 {/* Quick Start / Course Index */}
                 {courseIndexLesson && (
                   <Link
                     href={`/student/courses/${courseSlug}/lessons/${courseIndexLesson.slug}`}
-                    className="block bg-white border border-gray-200 rounded-xl shadow-sm hover:border-brand-light hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 md:p-5 p-4"
+                    className="block bg-white border border-gray-200 rounded-xl shadow-sm hover:border-brand-light hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 p-4 md:p-5"
                   >
                     {/* Mobile: Compact Layout */}
                     <div className="md:hidden">
@@ -365,7 +380,7 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
                     <Link
                       key={lesson.slug}
                       href={`/student/courses/${courseSlug}/lessons/${lesson.slug}`}
-                      className="block bg-white border border-gray-200 rounded-xl shadow-sm hover:border-brand-light hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 md:p-5 p-4"
+                      className="block bg-white border border-gray-200 rounded-xl shadow-sm hover:border-brand-light hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 p-4 md:p-5"
                     >
                       {/* Mobile: Compact Layout */}
                       <div className="md:hidden">

@@ -33,6 +33,15 @@ module.exports = {
         'hero': '24px',
       },
       spacing: {
+        // Global spacing scale - single source of truth
+        'xs': '4px',   // 4px
+        'sm': '8px',   // 8px
+        'md': '12px',  // 12px
+        'lg': '16px',  // 16px
+        'xl': '24px',  // 24px
+        '2xl': '32px', // 32px
+        '3xl': '48px', // 48px
+        // Legacy section spacing (kept for backward compatibility)
         'section': '64px',
         'section-lg': '96px',
       },

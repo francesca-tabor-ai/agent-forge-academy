@@ -37,12 +37,13 @@ export function Header({ isSidebarExpanded, onToggleSidebar, role }: HeaderProps
       className="sticky top-0 z-50 bg-white border-b flex-shrink-0" 
       style={{ 
         borderColor: 'var(--ca-neutral-300)',
+        borderBottomWidth: '1px',
         height: '64px', // ~64px as specified
       }}
       role="banner"
       aria-label="App header"
     >
-      <div className="flex items-center justify-between h-full px-4">
+      <div className="flex items-center justify-between h-full px-4 md:px-6">
         {/* Left: Burger icon + App name */}
         <div className="flex items-center">
           <button
