@@ -57,7 +57,13 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
     .eq('slug', courseSlug)
     .single();
 
-  if (error || !course) {
+  // Normalize database fields from snake_case to camelCase
+  const normalizedCourse = course ? {
+    ...course,
+    thumbnailUrl: course.thumbnail_url || undefined,
+  } : null;
+
+  if (error || !normalizedCourse) {
     // Course might not be in database yet, check if it exists in file system
     const lessons = loadAllLessons(undefined, courseSlug);
     if (lessons.length === 0) {
@@ -84,7 +90,7 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
   let nextLessonSlug: string | null = null;
   let completedLessonSlugs = new Set<string>();
 
-  if (profile && course?.id) {
+  if (profile && normalizedCourse?.id) {
     const { data: studentProfile } = await supabase
       .from('student_profiles')
       .select('id')
@@ -97,7 +103,7 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
       const { data: enrollmentData } = await supabase
         .from('course_enrollments')
         .select('*')
-        .eq('course_id', course.id)
+        .eq('course_id', normalizedCourse.id)
         .eq('student_profile_id', studentProfile.id)
         .single();
 
@@ -109,7 +115,7 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
           .from('lesson_progress')
           .select('lesson_slug, status')
           .eq('student_profile_id', studentProfile.id)
-          .eq('course_id', course.id);
+          .eq('course_id', normalizedCourse.id);
 
         const completedProgress = lessonProgress?.filter(lp => lp.status === 'completed') || [];
         completedLessons = completedProgress.length;
@@ -129,43 +135,41 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
   // Get static metadata (outcome, build, bestFor)
   const staticMetadata = courseMetadata[courseSlug];
 
-  const courseTitle = course?.title || metadata?.title || staticMetadata?.title || courseSlug.replace(/-/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase());
-  const courseDescription = course?.description || metadata?.description || null;
+  const courseTitle = normalizedCourse?.title || metadata?.title || staticMetadata?.title || courseSlug.replace(/-/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase());
+  const courseDescription = normalizedCourse?.description || metadata?.description || null;
   
   // Merge course data with metadata to ensure correct category/image resolution
   // Priority: metadata (file system) > static metadata > database
   // This ensures track images are always correct even if database has wrong/null category
-  const categoryForImage = metadata?.category || staticMetadata?.category || course?.category;
-  // Map database thumbnail_url (snake_case) to thumbnailUrl (camelCase) for consistency
-  const courseThumbnailUrl = course?.thumbnail_url ? course.thumbnail_url : undefined;
+  const categoryForImage = metadata?.category || staticMetadata?.category || normalizedCourse?.category;
   const courseCoverImage = getCourseCover({
     // Only use database imageUrl/thumbnailUrl if they're valid and metadata doesn't override
-    imageUrl: metadata?.imageUrl || staticMetadata?.imageUrl || course?.imageUrl,
-    thumbnailUrl: metadata?.thumbnailUrl || courseThumbnailUrl,
+    imageUrl: metadata?.imageUrl || staticMetadata?.imageUrl || normalizedCourse?.imageUrl,
+    thumbnailUrl: metadata?.thumbnailUrl || normalizedCourse?.thumbnailUrl,
     // Always prioritize metadata category (source of truth) over database category
     category: categoryForImage,
     track: categoryForImage, // Also set track field for compatibility
-    industries: metadata?.industries || staticMetadata?.industries || course?.industries,
+    industries: metadata?.industries || staticMetadata?.industries || normalizedCourse?.industries,
     // Include metadata object for fallback
     metadata: metadata ? { category: categoryForImage } : undefined,
   });
 
   // Prepare metadata for display
-  const durationWeeks = course?.duration_weeks || metadata?.duration_weeks;
-  const difficultyLevel = course?.difficulty_level || metadata?.difficulty_level;
-  const trackCategory = course?.category || metadata?.category || staticMetadata?.category;
-  const industries = course?.industries || metadata?.industries || staticMetadata?.industries || [];
+  const durationWeeks = normalizedCourse?.duration_weeks || metadata?.duration_weeks;
+  const difficultyLevel = normalizedCourse?.difficulty_level || metadata?.difficulty_level;
+  const trackCategory = normalizedCourse?.category || metadata?.category || staticMetadata?.category;
+  const industries = normalizedCourse?.industries || metadata?.industries || staticMetadata?.industries || [];
 
   // Get overview fields (outcome, build, bestFor)
   // Priority: database fields > dynamic metadata > static metadata
-  const outcome = course?.outcome && course.outcome.length > 0 
-    ? course.outcome 
+  const outcome = normalizedCourse?.outcome && normalizedCourse.outcome.length > 0 
+    ? normalizedCourse.outcome 
     : ((metadata as any)?.outcome || staticMetadata?.outcome);
-  const build = course?.youll_build && course.youll_build.length > 0
-    ? course.youll_build
+  const build = normalizedCourse?.youll_build && normalizedCourse.youll_build.length > 0
+    ? normalizedCourse.youll_build
     : ((metadata as any)?.build || staticMetadata?.build);
-  const bestFor = course?.best_for && course.best_for.length > 0
-    ? course.best_for
+  const bestFor = normalizedCourse?.best_for && normalizedCourse.best_for.length > 0
+    ? normalizedCourse.best_for
     : ((metadata as any)?.bestFor || staticMetadata?.bestFor);
 
   // Helper to parse text into bullet points
@@ -257,7 +261,7 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
           isEnrolled={!!enrollment}
           progressPercentage={enrollment?.progress_percentage}
           courseSlug={courseSlug}
-          courseId={course?.id}
+          courseId={normalizedCourse?.id}
           nextLessonSlug={nextLessonSlug}
           firstLessonSlug={lessons[0]?.slug}
         />
@@ -476,14 +480,14 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
           {/* Right Column: Progress Card + Quick Actions */}
           <div className="space-y-6 lg:space-y-8">
             {/* Progress Card - Mobile (top) */}
-            {(enrollment || course?.id) && (
+            {(enrollment || normalizedCourse?.id) && (
               <div className="lg:hidden">
                 <ProgressCard
                   enrollment={enrollment}
                   completedLessons={completedLessons}
                   totalLessons={lessons.length}
                   courseSlug={courseSlug}
-                  courseId={course?.id}
+                  courseId={normalizedCourse?.id}
                   nextLessonSlug={nextLessonSlug}
                   firstLessonSlug={lessons[0]?.slug}
                 />
@@ -491,14 +495,14 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
             )}
 
             {/* Progress Card - Desktop (sidebar) */}
-            {(enrollment || course?.id) && (
+            {(enrollment || normalizedCourse?.id) && (
               <div className="hidden lg:block">
                 <ProgressCard
                   enrollment={enrollment}
                   completedLessons={completedLessons}
                   totalLessons={lessons.length}
                   courseSlug={courseSlug}
-                  courseId={course?.id}
+                  courseId={normalizedCourse?.id}
                   nextLessonSlug={nextLessonSlug}
                   firstLessonSlug={lessons[0]?.slug}
                   isSticky={true}
@@ -510,7 +514,7 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
             <div className="hidden lg:block pt-4">
               <QuickActions
                 courseSlug={courseSlug}
-                courseId={course?.id}
+                courseId={normalizedCourse?.id}
                 isEnrolled={!!enrollment}
               />
             </div>
@@ -523,7 +527,7 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
         isEnrolled={!!enrollment}
         progressPercentage={enrollment?.progress_percentage}
         courseSlug={courseSlug}
-        courseId={course?.id}
+        courseId={normalizedCourse?.id}
         nextLessonSlug={nextLessonSlug}
         firstLessonSlug={lessons[0]?.slug}
       />
