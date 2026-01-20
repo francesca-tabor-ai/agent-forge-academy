@@ -40,6 +40,14 @@ export default async function AdminStartupsPage() {
     console.error('Error fetching startups:', error);
   }
 
+  // Normalize founders to always be an array
+  const normalizedStartups = (startups || []).map((startup: any) => ({
+    ...startup,
+    founders: Array.isArray(startup.founders) 
+      ? startup.founders 
+      : (startup.founders ? [startup.founders] : []),
+  }));
+
   // Fetch all founders for dropdown
   const { data: founders } = await supabase
     .from('founders')
@@ -48,7 +56,7 @@ export default async function AdminStartupsPage() {
 
   return (
     <StartupsAdminClient 
-      initialStartups={startups || []} 
+      initialStartups={normalizedStartups} 
       founders={founders || []}
     />
   );

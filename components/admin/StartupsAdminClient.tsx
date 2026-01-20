@@ -36,7 +36,7 @@ interface Startup {
   founders?: {
     id: string;
     name: string;
-  };
+  }[];
 }
 
 interface StartupsAdminClientProps {
@@ -268,13 +268,17 @@ export function StartupsAdminClient({ initialStartups, founders }: StartupsAdmin
                               <div className="text-xs text-ca-neutral-500 truncate hidden sm:block">{startup.tagline}</div>
                             )}
                             <div className="text-xs text-ca-neutral-500 sm:hidden">
-                              {startup.founders?.name || 'N/A'}
+                              {startup.founders && startup.founders.length > 0 
+                                ? startup.founders.map(f => f.name).join(", ")
+                                : 'N/A'}
                             </div>
                           </div>
                         </div>
                       </td>
                       <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900 hidden sm:table-cell">
-                        {startup.founders?.name || 'N/A'}
+                        {startup.founders && startup.founders.length > 0 
+                          ? startup.founders.map(f => f.name).join(", ")
+                          : 'N/A'}
                       </td>
                       <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
                         <span className={`px-2 py-1 text-xs font-medium rounded-full ${
