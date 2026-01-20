@@ -137,9 +137,9 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
   // This ensures track images are always correct even if database has wrong/null category
   const categoryForImage = metadata?.category || staticMetadata?.category || course?.category;
   const courseCoverImage = getCourseCover({
-    // Only use database imageUrl/thumbnail_url if they're valid and metadata doesn't override
+    // Only use database imageUrl/thumbnailUrl if they're valid and metadata doesn't override
     imageUrl: metadata?.imageUrl || staticMetadata?.imageUrl || course?.imageUrl,
-    thumbnail_url: metadata?.thumbnail_url || course?.thumbnail_url,
+    thumbnailUrl: metadata?.thumbnailUrl || (course?.thumbnail_url ? course.thumbnail_url : undefined), // Map DB thumbnail_url to thumbnailUrl
     // Always prioritize metadata category (source of truth) over database category
     category: categoryForImage,
     track: categoryForImage, // Also set track field for compatibility

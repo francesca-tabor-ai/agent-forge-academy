@@ -35,7 +35,8 @@ const DEFAULT_FALLBACK_IMAGE = 'https://wallpaperaccess.com/full/340554.png';
  */
 interface CourseWithImage {
   imageUrl?: string | null;
-  thumbnail_url?: string | null;
+  thumbnailUrl?: string | null; // camelCase (preferred)
+  thumbnail_url?: string | null; // snake_case (for backward compatibility with DB queries)
   category?: string;
   industries?: string[];
   metadata?: DashboardMetadata;
@@ -44,7 +45,7 @@ interface CourseWithImage {
 /**
  * Resolves the image URL for a course with fallback logic:
  * 1. course.imageUrl (if provided and valid - per-course override)
- * 2. course.thumbnail_url (if provided and valid - per-course override)
+ * 2. course.thumbnailUrl (if provided and valid - per-course override)
  * 3. Track-based image (ALWAYS use track image for courses)
  * 4. Global fallback image
  * 
@@ -72,10 +73,11 @@ export function resolveCourseImageUrl(course: CourseWithImage): string {
     return course.imageUrl;
   }
 
-  // Priority 2: Direct thumbnail_url (per-course override)
-  // Only use if it's a valid URL and not a placeholder
-  if (isValidUrl(course.thumbnail_url)) {
-    return course.thumbnail_url;
+  // Priority 2: Direct thumbnailUrl (per-course override)
+  // Accept both camelCase (preferred) and snake_case (backward compatibility)
+  const thumbnailUrl = course.thumbnailUrl || course.thumbnail_url;
+  if (isValidUrl(thumbnailUrl)) {
+    return thumbnailUrl;
   }
 
   const track = course.category || course.metadata?.category;

@@ -188,7 +188,8 @@ export function getCoverFromIndustries(industries: string[] | null | undefined):
  */
 interface CourseForCover {
   imageUrl?: string | null;
-  thumbnail_url?: string | null;
+  thumbnailUrl?: string | null; // camelCase (preferred)
+  thumbnail_url?: string | null; // snake_case (for backward compatibility with DB queries)
   industry?: string | null;
   industries?: string[] | null;
   track?: string | null;
@@ -215,7 +216,7 @@ function isValidImageUrl(url: string | null | undefined): url is string {
 /**
  * Get course cover image URL based on track with fallback
  * Priority: 
- * 1. course.imageUrl or course.thumbnail_url (per-course override)
+ * 1. course.imageUrl or course.thumbnailUrl (per-course override)
  * 2. course.track/category (ALWAYS use track for courses)
  * 3. Default fallback
  * 
@@ -225,7 +226,7 @@ function isValidImageUrl(url: string | null | undefined): url is string {
  * This function now matches the logic of resolveCourseImageUrl() to ensure
  * hero images and thumbnail images are the same.
  * 
- * @param course - Course object with imageUrl, thumbnail_url, track, category, or metadata
+ * @param course - Course object with imageUrl, thumbnailUrl, track, category, or metadata
  * @returns Cover image URL for the course
  */
 export function getCourseCover(course: CourseForCover | null | undefined): string {
@@ -233,13 +234,15 @@ export function getCourseCover(course: CourseForCover | null | undefined): strin
     return DEFAULT_FALLBACK_IMAGE;
   }
 
-  // Priority 1: Direct imageUrl or thumbnail_url (per-course override)
+  // Priority 1: Direct imageUrl or thumbnailUrl (per-course override)
   // Only use if it's a valid URL and not a placeholder
+  // Accept both camelCase (preferred) and snake_case (backward compatibility)
   if (isValidImageUrl(course.imageUrl)) {
     return course.imageUrl;
   }
-  if (isValidImageUrl(course.thumbnail_url)) {
-    return course.thumbnail_url;
+  const thumbnailUrl = course.thumbnailUrl || course.thumbnail_url; // Prefer camelCase, fallback to snake_case
+  if (isValidImageUrl(thumbnailUrl)) {
+    return thumbnailUrl;
   }
 
   // Priority 2: Use course.track or course.category (ALWAYS use track for courses)

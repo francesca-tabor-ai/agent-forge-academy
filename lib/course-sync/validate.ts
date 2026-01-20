@@ -82,11 +82,13 @@ export function validateCourseMetadata(
 
   // Hero image validation guardrail
   // Course must have either:
-  // 1. imageUrl or thumbnail_url (direct image)
+  // 1. imageUrl or thumbnailUrl (direct image)
   // 2. category (for track-based fallback)
   // 3. allow_fallback: true (explicitly allow fallback)
   const hasImageUrl = metadata.imageUrl && typeof metadata.imageUrl === 'string' && metadata.imageUrl.trim().length > 0;
-  const hasThumbnailUrl = metadata.thumbnail_url && typeof metadata.thumbnail_url === 'string' && metadata.thumbnail_url.trim().length > 0;
+  // Accept both thumbnail_url (from MD files) and thumbnailUrl (camelCase)
+  const thumbnailUrlValue = metadata.thumbnailUrl || metadata.thumbnail_url;
+  const hasThumbnailUrl = thumbnailUrlValue && typeof thumbnailUrlValue === 'string' && thumbnailUrlValue.trim().length > 0;
   const hasCategory = metadata.category && typeof metadata.category === 'string' && metadata.category.trim().length > 0;
   const allowFallback = metadata.allow_fallback === true || metadata.allow_fallback === 'true' || metadata.allowFallback === true || metadata.allowFallback === 'true';
 
@@ -102,11 +104,11 @@ export function validateCourseMetadata(
   }
 
   if (hasThumbnailUrl) {
-    const thumbnailUrl = String(metadata.thumbnail_url).trim();
+    const thumbnailUrl = String(thumbnailUrlValue).trim();
     if (!isValidImageUrl(thumbnailUrl)) {
       errors.push({
-        field: 'thumbnail_url',
-        message: `thumbnail_url is invalid or appears to be a placeholder: "${thumbnailUrl}"`,
+        field: 'thumbnailUrl',
+        message: `thumbnailUrl is invalid or appears to be a placeholder: "${thumbnailUrl}"`,
       });
     }
   }
@@ -115,7 +117,7 @@ export function validateCourseMetadata(
   if (!hasImageUrl && !hasThumbnailUrl && !hasCategory && !allowFallback) {
     errors.push({
       field: 'heroImage',
-      message: 'Course must have either imageUrl, thumbnail_url, or category (for track-based fallback). If none are available, set allow_fallback: true to explicitly enable fallback.',
+      message: 'Course must have either imageUrl, thumbnailUrl, or category (for track-based fallback). If none are available, set allow_fallback: true to explicitly enable fallback.',
     });
   }
 
@@ -203,11 +205,15 @@ export function normalizeCourseMetadata(
     }
   }
 
+  // Normalize thumbnail URL (accept both snake_case and camelCase)
+  const thumbnailUrlValue = raw.thumbnailUrl || raw.thumbnail_url;
+  const thumbnailUrl = thumbnailUrlValue ? String(thumbnailUrlValue).trim() : null;
+
   return {
     slug: courseSlug, // Always use directory name as source of truth
     title: String(raw.title || courseSlug).trim(),
     description: raw.description ? String(raw.description).trim() : null,
-    thumbnail_url: raw.thumbnail_url ? String(raw.thumbnail_url).trim() : null,
+    thumbnailUrl, // Use camelCase in TypeScript
     imageUrl: raw.imageUrl ? String(raw.imageUrl).trim() : undefined,
     duration_weeks: durationWeeks,
     difficulty_level: difficultyLevel,

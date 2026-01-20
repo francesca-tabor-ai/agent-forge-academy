@@ -29,7 +29,11 @@ async function getDatabaseCourses(
   const coursesMap = new Map<string, CourseMetadata>();
   if (data) {
     for (const course of data) {
-      coursesMap.set(course.slug, course as CourseMetadata);
+      // Map database snake_case to TypeScript camelCase
+      coursesMap.set(course.slug, {
+        ...course,
+        thumbnailUrl: course.thumbnail_url || null, // Map thumbnail_url -> thumbnailUrl
+      } as CourseMetadata);
     }
   }
 
@@ -54,7 +58,7 @@ function coursesAreDifferent(
   return (
     fileMetadata.title !== dbMetadata.title ||
     fileMetadata.description !== dbMetadata.description ||
-    fileMetadata.thumbnail_url !== dbMetadata.thumbnail_url ||
+    fileMetadata.thumbnailUrl !== dbMetadata.thumbnailUrl || // Use camelCase
     fileMetadata.duration_weeks !== dbMetadata.duration_weeks ||
     fileMetadata.difficulty_level !== dbMetadata.difficulty_level ||
     fileMetadata.is_published !== dbMetadata.is_published ||
@@ -134,7 +138,7 @@ export async function syncCoursesToDatabase(
             slug: fileMetadata.slug,
             title: fileMetadata.title,
             description: fileMetadata.description,
-            thumbnail_url: fileMetadata.thumbnail_url,
+            thumbnail_url: fileMetadata.thumbnailUrl, // Map thumbnailUrl -> thumbnail_url for DB
             duration_weeks: fileMetadata.duration_weeks,
             difficulty_level: fileMetadata.difficulty_level,
             is_published: fileMetadata.is_published,
@@ -164,7 +168,7 @@ export async function syncCoursesToDatabase(
           .update({
             title: fileMetadata.title,
             description: fileMetadata.description,
-            thumbnail_url: fileMetadata.thumbnail_url,
+            thumbnail_url: fileMetadata.thumbnailUrl, // Map thumbnailUrl -> thumbnail_url for DB
             duration_weeks: fileMetadata.duration_weeks,
             difficulty_level: fileMetadata.difficulty_level,
             is_published: fileMetadata.is_published,

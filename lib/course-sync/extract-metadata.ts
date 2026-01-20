@@ -130,7 +130,7 @@ export function extractCourseMetadata(
       slug: courseSlug,
       title: legacyMetadata.title,
       description: legacyMetadata.outcome || null,
-      thumbnail_url: null,
+      thumbnailUrl: null, // Use camelCase
       imageUrl: legacyMetadata.imageUrl,
       duration_weeks: durationWeeks,
       difficulty_level: difficultyLevel,
@@ -160,7 +160,7 @@ export function extractCourseMetadata(
       slug: courseSlug,
       title,
       description: null,
-      thumbnail_url: null,
+      thumbnailUrl: null, // Use camelCase
       imageUrl: undefined,
       duration_weeks: null,
       difficulty_level: null,

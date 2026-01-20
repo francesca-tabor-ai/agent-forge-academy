@@ -10,7 +10,8 @@ type Course = {
   slug: string;
   title: string;
   description: string | null;
-  thumbnail_url: string | null;
+  thumbnailUrl?: string | null; // camelCase (preferred)
+  thumbnail_url?: string | null; // snake_case (for backward compatibility with DB queries)
   imageUrl?: string | null;
   duration_weeks: number | null;
   difficulty_level: string | null;

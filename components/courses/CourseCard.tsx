@@ -25,7 +25,8 @@ interface CourseCardProps {
     slug: string;
     title: string;
     description: string | null;
-    thumbnail_url: string | null;
+    thumbnailUrl?: string | null; // camelCase (preferred)
+    thumbnail_url?: string | null; // snake_case (for backward compatibility with DB queries)
     imageUrl?: string | null;
     duration_weeks: number | null;
     difficulty_level: string | null;
@@ -129,7 +130,7 @@ export function CourseCard({
   const categoryForImage = metadata?.category || course.category;
   const imageUrl = resolveCourseImageUrl({
     imageUrl: course.imageUrl,
-    thumbnail_url: course.thumbnail_url,
+    thumbnailUrl: course.thumbnailUrl || course.thumbnail_url, // Prefer camelCase, fallback to snake_case
     category: categoryForImage,
     track: categoryForImage, // Also set track field for compatibility
     industries: displayIndustries,

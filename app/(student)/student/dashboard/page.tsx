@@ -75,7 +75,8 @@ export default async function StudentDashboard() {
     slug: string;
     title: string;
     description: string | null;
-    thumbnail_url: string | null;
+    thumbnailUrl?: string | null; // camelCase (preferred)
+    thumbnail_url?: string | null; // snake_case (for backward compatibility with DB queries)
     imageUrl?: string | null;
     duration_weeks: number | null;
     difficulty_level: string | null;
@@ -154,7 +155,7 @@ export default async function StudentDashboard() {
         // to ensure we show the course name, not the first lesson title
         title: staticMetadata?.title || dynamicMetadata?.metadata?.title || slug.replace(/-/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()),
         description: dynamicMetadata?.metadata?.description || staticMetadata?.outcome || null,
-        thumbnail_url: dynamicMetadata?.metadata?.thumbnail_url || null,
+        thumbnailUrl: dynamicMetadata?.metadata?.thumbnailUrl || null, // Use camelCase
         imageUrl: dynamicMetadata?.metadata?.imageUrl || metadata?.imageUrl,
         duration_weeks: dynamicMetadata?.metadata?.duration_weeks || null,
         difficulty_level: dynamicMetadata?.metadata?.difficulty_level || null,
