@@ -1,0 +1,16 @@
+# Example CSV File
+# 
+# This is an example CSV file showing the format expected by the migration script.
+# 
+# Requirements:
+# - First row must be headers (column names)
+# - Column names must match Supabase table column names exactly (case-sensitive)
+# - Empty values will be treated as NULL
+# - Quoted values are supported (e.g., "value, with comma")
+#
+# Remove this file and replace with your own CSV files.
+
+id,name,description,created_at
+1,Example Item 1,This is an example item,2024-01-01T00:00:00Z
+2,Example Item 2,"This is another example, with a comma",2024-01-02T00:00:00Z
+3,Example Item 3,This item has no description,
