@@ -117,9 +117,10 @@ async function validateSchema() {
       
       // Verify key location columns specifically
       const locationColumns = ['location', 'city', 'country'] as const;
-      const locationStatus = locationColumns.map(col => 
-        requiredColumns.includes(col) ? '✓' : '✗'
-      ).join(' ');
+      type RequiredColumn = (typeof requiredColumns)[number];
+      const locationStatus = locationColumns
+        .map((col) => (requiredColumns.includes(col as RequiredColumn) ? '✓' : '✗'))
+        .join(' ');
       console.log(`   📍 Location fields: ${locationStatus} (location, city, country)`);
     }
   }

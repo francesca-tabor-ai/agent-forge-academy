@@ -5,6 +5,7 @@ import { safeLogger } from '@/lib/utils/redactPII';
 import { mapGitHubRepoToProject, validateProjectInput, filterGitHubRepos, type GitHubRepo } from '@/lib/portfolio/github-mapper';
 import { revalidatePath } from 'next/cache';
 import { parseLocation } from '@/lib/profile/parseLocation';
+import { findCityForLocation } from '@/lib/cities/findNearestCity';
 
 /**
  * Helper function to sync GitHub repositories and create portfolio projects
@@ -723,6 +724,11 @@ export async function PATCH(request: NextRequest) {
     // Parse city from first token before comma, store normalized city key
     const { city, country } = parseLocation(location);
 
+    // Find nearest city for location (for banner image association)
+    // This will try exact match first, then nearest by coordinates if available
+    const matchedCity = location ? await findCityForLocation(location) : null;
+    const cityId = matchedCity?.id || null;
+
     if (!studentProfile) {
       // Create student profile if it doesn't exist
       const { data: newProfile, error: createError } = await supabase
@@ -736,6 +742,7 @@ export async function PATCH(request: NextRequest) {
           location: location || null,
           city: city,
           country: country,
+          city_id: cityId,
           linkedin_url: linkedin_url,
           github_url: github_url,
           website_url: website_url,
@@ -821,6 +828,7 @@ export async function PATCH(request: NextRequest) {
     // Update existing student profile (RLS will enforce ownership)
     // When user edits profile location, parse city from first token before comma
     // Store normalized city key (e.g., "london")
+    // Also find and associate nearest city for banner image
     const { data: updatedProfile, error } = await supabase
       .from('student_profiles')
       .update({
@@ -831,6 +839,7 @@ export async function PATCH(request: NextRequest) {
         location: location || null,
         city: city, // Normalized city key (e.g., "london")
         country: country, // Country (e.g., "UK")
+        city_id: cityId, // Foreign key to cities table for banner image
         linkedin_url: linkedin_url,
         github_url: github_url,
         website_url: website_url,
