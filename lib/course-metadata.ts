@@ -12,6 +12,7 @@ export interface CourseMetadata {
   industries: Industry[]; // Array of industry domains
   isLive?: boolean; // Indicates if course is live (defaults to true if not specified)
   imageUrl?: string; // Optional direct image URL
+  thumbnailUrl?: string; // Optional thumbnail image URL (camelCase)
 }
 
 export const courseMetadata: Record<string, CourseMetadata> = {
