@@ -55,6 +55,16 @@ export function StartupsPageClient() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
+  // ✅ Derive from URL first
+  const searchQuery = searchParams.get('search') || '';
+  const revenueFilter = searchParams.get('revenueRange') || 'All';
+  const vibeScoreFilter = searchParams.get('vibeScore') || 'All';
+  const technicalDifficultyFilter = searchParams.get('technicalDifficulty') || 'All';
+  const statusFilter = searchParams.get('status') || 'All';
+  const nicheFilter = searchParams.get('niche') || 'All';
+  const sortBy = searchParams.get('sort') || 'newest';
+
+  // ✅ Then initialize local state from those values
   const [startups, setStartups] = useState<Startup[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -63,14 +73,6 @@ export function StartupsPageClient() {
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [availableNiches, setAvailableNiches] = useState<string[]>([]);
   const [searchInput, setSearchInput] = useState(searchQuery);
-
-  const searchQuery = searchParams.get('search') || '';
-  const revenueFilter = searchParams.get('revenueRange') || 'All';
-  const vibeScoreFilter = searchParams.get('vibeScore') || 'All';
-  const technicalDifficultyFilter = searchParams.get('technicalDifficulty') || 'All';
-  const statusFilter = searchParams.get('status') || 'All';
-  const nicheFilter = searchParams.get('niche') || 'All';
-  const sortBy = searchParams.get('sort') || 'newest';
 
   const fetchStartups = useCallback(async (page: number = 1, append: boolean = false) => {
     if (append) {
