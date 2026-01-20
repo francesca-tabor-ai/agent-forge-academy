@@ -145,13 +145,13 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
   const courseCoverImage = getCourseCover({
     // Only use database imageUrl/thumbnailUrl if they're valid and metadata doesn't override
     imageUrl: metadata?.imageUrl || staticMetadata?.imageUrl || normalizedCourse?.imageUrl,
-    thumbnailUrl: metadata?.thumbnailUrl || normalizedCourse?.thumbnailUrl,
+    thumbnailUrl: metadata?.thumbnailUrl || staticMetadata?.thumbnailUrl || normalizedCourse?.thumbnailUrl,
     // Always prioritize metadata category (source of truth) over database category
     category: categoryForImage,
     track: categoryForImage, // Also set track field for compatibility
     industries: metadata?.industries || staticMetadata?.industries || normalizedCourse?.industries,
-    // Include metadata object for fallback
-    metadata: metadata ? { category: categoryForImage } : undefined,
+    // Include metadata object for fallback - preserve all fields, only override category
+    metadata: staticMetadata ? { ...staticMetadata, category: categoryForImage } : undefined,
   });
 
   // Prepare metadata for display

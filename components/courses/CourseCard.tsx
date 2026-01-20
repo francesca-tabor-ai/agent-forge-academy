@@ -134,6 +134,7 @@ export function CourseCard({
     category: categoryForImage,
     track: categoryForImage, // Also set track field for compatibility
     industries: displayIndustries,
+    // Only pass metadata if it exists and is complete - don't create partial objects
     metadata: metadata ? { ...metadata, category: categoryForImage } : undefined,
   });
 
