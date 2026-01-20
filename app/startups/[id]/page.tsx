@@ -124,6 +124,11 @@ export default async function StartupDetailPage({
     notFound();
   }
 
+  // Normalize founders to array (query returns single object for foreign key)
+  const foundersArray = Array.isArray(startup.founders) 
+    ? startup.founders 
+    : (startup.founders ? [startup.founders] : []);
+
   // Transform data
   const transformedStartup = {
     id: startup.id,
@@ -138,13 +143,13 @@ export default async function StartupDetailPage({
     launchYear: startup.launch_year,
     pricingModel: startup.pricing_model,
     targetCustomer: startup.target_customer,
-    founder: startup.founders ? {
-      id: startup.founders.id,
-      name: startup.founders.name,
-      bio: startup.founders.bio,
-      twitterUrl: startup.founders.twitter_url,
-      youtubeUrl: startup.founders.youtube_url,
-      website: startup.founders.website,
+    founder: foundersArray[0] ? {
+      id: foundersArray[0].id,
+      name: foundersArray[0].name,
+      bio: foundersArray[0].bio,
+      twitterUrl: foundersArray[0].twitter_url,
+      youtubeUrl: foundersArray[0].youtube_url,
+      website: foundersArray[0].website,
     } : null,
     businessModel: startup.business_models ? {
       revenueStreams: startup.business_models.revenue_streams,

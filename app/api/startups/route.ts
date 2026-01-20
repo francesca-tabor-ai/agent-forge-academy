@@ -158,27 +158,34 @@ export async function GET(request: NextRequest) {
     }
 
     // Transform data to match frontend expectations
-    let transformedStartups = (startups || []).map((startup: any) => ({
-      id: startup.id,
-      name: startup.name,
-      tagline: startup.tagline || '',
-      description: startup.description,
-      founder: startup.founders ? {
-        id: startup.founders.id,
-        name: startup.founders.name,
-        bio: startup.founders.bio,
-      } : null,
-      vibeScore: startup.vibe_score || 0,
-      revenueRange: formatRevenueRange(startup.revenue_range),
-      revenueRangeRaw: startup.revenue_range || null, // Keep raw value for sorting
-      technicalDifficulty: formatTechnicalDifficulty(startup.build_estimates?.[0]?.technical_difficulty || null),
-      status: formatStatus(startup.status),
-      logoUrl: startup.logo_url,
-      websiteUrl: startup.website_url,
-      launchYear: startup.launch_year,
-      pricingModel: startup.pricing_model,
-      targetCustomer: startup.target_customer,
-    }));
+    let transformedStartups = (startups || []).map((startup: any) => {
+      // Normalize founders to array (query returns single object for foreign key)
+      const foundersArray = Array.isArray(startup.founders) 
+        ? startup.founders 
+        : (startup.founders ? [startup.founders] : []);
+      
+      return {
+        id: startup.id,
+        name: startup.name,
+        tagline: startup.tagline || '',
+        description: startup.description,
+        founder: foundersArray[0] ? {
+          id: foundersArray[0].id,
+          name: foundersArray[0].name,
+          bio: foundersArray[0].bio,
+        } : null,
+        vibeScore: startup.vibe_score || 0,
+        revenueRange: formatRevenueRange(startup.revenue_range),
+        revenueRangeRaw: startup.revenue_range || null, // Keep raw value for sorting
+        technicalDifficulty: formatTechnicalDifficulty(startup.build_estimates?.[0]?.technical_difficulty || null),
+        status: formatStatus(startup.status),
+        logoUrl: startup.logo_url,
+        websiteUrl: startup.website_url,
+        launchYear: startup.launch_year,
+        pricingModel: startup.pricing_model,
+        targetCustomer: startup.target_customer,
+      };
+    });
 
     // Apply technical difficulty filter if specified
     if (filters.technicalDifficulty && filters.technicalDifficulty !== 'All') {
