@@ -4,7 +4,7 @@
  * This file is auto-generated from documentation/images/cities.md
  * DO NOT EDIT MANUALLY - changes will be overwritten
  * 
- * Generated at: 2026-01-21T13:31:22.965Z
+ * Generated at: 2026-01-21T16:55:21.181Z
  * Total cities: 49
  */
 
