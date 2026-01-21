@@ -74,6 +74,9 @@ async function diagnoseRequest() {
   console.log('\n\n💬 2. Conversation Messages (advisor_conversations table)');
   console.log('-'.repeat(80));
   
+  // Declare matchingConversations outside the if/else block so it's accessible later
+  let matchingConversations: any[] = [];
+  
   const { data: conversations, error: convError } = await supabase
     .from('advisor_conversations')
     .select('*')
@@ -83,7 +86,7 @@ async function diagnoseRequest() {
     console.error('❌ Error querying advisor_conversations:', convError);
   } else {
     // Filter conversations where metadata.requestId matches
-    const matchingConversations = conversations?.filter(conv => 
+    matchingConversations = conversations?.filter(conv => 
       conv.metadata?.requestId === REQUEST_ID
     ) || [];
 
@@ -131,17 +134,21 @@ async function diagnoseRequest() {
   console.log('\n\n⏰ 3. Request Timeline Analysis');
   console.log('-'.repeat(80));
   
-  // Use optional chaining for type safety - REQUEST_ID may be undefined at type level
-  // even though we have an early exit check at module level
-  const timestampMatch = REQUEST_ID?.match(/req_(\d+)_/);
-  if (!timestampMatch) {
+  // REQUEST_ID is guaranteed to be defined here due to early exit check at module level
+  // but TypeScript doesn't know that, so we assert it
+  if (!REQUEST_ID) {
     console.error('❌ REQUEST_ID missing or invalid format');
     return;
   }
   
-  // After the check above, we know REQUEST_ID is defined
-  // Create a typed constant for use in the rest of the function
-  const requestId: string = REQUEST_ID!;
+  const timestampMatch = REQUEST_ID.match(/req_(\d+)_/);
+  if (!timestampMatch) {
+    console.error('❌ REQUEST_ID has invalid format');
+    return;
+  }
+  
+  // After the checks above, we know REQUEST_ID is defined and valid
+  const requestId: string = REQUEST_ID;
   
   const timestamp = parseInt(timestampMatch[1], 10);
   const requestTime = new Date(timestamp);
