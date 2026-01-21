@@ -131,36 +131,42 @@ async function diagnoseRequest() {
   console.log('\n\n⏰ 3. Request Timeline Analysis');
   console.log('-'.repeat(80));
   
-  // REQUEST_ID is guaranteed to be defined here due to early exit check above
-  const timestampMatch = REQUEST_ID!.match(/req_(\d+)_/);
-  if (timestampMatch) {
-    const timestamp = parseInt(timestampMatch[1], 10);
-    const requestTime = new Date(timestamp);
-    console.log(`   Request Time: ${requestTime.toISOString()}`);
-    console.log(`   Request Time (Local): ${requestTime.toLocaleString()}`);
-    
-    // Check for logs around this time
-    const timeWindowStart = new Date(timestamp - 60000); // 1 minute before
-    const timeWindowEnd = new Date(timestamp + 60000);   // 1 minute after
-    
-    const { data: nearbyLogs, error: nearbyError } = await supabase
-      .from('request_logs')
-      .select('request_id, path, status, created_at')
-      .gte('created_at', timeWindowStart.toISOString())
-      .lte('created_at', timeWindowEnd.toISOString())
-      .order('created_at', { ascending: false })
-      .limit(10);
+  // Use optional chaining for type safety - REQUEST_ID may be undefined at type level
+  // even though we have an early exit check at module level
+  const timestampMatch = REQUEST_ID?.match(/req_(\d+)_/);
+  if (!timestampMatch) {
+    console.error('❌ REQUEST_ID missing or invalid format');
+    return;
+  }
+  
+  // After the check above, we know REQUEST_ID is defined
+  // Create a typed constant for use in the rest of the function
+  const requestId: string = REQUEST_ID!;
+  
+  const timestamp = parseInt(timestampMatch[1], 10);
+  const requestTime = new Date(timestamp);
+  console.log(`   Request Time: ${requestTime.toISOString()}`);
+  console.log(`   Request Time (Local): ${requestTime.toLocaleString()}`);
+  
+  // Check for logs around this time
+  const timeWindowStart = new Date(timestamp - 60000); // 1 minute before
+  const timeWindowEnd = new Date(timestamp + 60000);   // 1 minute after
+  
+  const { data: nearbyLogs, error: nearbyError } = await supabase
+    .from('request_logs')
+    .select('request_id, path, status, created_at')
+    .gte('created_at', timeWindowStart.toISOString())
+    .lte('created_at', timeWindowEnd.toISOString())
+    .order('created_at', { ascending: false })
+    .limit(10);
 
-    if (!nearbyError && nearbyLogs && nearbyLogs.length > 0) {
-      console.log(`\n   Nearby requests (±1 minute):`);
-      nearbyLogs.forEach(log => {
-        const isMatch = log.request_id === REQUEST_ID;
-        const marker = isMatch ? '👉' : '  ';
-        console.log(`   ${marker} ${log.request_id} - ${log.path} - ${log.status} - ${new Date(log.created_at).toISOString()}`);
-      });
-    }
-  } else {
-    console.log('⚠️  Could not extract timestamp from request ID');
+  if (!nearbyError && nearbyLogs && nearbyLogs.length > 0) {
+    console.log(`\n   Nearby requests (±1 minute):`);
+    nearbyLogs.forEach(log => {
+      const isMatch = log.request_id === requestId;
+      const marker = isMatch ? '👉' : '  ';
+      console.log(`   ${marker} ${log.request_id} - ${log.path} - ${log.status} - ${new Date(log.created_at).toISOString()}`);
+    });
   }
 
   // 4. Summary and recommendations
