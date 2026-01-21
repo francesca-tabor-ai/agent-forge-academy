@@ -20,6 +20,15 @@ email_action: "Build your first working fashion agent and create a reusable temp
 
 ---
 
+## Hands-On Video: Building Your AI Agent
+
+<video width="100%" controls>
+  <source src="/media/video/Scaling%20Fashion%20Visuals%20with%20AI%20-%20Video%202.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
+---
+
 ## 4.1 Overview of an AI Creative Agent
 
 ### What is an AI Creative Agent?

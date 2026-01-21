@@ -8,6 +8,8 @@ order: 0
 
 **From manual photoshoots → fully automated AI-powered fashion visual production**
 
+![Scaling Fashion Visuals with AI - Course Overview](/media/image/Scaling%20Fashion%20Visuals%20with%20AI%20-%20Image%201.png)
+
 ## Course Overview
 
 **Format:** Self-paced (with optional live sessions)  
@@ -41,6 +43,8 @@ By completing this course, you will be able to:
 ✅ Automate asset distribution to marketing channels  
 ✅ Troubleshoot and optimize AI fashion workflows  
 ✅ Adapt the system for other verticals (home, beauty, lifestyle)
+
+![Scaling Fashion Visuals with AI - What You'll Master](/media/image/Scaling%20Fashion%20Visuals%20with%20AI%20-%20Image%202.png)
 
 ---
 
@@ -205,6 +209,8 @@ By completing this course, you will be able to:
 
 ## Technology Stack
 
+![Scaling Fashion Visuals with AI - Technology Stack](/media/image/Scaling%20Fashion%20Visuals%20with%20AI%20-%20Image%203.png)
+
 ### AI Image Generation Platforms
 - Midjourney, DALL-E, Stable Diffusion
 - Fashion-specific AI models
@@ -254,6 +260,23 @@ By completing this course, you will be able to:
 
 ---
 
+## Video Resources
+
+### Course Introduction
+<video width="100%" controls>
+  <source src="/media/video/Scaling%20Fashion%20Visuals%20with%20AI%20-%20Video%201.mov" type="video/quicktime">
+  <source src="/media/video/Scaling%20Fashion%20Visuals%20with%20AI%20-%20Video%201.mov" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
+### Hands-On Workflow Building
+<video width="100%" controls>
+  <source src="/media/video/Scaling%20Fashion%20Visuals%20with%20AI%20-%20Video%202.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
+---
+
 ## Bonus Materials
 
 - Prompt system templates
@@ -265,6 +288,8 @@ By completing this course, you will be able to:
 ---
 
 ## Success Stories
+
+![Scaling Fashion Visuals with AI - Success Stories](/media/image/Scaling%20Fashion%20Visuals%20with%20AI%20-%20Image%204.png)
 
 > "Reduced our fashion photoshoot costs by 90% while increasing output 10x. Generated 200+ product shots in one day."  
 > **— Maria Santos, Fashion Brand Creative Director**
@@ -285,6 +310,8 @@ By completing this course, you will be able to:
 ---
 
 **Ready to scale your fashion visuals with AI? Let's begin! 🚀**
+
+![Scaling Fashion Visuals with AI - Get Started](/media/image/Scaling%20Fashion%20Visuals%20with%20AI%20-%20Image%205.png)
 
 ---
 
