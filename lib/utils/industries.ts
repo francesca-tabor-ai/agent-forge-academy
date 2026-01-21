@@ -18,6 +18,17 @@ export const INDUSTRIES = [
   'Legal & Compliance',
   'Retail / CPG',
   'B2B Sales / RevOps',
+  'Manufacturing',
+  'Logistics',
+  'Hospitality',
+  'Travel & Tourism',
+  'Restaurants',
+  'Telecommunications',
+  'Network Infrastructure',
+  'Wireless',
+  'Insurance',
+  'Financial Services',
+  'Risk Management',
 ] as const;
 
 export type Industry = typeof INDUSTRIES[number];

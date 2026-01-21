@@ -126,6 +126,12 @@ export async function POST(
       : (startup.revenue_potential ? [startup.revenue_potential] : []);
     const revenuePotential = revenuePotentialArray[0] ?? null;
 
+    // Normalize build_estimates to array (query returns array for one-to-many relationship)
+    const buildEstimatesArray = Array.isArray(startup.build_estimates)
+      ? startup.build_estimates
+      : (startup.build_estimates ? [startup.build_estimates] : []);
+    const buildEstimate = buildEstimatesArray[0] ?? null;
+
     // Prepare context for LLM
     const startupContext = {
       name: startup.name,
@@ -137,9 +143,9 @@ export async function POST(
       vibeScore: startup.vibe_score,
       founder: foundersArray[0]?.name ?? null,
       revenueStreams: businessModel?.revenue_streams ?? null,
-      buildTime: startup.build_estimates?.[0]?.estimated_build_time_days,
-      buildCost: startup.build_estimates?.[0]?.estimated_build_cost_usd,
-      technicalDifficulty: startup.build_estimates?.[0]?.technical_difficulty,
+      buildTime: buildEstimate?.estimated_build_time_days ?? null,
+      buildCost: buildEstimate?.estimated_build_cost_usd ?? null,
+      technicalDifficulty: buildEstimate?.technical_difficulty ?? null,
       revenuePotential: {
         conservative: revenuePotential?.conservative_mrr ?? null,
         realistic: revenuePotential?.realistic_mrr ?? null,
