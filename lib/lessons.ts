@@ -113,6 +113,8 @@ function validateAndNormalizeFrontmatter(data: Record<string, unknown>): LessonF
 
 /**
  * Gets all course slugs by detecting subdirectories in the course directory
+ * Filters out track directories (directories that contain course subdirectories)
+ * and only returns actual course directories
  * @param contentDir - Optional custom content directory path
  * @returns Array of course slugs (directory names)
  */
@@ -121,10 +123,65 @@ export function getAllCourseSlugs(contentDir: string = DEFAULT_CONTENT_DIR): str
     return [];
   }
 
+  const courseSlugs: string[] = [];
   const items = fs.readdirSync(contentDir, { withFileTypes: true });
-  return items
-    .filter((item) => item.isDirectory() && !item.name.startsWith('.'))
-    .map((item) => item.name);
+  
+  for (const item of items) {
+    if (!item.isDirectory() || item.name.startsWith('.')) {
+      continue;
+    }
+
+    const dirPath = path.join(contentDir, item.name);
+    const subItems = fs.readdirSync(dirPath, { withFileTypes: true });
+    
+    // Check if this directory contains subdirectories that look like courses
+    const hasSubDirs = subItems.some(subItem => subItem.isDirectory());
+    const hasMdFilesAtRoot = subItems.some(subItem => 
+      subItem.isFile() && subItem.name.endsWith('.md')
+    );
+    const hasCourseMetadata = subItems.some(subItem => 
+      subItem.isFile() && (subItem.name === '_COURSE_METADATA.md' || subItem.name === 'README.md')
+    );
+    
+    // If it has subdirectories AND those subdirectories contain .md files, it's a track
+    // Recurse into it to get the actual course slugs
+    if (hasSubDirs) {
+      // Check if subdirectories contain .md files (indicating they're courses)
+      const subDirs = subItems.filter(subItem => subItem.isDirectory());
+      const hasCourseSubDirs = subDirs.some(subDir => {
+        const subDirPath = path.join(dirPath, subDir.name);
+        const subDirItems = fs.readdirSync(subDirPath, { withFileTypes: true });
+        return subDirItems.some(subDirItem => 
+          subDirItem.isFile() && subDirItem.name.endsWith('.md')
+        );
+      });
+      
+      if (hasCourseSubDirs) {
+        // This is a track directory - get courses within it
+        // Return just the course name (not the track path) to match metadata format
+        const subDirs = subItems.filter(subItem => subItem.isDirectory());
+        for (const subDir of subDirs) {
+          const subDirPath = path.join(dirPath, subDir.name);
+          const subDirItems = fs.readdirSync(subDirPath, { withFileTypes: true });
+          const hasMdFiles = subDirItems.some(subDirItem => 
+            subDirItem.isFile() && subDirItem.name.endsWith('.md')
+          );
+          if (hasMdFiles) {
+            // This is a course directory - add just the course name
+            courseSlugs.push(subDir.name);
+          }
+        }
+        continue;
+      }
+    }
+    
+    // If it has .md files at root or course metadata, it's a course
+    if (hasMdFilesAtRoot || hasCourseMetadata) {
+      courseSlugs.push(item.name);
+    }
+  }
+  
+  return courseSlugs;
 }
 
 /**
@@ -146,8 +203,30 @@ export function loadAllLessons(
 
   if (courseSlug) {
     // Load lessons from a specific course directory
-    const courseDir = path.join(contentDir, courseSlug);
+    // First try direct path, then search recursively in tracks
+    let courseDir = path.join(contentDir, courseSlug);
+    let found = false;
+    
     if (fs.existsSync(courseDir) && fs.statSync(courseDir).isDirectory()) {
+      found = true;
+    } else {
+      // Search recursively in track directories
+      const items = fs.readdirSync(contentDir, { withFileTypes: true });
+      for (const item of items) {
+        if (!item.isDirectory() || item.name.startsWith('.')) {
+          continue;
+        }
+        const trackPath = path.join(contentDir, item.name);
+        const potentialCourseDir = path.join(trackPath, courseSlug);
+        if (fs.existsSync(potentialCourseDir) && fs.statSync(potentialCourseDir).isDirectory()) {
+          courseDir = potentialCourseDir;
+          found = true;
+          break;
+        }
+      }
+    }
+    
+    if (found) {
       const files = fs.readdirSync(courseDir);
       for (const file of files) {
         if (!file.endsWith('.md')) {
@@ -245,21 +324,44 @@ export function loadLessonBySlug(
   courseSlug?: string
 ): Lesson | null {
   // If course slug is provided, search only in that course directory
+  // First try direct path, then search recursively in tracks
   if (courseSlug) {
-    const courseDir = path.join(contentDir, courseSlug);
-    const filePath = path.join(courseDir, `${slug}.md`);
+    let courseDir = path.join(contentDir, courseSlug);
+    let found = false;
+    
+    if (fs.existsSync(courseDir) && fs.statSync(courseDir).isDirectory()) {
+      found = true;
+    } else {
+      // Search recursively in track directories
+      const items = fs.readdirSync(contentDir, { withFileTypes: true });
+      for (const item of items) {
+        if (!item.isDirectory() || item.name.startsWith('.')) {
+          continue;
+        }
+        const trackPath = path.join(contentDir, item.name);
+        const potentialCourseDir = path.join(trackPath, courseSlug);
+        if (fs.existsSync(potentialCourseDir) && fs.statSync(potentialCourseDir).isDirectory()) {
+          courseDir = potentialCourseDir;
+          found = true;
+          break;
+        }
+      }
+    }
+    
+    if (found) {
+      const filePath = path.join(courseDir, `${slug}.md`);
+      if (fs.existsSync(filePath)) {
+        const fileContents = fs.readFileSync(filePath, 'utf8');
+        const { data, content } = matter(fileContents);
+        const validatedFrontmatter = validateAndNormalizeFrontmatter({ ...data, course: courseSlug });
 
-    if (fs.existsSync(filePath)) {
-      const fileContents = fs.readFileSync(filePath, 'utf8');
-      const { data, content } = matter(fileContents);
-      const validatedFrontmatter = validateAndNormalizeFrontmatter({ ...data, course: courseSlug });
-
-      return {
-        slug,
-        courseSlug,
-        frontmatter: validatedFrontmatter,
-        content,
-      };
+        return {
+          slug,
+          courseSlug,
+          frontmatter: validatedFrontmatter,
+          content,
+        };
+      }
     }
     return null;
   }
@@ -267,23 +369,50 @@ export function loadLessonBySlug(
   // Otherwise, search in all course directories and root (backward compatible)
   const items = fs.readdirSync(contentDir, { withFileTypes: true });
 
-  // First check course subdirectories
+  // First check course subdirectories (including nested in tracks)
   const courseDirs = items.filter((item) => item.isDirectory() && !item.name.startsWith('.'));
   for (const courseDir of courseDirs) {
     const coursePath = path.join(contentDir, courseDir.name);
-    const filePath = path.join(coursePath, `${slug}.md`);
+    
+    // Check if this is a track (contains subdirectories) or a course (contains .md files)
+    const subItems = fs.readdirSync(coursePath, { withFileTypes: true });
+    const hasSubDirs = subItems.some(subItem => subItem.isDirectory());
+    const hasMdFiles = subItems.some(subItem => subItem.isFile() && subItem.name.endsWith('.md'));
+    
+    if (hasMdFiles && !hasSubDirs) {
+      // This is a course directory - check for the lesson
+      const filePath = path.join(coursePath, `${slug}.md`);
+      if (fs.existsSync(filePath)) {
+        const fileContents = fs.readFileSync(filePath, 'utf8');
+        const { data, content } = matter(fileContents);
+        const validatedFrontmatter = validateAndNormalizeFrontmatter({ ...data, course: courseDir.name });
 
-    if (fs.existsSync(filePath)) {
-      const fileContents = fs.readFileSync(filePath, 'utf8');
-      const { data, content } = matter(fileContents);
-      const validatedFrontmatter = validateAndNormalizeFrontmatter({ ...data, course: courseDir.name });
+        return {
+          slug,
+          courseSlug: courseDir.name,
+          frontmatter: validatedFrontmatter,
+          content,
+        };
+      }
+    } else if (hasSubDirs) {
+      // This is a track directory - search in its course subdirectories
+      const subDirs = subItems.filter(subItem => subItem.isDirectory());
+      for (const subDir of subDirs) {
+        const subDirPath = path.join(coursePath, subDir.name);
+        const filePath = path.join(subDirPath, `${slug}.md`);
+        if (fs.existsSync(filePath)) {
+          const fileContents = fs.readFileSync(filePath, 'utf8');
+          const { data, content } = matter(fileContents);
+          const validatedFrontmatter = validateAndNormalizeFrontmatter({ ...data, course: subDir.name });
 
-      return {
-        slug,
-        courseSlug: courseDir.name,
-        frontmatter: validatedFrontmatter,
-        content,
-      };
+          return {
+            slug,
+            courseSlug: subDir.name,
+            frontmatter: validatedFrontmatter,
+            content,
+          };
+        }
+      }
     }
   }
 
@@ -323,8 +452,30 @@ export function getAllLessonSlugs(
 
   if (courseSlug) {
     // Get slugs from specific course directory
-    const courseDir = path.join(contentDir, courseSlug);
+    // First try direct path, then search recursively in tracks
+    let courseDir = path.join(contentDir, courseSlug);
+    let found = false;
+    
     if (fs.existsSync(courseDir) && fs.statSync(courseDir).isDirectory()) {
+      found = true;
+    } else {
+      // Search recursively in track directories
+      const items = fs.readdirSync(contentDir, { withFileTypes: true });
+      for (const item of items) {
+        if (!item.isDirectory() || item.name.startsWith('.')) {
+          continue;
+        }
+        const trackPath = path.join(contentDir, item.name);
+        const potentialCourseDir = path.join(trackPath, courseSlug);
+        if (fs.existsSync(potentialCourseDir) && fs.statSync(potentialCourseDir).isDirectory()) {
+          courseDir = potentialCourseDir;
+          found = true;
+          break;
+        }
+      }
+    }
+    
+    if (found) {
       const files = fs.readdirSync(courseDir);
       files
         .filter((file) => file.endsWith('.md'))
@@ -339,19 +490,40 @@ export function getAllLessonSlugs(
     // Get slugs from all course directories + root
     const items = fs.readdirSync(contentDir, { withFileTypes: true });
 
-    // Course subdirectories
+    // Course subdirectories (including nested in tracks)
     const courseDirs = items.filter((item) => item.isDirectory() && !item.name.startsWith('.'));
     for (const courseDir of courseDirs) {
       const coursePath = path.join(contentDir, courseDir.name);
-      const files = fs.readdirSync(coursePath);
-      files
-        .filter((file) => file.endsWith('.md'))
-        .forEach((file) => {
+      const subItems = fs.readdirSync(coursePath, { withFileTypes: true });
+      
+      // Check if this is a track (contains subdirectories) or a course (contains .md files)
+      const hasSubDirs = subItems.some(subItem => subItem.isDirectory());
+      const hasMdFiles = subItems.some(subItem => subItem.isFile() && subItem.name.endsWith('.md'));
+      
+      if (hasMdFiles && !hasSubDirs) {
+        // This is a course directory
+        const files = subItems.filter(item => item.isFile() && item.name.endsWith('.md'));
+        files.forEach((file) => {
           slugs.push({
-            slug: file.replace(/\.md$/, ''),
+            slug: file.name.replace(/\.md$/, ''),
             courseSlug: courseDir.name,
           });
         });
+      } else if (hasSubDirs) {
+        // This is a track directory - get lessons from course subdirectories
+        const subDirs = subItems.filter(subItem => subItem.isDirectory());
+        for (const subDir of subDirs) {
+          const subDirPath = path.join(coursePath, subDir.name);
+          const subDirItems = fs.readdirSync(subDirPath, { withFileTypes: true });
+          const subDirFiles = subDirItems.filter(item => item.isFile() && item.name.endsWith('.md'));
+          subDirFiles.forEach((file) => {
+            slugs.push({
+              slug: file.name.replace(/\.md$/, ''),
+              courseSlug: subDir.name,
+            });
+          });
+        }
+      }
     }
 
     // Root directory files (backward compatible)

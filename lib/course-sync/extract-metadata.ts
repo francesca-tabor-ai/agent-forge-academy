@@ -34,10 +34,28 @@ export function extractCourseMetadata(
   courseSlug: string,
   contentDir: string = DEFAULT_CONTENT_DIR
 ): CourseMetadataSource | null {
-  const courseDir = path.join(contentDir, courseSlug);
-
+  // First try direct path, then search recursively in tracks
+  let courseDir = path.join(contentDir, courseSlug);
+  
   if (!fs.existsSync(courseDir) || !fs.statSync(courseDir).isDirectory()) {
-    return null;
+    // Search recursively in track directories
+    const items = fs.readdirSync(contentDir, { withFileTypes: true });
+    for (const item of items) {
+      if (!item.isDirectory() || item.name.startsWith('.')) {
+        continue;
+      }
+      const trackPath = path.join(contentDir, item.name);
+      const potentialCourseDir = path.join(trackPath, courseSlug);
+      if (fs.existsSync(potentialCourseDir) && fs.statSync(potentialCourseDir).isDirectory()) {
+        courseDir = potentialCourseDir;
+        break;
+      }
+    }
+    
+    // If still not found, return null
+    if (!fs.existsSync(courseDir) || !fs.statSync(courseDir).isDirectory()) {
+      return null;
+    }
   }
 
   // Try to find metadata in priority order
