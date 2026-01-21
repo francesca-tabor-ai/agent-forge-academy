@@ -33,16 +33,36 @@ const courseDir = path.join(__dirname, '..', 'course');
 
 // Get all course directories (only direct children, not nested)
 const entries = fs.readdirSync(courseDir, { withFileTypes: true });
-const courseDirs = entries
+const allDirs = entries
   .filter(entry => entry.isDirectory())
-  .map(entry => entry.name)
-  .filter(name => {
-    // Only include if it's a course (exists in metadata or is a known course folder)
-    // and is not already in a track folder (doesn't contain path separators in the name)
-    return !name.includes('/') && !name.includes('\\');
-  });
+  .map(entry => entry.name);
+
+// Identify track folders - they contain course subdirectories
+// A track folder is a directory that contains other directories (courses)
+const trackFolders = new Set();
+const courseDirs = [];
+
+for (const dirName of allDirs) {
+  const dirPath = path.join(courseDir, dirName);
+  const subEntries = fs.readdirSync(dirPath, { withFileTypes: true });
+  const hasSubDirs = subEntries.some(entry => entry.isDirectory());
+  const hasCourseFiles = subEntries.some(entry => 
+    entry.isFile() && (entry.name === 'README.md' || entry.name === '_COURSE_METADATA.md')
+  );
+  
+  // If it has subdirectories but no course files at root, it's likely a track folder
+  if (hasSubDirs && !hasCourseFiles) {
+    trackFolders.add(dirName);
+  } else {
+    // It's a course directory (has course files or is a single course)
+    courseDirs.push(dirName);
+  }
+}
 
 console.log(`Found ${courseDirs.length} course directories`);
+if (trackFolders.size > 0) {
+  console.log(`Found ${trackFolders.size} track folders (skipping): ${Array.from(trackFolders).join(', ')}`);
+}
 
 // Track mapping: track folder name -> courses to move
 const trackMap = {};
@@ -50,6 +70,11 @@ const unmappedCourses = [];
 
 // Group courses by track
 for (const courseSlug of courseDirs) {
+  // Skip the 'unknown' folder itself
+  if (courseSlug === 'unknown') {
+    continue;
+  }
+  
   const metadata = courseMetadata[courseSlug];
   
   if (!metadata || !metadata.category) {
@@ -73,7 +98,9 @@ for (const [track, courses] of Object.entries(trackMap)) {
 }
 
 if (unmappedCourses.length > 0) {
-  console.log(`\n⚠️  ${unmappedCourses.length} courses without tracks: ${unmappedCourses.join(', ')}`);
+  console.log(`\n⚠️  ${unmappedCourses.length} courses without tracks will be moved to 'unknown' folder: ${unmappedCourses.join(', ')}`);
+  // Add unmapped courses to trackMap under 'unknown'
+  trackMap['unknown'] = unmappedCourses;
 }
 
 // Create track folders and move courses
@@ -90,6 +117,12 @@ for (const [trackFolder, courses] of Object.entries(trackMap)) {
 
   // Move each course into its track folder
   for (const courseSlug of courses) {
+    // Skip if this is a track folder itself
+    if (trackFolders.has(courseSlug)) {
+      console.log(`⚠️  Skipping ${courseSlug} - this is a track folder`);
+      continue;
+    }
+    
     const sourcePath = path.join(courseDir, courseSlug);
     const destPath = path.join(trackPath, courseSlug);
     
