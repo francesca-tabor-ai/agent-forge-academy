@@ -19,7 +19,7 @@ async function getDatabaseCourses(
 ): Promise<Map<string, CourseMetadata>> {
   const { data, error } = await supabase
     .from('courses')
-    .select('slug, title, description, thumbnail_url, duration_weeks, difficulty_level, is_published, industries')
+    .select('slug, title, description, thumbnail_url, duration_weeks, difficulty_level, is_published, is_live, industries')
     .order('slug');
 
   if (error) {
@@ -31,9 +31,16 @@ async function getDatabaseCourses(
     for (const course of data) {
       // Map database snake_case to TypeScript camelCase
       coursesMap.set(course.slug, {
-        ...course,
+        slug: course.slug,
+        title: course.title,
+        description: course.description,
         thumbnailUrl: course.thumbnail_url || null, // Map thumbnail_url -> thumbnailUrl
-      } as CourseMetadata);
+        duration_weeks: course.duration_weeks,
+        difficulty_level: course.difficulty_level,
+        is_published: course.is_published,
+        is_live: course.is_live ?? course.is_published ?? false, // Default to is_published if is_live is null/undefined
+        industries: course.industries || [],
+      });
     }
   }
 
