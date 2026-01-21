@@ -4,7 +4,7 @@
  * This file is auto-generated from documentation/images/cities.md
  * DO NOT EDIT MANUALLY - changes will be overwritten
  * 
- * Generated at: 2026-01-20T12:19:23.536Z
+ * Generated at: 2026-01-21T13:31:22.965Z
  * Total cities: 49
  */
 
@@ -34,7 +34,7 @@ export const CITY_BANNER_MAP: Record<string, string> = {
   'geneva': 'https://images.unsplash.com/photo-1520962880247-cfaf541c8724?w=1920&q=80',   // Geneva, Switzerland
   'hong kong': 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=1920&q=80',   // Hong Kong, Hong Kong
   'lisbon': 'https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=1920&q=80',   // Lisbon, Portugal
-  'london': 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=1920&q=80',   // London, UK
+  'london': 'https://media.leonardo-hotels.com/static.leonardo-hotels.com/image/london-17_5147506bd1a879233a514b0ffe4be34e_15823e3e9e6a3b1dfded22f96a4c4db0.jpg',   // London, UK
   'los angeles': 'https://images.unsplash.com/photo-1515895306158-7f4f5e83b3b1?w=1920&q=80',   // Los Angeles, USA
   'madrid': 'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=1920&q=80',   // Madrid, Spain
   'manchester': 'https://images.unsplash.com/photo-1514565131-fce0801e5785?w=1920&q=80',   // Manchester, UK

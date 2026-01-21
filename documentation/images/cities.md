@@ -2,7 +2,7 @@
 
 (One per line. CityKey is lowercase, hyphenated. All images are from Unsplash.)
 
-* london | London | UK | https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=1920&q=80
+* london | London | UK | https://media.leonardo-hotels.com/static.leonardo-hotels.com/image/london-17_5147506bd1a879233a514b0ffe4be34e_15823e3e9e6a3b1dfded22f96a4c4db0.jpg
 * new-york | New York | USA | https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=1920&q=80
 * san-francisco | San Francisco | USA | https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=1920&q=80
 * los-angeles | Los Angeles | USA | https://images.unsplash.com/photo-1515895306158-7f4f5e83b3b1?w=1920&q=80

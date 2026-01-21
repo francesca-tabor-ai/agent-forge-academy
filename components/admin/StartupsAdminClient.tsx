@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Plus, Edit, Trash2, Search, Filter, Loader2, Rocket, ExternalLink } from 'lucide-react';
 import { StartupFormModal } from './StartupFormModal';
 import { FounderFormModal } from './FounderFormModal';
@@ -256,7 +257,7 @@ export function StartupsAdminClient({ initialStartups, founders }: StartupsAdmin
                       <td className="px-4 sm:px-6 py-4">
                         <div className="flex items-center gap-2 sm:gap-3 min-w-0">
                           {startup.logo_url ? (
-                            <img src={startup.logo_url} alt={startup.name} className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg object-cover flex-shrink-0" />
+                            <Image src={startup.logo_url} alt={startup.name} width={40} height={40} className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg object-cover flex-shrink-0" unoptimized />
                           ) : (
                             <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-gradient-to-br from-ca-gold to-ca-navy flex items-center justify-center flex-shrink-0">
                               <Rocket className="w-4 h-4 sm:w-5 sm:h-5 text-white" />

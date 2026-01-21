@@ -173,6 +173,7 @@ export function CourseHero({
           - onError handler switches to fallback image
           - If fallback also fails, gradient background is visible
         */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={currentImageUrl}
           alt=""

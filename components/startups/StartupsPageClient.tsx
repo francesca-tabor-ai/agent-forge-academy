@@ -158,7 +158,7 @@ export function StartupsPageClient() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [loadMore]);
 
-  const updateURLParams = (updates: Record<string, string | null>) => {
+  const updateURLParams = useCallback((updates: Record<string, string | null>) => {
     const params = new URLSearchParams(searchParams.toString());
     
     Object.entries(updates).forEach(([key, value]) => {
@@ -170,7 +170,7 @@ export function StartupsPageClient() {
     });
 
     router.push(`/startups?${params.toString()}`);
-  };
+  }, [searchParams, router]);
 
   // Debounced search handler
   useEffect(() => {
@@ -181,7 +181,7 @@ export function StartupsPageClient() {
     }, 300);
 
     return () => clearTimeout(timeoutId);
-  }, [searchInput]);
+  }, [searchInput, searchQuery, updateURLParams]);
 
   const handleSearchChange = (value: string) => {
     setSearchInput(value);

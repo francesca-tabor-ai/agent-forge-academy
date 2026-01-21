@@ -131,7 +131,8 @@ async function diagnoseRequest() {
   console.log('\n\n⏰ 3. Request Timeline Analysis');
   console.log('-'.repeat(80));
   
-  const timestampMatch = REQUEST_ID.match(/req_(\d+)_/);
+  // REQUEST_ID is guaranteed to be defined here due to early exit check above
+  const timestampMatch = REQUEST_ID!.match(/req_(\d+)_/);
   if (timestampMatch) {
     const timestamp = parseInt(timestampMatch[1], 10);
     const requestTime = new Date(timestamp);
