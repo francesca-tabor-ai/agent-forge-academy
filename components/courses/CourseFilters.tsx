@@ -67,6 +67,7 @@ const BEST_FOR_OPTIONS = [
   'RevOps',
   'B2B Sales',
   'DevOps',
+  'Creative',
 ];
 
 const SORT_OPTIONS = [
@@ -222,9 +223,27 @@ export function CourseFilters({ courses, onFilteredCoursesChange }: CourseFilter
     // Best For filter
     if (selectedBestFor.length > 0) {
       filtered = filtered.filter((course) => {
-        const rawBestFor = course.metadata?.bestFor;
-        const bestForStr = !rawBestFor ? '' : Array.isArray(rawBestFor) ? rawBestFor.join(' ') : rawBestFor;
-        return selectedBestFor.some((bf) => bestForStr.toLowerCase().includes(bf.toLowerCase()));
+        // Check if "Creative" is selected - filter by Creative AI track
+        if (selectedBestFor.includes('Creative')) {
+          const track = course.metadata?.category || '';
+          if (track === 'Creative AI') {
+            return true;
+          }
+        }
+        
+        // Check other "Best For" options against the bestFor field
+        const otherBestForOptions = selectedBestFor.filter(bf => bf !== 'Creative');
+        if (otherBestForOptions.length > 0) {
+          const rawBestFor = course.metadata?.bestFor;
+          const bestForStr = !rawBestFor ? '' : Array.isArray(rawBestFor) ? rawBestFor.join(' ') : rawBestFor;
+          if (otherBestForOptions.some((bf) => bestForStr.toLowerCase().includes(bf.toLowerCase()))) {
+            return true;
+          }
+        }
+        
+        // If only "Creative" was selected and course doesn't match, return false
+        // If other options were selected and course doesn't match, return false
+        return false;
       });
     }
 
