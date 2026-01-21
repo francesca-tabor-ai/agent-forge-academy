@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 
+// Force dynamic rendering - this route uses cookies for authentication
+export const dynamic = 'force-dynamic';
+export const revalidate = 0; // Ensure it won't be cached as static
+export const fetchCache = 'force-no-store'; // Prevent fetch caching
+
 export async function GET(request: NextRequest) {
   try {
     const supabase = await createUserSupabaseClient();
