@@ -95,8 +95,26 @@ export function StartupsPageClient() {
       params.set('limit', '12');
 
       const response = await fetch(`/api/startups?${params.toString()}`);
+      
       if (!response.ok) {
-        throw new Error('Failed to fetch startups');
+        // Try to get error message from response
+        let errorMessage = 'Failed to fetch startups';
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.error || errorMessage;
+        } catch {
+          // If response is not JSON, use status text
+          errorMessage = `${response.status} ${response.statusText}`;
+        }
+        
+        console.error('Failed to fetch startups:', {
+          status: response.status,
+          statusText: response.statusText,
+          url: `/api/startups?${params.toString()}`,
+          error: errorMessage,
+        });
+        
+        throw new Error(errorMessage);
       }
 
       const data = await response.json();

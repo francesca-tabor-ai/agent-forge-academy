@@ -47,8 +47,9 @@ export async function GET(request: NextRequest) {
     } = await supabase.auth.getUser();
 
     if (!user) {
+      console.error('Unauthorized access to /api/startups - no user found');
       return NextResponse.json(
-        { error: 'Unauthorized' },
+        { error: 'Unauthorized. Please log in to view startups.' },
         { status: 401 }
       );
     }
@@ -150,9 +151,18 @@ export async function GET(request: NextRequest) {
     const { data: startups, error, count } = await query;
 
     if (error) {
-      console.error('Error fetching startups:', error);
+      console.error('Error fetching startups:', {
+        message: error.message,
+        code: error.code,
+        details: error.details,
+        hint: error.hint,
+      });
       return NextResponse.json(
-        { error: error.message },
+        { 
+          error: error.message || 'Failed to fetch startups',
+          code: error.code,
+          details: process.env.NODE_ENV === 'development' ? error.details : undefined,
+        },
         { status: 500 }
       );
     }
@@ -253,8 +263,14 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error('Error in GET /api/startups:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Internal server error';
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { 
+        error: errorMessage,
+        details: process.env.NODE_ENV === 'development' 
+          ? (error instanceof Error ? error.stack : String(error))
+          : undefined,
+      },
       { status: 500 }
     );
   }
