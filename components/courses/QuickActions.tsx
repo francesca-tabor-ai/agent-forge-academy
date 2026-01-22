@@ -68,9 +68,9 @@ export function QuickActions({ courseSlug, courseId, isEnrolled, variant = 'side
   }
 
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-      <h2 className="text-xl font-bold text-gray-900 mb-4">Quick Actions</h2>
-      <div className="space-y-3">
+    <div className="bg-white border border-gray-200 rounded-2xl p-4 sm:p-6">
+      <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
+      <div className="grid gap-3 sm:grid-cols-2">
         {isEnrolled ? (
           <>
             <Link
@@ -87,7 +87,7 @@ export function QuickActions({ courseSlug, courseId, isEnrolled, variant = 'side
             </Link>
             <Link
               href="/student/portfolio"
-              className="block w-full px-4 py-2.5 text-sm font-medium text-gray-700 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors text-center"
+              className="block w-full px-4 py-2.5 text-sm font-medium text-gray-700 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors text-center sm:col-span-2"
             >
               View Portfolio
             </Link>

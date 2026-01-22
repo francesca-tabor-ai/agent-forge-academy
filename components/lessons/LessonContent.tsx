@@ -3,6 +3,8 @@
 import ReactMarkdown from 'react-markdown';
 import type { Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
+import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 import type { ComponentPropsWithoutRef } from 'react';
 
 interface LessonContentProps {
@@ -352,6 +354,17 @@ const markdownComponents: Components = {
   ),
 };
 
+// Sanitization schema that allows video and source tags
+const sanitizeSchema = {
+  ...defaultSchema,
+  tagNames: [...(defaultSchema.tagNames || []), 'video', 'source'],
+  attributes: {
+    ...(defaultSchema.attributes || {}),
+    video: ['controls', 'width', 'height', 'src', 'preload', 'poster', 'autoplay', 'loop', 'muted'],
+    source: ['src', 'type'],
+  },
+};
+
 // Format metrics in list items
 function MetricItem({ text }: { text: string }) {
   // Match patterns like "58% faster resolution time", "84% first-call resolution", "312% ROI"
@@ -400,7 +413,11 @@ function TopicCard({ topic }: { topic: TopicSection }) {
           <div>
             <h4 className="font-semibold text-gray-900 mb-3 text-base">Architecture:</h4>
             <div className="text-gray-700 text-base" style={{ lineHeight: '1.6' }}>
-              <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
+              <ReactMarkdown 
+                remarkPlugins={[remarkGfm]} 
+                rehypePlugins={[rehypeRaw, [rehypeSanitize, sanitizeSchema]]}
+                components={markdownComponents}
+              >
                 {architectureContent}
               </ReactMarkdown>
             </div>
@@ -438,7 +455,11 @@ function TopicCard({ topic }: { topic: TopicSection }) {
           )}
           {topic.otherContent.length > 0 && (
             <div className="text-gray-700 text-base" style={{ lineHeight: '1.6' }}>
-              <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
+              <ReactMarkdown 
+                remarkPlugins={[remarkGfm]} 
+                rehypePlugins={[rehypeRaw, [rehypeSanitize, sanitizeSchema]]}
+                components={markdownComponents}
+              >
                 {otherContent}
               </ReactMarkdown>
             </div>
@@ -461,6 +482,7 @@ export default function LessonContent({ content }: LessonContentProps) {
         <div className="space-y-6">
           <ReactMarkdown 
             remarkPlugins={[remarkGfm]}
+            rehypePlugins={[rehypeRaw, [rehypeSanitize, sanitizeSchema]]}
             components={markdownComponents}
           >
             {beforeTopics.trim()}
@@ -482,6 +504,7 @@ export default function LessonContent({ content }: LessonContentProps) {
         <div className="space-y-6">
           <ReactMarkdown 
             remarkPlugins={[remarkGfm]}
+            rehypePlugins={[rehypeRaw, [rehypeSanitize, sanitizeSchema]]}
             components={markdownComponents}
           >
             {afterTopics.trim()}

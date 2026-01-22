@@ -267,214 +267,210 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
         />
       </div>
 
-      {/* Full width section below hero */}
-      <div className="w-full">
+      {/* Main content container with consistent max-width and padding */}
+      <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         {/* Inner grid: wide layout */}
         <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-6 lg:gap-8">
           {/* Left Column: Overview + Modules */}
           <div className="space-y-8">
-          {/* Course Overview Section - De-emphasized since hero already shows course info */}
-          {(courseDescription || outcomeBullets.length > 0 || buildBullets.length > 0 || bestForItems.length > 0) && (
+            {/* Course Overview Section - De-emphasized since hero already shows course info */}
+            {(courseDescription || outcomeBullets.length > 0 || buildBullets.length > 0 || bestForItems.length > 0) && (
+              <div>
+                <OverviewCards
+                  description={courseDescription}
+                  outcome={outcomeBullets}
+                  build={buildBullets}
+                  bestFor={bestForItems}
+                />
+              </div>
+            )}
+
+            {/* Modules Section - Primary content, keep prominent */}
             <div>
-              <OverviewCards
-                description={courseDescription}
-                outcome={outcomeBullets}
-                build={buildBullets}
-                bestFor={bestForItems}
-              />
-            </div>
-          )}
-
-          {/* Modules Section - Primary content, keep prominent */}
-          <div>
-            <h2 className="text-section-header mb-4">Modules</h2>
-            
-            {lessons.length === 0 ? (
-          <div className="bg-white border border-gray-200 rounded-xl p-8 text-center shadow-sm">
-            <p className="text-gray-600">No lessons available for this course yet.</p>
-          </div>
-        ) : (
-          <div className="space-y-4">
-                {/* Quick Start / Course Index */}
-                {courseIndexLesson && (
-                  <Link
-                    href={`/student/courses/${courseSlug}/lessons/${courseIndexLesson.slug}`}
-                    className="block bg-white border border-gray-200 rounded-xl shadow-sm hover:border-brand-light hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 p-4 md:p-5"
-                  >
-                    {/* Mobile: Compact Layout */}
-                    <div className="md:hidden">
-                      <div className="flex items-start gap-3">
-                        <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-brand-light/10 flex items-center justify-center">
-                          <span className="text-brand-light text-lg">⚡</span>
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h3 className="text-base font-bold text-gray-900 mb-1 line-clamp-2">
-                            {courseIndexLesson.frontmatter.title || 'Quick Start'}
-                          </h3>
-                          <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
-                            <span>~15 min</span>
-                            {completedLessonSlugs.has(courseIndexLesson.slug) && (
-                              <span className="text-green-600 text-xs font-medium">✓ Completed</span>
-                            )}
-                          </div>
-                          <button className="w-full mt-2 px-4 py-2 bg-brand-light text-white font-semibold rounded-lg hover:bg-brand-light/90 transition-colors text-sm min-h-[44px]">
-                            {completedLessonSlugs.has(courseIndexLesson.slug) ? 'Review' : 'Start'} →
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Desktop: Expanded Layout */}
-                    <div className="hidden md:flex items-start justify-between gap-4">
-                      <div className="flex items-start gap-4 flex-1 min-w-0">
-                        <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-brand-light/10 flex items-center justify-center">
-                          <span className="text-brand-light text-lg">⚡</span>
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 mb-1">
-                            <h3 className="text-lg font-bold text-gray-900">
-                              {courseIndexLesson.frontmatter.title || 'Quick Start'}
-                            </h3>
-                            {completedLessonSlugs.has(courseIndexLesson.slug) && (
-                              <span className="text-green-600 text-sm font-medium">✓ Completed</span>
-                            )}
-                          </div>
-                          {courseIndexLesson.frontmatter.description && (
-                            <p className="text-sm text-gray-600 line-clamp-1 mb-2 leading-relaxed">
-                              {courseIndexLesson.frontmatter.description}
-                            </p>
-                          )}
-                          <div className="flex items-center gap-3 text-xs text-gray-500">
-                            <span className="px-2 py-0.5 bg-gray-100 rounded">Quick Start</span>
-                            <span>~15 min</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex-shrink-0 flex items-center gap-2">
-                        {completedLessonSlugs.has(courseIndexLesson.slug) ? (
-                          <span className="text-brand-light text-sm font-medium">Review →</span>
-                        ) : (
-                          <span className="text-brand-light text-sm font-medium">Start →</span>
-                        )}
-                      </div>
-                    </div>
-                  </Link>
-                )}
-
-                {/* Regular Modules */}
-                {regularLessons.map((lesson, index) => {
-                  const isCompleted = completedLessonSlugs.has(lesson.slug);
-                  const isInProgress = enrollment && !isCompleted && (index === 0 || completedLessonSlugs.has(regularLessons[index - 1]?.slug));
-                  const moduleNumber = lesson.frontmatter.module || (index + 1).toString();
-                  
-                  // Determine status
-                  let status = 'Not started';
-                  let statusColor = 'bg-gray-100 text-gray-700';
-                  let ctaText = 'Start';
-                  
-                  if (isCompleted) {
-                    status = 'Completed';
-                    statusColor = 'bg-green-100 text-green-700';
-                    ctaText = 'Review';
-                  } else if (isInProgress) {
-                    status = 'In progress';
-                    statusColor = 'bg-blue-100 text-blue-700';
-                    ctaText = 'Continue';
-                  }
-                  
-                  return (
+              <h2 className="text-section-header mb-4">Modules</h2>
+              
+              {lessons.length === 0 ? (
+                <div className="bg-white border border-gray-200 rounded-2xl p-8 text-center shadow-sm">
+                  <p className="text-gray-600">No lessons available for this course yet.</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {/* Quick Start / Course Index */}
+                  {courseIndexLesson && (
                     <Link
-                      key={lesson.slug}
-                      href={`/student/courses/${courseSlug}/lessons/${lesson.slug}`}
-                      className="block bg-white border border-gray-200 rounded-xl shadow-sm hover:border-brand-light hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 p-4 md:p-5"
+                      href={`/student/courses/${courseSlug}/lessons/${courseIndexLesson.slug}`}
+                      className="block bg-white border border-gray-200 rounded-2xl p-4 sm:p-5 hover:bg-gray-50 transition"
                     >
                       {/* Mobile: Compact Layout */}
                       <div className="md:hidden">
                         <div className="flex items-start gap-3">
-                          {/* Module Number Badge */}
-                          <div className={`flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center font-semibold text-sm ${statusColor}`}>
-                            {isCompleted ? '✓' : moduleNumber}
+                          <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-brand-light/10 flex items-center justify-center">
+                            <span className="text-brand-light text-lg">⚡</span>
                           </div>
-                          
-                          <div className="flex-1 min-w-0">
-                            <h3 className="text-base font-bold text-gray-900 mb-1 line-clamp-2">
-                              {lesson.frontmatter.title || lesson.slug}
+                          <div className="flex-1 min-w-0 space-y-1">
+                            <h3 className="text-base font-medium leading-snug text-gray-900">
+                              {courseIndexLesson.frontmatter.title || 'Quick Start'}
                             </h3>
-                            <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
-                              <span>~30 min</span>
-                              {enrollment && (
-                                <span className={`px-2 py-0.5 rounded text-xs font-medium ${
-                                  isCompleted 
-                                    ? 'bg-green-50 text-green-700' 
-                                    : isInProgress
-                                    ? 'bg-blue-50 text-blue-700'
-                                    : 'bg-gray-50 text-gray-600'
-                                }`}>
-                                  {status}
-                                </span>
+                            <div className="flex items-center gap-2 text-xs text-gray-500">
+                              <span>~15 min</span>
+                              {completedLessonSlugs.has(courseIndexLesson.slug) && (
+                                <span className="text-green-600 text-xs font-medium">✓ Completed</span>
                               )}
                             </div>
-                            <button className="w-full mt-2 px-4 py-2 bg-brand-light text-white font-semibold rounded-lg hover:bg-brand-light/90 transition-colors text-sm min-h-[44px]">
-                              {ctaText} →
-                            </button>
                           </div>
+                          <div className="shrink-0 text-sm font-medium">Start →</div>
                         </div>
                       </div>
 
                       {/* Desktop: Expanded Layout */}
                       <div className="hidden md:flex items-start justify-between gap-4">
                         <div className="flex items-start gap-4 flex-1 min-w-0">
-                          {/* Module Number Badge */}
-                          <div className={`flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center font-semibold text-sm ${statusColor}`}>
-                            {isCompleted ? '✓' : moduleNumber}
+                          <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-brand-light/10 flex items-center justify-center">
+                            <span className="text-brand-light text-lg">⚡</span>
                           </div>
-                          
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2 mb-1">
-                              <h3 className="text-lg font-bold text-gray-900">
-                                {lesson.frontmatter.title || lesson.slug}
+                          <div className="flex-1 min-w-0 space-y-1">
+                            <div className="flex items-center gap-2">
+                              <h3 className="text-lg font-medium leading-snug text-gray-900">
+                                {courseIndexLesson.frontmatter.title || 'Quick Start'}
                               </h3>
+                              {completedLessonSlugs.has(courseIndexLesson.slug) && (
+                                <span className="text-green-600 text-sm font-medium">✓ Completed</span>
+                              )}
                             </div>
-                            {lesson.frontmatter.description && (
-                              <p className="text-sm text-gray-600 line-clamp-1 mb-2 leading-relaxed">
-                                {lesson.frontmatter.description}
+                            {courseIndexLesson.frontmatter.description && (
+                              <p className="text-sm text-gray-600 leading-relaxed">
+                                {courseIndexLesson.frontmatter.description}
                               </p>
                             )}
                             <div className="flex items-center gap-3 text-xs text-gray-500">
-                              {lesson.frontmatter.module && (
-                                <span className="px-2 py-0.5 bg-gray-100 rounded">
-                                  Module {lesson.frontmatter.module}
-                                </span>
-                              )}
-                              {lesson.frontmatter.week && (
-                                <span>Week {lesson.frontmatter.week}</span>
-                              )}
-                              <span className="ml-auto">~30 min</span>
-                              {enrollment && (
-                                <span className={`px-2 py-0.5 rounded text-xs font-medium ${
-                                  isCompleted 
-                                    ? 'bg-green-50 text-green-700' 
-                                    : isInProgress
-                                    ? 'bg-blue-50 text-blue-700'
-                                    : 'bg-gray-50 text-gray-600'
-                                }`}>
-                                  {status}
-                                </span>
-                              )}
+                              <span className="px-2 py-0.5 bg-gray-100 rounded">Quick Start</span>
+                              <span>~15 min</span>
                             </div>
                           </div>
                         </div>
-                        
                         <div className="flex-shrink-0 flex items-center gap-2">
-                          <span className="text-brand-light text-sm font-medium">{ctaText} →</span>
+                          {completedLessonSlugs.has(courseIndexLesson.slug) ? (
+                            <span className="text-sm font-medium">Review →</span>
+                          ) : (
+                            <span className="text-sm font-medium">Start →</span>
+                          )}
                         </div>
                       </div>
-                    </Link>
-                  );
-                })}
-              </div>
-            )}
-          </div>
+                  </Link>
+                )}
+
+                  {/* Regular Modules */}
+                  {regularLessons.map((lesson, index) => {
+                    const isCompleted = completedLessonSlugs.has(lesson.slug);
+                    const isInProgress = enrollment && !isCompleted && (index === 0 || completedLessonSlugs.has(regularLessons[index - 1]?.slug));
+                    const moduleNumber = lesson.frontmatter.module || (index + 1).toString();
+                    
+                    // Determine status
+                    let status = 'Not started';
+                    let statusColor = 'bg-gray-100 text-gray-700';
+                    let ctaText = 'Start';
+                    
+                    if (isCompleted) {
+                      status = 'Completed';
+                      statusColor = 'bg-green-100 text-green-700';
+                      ctaText = 'Review';
+                    } else if (isInProgress) {
+                      status = 'In progress';
+                      statusColor = 'bg-blue-100 text-blue-700';
+                      ctaText = 'Continue';
+                    }
+                    
+                    return (
+                      <Link
+                        key={lesson.slug}
+                        href={`/student/courses/${courseSlug}/lessons/${lesson.slug}`}
+                        className="block bg-white border border-gray-200 rounded-2xl p-4 sm:p-5 hover:bg-gray-50 transition"
+                      >
+                        {/* Mobile: Compact Layout */}
+                        <div className="md:hidden">
+                          <div className="flex items-start gap-3">
+                            {/* Module Number Badge */}
+                            <div className={`flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center font-semibold text-sm ${statusColor}`}>
+                              {isCompleted ? '✓' : moduleNumber}
+                            </div>
+                            
+                            <div className="flex-1 min-w-0 space-y-1">
+                              <h3 className="text-base font-medium leading-snug text-gray-900">
+                                {lesson.frontmatter.title || lesson.slug}
+                              </h3>
+                              <div className="flex items-center gap-2 text-xs text-gray-500">
+                                <span>~30 min</span>
+                                {enrollment && (
+                                  <span className={`px-2 py-0.5 rounded text-xs font-medium ${
+                                    isCompleted 
+                                      ? 'bg-green-50 text-green-700' 
+                                      : isInProgress
+                                      ? 'bg-blue-50 text-blue-700'
+                                      : 'bg-gray-50 text-gray-600'
+                                  }`}>
+                                    {status}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                            <div className="shrink-0 text-sm font-medium">Start →</div>
+                          </div>
+                        </div>
+
+                        {/* Desktop: Expanded Layout */}
+                        <div className="hidden md:flex items-start justify-between gap-4">
+                          <div className="flex items-start gap-4 flex-1 min-w-0">
+                            {/* Module Number Badge */}
+                            <div className={`flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center font-semibold text-sm ${statusColor}`}>
+                              {isCompleted ? '✓' : moduleNumber}
+                            </div>
+                            
+                            <div className="flex-1 min-w-0 space-y-1">
+                              <div className="flex items-center gap-2">
+                                <h3 className="text-lg font-medium leading-snug text-gray-900">
+                                  {lesson.frontmatter.title || lesson.slug}
+                                </h3>
+                              </div>
+                              {lesson.frontmatter.description && (
+                                <p className="text-sm text-gray-600 leading-relaxed">
+                                  {lesson.frontmatter.description}
+                                </p>
+                              )}
+                              <div className="flex items-center gap-3 text-xs text-gray-500">
+                                {lesson.frontmatter.module && (
+                                  <span className="px-2 py-0.5 bg-gray-100 rounded">
+                                    Module {lesson.frontmatter.module}
+                                  </span>
+                                )}
+                                {lesson.frontmatter.week && (
+                                  <span>Week {lesson.frontmatter.week}</span>
+                                )}
+                                <span className="ml-auto">~30 min</span>
+                                {enrollment && (
+                                  <span className={`px-2 py-0.5 rounded text-xs font-medium ${
+                                    isCompleted 
+                                      ? 'bg-green-50 text-green-700' 
+                                      : isInProgress
+                                      ? 'bg-blue-50 text-blue-700'
+                                      : 'bg-gray-50 text-gray-600'
+                                  }`}>
+                                    {status}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div className="flex-shrink-0 flex items-center gap-2">
+                            <span className="text-sm font-medium">Start →</span>
+                          </div>
+                        </div>
+                      </Link>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Right Column: Progress Card + Quick Actions */}
@@ -511,7 +507,7 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
             )}
 
             {/* Quick Actions - Desktop only */}
-            <div className="hidden lg:block pt-4">
+            <div className="hidden lg:block">
               <QuickActions
                 courseSlug={courseSlug}
                 courseId={normalizedCourse?.id}

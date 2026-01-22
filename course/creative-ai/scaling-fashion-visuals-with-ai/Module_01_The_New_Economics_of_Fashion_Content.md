@@ -23,7 +23,6 @@ email_action: "Create a shortlist of high-ROI visual use cases for your brand or
 
 <video width="100%" controls>
   <source src="/media/video/Scaling%20Fashion%20Visuals%20with%20AI%20-%20Video%201.mov" type="video/quicktime">
-  <source src="/media/video/Scaling%20Fashion%20Visuals%20with%20AI%20-%20Video%201.mov" type="video/mp4">
   Your browser does not support the video tag.
 </video>
 

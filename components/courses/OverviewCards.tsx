@@ -32,16 +32,16 @@ export function OverviewCards({
   const hasMoreBuild = build.length > MAX_VISIBLE_BUILD;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
       {/* Description Card */}
       {description && (
-        <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+        <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
           <button
             onClick={() => setExpandedDescription(!expandedDescription)}
-            className="w-full md:pointer-events-none flex items-center justify-between p-5 md:p-6 text-left"
+            className="w-full md:pointer-events-none flex items-center justify-between p-4 sm:p-6 text-left"
             aria-expanded={expandedDescription}
           >
-            <h3 className="text-base font-semibold text-gray-900">
+            <h3 className="text-lg font-semibold text-gray-900">
               Description
             </h3>
             <ChevronDown
@@ -51,24 +51,24 @@ export function OverviewCards({
             />
           </button>
           <div
-            className={`px-5 md:px-6 pb-5 md:pb-6 transition-all md:block ${
+            className={`px-4 sm:px-6 pb-4 sm:pb-6 transition-all md:block ${
               expandedDescription ? 'block' : 'hidden md:block'
             }`}
           >
-            <p className="text-base text-gray-700 leading-relaxed max-w-prose">{description}</p>
+            <p className="text-sm sm:text-base text-gray-700 leading-relaxed">{description}</p>
           </div>
         </div>
       )}
 
       {/* Outcome Card */}
       {outcome.length > 0 && (
-        <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+        <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
           <button
             onClick={() => setExpandedOutcome(!expandedOutcome)}
-            className="w-full md:pointer-events-none flex items-center justify-between p-5 md:p-6 text-left"
+            className="w-full md:pointer-events-none flex items-center justify-between p-4 sm:p-6 text-left"
             aria-expanded={expandedOutcome}
           >
-            <h3 className="text-base font-semibold text-gray-900">
+            <h3 className="text-lg font-semibold text-gray-900">
               Outcome
             </h3>
             <ChevronDown
@@ -78,22 +78,21 @@ export function OverviewCards({
             />
           </button>
           <div
-            className={`px-5 md:px-6 pb-5 md:pb-6 transition-all md:block ${
+            className={`px-4 sm:px-6 pb-4 sm:pb-6 transition-all md:block ${
               expandedOutcome ? 'block' : 'hidden md:block'
             }`}
           >
-            <ul className="space-y-2 max-w-prose">
+            <ul className="list-disc pl-5 space-y-2 text-sm sm:text-base">
               {visibleOutcome.map((bullet, index) => (
-                <li key={index} className="flex items-start gap-3">
-                  <span className="text-brand-light mt-1.5 flex-shrink-0">•</span>
-                  <span className="text-base text-gray-700 leading-relaxed">{bullet}</span>
+                <li key={index} className="text-gray-700 leading-relaxed">
+                  {bullet}
                 </li>
               ))}
             </ul>
             {hasMoreOutcome && (
               <button
                 onClick={() => setExpandedOutcome(!expandedOutcome)}
-                className="mt-3 flex items-center gap-1 text-sm text-brand-light hover:text-brand-light/80 font-medium transition-colors"
+                className="mt-4 flex items-center gap-1 text-sm text-brand-light hover:text-brand-light/80 font-medium transition-colors"
               >
                 {expandedOutcome ? (
                   <>
@@ -114,13 +113,13 @@ export function OverviewCards({
 
       {/* You'll Build Card */}
       {build.length > 0 && (
-        <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+        <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
           <button
             onClick={() => setExpandedBuild(!expandedBuild)}
-            className="w-full md:pointer-events-none flex items-center justify-between p-5 md:p-6 text-left"
+            className="w-full md:pointer-events-none flex items-center justify-between p-4 sm:p-6 text-left"
             aria-expanded={expandedBuild}
           >
-            <h3 className="text-base font-semibold text-gray-900">
+            <h3 className="text-lg font-semibold text-gray-900">
               You&apos;ll Build
             </h3>
             <ChevronDown
@@ -130,22 +129,21 @@ export function OverviewCards({
             />
           </button>
           <div
-            className={`px-5 md:px-6 pb-5 md:pb-6 transition-all md:block ${
+            className={`px-4 sm:px-6 pb-4 sm:pb-6 transition-all md:block ${
               expandedBuild ? 'block' : 'hidden md:block'
             }`}
           >
-            <ul className="space-y-2 max-w-prose">
+            <ul className="list-disc pl-5 space-y-2 text-sm sm:text-base">
               {visibleBuild.map((bullet, index) => (
-                <li key={index} className="flex items-start gap-3">
-                  <span className="text-brand-light mt-1.5 flex-shrink-0">•</span>
-                  <span className="text-base text-gray-700 leading-relaxed">{bullet}</span>
+                <li key={index} className="text-gray-700 leading-relaxed">
+                  {bullet}
                 </li>
               ))}
             </ul>
             {hasMoreBuild && (
               <button
                 onClick={() => setExpandedBuild(!expandedBuild)}
-                className="mt-3 flex items-center gap-1 text-sm text-brand-light hover:text-brand-light/80 font-medium transition-colors"
+                className="mt-4 flex items-center gap-1 text-sm text-brand-light hover:text-brand-light/80 font-medium transition-colors"
               >
                 {expandedBuild ? (
                   <>
@@ -166,13 +164,13 @@ export function OverviewCards({
 
       {/* Best For Card */}
       {bestFor.length > 0 && (
-        <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+        <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
           <button
             onClick={() => setExpandedBestFor(!expandedBestFor)}
-            className="w-full md:pointer-events-none flex items-center justify-between p-5 md:p-6 text-left"
+            className="w-full md:pointer-events-none flex items-center justify-between p-4 sm:p-6 text-left"
             aria-expanded={expandedBestFor}
           >
-            <h3 className="text-base font-semibold text-gray-900">
+            <h3 className="text-lg font-semibold text-gray-900">
               Best For
             </h3>
             <ChevronDown
@@ -182,7 +180,7 @@ export function OverviewCards({
             />
           </button>
           <div
-            className={`px-5 md:px-6 pb-5 md:pb-6 transition-all md:block ${
+            className={`px-4 sm:px-6 pb-4 sm:pb-6 transition-all md:block ${
               expandedBestFor ? 'block' : 'hidden md:block'
             }`}
           >

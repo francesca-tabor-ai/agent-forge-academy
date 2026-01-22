@@ -468,6 +468,16 @@ export const courseMetadata: Record<string, CourseMetadata> = {
     time: '~8 weeks',
     industries: ['SaaS', 'DevTools', 'Media & Publishing'],
   },
+  'scaling-fashion-visuals-with-ai': {
+    slug: 'scaling-fashion-visuals-with-ai',
+    title: 'Scaling Fashion Visuals with AI',
+    category: 'Creative AI',
+    outcome: 'Design, run, and automate AI-powered fashion photoshoots that generate dozens (or hundreds) of consistent, on-brand visuals for PDPs, ads, and social media—without manual prompting.',
+    build: 'Complete scalable AI fashion visual system with automated AI agent workflows, batch generation pipelines, brand consistency controls, creative direction frameworks, and automated asset distribution.',
+    bestFor: ['Fashion & lifestyle brands', 'Creative & performance marketers', 'Agencies & freelancers', 'E-commerce founders', 'Content & growth teams'],
+    time: '~6–8 weeks',
+    industries: ['E-commerce', 'Retail / CPG', 'Media & Publishing'],
+  },
   'economic-modeling-with-ai': {
     slug: 'economic-modeling-with-ai',
     title: 'Economic Modeling with AI',
