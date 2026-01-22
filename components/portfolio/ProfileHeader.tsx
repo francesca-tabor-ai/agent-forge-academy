@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { resolveCityBanner } from '@/lib/cityBanners';
+import { generateProfileBanner } from '@/lib/startupBanners';
 
 interface ProfileHeaderProps {
   fullName?: string | null;
@@ -46,9 +46,9 @@ export function ProfileHeader({
   const initials = getInitials(fullName);
   const isDiscoverable = visibility !== 'private';
   
-  // Resolve banner image from city
-  // Given profile.city, return city image URL if known, else default banner image
-  const bannerImageUrl = resolveCityBanner(city);
+  // Generate gradient-based banner (more reliable than external images)
+  // Uses city or studentProfileId for deterministic generation
+  const bannerStyle = generateProfileBanner(city, studentProfileId || undefined);
 
   const handleMakeDiscoverable = () => {
     router.push('/student/portfolio/profile/edit');
@@ -74,17 +74,12 @@ export function ProfileHeader({
       {/* Cover Banner - Fixed height, LinkedIn style */}
       {/* Layer 1: Cover layer (background only) - overflow-hidden only on the gradient, not the wrapper */}
       <div className="relative h-[140px] sm:h-[180px] md:h-[200px] rounded-t-lg overflow-visible">
-        {/* Cover image (city banner) */}
-        <div className="absolute inset-0 rounded-t-lg overflow-hidden">
-          <Image
-            src={bannerImageUrl}
-            alt={city ? `${city} city banner` : 'Default banner'}
-            fill
-            className="object-cover"
-            priority
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 65vw, 840px"
-          />
-        </div>
+        {/* Cover banner (gradient-based, no external image dependency) */}
+        <div 
+          className="absolute inset-0 rounded-t-lg overflow-hidden"
+          style={bannerStyle.style}
+          aria-label={city ? `${city} profile banner` : 'Profile banner'}
+        />
         
         {/* Gradient overlay - ensures text/avatar visibility, never overlaps/clips */}
         <div className="absolute inset-0 bg-gradient-to-br from-black/40 via-black/30 to-black/50 rounded-t-lg overflow-hidden"></div>

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { generateStartupBanner } from '@/lib/startupBanners';
 import { 
   ArrowLeft, 
   Rocket, 
@@ -214,6 +215,9 @@ export function StartupDetailClient({ startup }: StartupDetailClientProps) {
 
   const vibeScoreColor = getVibeScoreColor(startup.vibeScore);
   const statusColor = getStatusColor(startup.status);
+  
+  // Generate gradient-based banner for startup
+  const bannerStyle = generateStartupBanner(startup.id, startup.name);
 
   // Group prompts by type
   const promptsByType = startup.prompts.reduce((acc, prompt) => {
@@ -248,7 +252,18 @@ export function StartupDetailClient({ startup }: StartupDetailClientProps) {
 
       {/* Hero Section */}
       <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
-        <div className="bg-gradient-to-r from-brand-light/10 to-brand-dark/10 p-6 md:p-8">
+        {/* Banner Section */}
+        <div 
+          className="relative h-32 sm:h-40 md:h-48 overflow-hidden"
+          style={bannerStyle.style}
+          aria-label={`${startup.name} banner`}
+        >
+          {/* Gradient overlay for better text contrast */}
+          <div className="absolute inset-0 bg-gradient-to-br from-black/30 via-black/20 to-black/40"></div>
+        </div>
+        
+        {/* Content Section */}
+        <div className="p-6 md:p-8">
           <div className="flex flex-col md:flex-row gap-6 md:gap-8">
             {/* Logo */}
             <div className="flex-shrink-0">
