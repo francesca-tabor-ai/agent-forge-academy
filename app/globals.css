@@ -603,6 +603,45 @@ pre code *:not([class*="hljs"]):not([class*="token"]) {
   color: #ffffff !important; /* white */
 }
 
+/* Fix bullet alignment for lesson content */
+.lesson-content ul {
+  list-style-type: disc;
+  list-style-position: outside; /* bullets outside padding for proper alignment */
+  padding-left: 1.5rem; /* aligns bullet + wrapped text */
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.lesson-content ol {
+  list-style-type: decimal;
+  list-style-position: outside; /* numbers outside padding for proper alignment */
+  padding-left: 1.5rem; /* aligns number + wrapped text */
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.lesson-content li {
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+  padding-left: 0.5rem; /* gap between bullet/number and text */
+}
+
+/* Prevent weird indent on wrapped lines - ensure wrapped text aligns with first line */
+.lesson-content li > p {
+  margin: 0;
+  display: inline; /* keeps text inline with bullet, prevents extra indentation */
+}
+
+/* Handle nested lists */
+.lesson-content ul ul,
+.lesson-content ol ol,
+.lesson-content ul ol,
+.lesson-content ol ul {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding-left: 1.5rem;
+}
+
 /* Allow syntax highlighting colors but ensure minimum brightness for visibility */
 pre code .hljs-keyword,
 pre code .hljs-string,

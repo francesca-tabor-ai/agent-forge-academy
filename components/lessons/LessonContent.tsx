@@ -299,12 +299,12 @@ const markdownComponents: Components = {
     </p>
   ),
   ul: ({ children, ...props }: ComponentPropsWithoutRef<'ul'>) => (
-    <ul {...props} className="list-disc list-inside mb-4 space-y-2 text-gray-700 ml-4">
+    <ul {...props} className="list-disc mb-4 space-y-2 text-gray-700">
       {children}
     </ul>
   ),
   ol: ({ children, ...props }: ComponentPropsWithoutRef<'ol'>) => (
-    <ol {...props} className="list-decimal list-inside mb-4 space-y-2 text-gray-700 ml-4">
+    <ol {...props} className="list-decimal mb-4 space-y-2 text-gray-700">
       {children}
     </ol>
   ),
