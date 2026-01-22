@@ -2,6 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { getStripeClient } from '@/lib/stripe';
 
+// Force dynamic rendering - this route uses cookies() which requires dynamic execution
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+export const fetchCache = 'force-no-store';
+
 /**
  * GET /api/subscription/data
  * 
