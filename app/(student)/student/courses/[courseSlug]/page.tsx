@@ -249,8 +249,10 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
         3. No full-bleed breakout that could overlap sidebar
         4. Z-index ensures hero is above header but below modals
         5. Negative margin breaks out of main content padding on mobile only
+        6. Negative top margin breaks out of LayoutWrapper padding to sit flush to top
+        7. Proper margin-bottom prevents overlap with content below
       */}
-      <div className="sticky top-[64px] z-[60] mb-0 -mx-4 sm:-mx-6 lg:mx-0 w-full lg:w-auto overflow-x-hidden">
+      <div className="sticky top-[64px] z-[60] mb-6 -mt-6 md:-mt-8 -mx-4 sm:-mx-6 lg:mx-0 w-full lg:w-auto overflow-x-hidden">
         <CourseHero
           title={courseTitle}
           imageUrl={courseCoverImage}
@@ -268,7 +270,7 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
       </div>
 
       {/* Main content container with consistent max-width and padding */}
-      <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+      <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8 pt-0 pb-6 sm:pb-8">
         {/* Inner grid: wide layout */}
         <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-6 lg:gap-8">
           {/* Left Column: Overview + Modules */}
