@@ -32,8 +32,13 @@ export default function LoginClient() {
       }
 
       // Redirect to the redirect param or /app
-      const redirectTo = searchParams.get('redirect') || '/app';
-      router.push(redirectTo);
+      // Validate redirect URL to prevent open redirects
+      let redirectTo = searchParams.get('redirect') || '/app';
+      // Ensure redirect starts with / and doesn't contain protocol (security)
+      if (!redirectTo.startsWith('/')) {
+        redirectTo = '/app';
+      }
+      router.replace(redirectTo);
       router.refresh();
     } catch (err) {
       setError('An unexpected error occurred');

@@ -98,7 +98,8 @@ export async function middleware(request: NextRequest) {
     const isPublicRoute = 
       publicRoutes.some((route) => pathname === route) || 
       pathname.startsWith('/auth/') ||
-      pathname.startsWith('/landing/'); // Landing pages are public
+      pathname.startsWith('/landing/') || // Landing pages are public
+      pathname.startsWith('/startups'); // Startup routes handle their own auth
 
     // If logged in and visiting /, redirect to /app
     if (user && pathname === '/') {
