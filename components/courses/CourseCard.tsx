@@ -130,9 +130,11 @@ export function CourseCard({
   const categoryForImage = metadata?.category || course.category;
   // Ensure category is always a string for CourseMetadata type requirement
   const safeCategory = categoryForImage ?? metadata?.category ?? "General";
+  // Priority: metadata imageUrl/thumbnailUrl (source of truth) > database imageUrl/thumbnailUrl > track image
+  // This ensures track images are always correct even if database has wrong/null thumbnail_url
   const imageUrl = resolveCourseImageUrl({
-    imageUrl: course.imageUrl,
-    thumbnailUrl: course.thumbnailUrl || course.thumbnail_url, // Prefer camelCase, fallback to snake_case
+    imageUrl: metadata?.imageUrl || course.imageUrl,
+    thumbnailUrl: metadata?.thumbnailUrl || course.thumbnailUrl || course.thumbnail_url, // Prioritize metadata, then database
     category: categoryForImage,
     industries: displayIndustries,
     // Only pass metadata if it exists and is complete - don't create partial objects
