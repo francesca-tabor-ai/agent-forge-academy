@@ -38,6 +38,7 @@ interface CourseWithImage {
   imageUrl?: string | null;
   thumbnailUrl?: string | null; // camelCase (preferred)
   thumbnail_url?: string | null; // snake_case (for backward compatibility with DB queries)
+  track?: string | null; // Track field (preferred over category)
   category?: string;
   industries?: string[];
   metadata?: DashboardMetadata;
@@ -81,9 +82,9 @@ export function resolveCourseImageUrl(course: CourseWithImage): string {
     return thumbnailUrl;
   }
 
-  const track = course.category || course.metadata?.category;
-
   // Priority 3: Track-based image (ALWAYS use track for courses)
+  // Match getCourseCover() logic: track || category || metadata.category
+  const track = course.track || course.category || course.metadata?.category;
   // Use TRACK_COVERS from courseCovers (supports local images with external fallback)
   if (track && TRACK_COVERS[track]) {
     return TRACK_COVERS[track];

@@ -12,9 +12,13 @@ interface LandingCourseCardProps {
 
 export function LandingCourseCard({ course }: LandingCourseCardProps) {
   // Resolve image URL with fallback logic
+  // Match banner logic: track || category || metadata.category
+  // In CourseMetadata, category represents the track, so pass it as track
   const imageUrl = resolveCourseImageUrl({
     imageUrl: course.imageUrl,
-    category: course.category,
+    thumbnailUrl: course.thumbnailUrl,
+    track: course.category, // Match banner logic: category is the track in CourseMetadata
+    category: course.category, // Also pass as category for fallback
     industries: course.industries,
     metadata: course,
   });

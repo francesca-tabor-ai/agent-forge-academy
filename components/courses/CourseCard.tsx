@@ -33,6 +33,7 @@ interface CourseCardProps {
     is_published: boolean;
     hasContent: boolean;
     industries: string[];
+    track?: string | null; // Track field (preferred over category)
     category?: string;
   };
   metadata?: CourseMetadata;
@@ -126,16 +127,18 @@ export function CourseCard({
   
   // Resolve image URL with fallback logic
   // This always returns a valid URL (has fallback to default)
-  // Priority: metadata category (source of truth) > database category > fallback
-  const categoryForImage = metadata?.category || course.category;
+  // Match banner logic: track || category || metadata.category
+  const trackForImage = course.track || course.category || metadata?.category;
   // Ensure category is always a string for CourseMetadata type requirement
-  const safeCategory = categoryForImage ?? metadata?.category ?? "General";
+  const safeCategory = trackForImage ?? metadata?.category ?? "General";
   // Priority: metadata imageUrl/thumbnailUrl (source of truth) > database imageUrl/thumbnailUrl > track image
   // This ensures track images are always correct even if database has wrong/null thumbnail_url
+  // Match getCourseCover() logic to ensure thumbnails and banners use the same image
   const imageUrl = resolveCourseImageUrl({
     imageUrl: metadata?.imageUrl || course.imageUrl,
     thumbnailUrl: metadata?.thumbnailUrl || course.thumbnailUrl || course.thumbnail_url, // Prioritize metadata, then database
-    category: categoryForImage,
+    track: course.track || metadata?.category, // Match banner logic: track field preferred
+    category: course.category || metadata?.category, // Fallback to category
     industries: displayIndustries,
     // Only pass metadata if it exists and is complete - don't create partial objects
     metadata: metadata ? { ...metadata, category: safeCategory } : undefined,
