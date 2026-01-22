@@ -46,7 +46,10 @@ export async function GET(
     }
 
     // Fetch startup with all related data
-    const { data: startup, error } = await supabase
+    // Try with founders join first, fallback to without if founders table doesn't exist
+    let startup, error;
+    
+    const queryWithFounders = supabase
       .from('startups')
       .select(`
         *,
@@ -107,6 +110,72 @@ export async function GET(
       .eq('id', id)
       .single();
 
+    const resultWithFounders = await queryWithFounders;
+    startup = resultWithFounders.data;
+    error = resultWithFounders.error;
+
+    // If error is about missing table/relation, try without founders join
+    if (error && (error.message?.includes('relation') || error.message?.includes('does not exist') || error.code === '42P01')) {
+      console.warn('Founders table not found, fetching startup without founders join:', error.message);
+      
+      const queryWithoutFounders = supabase
+        .from('startups')
+        .select(`
+          *,
+          business_models (
+            revenue_streams,
+            pricing_details,
+            distribution_channels,
+            key_metrics,
+            growth_notes
+          ),
+          build_estimates (
+            technical_difficulty,
+            estimated_build_time_days,
+            estimated_build_cost_usd,
+            maintenance_cost_usd_monthly,
+            solo_friendly
+          ),
+          revenue_potential (
+            conservative_mrr,
+            realistic_mrr,
+            breakout_mrr,
+            assumptions
+          ),
+          startup_tools (
+            usage_notes,
+            vibe_tools (
+              id,
+              name,
+              category,
+              cost_model,
+              description,
+              website_url
+            )
+          ),
+          vibe_prompts (
+            id,
+            prompt_type,
+            prompt_text,
+            difficulty
+          ),
+          startup_courses (
+            id,
+            title,
+            level,
+            price,
+            access_tier,
+            description
+          )
+        `)
+        .eq('id', id)
+        .single();
+
+      const resultWithoutFounders = await queryWithoutFounders;
+      startup = resultWithoutFounders.data;
+      error = resultWithoutFounders.error;
+    }
+
     if (error) {
       console.error('Error fetching startup:', error);
       if (error.code === 'PGRST116') {
@@ -116,7 +185,7 @@ export async function GET(
         );
       }
       return NextResponse.json(
-        { error: error.message },
+        { error: error.message || 'Failed to fetch startup' },
         { status: 500 }
       );
     }
@@ -129,9 +198,12 @@ export async function GET(
     }
 
     // Normalize founders to array (query returns single object for foreign key)
-    const foundersArray = Array.isArray(startup.founders) 
-      ? startup.founders 
-      : (startup.founders ? [startup.founders] : []);
+    // Handle case where founders table doesn't exist
+    const foundersArray = startup.founders 
+      ? (Array.isArray(startup.founders) 
+          ? startup.founders 
+          : [startup.founders])
+      : [];
 
     // Normalize business_models to array (query returns array for one-to-many relationship)
     const businessModelsArray = Array.isArray(startup.business_models)

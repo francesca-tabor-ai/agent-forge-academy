@@ -193,6 +193,24 @@ const getPromptTypeColor = (type: string) => {
 
 export function StartupDetailClient({ startup }: StartupDetailClientProps) {
   const router = useRouter();
+  
+  // Defensive guard - should not happen but prevents blank page
+  if (!startup) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 md:px-6 py-8">
+        <div className="text-center text-muted-foreground">
+          <p className="text-lg mb-2">Startup not found or failed to load.</p>
+          <button
+            onClick={() => router.push('/startups')}
+            className="text-primary hover:underline"
+          >
+            Return to startups list
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   const [activeTab, setActiveTab] = useState<'overview' | 'founder' | 'business' | 'build' | 'tools' | 'prompts' | 'courses'>('overview');
   const vibeScoreColor = getVibeScoreColor(startup.vibeScore);
   const statusColor = getStatusColor(startup.status);
