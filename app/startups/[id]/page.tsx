@@ -35,6 +35,8 @@ export default async function StartupDetailPage({
   params: { id: string };
 }) {
   const { id } = params;
+  
+  // Check auth first
   const supabase = await createUserSupabaseClient();
   const {
     data: { user },
@@ -45,286 +47,62 @@ export default async function StartupDetailPage({
     redirect('/auth/login');
   }
 
-  // Get user profile for progress tracking
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('id')
-    .eq('user_id', user.id)
-    .single();
-
-  // Fetch startup with all related data
-  // Try with founders join first, fallback to without if founders table doesn't exist
-  let startup, error;
-  
-  const queryWithFounders = supabase
+  // Fetch startup data directly from Supabase (simpler than API for server components)
+  // We'll use the API route later once it's working
+  const { data: startupData, error: startupError } = await supabase
     .from('startups')
-    .select(`
-      *,
-      founders:founder_id (
-        id,
-        name,
-        bio,
-        twitter_url,
-        youtube_url,
-        website
-      ),
-      business_models (
-        revenue_streams,
-        pricing_details,
-        distribution_channels,
-        key_metrics,
-        growth_notes
-      ),
-      build_estimates (
-        technical_difficulty,
-        estimated_build_time_days,
-        estimated_build_cost_usd,
-        maintenance_cost_usd_monthly,
-        solo_friendly
-      ),
-      revenue_potential (
-        conservative_mrr,
-        realistic_mrr,
-        breakout_mrr,
-        assumptions
-      ),
-      startup_tools (
-        usage_notes,
-        vibe_tools (
-          id,
-          name,
-          category,
-          cost_model,
-          description,
-          website_url
-        )
-      ),
-      vibe_prompts (
-        id,
-        prompt_type,
-        prompt_text,
-        difficulty
-      ),
-      startup_courses (
-        id,
-        title,
-        level,
-        price,
-        access_tier,
-        description,
-        course_modules (
-          id,
-          title,
-          order_index,
-          content
-        )
-      )
-    `)
+    .select('*')
     .eq('id', id)
     .single();
 
-  const resultWithFounders = await queryWithFounders;
-  startup = resultWithFounders.data;
-  error = resultWithFounders.error;
-
-  // If error is about missing table/relation, try without founders join
-  if (error && (error.message?.includes('relation') || error.message?.includes('does not exist') || error.code === '42P01')) {
-    console.warn('Founders table not found, fetching startup without founders join:', error.message);
-    
-    const queryWithoutFounders = supabase
-      .from('startups')
-      .select(`
-        *,
-        business_models (
-          revenue_streams,
-          pricing_details,
-          distribution_channels,
-          key_metrics,
-          growth_notes
-        ),
-        build_estimates (
-          technical_difficulty,
-          estimated_build_time_days,
-          estimated_build_cost_usd,
-          maintenance_cost_usd_monthly,
-          solo_friendly
-        ),
-        revenue_potential (
-          conservative_mrr,
-          realistic_mrr,
-          breakout_mrr,
-          assumptions
-        ),
-        startup_tools (
-          usage_notes,
-          vibe_tools (
-            id,
-            name,
-            category,
-            cost_model,
-            description,
-            website_url
-          )
-        ),
-        vibe_prompts (
-          id,
-          prompt_type,
-          prompt_text,
-          difficulty
-        ),
-        startup_courses (
-          id,
-          title,
-          level,
-          price,
-          access_tier,
-          description,
-          course_modules (
-            id,
-            title,
-            order_index,
-            content
-          )
-        )
-      `)
-      .eq('id', id)
-      .single();
-
-    const resultWithoutFounders = await queryWithoutFounders;
-    startup = resultWithoutFounders.data;
-    error = resultWithoutFounders.error;
+  if (startupError) {
+    console.error('Error fetching startup:', startupError);
+    if (startupError.code === 'PGRST116') {
+      return notFound();
+    }
+    return (
+      <main style={{ padding: 24 }}>
+        <h1 style={{ fontSize: 24, fontWeight: 700 }}>Startup failed to load</h1>
+        <pre style={{ marginTop: 12, whiteSpace: 'pre-wrap', color: '#c33' }}>
+          {startupError.message || 'Failed to fetch startup'}
+        </pre>
+      </main>
+    );
   }
 
-  if (error) {
-    console.error('Error fetching startup:', error);
-    notFound();
+  if (!startupData) {
+    return notFound();
   }
 
-  if (!startup) {
-    notFound();
-  }
-
-  // Normalize founders to array (query returns single object for foreign key)
-  // Handle case where founders table doesn't exist
-  const foundersArray = startup.founders 
-    ? (Array.isArray(startup.founders) 
-        ? startup.founders 
-        : [startup.founders])
-    : [];
-
-  // Normalize business_models to array (query returns array for one-to-many relationship)
-  const businessModelsArray = Array.isArray(startup.business_models)
-    ? startup.business_models
-    : (startup.business_models ? [startup.business_models] : []);
-  const businessModel = businessModelsArray[0] ?? null;
-
-  // Normalize revenue_potential to array (query returns array for one-to-many relationship)
-  const revenuePotentialArray = Array.isArray(startup.revenue_potential)
-    ? startup.revenue_potential
-    : (startup.revenue_potential ? [startup.revenue_potential] : []);
-  const revenuePotential = revenuePotentialArray[0] ?? null;
-
-  // Transform data
-  const transformedStartup = {
-    id: startup.id,
-    name: startup.name,
-    tagline: startup.tagline || '',
-    description: startup.description,
-    status: formatStatus(startup.status),
-    revenueRange: formatRevenueRange(startup.revenue_range),
-    vibeScore: startup.vibe_score || 0,
-    logoUrl: startup.logo_url,
-    websiteUrl: startup.website_url,
-    launchYear: startup.launch_year,
-    pricingModel: startup.pricing_model,
-    targetCustomer: startup.target_customer,
-    founder: foundersArray[0] ? {
-      id: foundersArray[0].id,
-      name: foundersArray[0].name,
-      bio: foundersArray[0].bio,
-      twitterUrl: foundersArray[0].twitter_url,
-      youtubeUrl: foundersArray[0].youtube_url,
-      website: foundersArray[0].website,
-    } : null,
-    businessModel: businessModel ? {
-      revenueStreams: businessModel.revenue_streams,
-      pricingDetails: businessModel.pricing_details,
-      distributionChannels: businessModel.distribution_channels,
-      keyMetrics: businessModel.key_metrics,
-      growthNotes: businessModel.growth_notes,
-    } : null,
-    buildEstimate: startup.build_estimates?.[0] ? {
-      technicalDifficulty: formatTechnicalDifficulty(startup.build_estimates[0].technical_difficulty),
-      estimatedBuildTimeDays: startup.build_estimates[0].estimated_build_time_days,
-      estimatedBuildCostUsd: startup.build_estimates[0].estimated_build_cost_usd,
-      maintenanceCostUsdMonthly: startup.build_estimates[0].maintenance_cost_usd_monthly,
-      soloFriendly: startup.build_estimates[0].solo_friendly,
-    } : null,
-    revenuePotential: revenuePotential ? {
-      conservativeMrr: revenuePotential.conservative_mrr,
-      realisticMrr: revenuePotential.realistic_mrr,
-      breakoutMrr: revenuePotential.breakout_mrr,
-      assumptions: revenuePotential.assumptions,
-    } : null,
-    tools: (startup.startup_tools || []).map((st: any) => ({
-      id: st.vibe_tools.id,
-      name: st.vibe_tools.name,
-      category: st.vibe_tools.category,
-      costModel: st.vibe_tools.cost_model,
-      description: st.vibe_tools.description,
-      websiteUrl: st.vibe_tools.website_url,
-      usageNotes: st.usage_notes,
-    })),
-    prompts: (startup.vibe_prompts || []).map((vp: any) => ({
-      id: vp.id,
-      promptType: vp.prompt_type,
-      promptText: vp.prompt_text,
-      difficulty: vp.difficulty,
-    })),
-    courses: await (async () => {
-      const coursesData = [];
-      for (const sc of startup.startup_courses || []) {
-        // Fetch user progress for this course
-        let userProgress = null;
-        if (profile) {
-          const { data: progress } = await supabase
-            .from('startup_progress_tracking')
-            .select('progress_percent, started_at, updated_at')
-            .eq('user_id', user.id)
-            .eq('course_id', sc.id)
-            .single();
-          userProgress = progress;
-        }
-
-        coursesData.push({
-          id: sc.id,
-          title: sc.title,
-          level: sc.level,
-          price: sc.price,
-          accessTier: sc.access_tier,
-          description: sc.description,
-          modules: (sc.course_modules || [])
-            .sort((a: any, b: any) => a.order_index - b.order_index)
-            .map((cm: any) => ({
-              id: cm.id,
-              title: cm.title,
-              orderIndex: cm.order_index,
-              content: cm.content,
-            })),
-          userProgress: userProgress ? {
-            progressPercent: userProgress.progress_percent,
-            startedAt: userProgress.started_at,
-            updatedAt: userProgress.updated_at,
-          } : null,
-        });
-      }
-      return coursesData;
-    })(),
+  // Transform basic startup data to match expected format
+  const startup = {
+    id: startupData.id,
+    name: startupData.name,
+    tagline: startupData.tagline || '',
+    description: startupData.description,
+    status: formatStatus(startupData.status),
+    revenueRange: formatRevenueRange(startupData.revenue_range),
+    vibeScore: startupData.vibe_score || 0,
+    logoUrl: startupData.logo_url,
+    websiteUrl: startupData.website_url,
+    launchYear: startupData.launch_year,
+    pricingModel: startupData.pricing_model,
+    targetCustomer: startupData.target_customer,
+    // Relationships will be added back once basic fetch is confirmed working
+    founder: null,
+    businessModel: null,
+    buildEstimate: null,
+    revenuePotential: null,
+    tools: [],
+    prompts: [],
+    courses: [],
   };
 
+  // Use the startup data we fetched above
+  // The API returns the transformed startup data
   return (
     <>
-      <StartupDetailClient startup={transformedStartup} />
+      <StartupDetailClient startup={startup} />
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-6">
         <StartupIdeationChat 
           startup={{ id: startup.id, name: startup.name, tagline: startup.tagline || '' }} 
