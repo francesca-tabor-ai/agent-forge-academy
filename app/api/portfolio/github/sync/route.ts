@@ -3,6 +3,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { safeLogger } from '@/lib/utils/redactPII';
 import { mapGitHubRepoToProject, filterGitHubRepos, type GitHubRepo } from '@/lib/portfolio/github-mapper';
 
+// Force dynamic rendering (this route uses cookies for authentication)
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+export const fetchCache = 'force-no-store';
+
 /**
  * GET /api/portfolio/github/sync
  * Fetch GitHub repositories for the authenticated user
