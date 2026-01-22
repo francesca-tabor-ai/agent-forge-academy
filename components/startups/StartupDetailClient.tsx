@@ -193,6 +193,7 @@ const getPromptTypeColor = (type: string) => {
 
 export function StartupDetailClient({ startup }: StartupDetailClientProps) {
   const router = useRouter();
+  const [activeTab, setActiveTab] = useState<'overview' | 'founder' | 'business' | 'build' | 'tools' | 'prompts' | 'courses'>('overview');
   
   // Defensive guard - should not happen but prevents blank page
   if (!startup) {
@@ -211,7 +212,6 @@ export function StartupDetailClient({ startup }: StartupDetailClientProps) {
     );
   }
 
-  const [activeTab, setActiveTab] = useState<'overview' | 'founder' | 'business' | 'build' | 'tools' | 'prompts' | 'courses'>('overview');
   const vibeScoreColor = getVibeScoreColor(startup.vibeScore);
   const statusColor = getStatusColor(startup.status);
 
