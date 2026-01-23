@@ -110,7 +110,7 @@ const TRACK_EXTERNAL_URLS: Record<string, string> = {
   "GTM & Revenue Operations": "https://wp.sfdcdigital.com/en-us/wp-content/uploads/sites/4/2024/08/revenue-ops.jpg?w=1024",
   "Creative AI": "https://www.hyperakt.com/_next/image?url=https%3A%2F%2Fwww.hyperakt.com%2Fassets%2Fimages%2Fthe-nonprofit-distinction-struggle-2%2FCraft.jpg&w=3840&q=75",
   "Audio & Voice": "https://media.bazaarvoice.com/Shutterstock_1159197631.png",
-  "Economics & Maths": "https://industrytoday.com/wp-content/uploads/2022/12/economic-growth.jpg",
+  "Economics & Maths": "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=1920&h=1080&fit=crop&q=80",
 };
 
 /**

@@ -23,7 +23,7 @@ const TRACK_DEFAULT_IMAGES: Record<string, string> = {
   'GTM & Revenue Operations': 'https://wp.sfdcdigital.com/en-us/wp-content/uploads/sites/4/2024/08/revenue-ops.jpg?w=1024',
   'ML Engineering': 'https://www.databricks.com/sites/default/files/styles/max_1000x1000/public/2025-12/machine-learning-engineering-complete-guide-building-production-ml-systems-og-image.png?itok=mhHGdHwy&v=1765535043',
   'Platform Engineering': 'https://8allocate.com/wp-content/uploads/2024/01/The-Future-of-Software-Engineering_-Predictions-for-2024.jpg',
-  'Economics & Maths': 'https://industrytoday.com/wp-content/uploads/2022/12/economic-growth.jpg',
+  'Economics & Maths': 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=1920&h=1080&fit=crop&q=80',
 };
 
 /**
