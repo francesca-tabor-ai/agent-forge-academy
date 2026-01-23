@@ -241,23 +241,21 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
 
   return (
     <div className="pb-20 lg:pb-8 mb-16 md:mb-0 overflow-x-hidden">
-      {/* Hero Banner - No longer sticky, sits in content flow */}
-      <div className="-mx-4 sm:-mx-6 lg:mx-0 mb-6">
-        <CourseHero
-          title={courseTitle}
-          imageUrl={courseCoverImage}
-          trackCategory={trackCategory}
-          difficultyLevel={difficultyLevel}
-          durationWeeks={durationWeeks}
-          industries={industries}
-          isEnrolled={!!enrollment}
-          progressPercentage={enrollment?.progress_percentage}
-          courseSlug={courseSlug}
-          courseId={normalizedCourse?.id}
-          nextLessonSlug={nextLessonSlug}
-          firstLessonSlug={lessons[0]?.slug}
-        />
-      </div>
+      {/* Hero Banner - Handles its own spacing, no wrapper needed */}
+      <CourseHero
+        title={courseTitle}
+        imageUrl={courseCoverImage}
+        trackCategory={trackCategory}
+        difficultyLevel={difficultyLevel}
+        durationWeeks={durationWeeks}
+        industries={industries}
+        isEnrolled={!!enrollment}
+        progressPercentage={enrollment?.progress_percentage}
+        courseSlug={courseSlug}
+        courseId={normalizedCourse?.id}
+        nextLessonSlug={nextLessonSlug}
+        firstLessonSlug={lessons[0]?.slug}
+      />
 
       {/* Main content container with consistent max-width and padding */}
       <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8 pt-0 pb-6 sm:pb-8">
