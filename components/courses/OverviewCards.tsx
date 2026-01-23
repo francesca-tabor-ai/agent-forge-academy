@@ -1,5 +1,6 @@
 'use client';
 
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { useState } from 'react';
 
 interface OverviewCardsProps {
@@ -9,20 +10,42 @@ interface OverviewCardsProps {
   bestFor?: string[];
 }
 
+/**
+ * Normalize text into paragraphs
+ * Collapses single newlines, keeps double newlines as paragraph breaks
+ * Prevents "word soup" where each word appears on its own line
+ */
+function normalizeParagraphs(text: string): string[] {
+  // Split by double newlines (paragraph breaks)
+  const paragraphs = text.split(/\n\s*\n/);
+  
+  return paragraphs
+    .map(para => para.trim())
+    .filter(para => para.length > 0)
+    .map(para => {
+      // Within each paragraph, collapse single newlines into spaces
+      return para.replace(/\n+/g, ' ').replace(/\s+/g, ' ').trim();
+    });
+}
+
 export function OverviewCards({
   description,
   outcome = [],
   build = [],
   bestFor = [],
 }: OverviewCardsProps) {
-  const [activeTab, setActiveTab] = useState<string>(() => {
-    // Default to first available tab
-    if (description) return 'description';
-    if (outcome.length > 0) return 'outcome';
-    if (build.length > 0) return 'build';
-    if (bestFor.length > 0) return 'bestfor';
-    return 'description';
-  });
+  // Determine default tab
+  const defaultValue = description 
+    ? 'description' 
+    : outcome.length > 0 
+    ? 'outcome' 
+    : build.length > 0 
+    ? 'build' 
+    : bestFor.length > 0 
+    ? 'bestfor' 
+    : 'description';
+
+  const [activeTab, setActiveTab] = useState(defaultValue);
 
   // Build tabs array
   const tabs = [
@@ -34,70 +57,80 @@ export function OverviewCards({
 
   if (tabs.length === 0) return null;
 
+  // Normalize description paragraphs
+  const descriptionParagraphs = description ? normalizeParagraphs(description) : [];
+
   return (
-    <div className="mt-6">
-      {/* Tabs List */}
-      <div className="flex flex-wrap gap-2 mb-4">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
-              activeTab === tab.id
-                ? 'bg-brand-light text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
-          >
-            {tab.label}
-          </button>
-        ))}
+    <Tabs defaultValue={defaultValue} value={activeTab} onValueChange={setActiveTab} className="mt-6">
+      <TabsList className="flex flex-wrap gap-2 mb-4 bg-transparent p-0 h-auto">
+        {tabs.map((tab) => {
+          const isActive = activeTab === tab.id;
+          return (
+            <TabsTrigger 
+              key={tab.id} 
+              value={tab.id}
+              className={`px-4 py-2 rounded-lg transition-colors ${
+                isActive
+                  ? 'bg-brand-light text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              {tab.label}
+            </TabsTrigger>
+          );
+        })}
+      </TabsList>
+
+      <div className="mt-4 rounded-2xl border border-gray-200 bg-white p-4 sm:p-6">
+        <TabsContent value="description" className="mt-0">
+          {descriptionParagraphs.length > 0 && (
+            <div className="text-sm sm:text-base text-gray-700 leading-relaxed space-y-4">
+              {descriptionParagraphs.map((para, i) => (
+                <p key={i}>{para}</p>
+              ))}
+            </div>
+          )}
+        </TabsContent>
+
+        <TabsContent value="outcome" className="mt-0">
+          {outcome.length > 0 && (
+            <ul className="list-disc pl-5 space-y-2 text-sm sm:text-base">
+              {outcome.map((bullet, index) => (
+                <li key={index} className="text-gray-700 leading-relaxed">
+                  {bullet}
+                </li>
+              ))}
+            </ul>
+          )}
+        </TabsContent>
+
+        <TabsContent value="build" className="mt-0">
+          {build.length > 0 && (
+            <ul className="list-disc pl-5 space-y-2 text-sm sm:text-base">
+              {build.map((bullet, index) => (
+                <li key={index} className="text-gray-700 leading-relaxed">
+                  {bullet}
+                </li>
+              ))}
+            </ul>
+          )}
+        </TabsContent>
+
+        <TabsContent value="bestfor" className="mt-0">
+          {bestFor.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {bestFor.map((item, index) => (
+                <span
+                  key={index}
+                  className="inline-block px-3 py-1.5 text-sm text-gray-700 bg-gray-100 border border-gray-200 rounded-full"
+                >
+                  {item}
+                </span>
+              ))}
+            </div>
+          )}
+        </TabsContent>
       </div>
-
-      {/* Tab Content */}
-      <div className="rounded-2xl border border-gray-200 bg-white p-4 sm:p-6">
-        {activeTab === 'description' && description && (
-          <div className="text-sm sm:text-base text-gray-700 leading-relaxed whitespace-pre-wrap">
-            {description.split('\n').map((para, i) => 
-              para.trim() ? (
-                <p key={i} className={i > 0 ? 'mt-4' : ''}>{para.trim()}</p>
-              ) : null
-            )}
-          </div>
-        )}
-
-        {activeTab === 'outcome' && outcome.length > 0 && (
-          <ul className="list-disc pl-5 space-y-2 text-sm sm:text-base">
-            {outcome.map((bullet, index) => (
-              <li key={index} className="text-gray-700 leading-relaxed">
-                {bullet}
-              </li>
-            ))}
-          </ul>
-        )}
-
-        {activeTab === 'build' && build.length > 0 && (
-          <ul className="list-disc pl-5 space-y-2 text-sm sm:text-base">
-            {build.map((bullet, index) => (
-              <li key={index} className="text-gray-700 leading-relaxed">
-                {bullet}
-              </li>
-            ))}
-          </ul>
-        )}
-
-        {activeTab === 'bestfor' && bestFor.length > 0 && (
-          <div className="flex flex-wrap gap-2">
-            {bestFor.map((item, index) => (
-              <span
-                key={index}
-                className="inline-block px-3 py-1.5 text-sm text-gray-700 bg-gray-100 border border-gray-200 rounded-full"
-              >
-                {item}
-              </span>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
+    </Tabs>
   );
 }
