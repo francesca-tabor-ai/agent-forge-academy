@@ -327,8 +327,8 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
                   </Link>
                 )}
 
-                  {/* Regular Modules - Grid Layout */}
-                  <div className="grid gap-4 sm:grid-cols-2">
+                  {/* Regular Modules - Single Column Layout */}
+                  <div className="space-y-3">
                   {regularLessons.map((lesson, index) => {
                     const isCompleted = completedLessonSlugs.has(lesson.slug);
                     const isInProgress = enrollment && !isCompleted && (index === 0 || completedLessonSlugs.has(regularLessons[index - 1]?.slug));
@@ -353,10 +353,10 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
                       <Link
                         key={lesson.slug}
                         href={`/student/courses/${courseSlug}/lessons/${lesson.slug}`}
-                        className="rounded-2xl border border-gray-200 bg-white p-4 hover:bg-gray-50 transition"
+                        className="block w-full rounded-2xl border border-gray-200 bg-white p-4 sm:p-5 hover:bg-gray-50 transition"
                       >
-                        <div className="flex items-start justify-between gap-3">
-                          <div className="space-y-1 flex-1 min-w-0">
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="min-w-0 space-y-1 flex-1">
                             <div className="flex items-center gap-2">
                               {/* Module Number Badge */}
                               <div className={`flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center font-semibold text-xs ${statusColor}`}>
@@ -367,7 +367,7 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
                               </h3>
                             </div>
                             {lesson.frontmatter.description && (
-                              <p className="text-xs sm:text-sm text-gray-600 leading-relaxed line-clamp-2">
+                              <p className="text-sm text-gray-600 leading-relaxed line-clamp-2">
                                 {lesson.frontmatter.description}
                               </p>
                             )}
@@ -386,7 +386,9 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
                               )}
                             </div>
                           </div>
-                          <span className="text-sm font-medium text-gray-700 shrink-0">Start →</span>
+                          <div className="shrink-0 text-sm font-medium text-gray-700">
+                            {ctaText} →
+                          </div>
                         </div>
                       </Link>
                     );
