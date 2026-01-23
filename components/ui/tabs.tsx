@@ -81,9 +81,11 @@ function TabsTrigger({ value, className, children }: TabsTriggerProps) {
       aria-selected={isActive}
       onClick={() => context.onValueChange(value)}
       className={cn(
-        'inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-light focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
-        !className?.includes('aria-selected') && isActive && 'bg-white text-gray-900 shadow-sm',
-        !className?.includes('aria-selected') && !isActive && 'text-gray-600 hover:bg-gray-50',
+        'inline-flex items-center justify-center whitespace-nowrap rounded-xl px-3 py-2 text-sm font-medium transition-all
+        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
+        disabled:pointer-events-none disabled:opacity-50',
+        !className?.includes('aria-selected') && isActive && 'bg-foreground text-background shadow',
+        !className?.includes('aria-selected') && !isActive && 'text-muted-foreground hover:text-foreground hover:bg-muted/50',
         className
       )}
     >
@@ -112,7 +114,7 @@ function TabsContent({ value, className, children }: TabsContentProps) {
     <div
       role="tabpanel"
       className={cn(
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-light focus-visible:ring-offset-2',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
         className
       )}
     >
