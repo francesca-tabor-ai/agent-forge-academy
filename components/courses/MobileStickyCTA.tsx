@@ -9,6 +9,7 @@ interface MobileStickyCTAProps {
   courseId?: string | null;
   nextLessonSlug?: string | null;
   firstLessonSlug?: string | null;
+  nextLessonTitle?: string | null;
 }
 
 export function MobileStickyCTA({
@@ -18,35 +19,38 @@ export function MobileStickyCTA({
   courseId,
   nextLessonSlug,
   firstLessonSlug,
+  nextLessonTitle,
 }: MobileStickyCTAProps) {
   if (!isEnrolled && !courseId) {
     return null;
   }
 
   return (
-    <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-40 p-4 safe-area-inset-bottom">
-      <div className="max-w-7xl mx-auto flex items-center gap-4">
-        {isEnrolled && progressPercentage !== undefined && (
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-xs font-medium text-gray-700">
-                {progressPercentage}% Complete
-              </span>
+    <div className="lg:hidden fixed bottom-0 left-0 right-0 border-t border-gray-200 bg-background/90 backdrop-blur shadow-lg z-40 safe-area-inset-bottom">
+      <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+        <div className="flex-1 min-w-0">
+          {isEnrolled && nextLessonTitle && (
+            <div className="text-xs sm:text-sm text-gray-600 truncate">
+              Next up: <span className="font-medium text-gray-900">{nextLessonTitle}</span>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-1.5">
-              <div
-                className="bg-brand-light h-1.5 rounded-full transition-all duration-300"
-                style={{ width: `${progressPercentage}%` }}
-              />
+          )}
+          {isEnrolled && progressPercentage !== undefined && !nextLessonTitle && (
+            <div className="text-xs sm:text-sm text-gray-600">
+              {progressPercentage}% Complete
             </div>
-          </div>
-        )}
+          )}
+          {!isEnrolled && (
+            <div className="text-xs sm:text-sm text-gray-600">
+              Ready to start?
+            </div>
+          )}
+        </div>
         {isEnrolled ? (
           <Link
             href={`/student/courses/${courseSlug}/lessons/${nextLessonSlug || firstLessonSlug || ''}`}
             className="flex-shrink-0 px-6 py-2.5 bg-brand-light text-white font-semibold rounded-lg hover:bg-brand-light/90 transition-colors text-sm whitespace-nowrap"
           >
-            Continue
+            Continue →
           </Link>
         ) : (
           <form action={`/api/courses/enroll?course_id=${courseId}`} method="POST" className="flex-shrink-0">
@@ -54,7 +58,7 @@ export function MobileStickyCTA({
               type="submit"
               className="px-6 py-2.5 bg-brand-light text-white font-semibold rounded-lg hover:bg-brand-light/90 transition-colors text-sm whitespace-nowrap"
             >
-              Enroll
+              Enroll →
             </button>
           </form>
         )}

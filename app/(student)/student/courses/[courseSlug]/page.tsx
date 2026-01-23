@@ -241,18 +241,8 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
 
   return (
     <div className="pb-20 lg:pb-8 mb-16 md:mb-0 overflow-x-hidden">
-      {/* Hero Banner - Sticky Header */}
-      {/* 
-        NON-OVERLAPPING LAYOUT RULES:
-        1. Hero sits inside main content flow (respects sidebar grid on desktop)
-        2. Hero accounts for header height (top-[64px] instead of top-0)
-        3. No full-bleed breakout that could overlap sidebar
-        4. Z-index ensures hero is above header but below modals
-        5. Negative margin breaks out of main content padding on mobile only
-        6. Negative top margin breaks out of LayoutWrapper padding to sit flush to top
-        7. Proper margin-bottom prevents overlap with content below
-      */}
-      <div className="sticky top-[64px] z-[60] mb-6 -mt-6 md:-mt-8 -mx-4 sm:-mx-6 lg:mx-0 w-full lg:w-auto overflow-x-hidden">
+      {/* Hero Banner - No longer sticky, sits in content flow */}
+      <div className="-mx-4 sm:-mx-6 lg:mx-0 mb-6">
         <CourseHero
           title={courseTitle}
           imageUrl={courseCoverImage}
@@ -296,51 +286,29 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
                   <p className="text-gray-600">No lessons available for this course yet.</p>
                 </div>
               ) : (
-                <div className="space-y-3">
-                  {/* Quick Start / Course Index */}
+                <div className="space-y-4">
+                  {/* Quick Start / Course Index - Full width */}
                   {courseIndexLesson && (
                     <Link
                       href={`/student/courses/${courseSlug}/lessons/${courseIndexLesson.slug}`}
                       className="block bg-white border border-gray-200 rounded-2xl p-4 sm:p-5 hover:bg-gray-50 transition"
                     >
-                      {/* Mobile: Compact Layout */}
-                      <div className="md:hidden">
-                        <div className="flex items-start gap-3">
-                          <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-brand-light/10 flex items-center justify-center">
-                            <span className="text-brand-light text-lg">⚡</span>
-                          </div>
-                          <div className="flex-1 min-w-0 space-y-1">
-                            <h3 className="text-base font-medium leading-snug text-gray-900">
-                              {courseIndexLesson.frontmatter.title || 'Quick Start'}
-                            </h3>
-                            <div className="flex items-center gap-2 text-xs text-gray-500">
-                              <span>~15 min</span>
-                              {completedLessonSlugs.has(courseIndexLesson.slug) && (
-                                <span className="text-green-600 text-xs font-medium">✓ Completed</span>
-                              )}
-                            </div>
-                          </div>
-                          <div className="shrink-0 text-sm font-medium">Start →</div>
-                        </div>
-                      </div>
-
-                      {/* Desktop: Expanded Layout */}
-                      <div className="hidden md:flex items-start justify-between gap-4">
+                      <div className="flex items-start justify-between gap-4">
                         <div className="flex items-start gap-4 flex-1 min-w-0">
                           <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-brand-light/10 flex items-center justify-center">
                             <span className="text-brand-light text-lg">⚡</span>
                           </div>
                           <div className="flex-1 min-w-0 space-y-1">
                             <div className="flex items-center gap-2">
-                              <h3 className="text-lg font-medium leading-snug text-gray-900">
+                              <h3 className="text-base sm:text-lg font-medium leading-snug text-gray-900">
                                 {courseIndexLesson.frontmatter.title || 'Quick Start'}
                               </h3>
                               {completedLessonSlugs.has(courseIndexLesson.slug) && (
-                                <span className="text-green-600 text-sm font-medium">✓ Completed</span>
+                                <span className="text-green-600 text-xs sm:text-sm font-medium">✓ Completed</span>
                               )}
                             </div>
                             {courseIndexLesson.frontmatter.description && (
-                              <p className="text-sm text-gray-600 leading-relaxed">
+                              <p className="text-sm text-gray-600 leading-relaxed hidden sm:block">
                                 {courseIndexLesson.frontmatter.description}
                               </p>
                             )}
@@ -361,7 +329,8 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
                   </Link>
                 )}
 
-                  {/* Regular Modules */}
+                  {/* Regular Modules - Grid Layout */}
+                  <div className="grid gap-4 sm:grid-cols-2">
                   {regularLessons.map((lesson, index) => {
                     const isCompleted = completedLessonSlugs.has(lesson.slug);
                     const isInProgress = enrollment && !isCompleted && (index === 0 || completedLessonSlugs.has(regularLessons[index - 1]?.slug));
@@ -386,90 +355,45 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
                       <Link
                         key={lesson.slug}
                         href={`/student/courses/${courseSlug}/lessons/${lesson.slug}`}
-                        className="block bg-white border border-gray-200 rounded-2xl p-4 sm:p-5 hover:bg-gray-50 transition"
+                        className="rounded-2xl border border-gray-200 bg-white p-4 hover:bg-gray-50 transition"
                       >
-                        {/* Mobile: Compact Layout */}
-                        <div className="md:hidden">
-                          <div className="flex items-start gap-3">
-                            {/* Module Number Badge */}
-                            <div className={`flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center font-semibold text-sm ${statusColor}`}>
-                              {isCompleted ? '✓' : moduleNumber}
-                            </div>
-                            
-                            <div className="flex-1 min-w-0 space-y-1">
-                              <h3 className="text-base font-medium leading-snug text-gray-900">
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="space-y-1 flex-1 min-w-0">
+                            <div className="flex items-center gap-2">
+                              {/* Module Number Badge */}
+                              <div className={`flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center font-semibold text-xs ${statusColor}`}>
+                                {isCompleted ? '✓' : moduleNumber}
+                              </div>
+                              <h3 className="text-sm sm:text-base font-medium leading-snug text-gray-900">
                                 {lesson.frontmatter.title || lesson.slug}
                               </h3>
-                              <div className="flex items-center gap-2 text-xs text-gray-500">
-                                <span>~30 min</span>
-                                {enrollment && (
-                                  <span className={`px-2 py-0.5 rounded text-xs font-medium ${
-                                    isCompleted 
-                                      ? 'bg-green-50 text-green-700' 
-                                      : isInProgress
-                                      ? 'bg-blue-50 text-blue-700'
-                                      : 'bg-gray-50 text-gray-600'
-                                  }`}>
-                                    {status}
-                                  </span>
-                                )}
-                              </div>
                             </div>
-                            <div className="shrink-0 text-sm font-medium">Start →</div>
-                          </div>
-                        </div>
-
-                        {/* Desktop: Expanded Layout */}
-                        <div className="hidden md:flex items-start justify-between gap-4">
-                          <div className="flex items-start gap-4 flex-1 min-w-0">
-                            {/* Module Number Badge */}
-                            <div className={`flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center font-semibold text-sm ${statusColor}`}>
-                              {isCompleted ? '✓' : moduleNumber}
-                            </div>
-                            
-                            <div className="flex-1 min-w-0 space-y-1">
-                              <div className="flex items-center gap-2">
-                                <h3 className="text-lg font-medium leading-snug text-gray-900">
-                                  {lesson.frontmatter.title || lesson.slug}
-                                </h3>
-                              </div>
-                              {lesson.frontmatter.description && (
-                                <p className="text-sm text-gray-600 leading-relaxed">
-                                  {lesson.frontmatter.description}
-                                </p>
+                            {lesson.frontmatter.description && (
+                              <p className="text-xs sm:text-sm text-gray-600 leading-relaxed line-clamp-2">
+                                {lesson.frontmatter.description}
+                              </p>
+                            )}
+                            <div className="flex items-center gap-2 text-xs text-gray-500">
+                              <span>~30 min</span>
+                              {enrollment && (
+                                <span className={`px-2 py-0.5 rounded text-xs font-medium ${
+                                  isCompleted 
+                                    ? 'bg-green-50 text-green-700' 
+                                    : isInProgress
+                                    ? 'bg-blue-50 text-blue-700'
+                                    : 'bg-gray-50 text-gray-600'
+                                }`}>
+                                  {status}
+                                </span>
                               )}
-                              <div className="flex items-center gap-3 text-xs text-gray-500">
-                                {lesson.frontmatter.module && (
-                                  <span className="px-2 py-0.5 bg-gray-100 rounded">
-                                    Module {lesson.frontmatter.module}
-                                  </span>
-                                )}
-                                {lesson.frontmatter.week && (
-                                  <span>Week {lesson.frontmatter.week}</span>
-                                )}
-                                <span className="ml-auto">~30 min</span>
-                                {enrollment && (
-                                  <span className={`px-2 py-0.5 rounded text-xs font-medium ${
-                                    isCompleted 
-                                      ? 'bg-green-50 text-green-700' 
-                                      : isInProgress
-                                      ? 'bg-blue-50 text-blue-700'
-                                      : 'bg-gray-50 text-gray-600'
-                                  }`}>
-                                    {status}
-                                  </span>
-                                )}
-                              </div>
                             </div>
                           </div>
-                          
-                          <div className="flex-shrink-0 flex items-center gap-2">
-                            <span className="text-sm font-medium">Start →</span>
-                          </div>
+                          <span className="text-sm font-medium text-gray-700 shrink-0">Start →</span>
                         </div>
                       </Link>
                     );
                   })}
+                  </div>
                 </div>
               )}
             </div>
@@ -528,6 +452,7 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
         courseId={normalizedCourse?.id}
         nextLessonSlug={nextLessonSlug}
         firstLessonSlug={lessons[0]?.slug}
+        nextLessonTitle={nextLessonSlug ? lessons.find(l => l.slug === nextLessonSlug)?.frontmatter.title || null : lessons[0]?.frontmatter.title || null}
       />
     </div>
   );

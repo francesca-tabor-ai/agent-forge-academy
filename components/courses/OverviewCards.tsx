@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { ChevronDown, ChevronUp } from 'lucide-react';
 
 interface OverviewCardsProps {
   description?: string | null;
@@ -16,187 +15,89 @@ export function OverviewCards({
   build = [],
   bestFor = [],
 }: OverviewCardsProps) {
-  // Mobile: collapsed by default, desktop: expanded (handled via CSS)
-  const [expandedDescription, setExpandedDescription] = useState(false);
-  const [expandedOutcome, setExpandedOutcome] = useState(false);
-  const [expandedBuild, setExpandedBuild] = useState(false);
-  const [expandedBestFor, setExpandedBestFor] = useState(false);
+  const [activeTab, setActiveTab] = useState<string>(() => {
+    // Default to first available tab
+    if (description) return 'description';
+    if (outcome.length > 0) return 'outcome';
+    if (build.length > 0) return 'build';
+    if (bestFor.length > 0) return 'bestfor';
+    return 'description';
+  });
 
-  // Consistent "Show more" thresholds for long lists
-  const MAX_VISIBLE_OUTCOME = 5;
-  const MAX_VISIBLE_BUILD = 5; // Make consistent with Outcome
+  // Build tabs array
+  const tabs = [
+    description && { id: 'description', label: 'Description' },
+    outcome.length > 0 && { id: 'outcome', label: 'Outcome' },
+    build.length > 0 && { id: 'build', label: "You'll Build" },
+    bestFor.length > 0 && { id: 'bestfor', label: 'Best For' },
+  ].filter(Boolean) as Array<{ id: string; label: string }>;
 
-  const visibleOutcome = expandedOutcome ? outcome : outcome.slice(0, MAX_VISIBLE_OUTCOME);
-  const visibleBuild = expandedBuild ? build : build.slice(0, MAX_VISIBLE_BUILD);
-  const hasMoreOutcome = outcome.length > MAX_VISIBLE_OUTCOME;
-  const hasMoreBuild = build.length > MAX_VISIBLE_BUILD;
+  if (tabs.length === 0) return null;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-      {/* Description Card */}
-      {description && (
-        <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
+    <div className="mt-6">
+      {/* Tabs List */}
+      <div className="flex flex-wrap gap-2 mb-4">
+        {tabs.map((tab) => (
           <button
-            onClick={() => setExpandedDescription(!expandedDescription)}
-            className="w-full md:pointer-events-none flex items-center justify-between p-4 sm:p-6 text-left"
-            aria-expanded={expandedDescription}
-          >
-            <h3 className="text-lg font-semibold text-gray-900">
-              Description
-            </h3>
-            <ChevronDown
-              className={`w-4 h-4 text-gray-500 transition-transform md:hidden ${
-                expandedDescription ? 'rotate-180' : ''
-              }`}
-            />
-          </button>
-          <div
-            className={`px-4 sm:px-6 pb-4 sm:pb-6 transition-all md:block ${
-              expandedDescription ? 'block' : 'hidden md:block'
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+              activeTab === tab.id
+                ? 'bg-brand-light text-white'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
           >
-            <p className="text-sm sm:text-base text-gray-700 leading-relaxed">{description}</p>
-          </div>
-        </div>
-      )}
+            {tab.label}
+          </button>
+        ))}
+      </div>
 
-      {/* Outcome Card */}
-      {outcome.length > 0 && (
-        <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
-          <button
-            onClick={() => setExpandedOutcome(!expandedOutcome)}
-            className="w-full md:pointer-events-none flex items-center justify-between p-4 sm:p-6 text-left"
-            aria-expanded={expandedOutcome}
-          >
-            <h3 className="text-lg font-semibold text-gray-900">
-              Outcome
-            </h3>
-            <ChevronDown
-              className={`w-4 h-4 text-gray-500 transition-transform md:hidden ${
-                expandedOutcome ? 'rotate-180' : ''
-              }`}
-            />
-          </button>
-          <div
-            className={`px-4 sm:px-6 pb-4 sm:pb-6 transition-all md:block ${
-              expandedOutcome ? 'block' : 'hidden md:block'
-            }`}
-          >
-            <ul className="list-disc pl-5 space-y-2 text-sm sm:text-base">
-              {visibleOutcome.map((bullet, index) => (
-                <li key={index} className="text-gray-700 leading-relaxed">
-                  {bullet}
-                </li>
-              ))}
-            </ul>
-            {hasMoreOutcome && (
-              <button
-                onClick={() => setExpandedOutcome(!expandedOutcome)}
-                className="mt-4 flex items-center gap-1 text-sm text-brand-light hover:text-brand-light/80 font-medium transition-colors"
-              >
-                {expandedOutcome ? (
-                  <>
-                    <ChevronUp className="w-4 h-4" />
-                    Show less
-                  </>
-                ) : (
-                  <>
-                    <ChevronDown className="w-4 h-4" />
-                    Show {outcome.length - MAX_VISIBLE_OUTCOME} more
-                  </>
-                )}
-              </button>
+      {/* Tab Content */}
+      <div className="rounded-2xl border border-gray-200 bg-white p-4 sm:p-6">
+        {activeTab === 'description' && description && (
+          <div className="text-sm sm:text-base text-gray-700 leading-relaxed whitespace-pre-wrap">
+            {description.split('\n').map((para, i) => 
+              para.trim() ? (
+                <p key={i} className={i > 0 ? 'mt-4' : ''}>{para.trim()}</p>
+              ) : null
             )}
           </div>
-        </div>
-      )}
+        )}
 
-      {/* You'll Build Card */}
-      {build.length > 0 && (
-        <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
-          <button
-            onClick={() => setExpandedBuild(!expandedBuild)}
-            className="w-full md:pointer-events-none flex items-center justify-between p-4 sm:p-6 text-left"
-            aria-expanded={expandedBuild}
-          >
-            <h3 className="text-lg font-semibold text-gray-900">
-              You&apos;ll Build
-            </h3>
-            <ChevronDown
-              className={`w-4 h-4 text-gray-500 transition-transform md:hidden ${
-                expandedBuild ? 'rotate-180' : ''
-              }`}
-            />
-          </button>
-          <div
-            className={`px-4 sm:px-6 pb-4 sm:pb-6 transition-all md:block ${
-              expandedBuild ? 'block' : 'hidden md:block'
-            }`}
-          >
-            <ul className="list-disc pl-5 space-y-2 text-sm sm:text-base">
-              {visibleBuild.map((bullet, index) => (
-                <li key={index} className="text-gray-700 leading-relaxed">
-                  {bullet}
-                </li>
-              ))}
-            </ul>
-            {hasMoreBuild && (
-              <button
-                onClick={() => setExpandedBuild(!expandedBuild)}
-                className="mt-4 flex items-center gap-1 text-sm text-brand-light hover:text-brand-light/80 font-medium transition-colors"
+        {activeTab === 'outcome' && outcome.length > 0 && (
+          <ul className="list-disc pl-5 space-y-2 text-sm sm:text-base">
+            {outcome.map((bullet, index) => (
+              <li key={index} className="text-gray-700 leading-relaxed">
+                {bullet}
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {activeTab === 'build' && build.length > 0 && (
+          <ul className="list-disc pl-5 space-y-2 text-sm sm:text-base">
+            {build.map((bullet, index) => (
+              <li key={index} className="text-gray-700 leading-relaxed">
+                {bullet}
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {activeTab === 'bestfor' && bestFor.length > 0 && (
+          <div className="flex flex-wrap gap-2">
+            {bestFor.map((item, index) => (
+              <span
+                key={index}
+                className="inline-block px-3 py-1.5 text-sm text-gray-700 bg-gray-100 border border-gray-200 rounded-full"
               >
-                {expandedBuild ? (
-                  <>
-                    <ChevronUp className="w-4 h-4" />
-                    Show less
-                  </>
-                ) : (
-                  <>
-                    <ChevronDown className="w-4 h-4" />
-                    Show {build.length - MAX_VISIBLE_BUILD} more
-                  </>
-                )}
-              </button>
-            )}
+                {item}
+              </span>
+            ))}
           </div>
-        </div>
-      )}
-
-      {/* Best For Card */}
-      {bestFor.length > 0 && (
-        <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
-          <button
-            onClick={() => setExpandedBestFor(!expandedBestFor)}
-            className="w-full md:pointer-events-none flex items-center justify-between p-4 sm:p-6 text-left"
-            aria-expanded={expandedBestFor}
-          >
-            <h3 className="text-lg font-semibold text-gray-900">
-              Best For
-            </h3>
-            <ChevronDown
-              className={`w-4 h-4 text-gray-500 transition-transform md:hidden ${
-                expandedBestFor ? 'rotate-180' : ''
-              }`}
-            />
-          </button>
-          <div
-            className={`px-4 sm:px-6 pb-4 sm:pb-6 transition-all md:block ${
-              expandedBestFor ? 'block' : 'hidden md:block'
-            }`}
-          >
-            <div className="flex flex-wrap gap-2">
-              {bestFor.map((item, index) => (
-                <span
-                  key={index}
-                  className="inline-block px-3 py-1.5 text-sm text-gray-700 bg-gray-100 border border-gray-200 rounded-full"
-                >
-                  {item}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

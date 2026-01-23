@@ -133,254 +133,118 @@ export function CourseHero({
   };
 
   return (
-    <div 
-      className="relative w-full min-h-[240px] sm:min-h-[280px] md:min-h-[320px] lg:min-h-[360px] overflow-hidden"
-      role="banner"
-      aria-label="Course hero banner"
-    >
-      {/* 
-        STANDARD PATTERN: Fallback Background Layer (Always Visible)
-        - Gradient/neutral background that's ALWAYS visible
-        - Ensures hero is NEVER blank, even if all images fail
-        - This is the last resort fallback
-      */}
-      <div
-        className="absolute inset-0"
-        style={{ 
-          background: GRADIENT_FALLBACK,
-        }}
-        aria-hidden="true"
-      />
-
-      {/* 
-        STANDARD PATTERN: Background Image Layer
-        - Full-bleed background image (absolute inset-0)
-        - bg-cover bg-center ensures image fills container
-        - Renders on top of gradient fallback
-        - If image fails, gradient fallback shows through
-      */}
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ 
-          backgroundImage: `url(${currentImageUrl})`,
-          // Ensure gradient shows through if image fails
-          backgroundColor: imageError ? 'transparent' : undefined,
-        }}
-        aria-hidden="true"
-      >
-        {/* 
-          Hidden img element to detect load errors
-          - onError handler switches to fallback image
-          - If fallback also fails, gradient background is visible
-        */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={currentImageUrl}
-          alt=""
-          className="hidden"
-          onError={handleImageError}
-          onLoad={() => {
-            setImageError(false);
-            setFallbackAttempted(false);
-          }}
-        />
-      </div>
-      
-      {/* 
-        Additional solid color fallback (if gradient fails)
-        - bg-gray-900 provides neutral background
-        - Only visible if both image and gradient fail (unlikely)
-      */}
-      <div
-        className="absolute inset-0 bg-gray-900"
-        style={{ 
-          opacity: imageError && fallbackAttempted ? 1 : 0,
-        }}
-        aria-hidden="true"
-      />
-      
-      {/* 
-        STANDARD PATTERN: Gradient Overlay for Readability
-        - Ensures text is always readable over any background image
-        - Transparent top to dark bottom gradient
-        - Applied as separate layer (absolute inset-0)
-      */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black/90" aria-hidden="true" />
-      
-      {/* 
-        STANDARD PATTERN: Content Container
-        - Reliable height: min-height matches wrapper at all breakpoints
-        - Flex layout: flex-col justify-end (content at bottom)
-        - Constrained width: max-w-7xl mx-auto (centered, max width)
-        - Responsive padding: px-4 sm:px-6 md:px-8 lg:px-12 (horizontal)
-        - Responsive padding: pb-8 sm:pb-12 md:pb-16 lg:pb-20 (bottom)
-        - Relative positioning: Creates stacking context for content above overlay
-      */}
-      <div className="relative h-full min-h-[240px] sm:min-h-[280px] md:min-h-[320px] lg:min-h-[360px] flex flex-col justify-end z-10">
-        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-6 sm:py-8 md:py-10 lg:py-12">
-        {/* Mobile: Stacked Layout */}
-        <div className="md:hidden space-y-4">
-          {/* Title - Largest, clear hierarchy */}
-          <h1 className="text-3xl sm:text-4xl font-bold text-white line-clamp-3 break-words leading-tight drop-shadow-lg">
-            {title}
-          </h1>
+    <section className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 pt-4 pb-6" role="banner" aria-label="Course hero banner">
+      {/* Banner Image - Fixed aspect ratio, no overlap */}
+      <div className="overflow-hidden rounded-2xl bg-muted">
+        <div className="aspect-[16/5] relative">
+          {/* Fallback Background Layer */}
+          <div
+            className="absolute inset-0"
+            style={{ 
+              background: GRADIENT_FALLBACK,
+            }}
+            aria-hidden="true"
+          />
           
-          {/* Metadata Row - Pill-style, muted */}
-          <div className="flex flex-wrap items-center gap-2">
+          {/* Background Image Layer */}
+          <div
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ 
+              backgroundImage: `url(${currentImageUrl})`,
+              backgroundColor: imageError ? 'transparent' : undefined,
+            }}
+            aria-hidden="true"
+          >
+            {/* Hidden img element to detect load errors */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={currentImageUrl}
+              alt=""
+              className="hidden"
+              onError={handleImageError}
+              onLoad={() => {
+                setImageError(false);
+                setFallbackAttempted(false);
+              }}
+            />
+          </div>
+          
+          {/* Gradient Overlay for readability */}
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black/90" aria-hidden="true" />
+        </div>
+      </div>
+
+      {/* Title and Metadata - Below banner with consistent spacing */}
+      <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div className="space-y-2">
+          <h1 className="text-2xl sm:text-3xl font-semibold leading-tight text-gray-900">{title}</h1>
+          <div className="flex flex-wrap gap-x-2 gap-y-1 text-sm text-gray-600">
             {trackCategory && (
-              <span className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white/90 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 whitespace-nowrap">
-                {trackCategory}
-              </span>
+              <>
+                <span>{trackCategory}</span>
+                {(difficultyLevel || durationWeeks) && <span>•</span>}
+              </>
             )}
             {difficultyLevel && (
-              <span className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white/90 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 capitalize whitespace-nowrap">
-                {difficultyLevel}
-              </span>
+              <>
+                <span className="capitalize">{difficultyLevel}</span>
+                {durationWeeks && <span>•</span>}
+              </>
             )}
             {durationWeeks && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white/90 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 whitespace-nowrap">
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                {durationWeeks} {durationWeeks === 1 ? 'week' : 'weeks'}
-              </span>
+              <span>{durationWeeks} {durationWeeks === 1 ? 'week' : 'weeks'}</span>
             )}
           </div>
-          
-          {/* Actions */}
-          <div className="flex gap-2 pt-2">
-            {isEnrolled ? (
-              <>
-                <Link
-                  href={`/student/courses/${courseSlug}/lessons/${nextLessonSlug || firstLessonSlug || ''}`}
-                  className="flex-1 inline-flex items-center justify-center px-5 py-3 bg-brand-light text-white font-semibold rounded-lg hover:bg-brand-light/90 transition-colors text-sm whitespace-nowrap shadow-lg min-h-[44px]"
-                >
-                  Continue {progressPercentage !== undefined && `(${progressPercentage}%)`}
-                </Link>
-                <button
-                  onClick={handleShare}
-                  className="inline-flex items-center justify-center gap-2 px-4 py-3 bg-white/20 backdrop-blur-sm text-white font-medium rounded-lg hover:bg-white/30 transition-colors text-sm whitespace-nowrap border border-white/30 min-h-[44px] min-w-[44px]"
-                  aria-label="Share course"
-                >
-                  <Share2 className="w-5 h-5" />
-                </button>
-              </>
-            ) : courseId ? (
-              <>
-                <form action={`/api/courses/enroll?course_id=${courseId}`} method="POST" className="flex-1">
-                  <button
-                    type="submit"
-                    className="w-full inline-flex items-center justify-center px-5 py-3 bg-brand-light text-white font-semibold rounded-lg hover:bg-brand-light/90 transition-colors text-sm whitespace-nowrap shadow-lg min-h-[44px]"
-                  >
-                    Enroll
-                  </button>
-                </form>
-                <button
-                  onClick={handleShare}
-                  className="inline-flex items-center justify-center gap-2 px-4 py-3 bg-white/20 backdrop-blur-sm text-white font-medium rounded-lg hover:bg-white/30 transition-colors text-sm whitespace-nowrap border border-white/30 min-h-[44px] min-w-[44px]"
-                  aria-label="Share course"
-                >
-                  <Share2 className="w-5 h-5" />
-                </button>
-              </>
-            ) : (
+        </div>
+        <div className="flex gap-2">
+          {isEnrolled ? (
+            <>
+              <Link
+                href={`/student/courses/${courseSlug}/lessons/${nextLessonSlug || firstLessonSlug || ''}`}
+                className="inline-flex items-center justify-center px-5 py-2.5 bg-brand-light text-white font-semibold rounded-lg hover:bg-brand-light/90 transition-colors text-sm whitespace-nowrap"
+              >
+                Continue {progressPercentage !== undefined && `(${progressPercentage}%)`}
+              </Link>
               <button
                 onClick={handleShare}
-                className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 bg-white/20 backdrop-blur-sm text-white font-medium rounded-lg hover:bg-white/30 transition-colors text-sm whitespace-nowrap border border-white/30 min-h-[44px]"
+                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 transition-colors text-sm whitespace-nowrap border border-gray-200"
+                aria-label="Share course"
               >
-                <Share2 className="w-5 h-5" />
+                <Share2 className="w-4 h-4" />
                 Share
               </button>
-            )}
-          </div>
-        </div>
-
-        {/* Desktop: Hero Layout with clear hierarchy */}
-        <div className="hidden md:block">
-          <div className="flex items-end justify-between gap-8">
-            {/* Left: Title and Metadata */}
-            <div className="flex-1 min-w-0 space-y-4">
-              {/* Course Title - Largest, clear typographic scale */}
-              <h1 className="text-5xl lg:text-6xl xl:text-7xl font-bold text-white line-clamp-3 break-words leading-tight drop-shadow-lg">
-                {title}
-              </h1>
-              
-              {/* Metadata Row - Pill-style, muted text beneath title */}
-              <div className="flex flex-wrap items-center gap-3">
-                {trackCategory && (
-                  <span className="inline-flex items-center px-4 py-2 text-sm font-medium text-white/90 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 whitespace-nowrap">
-                    {trackCategory}
-                  </span>
-                )}
-                {difficultyLevel && (
-                  <span className="inline-flex items-center px-4 py-2 text-sm font-medium text-white/90 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 capitalize whitespace-nowrap">
-                    {difficultyLevel}
-                  </span>
-                )}
-                {durationWeeks && (
-                  <span className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white/90 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 whitespace-nowrap">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    {durationWeeks} {durationWeeks === 1 ? 'week' : 'weeks'}
-                  </span>
-                )}
-              </div>
-            </div>
-
-            {/* Right: Primary Action (Share) - Aligned right */}
-            <div className="flex-shrink-0 flex flex-col gap-3 lg:gap-4">
-              {isEnrolled ? (
-                <>
-                  <Link
-                    href={`/student/courses/${courseSlug}/lessons/${nextLessonSlug || firstLessonSlug || ''}`}
-                    className="inline-flex items-center justify-center px-6 py-3 bg-brand-light text-white font-semibold rounded-lg hover:bg-brand-light/90 transition-colors text-base whitespace-nowrap shadow-lg"
-                  >
-                    Continue {progressPercentage !== undefined && `(${progressPercentage}%)`}
-                  </Link>
-                  <button
-                    onClick={handleShare}
-                    className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/20 backdrop-blur-sm text-white font-medium rounded-lg hover:bg-white/30 transition-colors text-base whitespace-nowrap border border-white/30"
-                    aria-label="Share course"
-                  >
-                    <Share2 className="w-5 h-5" />
-                    Share
-                  </button>
-                </>
-              ) : courseId ? (
-                <>
-                  <form action={`/api/courses/enroll?course_id=${courseId}`} method="POST" className="inline-block">
-                    <button
-                      type="submit"
-                      className="inline-flex items-center justify-center px-6 py-3 bg-brand-light text-white font-semibold rounded-lg hover:bg-brand-light/90 transition-colors text-base whitespace-nowrap shadow-lg"
-                    >
-                      Enroll
-                    </button>
-                  </form>
-                  <button
-                    onClick={handleShare}
-                    className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/20 backdrop-blur-sm text-white font-medium rounded-lg hover:bg-white/30 transition-colors text-base whitespace-nowrap border border-white/30"
-                    aria-label="Share course"
-                  >
-                    <Share2 className="w-5 h-5" />
-                    Share
-                  </button>
-                </>
-              ) : (
+            </>
+          ) : courseId ? (
+            <>
+              <form action={`/api/courses/enroll?course_id=${courseId}`} method="POST" className="inline-block">
                 <button
-                  onClick={handleShare}
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/20 backdrop-blur-sm text-white font-medium rounded-lg hover:bg-white/30 transition-colors text-base whitespace-nowrap border border-white/30"
-                  aria-label="Share course"
+                  type="submit"
+                  className="inline-flex items-center justify-center px-5 py-2.5 bg-brand-light text-white font-semibold rounded-lg hover:bg-brand-light/90 transition-colors text-sm whitespace-nowrap"
                 >
-                  <Share2 className="w-5 h-5" />
-                  Share
+                  Enroll
                 </button>
-              )}
-            </div>
-          </div>
-        </div>
+              </form>
+              <button
+                onClick={handleShare}
+                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 transition-colors text-sm whitespace-nowrap border border-gray-200"
+                aria-label="Share course"
+              >
+                <Share2 className="w-4 h-4" />
+                Share
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={handleShare}
+              className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 transition-colors text-sm whitespace-nowrap border border-gray-200"
+              aria-label="Share course"
+            >
+              <Share2 className="w-4 h-4" />
+              Share
+            </button>
+          )}
         </div>
       </div>
-    </div>
+    </section>
   );
 }
