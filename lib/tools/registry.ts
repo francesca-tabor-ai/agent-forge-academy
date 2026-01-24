@@ -76,6 +76,24 @@ export const toolsRegistry: Tool[] = [
     tags: ['reviews', 'analysis', 'automation', 'ai', 'products'],
     recommendedFor: ['agentic-commerce', 'ai-native-go-to-market-systems'],
   },
+  {
+    id: 'ai-product-pricing-revenue-modeler-pro',
+    name: 'AI Product Pricing & Revenue Modeler Pro',
+    description: 'Advanced ARC-O framework analysis with enhanced features. Model pricing strategies and revenue forecasts for AI products.',
+    href: '/student/tools/ai-product-pricing-revenue-modeler-pro',
+    status: 'active',
+    tags: ['pricing', 'revenue', 'modeling', 'analysis', 'strategy', 'forecasting'],
+    recommendedFor: ['gtm-and-revenue-operations', 'ai-native-go-to-market-systems'],
+  },
+  {
+    id: 'grd-generator',
+    name: 'Governance Requirements Documents (GRDs)',
+    description: 'Automatically generate Governance Requirements Documents (GRDs) from Product Requirements Documents (PRDs). Operationalize CLEAR-G governance by making governance decisions early, explicit, and enforceable.',
+    href: '/student/tools/grd-generator',
+    status: 'active',
+    tags: ['governance', 'compliance', 'risk', 'regulatory', 'ai-safety', 'documentation'],
+    recommendedFor: ['trust-and-regulation', 'agentic-rag'],
+  },
 ];
 
 /**
