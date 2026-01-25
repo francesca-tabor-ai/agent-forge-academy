@@ -1196,17 +1196,20 @@ export async function POST(request: NextRequest) {
       courseData: any;
       projectData: any;
       jobData: any;
+      startupData: any;
       userProfile: any;
-      activeContextIds: { courseId: string | null; projectId: string | null; jobId: string | null };
+      activeContextIds: { courseId: string | null; projectId: string | null; jobId: string | null; startupId: string | null };
     } = {
       courseData: null,
       projectData: null,
       jobData: null,
+      startupData: null,
       userProfile: null,
       activeContextIds: {
         courseId: context?.course?.id || null,
         projectId: context?.project?.id || null,
         jobId: context?.job?.id || null,
+        startupId: context?.startup?.id || null,
       },
     };
     try {
