@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import type { Tool } from '@/lib/tools/registry';
 import { ToolCard } from './ToolCard';
 import { ToolsToLearnNext } from '@/components/offers/ToolsToLearnNext';
@@ -74,24 +74,37 @@ function extractTimeValue(timeStr: string): number {
 }
 
 export function ToolsPageClient({ tools, studentProfileId }: ToolsPageClientProps) {
-  const router = useRouter();
   const searchParams = useSearchParams();
   
-  const [search, setSearch] = useState(searchParams.get('search') || '');
-  const [selectedTracks, setSelectedTracks] = useState<string[]>(
-    searchParams.get('tracks')?.split(',').filter(Boolean) || []
-  );
-  const [duration, setDuration] = useState(searchParams.get('duration') || '');
-  const [difficulty, setDifficulty] = useState(searchParams.get('difficulty') || '');
-  const [selectedBestFor, setSelectedBestFor] = useState<string[]>(
-    searchParams.get('bestFor')?.split(',').filter(Boolean) || []
-  );
-  const [selectedIndustries, setSelectedIndustries] = useState<string[]>(
-    searchParams.get('industries')?.split(',').filter(Boolean) || []
-  );
-  const [sort, setSort] = useState<'track' | 'tool' | 'recommended' | 'shortest' | 'longest' | 'newest'>(
-    (searchParams.get('sort') as any) || 'track'
-  );
+  // Safely get search params with fallbacks
+  const getSearchParam = (key: string): string | null => {
+    try {
+      return searchParams.get(key);
+    } catch (error) {
+      console.error(`Error getting search param ${key}:`, error);
+      return null;
+    }
+  };
+  
+  const [search, setSearch] = useState(() => getSearchParam('search') || '');
+  const [selectedTracks, setSelectedTracks] = useState<string[]>(() => {
+    const tracks = getSearchParam('tracks');
+    return tracks?.split(',').filter(Boolean) || [];
+  });
+  const [duration, setDuration] = useState(() => getSearchParam('duration') || '');
+  const [difficulty, setDifficulty] = useState(() => getSearchParam('difficulty') || '');
+  const [selectedBestFor, setSelectedBestFor] = useState<string[]>(() => {
+    const bestFor = getSearchParam('bestFor');
+    return bestFor?.split(',').filter(Boolean) || [];
+  });
+  const [selectedIndustries, setSelectedIndustries] = useState<string[]>(() => {
+    const industries = getSearchParam('industries');
+    return industries?.split(',').filter(Boolean) || [];
+  });
+  const [sort, setSort] = useState<'track' | 'tool' | 'recommended' | 'shortest' | 'longest' | 'newest'>(() => {
+    const sortParam = getSearchParam('sort');
+    return (sortParam as any) || 'track';
+  });
   const [isExpanded, setIsExpanded] = useState(false);
 
   // Update URL params when filters change

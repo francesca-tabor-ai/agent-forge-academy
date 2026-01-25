@@ -18,9 +18,43 @@ CREATE TABLE IF NOT EXISTS platform_tools (
   status tool_status NOT NULL DEFAULT 'active',
   tags TEXT[] DEFAULT '{}'::text[], -- Array of tags
   recommended_for_courses TEXT[] DEFAULT '{}'::text[], -- Array of course slugs
+  category VARCHAR(255), -- Track/category (e.g., "GTM & Revenue Operations", "Agentic Systems")
+  difficulty_level VARCHAR(50), -- 'beginner', 'intermediate', 'advanced'
+  duration VARCHAR(100), -- Time estimate (e.g., "~4-6 hours", "~8 weeks")
+  industries TEXT[] DEFAULT '{}'::text[], -- Array of industries
+  best_for TEXT[] DEFAULT '{}'::text[], -- Array of target audiences
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+-- Add missing columns if they don't exist (for existing tables)
+DO $$ 
+BEGIN
+  -- Add category column
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'platform_tools' AND column_name = 'category') THEN
+    ALTER TABLE platform_tools ADD COLUMN category VARCHAR(255);
+  END IF;
+  
+  -- Add difficulty_level column
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'platform_tools' AND column_name = 'difficulty_level') THEN
+    ALTER TABLE platform_tools ADD COLUMN difficulty_level VARCHAR(50);
+  END IF;
+  
+  -- Add duration column
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'platform_tools' AND column_name = 'duration') THEN
+    ALTER TABLE platform_tools ADD COLUMN duration VARCHAR(100);
+  END IF;
+  
+  -- Add industries column
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'platform_tools' AND column_name = 'industries') THEN
+    ALTER TABLE platform_tools ADD COLUMN industries TEXT[] DEFAULT '{}'::text[];
+  END IF;
+  
+  -- Add best_for column
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'platform_tools' AND column_name = 'best_for') THEN
+    ALTER TABLE platform_tools ADD COLUMN best_for TEXT[] DEFAULT '{}'::text[];
+  END IF;
+END $$;
 
 -- Create indexes for common queries
 CREATE INDEX IF NOT EXISTS idx_platform_tools_status ON platform_tools(status);
