@@ -8,6 +8,7 @@ import path from 'path';
 import matter from 'gray-matter';
 import { getAllCourseSlugs } from '../lessons';
 import { courseMetadata } from '../course-metadata';
+import { normalizeBestFor } from '../utils';
 import type {
   CourseMetadata,
   RawCourseMetadata,
@@ -71,12 +72,15 @@ export function extractCourseMetadata(
           const rawMetadata: RawCourseMetadata = data;
           const normalized = normalizeCourseMetadata(rawMetadata, courseSlug);
           // Preserve additional fields (outcome, build, bestFor) that aren't in CourseMetadata type
+          // Normalize bestFor to ensure it's always an array (handles both string and array inputs)
+          const normalizedBestFor = normalizeBestFor(data.bestFor || data.best_for);
           const metadataWithExtras = {
             ...normalized,
             // Preserve outcome, build, bestFor from raw metadata if they exist
             ...(data.outcome && { outcome: String(data.outcome) }),
             ...(data.build && { build: String(data.build) }),
-            ...(data.bestFor && { bestFor: String(data.bestFor) }),
+            // Use normalized bestFor array (or undefined if empty)
+            ...(normalizedBestFor.length > 0 && { bestFor: normalizedBestFor }),
           };
           return {
             courseSlug,

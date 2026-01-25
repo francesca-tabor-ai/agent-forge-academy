@@ -2,6 +2,7 @@
 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { useState } from 'react';
+import { normalizeBestFor } from '@/lib/utils';
 
 interface OverviewCardsProps {
   description?: string | null;
@@ -34,6 +35,10 @@ export function OverviewCards({
   build = [],
   bestFor = [],
 }: OverviewCardsProps) {
+  // Normalize bestFor to ensure it's always an array (defensive programming)
+  // This prevents crashes if bestFor is passed as a string or other type
+  const normalizedBestFor = normalizeBestFor(bestFor);
+  
   // Determine default tab
   const defaultValue = description 
     ? 'description' 
@@ -41,7 +46,7 @@ export function OverviewCards({
     ? 'outcome' 
     : build.length > 0 
     ? 'build' 
-    : bestFor.length > 0 
+    : normalizedBestFor.length > 0 
     ? 'bestfor' 
     : 'description';
 
@@ -52,7 +57,7 @@ export function OverviewCards({
     description && { id: 'description', label: 'Description' },
     outcome.length > 0 && { id: 'outcome', label: 'Outcome' },
     build.length > 0 && { id: 'build', label: "You'll Build" },
-    bestFor.length > 0 && { id: 'bestfor', label: 'Best For' },
+    normalizedBestFor.length > 0 && { id: 'bestfor', label: 'Best For' },
   ].filter(Boolean) as Array<{ id: string; label: string }>;
 
   if (tabs.length === 0) return null;
@@ -117,9 +122,9 @@ export function OverviewCards({
         </TabsContent>
 
         <TabsContent value="bestfor" className="mt-0">
-          {bestFor.length > 0 && (
+          {normalizedBestFor.length > 0 && (
             <div className="flex flex-wrap gap-2">
-              {bestFor.map((item, index) => (
+              {normalizedBestFor.map((item, index) => (
                 <span
                   key={index}
                   className="inline-block px-3 py-1.5 text-sm text-gray-700 bg-gray-100 border border-gray-200 rounded-full"
