@@ -186,7 +186,7 @@ export function GRDGeneratorClient({
             PRD → GRD Generator
           </h1>
           <p className="text-gray-600 text-lg">
-            "If the PRD defines what we're building, the GRD defines what must never go wrong."
+            &quot;If the PRD defines what we&apos;re building, the GRD defines what must never go wrong.&quot;
           </p>
         </div>
 
