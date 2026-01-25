@@ -3,7 +3,8 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { generateProfileBanner } from '@/lib/startupBanners';
+import { useState } from 'react';
+import { getProfileBannerUrl } from '@/lib/profileBanner';
 
 interface ProfileHeaderProps {
   fullName?: string | null;
@@ -46,9 +47,20 @@ export function ProfileHeader({
   const initials = getInitials(fullName);
   const isDiscoverable = visibility !== 'private';
   
-  // Generate gradient-based banner (more reliable than external images)
-  // Uses city or studentProfileId for deterministic generation
-  const bannerStyle = generateProfileBanner(city, studentProfileId || undefined);
+  // Get banner image URL based on location/city (London first, fallback second)
+  const bannerSrc = getProfileBannerUrl(location, city);
+  const [imageError, setImageError] = useState(false);
+  const [currentBannerSrc, setCurrentBannerSrc] = useState(bannerSrc);
+  
+  // Handle image load error - fallback to default
+  const handleImageError = () => {
+    if (!imageError) {
+      setImageError(true);
+      // Fallback to default banner
+      const fallbackBanner = 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=80';
+      setCurrentBannerSrc(fallbackBanner);
+    }
+  };
 
   const handleMakeDiscoverable = () => {
     router.push('/student/portfolio/profile/edit');
@@ -72,14 +84,20 @@ export function ProfileHeader({
   return (
     <div className="bg-white border border-gray-200 rounded-lg relative overflow-visible">
       {/* Cover Banner - Fixed height, LinkedIn style */}
-      {/* Layer 1: Cover layer (background only) - overflow-hidden only on the gradient, not the wrapper */}
+      {/* Layer 1: Cover layer (background only) - overflow-hidden only on the image, not the wrapper */}
       <div className="relative h-[140px] sm:h-[180px] md:h-[200px] rounded-t-lg overflow-visible">
-        {/* Cover banner (gradient-based, no external image dependency) */}
-        <div 
-          className="absolute inset-0 rounded-t-lg overflow-hidden"
-          style={bannerStyle.style}
-          aria-label={city ? `${city} profile banner` : 'Profile banner'}
-        />
+        {/* Cover banner (image-based with safe fallback) */}
+        <div className="absolute inset-0 rounded-t-lg overflow-hidden">
+          <Image
+            src={currentBannerSrc}
+            alt={city ? `${city} profile banner` : location ? `${location} profile banner` : 'Profile banner'}
+            fill
+            priority
+            className="object-cover"
+            onError={handleImageError}
+            unoptimized={currentBannerSrc.includes('media.leonardo-hotels.com')}
+          />
+        </div>
         
         {/* Gradient overlay - ensures text/avatar visibility, never overlaps/clips */}
         <div className="absolute inset-0 bg-gradient-to-br from-black/40 via-black/30 to-black/50 rounded-t-lg overflow-hidden"></div>

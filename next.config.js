@@ -113,6 +113,13 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      // Leonardo Hotels (London city banner)
+      {
+        protocol: 'https',
+        hostname: 'media.leonardo-hotels.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
 }
