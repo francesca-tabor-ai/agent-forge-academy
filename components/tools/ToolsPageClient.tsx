@@ -89,7 +89,6 @@ export function ToolsPageClient({ tools, studentProfileId }: ToolsPageClientProp
   const [selectedIndustries, setSelectedIndustries] = useState<string[]>(
     searchParams.get('industries')?.split(',').filter(Boolean) || []
   );
-  const [statusFilter, setStatusFilter] = useState(searchParams.get('status') || 'all');
   const [sort, setSort] = useState<'track' | 'tool' | 'recommended' | 'shortest' | 'longest' | 'newest'>(
     (searchParams.get('sort') as any) || 'track'
   );
@@ -104,13 +103,12 @@ export function ToolsPageClient({ tools, studentProfileId }: ToolsPageClientProp
     if (difficulty) params.set('difficulty', difficulty);
     if (selectedBestFor.length > 0) params.set('bestFor', selectedBestFor.join(','));
     if (selectedIndustries.length > 0) params.set('industries', selectedIndustries.join(','));
-    if (statusFilter !== 'all') params.set('status', statusFilter);
     if (sort && sort !== 'track') params.set('sort', sort);
 
     // Update URL without navigation
     const newUrl = params.toString() ? `?${params.toString()}` : window.location.pathname;
     window.history.replaceState({}, '', newUrl);
-  }, [search, selectedTracks, duration, difficulty, selectedBestFor, selectedIndustries, statusFilter, sort]);
+  }, [search, selectedTracks, duration, difficulty, selectedBestFor, selectedIndustries, sort]);
 
   // Filter and sort tools
   const filteredTools = useMemo(() => {
@@ -187,11 +185,6 @@ export function ToolsPageClient({ tools, studentProfileId }: ToolsPageClientProp
       });
     }
 
-    // Status filter
-    if (statusFilter !== 'all') {
-      filtered = filtered.filter((tool) => tool.status === statusFilter);
-    }
-
     // Sort
     filtered.sort((a, b) => {
       if (sort === 'shortest') {
@@ -227,7 +220,7 @@ export function ToolsPageClient({ tools, studentProfileId }: ToolsPageClientProp
     });
 
     return filtered;
-  }, [tools, search, selectedTracks, duration, difficulty, selectedBestFor, selectedIndustries, statusFilter, sort]);
+  }, [tools, search, selectedTracks, duration, difficulty, selectedBestFor, selectedIndustries, sort]);
 
   // Compute available filters based on tools
   const availableFilters = useMemo(() => {
@@ -315,12 +308,11 @@ export function ToolsPageClient({ tools, studentProfileId }: ToolsPageClientProp
     setDifficulty('');
     setSelectedBestFor([]);
     setSelectedIndustries([]);
-    setStatusFilter('all');
     setSort('track');
   };
 
   const hasActiveFilters =
-    search || selectedTracks.length > 0 || duration || difficulty || selectedBestFor.length > 0 || selectedIndustries.length > 0 || statusFilter !== 'all';
+    search || selectedTracks.length > 0 || duration || difficulty || selectedBestFor.length > 0 || selectedIndustries.length > 0;
 
   // Calculate total active filter count
   const activeFilterCount = 
@@ -330,7 +322,6 @@ export function ToolsPageClient({ tools, studentProfileId }: ToolsPageClientProp
     (difficulty ? 1 : 0) +
     selectedBestFor.length +
     selectedIndustries.length +
-    (statusFilter !== 'all' ? 1 : 0) +
     (sort !== 'track' ? 1 : 0);
 
   // Build array of active filter chips
@@ -387,14 +378,6 @@ export function ToolsPageClient({ tools, studentProfileId }: ToolsPageClientProp
       });
     });
 
-    // Status
-    if (statusFilter !== 'all') {
-      chips.push({
-        label: `Status: ${statusFilter === 'coming_soon' ? 'Coming Soon' : statusFilter.charAt(0).toUpperCase() + statusFilter.slice(1)}`,
-        onRemove: () => setStatusFilter('all'),
-      });
-    }
-
     // Sort
     if (sort !== 'track') {
       const sortLabel = SORT_OPTIONS.find((opt) => opt.value === sort)?.label || sort;
@@ -405,7 +388,7 @@ export function ToolsPageClient({ tools, studentProfileId }: ToolsPageClientProp
     }
 
     return chips;
-  }, [search, selectedTracks, duration, difficulty, selectedBestFor, selectedIndustries, statusFilter, sort]);
+  }, [search, selectedTracks, duration, difficulty, selectedBestFor, selectedIndustries, sort]);
 
   return (
     <div className="space-y-6">
@@ -500,21 +483,6 @@ export function ToolsPageClient({ tools, studentProfileId }: ToolsPageClientProp
         <div>
           {isExpanded && (
             <div className="mt-4 space-y-4 pt-4 border-t border-gray-200">
-              {/* Status Filter */}
-              <div>
-                <label className="block text-xs font-medium text-gray-700 mb-2">Status</label>
-                <select
-                  value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value)}
-                  className="w-full px-3 py-1 text-xs border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent bg-white"
-                >
-                  <option value="all">All Status</option>
-                  <option value="active">Active</option>
-                  <option value="beta">Beta</option>
-                  <option value="coming_soon">Coming Soon</option>
-                </select>
-              </div>
-
               {/* Tracks (Multi-select) */}
               {availableFilters.tracks.length > 0 && (
                 <div>

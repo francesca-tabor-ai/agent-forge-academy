@@ -38,11 +38,11 @@ export default async function ToolsPage() {
     redirect('/');
   }
 
-  // Get tools from database (platform_tools table)
+  // Get tools from database (platform_tools table) - only show Live tools
   const { data: platformTools, error } = await supabase
     .from('platform_tools')
     .select('*')
-    .neq('status', 'deprecated')
+    .eq('status', 'active')
     .order('created_at', { ascending: false });
 
   if (error) {

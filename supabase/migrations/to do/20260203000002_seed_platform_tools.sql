@@ -152,7 +152,7 @@ INSERT INTO platform_tools (
   'active',
   ARRAY['content', 'cms', 'architecture', 'workflows', 'systems'],
   ARRAY['ai-native-go-to-market-systems'],
-  'GTM & Revenue Operations',
+  'Media & Content Ops',
   'intermediate',
   '~4-8 hours',
   ARRAY['SaaS', 'Media & Publishing', 'E-commerce'],
@@ -323,7 +323,7 @@ INSERT INTO platform_tools (
   'Trust & Regulation',
   'intermediate',
   '~2-4 hours',
-  ARRAY['Legal & Compliance', 'SaaS', 'Healthcare', 'Finance'],
+  ARRAY['Legal & Compliance', 'SaaS', 'Healthcare', 'Financial Services'],
   ARRAY['PM', 'Founder', 'Tech Lead']
 )
 ON CONFLICT (id) DO UPDATE SET
