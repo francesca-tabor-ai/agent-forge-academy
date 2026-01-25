@@ -2,6 +2,7 @@
 
 import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 interface AutoImportSectionProps {
   studentProfileId: string;
@@ -15,6 +16,10 @@ export function AutoImportSection({ studentProfileId, hasExistingData }: AutoImp
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [progress, setProgress] = useState<string>('');
+  const [importResult, setImportResult] = useState<{
+    githubImported?: boolean;
+    projectsCreated?: number;
+  } | null>(null);
   
   const cvFileInputRef = useRef<HTMLInputElement>(null);
   const [cvFile, setCvFile] = useState<File | null>(null);
@@ -75,6 +80,14 @@ export function AutoImportSection({ studentProfileId, hasExistingData }: AutoImp
     setLoading(true);
     setError(null);
     setSuccess(null);
+    setImportResult(null);
+    
+    // Determine which sources are being imported
+    const sources: string[] = [];
+    if (cvFile) sources.push('cv');
+    if (linkedinUrl.trim()) sources.push('linkedin');
+    if (githubUrl.trim()) sources.push('github');
+
     setProgress('Preparing import...');
 
     try {
@@ -98,7 +111,15 @@ export function AutoImportSection({ studentProfileId, hasExistingData }: AutoImp
       
       formData.append('studentProfileId', studentProfileId);
 
-      setProgress('Processing CV...');
+      // Update progress based on what's being processed
+      if (cvFile) {
+        setProgress('Processing CV...');
+      } else if (githubUrl.trim()) {
+        setProgress('Fetching GitHub repositories...');
+      } else if (linkedinUrl.trim()) {
+        setProgress('Processing LinkedIn profile...');
+      }
+
       const response = await fetch('/api/portfolio/auto-import', {
         method: 'POST',
         body: formData,
@@ -111,13 +132,45 @@ export function AutoImportSection({ studentProfileId, hasExistingData }: AutoImp
 
       const data = await response.json();
       
-      setSuccess(
-        `Successfully imported! ` +
-        `${data.profileUpdated ? 'Profile updated. ' : ''}` +
-        `${data.projectsCreated ? `${data.projectsCreated} projects created. ` : ''}` +
-        `${data.cvUploaded ? 'CV uploaded. ' : ''}`
-      );
+      // Build source-specific success messages
+      const messages: string[] = [];
       
+      if (data.cvUploaded) {
+        messages.push('CV uploaded and saved.');
+      }
+      
+      if (data.linkedinImported) {
+        messages.push('Imported LinkedIn experience into Portfolio.');
+      }
+      
+      if (data.githubImported) {
+        const projectCount = data.projectsCreated || 0;
+        const updatedCount = data.projectsUpdated || 0;
+        const skippedCount = data.projectsSkipped || 0;
+        
+        let githubMsg = `Imported ${projectCount} GitHub ${projectCount === 1 ? 'repository' : 'repositories'} into Projects.`;
+        if (updatedCount > 0 || skippedCount > 0) {
+          const details: string[] = [];
+          if (updatedCount > 0) details.push(`${updatedCount} updated`);
+          if (skippedCount > 0) details.push(`${skippedCount} skipped`);
+          githubMsg += ` (${details.join(', ')})`;
+        }
+        messages.push(githubMsg);
+      }
+      
+      if (data.profileUpdated && !data.cvUploaded && !data.linkedinImported && !data.githubImported) {
+        messages.push('Profile updated.');
+      }
+      
+      const successMessage = messages.length > 0 
+        ? messages.join(' ') 
+        : 'Import completed.';
+      
+      setSuccess(successMessage);
+      setImportResult({
+        githubImported: data.githubImported,
+        projectsCreated: data.projectsCreated,
+      });
       setProgress('');
       
       // Reset form
@@ -129,10 +182,18 @@ export function AutoImportSection({ studentProfileId, hasExistingData }: AutoImp
         cvFileInputRef.current.value = '';
       }
 
-      // Refresh page after a short delay
-      setTimeout(() => {
-        router.refresh();
-      }, 2000);
+      // If GitHub import was successful, show option to review projects
+      if (data.githubImported && data.projectsCreated > 0) {
+        // Refresh page after a short delay to show new projects
+        setTimeout(() => {
+          router.refresh();
+        }, 2000);
+      } else {
+        // Refresh page after a short delay
+        setTimeout(() => {
+          router.refresh();
+        }, 2000);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Import failed');
       setProgress('');
@@ -161,6 +222,14 @@ export function AutoImportSection({ studentProfileId, hasExistingData }: AutoImp
           {success && (
             <div className="bg-green-50 border border-green-200 rounded-md p-2">
               <p className="text-xs text-green-800">{success}</p>
+              {importResult?.githubImported && importResult?.projectsCreated && importResult.projectsCreated > 0 && (
+                <Link
+                  href="/student/portfolio"
+                  className="text-xs text-green-700 hover:text-green-900 underline mt-1 inline-block"
+                >
+                  Review imported projects →
+                </Link>
+              )}
             </div>
           )}
 

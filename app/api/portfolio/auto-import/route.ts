@@ -2,7 +2,7 @@ import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 import { extractTextFromCV } from '@/lib/cv/extractText';
 import { safeLogger } from '@/lib/utils/redactPII';
-import { filterGitHubRepos, type GitHubRepo } from '@/lib/portfolio/github-mapper';
+import { filterGitHubRepos, mapGitHubRepoToProject, validateProjectInput, type GitHubRepo } from '@/lib/portfolio/github-mapper';
 
 // Extract profile data from CV text
 function extractProfileFromCV(cvText: string): {
@@ -87,7 +87,7 @@ function extractProfileFromCV(cvText: string): {
 }
 
 // Fetch GitHub repositories
-async function fetchGitHubRepos(githubUrl: string, token?: string): Promise<any[]> {
+async function fetchGitHubRepos(githubUrl: string, token?: string): Promise<GitHubRepo[]> {
   try {
     // Extract username from GitHub URL
     const urlMatch = githubUrl.match(/github\.com\/([^\/\?]+)/i);
@@ -107,7 +107,7 @@ async function fetchGitHubRepos(githubUrl: string, token?: string): Promise<any[
     }
     
     const response = await fetch(
-      `https://api.github.com/users/${username}/repos?sort=updated&per_page=20`,
+      `https://api.github.com/users/${username}/repos?sort=updated&per_page=100`,
       { headers }
     );
     
@@ -130,59 +130,147 @@ async function fetchGitHubRepos(githubUrl: string, token?: string): Promise<any[
       excludeEmpty: true,
     });
     
-    return filteredRepos.map((repo: GitHubRepo) => ({
-        name: repo.name,
-        description: repo.description || '',
-        url: repo.html_url,
-        language: repo.language,
-        stars: repo.stargazers_count,
-        updated: repo.updated_at,
-        topics: repo.topics || [],
-      }));
+    return filteredRepos;
   } catch (error) {
     safeLogger.error('Error fetching GitHub repos', error);
     throw error;
   }
 }
 
-// Create portfolio projects from GitHub repos
+// Create portfolio projects from GitHub repos using proper mapping and upsert
 async function createProjectsFromRepos(
   supabase: any,
   studentProfileId: string,
-  repos: any[]
-): Promise<number> {
+  repos: GitHubRepo[]
+): Promise<{ created: number; updated: number; skipped: number }> {
   let created = 0;
+  let updated = 0;
+  let skipped = 0;
   
-  for (const repo of repos.slice(0, 10)) { // Limit to 10 most recent
-    // Check if project already exists
-    const { data: existing } = await supabase
-      .from('portfolio_projects')
-      .select('id')
-      .eq('student_profile_id', studentProfileId)
-      .eq('github_url', repo.url)
-      .single();
-    
-    if (existing) {
-      continue; // Skip if already exists
-    }
-    
-    // Create project
-    const { error } = await supabase
-      .from('portfolio_projects')
-      .insert({
-        student_profile_id: studentProfileId,
-        title: repo.name.replace(/-/g, ' ').replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()),
-        description: repo.description || `A ${repo.language || 'software'} project${repo.topics.length > 0 ? ` using ${repo.topics.slice(0, 3).join(', ')}` : ''}.`,
-        github_url: repo.url,
-        visibility: 'private', // Default to private, user can change later
+  // Limit to 50 most recent repos
+  const reposToProcess = repos.slice(0, 50);
+  
+  for (const repo of reposToProcess) {
+    try {
+      // Map GitHub repo to project input using the proper mapper
+      const projectInput = mapGitHubRepoToProject(repo, {
+        defaultVisibility: 'private', // Default to private, user can change later
+        includeTopicsInDescription: true,
       });
-    
-    if (!error) {
-      created++;
+      
+      // Validate the project input
+      const validation = validateProjectInput(projectInput);
+      if (!validation.valid) {
+        safeLogger.warn('Skipping invalid project', {
+          repoName: repo.name,
+          errors: validation.errors,
+        });
+        skipped++;
+        continue;
+      }
+      
+      // Check if project already exists using source + source_id (proper deduplication)
+      const { data: existing } = await supabase
+        .from('portfolio_projects')
+        .select('id, image_url, status, visibility')
+        .eq('student_profile_id', studentProfileId)
+        .eq('source', 'github')
+        .eq('source_id', String(projectInput.source_id))
+        .single();
+      
+      if (existing) {
+        // Update existing project - only safe fields
+        // Don't overwrite user edits like image_url, status, visibility
+        const updateData: any = {
+          title: projectInput.title,
+          description: projectInput.description,
+          repo_url: projectInput.github_url,
+          github_url: projectInput.github_url, // Keep for backward compatibility
+          demo_url: projectInput.demo_url,
+          last_synced_at: new Date().toISOString(),
+          // Keep existing image_url, status, visibility (don't overwrite user changes)
+        };
+        
+        const { error: updateError } = await supabase
+          .from('portfolio_projects')
+          .update(updateData)
+          .eq('id', existing.id);
+        
+        if (updateError) {
+          safeLogger.error('Error updating project', {
+            projectId: existing.id,
+            error: updateError,
+          });
+          skipped++;
+        } else {
+          updated++;
+        }
+      } else {
+        // Insert new project with source tracking
+        const { error: insertError } = await supabase
+          .from('portfolio_projects')
+          .insert({
+            student_profile_id: studentProfileId,
+            title: projectInput.title,
+            description: projectInput.description,
+            github_url: projectInput.github_url,
+            repo_url: projectInput.github_url,
+            demo_url: projectInput.demo_url,
+            visibility: projectInput.visibility,
+            status: 'draft', // Default to draft
+            source: 'github',
+            source_id: String(projectInput.source_id),
+            last_synced_at: new Date().toISOString(),
+          });
+        
+        if (insertError) {
+          // If it's a unique constraint violation, treat as update
+          if (insertError.code === '23505') {
+            // Try to update instead
+            const { error: updateError } = await supabase
+              .from('portfolio_projects')
+              .update({
+                title: projectInput.title,
+                description: projectInput.description,
+                repo_url: projectInput.github_url,
+                github_url: projectInput.github_url,
+                demo_url: projectInput.demo_url,
+                last_synced_at: new Date().toISOString(),
+              })
+              .eq('student_profile_id', studentProfileId)
+              .eq('source', 'github')
+              .eq('source_id', String(projectInput.source_id));
+            
+            if (!updateError) {
+              updated++;
+            } else {
+              safeLogger.error('Error upserting project', {
+                repoName: repo.name,
+                error: updateError,
+              });
+              skipped++;
+            }
+          } else {
+            safeLogger.error('Error creating project', {
+              repoName: repo.name,
+              error: insertError,
+            });
+            skipped++;
+          }
+        } else {
+          created++;
+        }
+      }
+    } catch (error) {
+      safeLogger.error('Error processing repo', {
+        repoName: repo.name,
+        error,
+      });
+      skipped++;
     }
   }
   
-  return created;
+  return { created, updated, skipped };
 }
 
 export async function POST(request: Request) {
@@ -230,7 +318,11 @@ export async function POST(request: Request) {
 
     let profileUpdated = false;
     let projectsCreated = 0;
+    let projectsUpdated = 0;
+    let projectsSkipped = 0;
     let cvUploaded = false;
+    let githubImported = false;
+    let linkedinImported = false;
 
     // Process CV
     if (cvFile) {
@@ -359,6 +451,7 @@ export async function POST(request: Request) {
           .eq('id', studentProfileId);
         
         profileUpdated = true;
+        linkedinImported = true;
         
         // Note: LinkedIn profile scraping requires LinkedIn API or web scraping
         // which may violate ToS. For now, we just store the URL.
@@ -381,9 +474,13 @@ export async function POST(request: Request) {
         
         profileUpdated = true;
         
-        // Create projects from repositories
+        // Create projects from repositories using proper mapping and upsert
         if (repos.length > 0) {
-          projectsCreated = await createProjectsFromRepos(supabase, studentProfileId, repos);
+          const result = await createProjectsFromRepos(supabase, studentProfileId, repos);
+          projectsCreated = result.created;
+          projectsUpdated = result.updated;
+          projectsSkipped = result.skipped;
+          githubImported = true;
         }
       } catch (error) {
         safeLogger.error('Error processing GitHub', error);
@@ -393,6 +490,7 @@ export async function POST(request: Request) {
           .update({ github_url: githubUrl })
           .eq('id', studentProfileId);
         profileUpdated = true;
+        // Don't set githubImported = true if repos failed to fetch
       }
     }
 
@@ -400,7 +498,11 @@ export async function POST(request: Request) {
       success: true,
       profileUpdated,
       projectsCreated,
+      projectsUpdated,
+      projectsSkipped,
       cvUploaded,
+      githubImported,
+      linkedinImported,
     });
   } catch (error) {
     safeLogger.error('Error in auto-import', error);
