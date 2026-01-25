@@ -48,6 +48,7 @@ export async function GET(request: NextRequest) {
         activeCourseId: null,
         activeProjectId: null,
         activeJobId: null,
+        activeStartupId: null,
       });
     }
 
@@ -56,6 +57,7 @@ export async function GET(request: NextRequest) {
       activeCourseId: context.active_course_id,
       activeProjectId: context.active_project_id,
       activeJobId: context.active_job_id,
+      activeStartupId: context.active_startup_id,
     });
   } catch (error) {
     console.error('Error fetching advisor context:', error);
@@ -79,7 +81,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { activeCourseId, activeProjectId, activeJobId } = body;
+    const { activeCourseId, activeProjectId, activeJobId, activeStartupId } = body;
 
     // Get student profile
     const { data: profile } = await supabase
@@ -128,6 +130,7 @@ export async function POST(request: NextRequest) {
           active_course_id: activeCourseId || null,
           active_project_id: activeProjectId || null,
           active_job_id: activeJobId || null,
+          active_startup_id: activeStartupId || null,
         },
         {
           onConflict: 'student_profile_id',
@@ -149,6 +152,7 @@ export async function POST(request: NextRequest) {
       activeCourseId: context.active_course_id,
       activeProjectId: context.active_project_id,
       activeJobId: context.active_job_id,
+      activeStartupId: context.active_startup_id,
     });
   } catch (error) {
     console.error('Error updating advisor context:', error);

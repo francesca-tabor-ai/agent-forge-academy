@@ -24,6 +24,11 @@ export function ContextBar({ activeContext, onChangeContext }: ContextBarProps) 
       value: activeContext.job ? `${activeContext.job.title} at ${activeContext.job.company}` : 'None',
       icon: '🎯',
     },
+    {
+      label: 'Active Startup',
+      value: activeContext.startup?.name || 'None',
+      icon: '🚀',
+    },
   ];
 
   return (
@@ -38,7 +43,7 @@ export function ContextBar({ activeContext, onChangeContext }: ContextBarProps) 
           Change context
         </button>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         {contextItems.map((item, index) => (
           <div key={index} className="flex items-start gap-2" data-testid={`context-item-${item.label.toLowerCase().replace(/\s+/g, '-')}`}>
             <span className="text-lg">{item.icon}</span>

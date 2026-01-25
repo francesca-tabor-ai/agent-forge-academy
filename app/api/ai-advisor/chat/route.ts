@@ -21,25 +21,27 @@ async function loadActiveContext(
   activeCourseId: string | null;
   activeProjectId: string | null;
   activeJobId: string | null;
+  activeStartupId: string | null;
 }> {
   if (!studentProfileId) {
-    return { activeCourseId: null, activeProjectId: null, activeJobId: null };
+    return { activeCourseId: null, activeProjectId: null, activeJobId: null, activeStartupId: null };
   }
 
   const { data: context } = await supabase
     .from('advisor_context')
-    .select('active_course_id, active_project_id, active_job_id')
+    .select('active_course_id, active_project_id, active_job_id, active_startup_id')
     .eq('student_profile_id', studentProfileId)
     .single();
 
   if (!context) {
-    return { activeCourseId: null, activeProjectId: null, activeJobId: null };
+    return { activeCourseId: null, activeProjectId: null, activeJobId: null, activeStartupId: null };
   }
 
   return {
     activeCourseId: context.active_course_id,
     activeProjectId: context.active_project_id,
     activeJobId: context.active_job_id,
+    activeStartupId: context.active_startup_id,
   };
 }
 
@@ -48,18 +50,20 @@ async function fetchContextData(
   context: ChatRequest['context'],
   supabase: any,
   studentProfileId: string | null,
-  activeContext?: { activeCourseId: string | null; activeProjectId: string | null; activeJobId: string | null }
+  activeContext?: { activeCourseId: string | null; activeProjectId: string | null; activeJobId: string | null; activeStartupId: string | null }
 ): Promise<{
   courseData: any;
   projectData: any;
   jobData: any;
+  startupData: any;
   userProfile: any;
-  activeContextIds: { courseId: string | null; projectId: string | null; jobId: string | null };
+  activeContextIds: { courseId: string | null; projectId: string | null; jobId: string | null; startupId: string | null };
 }> {
   // Use active context from database if available, otherwise use request context
   const courseId = activeContext?.activeCourseId || context?.course?.id;
   const projectId = activeContext?.activeProjectId || context?.project?.id;
   const jobId = activeContext?.activeJobId || context?.job?.id;
+  const startupId = activeContext?.activeStartupId || context?.startup?.id;
 
   // Fetch course data
   let courseData = null;
@@ -134,6 +138,33 @@ async function fetchContextData(
     }
   }
 
+  // Fetch startup data
+  let startupData = null;
+  if (startupId) {
+    const { data: startup } = await supabase
+      .from('startups')
+      .select('*')
+      .eq('id', startupId)
+      .eq('status', 'active')
+      .single();
+    if (startup) {
+      startupData = {
+        id: startup.id,
+        name: startup.name,
+        tagline: startup.tagline,
+        description: startup.description,
+        status: startup.status,
+        launchYear: startup.launch_year,
+        revenueRange: startup.revenue_range,
+        pricingModel: startup.pricing_model,
+        targetCustomer: startup.target_customer,
+        vibeScore: startup.vibe_score,
+        logoUrl: startup.logo_url,
+        websiteUrl: startup.website_url,
+      };
+    }
+  }
+
   // Get user profile summary
   let userProfile = null;
   if (studentProfileId) {
@@ -163,11 +194,13 @@ async function fetchContextData(
     courseData,
     projectData,
     jobData,
+    startupData,
     userProfile,
     activeContextIds: {
       courseId: courseId || null,
       projectId: projectId || null,
       jobId: jobId || null,
+      startupId: startupId || null,
     },
   };
 }
@@ -177,7 +210,7 @@ async function fetchContextData(
  */
 function buildSystemPrompt(
   context: ChatRequest['context'],
-  contextData?: { courseData: any; projectData: any; jobData: any; userProfile: any },
+  contextData?: { courseData: any; projectData: any; jobData: any; startupData: any; userProfile: any },
   intent?: AdvisorIntent,
   tools?: { useRAG: boolean; useJobsMatching: boolean; usePortfolioFetch: boolean; useCourseContext: boolean }
 ): string {
@@ -450,8 +483,9 @@ async function buildLLMMessages(
     courseData: any;
     projectData: any;
     jobData: any;
+    startupData: any;
     userProfile: any;
-    activeContextIds: { courseId: string | null; projectId: string | null; jobId: string | null };
+    activeContextIds: { courseId: string | null; projectId: string | null; jobId: string | null; startupId: string | null };
   },
   intent?: AdvisorIntent,
   tools?: { useRAG: boolean; useJobsMatching: boolean; usePortfolioFetch: boolean; useCourseContext: boolean },
@@ -1163,6 +1197,7 @@ export async function POST(request: NextRequest) {
         hasCourseData: !!contextData.courseData,
         hasProjectData: !!contextData.projectData,
         hasJobData: !!contextData.jobData,
+        hasStartupData: !!contextData.startupData,
         hasUserProfile: !!contextData.userProfile,
         activeContextIds: contextData.activeContextIds,
         latency: contextDataLatency,
@@ -1183,6 +1218,7 @@ export async function POST(request: NextRequest) {
         courseId: context?.course?.id || null,
         projectId: context?.project?.id || null,
         jobId: context?.job?.id || null,
+        startupId: context?.startup?.id || null,
       };
     }
 
@@ -1208,6 +1244,10 @@ export async function POST(request: NextRequest) {
             id: contextData.jobData.id,
             title: contextData.jobData.title,
             company: contextData.jobData.company,
+          } : undefined,
+          startup: contextData.startupData ? {
+            id: contextData.startupData.id,
+            name: contextData.startupData.name,
           } : undefined,
         };
 
@@ -1242,6 +1282,7 @@ export async function POST(request: NextRequest) {
         active_course_id: contextData.activeContextIds.courseId,
         active_project_id: contextData.activeContextIds.projectId,
         active_job_id: contextData.activeContextIds.jobId,
+        active_startup_id: contextData.activeContextIds.startupId,
         role: 'user',
         content: message,
         metadata: {

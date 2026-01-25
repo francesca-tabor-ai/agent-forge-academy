@@ -54,6 +54,16 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    // Fetch user's bookmarked startup IDs
+    const { data: bookmarks } = await supabase
+      .from('startup_bookmarks')
+      .select('startup_id')
+      .eq('user_id', user.id);
+
+    const bookmarkedStartupIds = new Set(
+      (bookmarks || []).map((b: any) => b.startup_id)
+    );
+
     const { searchParams } = new URL(request.url);
     const filters: StartupFilters = {
       search: searchParams.get('search') || undefined,
@@ -194,6 +204,7 @@ export async function GET(request: NextRequest) {
         launchYear: startup.launch_year,
         pricingModel: startup.pricing_model,
         targetCustomer: startup.target_customer,
+        isBookmarked: bookmarkedStartupIds.has(startup.id),
       };
     });
 
@@ -220,6 +231,21 @@ export async function GET(request: NextRequest) {
     }
 
     // Apply sorting that requires in-memory processing
+    // First, separate bookmarked and non-bookmarked startups
+    const bookmarkedStartups: typeof transformedStartups = [];
+    const nonBookmarkedStartups: typeof transformedStartups = [];
+    
+    transformedStartups.forEach((startup) => {
+      if (startup.isBookmarked) {
+        bookmarkedStartups.push(startup);
+      } else {
+        nonBookmarkedStartups.push(startup);
+      }
+    });
+
+    // Sort each group according to the selected sort option
+    // Only sort in-memory for sorts that require it (highest-revenue, easiest-build)
+    // For other sorts (newest, most-vibe-coded), the database already sorted them correctly
     if (filters.sort === 'highest-revenue') {
       const revenueOrder: Record<string, number> = {
         'pre_revenue': 0,
@@ -227,7 +253,12 @@ export async function GET(request: NextRequest) {
         '$10_50k': 2,
         '$50k_plus': 3,
       };
-      transformedStartups.sort((a, b) => {
+      bookmarkedStartups.sort((a, b) => {
+        const aOrder = revenueOrder[a.revenueRangeRaw] ?? -1;
+        const bOrder = revenueOrder[b.revenueRangeRaw] ?? -1;
+        return bOrder - aOrder; // Descending
+      });
+      nonBookmarkedStartups.sort((a, b) => {
         const aOrder = revenueOrder[a.revenueRangeRaw] ?? -1;
         const bOrder = revenueOrder[b.revenueRangeRaw] ?? -1;
         return bOrder - aOrder; // Descending
@@ -238,12 +269,22 @@ export async function GET(request: NextRequest) {
         'medium': 1,
         'high': 2,
       };
-      transformedStartups.sort((a, b) => {
+      bookmarkedStartups.sort((a, b) => {
+        const aOrder = difficultyOrder[a.technicalDifficulty?.toLowerCase() || ''] ?? 999;
+        const bOrder = difficultyOrder[b.technicalDifficulty?.toLowerCase() || ''] ?? 999;
+        return aOrder - bOrder; // Ascending (easiest first)
+      });
+      nonBookmarkedStartups.sort((a, b) => {
         const aOrder = difficultyOrder[a.technicalDifficulty?.toLowerCase() || ''] ?? 999;
         const bOrder = difficultyOrder[b.technicalDifficulty?.toLowerCase() || ''] ?? 999;
         return aOrder - bOrder; // Ascending (easiest first)
       });
     }
+    // For other sorts (newest, most-vibe-coded), the database already sorted them
+    // so we maintain that order by not sorting again
+
+    // Combine: bookmarked first, then non-bookmarked
+    transformedStartups = [...bookmarkedStartups, ...nonBookmarkedStartups];
 
     // Apply pagination after filtering and sorting
     const page = filters.page || 1;

@@ -20,6 +20,9 @@ export function JobOpportunitiesSection({ studentProfileId }: JobOpportunitiesSe
   const [savedApplications, setSavedApplications] = useState<SavedApplication[]>([]);
   const [newOpportunitiesCount, setNewOpportunitiesCount] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [generating, setGenerating] = useState<{ [key: string]: boolean }>({});
+  const [generatedContent, setGeneratedContent] = useState<{ [key: string]: string }>({});
+  const [showModal, setShowModal] = useState<{ type: 'cv' | 'cover-letter' | 'portfolio' | null; jobId: string | null }>({ type: null, jobId: null });
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -105,6 +108,101 @@ export function JobOpportunitiesSection({ studentProfileId }: JobOpportunitiesSe
 
   // Limit to 5-7 recommended jobs
   const displayedJobs = recommendedJobs.slice(0, 7);
+
+  const handleGenerateCV = async (jobId: string) => {
+    if (!studentProfileId) {
+      alert('Please log in to generate a CV');
+      return;
+    }
+
+    setGenerating({ ...generating, [`cv-${jobId}`]: true });
+    try {
+      const response = await fetch('/api/jobs/generate-cv', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ jobId, useExistingCV: false }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to generate CV');
+      }
+
+      const data = await response.json();
+      setGeneratedContent({ ...generatedContent, [`cv-${jobId}`]: data.content });
+      setShowModal({ type: 'cv', jobId });
+    } catch (error: any) {
+      console.error('Error generating CV:', error);
+      alert(`Failed to generate CV: ${error.message}`);
+    } finally {
+      setGenerating({ ...generating, [`cv-${jobId}`]: false });
+    }
+  };
+
+  const handleGenerateCoverLetter = async (jobId: string) => {
+    if (!studentProfileId) {
+      alert('Please log in to generate a cover letter');
+      return;
+    }
+
+    setGenerating({ ...generating, [`cover-${jobId}`]: true });
+    try {
+      const response = await fetch('/api/jobs/generate-cover-letter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ jobId }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to generate cover letter');
+      }
+
+      const data = await response.json();
+      setGeneratedContent({ ...generatedContent, [`cover-${jobId}`]: data.content });
+      setShowModal({ type: 'cover-letter', jobId });
+    } catch (error: any) {
+      console.error('Error generating cover letter:', error);
+      alert(`Failed to generate cover letter: ${error.message}`);
+    } finally {
+      setGenerating({ ...generating, [`cover-${jobId}`]: false });
+    }
+  };
+
+  const handleTailorPortfolio = async (jobId: string) => {
+    if (!studentProfileId) {
+      alert('Please log in to tailor your portfolio');
+      return;
+    }
+
+    setGenerating({ ...generating, [`portfolio-${jobId}`]: true });
+    try {
+      const response = await fetch('/api/jobs/tailor-portfolio', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ jobId }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to tailor portfolio');
+      }
+
+      const data = await response.json();
+      if (data.recommendedProjectIds && data.recommendedProjectIds.length > 0) {
+        // Redirect to portfolio page with recommended projects highlighted
+        const projectIds = data.recommendedProjectIds.join(',');
+        window.location.href = `/student/portfolio?highlight=${projectIds}&jobId=${jobId}`;
+      } else {
+        alert(data.explanation || 'No projects found to tailor. Consider adding projects that match the job requirements.');
+      }
+    } catch (error: any) {
+      console.error('Error tailoring portfolio:', error);
+      alert(`Failed to tailor portfolio: ${error.message}`);
+    } finally {
+      setGenerating({ ...generating, [`portfolio-${jobId}`]: false });
+    }
+  };
 
   if (loading) {
     return (
@@ -195,31 +293,34 @@ export function JobOpportunitiesSection({ studentProfileId }: JobOpportunitiesSe
                   {/* Action Buttons */}
                   <div className="flex items-center gap-2 pt-4 border-t border-gray-100" onClick={(e) => e.preventDefault()}>
                     <button 
-                      className="btn-secondary text-sm"
+                      className="btn-secondary text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                       onClick={(e) => {
                         e.stopPropagation();
-                        // TODO: Implement CV generation
+                        handleGenerateCV(job.id);
                       }}
+                      disabled={generating[`cv-${job.id}`]}
                     >
-                      Generate CV
+                      {generating[`cv-${job.id}`] ? 'Generating...' : 'Generate CV'}
                     </button>
                     <button 
-                      className="btn-secondary text-sm"
+                      className="btn-secondary text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                       onClick={(e) => {
                         e.stopPropagation();
-                        // TODO: Implement cover letter generation
+                        handleGenerateCoverLetter(job.id);
                       }}
+                      disabled={generating[`cover-${job.id}`]}
                     >
-                      Cover Letter
+                      {generating[`cover-${job.id}`] ? 'Generating...' : 'Cover Letter'}
                     </button>
                     <button 
-                      className="btn-secondary text-sm"
+                      className="btn-secondary text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                       onClick={(e) => {
                         e.stopPropagation();
-                        // TODO: Implement portfolio tailoring
+                        handleTailorPortfolio(job.id);
                       }}
+                      disabled={generating[`portfolio-${job.id}`]}
                     >
-                      Tailor Portfolio
+                      {generating[`portfolio-${job.id}`] ? 'Tailoring...' : 'Tailor Portfolio'}
                     </button>
                   </div>
                 </Link>
@@ -301,6 +402,60 @@ export function JobOpportunitiesSection({ studentProfileId }: JobOpportunitiesSe
           </div>
         )}
       </div>
+
+      {/* Modal for displaying generated CV or Cover Letter */}
+      {showModal.type && showModal.jobId && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-semibold text-gray-900">
+                  {showModal.type === 'cv' ? 'Generated CV' : 'Generated Cover Letter'}
+                </h2>
+                <button
+                  onClick={() => setShowModal({ type: null, jobId: null })}
+                  className="text-gray-400 hover:text-gray-600 text-2xl leading-none"
+                >
+                  ×
+                </button>
+              </div>
+            </div>
+            <div className="p-6">
+              <div className="mb-4">
+                <textarea
+                  value={generatedContent[`${showModal.type === 'cv' ? 'cv' : 'cover'}-${showModal.jobId}`] || ''}
+                  onChange={(e) => {
+                    setGeneratedContent({
+                      ...generatedContent,
+                      [`${showModal.type === 'cv' ? 'cv' : 'cover'}-${showModal.jobId}`]: e.target.value,
+                    });
+                  }}
+                  rows={20}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light font-mono text-sm"
+                />
+              </div>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => {
+                    const content = generatedContent[`${showModal.type === 'cv' ? 'cv' : 'cover'}-${showModal.jobId}`] || '';
+                    navigator.clipboard.writeText(content);
+                    alert('Copied to clipboard!');
+                  }}
+                  className="px-4 py-2 bg-brand-light text-white rounded-lg hover:bg-brand-light/90 transition-colors text-sm font-medium"
+                >
+                  Copy to Clipboard
+                </button>
+                <button
+                  onClick={() => setShowModal({ type: null, jobId: null })}
+                  className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

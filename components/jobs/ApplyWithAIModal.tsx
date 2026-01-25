@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import type { NormalizedJobOpportunity } from '@/lib/types/job-opportunity';
 
@@ -23,6 +23,71 @@ export function ApplyWithAIModal({
   const [cvContent, setCvContent] = useState('');
   const [coverLetterContent, setCoverLetterContent] = useState('');
   const [selectedProjects, setSelectedProjects] = useState<string[]>([]);
+  const [generatingCV, setGeneratingCV] = useState(false);
+  const [generatingCoverLetter, setGeneratingCoverLetter] = useState(false);
+  const [tailoringPortfolio, setTailoringPortfolio] = useState(false);
+  const [availableProjects, setAvailableProjects] = useState<Array<{ id: string; title: string; description: string }>>([]);
+
+  // Fetch projects when component mounts or job changes
+  useEffect(() => {
+    const fetchProjects = async () => {
+      if (!studentProfileId) return;
+
+      try {
+        const response = await fetch('/api/projects');
+        if (response.ok) {
+          const data = await response.json();
+          // The API returns { ok: true, projects: [...] } with id and title
+          // We'll fetch full details if needed, but for now use what we have
+          setAvailableProjects((data.projects || []).map((p: any) => ({
+            id: p.id,
+            title: p.title,
+            description: p.description || '',
+          })));
+        }
+      } catch (error) {
+        console.error('Error fetching projects:', error);
+      }
+    };
+
+    fetchProjects();
+  }, [studentProfileId]);
+
+  // Auto-tailor portfolio when entering portfolio step
+  useEffect(() => {
+    if (currentStep === 'portfolio' && selectedJob && availableProjects.length > 0 && selectedProjects.length === 0) {
+      handleTailorPortfolio();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentStep, selectedJob?.id, availableProjects.length]);
+
+  const handleTailorPortfolio = async () => {
+    if (!selectedJob || !studentProfileId) return;
+
+    setTailoringPortfolio(true);
+    try {
+      const response = await fetch('/api/jobs/tailor-portfolio', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ jobId: selectedJob.id }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to tailor portfolio');
+      }
+
+      const data = await response.json();
+      if (data.recommendedProjectIds && data.recommendedProjectIds.length > 0) {
+        setSelectedProjects(data.recommendedProjectIds);
+      }
+    } catch (error: any) {
+      console.error('Error tailoring portfolio:', error);
+      // Don't show alert, just log - user can still manually select projects
+    } finally {
+      setTailoringPortfolio(false);
+    }
+  };
 
   const steps: Array<{ key: Step; label: string }> = [
     { key: 'cv', label: 'CV' },
@@ -54,13 +119,67 @@ export function ApplyWithAIModal({
   };
 
   const handleGenerateCV = async () => {
-    // TODO: Implement CV generation API call
-    setCvContent('Generated CV content will appear here...');
+    if (!selectedJob || !studentProfileId) {
+      alert('Please select a job first');
+      return;
+    }
+
+    setGeneratingCV(true);
+    try {
+      const response = await fetch('/api/jobs/generate-cv', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          jobId: selectedJob.id, 
+          useExistingCV: cvOption === 'uploaded' 
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to generate CV');
+      }
+
+      const data = await response.json();
+      setCvContent(data.content);
+    } catch (error: any) {
+      console.error('Error generating CV:', error);
+      alert(`Failed to generate CV: ${error.message}`);
+    } finally {
+      setGeneratingCV(false);
+    }
   };
 
   const handleGenerateCoverLetter = async () => {
-    // TODO: Implement cover letter generation API call
-    setCoverLetterContent('Generated cover letter content will appear here...');
+    if (!selectedJob || !studentProfileId) {
+      alert('Please select a job first');
+      return;
+    }
+
+    setGeneratingCoverLetter(true);
+    try {
+      const response = await fetch('/api/jobs/generate-cover-letter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          jobId: selectedJob.id,
+          selectedProjectIds: selectedProjects.length > 0 ? selectedProjects : undefined,
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to generate cover letter');
+      }
+
+      const data = await response.json();
+      setCoverLetterContent(data.content);
+    } catch (error: any) {
+      console.error('Error generating cover letter:', error);
+      alert(`Failed to generate cover letter: ${error.message}`);
+    } finally {
+      setGeneratingCoverLetter(false);
+    }
   };
 
   const handleExport = (format: 'pdf' | 'docx' | 'clipboard') => {
@@ -198,9 +317,10 @@ export function ApplyWithAIModal({
                   <div>
                     <button
                       onClick={handleGenerateCV}
-                      className="px-4 py-2 bg-brand-light text-white rounded-lg hover:bg-brand-light/90 transition-colors text-sm font-medium mb-4"
+                      disabled={generatingCV}
+                      className="px-4 py-2 bg-brand-light text-white rounded-lg hover:bg-brand-light/90 transition-colors text-sm font-medium mb-4 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      Generate CV
+                      {generatingCV ? 'Generating...' : 'Generate CV'}
                     </button>
                   </div>
                 )}
@@ -229,9 +349,10 @@ export function ApplyWithAIModal({
               <div className="space-y-4">
                 <button
                   onClick={handleGenerateCoverLetter}
-                  className="px-4 py-2 bg-brand-light text-white rounded-lg hover:bg-brand-light/90 transition-colors text-sm font-medium"
+                  disabled={generatingCoverLetter}
+                  className="px-4 py-2 bg-brand-light text-white rounded-lg hover:bg-brand-light/90 transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Generate Tailored Cover Letter
+                  {generatingCoverLetter ? 'Generating...' : 'Generate Tailored Cover Letter'}
                 </button>
 
                 {coverLetterContent && (
@@ -258,31 +379,60 @@ export function ApplyWithAIModal({
               <p className="text-sm text-gray-600">
                 Select 1-3 projects to highlight (AI suggests defaults)
               </p>
-              <div className="space-y-2">
-                {/* TODO: Fetch actual projects from API */}
-                {['Project 1', 'Project 2', 'Project 3'].map((project, idx) => (
-                  <label key={idx} className="flex items-center gap-2 p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
-                    <input
-                      type="checkbox"
-                      checked={selectedProjects.includes(project)}
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          setSelectedProjects([...selectedProjects, project]);
-                        } else {
-                          setSelectedProjects(selectedProjects.filter(p => p !== project));
-                        }
-                      }}
-                      className="text-brand-light"
-                    />
-                    <span className="text-sm text-gray-700">{project}</span>
-                  </label>
-                ))}
-              </div>
-              <div className="mt-4 p-4 bg-gray-50 border border-gray-200 rounded-lg">
-                <p className="text-xs text-gray-600">
-                  Preview: You can preview the tailored view vs default view before exporting.
-                </p>
-              </div>
+              
+              {tailoringPortfolio && (
+                <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                  <p className="text-sm text-blue-800">Analyzing your portfolio and job requirements...</p>
+                </div>
+              )}
+
+              {availableProjects.length === 0 && !tailoringPortfolio && (
+                <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                  <p className="text-sm text-yellow-800">No portfolio projects found. Add projects to your portfolio first.</p>
+                  <Link href="/student/portfolio" className="text-sm text-yellow-900 underline mt-2 inline-block">
+                    Go to Portfolio →
+                  </Link>
+                </div>
+              )}
+
+              {availableProjects.length > 0 && (
+                <div className="space-y-2">
+                  {availableProjects.map((project) => (
+                    <label key={project.id} className="flex items-start gap-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={selectedProjects.includes(project.id)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            if (selectedProjects.length < 3) {
+                              setSelectedProjects([...selectedProjects, project.id]);
+                            } else {
+                              alert('Please select a maximum of 3 projects');
+                            }
+                          } else {
+                            setSelectedProjects(selectedProjects.filter(p => p !== project.id));
+                          }
+                        }}
+                        className="text-brand-light mt-1"
+                      />
+                      <div className="flex-1">
+                        <span className="text-sm font-medium text-gray-900 block">{project.title}</span>
+                        {project.description && (
+                          <span className="text-xs text-gray-600 block mt-1 line-clamp-2">{project.description}</span>
+                        )}
+                      </div>
+                    </label>
+                  ))}
+                </div>
+              )}
+
+              {selectedProjects.length > 0 && (
+                <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+                  <p className="text-xs text-green-800">
+                    {selectedProjects.length} project{selectedProjects.length !== 1 ? 's' : ''} selected for this application.
+                  </p>
+                </div>
+              )}
             </div>
           )}
 

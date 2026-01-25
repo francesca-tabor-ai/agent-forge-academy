@@ -78,12 +78,29 @@ export default async function AIAdvisorPage() {
     // For now, using empty array
   ];
 
+  // Get startups (all available startups for now - could filter by bookmarks/interests later)
+  let activeStartups: Array<{ id: string; name: string }> = [];
+  const { data: startups } = await supabase
+    .from('startups')
+    .select('id, name')
+    .eq('status', 'active')
+    .order('created_at', { ascending: false })
+    .limit(50); // Limit to 50 most recent startups
+
+  if (startups) {
+    activeStartups = startups.map((s) => ({
+      id: s.id,
+      name: s.name,
+    }));
+  }
+
   return (
     <AIAdvisor
       studentProfileId={studentProfileId}
       activeCourses={activeCourses}
       activeProjects={activeProjects}
       activeJobs={activeJobs}
+      activeStartups={activeStartups}
     />
   );
 }

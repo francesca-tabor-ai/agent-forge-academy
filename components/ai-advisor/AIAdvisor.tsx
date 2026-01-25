@@ -41,6 +41,7 @@ export interface ActiveContext {
   course?: { id: string; slug: string; title: string };
   project?: { id: string; title: string };
   job?: { id: string; title: string; company: string };
+  startup?: { id: string; name: string };
 }
 
 interface AIAdvisorProps {
@@ -48,6 +49,7 @@ interface AIAdvisorProps {
   activeCourses: Array<{ id: string; slug: string; title: string }>;
   activeProjects: Array<{ id: string; title: string }>;
   activeJobs: Array<{ id: string; title: string; company: string }>;
+  activeStartups: Array<{ id: string; name: string }>;
 }
 
 export function AIAdvisor({
@@ -55,6 +57,7 @@ export function AIAdvisor({
   activeCourses,
   activeProjects,
   activeJobs,
+  activeStartups,
 }: AIAdvisorProps) {
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -110,6 +113,11 @@ export function AIAdvisor({
             if (job) loadedContext.job = job;
           }
           
+          if (data.activeStartupId) {
+            const startup = activeStartups.find((s) => s.id === data.activeStartupId);
+            if (startup) loadedContext.startup = startup;
+          }
+          
           if (Object.keys(loadedContext).length > 0) {
             setActiveContext(loadedContext);
             
@@ -118,6 +126,7 @@ export function AIAdvisor({
             if (loadedContext.course) convParams.set('courseId', loadedContext.course.id);
             if (loadedContext.project) convParams.set('projectId', loadedContext.project.id);
             if (loadedContext.job) convParams.set('jobId', loadedContext.job.id);
+            if (loadedContext.startup) convParams.set('startupId', loadedContext.startup.id);
             
             const convResponse = await fetch(`/api/advisor/conversations?${convParams.toString()}`);
             if (convResponse.ok) {
@@ -153,6 +162,9 @@ export function AIAdvisor({
             if (activeJobs.length > 0) {
               fallbackContext.job = activeJobs[0];
             }
+            if (activeStartups.length > 0) {
+              fallbackContext.startup = activeStartups[0];
+            }
             if (Object.keys(fallbackContext).length > 0) {
               setActiveContext(fallbackContext);
             }
@@ -171,6 +183,9 @@ export function AIAdvisor({
         if (activeJobs.length > 0) {
           fallbackContext.job = activeJobs[0];
         }
+        if (activeStartups.length > 0) {
+          fallbackContext.startup = activeStartups[0];
+        }
         if (Object.keys(fallbackContext).length > 0) {
           setActiveContext(fallbackContext);
         }
@@ -178,7 +193,7 @@ export function AIAdvisor({
     };
     
     loadContextAndHistory();
-  }, [activeCourses, activeProjects, activeJobs]); // Re-run when active context items change
+  }, [activeCourses, activeProjects, activeJobs, activeStartups]); // Re-run when active context items change
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
@@ -997,6 +1012,7 @@ export function AIAdvisor({
           activeCourses={activeCourses}
           activeProjects={activeProjects}
           activeJobs={activeJobs}
+          activeStartups={activeStartups}
           currentContext={activeContext}
           onSelectContext={(context) => {
             setActiveContext(context);

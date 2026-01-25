@@ -7,6 +7,7 @@ interface ContextSelectorModalProps {
   activeCourses: Array<{ id: string; slug: string; title: string }>;
   activeProjects: Array<{ id: string; title: string }>;
   activeJobs: Array<{ id: string; title: string; company: string }>;
+  activeStartups: Array<{ id: string; name: string }>;
   currentContext: ActiveContext;
   onSelectContext: (context: ActiveContext) => void;
   onClose: () => void;
@@ -16,6 +17,7 @@ export function ContextSelectorModal({
   activeCourses,
   activeProjects,
   activeJobs,
+  activeStartups,
   currentContext,
   onSelectContext,
   onClose,
@@ -28,6 +30,9 @@ export function ContextSelectorModal({
   );
   const [selectedJob, setSelectedJob] = useState<string | null>(
     currentContext.job?.id || null
+  );
+  const [selectedStartup, setSelectedStartup] = useState<string | null>(
+    currentContext.startup?.id || null
   );
 
   const handleApply = async () => {
@@ -48,6 +53,11 @@ export function ContextSelectorModal({
       if (job) newContext.job = job;
     }
     
+    if (selectedStartup) {
+      const startup = activeStartups.find((s) => s.id === selectedStartup);
+      if (startup) newContext.startup = startup;
+    }
+    
     // Persist to database
     try {
       await fetch('/api/advisor/context', {
@@ -59,6 +69,7 @@ export function ContextSelectorModal({
           activeCourseId: selectedCourse || null,
           activeProjectId: selectedProject || null,
           activeJobId: selectedJob || null,
+          activeStartupId: selectedStartup || null,
         }),
       });
     } catch (error) {
@@ -139,6 +150,26 @@ export function ContextSelectorModal({
               {activeJobs.map((job) => (
                 <option key={job.id} value={job.id}>
                   {job.title} at {job.company}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Startup Selection */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Active Startup
+            </label>
+            <select
+              data-testid="context-startup-select"
+              value={selectedStartup || ''}
+              onChange={(e) => setSelectedStartup(e.target.value || null)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">None</option>
+              {activeStartups.map((startup) => (
+                <option key={startup.id} value={startup.id}>
+                  {startup.name}
                 </option>
               ))}
             </select>
