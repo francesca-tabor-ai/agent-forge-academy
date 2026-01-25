@@ -23,6 +23,8 @@
     "sync-courses:dry-run": "tsx scripts/sync-courses.ts --dry-run",
     "generate-metadata": "tsx scripts/generate-metadata-files.ts",
     "lint:content": "tsx scripts/lint-content-guard.ts",
+    "lint:md:dupes": "node scripts/find-duplicate-text.mjs",
+    "fix:md:dupes": "node scripts/fix-duplicate-text.mjs",
     "lint:all": "npm run lint && npm run lint:content",
     "validate:images": "tsx scripts/validate-course-images.ts",
     "validate:images:skip-external": "tsx scripts/validate-course-images.ts --skip-external",

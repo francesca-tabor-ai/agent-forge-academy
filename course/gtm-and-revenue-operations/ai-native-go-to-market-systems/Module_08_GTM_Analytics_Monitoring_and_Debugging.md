@@ -715,11 +715,11 @@ Build a system that monitors automation health and alerts on issues.
 
 ## Key Takeaways
 
-- **Pipeline health metrics show overall GTM performance**: **Pipeline health metrics show overall GTM performance**: **Pipeline health metrics show overall GTM performance**
-- **Activity metrics predict outcomes; outcome metrics confirm results**: **Activity metrics predict outcomes; outcome metrics confirm results**: **Activity metrics predict outcomes; outcome metrics confirm results**
-- **Automation monitoring catches issues before they impact business**: **Automation monitoring catches issues before they impact business**: **Automation monitoring catches issues before they impact business**
-- **Systematic debugging process resolves issues quickly**: **Systematic debugging process resolves issues quickly**: **Systematic debugging process resolves issues quickly**
-- **Leading and lagging indicators together provide complete picture**: **Leading and lagging indicators together provide complete picture**: **Leading and lagging indicators together provide complete picture**
+- **Pipeline health metrics show overall GTM performance**
+- **Activity metrics predict outcomes; outcome metrics confirm results**
+- **Automation monitoring catches issues before they impact business**
+- **Systematic debugging process resolves issues quickly**
+- **Leading and lagging indicators together provide complete picture**
 
 ---
 

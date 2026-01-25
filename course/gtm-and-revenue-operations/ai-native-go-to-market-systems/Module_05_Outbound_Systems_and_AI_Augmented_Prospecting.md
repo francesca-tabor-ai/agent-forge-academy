@@ -608,11 +608,11 @@ Enhance your outbound sequence with AI-generated research snippets.
 
 ## Key Takeaways
 
-- **Outbound is a system, not a list**: **Outbound is a system, not a list**: **Outbound is a system, not a list**
-- **Sequencing logic and personalization drive results**: **Sequencing logic and personalization drive results**: **Sequencing logic and personalization drive results**
-- **AI-assisted research enables personalization at scale**: **AI-assisted research enables personalization at scale**: **AI-assisted research enables personalization at scale**
-- **Signal-based prioritization focuses effort on high-value prospects**: **Signal-based prioritization focuses effort on high-value prospects**: **Signal-based prioritization focuses effort on high-value prospects**
-- **End-to-end workflows ensure consistency and scalability**: **End-to-end workflows ensure consistency and scalability**: **End-to-end workflows ensure consistency and scalability**
+- **Outbound is a system, not a list**
+- **Sequencing logic and personalization drive results**
+- **AI-assisted research enables personalization at scale**
+- **Signal-based prioritization focuses effort on high-value prospects**
+- **End-to-end workflows ensure consistency and scalability**
 
 ---
 

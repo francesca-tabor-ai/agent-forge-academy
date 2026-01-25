@@ -599,10 +599,10 @@ Design and build a GTM system that demonstrates your ability to:
 ## Key Takeaways
 
 - **End-to-end ownership means designing, building, and maintaining complete systems**: **End-to-end ownership means designing, building, and maintaining complete systems**: **End-to-end ownership means designing, building, and.
-- **Integration of multiple components creates powerful GTM engines**: **Integration of multiple components creates powerful GTM engines**: **Integration of multiple components creates powerful GTM engines**
+- **Integration of multiple components creates powerful GTM engines**
 - **AI adds leverage when applied to the right use cases with proper guardrails**: **AI adds leverage when applied to the right use cases with proper guardrails**: **AI adds leverage when applied to the right use cases with.
-- **Analytics and monitoring ensure systems deliver value**: **Analytics and monitoring ensure systems deliver value**: **Analytics and monitoring ensure systems deliver value**
-- **Documentation and reflection enable continuous improvement**: **Documentation and reflection enable continuous improvement**: **Documentation and reflection enable continuous improvement**
+- **Analytics and monitoring ensure systems deliver value**
+- **Documentation and reflection enable continuous improvement**
 
 ---
 

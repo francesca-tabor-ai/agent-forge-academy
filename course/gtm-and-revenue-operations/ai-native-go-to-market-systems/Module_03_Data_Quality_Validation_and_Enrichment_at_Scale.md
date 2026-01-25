@@ -659,11 +659,11 @@ Build an alert system that notifies you when data quality degrades.
 
 ## Key Takeaways
 
-- **Data quality is a system property, not a manual task**: **Data quality is a system property, not a manual task**: **Data quality is a system property, not a manual task**
-- **Validation rules prevent bad data from entering**: **Validation rules prevent bad data from entering**: **Validation rules prevent bad data from entering**
-- **Enrichment strategies depend on volume and value**: **Enrichment strategies depend on volume and value**: **Enrichment strategies depend on volume and value**
-- **De-duplication keeps records clean and accurate**: **De-duplication keeps records clean and accurate**: **De-duplication keeps records clean and accurate**
-- **Monitoring and alerts catch issues before they impact business**: **Monitoring and alerts catch issues before they impact business**: **Monitoring and alerts catch issues before they impact business**
+- **Data quality is a system property, not a manual task**
+- **Validation rules prevent bad data from entering**
+- **Enrichment strategies depend on volume and value**
+- **De-duplication keeps records clean and accurate**
+- **Monitoring and alerts catch issues before they impact business**
 
 ---
 

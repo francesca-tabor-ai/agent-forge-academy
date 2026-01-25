@@ -193,8 +193,8 @@ A new protocol for AI agents that provides:
 
 The referral economy is collapsing. Zero-click outcomes dominate, new generations prefer conversational discovery, and AI crawlers operate differently than traditional search bots. Success in this new landscape requires:
 
-- **Shifting from click optimization to citation optimization**: **Shifting from click optimization to citation optimization**: **Shifting from click optimization to citation optimization**
-- **Building presence on platforms where your audience actually lives**: **Building presence on platforms where your audience actually lives**: **Building presence on platforms where your audience actually lives**
-- **Understanding and accommodating AI crawler behavior**: **Understanding and accommodating AI crawler behavior**: **Understanding and accommodating AI crawler behavior**
+- **Shifting from click optimization to citation optimization**
+- **Building presence on platforms where your audience actually lives**
+- **Understanding and accommodating AI crawler behavior**
 
 The next module will explore how to build the technical foundation that makes your content discoverable and citable by AI systems.

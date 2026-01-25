@@ -671,11 +671,11 @@ Create a webhook that receives events and triggers actions in HubSpot.
 
 ## Key Takeaways
 
-- **APIs and webhooks enable system integration**: **APIs and webhooks enable system integration**: **APIs and webhooks enable system integration**
-- **No-code tools are powerful but have limitations**: **No-code tools are powerful but have limitations**: **No-code tools are powerful but have limitations**
-- **Choose the right tool for the job (no-code vs custom code)**: **Choose the right tool for the job (no-code vs custom code)**: **Choose the right tool for the job (no-code vs custom code)**
-- **Error handling and retries are critical for reliability**: **Error handling and retries are critical for reliability**: **Error handling and retries are critical for reliability**
-- **Versioning and rollback mindset prevents production issues**: **Versioning and rollback mindset prevents production issues**: **Versioning and rollback mindset prevents production issues**
+- **APIs and webhooks enable system integration**
+- **No-code tools are powerful but have limitations**
+- **Choose the right tool for the job (no-code vs custom code)**
+- **Error handling and retries are critical for reliability**
+- **Versioning and rollback mindset prevents production issues**
 
 ---
 

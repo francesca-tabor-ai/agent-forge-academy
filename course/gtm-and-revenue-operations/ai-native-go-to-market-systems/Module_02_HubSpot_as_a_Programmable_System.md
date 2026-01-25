@@ -652,11 +652,11 @@ Build a workflow that automatically routes deals to the right owner based on com
 
 ## Key Takeaways
 
-- **HubSpot is a programmable system, not just a CRM**: **HubSpot is a programmable system, not just a CRM**: **HubSpot is a programmable system, not just a CRM**
-- **Property design impacts scalability and automation**: **Property design impacts scalability and automation**: **Property design impacts scalability and automation**
-- **Pipeline stages should reflect your sales process**: **Pipeline stages should reflect your sales process**: **Pipeline stages should reflect your sales process**
-- **Workflow patterns enable automation at scale**: **Workflow patterns enable automation at scale**: **Workflow patterns enable automation at scale**
-- **Routing logic ensures leads and deals go to the right owners**: **Routing logic ensures leads and deals go to the right owners**: **Routing logic ensures leads and deals go to the right owners**
+- **HubSpot is a programmable system, not just a CRM**
+- **Property design impacts scalability and automation**
+- **Pipeline stages should reflect your sales process**
+- **Workflow patterns enable automation at scale**
+- **Routing logic ensures leads and deals go to the right owners**
 
 ---
 

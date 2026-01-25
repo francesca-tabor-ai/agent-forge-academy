@@ -595,7 +595,7 @@ Take one pain point from your interview and ship a fix this week.
 - **Work with Sales/Marketing/CS by speaking their language and focusing on outcomes**: **Work with Sales/Marketing/CS by speaking their language and focusing on outcomes**: **Work with Sales/Marketing/CS by speaking their.
 - **Turn complaints into requirements by understanding root causes and proposing solutions**: **Turn complaints into requirements by understanding root causes and proposing solutions**: **Turn complaints into requirements by.
 - **Say "no" effectively by offering alternatives and explaining trade-offs**: **Say "no" effectively by offering alternatives and explaining trade-offs**: **Say "no" effectively by offering alternatives and explaining.
-- **Documentation that scales preserves knowledge and enables others**: **Documentation that scales preserves knowledge and enables others**: **Documentation that scales preserves knowledge and enables others**
+- **Documentation that scales preserves knowledge and enables others**
 - **Building trust through delivery, proactivity, and results creates strong partnerships**: **Building trust through delivery, proactivity, and results creates strong partnerships**: **Building trust through delivery, proactivity,.
 
 ---

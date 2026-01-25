@@ -694,11 +694,11 @@ Build a workflow that automatically enrolls accounts into outbound sequences bas
 
 ## Key Takeaways
 
-- **Event-driven GTM is more responsive than stage-driven**: **Event-driven GTM is more responsive than stage-driven**: **Event-driven GTM is more responsive than stage-driven**
-- **External events (funding, hiring, intent) indicate buying signals**: **External events (funding, hiring, intent) indicate buying signals**: **External events (funding, hiring, intent) indicate buying signals**
-- **Internal triggers (usage, activity) show engagement and risk**: **Internal triggers (usage, activity) show engagement and risk**: **Internal triggers (usage, activity) show engagement and risk**
-- **Design workflows to be idempotent and conflict-free**: **Design workflows to be idempotent and conflict-free**: **Design workflows to be idempotent and conflict-free**
-- **Monitor workflows to catch issues before they impact business**: **Monitor workflows to catch issues before they impact business**: **Monitor workflows to catch issues before they impact business**
+- **Event-driven GTM is more responsive than stage-driven**
+- **External events (funding, hiring, intent) indicate buying signals**
+- **Internal triggers (usage, activity) show engagement and risk**
+- **Design workflows to be idempotent and conflict-free**
+- **Monitor workflows to catch issues before they impact business**
 
 ---
 

@@ -771,10 +771,10 @@ Enhance an existing GTM workflow with AI capabilities.
 ## Key Takeaways
 
 - **AI adds leverage in classification, summarization, routing, and scoring**: **AI adds leverage in classification, summarization, routing, and scoring**: **AI adds leverage in classification, summarization, routing,.
-- **Human-in-the-loop is essential for high-stakes decisions**: **Human-in-the-loop is essential for high-stakes decisions**: **Human-in-the-loop is essential for high-stakes decisions**
-- **Guardrails prevent hallucination and over-automation**: **Guardrails prevent hallucination and over-automation**: **Guardrails prevent hallucination and over-automation**
-- **Balance automation with human judgment**: **Balance automation with human judgment**: **Balance automation with human judgment**
-- **Monitor and iterate to improve AI effectiveness**: **Monitor and iterate to improve AI effectiveness**: **Monitor and iterate to improve AI effectiveness**
+- **Human-in-the-loop is essential for high-stakes decisions**
+- **Guardrails prevent hallucination and over-automation**
+- **Balance automation with human judgment**
+- **Monitor and iterate to improve AI effectiveness**
 
 ---
 

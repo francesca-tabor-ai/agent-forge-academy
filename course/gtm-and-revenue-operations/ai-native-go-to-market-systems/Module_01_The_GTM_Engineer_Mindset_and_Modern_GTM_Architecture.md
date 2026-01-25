@@ -547,11 +547,11 @@ Identify one manual workflow you can automate this week using tools you already 
 
 ## Key Takeaways
 
-- **GTM Engineers are system builders, not tool administrators**: **GTM Engineers are system builders, not tool administrators**: **GTM Engineers are system builders, not tool administrators**
+- **GTM Engineers are system builders, not tool administrators**
 - **Traditional RevOps breaks at scale due to manual processes and data quality issues**: **Traditional RevOps breaks at scale due to manual processes and data quality issues**: **Traditional RevOps breaks at scale due to manual.
-- **Event-driven GTM is more responsive than stage-driven GTM**: **Event-driven GTM is more responsive than stage-driven GTM**: **Event-driven GTM is more responsive than stage-driven GTM**
-- **Velocity over perfection: ship fast, iterate faster**: **Velocity over perfection: ship fast, iterate faster**: **Velocity over perfection: ship fast, iterate faster**
-- **Own outcomes, not tools: measure impact, not activity**: **Own outcomes, not tools: measure impact, not activity**: **Own outcomes, not tools: measure impact, not activity**
+- **Event-driven GTM is more responsive than stage-driven GTM**
+- **Velocity over perfection: ship fast, iterate faster**
+- **Own outcomes, not tools: measure impact, not activity**
 
 ---
 
