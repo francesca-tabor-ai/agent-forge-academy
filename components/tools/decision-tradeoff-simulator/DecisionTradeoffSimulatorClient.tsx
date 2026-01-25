@@ -194,7 +194,7 @@ export function DecisionTradeoffSimulatorClient() {
       const result = runSimulation(baselineSettings, scenario);
       setCurrentResult(result);
     }
-  }, []); // Only run on mount
+  }, [baselineSettings, scenario, currentResult]); // Include dependencies
 
   // Update current result when debounced settings change
   useEffect(() => {

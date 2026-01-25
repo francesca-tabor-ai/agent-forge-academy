@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import type { Tool } from '@/lib/tools/registry';
@@ -49,7 +49,7 @@ export function ToolsPageClient({ tools, studentProfileId }: ToolsPageClientProp
   }, [tools]);
 
   // Update URL params
-  const updateURLParams = (updates: Record<string, string | null>) => {
+  const updateURLParams = useCallback((updates: Record<string, string | null>) => {
     const params = new URLSearchParams(searchParams.toString());
     Object.entries(updates).forEach(([key, value]) => {
       if (value === null || value === '') {
@@ -59,7 +59,7 @@ export function ToolsPageClient({ tools, studentProfileId }: ToolsPageClientProp
       }
     });
     router.push(`?${params.toString()}`, { scroll: false });
-  };
+  }, [searchParams, router]);
 
   // Debounced search handler
   useEffect(() => {
@@ -70,7 +70,7 @@ export function ToolsPageClient({ tools, studentProfileId }: ToolsPageClientProp
     }, 300);
 
     return () => clearTimeout(timeoutId);
-  }, [searchInput, searchQuery]);
+  }, [searchInput, searchQuery, updateURLParams]);
 
   // Filter tools
   const filteredTools = useMemo(() => {

@@ -286,7 +286,7 @@ export function AgentBoundarySafetyDesignerClient({
 
             {rules.length === 0 ? (
               <div className="text-center py-8 text-gray-500">
-                <p>No rules defined yet. Click "Add Rule" to get started.</p>
+                <p>No rules defined yet. Click &quot;Add Rule&quot; to get started.</p>
               </div>
             ) : (
               <div className="space-y-4">
@@ -410,7 +410,7 @@ export function AgentBoundarySafetyDesignerClient({
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <p className="font-medium text-gray-900">{result.testCase.description || result.testCase.prompt}</p>
-                          <p className="text-sm text-gray-600 mt-1">Prompt: "{result.testCase.prompt}"</p>
+                          <p className="text-sm text-gray-600 mt-1">Prompt: &quot;{result.testCase.prompt}&quot;</p>
                           <p className="text-sm mt-2">
                             Expected: <span className="font-medium">{result.testCase.expectedAction}</span> /{' '}
                             <span className="font-medium">{result.testCase.expectedEscalation}</span>
