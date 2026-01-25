@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import { StartupCard } from './StartupCard';
 
 interface Founder {
@@ -73,6 +74,7 @@ export function StartupsPageClient() {
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [availableNiches, setAvailableNiches] = useState<string[]>([]);
   const [searchInput, setSearchInput] = useState(searchQuery);
+  const [isFiltersExpanded, setIsFiltersExpanded] = useState(true);
 
   const fetchStartups = useCallback(async (page: number = 1, append: boolean = false) => {
     if (append) {
@@ -266,12 +268,23 @@ export function StartupsPageClient() {
       {/* Filters Card */}
       <div className="bg-white border border-gray-200 rounded-lg">
         {/* Card Header */}
-        <div className="px-6 py-4 border-b border-gray-200">
+        <button
+          onClick={() => setIsFiltersExpanded(!isFiltersExpanded)}
+          className="w-full px-6 py-4 border-b border-gray-200 flex items-center justify-between hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-2 rounded-t-lg"
+          aria-expanded={isFiltersExpanded}
+          aria-label={isFiltersExpanded ? 'Collapse filters' : 'Expand filters'}
+        >
           <h2 className="text-lg font-semibold text-gray-900">Filters</h2>
-        </div>
+          {isFiltersExpanded ? (
+            <ChevronUp className="w-5 h-5 text-gray-500" />
+          ) : (
+            <ChevronDown className="w-5 h-5 text-gray-500" />
+          )}
+        </button>
 
         {/* Card Content */}
-        <div className="p-6">
+        {isFiltersExpanded && (
+          <div className="p-6 transition-all duration-200 ease-in-out">
           <div className="grid grid-cols-12 gap-4">
             {/* Row 1: Search (full width) */}
             <div className="col-span-12">
@@ -437,6 +450,7 @@ export function StartupsPageClient() {
             </select>
           </div>
         </div>
+        )}
       </div>
 
       {/* Results Header */}
