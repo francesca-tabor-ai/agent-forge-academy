@@ -94,6 +94,15 @@ export const toolsRegistry: Tool[] = [
     tags: ['governance', 'compliance', 'risk', 'regulatory', 'ai-safety', 'documentation'],
     recommendedFor: ['trust-and-regulation', 'agentic-rag'],
   },
+  {
+    id: 'agentic-systems-planner',
+    name: 'Agentic Systems Planner',
+    description: 'Comprehensive discovery & documentation generator for planning agentic AI applications. Generate PDD, SDD, evaluation frameworks, and more.',
+    href: '/student/tools/agentic-systems-planner',
+    status: 'active',
+    tags: ['planning', 'documentation', 'agents', 'discovery', 'architecture', 'design'],
+    recommendedFor: ['agentic-rag', 'agentic-systems'],
+  },
 ];
 
 /**
