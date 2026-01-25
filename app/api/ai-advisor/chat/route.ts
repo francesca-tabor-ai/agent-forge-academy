@@ -316,6 +316,26 @@ function buildSystemPrompt(
     if (job.matchingScore !== undefined) {
       systemPrompt += `- Match Score: ${job.matchingScore}%\n`;
     }
+    systemPrompt += `\n`;
+  }
+
+  if (context?.startup && contextData?.startupData) {
+    const startup = contextData.startupData;
+    systemPrompt += `\n**Current Startup Context:**\n`;
+    systemPrompt += `- Startup: ${startup.name}\n`;
+    if (startup.tagline) {
+      systemPrompt += `- Tagline: ${startup.tagline}\n`;
+    }
+    if (startup.description) {
+      systemPrompt += `- Description: ${startup.description.substring(0, 300)}${startup.description.length > 300 ? '...' : ''}\n`;
+    }
+    if (startup.revenueRange) {
+      systemPrompt += `- Revenue Range: ${startup.revenueRange}\n`;
+    }
+    if (startup.vibeScore) {
+      systemPrompt += `- Vibe Score: ${startup.vibeScore}/10\n`;
+    }
+    systemPrompt += `\n`;
   }
 
   if (contextData?.userProfile) {
@@ -1141,10 +1161,11 @@ export async function POST(request: NextRequest) {
     // Load active context from database (needed for intent classification and later)
     // Make this non-blocking - if it fails, continue with null context
     const contextLoadStart = Date.now();
-    let activeContext: { activeCourseId: string | null; activeProjectId: string | null; activeJobId: string | null } = {
+    let activeContext: { activeCourseId: string | null; activeProjectId: string | null; activeJobId: string | null; activeStartupId: string | null } = {
       activeCourseId: null,
       activeProjectId: null,
       activeJobId: null,
+      activeStartupId: null,
     };
     try {
       activeContext = await loadActiveContext(supabase, studentProfileId);
@@ -1568,6 +1589,7 @@ export async function POST(request: NextRequest) {
                           active_course_id: contextData.activeContextIds.courseId,
                           active_project_id: contextData.activeContextIds.projectId,
                           active_job_id: contextData.activeContextIds.jobId,
+                          active_startup_id: contextData.activeContextIds.startupId,
                           role: 'assistant',
                           content: finalResponse,
                           metadata: {
@@ -1853,6 +1875,7 @@ export async function POST(request: NextRequest) {
             active_course_id: contextData.activeContextIds.courseId,
             active_project_id: contextData.activeContextIds.projectId,
             active_job_id: contextData.activeContextIds.jobId,
+            active_startup_id: contextData.activeContextIds.startupId,
             role: 'assistant',
             content: responseContent,
             metadata: {

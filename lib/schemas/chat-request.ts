@@ -45,12 +45,21 @@ const JobContextSchema = z.object({
 }).strict(); // Reject additional properties
 
 /**
+ * Schema for startup context
+ */
+const StartupContextSchema = z.object({
+  id: z.string().min(1, 'Startup ID is required'),
+  name: z.string().min(1, 'Startup name is required'),
+}).strict(); // Reject additional properties
+
+/**
  * Schema for context object
  */
 const ContextSchema = z.object({
   course: CourseContextSchema.optional(),
   project: ProjectContextSchema.optional(),
   job: JobContextSchema.optional(),
+  startup: StartupContextSchema.optional(),
 }).strict().optional();
 
 /**

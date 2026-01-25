@@ -37,8 +37,7 @@ export function ApplyWithAIModal({
         const response = await fetch('/api/projects');
         if (response.ok) {
           const data = await response.json();
-          // The API returns { ok: true, projects: [...] } with id and title
-          // We'll fetch full details if needed, but for now use what we have
+          // The API returns { ok: true, projects: [...] } with id, title, and description
           setAvailableProjects((data.projects || []).map((p: any) => ({
             id: p.id,
             title: p.title,

@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
     // Fetch projects
     const { data: projects, error } = await supabase
       .from('portfolio_projects')
-      .select('id, title')
+      .select('id, title, description')
       .eq('student_profile_id', studentProfile.id)
       .order('created_at', { ascending: false });
 

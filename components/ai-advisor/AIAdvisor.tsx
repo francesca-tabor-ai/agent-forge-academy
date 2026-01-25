@@ -29,6 +29,7 @@ export interface Message {
     course?: { id: string; slug: string; title: string };
     project?: { id: string; title: string };
     job?: { id: string; title: string; company: string };
+    startup?: { id: string; name: string };
   };
   intent?: string; // For quick actions
   nextActions?: NextAction[]; // Structured next actions for UI buttons
