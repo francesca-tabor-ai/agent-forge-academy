@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import { ToolsPageClient } from '@/components/tools/ToolsPageClient';
@@ -41,9 +42,23 @@ export default async function ToolsPage() {
   const tools = getAvailableTools();
 
   return (
-    <ToolsPageClient
-      tools={tools}
-      studentProfileId={studentProfileId}
-    />
+    <Suspense fallback={
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Tools</h1>
+          <p className="text-gray-600 mt-2">
+            Discover tools and resources to help you build and ship faster
+          </p>
+        </div>
+        <div className="text-center py-12">
+          <p className="text-gray-500">Loading tools...</p>
+        </div>
+      </div>
+    }>
+      <ToolsPageClient
+        tools={tools}
+        studentProfileId={studentProfileId}
+      />
+    </Suspense>
   );
 }
