@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { logToolRunSafe } from '@/lib/tools/logToolRun';
 
 interface AgenticSystemsPlannerClientProps {
@@ -18,11 +18,7 @@ export function AgenticSystemsPlannerClient({
   const [isGenerating, setIsGenerating] = useState(false);
   const totalSections = 10;
 
-  useEffect(() => {
-    updateProgress();
-  }, [currentSection]);
-
-  const updateProgress = () => {
+  const updateProgress = useCallback(() => {
     const progress = (currentSection / totalSections) * 100;
     const progressBar = document.getElementById('progressBar');
     const progressText = document.getElementById('progressText');
@@ -32,7 +28,11 @@ export function AgenticSystemsPlannerClient({
         ? 'Ready to begin' 
         : `Section ${currentSection} of ${totalSections}`;
     }
-  };
+  }, [currentSection]);
+
+  useEffect(() => {
+    updateProgress();
+  }, [currentSection, updateProgress]);
 
   const startQuestionnaire = () => {
     setCurrentSection(1);
@@ -684,7 +684,7 @@ ${data.q5_3_dealbreakers || 'Not specified'}
                 </div>
 
                 <div className="bg-white border border-gray-200 rounded-lg p-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">What You'll Get</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">What You&apos;ll Get</h3>
                   <ul className="space-y-2 text-gray-700">
                     <li className="flex items-start gap-2">
                       <span>📄</span>
@@ -723,7 +723,7 @@ ${data.q5_3_dealbreakers || 'Not specified'}
                 <div className="grid md:grid-cols-2 gap-4 text-sm text-gray-700">
                   <div className="flex items-start gap-2">
                     <span className="text-green-600">✓</span>
-                    <span><strong>Smart Validation</strong> - Required fields marked with asterisks (*), won't let you proceed if critical info is missing</span>
+                    <span><strong>Smart Validation</strong> - Required fields marked with asterisks (*), won&apos;t let you proceed if critical info is missing</span>
                   </div>
                   <div className="flex items-start gap-2">
                     <span className="text-green-600">✓</span>
@@ -764,7 +764,7 @@ ${data.q5_3_dealbreakers || 'Not specified'}
             <div id="section1" className="space-y-6">
               <div className="bg-gray-50 p-5 rounded-lg border-l-4 border-purple-600 mb-6">
                 <h2 className="text-xl font-bold text-gray-900 mb-2">1. Business Context & Problem Definition</h2>
-                <p className="text-gray-600 text-sm">Help us understand the problem you're solving and why it matters</p>
+                <p className="text-gray-600 text-sm">Help us understand the problem you&apos;re solving and why it matters</p>
               </div>
 
               <div className="space-y-4">
