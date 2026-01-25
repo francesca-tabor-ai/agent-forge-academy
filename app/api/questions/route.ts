@@ -15,6 +15,14 @@ export async function POST(request: Request) {
     const payload = await request.json();
     const { title, body, context_type, context_id } = payload;
 
+    // Validate required fields
+    if (!title || !body || !context_type) {
+      return NextResponse.json(
+        { error: 'Title, body, and context_type are required' },
+        { status: 400 }
+      );
+    }
+
     // Get user's profile
     const { data: profile } = await supabase
       .from('profiles')
@@ -38,14 +46,15 @@ export async function POST(request: Request) {
     }
 
     // Create question (RLS will enforce permissions)
+    // context_id is optional - use null if empty/undefined
     const { data: question, error } = await supabase
       .from('questions')
       .insert({
         student_profile_id: studentProfile.id,
-        title,
-        body,
+        title: title.trim(),
+        body: body.trim(),
         context_type,
-        context_id,
+        context_id: context_id && context_id.trim() ? context_id.trim() : null,
       })
       .select()
       .single();

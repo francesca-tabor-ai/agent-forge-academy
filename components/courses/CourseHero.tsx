@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Share2 } from 'lucide-react';
+import { Share2, Check } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 /**
@@ -89,6 +89,9 @@ export function CourseHero({
     return DEFAULT_FALLBACK_IMAGE;
   });
 
+  // Toast notification state for share feedback
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+
   // Update image URL when prop changes
   useEffect(() => {
     if (isValidImageUrl(imageUrl)) {
@@ -101,6 +104,16 @@ export function CourseHero({
       setFallbackAttempted(false);
     }
   }, [imageUrl]);
+
+  // Auto-hide toast after 3 seconds
+  useEffect(() => {
+    if (toast) {
+      const timer = setTimeout(() => {
+        setToast(null);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [toast]);
 
   // Handle image load error - switches to fallback
   // This ensures if the image URL fails to load, we use the default fallback
@@ -117,23 +130,74 @@ export function CourseHero({
     }
   };
 
-  const handleShare = () => {
-    if (navigator.share) {
-      navigator.share({
-        title: title,
-        url: window.location.href,
-      }).catch(() => {
+  const handleShare = async () => {
+    const courseUrl = `${window.location.origin}/student/courses/${courseSlug}`;
+    
+    try {
+      // Try Web Share API first (mobile/supported browsers)
+      if (navigator.share) {
+        await navigator.share({
+          title: title,
+          text: `Check out this course: ${title}`,
+          url: courseUrl,
+        });
+        setToast({ message: 'Shared successfully!', type: 'success' });
+      } else {
         // Fallback: copy to clipboard
-        navigator.clipboard.writeText(window.location.href);
-      });
-    } else {
-      // Fallback: copy to clipboard
-      navigator.clipboard.writeText(window.location.href);
+        await navigator.clipboard.writeText(courseUrl);
+        setToast({ message: 'Link copied to clipboard!', type: 'success' });
+      }
+    } catch (error) {
+      // User cancelled share dialog or clipboard failed
+      if (error instanceof Error && error.name !== 'AbortError') {
+        // Only show error if it's not a user cancellation
+        try {
+          // Last resort: try clipboard again
+          await navigator.clipboard.writeText(courseUrl);
+          setToast({ message: 'Link copied to clipboard!', type: 'success' });
+        } catch (clipboardError) {
+          setToast({ message: 'Failed to share. Please copy the URL manually.', type: 'error' });
+        }
+      }
+      // If AbortError (user cancelled), don't show any toast
     }
   };
 
   return (
-    <section className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 pt-4 pb-6" role="banner" aria-label="Course hero banner">
+    <>
+      {/* Toast Notification */}
+      {toast && (
+        <div
+          className={`fixed top-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-in slide-in-from-top-2 ${
+            toast.type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+          }`}
+        >
+          {toast.type === 'success' ? (
+            <Check className="w-5 h-5 flex-shrink-0" />
+          ) : (
+            <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          )}
+          <span className="font-medium">{toast.message}</span>
+          <button
+            onClick={() => setToast(null)}
+            className="ml-2 text-white hover:text-gray-200 transition-colors"
+            aria-label="Close"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+      )}
+
+      <section className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 pt-4 pb-6" role="banner" aria-label="Course hero banner">
       {/* Banner Image - Fixed aspect ratio, no overlap */}
       <div className="overflow-hidden rounded-2xl bg-muted">
         <div className="aspect-[16/5] relative">
@@ -246,5 +310,6 @@ export function CourseHero({
         </div>
       </div>
     </section>
+    </>
   );
 }

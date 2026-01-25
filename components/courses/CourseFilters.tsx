@@ -300,6 +300,121 @@ export function CourseFilters({ courses, onFilteredCoursesChange }: CourseFilter
     onFilteredCoursesChange(filteredCourses);
   }, [filteredCourses, onFilteredCoursesChange]);
 
+  // Compute available filters based on courses
+  const availableFilters = useMemo(() => {
+    const availableTracks = new Set<string>();
+    const availableBestFor = new Set<string>();
+    const availableIndustries = new Set<string>();
+    const availableDurations = new Set<string>();
+    const availableDifficulties = new Set<string>();
+
+    courses.forEach((course) => {
+      // Tracks
+      const track = course.metadata?.category || course.category;
+      if (track) {
+        availableTracks.add(track);
+      }
+
+      // Best For
+      const rawBestFor = course.metadata?.bestFor;
+      if (rawBestFor) {
+        if (Array.isArray(rawBestFor)) {
+          rawBestFor.forEach((bf) => {
+            if (bf) availableBestFor.add(bf);
+          });
+        } else if (typeof rawBestFor === 'string') {
+          // Handle comma-separated or space-separated strings
+          rawBestFor.split(/[,\s]+/).forEach((bf) => {
+            const trimmed = bf.trim();
+            if (trimmed) availableBestFor.add(trimmed);
+          });
+        }
+      }
+      // Special case: if course has Creative AI track, add Creative to Best For
+      if (track === 'Creative AI') {
+        availableBestFor.add('Creative');
+      }
+
+      // Industries
+      const courseIndustries = course.industries || course.metadata?.industries || [];
+      courseIndustries.forEach((industry) => {
+        if (industry) availableIndustries.add(industry);
+      });
+
+      // Duration
+      const time = course.metadata?.time || '';
+      if (time) {
+        if (time.includes('0–4') || time.includes('2–4') || time.includes('3–5')) {
+          availableDurations.add('0-4h');
+        }
+        if (time.includes('4–8') || time.includes('4–6') || time.includes('4–10')) {
+          availableDurations.add('4-8h');
+        }
+        if (time.includes('8–12') || time.includes('6–12')) {
+          availableDurations.add('8-12h');
+        }
+        if (time.includes('week') || time.includes('Week')) {
+          availableDurations.add('weeks');
+        }
+      }
+
+      // Difficulty
+      if (course.difficulty_level) {
+        availableDifficulties.add(course.difficulty_level.toLowerCase());
+      } else {
+        availableDifficulties.add('unspecified');
+      }
+    });
+
+    return {
+      tracks: Array.from(availableTracks).sort(),
+      bestFor: Array.from(availableBestFor).sort(),
+      industries: Array.from(availableIndustries).sort(),
+      durations: Array.from(availableDurations),
+      difficulties: Array.from(availableDifficulties),
+    };
+  }, [courses]);
+
+  // Clean up selected filters that are no longer available
+  useEffect(() => {
+    // Clean up tracks
+    if (selectedTracks.length > 0) {
+      const validTracks = selectedTracks.filter((track) => availableFilters.tracks.includes(track));
+      if (validTracks.length !== selectedTracks.length) {
+        setSelectedTracks(validTracks);
+      }
+    }
+
+    // Clean up bestFor
+    if (selectedBestFor.length > 0) {
+      const validBestFor = selectedBestFor.filter((bf) => availableFilters.bestFor.includes(bf));
+      if (validBestFor.length !== selectedBestFor.length) {
+        setSelectedBestFor(validBestFor);
+      }
+    }
+
+    // Clean up industries
+    if (selectedIndustries.length > 0) {
+      const validIndustries = selectedIndustries.filter((industry) => availableFilters.industries.includes(industry));
+      if (validIndustries.length !== selectedIndustries.length) {
+        setSelectedIndustries(validIndustries);
+      }
+    }
+
+    // Clean up duration
+    if (duration && !availableFilters.durations.includes(duration)) {
+      setDuration('');
+    }
+
+    // Clean up difficulty
+    if (difficulty) {
+      const difficultyLower = difficulty.toLowerCase();
+      if (!availableFilters.difficulties.includes(difficultyLower)) {
+        setDifficulty('');
+      }
+    }
+  }, [availableFilters, selectedTracks, selectedBestFor, selectedIndustries, duration, difficulty]);
+
   const toggleTrack = (track: string) => {
     setSelectedTracks((prev) =>
       prev.includes(track) ? prev.filter((t) => t !== track) : [...prev, track]
@@ -487,109 +602,119 @@ export function CourseFilters({ courses, onFilteredCoursesChange }: CourseFilter
         {isExpanded && (
           <div className="mt-4 space-y-4 pt-4 border-t border-gray-200">
               {/* Tracks (Multi-select) */}
-              <div>
-                <label className="block text-xs font-medium text-gray-700 mb-2">Track</label>
-                <div className="flex flex-wrap gap-2">
-                  {TRACKS.map((track) => (
-                    <button
-                      key={track}
-                      type="button"
-                      onClick={() => toggleTrack(track)}
-                      className={`px-3 py-1 text-xs rounded-full border transition-colors ${
-                        selectedTracks.includes(track)
-                          ? 'bg-brand-light text-white border-brand-light'
-                          : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
-                      }`}
-                    >
-                      {track}
-                    </button>
-                  ))}
+              {availableFilters.tracks.length > 0 && (
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 mb-2">Track</label>
+                  <div className="flex flex-wrap gap-2">
+                    {availableFilters.tracks.map((track) => (
+                      <button
+                        key={track}
+                        type="button"
+                        onClick={() => toggleTrack(track)}
+                        className={`px-3 py-1 text-xs rounded-full border transition-colors ${
+                          selectedTracks.includes(track)
+                            ? 'bg-brand-light text-white border-brand-light'
+                            : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
+                        }`}
+                      >
+                        {track}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Duration (Single-select) */}
-              <div>
-                <label className="block text-xs font-medium text-gray-700 mb-2">Duration</label>
-                <div className="flex flex-wrap gap-2">
-                  {DURATION_OPTIONS.map((option) => (
-                    <button
-                      key={option.value}
-                      type="button"
-                      onClick={() => setDuration(duration === option.value ? '' : option.value)}
-                      className={`px-3 py-1 text-xs rounded-full border transition-colors ${
-                        duration === option.value
-                          ? 'bg-brand-light text-white border-brand-light'
-                          : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
-                      }`}
-                    >
-                      {option.label}
-                    </button>
-                  ))}
+              {availableFilters.durations.length > 0 && (
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 mb-2">Duration</label>
+                  <div className="flex flex-wrap gap-2">
+                    {DURATION_OPTIONS.filter((option) => availableFilters.durations.includes(option.value)).map((option) => (
+                      <button
+                        key={option.value}
+                        type="button"
+                        onClick={() => setDuration(duration === option.value ? '' : option.value)}
+                        className={`px-3 py-1 text-xs rounded-full border transition-colors ${
+                          duration === option.value
+                            ? 'bg-brand-light text-white border-brand-light'
+                            : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
+                        }`}
+                      >
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Difficulty (Single-select) */}
-              <div>
-                <label className="block text-xs font-medium text-gray-700 mb-2">Difficulty</label>
-                <div className="flex flex-wrap gap-2">
-                  {DIFFICULTY_OPTIONS.map((option) => (
-                    <button
-                      key={option.value}
-                      type="button"
-                      onClick={() => setDifficulty(difficulty === option.value ? '' : option.value)}
-                      className={`px-3 py-1 text-xs rounded-full border transition-colors ${
-                        difficulty === option.value
-                          ? 'bg-brand-light text-white border-brand-light'
-                          : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
-                      }`}
-                    >
-                      {option.label}
-                    </button>
-                  ))}
+              {availableFilters.difficulties.length > 0 && (
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 mb-2">Difficulty</label>
+                  <div className="flex flex-wrap gap-2">
+                    {DIFFICULTY_OPTIONS.filter((option) => availableFilters.difficulties.includes(option.value)).map((option) => (
+                      <button
+                        key={option.value}
+                        type="button"
+                        onClick={() => setDifficulty(difficulty === option.value ? '' : option.value)}
+                        className={`px-3 py-1 text-xs rounded-full border transition-colors ${
+                          difficulty === option.value
+                            ? 'bg-brand-light text-white border-brand-light'
+                            : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
+                        }`}
+                      >
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Best For (Multi-select) */}
-              <div>
-                <label className="block text-xs font-medium text-gray-700 mb-2">Best For</label>
-                <div className="flex flex-wrap gap-2">
-                  {BEST_FOR_OPTIONS.map((option) => (
-                    <button
-                      key={option}
-                      type="button"
-                      onClick={() => toggleBestFor(option)}
-                      className={`px-3 py-1 text-xs rounded-full border transition-colors ${
-                        selectedBestFor.includes(option)
-                          ? 'bg-brand-light text-white border-brand-light'
-                          : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
-                      }`}
-                    >
-                      {option}
-                    </button>
-                  ))}
+              {availableFilters.bestFor.length > 0 && (
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 mb-2">Best For</label>
+                  <div className="flex flex-wrap gap-2">
+                    {availableFilters.bestFor.map((option) => (
+                      <button
+                        key={option}
+                        type="button"
+                        onClick={() => toggleBestFor(option)}
+                        className={`px-3 py-1 text-xs rounded-full border transition-colors ${
+                          selectedBestFor.includes(option)
+                            ? 'bg-brand-light text-white border-brand-light'
+                            : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
+                        }`}
+                      >
+                        {option}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Industry (Multi-select) */}
-              <div>
-                <label className="block text-xs font-medium text-gray-700 mb-2">Industry</label>
-                <div className="flex flex-wrap gap-2">
-                  {INDUSTRIES.map((industry) => (
-                    <button
-                      key={industry}
-                      type="button"
-                      onClick={() => toggleIndustry(industry)}
-                      className={`px-3 py-1 text-xs rounded-full border transition-colors ${
-                        selectedIndustries.includes(industry)
-                          ? 'bg-brand-light text-white border-brand-light'
-                          : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
-                      }`}
-                    >
-                      {industry}
-                    </button>
-                  ))}
+              {availableFilters.industries.length > 0 && (
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 mb-2">Industry</label>
+                  <div className="flex flex-wrap gap-2">
+                    {availableFilters.industries.map((industry) => (
+                      <button
+                        key={industry}
+                        type="button"
+                        onClick={() => toggleIndustry(industry)}
+                        className={`px-3 py-1 text-xs rounded-full border transition-colors ${
+                          selectedIndustries.includes(industry)
+                            ? 'bg-brand-light text-white border-brand-light'
+                            : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
+                        }`}
+                      >
+                        {industry}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
         )}
       </div>
