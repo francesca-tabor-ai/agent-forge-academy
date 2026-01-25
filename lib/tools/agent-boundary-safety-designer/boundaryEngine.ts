@@ -314,3 +314,14 @@ export function importRuleFromJSON(json: string): BoundaryRule {
     }
   );
 }
+
+/**
+ * Re-export types for convenience (allows importing types from boundaryEngine)
+ */
+export type {
+  BoundaryRule,
+  BoundaryEvaluationResult,
+  BoundaryAction,
+  EscalationPath,
+  EvaluationMethod,
+} from './types';
