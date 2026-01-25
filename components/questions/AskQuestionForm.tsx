@@ -53,7 +53,7 @@ export function AskQuestionForm() {
       <header className="space-y-2">
         <h1 className="text-2xl font-semibold tracking-tight">Ask a question</h1>
         <p className="text-sm text-gray-600">
-          Include what you tried and what you expected. The more specific you are, the faster {"you'll"} get help.
+          Include what you tried and what you expected. The more specific you are, the faster {"you&apos;ll"} get help.
         </p>
       </header>
 
@@ -103,7 +103,7 @@ What have you tried so far?
               className="min-h-[160px] w-full rounded-xl border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ca-gold focus:border-ca-gold transition-all resize-y"
             />
             <p className="text-xs text-gray-500">
-              Be specific about the problem, what {"you've"} tried, and any error messages.
+              Be specific about the problem, what {"you&apos;ve"} tried, and any error messages.
             </p>
           </div>
 
@@ -168,7 +168,7 @@ What have you tried so far?
                   <li>Include error messages or screenshots</li>
                   <li>Describe steps to reproduce the issue</li>
                   <li>Explain what you expected vs. what actually happened</li>
-                  <li>Share what {"you've"} already tried</li>
+                  <li>Share what {"you&apos;ve"} already tried</li>
                   <li>Be specific and concise</li>
                 </ul>
               </div>
