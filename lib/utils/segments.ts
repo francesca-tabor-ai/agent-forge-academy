@@ -6,6 +6,7 @@ import type { Segment, SegmentType } from '@/lib/types/segment';
 import { courseMetadata } from '@/lib/course-metadata';
 import { INDUSTRIES } from '@/lib/utils/industries';
 import { getSegmentKey } from '@/lib/types/segment';
+import { normalizeBestFor } from '@/lib/utils';
 import { 
   getTrackHeroImage as getTrackHeroImageFromResolver,
   getIndustryHeroImage as getIndustryHeroImageFromResolver,
@@ -35,10 +36,8 @@ function getAllJobRoles(): string[] {
   
   Object.values(courseMetadata).forEach((course) => {
     if (course.bestFor) {
-      // Handle bestFor as string or array
-      const bestForArray = Array.isArray(course.bestFor) 
-        ? course.bestFor 
-        : [course.bestFor];
+      // Normalize bestFor to array using helper function
+      const bestForArray = normalizeBestFor(course.bestFor);
       
       bestForArray.forEach((bestForEntry) => {
         // Extract role keywords from bestFor strings
@@ -137,10 +136,8 @@ function getCoursesForRole(role: string, onlyLive: boolean = true): string[] {
     .filter((course) => {
       if (!course.bestFor) return false;
       
-      // Handle bestFor as string or array
-      const bestForArray = Array.isArray(course.bestFor) 
-        ? course.bestFor 
-        : [course.bestFor];
+      // Normalize bestFor to array using helper function
+      const bestForArray = normalizeBestFor(course.bestFor);
       
       // Check if any role keyword appears in any bestFor entry
       const matches = bestForArray.some((bestForEntry) => {

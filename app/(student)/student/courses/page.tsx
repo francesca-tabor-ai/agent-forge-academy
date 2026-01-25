@@ -7,6 +7,7 @@ import { CoursesPageClient } from '@/components/courses/CoursesPageClient';
 import { getUserSubscriptionTier } from '@/lib/utils/subscription-access';
 import type { Industry } from '@/lib/utils/industries';
 import { isValidIndustry } from '@/lib/utils/industries';
+import { normalizeBestFor } from '@/lib/utils';
 
 /**
  * Filter and validate industries array to ensure it's Industry[]
@@ -111,10 +112,10 @@ export default async function CoursesPage() {
     // For courses without static metadata (like Finance), create metadata from dynamic fields
     const enhancedMetadata = staticMetadata ? {
       ...staticMetadata,
-      // Override with dynamic metadata fields if available
+      // Override with dynamic metadata fields if available, normalize bestFor
       outcome: (dynamicMetadata?.metadata as any)?.outcome || staticMetadata.outcome,
       build: (dynamicMetadata?.metadata as any)?.build || staticMetadata.build,
-      bestFor: (dynamicMetadata?.metadata as any)?.bestFor || staticMetadata.bestFor,
+      bestFor: normalizeBestFor((dynamicMetadata?.metadata as any)?.bestFor || staticMetadata.bestFor),
       // Prioritize static metadata title (course-metadata.ts) over dynamic metadata title
       // to ensure we show the course name, not the first lesson title
       // Ensure title is always a string with hard fallback
@@ -131,7 +132,7 @@ export default async function CoursesPage() {
       category: dynamicMetadata.metadata.category || course.category || "Uncategorized",
       outcome: (dynamicMetadata.metadata as any)?.outcome || dynamicMetadata.metadata.description || '',
       build: (dynamicMetadata.metadata as any)?.build || '',
-      bestFor: (dynamicMetadata.metadata as any)?.bestFor || '',
+      bestFor: normalizeBestFor((dynamicMetadata.metadata as any)?.bestFor || ''),
       time: dynamicMetadata.metadata.duration_weeks ? `${dynamicMetadata.metadata.duration_weeks} weeks` : '',
       industries: filterIndustries(dynamicMetadata.metadata.industries),
       imageUrl: (dynamicMetadata.metadata as any)?.imageUrl,
@@ -170,7 +171,7 @@ export default async function CoursesPage() {
         ...staticMetadata,
         outcome: (dynamicMetadata?.metadata as any)?.outcome || staticMetadata.outcome,
         build: (dynamicMetadata?.metadata as any)?.build || staticMetadata.build,
-        bestFor: (dynamicMetadata?.metadata as any)?.bestFor || staticMetadata.bestFor,
+        bestFor: normalizeBestFor((dynamicMetadata?.metadata as any)?.bestFor || staticMetadata.bestFor),
         // Prioritize static metadata title (course-metadata.ts) over dynamic metadata title
         // to ensure we show the course name, not the first lesson title
         // Ensure title is always a string with hard fallback
@@ -186,7 +187,7 @@ export default async function CoursesPage() {
         category: dynamicMetadata.metadata.category || "Uncategorized",
         outcome: (dynamicMetadata.metadata as any)?.outcome || dynamicMetadata.metadata.description || '',
         build: (dynamicMetadata.metadata as any)?.build || '',
-        bestFor: (dynamicMetadata.metadata as any)?.bestFor || '',
+        bestFor: normalizeBestFor((dynamicMetadata.metadata as any)?.bestFor || ''),
         time: dynamicMetadata.metadata.duration_weeks ? `${dynamicMetadata.metadata.duration_weeks} weeks` : '',
         industries: filterIndustries(dynamicMetadata.metadata.industries),
         imageUrl: (dynamicMetadata.metadata as any)?.imageUrl,

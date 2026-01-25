@@ -7,6 +7,7 @@ import { CoursesSection } from '@/components/dashboard/CoursesSection';
 import { PortfolioSection } from '@/components/dashboard/PortfolioSection';
 import { ToolsToLearnNext } from '@/components/offers/ToolsToLearnNext';
 import { UnlockedOffersRecommendations } from '@/components/offers/UnlockedOffersRecommendations';
+import { normalizeBestFor } from '@/lib/utils';
 
 export default async function StudentDashboard() {
   const supabase = await createUserSupabaseClient();
@@ -100,10 +101,10 @@ export default async function StudentDashboard() {
     // For courses without static metadata (like Finance), create metadata from dynamic fields
     const enhancedMetadata = staticMetadata ? {
       ...staticMetadata,
-      // Override with dynamic metadata fields if available
+      // Override with dynamic metadata fields if available, normalize bestFor
       outcome: (dynamicMetadata?.metadata as any)?.outcome || staticMetadata.outcome,
       build: (dynamicMetadata?.metadata as any)?.build || staticMetadata.build,
-      bestFor: (dynamicMetadata?.metadata as any)?.bestFor || staticMetadata.bestFor,
+      bestFor: normalizeBestFor((dynamicMetadata?.metadata as any)?.bestFor || staticMetadata.bestFor),
       // Prioritize static metadata title (course-metadata.ts) over dynamic metadata title
       // to ensure we show the course name, not the first lesson title
       title: staticMetadata.title || dynamicMetadata?.metadata?.title,
@@ -116,7 +117,7 @@ export default async function StudentDashboard() {
       category: dynamicMetadata.metadata.category || course.category || '',
       outcome: (dynamicMetadata.metadata as any)?.outcome || dynamicMetadata.metadata.description || '',
       build: (dynamicMetadata.metadata as any)?.build || '',
-      bestFor: (dynamicMetadata.metadata as any)?.bestFor || '',
+      bestFor: normalizeBestFor((dynamicMetadata.metadata as any)?.bestFor || ''),
       time: dynamicMetadata.metadata.duration_weeks ? `${dynamicMetadata.metadata.duration_weeks} weeks` : '',
       industries: dynamicMetadata.metadata.industries || [],
       imageUrl: (dynamicMetadata.metadata as any)?.imageUrl,

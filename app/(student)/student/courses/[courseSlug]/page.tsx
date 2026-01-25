@@ -12,6 +12,7 @@ import { OverviewCards } from '@/components/courses/OverviewCards';
 import { ProgressCard } from '@/components/courses/ProgressCard';
 import { QuickActions } from '@/components/courses/QuickActions';
 import { MobileStickyCTA } from '@/components/courses/MobileStickyCTA';
+import { normalizeBestFor } from '@/lib/utils';
 
 interface CoursePageProps {
   params: Promise<{ courseSlug: string }>;
@@ -168,9 +169,12 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
   const build = normalizedCourse?.youll_build && normalizedCourse.youll_build.length > 0
     ? normalizedCourse.youll_build
     : ((metadata as any)?.build || staticMetadata?.build);
-  const bestFor = normalizedCourse?.best_for && normalizedCourse.best_for.length > 0
+  const bestForRaw = normalizedCourse?.best_for && normalizedCourse.best_for.length > 0
     ? normalizedCourse.best_for
     : ((metadata as any)?.bestFor || staticMetadata?.bestFor);
+  
+  // Normalize bestFor to array using helper function
+  const bestFor = normalizeBestFor(bestForRaw);
 
   // Helper to parse text into bullet points
   // Handles: arrays, newline-separated, comma-separated, inline bullets (• separated), or single string
@@ -223,6 +227,7 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
 
   const outcomeBullets = parseIntoBullets(outcome);
   const buildBullets = parseIntoBullets(build);
+  // bestFor is already normalized to an array, but parseIntoBullets handles arrays correctly
   const bestForItems = parseIntoBullets(bestFor);
 
   // Identify Course Index/Reference Guide lesson

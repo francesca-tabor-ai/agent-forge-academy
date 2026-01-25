@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { CourseMetadata } from '@/lib/course-metadata';
 import { INDUSTRIES } from '@/lib/utils/industries';
+import { normalizeBestFor } from '@/lib/utils';
 
 type Course = {
   id: string | null;
@@ -175,8 +176,8 @@ export function CourseFilters({ courses, onFilteredCoursesChange }: CourseFilter
       filtered = filtered.filter((course) => {
         const title = course.metadata?.title || course.title || '';
         const track = course.metadata?.category || '';
-        const rawBestFor = course.metadata?.bestFor;
-        const bestForStr = !rawBestFor ? '' : Array.isArray(rawBestFor) ? rawBestFor.join(' ') : rawBestFor;
+        const normalizedBestFor = normalizeBestFor(course.metadata?.bestFor);
+        const bestForStr = normalizedBestFor.join(' ');
         return (
           title.toLowerCase().includes(searchLower) ||
           track.toLowerCase().includes(searchLower) ||
@@ -234,8 +235,8 @@ export function CourseFilters({ courses, onFilteredCoursesChange }: CourseFilter
         // Check other "Best For" options against the bestFor field
         const otherBestForOptions = selectedBestFor.filter(bf => bf !== 'Creative');
         if (otherBestForOptions.length > 0) {
-          const rawBestFor = course.metadata?.bestFor;
-          const bestForStr = !rawBestFor ? '' : Array.isArray(rawBestFor) ? rawBestFor.join(' ') : rawBestFor;
+          const normalizedBestFor = normalizeBestFor(course.metadata?.bestFor);
+          const bestForStr = normalizedBestFor.join(' ');
           if (otherBestForOptions.some((bf) => bestForStr.toLowerCase().includes(bf.toLowerCase()))) {
             return true;
           }
@@ -315,21 +316,12 @@ export function CourseFilters({ courses, onFilteredCoursesChange }: CourseFilter
         availableTracks.add(track);
       }
 
-      // Best For
+      // Best For - normalize to array first
       const rawBestFor = course.metadata?.bestFor;
-      if (rawBestFor) {
-        if (Array.isArray(rawBestFor)) {
-          rawBestFor.forEach((bf) => {
-            if (bf) availableBestFor.add(bf);
-          });
-        } else if (typeof rawBestFor === 'string') {
-          // Handle comma-separated or space-separated strings
-          rawBestFor.split(/[,\s]+/).forEach((bf) => {
-            const trimmed = bf.trim();
-            if (trimmed) availableBestFor.add(trimmed);
-          });
-        }
-      }
+      const normalizedBestFor = normalizeBestFor(rawBestFor);
+      normalizedBestFor.forEach((bf) => {
+        if (bf) availableBestFor.add(bf);
+      });
       // Special case: if course has Creative AI track, add Creative to Best For
       if (track === 'Creative AI') {
         availableBestFor.add('Creative');

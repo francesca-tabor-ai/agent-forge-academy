@@ -12,6 +12,7 @@ import { resolveCourseImageUrl } from '@/lib/utils/course-image-resolver';
 import { Lock, ChevronDown, ChevronUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CourseImagePlaceholder } from './CourseImagePlaceholder';
+import { normalizeBestFor } from '@/lib/utils';
 
 interface ExpandableSectionProps {
   title: string;
@@ -114,8 +115,8 @@ export function CourseCard({
   // Use description from course if outcome is not available (for dynamic metadata courses like Finance)
   const displayOutcome = metadata?.outcome || course.description || '';
   const displayTime = metadata?.time || (course.duration_weeks ? `${course.duration_weeks} weeks` : '');
-  const rawBestFor = metadata?.bestFor;
-  const displayBestFor: string = !rawBestFor ? '' : Array.isArray(rawBestFor) ? rawBestFor.join('\n') : rawBestFor;
+  const normalizedBestFor = normalizeBestFor(metadata?.bestFor);
+  const displayBestFor: string = normalizedBestFor.join('\n');
   const displayBuild = metadata?.build || '';
   // Use course industries if it has values, otherwise fall back to metadata industries
   const displayIndustries = (course.industries && course.industries.length > 0) 
