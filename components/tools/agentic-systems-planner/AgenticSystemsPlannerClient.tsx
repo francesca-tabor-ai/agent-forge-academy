@@ -611,28 +611,21 @@ ${data.q5_3_dealbreakers || 'Not specified'}
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-600 to-purple-800 p-5">
-      <div className="max-w-6xl mx-auto bg-white rounded-xl shadow-2xl overflow-hidden">
-        {/* Header */}
-        <div className="bg-gradient-to-r from-purple-600 to-purple-800 text-white p-8 text-center">
-          <h1 className="text-3xl font-bold mb-2">🤖 Agentic Systems Planner</h1>
-          <p className="opacity-90 text-sm">Comprehensive Discovery & Documentation Generator</p>
+    <div className="space-y-6">
+      {/* Progress Bar */}
+      <div className="bg-white border border-gray-200 rounded-lg p-4">
+        <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden mb-2">
+          <div 
+            id="progressBar" 
+            className="h-full bg-[var(--ca-gold)] transition-all duration-300"
+            style={{ width: '0%' }}
+          />
         </div>
+        <div id="progressText" className="text-sm text-gray-600 text-center">Ready to begin</div>
+      </div>
 
-        {/* Progress Bar */}
-        <div className="bg-gray-100 px-8 py-5 border-b border-gray-200">
-          <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden mb-2">
-            <div 
-              id="progressBar" 
-              className="h-full bg-gradient-to-r from-purple-600 to-purple-800 transition-all duration-300"
-              style={{ width: '0%' }}
-            />
-          </div>
-          <div id="progressText" className="text-sm text-gray-600 text-center">Ready to begin</div>
-        </div>
-
-        {/* Content */}
-        <div className="p-8">
+      {/* Content */}
+      <div className="bg-white border border-gray-200 rounded-lg p-6 md:p-8">
           {/* Intro Screen */}
           {currentSection === 0 && (
             <div className="py-10 max-w-4xl mx-auto">
@@ -660,21 +653,21 @@ ${data.q5_3_dealbreakers || 'Not specified'}
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">How It Works</h3>
                   <div className="space-y-3">
                     <div className="flex items-start gap-3">
-                      <span className="flex-shrink-0 w-8 h-8 bg-purple-100 text-purple-700 rounded-full flex items-center justify-center font-semibold">1</span>
+                      <span className="flex-shrink-0 w-8 h-8 bg-[var(--ca-gold)]/20 text-gray-900 rounded-full flex items-center justify-center font-semibold">1</span>
                       <div>
                         <p className="font-medium text-gray-900">Complete Questionnaire</p>
                         <p className="text-sm text-gray-600">Answer questions across 10 strategic sections (20-40 minutes)</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
-                      <span className="flex-shrink-0 w-8 h-8 bg-purple-100 text-purple-700 rounded-full flex items-center justify-center font-semibold">2</span>
+                      <span className="flex-shrink-0 w-8 h-8 bg-[var(--ca-gold)]/20 text-gray-900 rounded-full flex items-center justify-center font-semibold">2</span>
                       <div>
                         <p className="font-medium text-gray-900">Automatic Generation</p>
                         <p className="text-sm text-gray-600">Instantly generate 7 comprehensive planning documents</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
-                      <span className="flex-shrink-0 w-8 h-8 bg-purple-100 text-purple-700 rounded-full flex items-center justify-center font-semibold">3</span>
+                      <span className="flex-shrink-0 w-8 h-8 bg-[var(--ca-gold)]/20 text-gray-900 rounded-full flex items-center justify-center font-semibold">3</span>
                       <div>
                         <p className="font-medium text-gray-900">Export & Share</p>
                         <p className="text-sm text-gray-600">Download, print, or share with your team</p>
@@ -750,7 +743,7 @@ ${data.q5_3_dealbreakers || 'Not specified'}
                 <div>
                   <button 
                     onClick={startQuestionnaire}
-                    className="px-8 py-4 bg-gradient-to-r from-purple-600 to-purple-800 text-white font-semibold rounded-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5"
+                    className="btn-primary"
                   >
                     Start Questionnaire →
                   </button>
@@ -762,7 +755,7 @@ ${data.q5_3_dealbreakers || 'Not specified'}
           {/* Section 1: Business Context */}
           {currentSection === 1 && (
             <div id="section1" className="space-y-6">
-              <div className="bg-gray-50 p-5 rounded-lg border-l-4 border-purple-600 mb-6">
+              <div className="bg-gray-50 p-5 rounded-lg border-l-4 border-[var(--ca-gold)] mb-6">
                 <h2 className="text-xl font-bold text-gray-900 mb-2">1. Business Context & Problem Definition</h2>
                 <p className="text-gray-600 text-sm">Help us understand the problem you&apos;re solving and why it matters</p>
               </div>
@@ -776,7 +769,7 @@ ${data.q5_3_dealbreakers || 'Not specified'}
                   <textarea 
                     id="q1_1_problem" 
                     required
-                    className="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-purple-600 focus:outline-none"
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--ca-gold)] focus:border-[var(--ca-gold)] focus:outline-none"
                     rows={3}
                   />
                   <div id="error_q1_1_problem" className="text-red-600 text-sm mt-1 hidden">This field is required</div>
@@ -803,7 +796,7 @@ ${data.q5_3_dealbreakers || 'Not specified'}
                   <select 
                     id="q1_1_frequency" 
                     required
-                    className="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-purple-600 focus:outline-none"
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--ca-gold)] focus:border-[var(--ca-gold)] focus:outline-none"
                   >
                     <option value="">Select frequency...</option>
                     <option value="hourly">Hourly</option>
@@ -822,7 +815,7 @@ ${data.q5_3_dealbreakers || 'Not specified'}
                   <textarea 
                     id="q1_2_current_solution" 
                     required
-                    className="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-purple-600 focus:outline-none"
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--ca-gold)] focus:border-[var(--ca-gold)] focus:outline-none"
                     rows={4}
                   />
                 </div>
@@ -835,7 +828,7 @@ ${data.q5_3_dealbreakers || 'Not specified'}
                     type="text" 
                     id="q1_2_tools" 
                     placeholder="e.g., Salesforce, Excel, Email, Manual process"
-                    className="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-purple-600 focus:outline-none"
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--ca-gold)] focus:border-[var(--ca-gold)] focus:outline-none"
                   />
                 </div>
 
@@ -854,7 +847,7 @@ ${data.q5_3_dealbreakers || 'Not specified'}
                   <textarea 
                     id="q1_3_pain_details" 
                     placeholder="Provide details about the pain points..."
-                    className="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-purple-600 focus:outline-none"
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--ca-gold)] focus:border-[var(--ca-gold)] focus:outline-none"
                     rows={3}
                   />
                 </div>
@@ -870,7 +863,7 @@ ${data.q5_3_dealbreakers || 'Not specified'}
                         type="number" 
                         id="q1_5_revenue" 
                         placeholder="e.g., 100000"
-                        className="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-purple-600 focus:outline-none"
+                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--ca-gold)] focus:border-[var(--ca-gold)] focus:outline-none"
                       />
                     </div>
                     <div>
@@ -879,7 +872,7 @@ ${data.q5_3_dealbreakers || 'Not specified'}
                         type="number" 
                         id="q1_5_cost_savings" 
                         placeholder="e.g., 50000"
-                        className="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-purple-600 focus:outline-none"
+                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--ca-gold)] focus:border-[var(--ca-gold)] focus:outline-none"
                       />
                     </div>
                     <div>
@@ -888,7 +881,7 @@ ${data.q5_3_dealbreakers || 'Not specified'}
                         type="number" 
                         id="q1_5_time_savings" 
                         placeholder="e.g., 200"
-                        className="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-purple-600 focus:outline-none"
+                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--ca-gold)] focus:border-[var(--ca-gold)] focus:outline-none"
                       />
                     </div>
                   </div>
@@ -903,7 +896,7 @@ ${data.q5_3_dealbreakers || 'Not specified'}
                     id="q1_6_sponsor" 
                     placeholder="Name and role" 
                     required
-                    className="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-purple-600 focus:outline-none"
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--ca-gold)] focus:border-[var(--ca-gold)] focus:outline-none"
                   />
                 </div>
 
@@ -915,7 +908,7 @@ ${data.q5_3_dealbreakers || 'Not specified'}
                     id="q1_7_success" 
                     required 
                     placeholder="Describe the ideal outcome and what will have changed..."
-                    className="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-purple-600 focus:outline-none"
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--ca-gold)] focus:border-[var(--ca-gold)] focus:outline-none"
                     rows={4}
                   />
                 </div>
@@ -927,7 +920,7 @@ ${data.q5_3_dealbreakers || 'Not specified'}
           {/* For brevity, I'll add a placeholder for the remaining sections */}
           {currentSection > 1 && currentSection <= 10 && (
             <div id={`section${currentSection}`} className="space-y-6">
-              <div className="bg-gray-50 p-5 rounded-lg border-l-4 border-purple-600 mb-6">
+              <div className="bg-gray-50 p-5 rounded-lg border-l-4 border-[var(--ca-gold)] mb-6">
                 <h2 className="text-xl font-bold text-gray-900 mb-2">Section {currentSection}</h2>
                 <p className="text-gray-600 text-sm">Section content will be expanded</p>
               </div>
@@ -938,7 +931,7 @@ ${data.q5_3_dealbreakers || 'Not specified'}
           {/* Results Section */}
           {currentSection === 11 && (
             <div id="results" className="space-y-6">
-              <div className="bg-gray-50 p-6 rounded-lg border-l-4 border-purple-600 mb-6">
+              <div className="bg-gray-50 p-6 rounded-lg border-l-4 border-[var(--ca-gold)] mb-6">
                 <h2 className="text-2xl font-bold text-gray-900 mb-2">📋 Your Planning Documentation</h2>
                 <p className="text-gray-600">All documentation has been generated based on your responses. Download individual documents or all at once.</p>
               </div>
@@ -946,7 +939,7 @@ ${data.q5_3_dealbreakers || 'Not specified'}
               <div className="flex flex-wrap gap-3 mb-8">
                 <button 
                   onClick={downloadAllDocs}
-                  className="px-5 py-3 bg-gradient-to-r from-purple-600 to-purple-800 text-white font-semibold rounded-lg hover:shadow-lg transition-all"
+                  className="btn-primary"
                 >
                   📥 Download All Documents
                 </button>
@@ -962,7 +955,7 @@ ${data.q5_3_dealbreakers || 'Not specified'}
                   <button 
                     key={doc.id}
                     onClick={() => downloadDoc(doc.id)}
-                    className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm"
+                    className="btn-secondary text-sm"
                     title={doc.desc}
                   >
                     Download {doc.name}
@@ -972,49 +965,49 @@ ${data.q5_3_dealbreakers || 'Not specified'}
 
               <div className="space-y-6">
                 <div className="bg-white border border-gray-200 rounded-lg p-6">
-                  <h3 className="text-lg font-semibold text-purple-600 mb-4">Problem Definition Document (PDD)</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Problem Definition Document (PDD)</h3>
                   <pre className="text-sm text-gray-700 whitespace-pre-wrap bg-gray-50 p-4 rounded border border-gray-200 max-h-96 overflow-y-auto">
                     {generatePDD(formData)}
                   </pre>
                 </div>
 
                 <div className="bg-white border border-gray-200 rounded-lg p-6">
-                  <h3 className="text-lg font-semibold text-purple-600 mb-4">System Design Document (SDD)</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">System Design Document (SDD)</h3>
                   <pre className="text-sm text-gray-700 whitespace-pre-wrap bg-gray-50 p-4 rounded border border-gray-200 max-h-96 overflow-y-auto">
                     {generateSDD(formData)}
                   </pre>
                 </div>
 
                 <div className="bg-white border border-gray-200 rounded-lg p-6">
-                  <h3 className="text-lg font-semibold text-purple-600 mb-4">Evaluation & Metrics Framework</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Evaluation & Metrics Framework</h3>
                   <pre className="text-sm text-gray-700 whitespace-pre-wrap bg-gray-50 p-4 rounded border border-gray-200 max-h-96 overflow-y-auto">
                     {generateEvalFramework(formData)}
                   </pre>
                 </div>
 
                 <div className="bg-white border border-gray-200 rounded-lg p-6">
-                  <h3 className="text-lg font-semibold text-purple-600 mb-4">Data & Context Requirements</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Data & Context Requirements</h3>
                   <pre className="text-sm text-gray-700 whitespace-pre-wrap bg-gray-50 p-4 rounded border border-gray-200 max-h-96 overflow-y-auto">
                     {generateDataRequirements(formData)}
                   </pre>
                 </div>
 
                 <div className="bg-white border border-gray-200 rounded-lg p-6">
-                  <h3 className="text-lg font-semibold text-purple-600 mb-4">Technical Constraints Document</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Technical Constraints Document</h3>
                   <pre className="text-sm text-gray-700 whitespace-pre-wrap bg-gray-50 p-4 rounded border border-gray-200 max-h-96 overflow-y-auto">
                     {generateTechConstraints(formData)}
                   </pre>
                 </div>
 
                 <div className="bg-white border border-gray-200 rounded-lg p-6">
-                  <h3 className="text-lg font-semibold text-purple-600 mb-4">Development Roadmap</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Development Roadmap</h3>
                   <pre className="text-sm text-gray-700 whitespace-pre-wrap bg-gray-50 p-4 rounded border border-gray-200 max-h-96 overflow-y-auto">
                     {generateRoadmap(formData)}
                   </pre>
                 </div>
 
                 <div className="bg-white border border-gray-200 rounded-lg p-6">
-                  <h3 className="text-lg font-semibold text-purple-600 mb-4">Prompt Engineering Strategy</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Prompt Engineering Strategy</h3>
                   <pre className="text-sm text-gray-700 whitespace-pre-wrap bg-gray-50 p-4 rounded border border-gray-200 max-h-96 overflow-y-auto">
                     {generatePromptStrategy(formData)}
                   </pre>
@@ -1024,13 +1017,13 @@ ${data.q5_3_dealbreakers || 'Not specified'}
               <div className="flex justify-between pt-6 border-t border-gray-200">
                 <button 
                   onClick={startOver}
-                  className="px-6 py-2 bg-gray-200 text-gray-900 rounded-lg hover:bg-gray-300 transition-colors"
+                  className="btn-secondary"
                 >
                   ← Start Over
                 </button>
                 <button 
                   onClick={() => window.print()}
-                  className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                  className="btn-primary"
                 >
                   🖨️ Print All
                 </button>
@@ -1044,21 +1037,20 @@ ${data.q5_3_dealbreakers || 'Not specified'}
               <button 
                 onClick={previousSection}
                 disabled={currentSection === 1}
-                className="px-6 py-2 bg-gray-200 text-gray-900 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 ← Previous
               </button>
               <button 
                 onClick={nextSection}
                 disabled={isGenerating}
-                className="px-6 py-2 bg-gradient-to-r from-purple-600 to-purple-800 text-white font-semibold rounded-lg hover:shadow-lg transition-all disabled:opacity-50"
+                className="btn-primary disabled:opacity-50"
               >
                 {isGenerating ? 'Generating...' : currentSection === totalSections ? 'Generate Documents →' : 'Next →'}
               </button>
             </div>
           )}
         </div>
-      </div>
     </div>
   );
 }

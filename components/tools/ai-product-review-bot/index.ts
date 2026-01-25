@@ -1,0 +1,1 @@
+export { AIProductReviewBotClient } from './AIProductReviewBotClient';

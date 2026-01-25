@@ -178,24 +178,13 @@ export function GRDGeneratorClient({
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-8">
-      <div className="max-w-6xl mx-auto space-y-6">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
-            PRD → GRD Generator
-          </h1>
-          <p className="text-gray-600 text-lg">
-            &quot;If the PRD defines what we&apos;re building, the GRD defines what must never go wrong.&quot;
-          </p>
+    <div className="space-y-6">
+      {/* Error Display */}
+      {state.error && (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+          <p className="text-red-800 text-sm">{state.error}</p>
         </div>
-
-        {/* Error Display */}
-        {state.error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-            <p className="text-red-800 text-sm">{state.error}</p>
-          </div>
-        )}
+      )}
 
         {/* Step Indicator */}
         {state.grd && (
@@ -309,7 +298,7 @@ function UploadStep({
   isLoading: boolean;
 }) {
   return (
-    <div className="bg-white rounded-lg shadow-lg p-8">
+    <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
       <div className="flex items-center gap-3 mb-6">
         <FileText className="text-brand-light" size={24} />
         <h2 className="text-2xl font-semibold text-gray-900">Upload or Paste PRD</h2>
@@ -318,7 +307,7 @@ function UploadStep({
       <div className="mb-6">
         <label 
           htmlFor="file-upload"
-          className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
+          className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-brand-light hover:bg-brand-light/5 transition-colors"
         >
           <div className="flex flex-col items-center justify-center pt-5 pb-6">
             <Upload className="text-gray-400 mb-2" size={32} />
@@ -372,7 +361,7 @@ function UploadStep({
       <button
         onClick={onGenerate}
         disabled={!prdText.trim() || isLoading}
-        className="mt-6 w-full bg-brand-light hover:bg-brand-light/90 disabled:bg-gray-300 text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
+        className="mt-6 w-full bg-brand-light hover:bg-brand-light/90 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
       >
         {isLoading ? (
           <>
@@ -408,7 +397,7 @@ function ReviewStep({
   return (
     <div className="space-y-6">
       {/* Classification */}
-      <div className="bg-white rounded-lg shadow-lg p-6">
+      <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
             <Lock className="text-red-600" size={24} />
@@ -439,8 +428,8 @@ function ReviewStep({
 
       {/* Standard Operating Procedures */}
       {sops && (
-        <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-lg">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Standard Operating Procedures</h2>
+        <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+          <h2 className="text-2xl font-semibold text-gray-900 mb-2">Standard Operating Procedures</h2>
           <p className="text-gray-600 mb-6">Detailed implementation guides for each governance requirement</p>
           
           <div className="space-y-4">
@@ -511,7 +500,7 @@ function ReviewStep({
       </div>
 
       {/* Ownership */}
-      <div className="bg-white rounded-lg shadow-lg p-6">
+      <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
         <div className="flex items-center gap-3 mb-4">
           <Users className="text-brand-light" size={24} />
           <h2 className="text-2xl font-semibold text-gray-900">Ownership & Accountability</h2>
@@ -531,7 +520,7 @@ function ReviewStep({
 
       {/* Regulatory Mapping */}
       {Object.keys(grd.regulatoryMapping).length > 0 && (
-        <div className="bg-white rounded-lg shadow-lg p-6">
+        <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
           <div className="flex items-center gap-3 mb-4">
             <Shield className="text-purple-600" size={24} />
             <h2 className="text-2xl font-semibold text-gray-900">Regulatory Mapping</h2>
@@ -555,13 +544,13 @@ function ReviewStep({
       <div className="flex justify-between">
         <button
           onClick={onBack}
-          className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium"
+          className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium transition-colors"
         >
           Back
         </button>
         <button
           onClick={onNext}
-          className="px-6 py-2 bg-brand-light text-white rounded-lg hover:bg-brand-light/90 font-medium"
+          className="px-6 py-2 bg-brand-light text-white rounded-lg hover:bg-brand-light/90 font-medium transition-colors"
         >
           Review Gaps ({grd.gaps.length})
         </button>
@@ -584,7 +573,7 @@ function SOPSection({
   onToggle: () => void;
 }) {
   return (
-    <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+    <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
       <button
         onClick={onToggle}
         className="w-full p-6 flex items-center justify-between hover:bg-gray-50 transition-colors"
@@ -663,7 +652,7 @@ function RequirementCard({
   requirements: any;
 }) {
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6">
+    <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
       <h3 className="text-xl font-semibold text-gray-900 mb-4">{title}</h3>
       <div className="space-y-3 text-sm">
         {title === 'Lineage & Traceability' && (
@@ -836,13 +825,13 @@ function GapsStep({
       <div className="flex justify-between">
         <button
           onClick={onBack}
-          className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium"
+          className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium transition-colors"
         >
           Back
         </button>
         <button
           onClick={onNext}
-          className="px-6 py-2 bg-brand-light text-white rounded-lg hover:bg-brand-light/90 font-medium"
+          className="px-6 py-2 bg-brand-light text-white rounded-lg hover:bg-brand-light/90 font-medium transition-colors"
         >
           Export GRD
         </button>
@@ -873,7 +862,7 @@ function ExportStep({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <button
             onClick={() => onExport('json')}
-            className="p-6 border-2 border-gray-200 rounded-lg hover:border-brand-light hover:bg-brand-light/5 transition-all text-left"
+            className="p-6 border-2 border-gray-200 rounded-lg hover:border-brand-light hover:bg-brand-light/5 transition-all text-left w-full"
           >
             <div className="text-2xl mb-2">📄</div>
             <h3 className="font-semibold text-gray-900 mb-1">JSON Format</h3>
@@ -884,7 +873,7 @@ function ExportStep({
 
           <button
             onClick={() => onExport('markdown')}
-            className="p-6 border-2 border-gray-200 rounded-lg hover:border-brand-light hover:bg-brand-light/5 transition-all text-left"
+            className="p-6 border-2 border-gray-200 rounded-lg hover:border-brand-light hover:bg-brand-light/5 transition-all text-left w-full"
           >
             <div className="text-2xl mb-2">📝</div>
             <h3 className="font-semibold text-gray-900 mb-1">Markdown Format</h3>
@@ -898,13 +887,13 @@ function ExportStep({
       <div className="flex justify-between">
         <button
           onClick={onBack}
-          className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium"
+          className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium transition-colors"
         >
           Back
         </button>
         <button
           onClick={onReset}
-          className="px-6 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium"
+          className="px-6 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-colors"
         >
           Start Over
         </button>

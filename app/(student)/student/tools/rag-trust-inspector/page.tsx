@@ -2,6 +2,7 @@ import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { getToolById } from '@/lib/tools/registry';
+import { RAGTrustInspector } from '@/components/tools/rag-trust-inspector';
 
 export default async function RAGTrustInspectorPage() {
   const supabase = await createUserSupabaseClient();
@@ -49,22 +50,8 @@ export default async function RAGTrustInspectorPage() {
         </p>
       </div>
 
-      {/* Placeholder Content */}
-      <div className="bg-white border border-gray-200 rounded-lg p-6">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">What this tool does</h2>
-        <p className="text-gray-600 mb-4">
-          The RAG Trust Inspector helps you inspect and validate RAG (Retrieval-Augmented Generation) systems for trust, accuracy, and reliability. 
-          Analyze your RAG implementations to ensure they meet quality and safety standards.
-        </p>
-        <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-          <p className="text-sm text-gray-600">
-            <strong>Status:</strong> {tool?.status === 'active' ? 'Live' : tool?.status === 'beta' ? 'Beta' : 'Coming Soon'}
-          </p>
-          <p className="text-sm text-gray-500 mt-2">
-            This tool is currently under development. Check back soon for updates!
-          </p>
-        </div>
-      </div>
+      {/* RAG Trust Inspector Component */}
+      <RAGTrustInspector />
     </div>
   );
 }

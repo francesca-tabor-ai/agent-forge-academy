@@ -2,6 +2,7 @@ import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { getToolById } from '@/lib/tools/registry';
+import { DecisionTradeoffSimulatorClient } from '@/components/tools/decision-tradeoff-simulator/DecisionTradeoffSimulatorClient';
 
 export default async function DecisionTradeoffSimulatorPage() {
   const supabase = await createUserSupabaseClient();
@@ -49,22 +50,8 @@ export default async function DecisionTradeoffSimulatorPage() {
         </p>
       </div>
 
-      {/* Placeholder Content */}
-      <div className="bg-white border border-gray-200 rounded-lg p-6">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">What this tool does</h2>
-        <p className="text-gray-600 mb-4">
-          The Decision Trade-off Simulator helps you simulate and analyze trade-offs in decision-making processes. 
-          Evaluate different architectural and strategic choices to make informed decisions.
-        </p>
-        <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-          <p className="text-sm text-gray-600">
-            <strong>Status:</strong> {tool?.status === 'active' ? 'Live' : tool?.status === 'beta' ? 'Beta' : 'Coming Soon'}
-          </p>
-          <p className="text-sm text-gray-500 mt-2">
-            This tool is currently under development. Check back soon for updates!
-          </p>
-        </div>
-      </div>
+      {/* Tool Client Component */}
+      <DecisionTradeoffSimulatorClient />
     </div>
   );
 }
