@@ -24,6 +24,7 @@ export type JobOpportunity = {
   location?: string;
   is_remote?: boolean;
   salary_range?: string;
+  category_id?: string | null; // For "Best for" filter
   
   // Legacy camelCase fields for backward compatibility
   matchingScore?: number; // Alias for matching_score (will be normalized)

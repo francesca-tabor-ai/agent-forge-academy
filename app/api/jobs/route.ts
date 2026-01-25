@@ -581,6 +581,7 @@ export async function GET(request: NextRequest) {
           application_deadline: job.application_deadline || null,
           is_active: job.is_active ?? true,
           is_featured: job.is_featured ?? false,
+          category_id: job.category_id || null, // For "Best for" filter
           created_at: job.created_at || null,
           updated_at: job.updated_at || null,
         };
@@ -606,6 +607,7 @@ export async function GET(request: NextRequest) {
           application_deadline: job.application_deadline || null,
           is_active: job.is_active ?? true,
           is_featured: job.is_featured ?? false,
+          category_id: job.category_id || null, // For "Best for" filter
           created_at: job.created_at || null,
           updated_at: job.updated_at || null,
         };

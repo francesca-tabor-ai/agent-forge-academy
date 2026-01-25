@@ -302,6 +302,7 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
   const [showApplyModal, setShowApplyModal] = useState(false);
   const [applyJob, setApplyJob] = useState<NormalizedJobOpportunity | null>(null);
   const [profileIncomplete, setProfileIncomplete] = useState<{ reason: string; missingFields: string[] } | null>(null);
+  const [jobCategories, setJobCategories] = useState<Array<{ id: string; name: string; slug: string }>>([]);
   
   const abortControllerRef = useRef<AbortController | null>(null);
   const searchDebounceRef = useRef<NodeJS.Timeout | null>(null);
@@ -312,6 +313,9 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
   const roleTypeFilter = (searchParams.get('roleType') || 'all') as RoleType;
   const skillFilter = useMemo(() => {
     return searchParams.get('skills')?.split(',') || [];
+  }, [searchParams]);
+  const categoryFilter = useMemo(() => {
+    return searchParams.get('categories')?.split(',') || [];
   }, [searchParams]);
   const sortBy = (searchParams.get('sort') || 'best-match') as SortOption;
 
@@ -475,6 +479,18 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
     
     fetchJobs(controller.signal);
     
+    // Fetch job categories
+    fetch('/api/jobs/categories')
+      .then(res => res.json())
+      .then(data => {
+        if (data.ok && data.categories) {
+          setJobCategories(data.categories);
+        }
+      })
+      .catch(err => {
+        console.error('Error fetching job categories:', err);
+      });
+    
     return () => {
       controller.abort();
     };
@@ -551,6 +567,13 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
       );
     }
 
+    // Category filter (Best for)
+    if (categoryFilter.length > 0) {
+      filtered = filtered.filter(job =>
+        job.category_id && categoryFilter.includes(job.category_id)
+      );
+    }
+
     // Sort (use computed fields from API)
     filtered.sort((a, b) => {
       switch (sortBy) {
@@ -571,7 +594,7 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
     });
 
     return filtered;
-  }, [jobs, searchQuery, statusFilter, roleTypeFilter, skillFilter, sortBy]);
+  }, [jobs, searchQuery, statusFilter, roleTypeFilter, skillFilter, categoryFilter, sortBy]);
 
   const updateURLParams = (updates: Record<string, string | null>) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -605,6 +628,7 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
       search: null,
       status: null,
       skills: null,
+      categories: null,
       sort: null,
     });
   };
@@ -618,6 +642,13 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
 
   const handleSortChange = (sort: SortOption) => {
     updateURLParams({ sort: sort !== 'best-match' ? sort : null });
+  };
+
+  const handleCategoryToggle = (categoryId: string) => {
+    const newCategories = categoryFilter.includes(categoryId)
+      ? categoryFilter.filter(c => c !== categoryId)
+      : [...categoryFilter, categoryId];
+    updateURLParams({ categories: newCategories.length > 0 ? newCategories.join(',') : null });
   };
 
   const getStatusBadge = (status?: string) => {
@@ -733,7 +764,7 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
             <div className="col-span-12">
               <div className="flex items-center justify-between mb-2">
                 <label className="block text-sm font-medium text-gray-700">Search</label>
-                {(statusFilter !== 'all' || searchQuery || skillFilter.length > 0) && (
+                {(statusFilter !== 'all' || searchQuery || skillFilter.length > 0 || categoryFilter.length > 0) && (
                     <button
                       onClick={handleResetFilters}
                       className="h-10 px-3 text-xs text-gray-500 hover:text-gray-700 underline transition-colors focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-1 rounded"
@@ -813,6 +844,39 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
                 />
               </div>
             )}
+
+            {/* Best For Filter */}
+            {jobCategories.length > 0 && (
+              <div className="col-span-12 md:col-span-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Best For</label>
+                <select
+                  value={categoryFilter.length > 0 ? categoryFilter[0] : ''}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value) {
+                      updateURLParams({ categories: value });
+                    } else {
+                      updateURLParams({ categories: null });
+                    }
+                  }}
+                  className="w-full h-10 px-4 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent bg-white appearance-none cursor-pointer"
+                  style={{
+                    backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
+                    backgroundPosition: 'right 0.5rem center',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundSize: '1.5em 1.5em',
+                    paddingRight: '2.5rem',
+                  }}
+                >
+                  <option value="">All categories</option>
+                  {jobCategories.map((category) => (
+                    <option key={category.id} value={category.id}>
+                      {category.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -828,7 +892,7 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
         </div>
         
         {/* Active Filters Summary */}
-        {(searchQuery || statusFilter !== 'all' || skillFilter.length > 0) && (
+        {(searchQuery || statusFilter !== 'all' || skillFilter.length > 0 || categoryFilter.length > 0) && (
           <div className="flex flex-col sm:flex-row sm:items-center gap-3">
             <div className="flex items-center gap-2 flex-wrap">
               {searchQuery && (
@@ -862,6 +926,18 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
                     onClick={() => updateURLParams({ skills: null })}
                     className="hover:text-brand-light/70 text-base leading-none focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-1 rounded"
                     aria-label="Remove skills filter"
+                  >
+                    ×
+                  </button>
+                </span>
+              )}
+              {categoryFilter.length > 0 && (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-brand-light/10 text-brand-light text-xs font-medium rounded-full border border-brand-light/20">
+                  Best For: {jobCategories.find(c => c.id === categoryFilter[0])?.name || 'Selected'}
+                  <button
+                    onClick={() => updateURLParams({ categories: null })}
+                    className="hover:text-brand-light/70 text-base leading-none focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-1 rounded"
+                    aria-label="Remove category filter"
                   >
                     ×
                   </button>
@@ -1042,11 +1118,11 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
                 No jobs to show yet
               </h3>
               <p className="text-sm text-gray-600 mb-6">
-                {searchQuery || statusFilter !== 'all' || skillFilter.length > 0
+                {searchQuery || statusFilter !== 'all' || skillFilter.length > 0 || categoryFilter.length > 0
                   ? 'No jobs match your filters. Try adjusting your search criteria.'
                   : "We'll recommend jobs once you complete a course or add a project."}
               </p>
-              {!searchQuery && statusFilter === 'all' && skillFilter.length === 0 && (
+              {!searchQuery && statusFilter === 'all' && skillFilter.length === 0 && categoryFilter.length === 0 && (
                 <div className="flex items-center justify-center gap-4">
                   <Link
                     href="/student/courses"
