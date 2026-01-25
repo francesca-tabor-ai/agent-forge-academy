@@ -268,7 +268,6 @@ export function GRDGeneratorClient({
             onReset={handleReset}
           />
         )}
-      </div>
     </div>
   );
 }
