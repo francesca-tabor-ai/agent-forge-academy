@@ -1,141 +1,411 @@
 'use client';
 
-import { useState, useMemo, useEffect, useCallback } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { useState, useEffect, useMemo } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import type { Tool } from '@/lib/tools/registry';
 import { ToolCard } from './ToolCard';
 import { ToolsToLearnNext } from '@/components/offers/ToolsToLearnNext';
 import { UnlockedOffersRecommendations } from '@/components/offers/UnlockedOffersRecommendations';
+import { INDUSTRIES } from '@/lib/utils/industries';
 
 interface ToolsPageClientProps {
   tools: Tool[];
   studentProfileId: string;
 }
 
+const DURATION_OPTIONS = [
+  { value: '0-4h', label: '0–4 hours' },
+  { value: '4-8h', label: '4–8 hours' },
+  { value: '8-12h', label: '8–12 hours' },
+  { value: 'weeks', label: 'Weeks' },
+];
+
+const DIFFICULTY_OPTIONS = [
+  { value: 'beginner', label: 'Beginner' },
+  { value: 'intermediate', label: 'Intermediate' },
+  { value: 'advanced', label: 'Advanced' },
+  { value: 'unspecified', label: 'Not specified' },
+];
+
+const BEST_FOR_OPTIONS = [
+  'Engineer',
+  'Tech Lead',
+  'PM',
+  'Founder',
+  'Marketer',
+  'Content Team',
+  'Data Team',
+  'Growth Team',
+  'Sales Team',
+  'CX Team',
+  'E-Commerce',
+  'RevOps',
+  'B2B Sales',
+  'DevOps',
+  'Creative',
+];
+
+const SORT_OPTIONS = [
+  { value: 'track', label: 'Track A–Z' },
+  { value: 'tool', label: 'Tool Name A–Z' },
+  { value: 'recommended', label: 'Recommended' },
+  { value: 'shortest', label: 'Shortest → Longest' },
+  { value: 'longest', label: 'Longest → Shortest' },
+  { value: 'newest', label: 'Newest' },
+];
+
+// Helper function to extract numeric time value for sorting
+function extractTimeValue(timeStr: string): number {
+  if (!timeStr) return 0;
+  // Extract hours or weeks
+  const hoursMatch = timeStr.match(/(\d+)[–-](\d+)\s*hours?/i);
+  if (hoursMatch) {
+    return parseInt(hoursMatch[2] || hoursMatch[1], 10);
+  }
+  const singleHourMatch = timeStr.match(/(\d+)\s*hours?/i);
+  if (singleHourMatch) {
+    return parseInt(singleHourMatch[1], 10);
+  }
+  const weeksMatch = timeStr.match(/(\d+)\s*weeks?/i);
+  if (weeksMatch) {
+    return parseInt(weeksMatch[1], 10) * 40; // Convert weeks to approximate hours
+  }
+  return 0;
+}
+
 export function ToolsPageClient({ tools, studentProfileId }: ToolsPageClientProps) {
-  const searchParams = useSearchParams();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  
+  const [search, setSearch] = useState(searchParams.get('search') || '');
+  const [selectedTracks, setSelectedTracks] = useState<string[]>(
+    searchParams.get('tracks')?.split(',').filter(Boolean) || []
+  );
+  const [duration, setDuration] = useState(searchParams.get('duration') || '');
+  const [difficulty, setDifficulty] = useState(searchParams.get('difficulty') || '');
+  const [selectedBestFor, setSelectedBestFor] = useState<string[]>(
+    searchParams.get('bestFor')?.split(',').filter(Boolean) || []
+  );
+  const [selectedIndustries, setSelectedIndustries] = useState<string[]>(
+    searchParams.get('industries')?.split(',').filter(Boolean) || []
+  );
+  const [statusFilter, setStatusFilter] = useState(searchParams.get('status') || 'all');
+  const [sort, setSort] = useState<'track' | 'tool' | 'recommended' | 'shortest' | 'longest' | 'newest'>(
+    (searchParams.get('sort') as any) || 'track'
+  );
+  const [isExpanded, setIsExpanded] = useState(false);
 
-  // Get filter values from URL params
-  const searchQuery = searchParams.get('search') || '';
-  const statusFilter = searchParams.get('status') || 'all';
-  const tagFilter = useMemo(() => {
-    return searchParams.get('tags')?.split(',').filter(Boolean) || [];
-  }, [searchParams]);
-  const courseFilter = useMemo(() => {
-    return searchParams.get('courses')?.split(',').filter(Boolean) || [];
-  }, [searchParams]);
-
-  // Local state
-  const [searchInput, setSearchInput] = useState(searchQuery);
-  const [isFiltersExpanded, setIsFiltersExpanded] = useState(false);
-
-  // Get all unique tags and courses from tools
-  const allTags = useMemo(() => {
-    const tagSet = new Set<string>();
-    tools.forEach(tool => {
-      tool.tags.forEach(tag => tagSet.add(tag));
-    });
-    return Array.from(tagSet).sort();
-  }, [tools]);
-
-  const allCourses = useMemo(() => {
-    const courseSet = new Set<string>();
-    tools.forEach(tool => {
-      tool.recommendedFor.forEach(course => courseSet.add(course));
-    });
-    return Array.from(courseSet).sort();
-  }, [tools]);
-
-  // Update URL params
-  const updateURLParams = useCallback((updates: Record<string, string | null>) => {
-    const params = new URLSearchParams(searchParams.toString());
-    Object.entries(updates).forEach(([key, value]) => {
-      if (value === null || value === '') {
-        params.delete(key);
-      } else {
-        params.set(key, value);
-      }
-    });
-    router.push(`?${params.toString()}`, { scroll: false });
-  }, [searchParams, router]);
-
-  // Debounced search handler
+  // Update URL params when filters change
   useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      if (searchInput !== searchQuery) {
-        updateURLParams({ search: searchInput || null });
-      }
-    }, 300);
+    const params = new URLSearchParams();
+    if (search) params.set('search', search);
+    if (selectedTracks.length > 0) params.set('tracks', selectedTracks.join(','));
+    if (duration) params.set('duration', duration);
+    if (difficulty) params.set('difficulty', difficulty);
+    if (selectedBestFor.length > 0) params.set('bestFor', selectedBestFor.join(','));
+    if (selectedIndustries.length > 0) params.set('industries', selectedIndustries.join(','));
+    if (statusFilter !== 'all') params.set('status', statusFilter);
+    if (sort && sort !== 'track') params.set('sort', sort);
 
-    return () => clearTimeout(timeoutId);
-  }, [searchInput, searchQuery, updateURLParams]);
+    // Update URL without navigation
+    const newUrl = params.toString() ? `?${params.toString()}` : window.location.pathname;
+    window.history.replaceState({}, '', newUrl);
+  }, [search, selectedTracks, duration, difficulty, selectedBestFor, selectedIndustries, statusFilter, sort]);
 
-  // Filter tools
+  // Filter and sort tools
   const filteredTools = useMemo(() => {
-    return tools.filter(tool => {
-      // Search filter
-      if (searchQuery) {
-        const searchLower = searchQuery.toLowerCase();
-        const matchesSearch =
-          tool.name.toLowerCase().includes(searchLower) ||
-          tool.description.toLowerCase().includes(searchLower) ||
-          tool.tags.some(tag => tag.toLowerCase().includes(searchLower));
-        if (!matchesSearch) return false;
-      }
+    let filtered = [...tools];
 
-      // Status filter
-      if (statusFilter !== 'all' && tool.status !== statusFilter) {
-        return false;
-      }
-
-      // Tag filter (any selected tag must be present)
-      if (tagFilter.length > 0) {
-        const hasMatchingTag = tagFilter.some(tag => tool.tags.includes(tag));
-        if (!hasMatchingTag) return false;
-      }
-
-      // Course filter (any selected course must be in recommendedFor)
-      if (courseFilter.length > 0) {
-        const hasMatchingCourse = courseFilter.some(course =>
-          tool.recommendedFor.includes(course)
+    // Search filter
+    if (search) {
+      const searchLower = search.toLowerCase();
+      filtered = filtered.filter((tool) => {
+        const name = tool.name || '';
+        const description = tool.description || '';
+        const category = tool.category || '';
+        const bestForStr = tool.bestFor?.join(' ') || '';
+        return (
+          name.toLowerCase().includes(searchLower) ||
+          description.toLowerCase().includes(searchLower) ||
+          category.toLowerCase().includes(searchLower) ||
+          bestForStr.toLowerCase().includes(searchLower) ||
+          tool.tags.some(tag => tag.toLowerCase().includes(searchLower))
         );
-        if (!hasMatchingCourse) return false;
+      });
+    }
+
+    // Track filter
+    if (selectedTracks.length > 0) {
+      filtered = filtered.filter((tool) => {
+        const track = tool.category || '';
+        return selectedTracks.includes(track);
+      });
+    }
+
+    // Duration filter
+    if (duration) {
+      filtered = filtered.filter((tool) => {
+        const toolDuration = tool.duration || '';
+        if (duration === '0-4h') {
+          return toolDuration.includes('0–4') || toolDuration.includes('2–4') || toolDuration.includes('3–5');
+        } else if (duration === '4-8h') {
+          return toolDuration.includes('4–8') || toolDuration.includes('4–6') || toolDuration.includes('4–10');
+        } else if (duration === '8-12h') {
+          return toolDuration.includes('8–12') || toolDuration.includes('6–12');
+        } else if (duration === 'weeks') {
+          return toolDuration.includes('week') || toolDuration.includes('Week');
+        }
+        return true;
+      });
+    }
+
+    // Difficulty filter
+    if (difficulty) {
+      filtered = filtered.filter((tool) => {
+        if (difficulty === 'unspecified') {
+          return !tool.difficultyLevel;
+        }
+        return tool.difficultyLevel?.toLowerCase() === difficulty.toLowerCase();
+      });
+    }
+
+    // Best For filter
+    if (selectedBestFor.length > 0) {
+      filtered = filtered.filter((tool) => {
+        const toolBestFor = tool.bestFor || [];
+        return selectedBestFor.some((bf) => 
+          toolBestFor.some(tbf => tbf.toLowerCase().includes(bf.toLowerCase()))
+        );
+      });
+    }
+
+    // Industry filter
+    if (selectedIndustries.length > 0) {
+      filtered = filtered.filter((tool) => {
+        const toolIndustries = tool.industries || [];
+        return toolIndustries.some((industry) => selectedIndustries.includes(industry));
+      });
+    }
+
+    // Status filter
+    if (statusFilter !== 'all') {
+      filtered = filtered.filter((tool) => tool.status === statusFilter);
+    }
+
+    // Sort
+    filtered.sort((a, b) => {
+      if (sort === 'shortest') {
+        const durationA = a.duration || '';
+        const durationB = b.duration || '';
+        const numA = extractTimeValue(durationA);
+        const numB = extractTimeValue(durationB);
+        return numA - numB;
+      } else if (sort === 'longest') {
+        const durationA = a.duration || '';
+        const durationB = b.duration || '';
+        const numA = extractTimeValue(durationA);
+        const numB = extractTimeValue(durationB);
+        return numB - numA;
+      } else if (sort === 'newest') {
+        // Tools don't have created_at in the registry, so we'll skip this for now
+        return 0;
+      } else if (sort === 'track') {
+        const trackA = a.category || '';
+        const trackB = b.category || '';
+        const trackCompare = trackA.localeCompare(trackB);
+        if (trackCompare !== 0) return trackCompare;
+        const nameA = a.name || '';
+        const nameB = b.name || '';
+        return nameA.localeCompare(nameB);
+      } else if (sort === 'tool') {
+        const nameA = a.name || '';
+        const nameB = b.name || '';
+        return nameA.localeCompare(nameB);
+      }
+      // Recommended (default) - keep original order
+      return 0;
+    });
+
+    return filtered;
+  }, [tools, search, selectedTracks, duration, difficulty, selectedBestFor, selectedIndustries, statusFilter, sort]);
+
+  // Compute available filters based on tools
+  const availableFilters = useMemo(() => {
+    const availableTracks = new Set<string>();
+    const availableBestFor = new Set<string>();
+    const availableIndustries = new Set<string>();
+    const availableDurations = new Set<string>();
+    const availableDifficulties = new Set<string>();
+
+    tools.forEach((tool) => {
+      // Tracks
+      const track = tool.category;
+      if (track) {
+        availableTracks.add(track);
       }
 
-      return true;
+      // Best For
+      const toolBestFor = tool.bestFor || [];
+      toolBestFor.forEach((bf) => {
+        if (bf) availableBestFor.add(bf);
+      });
+
+      // Industries
+      const toolIndustries = tool.industries || [];
+      toolIndustries.forEach((industry) => {
+        if (industry) availableIndustries.add(industry);
+      });
+
+      // Duration
+      const toolDuration = tool.duration || '';
+      if (toolDuration) {
+        if (toolDuration.includes('0–4') || toolDuration.includes('2–4') || toolDuration.includes('3–5')) {
+          availableDurations.add('0-4h');
+        }
+        if (toolDuration.includes('4–8') || toolDuration.includes('4–6') || toolDuration.includes('4–10')) {
+          availableDurations.add('4-8h');
+        }
+        if (toolDuration.includes('8–12') || toolDuration.includes('6–12')) {
+          availableDurations.add('8-12h');
+        }
+        if (toolDuration.includes('week') || toolDuration.includes('Week')) {
+          availableDurations.add('weeks');
+        }
+      }
+
+      // Difficulty
+      if (tool.difficultyLevel) {
+        availableDifficulties.add(tool.difficultyLevel.toLowerCase());
+      } else {
+        availableDifficulties.add('unspecified');
+      }
     });
-  }, [tools, searchQuery, statusFilter, tagFilter, courseFilter]);
 
-  const handleStatusChange = (value: string) => {
-    updateURLParams({ status: value !== 'all' ? value : null });
+    return {
+      tracks: Array.from(availableTracks).sort(),
+      bestFor: Array.from(availableBestFor).sort(),
+      industries: Array.from(availableIndustries).sort(),
+      durations: Array.from(availableDurations),
+      difficulties: Array.from(availableDifficulties),
+    };
+  }, [tools]);
+
+  const toggleTrack = (track: string) => {
+    setSelectedTracks((prev) =>
+      prev.includes(track) ? prev.filter((t) => t !== track) : [...prev, track]
+    );
   };
 
-  const handleTagToggle = (tag: string) => {
-    const newTags = tagFilter.includes(tag)
-      ? tagFilter.filter(t => t !== tag)
-      : [...tagFilter, tag];
-    updateURLParams({ tags: newTags.length > 0 ? newTags.join(',') : null });
+  const toggleBestFor = (bestFor: string) => {
+    setSelectedBestFor((prev) =>
+      prev.includes(bestFor) ? prev.filter((b) => b !== bestFor) : [...prev, bestFor]
+    );
   };
 
-  const handleCourseToggle = (course: string) => {
-    const newCourses = courseFilter.includes(course)
-      ? courseFilter.filter(c => c !== course)
-      : [...courseFilter, course];
-    updateURLParams({ courses: newCourses.length > 0 ? newCourses.join(',') : null });
+  const toggleIndustry = (industry: string) => {
+    setSelectedIndustries((prev) =>
+      prev.includes(industry) ? prev.filter((i) => i !== industry) : [...prev, industry]
+    );
   };
 
-  const handleResetFilters = () => {
-    setSearchInput('');
-    router.push('/student/tools');
+  const clearFilters = () => {
+    setSearch('');
+    setSelectedTracks([]);
+    setDuration('');
+    setDifficulty('');
+    setSelectedBestFor([]);
+    setSelectedIndustries([]);
+    setStatusFilter('all');
+    setSort('track');
   };
 
   const hasActiveFilters =
-    searchQuery ||
-    statusFilter !== 'all' ||
-    tagFilter.length > 0 ||
-    courseFilter.length > 0;
+    search || selectedTracks.length > 0 || duration || difficulty || selectedBestFor.length > 0 || selectedIndustries.length > 0 || statusFilter !== 'all';
+
+  // Calculate total active filter count
+  const activeFilterCount = 
+    (search ? 1 : 0) +
+    selectedTracks.length +
+    (duration ? 1 : 0) +
+    (difficulty ? 1 : 0) +
+    selectedBestFor.length +
+    selectedIndustries.length +
+    (statusFilter !== 'all' ? 1 : 0) +
+    (sort !== 'track' ? 1 : 0);
+
+  // Build array of active filter chips
+  const activeFilterChips = useMemo(() => {
+    const chips: Array<{ label: string; onRemove: () => void }> = [];
+
+    // Search
+    if (search) {
+      chips.push({
+        label: `Search: "${search}"`,
+        onRemove: () => setSearch(''),
+      });
+    }
+
+    // Tracks
+    selectedTracks.forEach((track) => {
+      chips.push({
+        label: `Track: ${track}`,
+        onRemove: () => setSelectedTracks((prev) => prev.filter((t) => t !== track)),
+      });
+    });
+
+    // Duration
+    if (duration) {
+      const durationLabel = DURATION_OPTIONS.find((opt) => opt.value === duration)?.label || duration;
+      chips.push({
+        label: `Duration: ${durationLabel}`,
+        onRemove: () => setDuration(''),
+      });
+    }
+
+    // Difficulty
+    if (difficulty) {
+      const difficultyLabel = DIFFICULTY_OPTIONS.find((opt) => opt.value === difficulty)?.label || difficulty;
+      chips.push({
+        label: `Difficulty: ${difficultyLabel}`,
+        onRemove: () => setDifficulty(''),
+      });
+    }
+
+    // Best For
+    selectedBestFor.forEach((bestFor) => {
+      chips.push({
+        label: `Best For: ${bestFor}`,
+        onRemove: () => setSelectedBestFor((prev) => prev.filter((b) => b !== bestFor)),
+      });
+    });
+
+    // Industries
+    selectedIndustries.forEach((industry) => {
+      chips.push({
+        label: `Industry: ${industry}`,
+        onRemove: () => setSelectedIndustries((prev) => prev.filter((i) => i !== industry)),
+      });
+    });
+
+    // Status
+    if (statusFilter !== 'all') {
+      chips.push({
+        label: `Status: ${statusFilter === 'coming_soon' ? 'Coming Soon' : statusFilter.charAt(0).toUpperCase() + statusFilter.slice(1)}`,
+        onRemove: () => setStatusFilter('all'),
+      });
+    }
+
+    // Sort
+    if (sort !== 'track') {
+      const sortLabel = SORT_OPTIONS.find((opt) => opt.value === sort)?.label || sort;
+      chips.push({
+        label: `Sort: ${sortLabel}`,
+        onRemove: () => setSort('track'),
+      });
+    }
+
+    return chips;
+  }, [search, selectedTracks, duration, difficulty, selectedBestFor, selectedIndustries, statusFilter, sort]);
 
   return (
     <div className="space-y-6">
@@ -151,63 +421,92 @@ export function ToolsPageClient({ tools, studentProfileId }: ToolsPageClientProp
       <ToolsToLearnNext />
       <UnlockedOffersRecommendations />
 
-      {/* Filters Card */}
-      <div className="bg-white border border-gray-200 rounded-lg">
-        {/* Card Header */}
-        <button
-          onClick={() => setIsFiltersExpanded(!isFiltersExpanded)}
-          className="w-full px-6 py-4 border-b border-gray-200 flex items-center justify-between hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-2 rounded-t-lg"
-          aria-expanded={isFiltersExpanded}
-          aria-label={isFiltersExpanded ? 'Collapse filters' : 'Expand filters'}
-        >
-          <h2 className="text-lg font-semibold text-gray-900">Filters</h2>
-          {isFiltersExpanded ? (
-            <ChevronUp className="w-5 h-5 text-gray-500" />
-          ) : (
-            <ChevronDown className="w-5 h-5 text-gray-500" />
+      {/* Filters Section */}
+      <div className="space-y-4">
+        {/* Search Bar and Sort - Top Bar */}
+        <div className="flex items-center gap-3">
+          <div className="flex-1">
+            <input
+              type="text"
+              placeholder="Search tools by name, track, or 'Best For'..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent"
+            />
+          </div>
+          <div className="flex-shrink-0">
+            <label htmlFor="sort-select" className="sr-only">
+              Sort by
+            </label>
+            <select
+              id="sort-select"
+              value={sort}
+              onChange={(e) => setSort(e.target.value as 'track' | 'tool' | 'recommended' | 'shortest' | 'longest' | 'newest')}
+              className="px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent bg-white"
+            >
+              {SORT_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        {/* Active Filter Chips */}
+        {activeFilterChips.length > 0 && (
+          <div className="flex flex-wrap gap-2">
+            {activeFilterChips.map((chip, index) => (
+              <span
+                key={index}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-brand-light/10 text-brand-light text-xs font-medium rounded-full border border-brand-light/20"
+              >
+                {chip.label}
+                <button
+                  onClick={chip.onRemove}
+                  className="hover:text-brand-light/70 text-base leading-none focus:outline-none transition-colors ml-0.5"
+                  aria-label={`Remove ${chip.label}`}
+                  type="button"
+                >
+                  ×
+                </button>
+              </span>
+            ))}
+          </div>
+        )}
+
+        {/* Filters Header with Count and Clear All */}
+        <div className="flex items-center justify-between">
+          <button
+            type="button"
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-gray-900"
+          >
+            <span>Filters {activeFilterCount > 0 && `(${activeFilterCount})`}</span>
+            <span>{isExpanded ? '▲' : '▼'}</span>
+          </button>
+          {hasActiveFilters && (
+            <button
+              type="button"
+              onClick={clearFilters}
+              className="text-sm text-gray-600 hover:text-gray-900 underline"
+            >
+              Clear all
+            </button>
           )}
-        </button>
+        </div>
 
-        {/* Card Content */}
-        {isFiltersExpanded && (
-          <div className="p-6 transition-all duration-200 ease-in-out">
-            <div className="space-y-4">
-              {/* Search */}
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <label className="block text-sm font-medium text-gray-700">Search</label>
-                  {hasActiveFilters && (
-                    <button
-                      onClick={handleResetFilters}
-                      className="h-10 px-3 text-xs text-gray-500 hover:text-gray-700 underline transition-colors focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-1 rounded"
-                    >
-                      Reset filters
-                    </button>
-                  )}
-                </div>
-                <input
-                  type="text"
-                  placeholder="Search by tool name, description, or tags..."
-                  value={searchInput}
-                  onChange={(e) => setSearchInput(e.target.value)}
-                  className="w-full h-10 px-4 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent"
-                />
-              </div>
-
+        {/* Expandable Filters */}
+        <div>
+          {isExpanded && (
+            <div className="mt-4 space-y-4 pt-4 border-t border-gray-200">
               {/* Status Filter */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                <label className="block text-xs font-medium text-gray-700 mb-2">Status</label>
                 <select
                   value={statusFilter}
-                  onChange={(e) => handleStatusChange(e.target.value)}
-                  className="w-full h-10 px-4 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent bg-white appearance-none cursor-pointer"
-                  style={{
-                    backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
-                    backgroundPosition: 'right 0.5rem center',
-                    backgroundRepeat: 'no-repeat',
-                    backgroundSize: '1.5em 1.5em',
-                    paddingRight: '2.5rem',
-                  }}
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                  className="w-full px-3 py-1 text-xs border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent bg-white"
                 >
                   <option value="all">All Status</option>
                   <option value="active">Active</option>
@@ -216,134 +515,129 @@ export function ToolsPageClient({ tools, studentProfileId }: ToolsPageClientProp
                 </select>
               </div>
 
-              {/* Tags Filter */}
-              {allTags.length > 0 && (
+              {/* Tracks (Multi-select) */}
+              {availableFilters.tracks.length > 0 && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Tags</label>
+                  <label className="block text-xs font-medium text-gray-700 mb-2">Track</label>
                   <div className="flex flex-wrap gap-2">
-                    {allTags.map((tag) => (
+                    {availableFilters.tracks.map((track) => (
                       <button
-                        key={tag}
-                        onClick={() => handleTagToggle(tag)}
-                        className={`px-3 py-1.5 text-sm font-medium rounded-full border transition-colors focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-1 ${
-                          tagFilter.includes(tag)
+                        key={track}
+                        type="button"
+                        onClick={() => toggleTrack(track)}
+                        className={`px-3 py-1 text-xs rounded-full border transition-colors ${
+                          selectedTracks.includes(track)
                             ? 'bg-brand-light text-white border-brand-light'
-                            : 'bg-white text-gray-700 border-gray-300 hover:border-brand-light hover:text-brand-light'
+                            : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
                         }`}
                       >
-                        {tag}
+                        {track}
                       </button>
                     ))}
                   </div>
                 </div>
               )}
 
-              {/* Courses Filter */}
-              {allCourses.length > 0 && (
+              {/* Duration (Single-select) */}
+              {availableFilters.durations.length > 0 && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Recommended for Courses
-                  </label>
+                  <label className="block text-xs font-medium text-gray-700 mb-2">Duration</label>
                   <div className="flex flex-wrap gap-2">
-                    {allCourses.map((course) => (
+                    {DURATION_OPTIONS.filter((option) => availableFilters.durations.includes(option.value)).map((option) => (
                       <button
-                        key={course}
-                        onClick={() => handleCourseToggle(course)}
-                        className={`px-3 py-1.5 text-sm font-medium rounded-full border transition-colors focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-1 ${
-                          courseFilter.includes(course)
+                        key={option.value}
+                        type="button"
+                        onClick={() => setDuration(duration === option.value ? '' : option.value)}
+                        className={`px-3 py-1 text-xs rounded-full border transition-colors ${
+                          duration === option.value
                             ? 'bg-brand-light text-white border-brand-light'
-                            : 'bg-white text-gray-700 border-gray-300 hover:border-brand-light hover:text-brand-light'
+                            : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
                         }`}
                       >
-                        {course.replace(/-/g, ' ')}
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Difficulty (Single-select) */}
+              {availableFilters.difficulties.length > 0 && (
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 mb-2">Difficulty</label>
+                  <div className="flex flex-wrap gap-2">
+                    {DIFFICULTY_OPTIONS.filter((option) => availableFilters.difficulties.includes(option.value)).map((option) => (
+                      <button
+                        key={option.value}
+                        type="button"
+                        onClick={() => setDifficulty(difficulty === option.value ? '' : option.value)}
+                        className={`px-3 py-1 text-xs rounded-full border transition-colors ${
+                          difficulty === option.value
+                            ? 'bg-brand-light text-white border-brand-light'
+                            : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
+                        }`}
+                      >
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Best For (Multi-select) */}
+              {availableFilters.bestFor.length > 0 && (
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 mb-2">Best For</label>
+                  <div className="flex flex-wrap gap-2">
+                    {availableFilters.bestFor.map((option) => (
+                      <button
+                        key={option}
+                        type="button"
+                        onClick={() => toggleBestFor(option)}
+                        className={`px-3 py-1 text-xs rounded-full border transition-colors ${
+                          selectedBestFor.includes(option)
+                            ? 'bg-brand-light text-white border-brand-light'
+                            : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
+                        }`}
+                      >
+                        {option}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Industry (Multi-select) */}
+              {availableFilters.industries.length > 0 && (
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 mb-2">Industry</label>
+                  <div className="flex flex-wrap gap-2">
+                    {availableFilters.industries.map((industry) => (
+                      <button
+                        key={industry}
+                        type="button"
+                        onClick={() => toggleIndustry(industry)}
+                        className={`px-3 py-1 text-xs rounded-full border transition-colors ${
+                          selectedIndustries.includes(industry)
+                            ? 'bg-brand-light text-white border-brand-light'
+                            : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
+                        }`}
+                      >
+                        {industry}
                       </button>
                     ))}
                   </div>
                 </div>
               )}
             </div>
-          </div>
-        )}
-      </div>
-
-      {/* Results Header */}
-      {hasActiveFilters && (
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-gray-200">
-          <div>
-            <p className="text-sm text-gray-600">
-              Showing <span className="font-medium text-gray-900">{filteredTools.length}</span> of{' '}
-              <span className="font-medium text-gray-900">{tools.length}</span> tool
-              {tools.length !== 1 ? 's' : ''}
-            </p>
-          </div>
-
-          {/* Active Filters Summary */}
-          <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-            <div className="flex items-center gap-2 flex-wrap">
-              {searchQuery && (
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded-full border border-gray-300">
-                  Search: &quot;{searchQuery}&quot;
-                  <button
-                    onClick={() => updateURLParams({ search: null })}
-                    className="hover:text-gray-900 text-base leading-none focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-1 rounded"
-                    aria-label="Remove search"
-                  >
-                    ×
-                  </button>
-                </span>
-              )}
-              {statusFilter !== 'all' && (
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-brand-light/10 text-brand-light text-xs font-medium rounded-full border border-brand-light/20">
-                  Status: {statusFilter === 'coming_soon' ? 'Coming Soon' : statusFilter.charAt(0).toUpperCase() + statusFilter.slice(1)}
-                  <button
-                    onClick={() => updateURLParams({ status: null })}
-                    className="hover:text-brand-light/70 text-base leading-none focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-1 rounded"
-                    aria-label="Remove status filter"
-                  >
-                    ×
-                  </button>
-                </span>
-              )}
-              {tagFilter.map((tag) => (
-                <span
-                  key={tag}
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-brand-light/10 text-brand-light text-xs font-medium rounded-full border border-brand-light/20"
-                >
-                  Tag: {tag}
-                  <button
-                    onClick={() => handleTagToggle(tag)}
-                    className="hover:text-brand-light/70 text-base leading-none focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-1 rounded"
-                    aria-label={`Remove ${tag} filter`}
-                  >
-                    ×
-                  </button>
-                </span>
-              ))}
-              {courseFilter.map((course) => (
-                <span
-                  key={course}
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-brand-light/10 text-brand-light text-xs font-medium rounded-full border border-brand-light/20"
-                >
-                  Course: {course.replace(/-/g, ' ')}
-                  <button
-                    onClick={() => handleCourseToggle(course)}
-                    className="hover:text-brand-light/70 text-base leading-none focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-1 rounded"
-                    aria-label={`Remove ${course} filter`}
-                  >
-                    ×
-                  </button>
-                </span>
-              ))}
-            </div>
-            <button
-              onClick={handleResetFilters}
-              className="h-10 px-3 text-xs font-medium text-gray-600 hover:text-gray-900 underline transition-colors whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-1 rounded"
-            >
-              Clear all
-            </button>
-          </div>
+          )}
         </div>
-      )}
+
+        {/* Results Count */}
+        <div className="text-sm text-gray-600">
+          Showing {filteredTools.length} of {tools.length} tool{tools.length !== 1 ? 's' : ''}
+        </div>
+      </div>
 
       {/* Tools Grid */}
       {filteredTools.length > 0 ? (
@@ -360,7 +654,7 @@ export function ToolsPageClient({ tools, studentProfileId }: ToolsPageClientProp
           </p>
           {hasActiveFilters && (
             <button
-              onClick={handleResetFilters}
+              onClick={clearFilters}
               className="h-10 px-4 bg-brand-light text-white rounded-lg hover:bg-brand-light/90 transition-colors font-medium text-sm focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-2"
             >
               Reset Filters

@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import { ToolsPageClient } from '@/components/tools/ToolsPageClient';
-import { getAvailableTools } from '@/lib/tools/registry';
+import type { Tool } from '@/lib/tools/registry';
 
 export default async function ToolsPage() {
   const supabase = await createUserSupabaseClient();
@@ -38,8 +38,32 @@ export default async function ToolsPage() {
     redirect('/');
   }
 
-  // Get tools from registry (includes active, beta, and coming_soon - excludes deprecated)
-  const tools = getAvailableTools();
+  // Get tools from database (platform_tools table)
+  const { data: platformTools, error } = await supabase
+    .from('platform_tools')
+    .select('*')
+    .neq('status', 'deprecated')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching platform tools:', error);
+  }
+
+  // Map database tools to Tool interface
+  const tools: Tool[] = (platformTools || []).map((tool: any) => ({
+    id: tool.id,
+    name: tool.name,
+    description: tool.description,
+    href: tool.href,
+    status: tool.status,
+    tags: tool.tags || [],
+    recommendedFor: tool.recommended_for_courses || [],
+    category: tool.category || undefined,
+    difficultyLevel: tool.difficulty_level || undefined,
+    duration: tool.duration || undefined,
+    industries: tool.industries || [],
+    bestFor: tool.best_for || [],
+  }));
 
   return (
     <Suspense fallback={

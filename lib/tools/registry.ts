@@ -15,6 +15,11 @@ export interface Tool {
   status: ToolStatus;
   tags: string[];
   recommendedFor: string[];
+  category?: string; // Track/category (e.g., "GTM & Revenue Operations", "Agentic Systems")
+  difficultyLevel?: string; // 'beginner', 'intermediate', 'advanced'
+  duration?: string; // Time estimate (e.g., "~4-6 hours", "~8 weeks")
+  industries?: string[]; // Array of industries
+  bestFor?: string[]; // Array of target audiences
 }
 
 /**
