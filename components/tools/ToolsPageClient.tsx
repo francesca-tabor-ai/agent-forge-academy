@@ -7,6 +7,7 @@ import { ToolCard } from './ToolCard';
 import { ToolsToLearnNext } from '@/components/offers/ToolsToLearnNext';
 import { UnlockedOffersRecommendations } from '@/components/offers/UnlockedOffersRecommendations';
 import { INDUSTRIES } from '@/lib/utils/industries';
+import { normalizeBestFor } from '@/lib/utils';
 
 interface ToolsPageClientProps {
   tools: Tool[];
@@ -134,7 +135,8 @@ export function ToolsPageClient({ tools, studentProfileId }: ToolsPageClientProp
         const name = tool.name || '';
         const description = tool.description || '';
         const category = tool.category || '';
-        const bestForStr = tool.bestFor?.join(' ') || '';
+        const normalizedBestFor = normalizeBestFor(tool.bestFor);
+        const bestForStr = normalizedBestFor.join(' ');
         return (
           name.toLowerCase().includes(searchLower) ||
           description.toLowerCase().includes(searchLower) ||
@@ -183,7 +185,7 @@ export function ToolsPageClient({ tools, studentProfileId }: ToolsPageClientProp
     // Best For filter
     if (selectedBestFor.length > 0) {
       filtered = filtered.filter((tool) => {
-        const toolBestFor = tool.bestFor || [];
+        const toolBestFor = normalizeBestFor(tool.bestFor);
         return selectedBestFor.some((bf) => 
           toolBestFor.some(tbf => tbf.toLowerCase().includes(bf.toLowerCase()))
         );
@@ -251,7 +253,7 @@ export function ToolsPageClient({ tools, studentProfileId }: ToolsPageClientProp
       }
 
       // Best For
-      const toolBestFor = tool.bestFor || [];
+      const toolBestFor = normalizeBestFor(tool.bestFor);
       toolBestFor.forEach((bf) => {
         if (bf) availableBestFor.add(bf);
       });

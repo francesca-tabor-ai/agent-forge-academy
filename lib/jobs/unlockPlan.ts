@@ -12,6 +12,7 @@
 
 import { courseMetadata, type CourseMetadata } from '@/lib/course-metadata';
 import { loadAllLessons, type Lesson } from '@/lib/lessons';
+import { normalizeBestFor } from '@/lib/utils';
 
 export interface UnlockPlanRecommendation {
   type: 'course' | 'lesson' | 'project';
@@ -49,12 +50,13 @@ function normalizeSkill(skill: string): string {
  */
 function skillMatchesCourse(skill: string, course: CourseMetadata): boolean {
   const normalizedSkill = normalizeSkill(skill);
+  const normalizedBestFor = normalizeBestFor(course.bestFor);
   const searchText = [
     course.title,
     course.category,
     course.outcome || '',
     course.build || '',
-    course.bestFor || '',
+    normalizedBestFor.join(' '),
     course.slug,
   ]
     .join(' ')
