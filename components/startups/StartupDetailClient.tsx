@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -195,6 +195,9 @@ const getPromptTypeColor = (type: string) => {
 export function StartupDetailClient({ startup }: StartupDetailClientProps) {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<'overview' | 'founder' | 'business' | 'build' | 'tools' | 'prompts' | 'courses'>('overview');
+  const [expandedTools, setExpandedTools] = useState<Record<string, boolean>>({});
+  const [toolTruncationNeeds, setToolTruncationNeeds] = useState<Record<string, boolean>>({});
+  const toolDescriptionRefs = useRef<Record<string, HTMLParagraphElement | null>>({});
   
   // Defensive guard - should not happen but prevents blank page
   if (!startup) {
@@ -237,6 +240,43 @@ export function StartupDetailClient({ startup }: StartupDetailClientProps) {
 
   const handleStartAIIdeation = () => {
     router.push(`/student/ai-advisor?startup_id=${startup.id}`);
+  };
+
+  // Check if tool descriptions need truncation
+  useEffect(() => {
+    const checkTruncation = (toolId: string) => {
+      const element = toolDescriptionRefs.current[toolId];
+      if (element) {
+        // Temporarily remove line-clamp to get actual full height
+        element.classList.remove('line-clamp-2');
+        const actualFullHeight = element.scrollHeight;
+        element.classList.add('line-clamp-2');
+        const clampedHeight = element.scrollHeight;
+        
+        setToolTruncationNeeds(prev => ({
+          ...prev,
+          [toolId]: actualFullHeight > clampedHeight
+        }));
+      }
+    };
+
+    // Check truncation for all tools when they're rendered
+    const timeoutIds: NodeJS.Timeout[] = [];
+    startup.tools.forEach(tool => {
+      const timeoutId = setTimeout(() => checkTruncation(tool.id), 0);
+      timeoutIds.push(timeoutId);
+    });
+
+    return () => {
+      timeoutIds.forEach(id => clearTimeout(id));
+    };
+  }, [startup.tools]);
+
+  const toggleToolExpansion = (toolId: string) => {
+    setExpandedTools(prev => ({
+      ...prev,
+      [toolId]: !prev[toolId]
+    }));
   };
 
   return (
@@ -753,7 +793,24 @@ export function StartupDetailClient({ startup }: StartupDetailClientProps) {
                           </span>
                         </div>
                         {tool.description && (
-                          <p className="text-sm text-gray-600 mb-3 line-clamp-2">{tool.description}</p>
+                          <div className="mb-3">
+                            <p
+                              ref={(el) => {
+                                toolDescriptionRefs.current[tool.id] = el;
+                              }}
+                              className={`text-sm text-gray-600 ${!expandedTools[tool.id] ? 'line-clamp-2' : ''}`}
+                            >
+                              {tool.description}
+                            </p>
+                            {toolTruncationNeeds[tool.id] && (
+                              <button
+                                onClick={() => toggleToolExpansion(tool.id)}
+                                className="mt-2 text-sm font-medium text-brand-light hover:text-brand-light/80 transition-colors"
+                              >
+                                {expandedTools[tool.id] ? 'Read less' : 'Read more'}
+                              </button>
+                            )}
+                          </div>
                         )}
                         {tool.usageNotes && (
                           <div className="mb-3">

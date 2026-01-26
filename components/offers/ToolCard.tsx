@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { ToolLogo } from './ToolLogo';
 
@@ -47,6 +48,31 @@ export function ToolCard({
   enrolledCourseSlugs = [],
   requiredCourseForOffer,
 }: ToolCardProps) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [needsTruncation, setNeedsTruncation] = useState(false);
+  const descriptionRef = useRef<HTMLParagraphElement>(null);
+
+  useEffect(() => {
+    // Check if description needs truncation by comparing scrollHeight with clientHeight
+    const checkTruncation = () => {
+      if (descriptionRef.current) {
+        const element = descriptionRef.current;
+        // Temporarily remove line-clamp to get actual full height
+        element.classList.remove('line-clamp-2');
+        const actualFullHeight = element.scrollHeight;
+        element.classList.add('line-clamp-2');
+        const clampedHeight = element.scrollHeight;
+        
+        setNeedsTruncation(actualFullHeight > clampedHeight);
+      }
+    };
+
+    // Wait for element to be rendered
+    const timeoutId = setTimeout(checkTruncation, 0);
+    
+    return () => clearTimeout(timeoutId);
+  }, [description]);
+
   // Generate a slug from tool name if not provided
   const slug = toolSlug || toolName.toLowerCase().replace(/\s+/g, '-');
   
@@ -68,7 +94,26 @@ export function ToolCard({
         />
         <div className="flex-1 min-w-0">
           <h3 className="text-lg font-semibold text-gray-900 mb-1">{toolName}</h3>
-          <p className="text-sm text-gray-600 line-clamp-2">{description}</p>
+          <div>
+            <p
+              ref={descriptionRef}
+              className={`text-sm text-gray-600 ${!isExpanded ? 'line-clamp-2' : ''}`}
+            >
+              {description}
+            </p>
+            {needsTruncation && (
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setIsExpanded(!isExpanded);
+                }}
+                className="mt-2 text-sm font-medium text-brand-light hover:text-brand-light/80 transition-colors"
+              >
+                {isExpanded ? 'Read less' : 'Read more'}
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
