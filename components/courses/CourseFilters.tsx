@@ -224,27 +224,28 @@ export function CourseFilters({ courses, onFilteredCoursesChange }: CourseFilter
     // Best For filter
     if (selectedBestFor.length > 0) {
       filtered = filtered.filter((course) => {
-        // Check if "Creative" is selected - filter by Creative AI track
-        if (selectedBestFor.includes('Creative')) {
-          const track = course.metadata?.category || '';
-          if (track === 'Creative AI') {
-            return true;
-          }
-        }
+        // Normalize the course's bestFor field to an array
+        const normalizedBestFor = normalizeBestFor(course.metadata?.bestFor);
         
-        // Check other "Best For" options against the bestFor field
-        const otherBestForOptions = selectedBestFor.filter(bf => bf !== 'Creative');
-        if (otherBestForOptions.length > 0) {
-          const normalizedBestFor = normalizeBestFor(course.metadata?.bestFor);
-          const bestForStr = normalizedBestFor.join(' ');
-          if (otherBestForOptions.some((bf) => bestForStr.toLowerCase().includes(bf.toLowerCase()))) {
-            return true;
+        // Check if any selected "Best For" option matches the course
+        return selectedBestFor.some((selectedBf) => {
+          // Special case: "Creative" matches Creative AI track
+          if (selectedBf === 'Creative') {
+            const track = course.metadata?.category || '';
+            return track === 'Creative AI';
           }
-        }
-        
-        // If only "Creative" was selected and course doesn't match, return false
-        // If other options were selected and course doesn't match, return false
-        return false;
+          
+          // For other options, check if the selected option appears in any bestFor entry
+          // Use case-insensitive matching and check for substring matches
+          const selectedBfLower = selectedBf.toLowerCase().trim();
+          return normalizedBestFor.some((bfEntry) => {
+            const bfEntryLower = bfEntry.toLowerCase().trim();
+            // Check if the selected option is contained in the bestFor entry
+            // This handles cases like selecting "Engineer" matching "AI Engineers" or "ML Engineers"
+            // Also handles exact matches like selecting "AI Engineers" matching "AI Engineers"
+            return bfEntryLower.includes(selectedBfLower);
+          });
+        });
       });
     }
 
