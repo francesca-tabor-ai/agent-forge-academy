@@ -77,7 +77,7 @@ export function SpecDrivenDevelopmentClient({
         <p className="text-gray-600 mb-4">
           Spec-Driven Development (SDDD) orchestrates five specialized AI agents in a sequential workflow to produce 
           formal specifications, architecture documents, and implementation plans. This tool treats specifications as 
-          the authoritative source of truth, eliminating "vibe coding" by establishing formal requirements before implementation.
+          the authoritative source of truth, eliminating &quot;vibe coding&quot; by establishing formal requirements before implementation.
         </p>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
