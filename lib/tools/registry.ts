@@ -108,6 +108,20 @@ export const toolsRegistry: Tool[] = [
     tags: ['planning', 'documentation', 'agents', 'discovery', 'architecture', 'design'],
     recommendedFor: ['agentic-rag', 'agentic-systems'],
   },
+  {
+    id: 'spec-driven-development',
+    name: 'Spec-Driven Development',
+    description: 'Orchestrate AI agents to produce formal specifications, architecture documents, and implementation plans. Treat specifications as the authoritative source of truth with traceable, constitutional-compliant outputs.',
+    href: '/student/tools/spec-driven-development',
+    status: 'active',
+    tags: ['specifications', 'workflow', 'agents', 'documentation', 'architecture', 'development', 'traceability'],
+    recommendedFor: ['agentic-systems', 'agentic-rag'],
+    category: 'Agentic Systems',
+    difficultyLevel: 'intermediate',
+    duration: '~4-8 hours',
+    industries: ['SaaS', 'DevTools'],
+    bestFor: ['Engineer', 'Tech Lead', 'PM'],
+  },
 ];
 
 /**
