@@ -111,6 +111,7 @@ const TRACK_EXTERNAL_URLS: Record<string, string> = {
   "Creative AI": "https://blogs-cdn.imagine.art/creative_ai_art_prompts_a67d64e4eb.png",
   "Audio & Voice": "https://media.bazaarvoice.com/Shutterstock_1159197631.png",
   "Economics & Maths": "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=1920&h=1080&fit=crop&q=80",
+  "Public Sector Governance": "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1920&h=1080&fit=crop&q=80",
 };
 
 /**
@@ -159,6 +160,7 @@ export const TRACK_COVERS: Record<string, string> = {
   "Creative AI": getTrackImageUrl("Creative AI"),
   "Audio & Voice": getTrackImageUrl("Audio & Voice"),
   "Economics & Maths": getTrackImageUrl("Economics & Maths"),
+  "Public Sector Governance": getTrackImageUrl("Public Sector Governance"),
 };
 
 /**
