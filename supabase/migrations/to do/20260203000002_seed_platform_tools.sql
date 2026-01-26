@@ -423,3 +423,87 @@ ON CONFLICT (id) DO UPDATE SET
   industries = EXCLUDED.industries,
   best_for = EXCLUDED.best_for,
   updated_at = NOW();
+
+-- 11. Strategy-to-Technical Prompt
+INSERT INTO platform_tools (
+  id,
+  name,
+  description,
+  href,
+  status,
+  tags,
+  recommended_for_courses,
+  category,
+  difficulty_level,
+  duration,
+  industries,
+  best_for
+) VALUES (
+  'strategy-to-technical-prompt',
+  'Strategy-to-Technical Prompt',
+  'A ChatGPT prompt template that transforms vague business ideas into structured technical requirement documents (PRD). The prompt guides you through converting high-level strategic concepts into actionable product requirements with specific success metrics, potential risks, user stories, technical constraints, and implementation priorities. Perfect for founders, product managers, and teams who need to bridge the gap between business vision and technical execution.',
+  '/student/tools/strategy-to-technical-prompt',
+  'active',
+  ARRAY['strategy', 'prd', 'requirements', 'documentation', 'business', 'product', 'planning', 'prompt', 'product-requirements', 'technical-specs', 'business-strategy', 'product-management'],
+  ARRAY['spec-driven-development', 'ai-native-go-to-market-systems', 'vibe-engineering'],
+  'Product & Strategy',
+  'beginner',
+  '~30-60 minutes',
+  ARRAY['SaaS', 'Startups', 'Enterprise Software', 'E-commerce', 'DevTools'],
+  ARRAY['PM', 'Founder', 'Product Manager', 'Business Analyst', 'Tech Lead']
+)
+ON CONFLICT (id) DO UPDATE SET
+  name = EXCLUDED.name,
+  description = EXCLUDED.description,
+  href = EXCLUDED.href,
+  status = EXCLUDED.status,
+  tags = EXCLUDED.tags,
+  recommended_for_courses = EXCLUDED.recommended_for_courses,
+  category = EXCLUDED.category,
+  difficulty_level = EXCLUDED.difficulty_level,
+  duration = EXCLUDED.duration,
+  industries = EXCLUDED.industries,
+  best_for = EXCLUDED.best_for,
+  updated_at = NOW();
+
+-- 12. AI Portfolio Prioritizer
+INSERT INTO platform_tools (
+  id,
+  name,
+  description,
+  href,
+  status,
+  tags,
+  recommended_for_courses,
+  category,
+  difficulty_level,
+  duration,
+  industries,
+  best_for
+) VALUES (
+  'ai-portfolio-prioritizer',
+  'AI Portfolio Prioritizer',
+  'Analyze a list of business problems and rank them by ROI and feasibility. Demonstrate how AI can accelerate the decision-making process for project funding.',
+  '/student/tools/ai-portfolio-prioritizer',
+  'active',
+  ARRAY['prioritization', 'roi', 'feasibility', 'portfolio', 'decision-making', 'funding', 'analysis', 'strategy', 'business-problems'],
+  ARRAY['ai-native-go-to-market-systems', 'platform-os'],
+  'GTM & Revenue Operations',
+  'intermediate',
+  '~2-4 hours',
+  ARRAY['SaaS', 'B2B Sales / RevOps', 'Enterprise Software', 'Startups'],
+  ARRAY['PM', 'Founder', 'Product Manager', 'Business Analyst', 'Executive']
+)
+ON CONFLICT (id) DO UPDATE SET
+  name = EXCLUDED.name,
+  description = EXCLUDED.description,
+  href = EXCLUDED.href,
+  status = EXCLUDED.status,
+  tags = EXCLUDED.tags,
+  recommended_for_courses = EXCLUDED.recommended_for_courses,
+  category = EXCLUDED.category,
+  difficulty_level = EXCLUDED.difficulty_level,
+  duration = EXCLUDED.duration,
+  industries = EXCLUDED.industries,
+  best_for = EXCLUDED.best_for,
+  updated_at = NOW();
