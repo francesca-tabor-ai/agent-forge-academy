@@ -3,6 +3,10 @@ import { redirect } from 'next/navigation';
 import { SubscriptionPage } from '@/components/subscription/SubscriptionPage';
 import { getSubscriptionData } from '@/lib/subscription/getSubscriptionData';
 
+// Force dynamic rendering - this page uses cookies for authentication
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 interface SubscriptionPageProps {
   searchParams: Promise<{ success?: string; canceled?: string }>;
 }
