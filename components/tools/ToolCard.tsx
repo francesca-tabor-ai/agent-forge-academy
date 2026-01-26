@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import type { Tool } from '@/lib/tools/registry';
 
@@ -28,6 +29,32 @@ const statusConfig: Record<Tool['status'], { label: string; className: string }>
 
 export function ToolCard({ tool }: ToolCardProps) {
   const statusBadge = statusConfig[tool.status];
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [needsTruncation, setNeedsTruncation] = useState(false);
+  const descriptionRef = useRef<HTMLParagraphElement>(null);
+
+  useEffect(() => {
+    // Check if description needs truncation by comparing scrollHeight with clientHeight
+    const checkTruncation = () => {
+      if (descriptionRef.current) {
+        const element = descriptionRef.current;
+        // Element always has line-clamp-3 initially, so we can check if content is truncated
+        const fullHeight = element.scrollHeight;
+        
+        // Temporarily remove line-clamp to get actual full height
+        element.classList.remove('line-clamp-3');
+        const actualFullHeight = element.scrollHeight;
+        element.classList.add('line-clamp-3');
+        
+        setNeedsTruncation(actualFullHeight > fullHeight);
+      }
+    };
+
+    // Wait for element to be rendered
+    const timeoutId = setTimeout(checkTruncation, 0);
+    
+    return () => clearTimeout(timeoutId);
+  }, [tool.description]);
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg p-6 hover:border-brand-light card-interactive flex flex-col h-full">
@@ -46,9 +73,26 @@ export function ToolCard({ tool }: ToolCardProps) {
       </div>
 
       {/* Description */}
-      <p className="text-sm text-gray-600 mb-4 line-clamp-3 flex-grow">
-        {tool.description}
-      </p>
+      <div className="mb-4 flex-grow">
+        <p
+          ref={descriptionRef}
+          className={`text-sm text-gray-600 ${!isExpanded ? 'line-clamp-3' : ''}`}
+        >
+          {tool.description}
+        </p>
+        {needsTruncation && (
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setIsExpanded(!isExpanded);
+            }}
+            className="mt-2 text-sm font-medium text-brand-light hover:text-brand-light/80 transition-colors"
+          >
+            {isExpanded ? 'Read less' : 'Read more'}
+          </button>
+        )}
+      </div>
 
       {/* Tags/Chips */}
       {tool.tags.length > 0 && (
