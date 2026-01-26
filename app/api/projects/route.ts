@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 
+// Force dynamic rendering - this route uses cookies for authentication
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+export const fetchCache = "force-no-store";
+
 // GET: List user's projects
 export async function GET(request: NextRequest) {
   try {
