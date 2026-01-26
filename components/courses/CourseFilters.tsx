@@ -346,6 +346,8 @@ export function CourseFilters({ courses, onFilteredCoursesChange }: CourseFilter
       const normalizedBestFor = normalizeBestFor(rawBestFor);
       
       BEST_FOR_OPTIONS.forEach((option) => {
+        if (!track) return; // ✅ ensure track is a string
+
         if (courseMatchesBestForOption(normalizedBestFor, track, option)) {
           availableBestFor.add(option);
         }

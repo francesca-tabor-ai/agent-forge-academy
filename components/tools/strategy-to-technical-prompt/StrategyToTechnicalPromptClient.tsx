@@ -153,7 +153,7 @@ export function StrategyToTechnicalPromptClient({
       await logToolRunSafe({
         toolId,
         studentProfileId,
-        metadata: {
+        inputs: {
           action: 'copied_prompt',
         },
       });
@@ -173,10 +173,10 @@ export function StrategyToTechnicalPromptClient({
           How to Use This Prompt
         </h2>
         <ol className="list-decimal list-inside space-y-2 text-gray-700">
-          <li>Click the "Copy Prompt" button below to copy the entire prompt template</li>
+          <li>Click the &quot;Copy Prompt&quot; button below to copy the entire prompt template</li>
           <li>Open ChatGPT (or your preferred AI assistant)</li>
           <li>Paste the prompt into the chat</li>
-          <li>Replace the placeholder text "[Paste the vague business idea here]" with your actual business idea</li>
+          <li>Replace the placeholder text &quot;[Paste the vague business idea here]&quot; with your actual business idea</li>
           <li>Submit and let the AI transform your idea into a structured PRD</li>
           <li>Review and refine the output to match your specific needs</li>
         </ol>
@@ -267,7 +267,7 @@ export function StrategyToTechnicalPromptClient({
           </li>
           <li className="flex items-start gap-2">
             <span className="text-gray-400 mt-1">•</span>
-            <span><strong>Iterate:</strong> Use the AI's output as a starting point, then refine based on your domain expertise</span>
+            <span><strong>Iterate:</strong> Use the AI&apos;s output as a starting point, then refine based on your domain expertise</span>
           </li>
           <li className="flex items-start gap-2">
             <span className="text-gray-400 mt-1">•</span>
