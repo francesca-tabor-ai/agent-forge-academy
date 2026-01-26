@@ -101,7 +101,7 @@ function extractTimeValue(timeStr: string): number {
 // Helper function to check if a course matches a "Best For" option
 function courseMatchesBestForOption(
   normalizedBestFor: string[],
-  track: string,
+  track: string | undefined,
   option: string
 ): boolean {
   const bestForStr = normalizedBestFor.join(' ').toLowerCase();
