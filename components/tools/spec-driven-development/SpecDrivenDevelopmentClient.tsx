@@ -20,7 +20,6 @@ export function SpecDrivenDevelopmentClient({
     await logToolRunSafe({
       toolId,
       studentProfileId,
-      metadata: { action: 'launch' },
     });
     
     // Open the Spec-Driven Development application in a new tab
