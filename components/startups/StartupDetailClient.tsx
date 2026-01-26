@@ -199,6 +199,39 @@ export function StartupDetailClient({ startup }: StartupDetailClientProps) {
   const [toolTruncationNeeds, setToolTruncationNeeds] = useState<Record<string, boolean>>({});
   const toolDescriptionRefs = useRef<Record<string, HTMLParagraphElement | null>>({});
   
+  // Check if tool descriptions need truncation
+  // Hook must be called unconditionally before any early returns
+  useEffect(() => {
+    if (!startup?.tools) return; // Conditional logic inside hook is fine
+    
+    const checkTruncation = (toolId: string) => {
+      const element = toolDescriptionRefs.current[toolId];
+      if (element) {
+        // Temporarily remove line-clamp to get actual full height
+        element.classList.remove('line-clamp-2');
+        const actualFullHeight = element.scrollHeight;
+        element.classList.add('line-clamp-2');
+        const clampedHeight = element.scrollHeight;
+        
+        setToolTruncationNeeds(prev => ({
+          ...prev,
+          [toolId]: actualFullHeight > clampedHeight
+        }));
+      }
+    };
+
+    // Check truncation for all tools when they're rendered
+    const timeoutIds: NodeJS.Timeout[] = [];
+    startup.tools.forEach(tool => {
+      const timeoutId = setTimeout(() => checkTruncation(tool.id), 0);
+      timeoutIds.push(timeoutId);
+    });
+
+    return () => {
+      timeoutIds.forEach(id => clearTimeout(id));
+    };
+  }, [startup?.tools]);
+  
   // Defensive guard - should not happen but prevents blank page
   if (!startup) {
     return (
@@ -241,36 +274,6 @@ export function StartupDetailClient({ startup }: StartupDetailClientProps) {
   const handleStartAIIdeation = () => {
     router.push(`/student/ai-advisor?startup_id=${startup.id}`);
   };
-
-  // Check if tool descriptions need truncation
-  useEffect(() => {
-    const checkTruncation = (toolId: string) => {
-      const element = toolDescriptionRefs.current[toolId];
-      if (element) {
-        // Temporarily remove line-clamp to get actual full height
-        element.classList.remove('line-clamp-2');
-        const actualFullHeight = element.scrollHeight;
-        element.classList.add('line-clamp-2');
-        const clampedHeight = element.scrollHeight;
-        
-        setToolTruncationNeeds(prev => ({
-          ...prev,
-          [toolId]: actualFullHeight > clampedHeight
-        }));
-      }
-    };
-
-    // Check truncation for all tools when they're rendered
-    const timeoutIds: NodeJS.Timeout[] = [];
-    startup.tools.forEach(tool => {
-      const timeoutId = setTimeout(() => checkTruncation(tool.id), 0);
-      timeoutIds.push(timeoutId);
-    });
-
-    return () => {
-      timeoutIds.forEach(id => clearTimeout(id));
-    };
-  }, [startup.tools]);
 
   const toggleToolExpansion = (toolId: string) => {
     setExpandedTools(prev => ({
