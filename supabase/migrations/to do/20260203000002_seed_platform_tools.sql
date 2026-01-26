@@ -381,3 +381,45 @@ ON CONFLICT (id) DO UPDATE SET
   industries = EXCLUDED.industries,
   best_for = EXCLUDED.best_for,
   updated_at = NOW();
+
+-- 10. Spec-Driven Development
+INSERT INTO platform_tools (
+  id,
+  name,
+  description,
+  href,
+  status,
+  tags,
+  recommended_for_courses,
+  category,
+  difficulty_level,
+  duration,
+  industries,
+  best_for
+) VALUES (
+  'spec-driven-development',
+  'Spec-Driven Development',
+  'Orchestrate AI agents to produce formal specifications, architecture documents, and implementation plans. Treat specifications as the authoritative source of truth with traceable, constitutional-compliant outputs.',
+  '/student/tools/spec-driven-development',
+  'active',
+  ARRAY['specifications', 'workflow', 'agents', 'documentation', 'architecture', 'development', 'traceability'],
+  ARRAY['agentic-systems', 'agentic-rag'],
+  'Agentic Systems',
+  'intermediate',
+  '~4-8 hours',
+  ARRAY['SaaS', 'DevTools'],
+  ARRAY['Engineer', 'Tech Lead', 'PM']
+)
+ON CONFLICT (id) DO UPDATE SET
+  name = EXCLUDED.name,
+  description = EXCLUDED.description,
+  href = EXCLUDED.href,
+  status = EXCLUDED.status,
+  tags = EXCLUDED.tags,
+  recommended_for_courses = EXCLUDED.recommended_for_courses,
+  category = EXCLUDED.category,
+  difficulty_level = EXCLUDED.difficulty_level,
+  duration = EXCLUDED.duration,
+  industries = EXCLUDED.industries,
+  best_for = EXCLUDED.best_for,
+  updated_at = NOW();
