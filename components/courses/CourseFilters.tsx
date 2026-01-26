@@ -54,21 +54,21 @@ const DIFFICULTY_OPTIONS = [
 ];
 
 const BEST_FOR_OPTIONS = [
-  'Engineer',
-  'Tech Lead',
-  'PM',
-  'Founder',
-  'Marketer',
-  'Content Team',
-  'Data Team',
-  'Growth Team',
-  'Sales Team',
-  'CX Team',
-  'E-Commerce',
+  'Engineers',
+  'Product Managers',
+  'Data Scientists',
+  'Marketers',
+  'Founders',
+  'E-Commerce Operators',
+  'Content Teams',
+  'Growth Teams',
+  'Sales Teams',
+  'ML Engineers',
+  'AI Engineers',
+  'Operations Teams',
   'RevOps',
-  'B2B Sales',
-  'DevOps',
-  'Creative',
+  'Analysts',
+  'Creative Teams',
 ];
 
 const SORT_OPTIONS = [
@@ -96,6 +96,44 @@ function extractTimeValue(timeStr: string): number {
     return parseInt(weeksMatch[1], 10) * 40; // Convert weeks to approximate hours
   }
   return 0;
+}
+
+// Helper function to check if a course matches a "Best For" option
+function courseMatchesBestForOption(
+  normalizedBestFor: string[],
+  track: string,
+  option: string
+): boolean {
+  const bestForStr = normalizedBestFor.join(' ').toLowerCase();
+  const optionLower = option.toLowerCase();
+  
+  // Direct match
+  if (bestForStr.includes(optionLower) || optionLower.includes(bestForStr)) {
+    return true;
+  }
+  
+  // Special matching rules for each option
+  const matchRules: Record<string, string[]> = {
+    'Engineers': ['engineer', 'developer', 'tech lead', 'architect'],
+    'Product Managers': ['product manager', 'pm'],
+    'Data Scientists': ['data scientist', 'data analyst'],
+    'Marketers': ['marketer', 'marketing', 'cmo', 'marketing director'],
+    'Founders': ['founder', 'founders'],
+    'E-Commerce Operators': ['e-commerce', 'ecommerce', 'amazon seller', 'e-commerce operator'],
+    'Content Teams': ['content', 'content team', 'content strategist'],
+    'Growth Teams': ['growth', 'growth team', 'growth ops'],
+    'Sales Teams': ['sales', 'sales team', 'sales leader'],
+    'ML Engineers': ['ml engineer', 'machine learning'],
+    'AI Engineers': ['ai engineer', 'artificial intelligence'],
+    'Operations Teams': ['operations', 'ops', 'operations manager'],
+    'RevOps': ['revops', 'revenue operations', 'rev ops'],
+    'Analysts': ['analyst', 'data analyst', 'business analyst'],
+    'Creative Teams': ['creative', 'creative team', 'designer'],
+  };
+  
+  const keywords = matchRules[option] || [optionLower];
+  return keywords.some(keyword => bestForStr.includes(keyword)) || 
+         (option === 'Creative Teams' && track === 'Creative AI');
 }
 
 export function CourseFilters({ courses, onFilteredCoursesChange }: CourseFiltersProps) {
@@ -226,25 +264,11 @@ export function CourseFilters({ courses, onFilteredCoursesChange }: CourseFilter
       filtered = filtered.filter((course) => {
         // Normalize the course's bestFor field to an array
         const normalizedBestFor = normalizeBestFor(course.metadata?.bestFor);
+        const track = course.metadata?.category || '';
         
         // Check if any selected "Best For" option matches the course
         return selectedBestFor.some((selectedBf) => {
-          // Special case: "Creative" matches Creative AI track
-          if (selectedBf === 'Creative') {
-            const track = course.metadata?.category || '';
-            return track === 'Creative AI';
-          }
-          
-          // For other options, check if the selected option appears in any bestFor entry
-          // Use case-insensitive matching and check for substring matches
-          const selectedBfLower = selectedBf.toLowerCase().trim();
-          return normalizedBestFor.some((bfEntry) => {
-            const bfEntryLower = bfEntry.toLowerCase().trim();
-            // Check if the selected option is contained in the bestFor entry
-            // This handles cases like selecting "Engineer" matching "AI Engineers" or "ML Engineers"
-            // Also handles exact matches like selecting "AI Engineers" matching "AI Engineers"
-            return bfEntryLower.includes(selectedBfLower);
-          });
+          return courseMatchesBestForOption(normalizedBestFor, track, selectedBf);
         });
       });
     }
@@ -317,16 +341,15 @@ export function CourseFilters({ courses, onFilteredCoursesChange }: CourseFilter
         availableTracks.add(track);
       }
 
-      // Best For - normalize to array first
+      // Best For - check which of the fixed options match this course
       const rawBestFor = course.metadata?.bestFor;
       const normalizedBestFor = normalizeBestFor(rawBestFor);
-      normalizedBestFor.forEach((bf) => {
-        if (bf) availableBestFor.add(bf);
+      
+      BEST_FOR_OPTIONS.forEach((option) => {
+        if (courseMatchesBestForOption(normalizedBestFor, track, option)) {
+          availableBestFor.add(option);
+        }
       });
-      // Special case: if course has Creative AI track, add Creative to Best For
-      if (track === 'Creative AI') {
-        availableBestFor.add('Creative');
-      }
 
       // Industries
       const courseIndustries = course.industries || course.metadata?.industries || [];
