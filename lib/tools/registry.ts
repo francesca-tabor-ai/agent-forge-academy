@@ -111,16 +111,16 @@ export const toolsRegistry: Tool[] = [
   {
     id: 'spec-driven-development',
     name: 'Spec-Driven Development',
-    description: 'Orchestrate AI agents to produce formal specifications, architecture documents, and implementation plans. Treat specifications as the authoritative source of truth with traceable, constitutional-compliant outputs.',
+    description: 'Orchestrate five specialized AI agents (Decision Author, Analyst, Architect, Scrum Master, Developer) to produce formal specifications, architecture documents, and implementation plans in a sequential, traceable workflow. Treat specifications as the authoritative source of truth with constitutional-compliant outputs. Features include document versioning, real-time streaming, context variable customization, constitution pattern governance, file upload support (PDF/TXT), document validation, and export capabilities. Eliminates "vibe coding" by establishing formal requirements before implementation.',
     href: '/student/tools/spec-driven-development',
     status: 'active',
-    tags: ['specifications', 'workflow', 'agents', 'documentation', 'architecture', 'development', 'traceability'],
-    recommendedFor: ['agentic-systems', 'agentic-rag'],
+    tags: ['specifications', 'workflow', 'agents', 'documentation', 'architecture', 'development', 'traceability', 'sddd', 'prd', 'requirements', 'governance', 'constitution', 'versioning', 'validation', 'multi-agent', 'sequential-workflow', 'formal-specs'],
+    recommendedFor: ['agentic-systems', 'agentic-rag', 'vibe-engineering'],
     category: 'Agentic Systems',
     difficultyLevel: 'intermediate',
     duration: '~4-8 hours',
-    industries: ['SaaS', 'DevTools'],
-    bestFor: ['Engineer', 'Tech Lead', 'PM'],
+    industries: ['SaaS', 'DevTools', 'Enterprise Software', 'Financial Services', 'Healthcare'],
+    bestFor: ['Engineer', 'Tech Lead', 'PM', 'Architect', 'Product Manager', 'Engineering Manager'],
   },
 ];
 

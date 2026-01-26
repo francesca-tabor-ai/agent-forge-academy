@@ -399,16 +399,16 @@ INSERT INTO platform_tools (
 ) VALUES (
   'spec-driven-development',
   'Spec-Driven Development',
-  'Orchestrate AI agents to produce formal specifications, architecture documents, and implementation plans. Treat specifications as the authoritative source of truth with traceable, constitutional-compliant outputs.',
+  'Orchestrate five specialized AI agents (Decision Author, Analyst, Architect, Scrum Master, Developer) to produce formal specifications, architecture documents, and implementation plans in a sequential, traceable workflow. Treat specifications as the authoritative source of truth with constitutional-compliant outputs. Features include document versioning, real-time streaming, context variable customization, constitution pattern governance, file upload support (PDF/TXT), document validation, and export capabilities. Eliminates "vibe coding" by establishing formal requirements before implementation.',
   '/student/tools/spec-driven-development',
   'active',
-  ARRAY['specifications', 'workflow', 'agents', 'documentation', 'architecture', 'development', 'traceability'],
-  ARRAY['agentic-systems', 'agentic-rag'],
+  ARRAY['specifications', 'workflow', 'agents', 'documentation', 'architecture', 'development', 'traceability', 'sddd', 'prd', 'requirements', 'governance', 'constitution', 'versioning', 'validation', 'multi-agent', 'sequential-workflow', 'formal-specs'],
+  ARRAY['agentic-systems', 'agentic-rag', 'vibe-engineering'],
   'Agentic Systems',
   'intermediate',
   '~4-8 hours',
-  ARRAY['SaaS', 'DevTools'],
-  ARRAY['Engineer', 'Tech Lead', 'PM']
+  ARRAY['SaaS', 'DevTools', 'Enterprise Software', 'Financial Services', 'Healthcare'],
+  ARRAY['Engineer', 'Tech Lead', 'PM', 'Architect', 'Product Manager', 'Engineering Manager']
 )
 ON CONFLICT (id) DO UPDATE SET
   name = EXCLUDED.name,
