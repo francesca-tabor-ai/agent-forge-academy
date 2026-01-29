@@ -498,6 +498,13 @@ export async function POST(request: NextRequest) {
 
     console.log('[Headshot Upload] Profile updated successfully');
 
+    // Revalidate profile and portfolio pages to ensure fresh data
+    const { revalidatePath } = await import('next/cache');
+    revalidatePath('/student/profile');
+    revalidatePath('/student/profile', 'page');
+    revalidatePath('/student/portfolio');
+    revalidatePath('/student/portfolio', 'page');
+
     const duration = Date.now() - startTime;
     await logRequest({
       requestId,
@@ -689,6 +696,13 @@ export async function DELETE(request: NextRequest) {
         { status: 500 }
       );
     }
+
+    // Revalidate profile and portfolio pages to ensure fresh data
+    const { revalidatePath } = await import('next/cache');
+    revalidatePath('/student/profile');
+    revalidatePath('/student/profile', 'page');
+    revalidatePath('/student/portfolio');
+    revalidatePath('/student/portfolio', 'page');
 
     const duration = Date.now() - startTime;
     await logRequest({

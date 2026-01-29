@@ -146,7 +146,7 @@ export function ProfileEditForm({ initialData }: ProfileEditFormProps) {
       
       // Redirect with query param for toast notification
       setTimeout(() => {
-        router.push(`/student/portfolio?${queryParam}`);
+        router.push(`/student/profile?${queryParam}`);
       }, 500);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');

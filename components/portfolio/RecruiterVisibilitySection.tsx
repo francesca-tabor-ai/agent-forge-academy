@@ -40,7 +40,7 @@ export function RecruiterVisibilitySection({
     {
       label: 'Bio present',
       completed: hasBio,
-      fixLink: '/student/portfolio/profile/edit',
+      fixLink: '/student/profile',
       fixAction: 'Add bio',
     },
     {
@@ -66,7 +66,7 @@ export function RecruiterVisibilitySection({
         <h3 className="text-base font-semibold text-gray-900">Visibility</h3>
         {!isComplete && (
           <Link
-            href="/student/portfolio/profile/edit"
+            href="/student/profile"
             className="text-xs font-medium text-brand-light hover:text-brand-light/90"
           >
             Edit

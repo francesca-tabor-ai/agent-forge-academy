@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
 
-export default function ProfileEditRedirectPage() {
+export default function ProfileRedirectPage() {
   redirect('/student/profile');
 }

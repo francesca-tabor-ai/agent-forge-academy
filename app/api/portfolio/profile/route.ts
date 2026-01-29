@@ -782,6 +782,12 @@ export async function PATCH(request: NextRequest) {
         });
       }
 
+      // Revalidate profile and portfolio pages to ensure fresh data
+      revalidatePath('/student/profile');
+      revalidatePath('/student/profile', 'page');
+      revalidatePath('/student/portfolio');
+      revalidatePath('/student/portfolio', 'page');
+
       // Trigger GitHub sync if github_url was provided
       // Do this asynchronously so it doesn't block the response
       if (github_url) {
@@ -906,6 +912,12 @@ export async function PATCH(request: NextRequest) {
           });
         });
     }
+
+    // Revalidate profile and portfolio pages to ensure fresh data
+    revalidatePath('/student/profile');
+    revalidatePath('/student/profile', 'page');
+    revalidatePath('/student/portfolio');
+    revalidatePath('/student/portfolio', 'page');
 
     const duration = Date.now() - startTime;
     await logRequest({

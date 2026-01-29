@@ -414,7 +414,7 @@ export function AutoImportSection({ studentProfileId, hasExistingData }: AutoImp
           Upload your CV, LinkedIn, or GitHub to automatically create your profile and portfolio
         </p>
         <button
-          onClick={() => router.push('/student/portfolio/profile/edit')}
+          onClick={() => router.push('/student/profile')}
           className="btn-primary"
         >
           Get Started

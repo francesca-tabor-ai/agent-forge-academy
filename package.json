@@ -30,6 +30,7 @@
     "validate:images:skip-external": "tsx scripts/validate-course-images.ts --skip-external",
     "validate:schema": "tsx scripts/validate-schema.ts",
     "test:apijobs": "tsx scripts/test-apijobs-endpoint.ts",
+    "test:ai-config": "tsx scripts/test-ai-advisor-config.ts",
     "sync:jobs": "tsx scripts/sync-jobs-from-api.ts",
     "sync:jobs:dry-run": "tsx scripts/sync-jobs-from-api.ts --dry-run"
   },

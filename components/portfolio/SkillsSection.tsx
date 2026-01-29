@@ -197,7 +197,7 @@ export function SkillsSection({ skills = [], studentProfileId, onUpdate }: Skill
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold text-gray-900">Skills</h2>
           <Link
-            href="/student/portfolio/profile/edit"
+            href="/student/profile"
             className="text-sm font-medium text-gray-600 hover:text-gray-900"
           >
             Add skills
@@ -208,7 +208,7 @@ export function SkillsSection({ skills = [], studentProfileId, onUpdate }: Skill
             Showcase your technical and professional skills.
           </p>
           <Link
-            href="/student/portfolio/profile/edit"
+            href="/student/profile"
             className="btn-secondary text-sm inline-block"
           >
             Add skills
@@ -223,7 +223,7 @@ export function SkillsSection({ skills = [], studentProfileId, onUpdate }: Skill
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-semibold text-gray-900">Skills</h2>
         <Link
-          href="/student/portfolio/profile/edit"
+          href="/student/profile"
           className="text-sm font-medium text-gray-600 hover:text-gray-900"
         >
           Add skills

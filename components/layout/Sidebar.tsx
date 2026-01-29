@@ -36,7 +36,6 @@ export default function Sidebar({ role, isExpanded, isMobile }: SidebarProps) {
         return [
           { href: '/student/dashboard', label: 'Dashboard', icon: LayoutDashboard },
           { href: '/student/courses', label: 'Courses', icon: BookOpen },
-          { href: '/student/portfolio', label: 'Portfolio', icon: Briefcase },
           { href: '/student/jobs', label: 'Job Opportunities', icon: BriefcaseIcon },
           { href: '/startups', label: 'Startups', icon: Rocket },
           { href: '/student/ai-advisor', label: 'AI Advisor', icon: Bot },

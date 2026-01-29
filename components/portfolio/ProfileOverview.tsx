@@ -44,7 +44,7 @@ export function ProfileOverview({ fullName, headline, bio, primaryRoles = [], co
             Add your professional headline, bio, and skills to help recruiters understand your expertise.
           </p>
           <Link
-            href="/student/portfolio/profile/edit"
+            href="/student/profile"
             className="btn-primary text-sm inline-block"
           >
             Add Profile Details
@@ -59,7 +59,7 @@ export function ProfileOverview({ fullName, headline, bio, primaryRoles = [], co
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-medium text-gray-900">Profile Overview</h2>
         <Link
-          href="/student/portfolio/profile/edit"
+          href="/student/profile"
           className="text-sm font-medium text-brand-light hover:text-brand-light/90"
         >
           Edit →

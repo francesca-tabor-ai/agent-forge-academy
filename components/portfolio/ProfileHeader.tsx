@@ -63,7 +63,7 @@ export function ProfileHeader({
   };
 
   const handleMakeDiscoverable = () => {
-    router.push('/student/portfolio/profile/edit');
+    router.push('/student/profile');
   };
 
   const handleShare = () => {
@@ -246,7 +246,7 @@ export function ProfileHeader({
               </>
             )}
             <Link
-              href="/student/portfolio/profile/edit"
+              href="/student/profile"
               className="btn-secondary text-sm px-3 py-2 whitespace-nowrap"
             >
               Edit profile
