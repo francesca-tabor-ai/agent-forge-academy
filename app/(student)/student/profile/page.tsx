@@ -77,6 +77,14 @@ export default async function ProfilePage() {
     }
   }
 
+  // Type-safe CV visibility - narrow to expected union type
+  const safeCvVisibility =
+    cvVisibility === "public" ||
+    cvVisibility === "private" ||
+    cvVisibility === "recruiters_only"
+      ? cvVisibility
+      : null;
+
   return (
     <div className="max-w-7xl mx-auto">
       <div className="grid grid-cols-1 lg:grid-cols-[65%_35%] gap-6">
@@ -138,7 +146,7 @@ export default async function ProfilePage() {
             studentProfileId={studentProfile.id}
             cvFileName={cvFileName}
             cvLastUpdated={cvLastUpdated}
-            cvVisibility={cvVisibility}
+            cvVisibility={safeCvVisibility}
             cvDownloadUrl={cvDownloadUrl}
             hasCV={hasCV}
             isDefault={true}
