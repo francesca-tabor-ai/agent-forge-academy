@@ -80,11 +80,11 @@ export function EditProjectForm({ project }: EditProjectFormProps) {
           if (typeof window !== 'undefined' && window.history.length > 1) {
             router.back();
           } else {
-            router.push('/student/profile');
+            router.push('/student/portfolio');
           }
         } catch {
-          // Fallback to profile if anything goes wrong
-          router.push('/student/profile');
+          // Fallback to portfolio if anything goes wrong
+          router.push('/student/portfolio');
         }
       }, 500);
     } catch (err) {
@@ -229,7 +229,7 @@ export function EditProjectForm({ project }: EditProjectFormProps) {
         <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-200">
           <button
             type="button"
-            onClick={() => router.push('/student/profile')}
+            onClick={() => router.push('/student/portfolio')}
             disabled={loading || saveState === 'saving'}
             className="btn-secondary text-sm"
           >

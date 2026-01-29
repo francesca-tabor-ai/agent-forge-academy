@@ -786,10 +786,9 @@ export async function PATCH(request: NextRequest) {
         });
       }
 
-      // Revalidate profile and portfolio pages to ensure fresh data
-      revalidatePath('/student/profile');
-      revalidatePath('/student/profile', 'page');
+      // Revalidate portfolio page to ensure fresh data
       revalidatePath('/student/portfolio');
+      revalidatePath('/student/portfolio', 'page');
       revalidatePath('/student/portfolio', 'page');
 
       // Trigger GitHub sync if github_url was provided
@@ -917,9 +916,9 @@ export async function PATCH(request: NextRequest) {
         });
     }
 
-    // Revalidate profile and portfolio pages to ensure fresh data
-    revalidatePath('/student/profile');
-    revalidatePath('/student/profile', 'page');
+    // Revalidate portfolio page to ensure fresh data
+    revalidatePath('/student/portfolio');
+    revalidatePath('/student/portfolio', 'page');
     revalidatePath('/student/portfolio');
     revalidatePath('/student/portfolio', 'page');
 

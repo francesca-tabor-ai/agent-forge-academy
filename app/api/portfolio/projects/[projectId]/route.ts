@@ -114,9 +114,9 @@ export async function PATCH(request: Request, { params }: RouteParams) {
       return NextResponse.json({ error: 'Project not found' }, { status: 404 });
     }
 
-    // Revalidate profile and portfolio pages to ensure fresh data
-    revalidatePath('/student/profile');
-    revalidatePath('/student/profile', 'page');
+    // Revalidate portfolio page to ensure fresh data
+    revalidatePath('/student/portfolio');
+    revalidatePath('/student/portfolio', 'page');
     revalidatePath('/student/portfolio');
     revalidatePath('/student/portfolio', 'page');
 

@@ -498,10 +498,8 @@ export async function POST(request: NextRequest) {
 
     console.log('[Headshot Upload] Profile updated successfully');
 
-    // Revalidate profile and portfolio pages to ensure fresh data
+    // Revalidate portfolio page to ensure fresh data
     const { revalidatePath } = await import('next/cache');
-    revalidatePath('/student/profile');
-    revalidatePath('/student/profile', 'page');
     revalidatePath('/student/portfolio');
     revalidatePath('/student/portfolio', 'page');
 
@@ -697,10 +695,8 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    // Revalidate profile and portfolio pages to ensure fresh data
+    // Revalidate portfolio page to ensure fresh data
     const { revalidatePath } = await import('next/cache');
-    revalidatePath('/student/profile');
-    revalidatePath('/student/profile', 'page');
     revalidatePath('/student/portfolio');
     revalidatePath('/student/portfolio', 'page');
 

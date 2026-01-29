@@ -69,14 +69,14 @@ export function Header({ isSidebarExpanded, onToggleSidebar, role }: HeaderProps
           <Link
             href={
               role === 'student' 
-                ? '/student/profile'
+                ? '/student/portfolio'
                 : role === 'instructor'
                 ? '/tutor/dashboard'
                 : role === 'recruiter'
                 ? '/recruiter/directory'
                 : role === 'admin'
                 ? '/admin'
-                : '/student/profile' // fallback
+                : '/student/portfolio' // fallback
             }
             className="inline-flex items-center justify-center p-2 rounded-md text-ca-neutral-500 hover:text-ca-text hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-ca-gold focus:ring-offset-2"
             aria-label="Profile"

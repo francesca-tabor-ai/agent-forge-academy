@@ -1099,7 +1099,7 @@ export function JobOpportunitiesPage({ studentProfileId }: JobOpportunitiesPageP
               </p>
               <div className="flex items-center justify-center gap-4">
                 <Link
-                  href="/student/profile"
+                  href="/student/portfolio"
                   className="btn-primary text-sm font-medium"
                 >
                   Edit Profile
