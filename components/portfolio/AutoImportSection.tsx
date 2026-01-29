@@ -19,6 +19,10 @@ export function AutoImportSection({ studentProfileId, hasExistingData }: AutoImp
   const [importResult, setImportResult] = useState<{
     githubImported?: boolean;
     projectsCreated?: number;
+    projectsSkipped?: number;
+    reposFetched?: number;
+    reposFiltered?: number;
+    skipReasons?: Record<string, string[]>;
   } | null>(null);
   
   const cvFileInputRef = useRef<HTMLInputElement>(null);
@@ -143,23 +147,57 @@ export function AutoImportSection({ studentProfileId, hasExistingData }: AutoImp
         messages.push('Imported LinkedIn experience into Portfolio.');
       }
       
-      if (data.githubImported) {
+      if (data.githubImported || (data.reposFetched && data.reposFetched > 0)) {
         const projectCount = data.projectsCreated || 0;
         const updatedCount = data.projectsUpdated || 0;
         const skippedCount = data.projectsSkipped || 0;
+        const reposFetched = data.reposFetched || 0;
+        const reposFiltered = data.reposFiltered || 0;
+        const skipReasons = data.projectsSkipReasons || {};
         
-        let githubMsg = `Imported ${projectCount} GitHub ${projectCount === 1 ? 'repository' : 'repositories'} into Projects.`;
-        if (updatedCount > 0 || skippedCount > 0) {
-          const details: string[] = [];
-          if (updatedCount > 0) details.push(`${updatedCount} updated`);
-          if (skippedCount > 0) details.push(`${skippedCount} skipped`);
-          githubMsg += ` (${details.join(', ')})`;
+        if (projectCount > 0 || updatedCount > 0) {
+          let githubMsg = `Imported ${projectCount} GitHub ${projectCount === 1 ? 'repository' : 'repositories'} into Projects.`;
+          if (updatedCount > 0 || skippedCount > 0) {
+            const details: string[] = [];
+            if (updatedCount > 0) details.push(`${updatedCount} updated`);
+            if (skippedCount > 0) details.push(`${skippedCount} skipped`);
+            githubMsg += ` (${details.join(', ')})`;
+          }
+          messages.push(githubMsg);
+        } else {
+          // No projects were imported - provide helpful feedback
+          const filteredOut = reposFetched - reposFiltered;
+          let feedbackMsg = '';
+          
+          if (reposFetched === 0) {
+            feedbackMsg = 'No repositories found. Check that your GitHub URL is correct and the account has public repositories.';
+          } else if (filteredOut > 0 && reposFiltered === 0) {
+            feedbackMsg = `Found ${reposFetched} ${reposFetched === 1 ? 'repository' : 'repositories'}, but all were skipped (forks, archived, or empty). Make sure you have public, non-forked, non-archived repositories with content.`;
+          } else if (skippedCount > 0) {
+            feedbackMsg = `Found ${reposFetched} ${reposFetched === 1 ? 'repository' : 'repositories'}, but ${skippedCount} ${skippedCount === 1 ? 'was' : 'were'} skipped during import.`;
+          } else {
+            feedbackMsg = 'No repositories were imported. Please check your GitHub URL and repository settings.';
+          }
+          
+          messages.push(feedbackMsg);
         }
-        messages.push(githubMsg);
       }
       
       if (data.profileUpdated && !data.cvUploaded && !data.linkedinImported && !data.githubImported) {
         messages.push('Profile updated.');
+      }
+      
+      // Handle case where GitHub URL was provided but nothing was imported
+      if (githubUrl && !data.githubImported && !data.cvUploaded && !data.linkedinImported) {
+        if (data.reposFetched === 0) {
+          messages.push('GitHub URL saved, but no repositories were found. Check that your GitHub URL is correct and the account has public repositories.');
+        } else if (data.reposFetched && data.reposFiltered === 0) {
+          messages.push(`GitHub URL saved, but all ${data.reposFetched} ${data.reposFetched === 1 ? 'repository was' : 'repositories were'} filtered out (forks, archived, or empty repos are excluded).`);
+        } else if (data.projectsSkipped && data.projectsSkipped > 0) {
+          messages.push(`GitHub URL saved, but ${data.projectsSkipped} ${data.projectsSkipped === 1 ? 'repository was' : 'repositories were'} skipped during import.`);
+        } else {
+          messages.push('GitHub URL saved, but no repositories were imported.');
+        }
       }
       
       const successMessage = messages.length > 0 
@@ -170,6 +208,10 @@ export function AutoImportSection({ studentProfileId, hasExistingData }: AutoImp
       setImportResult({
         githubImported: data.githubImported,
         projectsCreated: data.projectsCreated,
+        projectsSkipped: data.projectsSkipped,
+        reposFetched: data.reposFetched,
+        reposFiltered: data.reposFiltered,
+        skipReasons: data.projectsSkipReasons,
       });
       setProgress('');
       
@@ -230,6 +272,39 @@ export function AutoImportSection({ studentProfileId, hasExistingData }: AutoImp
                   Review imported projects →
                 </Link>
               )}
+              {importResult?.skipReasons && Object.keys(importResult.skipReasons).length > 0 && (
+                <details className="mt-2">
+                  <summary className="text-xs text-green-700 hover:text-green-900 cursor-pointer underline">
+                    Why were some repos skipped? ({Object.keys(importResult.skipReasons).length} repos)
+                  </summary>
+                  <div className="mt-2 text-xs text-green-700 space-y-1">
+                    {Object.entries(importResult.skipReasons).map(([repoName, reasons]) => (
+                      <div key={repoName} className="pl-2 border-l-2 border-green-300">
+                        <strong>{repoName}:</strong> {reasons.join('; ')}
+                      </div>
+                    ))}
+                  </div>
+                </details>
+              )}
+              {importResult?.reposFetched && importResult.reposFetched > 0 && (
+                <div className="mt-2 text-xs text-green-700 space-y-1">
+                  <p>
+                    <strong>Summary:</strong> Found {importResult.reposFetched} {importResult.reposFetched === 1 ? 'repository' : 'repositories'}.
+                    {importResult.reposFiltered !== undefined && importResult.reposFetched > importResult.reposFiltered && (
+                      <> {importResult.reposFetched - importResult.reposFiltered} {importResult.reposFetched - importResult.reposFiltered === 1 ? 'was' : 'were'} filtered out (forks, archived, or empty).</>
+                    )}
+                    {importResult.reposFiltered !== undefined && (
+                      <> {importResult.reposFiltered} {importResult.reposFiltered === 1 ? 'was' : 'were'} processed.</>
+                    )}
+                  </p>
+                  {importResult.reposFiltered !== undefined && 
+                   importResult.reposFetched > importResult.reposFiltered && (
+                    <p className="text-green-600 italic">
+                      Tip: To import more repos, make sure they're public, not forked, not archived, and contain code.
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
           )}
 
@@ -282,9 +357,21 @@ export function AutoImportSection({ studentProfileId, hasExistingData }: AutoImp
               value={githubUrl}
               onChange={(e) => setGithubUrl(e.target.value)}
               disabled={loading}
-              placeholder="github.com/username"
+              placeholder="https://github.com/username"
               className="w-full px-2 py-1.5 text-xs border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-brand-light focus:border-transparent disabled:opacity-50"
             />
+            {githubUrl && (
+              <div className="mt-1 text-xs text-gray-500">
+                <p className="font-medium mb-1">For best results, ensure your repos:</p>
+                <ul className="list-disc list-inside space-y-0.5 ml-1">
+                  <li>Are <strong>Public</strong> (or provide a token for private repos)</li>
+                  <li>Are <strong>not Forks</strong> (original repos only)</li>
+                  <li>Are <strong>not Archived</strong></li>
+                  <li>Have <strong>content</strong> (not empty)</li>
+                  <li>Have a <strong>description</strong> and <strong>README.md</strong> (recommended)</li>
+                </ul>
+              </div>
+            )}
           </div>
 
           {/* GitHub Token (Optional) */}

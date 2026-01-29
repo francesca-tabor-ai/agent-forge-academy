@@ -87,7 +87,10 @@ function extractProfileFromCV(cvText: string): {
 }
 
 // Fetch GitHub repositories
-async function fetchGitHubRepos(githubUrl: string, token?: string): Promise<GitHubRepo[]> {
+async function fetchGitHubRepos(
+  githubUrl: string, 
+  token?: string
+): Promise<{ repos: GitHubRepo[]; totalFetched: number; filteredCount: number }> {
   try {
     // Extract username from GitHub URL
     const urlMatch = githubUrl.match(/github\.com\/([^\/\?]+)/i);
@@ -122,6 +125,7 @@ async function fetchGitHubRepos(githubUrl: string, token?: string): Promise<GitH
     }
     
     const repos: GitHubRepo[] = await response.json();
+    const totalFetched = repos.length;
     
     // Filter repos based on rules (exclude forks, archived, and empty repos)
     const filteredRepos = filterGitHubRepos(repos, {
@@ -130,7 +134,11 @@ async function fetchGitHubRepos(githubUrl: string, token?: string): Promise<GitH
       excludeEmpty: true,
     });
     
-    return filteredRepos;
+    return {
+      repos: filteredRepos,
+      totalFetched,
+      filteredCount: filteredRepos.length,
+    };
   } catch (error) {
     safeLogger.error('Error fetching GitHub repos', error);
     throw error;
@@ -142,10 +150,11 @@ async function createProjectsFromRepos(
   supabase: any,
   studentProfileId: string,
   repos: GitHubRepo[]
-): Promise<{ created: number; updated: number; skipped: number }> {
+): Promise<{ created: number; updated: number; skipped: number; skipReasons: Record<string, string[]> }> {
   let created = 0;
   let updated = 0;
   let skipped = 0;
+  const skipReasons: Record<string, string[]> = {};
   
   // Limit to 50 most recent repos
   const reposToProcess = repos.slice(0, 50);
@@ -161,6 +170,8 @@ async function createProjectsFromRepos(
       // Validate the project input
       const validation = validateProjectInput(projectInput);
       if (!validation.valid) {
+        const reasons = validation.errors;
+        skipReasons[repo.name] = reasons;
         safeLogger.warn('Skipping invalid project', {
           repoName: repo.name,
           errors: validation.errors,
@@ -197,6 +208,7 @@ async function createProjectsFromRepos(
           .eq('id', existing.id);
         
         if (updateError) {
+          skipReasons[repo.name] = [`Database error: ${updateError.message}`];
           safeLogger.error('Error updating project', {
             projectId: existing.id,
             error: updateError,
@@ -244,6 +256,7 @@ async function createProjectsFromRepos(
             if (!updateError) {
               updated++;
             } else {
+              skipReasons[repo.name] = [`Database error: ${updateError.message}`];
               safeLogger.error('Error upserting project', {
                 repoName: repo.name,
                 error: updateError,
@@ -251,6 +264,7 @@ async function createProjectsFromRepos(
               skipped++;
             }
           } else {
+            skipReasons[repo.name] = [`Database error: ${insertError.message}`];
             safeLogger.error('Error creating project', {
               repoName: repo.name,
               error: insertError,
@@ -262,6 +276,7 @@ async function createProjectsFromRepos(
         }
       }
     } catch (error) {
+      skipReasons[repo.name] = [`Processing error: ${error instanceof Error ? error.message : 'Unknown error'}`];
       safeLogger.error('Error processing repo', {
         repoName: repo.name,
         error,
@@ -270,7 +285,7 @@ async function createProjectsFromRepos(
     }
   }
   
-  return { created, updated, skipped };
+  return { created, updated, skipped, skipReasons };
 }
 
 export async function POST(request: Request) {
@@ -320,6 +335,9 @@ export async function POST(request: Request) {
     let projectsCreated = 0;
     let projectsUpdated = 0;
     let projectsSkipped = 0;
+    let projectsSkipReasons: Record<string, string[]> = {};
+    let reposFetched = 0;
+    let reposFiltered = 0;
     let cvUploaded = false;
     let githubImported = false;
     let linkedinImported = false;
@@ -463,8 +481,13 @@ export async function POST(request: Request) {
     // Process GitHub URL
     if (githubUrl) {
       try {
-        // Fetch repositories
-        const repos = await fetchGitHubRepos(githubUrl, githubToken || undefined);
+        // Fetch repositories with filtering metadata
+        const { repos: filteredRepos, totalFetched, filteredCount } = await fetchGitHubRepos(
+          githubUrl, 
+          githubToken || undefined
+        );
+        reposFetched = totalFetched;
+        reposFiltered = filteredCount;
         
         // Update profile with GitHub URL
         await supabase
@@ -475,12 +498,16 @@ export async function POST(request: Request) {
         profileUpdated = true;
         
         // Create projects from repositories using proper mapping and upsert
-        if (repos.length > 0) {
-          const result = await createProjectsFromRepos(supabase, studentProfileId, repos);
+        if (filteredRepos.length > 0) {
+          const result = await createProjectsFromRepos(supabase, studentProfileId, filteredRepos);
           projectsCreated = result.created;
           projectsUpdated = result.updated;
           projectsSkipped = result.skipped;
+          projectsSkipReasons = result.skipReasons;
           githubImported = true;
+        } else if (reposFetched > 0) {
+          // Repos were fetched but all were filtered out
+          githubImported = false; // Don't mark as imported if nothing was imported
         }
       } catch (error) {
         safeLogger.error('Error processing GitHub', error);
@@ -500,6 +527,9 @@ export async function POST(request: Request) {
       projectsCreated,
       projectsUpdated,
       projectsSkipped,
+      projectsSkipReasons: Object.keys(projectsSkipReasons).length > 0 ? projectsSkipReasons : undefined,
+      reposFetched,
+      reposFiltered,
       cvUploaded,
       githubImported,
       linkedinImported,
