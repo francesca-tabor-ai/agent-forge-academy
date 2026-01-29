@@ -15,15 +15,17 @@ CREATE TABLE IF NOT EXISTS custom_tools (
   url TEXT,
   notes TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  -- Prevent duplicate custom tools per user (case-insensitive)
-  CONSTRAINT unique_user_tool_name UNIQUE (user_id, LOWER(TRIM(name)))
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 -- Create indexes for custom_tools
 CREATE INDEX IF NOT EXISTS idx_custom_tools_user_id ON custom_tools(user_id);
 CREATE INDEX IF NOT EXISTS idx_custom_tools_name ON custom_tools(LOWER(name));
 CREATE INDEX IF NOT EXISTS idx_custom_tools_created_at ON custom_tools(created_at DESC);
+
+-- Create unique index to prevent duplicate custom tools per user (case-insensitive, trimmed)
+CREATE UNIQUE INDEX IF NOT EXISTS idx_custom_tools_unique_user_name 
+  ON custom_tools(user_id, LOWER(TRIM(name)));
 
 -- Create trigger to update updated_at
 DROP TRIGGER IF EXISTS update_custom_tools_updated_at ON custom_tools;
