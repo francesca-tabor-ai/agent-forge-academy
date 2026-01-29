@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createUserSupabaseClient } from '@/lib/supabase/server';
+import { normalizeSkillAI } from '@/lib/utils/skill-normalization';
 
 interface RouteParams {
   params: Promise<{ projectId: string }>;
@@ -204,7 +205,9 @@ export async function POST(request: Request, { params }: RouteParams) {
         return NextResponse.json({ error: 'Tool name is required' }, { status: 400 });
       }
 
-      const trimmedName = name.trim();
+      // Normalize AI in tool name and notes (source of truth)
+      const trimmedName = normalizeSkillAI(name.trim());
+      const normalizedNotes = notes ? normalizeSkillAI(notes.trim()) : null;
       if (trimmedName.length > 60) {
         return NextResponse.json({ error: 'Tool name must be 60 characters or less' }, { status: 400 });
       }
@@ -258,7 +261,7 @@ export async function POST(request: Request, { params }: RouteParams) {
               category: category || null,
               version: version || null,
               url: url || null,
-              notes: notes || null,
+              notes: normalizedNotes,
             })
             .select('id')
             .single();
@@ -290,7 +293,7 @@ export async function POST(request: Request, { params }: RouteParams) {
             category: category || null,
             version: version || null,
             url: url || null,
-            notes: notes || null,
+            notes: normalizedNotes,
           })
           .select('id')
           .single();

@@ -115,7 +115,9 @@ export function SkillsInput({ value, onChange, placeholder = 'Type a skill and p
     }
 
     if (!skillExists(skill)) {
-      onChange([...value, skill]);
+      // Normalize skill before adding (ensures "AI" is capitalized)
+      const normalized = normalizeSkill(skill);
+      onChange([...value, normalized]);
     }
     setInputValue('');
     setSuggestions([]);
