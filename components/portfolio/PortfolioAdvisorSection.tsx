@@ -102,7 +102,7 @@ export function PortfolioAdvisorSection({ suggestions = [], latestProjectId }: P
       <div className="mt-3 pt-3 border-t border-gray-200">
         <Link
           href="/student/ai-advisor"
-          className="btn-secondary text-xs w-full text-center block py-2"
+          className="btn-secondary text-xs w-full flex py-2"
         >
           Ask AI Advisor
         </Link>

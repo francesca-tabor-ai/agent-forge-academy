@@ -47,6 +47,33 @@
     @apply font-playfair;
     color: var(--ca-text);
   }
+
+  /* Global Button & Button-like Link Centering - Perfect vertical + horizontal alignment */
+  button,
+  a[role="button"],
+  .btn {
+    display: inline-flex;
+    align-items: center;      /* vertical centering */
+    justify-content: center;  /* horizontal centering */
+    text-align: center;
+    line-height: 1;           /* avoids baseline drift */
+    white-space: nowrap;
+  }
+
+  /* Cursor consistency - all clickable elements feel clickable */
+  button,
+  a,
+  a[role="button"],
+  .btn {
+    cursor: pointer;
+  }
+
+  /* Disabled states - proper cursor feedback */
+  button:disabled,
+  [aria-disabled="true"],
+  .btn:disabled {
+    cursor: not-allowed;
+  }
 }
 
 @layer components {
@@ -110,6 +137,12 @@
 
   /* Primary Button - Create Academy style (gold CTA, pill shape) */
   .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    line-height: 1;
+    white-space: nowrap;
     background: var(--ca-gold);
     color: #fff;
     border: 0;
@@ -123,6 +156,11 @@
     @apply active:scale-95;
     @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ca-gold focus-visible:ring-offset-2;
     min-height: 44px; /* WCAG tap target size */
+    cursor: pointer;
+  }
+
+  .btn-primary:disabled {
+    cursor: not-allowed;
   }
 
   .btn-primary::before {
@@ -145,6 +183,12 @@
 
   /* Secondary Button - Create Academy style */
   .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    line-height: 1;
+    white-space: nowrap;
     background: transparent;
     color: var(--ca-text);
     border: 1px solid var(--ca-neutral-300);
@@ -156,6 +200,21 @@
     @apply active:scale-95;
     @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ca-gold focus-visible:ring-offset-2;
     min-height: 44px;
+    cursor: pointer;
+  }
+
+  .btn-secondary:disabled {
+    cursor: not-allowed;
+  }
+
+  /* Full-width buttons - use flex instead of inline-flex for proper block-level behavior */
+  .btn-primary.w-full,
+  .btn-secondary.w-full,
+  button.w-full.btn-primary,
+  button.w-full.btn-secondary,
+  a.w-full.btn-primary,
+  a.w-full.btn-secondary {
+    display: flex;
   }
 
   /* Chip Component - Create Academy style */

@@ -126,7 +126,7 @@ export default async function ProfilePage() {
           <div className="bg-white border border-gray-200 rounded-lg p-6">
             <Link
               href="/student/profile/edit"
-              className="w-full btn-primary text-center block"
+              className="w-full btn-primary flex"
             >
               Edit Profile
             </Link>
