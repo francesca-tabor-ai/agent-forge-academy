@@ -63,7 +63,7 @@ export function RecruiterVisibilitySection({
   return (
     <section className="bg-white border border-gray-200 rounded-lg p-5">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-base font-semibold text-gray-900">Visibility</h3>
+        <h3 className="text-base font-semibold text-gray-900">Complete Set Up</h3>
         {!isComplete && (
           <Link
             href="/student/profile/edit"

@@ -7,6 +7,7 @@ import { SkillsSection } from '@/components/portfolio/SkillsSection';
 import { ProfileToolProficiencies } from '@/components/portfolio/ProfileToolProficiencies';
 import { CVResumeSection } from '@/components/portfolio/CVResumeSection';
 import { RecruiterVisibilitySection } from '@/components/portfolio/RecruiterVisibilitySection';
+import { GitHubProjectsSection } from '@/components/portfolio/GitHubProjectsSection';
 
 export default async function ProfilePage() {
   const supabase = await createUserSupabaseClient();
@@ -85,6 +86,17 @@ export default async function ProfilePage() {
       ? cvVisibility
       : null;
 
+  // Get portfolio projects (specifically GitHub projects)
+  const { data: projects } = await supabase
+    .from('portfolio_projects')
+    .select('id, title, description, github_url, demo_url, visibility, source')
+    .eq('student_profile_id', studentProfile.id)
+    .order('created_at', { ascending: false });
+
+  const hasGitHubUrl = !!(studentProfile.github_url);
+  const projectCount = projects?.length || 0;
+  const visibleProjectCount = projects?.filter(p => p.visibility === 'public' || p.visibility === 'recruiters_only').length || 0;
+
   return (
     <div className="max-w-7xl mx-auto">
       <div className="grid grid-cols-1 lg:grid-cols-[65%_35%] gap-6">
@@ -107,6 +119,13 @@ export default async function ProfilePage() {
 
           {/* About Section */}
           <AboutSection bio={studentProfile.bio || null} />
+
+          {/* Projects from GitHub Section */}
+          <GitHubProjectsSection
+            projects={projects || []}
+            hasGitHubUrl={hasGitHubUrl}
+            studentProfileId={studentProfile.id}
+          />
 
           {/* Skills Section */}
           <SkillsSection 
@@ -137,8 +156,8 @@ export default async function ProfilePage() {
             currentVisibility={studentProfile.visibility}
             hasBio={hasBio}
             hasCV={hasCV}
-            projectCount={0}
-            visibleProjectCount={0}
+            projectCount={projectCount}
+            visibleProjectCount={visibleProjectCount}
           />
 
           {/* CV & Resume Card */}

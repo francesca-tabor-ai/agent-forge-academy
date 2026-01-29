@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import { cleanBio, getBioPreview } from '@/lib/portfolio/cleanBio';
 
@@ -10,6 +10,7 @@ interface AboutSectionProps {
 
 export function AboutSection({ bio }: AboutSectionProps) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [showCursorInstructions, setShowCursorInstructions] = useState(false);
   
   // Clean and format the bio
   const cleanedBio = useMemo(() => {
@@ -26,6 +27,18 @@ export function AboutSection({ bio }: AboutSectionProps) {
   // Check if bio needs expansion
   const needsExpansion = cleanedBio && previewBio && cleanedBio.length > previewBio.length;
 
+  // Show cursor instructions when bio is empty or on first visit (persist dismissal in localStorage)
+  useEffect(() => {
+    const dismissed = localStorage.getItem('about-cursor-instructions-dismissed');
+    const shouldShow = !bio || !cleanedBio;
+    setShowCursorInstructions(shouldShow && !dismissed);
+  }, [bio, cleanedBio]);
+
+  const handleDismissInstructions = () => {
+    localStorage.setItem('about-cursor-instructions-dismissed', 'true');
+    setShowCursorInstructions(false);
+  };
+
   if (!bio || !cleanedBio) {
     return (
       <section className="bg-white border border-gray-200 rounded-lg p-6">
@@ -38,6 +51,22 @@ export function AboutSection({ bio }: AboutSectionProps) {
             Add section
           </Link>
         </div>
+        {showCursorInstructions && (
+          <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-md flex items-start justify-between gap-2">
+            <p className="text-sm text-gray-700 flex-1">
+              Click <strong>Edit</strong> to place your cursor and start writing.
+            </p>
+            <button
+              onClick={handleDismissInstructions}
+              className="text-gray-400 hover:text-gray-600 transition-colors flex-shrink-0"
+              aria-label="Dismiss instructions"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        )}
         <div className="text-center py-8">
           <p className="text-sm text-gray-600 mb-4">
             Share your professional story and what makes you unique.
@@ -67,6 +96,22 @@ export function AboutSection({ bio }: AboutSectionProps) {
           Edit
         </Link>
       </div>
+      {showCursorInstructions && (
+        <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-md flex items-start justify-between gap-2">
+          <p className="text-sm text-gray-700 flex-1">
+            Click <strong>Edit</strong> to place your cursor and start writing.
+          </p>
+          <button
+            onClick={handleDismissInstructions}
+            className="text-gray-400 hover:text-gray-600 transition-colors flex-shrink-0"
+            aria-label="Dismiss instructions"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      )}
       
       <div className="text-sm text-gray-700 leading-relaxed">
         {(() => {

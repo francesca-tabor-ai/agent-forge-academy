@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { getProfileBannerUrl } from '@/lib/profileBanner';
 
@@ -43,9 +42,7 @@ export function ProfileHeader({
   visibility = 'private',
   studentProfileId,
 }: ProfileHeaderProps) {
-  const router = useRouter();
   const initials = getInitials(fullName);
-  const isDiscoverable = visibility !== 'private';
   
   // Get banner image URL based on location/city (London first, fallback second)
   const bannerSrc = getProfileBannerUrl(location, city);
@@ -60,10 +57,6 @@ export function ProfileHeader({
       const fallbackBanner = 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=80';
       setCurrentBannerSrc(fallbackBanner);
     }
-  };
-
-  const handleMakeDiscoverable = () => {
-    router.push('/student/profile/edit');
   };
 
   const handleShare = () => {
@@ -212,14 +205,6 @@ export function ProfileHeader({
 
           {/* Right Side - Actions */}
           <div className="flex items-center gap-2 flex-shrink-0 flex-wrap sm:flex-nowrap">
-            {!isDiscoverable && (
-              <button
-                onClick={handleMakeDiscoverable}
-                className="btn-primary text-sm px-4 py-2 whitespace-nowrap"
-              >
-                Make discoverable
-              </button>
-            )}
             {visibility === 'public' && studentProfileId && (
               <>
                 <button
@@ -247,7 +232,7 @@ export function ProfileHeader({
             )}
             <Link
               href="/student/profile/edit"
-              className="btn-secondary text-sm px-3 py-2 whitespace-nowrap"
+              className="btn-primary text-sm px-3 py-2 whitespace-nowrap"
             >
               Edit profile
             </Link>
