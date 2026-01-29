@@ -1,5 +1,6 @@
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 
 interface RouteParams {
   params: Promise<{ projectId: string }>;
@@ -112,6 +113,12 @@ export async function PATCH(request: Request, { params }: RouteParams) {
     if (!project) {
       return NextResponse.json({ error: 'Project not found' }, { status: 404 });
     }
+
+    // Revalidate profile and portfolio pages to ensure fresh data
+    revalidatePath('/student/profile');
+    revalidatePath('/student/profile', 'page');
+    revalidatePath('/student/portfolio');
+    revalidatePath('/student/portfolio', 'page');
 
     // Fetch project skills
     const { data: projectSkills } = await supabase

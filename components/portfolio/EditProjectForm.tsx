@@ -68,14 +68,28 @@ export function EditProjectForm({ project }: EditProjectFormProps) {
         throw new Error(data.error || 'Failed to update project');
       }
 
+      // Show success state
       setSaveState('saved');
+      
+      // Wait a moment so user sees the success confirmation, then navigate
       setTimeout(() => {
-        router.push('/student/portfolio');
-      }, 1000);
+        // Navigate back to profile page (or wherever they came from)
+        // Use router.back() to return to previous page, with fallback to profile
+        try {
+          // Check if we have browser history to go back to
+          if (typeof window !== 'undefined' && window.history.length > 1) {
+            router.back();
+          } else {
+            router.push('/student/profile');
+          }
+        } catch {
+          // Fallback to profile if anything goes wrong
+          router.push('/student/profile');
+        }
+      }, 500);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
       setSaveState('idle');
-    } finally {
       setLoading(false);
     }
   };
@@ -215,15 +229,15 @@ export function EditProjectForm({ project }: EditProjectFormProps) {
         <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-200">
           <button
             type="button"
-            onClick={() => router.push('/student/portfolio')}
-            disabled={loading}
+            onClick={() => router.push('/student/profile')}
+            disabled={loading || saveState === 'saving'}
             className="btn-secondary text-sm"
           >
             Cancel
           </button>
           <button
             type="submit"
-            disabled={loading || saveState === 'saving'}
+            disabled={loading || saveState === 'saving' || saveState === 'saved'}
             className="btn-primary text-sm disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {saveState === 'saving' ? 'Saving...' : saveState === 'saved' ? 'Saved' : 'Save Changes'}
