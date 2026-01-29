@@ -300,7 +300,7 @@ export function AutoImportSection({ studentProfileId, hasExistingData }: AutoImp
                   {importResult.reposFiltered !== undefined && 
                    importResult.reposFetched > importResult.reposFiltered && (
                     <p className="text-green-600 italic">
-                      Tip: To import more repos, make sure they're public, not forked, not archived, and contain code.
+                      Tip: To import more repos, make sure they&apos;re public, not forked, not archived, and contain code.
                     </p>
                   )}
                 </div>
