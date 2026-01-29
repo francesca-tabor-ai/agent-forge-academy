@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
+import { normalizeSkillAI } from '@/lib/utils/skill-normalization';
 
 interface ProfileOverviewProps {
   fullName?: string | null;
@@ -177,7 +178,7 @@ export function ProfileOverview({ fullName, headline, bio, primaryRoles = [], co
                   key={idx}
                   className="px-3 py-1 bg-gray-100 text-gray-700 text-sm font-medium rounded-full border border-gray-200"
                 >
-                  {skill}
+                  {normalizeSkillAI(skill)}
                 </span>
               ))}
               {remainingSkillsCount > 0 && !showAllSkills && (

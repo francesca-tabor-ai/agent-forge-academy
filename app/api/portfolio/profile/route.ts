@@ -6,6 +6,7 @@ import { mapGitHubRepoToProject, validateProjectInput, filterGitHubRepos, type G
 import { revalidatePath } from 'next/cache';
 import { parseLocation } from '@/lib/profile/parseLocation';
 import { findCityForLocation } from '@/lib/cities/findNearestCity';
+import { normalizeSkillsAI } from '@/lib/utils/skill-normalization';
 
 /**
  * Helper function to sync GitHub repositories and create portfolio projects
@@ -573,6 +574,9 @@ export async function PATCH(request: NextRequest) {
       fieldErrors.skills = 'Skills must be an array';
     } else if (skills.length > 30) {
       fieldErrors.skills = 'Maximum 30 skills allowed';
+    } else {
+      // Normalize AI in skills before persistence (source of truth)
+      skills = normalizeSkillsAI(skills);
     }
 
     // Return validation errors if any
@@ -738,7 +742,7 @@ export async function PATCH(request: NextRequest) {
           full_name: full_name || null,
           headline: headline || '',
           bio: bio || null,
-          skills: skills || [],
+          skills: normalizeSkillsAI(skills || []),
           location: location || null,
           city: city,
           country: country,
@@ -841,7 +845,7 @@ export async function PATCH(request: NextRequest) {
         full_name: full_name || null,
         headline,
         bio: bio || null,
-        skills: skills || [],
+        skills: normalizeSkillsAI(skills || []),
         location: location || null,
         city: city, // Normalized city key (e.g., "london")
         country: country, // Country (e.g., "UK")

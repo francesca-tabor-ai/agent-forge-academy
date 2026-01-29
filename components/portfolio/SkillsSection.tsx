@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { normalizeSkillAI } from '@/lib/utils/skill-normalization';
 
 interface Skill {
   name: string;
@@ -241,7 +242,7 @@ export function SkillsSection({ skills = [], studentProfileId, onUpdate }: Skill
                 className="flex items-center justify-between group hover:bg-gray-50 rounded px-2 py-1.5 -mx-2 transition-colors"
               >
                 <div className="flex items-center gap-2 flex-1">
-                  <span className="text-sm text-gray-600 font-medium">{skill.name}</span>
+                  <span className="text-sm text-gray-600 font-medium">{normalizeSkillAI(skill.name)}</span>
                   {studentProfileId && (
                     <button
                       onClick={() => handleToggleTopSkill(skill.name)}
@@ -300,7 +301,7 @@ export function SkillsSection({ skills = [], studentProfileId, onUpdate }: Skill
                     className="flex items-center justify-between group hover:bg-gray-50 rounded px-2 py-1.5 -mx-2 transition-colors"
                   >
                     <div className="flex items-center gap-2 flex-1">
-                      <span className="text-sm text-gray-700">{skill.name}</span>
+                      <span className="text-sm text-gray-700">{normalizeSkillAI(skill.name)}</span>
                       {studentProfileId && (
                         <button
                           onClick={() => handleToggleTopSkill(skill.name)}

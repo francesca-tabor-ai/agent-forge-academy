@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createUserSupabaseClient } from '@/lib/supabase/server';
 import { safeLogger } from '@/lib/utils/redactPII';
 import { normalizeSkill } from '@/lib/profile/extractSkillsFromCv';
+import { normalizeSkillAI } from '@/lib/utils/skill-normalization';
 
 /**
  * GET /api/portfolio/projects/[projectId]/skills
@@ -178,7 +179,7 @@ export async function POST(
 
     // Format skill name (title case)
     const formatSkillName = (skill: string): string => {
-      return skill
+      const formatted = skill
         .trim()
         .replace(/\s+/g, ' ')
         .split(/\s+/)
@@ -188,6 +189,9 @@ export async function POST(
           return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
         })
         .join(' ');
+      
+      // Apply AI normalization (must be after title case to catch "Ai")
+      return normalizeSkillAI(formatted);
     };
 
     const formattedSkillName = formatSkillName(normalizedSkillName);

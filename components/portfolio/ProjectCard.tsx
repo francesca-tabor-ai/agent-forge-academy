@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ExpandableDescription } from './ExpandableDescription';
 import { ProjectToolProficiencies } from './ProjectToolProficiencies';
+import { normalizeSkillAI } from '@/lib/utils/skill-normalization';
 
 interface ProjectCardProps {
   id: string;
@@ -187,7 +188,7 @@ export function ProjectCard({
                     key={skill.id}
                     className="px-2 py-0.5 text-xs font-medium bg-white/90 text-gray-700 rounded-full backdrop-blur-sm"
                   >
-                    {skill.name}
+                    {normalizeSkillAI(skill.name)}
                   </span>
                 ))}
                 {skills.length > 3 && (
@@ -310,7 +311,7 @@ export function ProjectCard({
                   key={skill.id}
                   className="px-2 py-0.5 text-xs font-medium bg-gray-100 text-gray-700 rounded-full"
                 >
-                  {skill.name}
+                  {normalizeSkillAI(skill.name)}
                 </span>
               ))}
             </div>

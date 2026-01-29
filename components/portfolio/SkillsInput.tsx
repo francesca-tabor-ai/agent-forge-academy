@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, KeyboardEvent } from 'react';
+import { normalizeSkillAI } from '@/lib/utils/skill-normalization';
 
 interface SkillsInputProps {
   value: string[];
@@ -33,14 +34,17 @@ export function SkillsInput({ value, onChange, placeholder = 'Type a skill and p
     return value.some(existing => existing.toLowerCase() === skill.toLowerCase());
   };
 
-  // Normalize skill: trim, collapse multiple spaces, capitalize first letter
+  // Normalize skill: trim, collapse multiple spaces, capitalize first letter, normalize AI
   const normalizeSkill = (skill: string): string => {
-    return skill
+    const normalized = skill
       .trim()
       .replace(/\s+/g, ' ') // Collapse multiple spaces
       .split(' ')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
       .join(' ');
+    
+    // Apply AI normalization (must be after title case to catch "Ai")
+    return normalizeSkillAI(normalized);
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -136,7 +140,7 @@ export function SkillsInput({ value, onChange, placeholder = 'Type a skill and p
               key={idx}
               className="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-700 text-sm font-medium rounded border border-blue-200"
             >
-              {skill}
+              {normalizeSkillAI(skill)}
               <button
                 type="button"
                 onClick={() => removeSkill(skill)}
