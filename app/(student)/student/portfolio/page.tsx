@@ -197,7 +197,6 @@ export default async function PortfolioPage() {
           visibility, 
           cover_image_url,
           image_url,
-          images, 
           created_at,
           updated_at,
           last_synced_at,
