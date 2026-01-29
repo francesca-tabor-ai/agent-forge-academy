@@ -85,6 +85,14 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
   // Load lessons for this course (needed for progress calculation)
   const lessons = loadAllLessons(undefined, courseSlug);
 
+  // Filter to only show module files (Module_*.md and Capstone_*.md)
+  // Keep metadata files (_COURSE_METADATA.md, README.md) for metadata extraction but don't show them
+  const isModuleFile = (lesson: Lesson) => {
+    const slug = lesson.slug;
+    return slug.startsWith('Module_') || slug.startsWith('Capstone_');
+  };
+  const moduleLessons = lessons.filter(isModuleFile);
+
   let enrollment = null;
   let studentProfileId: string | null = null;
   let completedLessons = 0;
@@ -122,8 +130,8 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
         completedLessons = completedProgress.length;
         completedLessonSlugs = new Set(completedProgress.map(lp => lp.lesson_slug));
 
-        // Find next uncompleted lesson
-        const nextLesson = lessons.find(l => !completedLessonSlugs.has(l.slug));
+        // Find next uncompleted lesson (only from module files)
+        const nextLesson = moduleLessons.find(l => !completedLessonSlugs.has(l.slug));
         nextLessonSlug = nextLesson?.slug || null;
       }
     }
@@ -230,7 +238,7 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
   // bestFor is already normalized to an array, but parseIntoBullets handles arrays correctly
   const bestForItems = parseIntoBullets(bestFor);
 
-  // Identify Course Index/Reference Guide lesson
+  // Identify Course Index/Reference Guide lesson (for backward compatibility)
   const isCourseIndex = (lesson: Lesson) => {
     const title = lesson.frontmatter.title?.toLowerCase() || '';
     const slug = lesson.slug.toLowerCase();
@@ -239,10 +247,10 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
            slug.includes('index') || 
            slug.includes('_course_metadata');
   };
-
-  // Separate Course Index from regular lessons
-  const courseIndexLesson = lessons.find(isCourseIndex);
-  const regularLessons = lessons.filter(l => !isCourseIndex(l));
+  
+  // Separate Course Index from regular lessons (if any exist in modules)
+  const courseIndexLesson = moduleLessons.find(isCourseIndex);
+  const regularLessons = moduleLessons.filter(l => !isCourseIndex(l));
 
   return (
     <div className="pb-20 lg:pb-8 mb-16 md:mb-0 overflow-x-hidden">
@@ -259,7 +267,7 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
         courseSlug={courseSlug}
         courseId={normalizedCourse?.id}
         nextLessonSlug={nextLessonSlug}
-        firstLessonSlug={lessons[0]?.slug}
+        firstLessonSlug={moduleLessons[0]?.slug}
       />
 
       {/* Main content container with consistent max-width and padding */}
@@ -284,7 +292,7 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
             <div>
               <h2 className="text-section-header mb-4">Modules</h2>
               
-              {lessons.length === 0 ? (
+              {moduleLessons.length === 0 ? (
                 <div className="bg-white border border-gray-200 rounded-2xl p-8 text-center shadow-sm">
                   <p className="text-gray-600">No lessons available for this course yet.</p>
                 </div>
@@ -412,11 +420,11 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
                 <ProgressCard
                   enrollment={enrollment}
                   completedLessons={completedLessons}
-                  totalLessons={lessons.length}
+                  totalLessons={moduleLessons.length}
                   courseSlug={courseSlug}
                   courseId={normalizedCourse?.id}
                   nextLessonSlug={nextLessonSlug}
-                  firstLessonSlug={lessons[0]?.slug}
+                  firstLessonSlug={moduleLessons[0]?.slug}
                 />
               </div>
             )}
@@ -427,11 +435,11 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
                 <ProgressCard
                   enrollment={enrollment}
                   completedLessons={completedLessons}
-                  totalLessons={lessons.length}
+                  totalLessons={moduleLessons.length}
                   courseSlug={courseSlug}
                   courseId={normalizedCourse?.id}
                   nextLessonSlug={nextLessonSlug}
-                  firstLessonSlug={lessons[0]?.slug}
+                  firstLessonSlug={moduleLessons[0]?.slug}
                   isSticky={true}
                 />
               </div>
@@ -456,8 +464,8 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
         courseSlug={courseSlug}
         courseId={normalizedCourse?.id}
         nextLessonSlug={nextLessonSlug}
-        firstLessonSlug={lessons[0]?.slug}
-        nextLessonTitle={nextLessonSlug ? lessons.find(l => l.slug === nextLessonSlug)?.frontmatter.title || null : lessons[0]?.frontmatter.title || null}
+        firstLessonSlug={moduleLessons[0]?.slug}
+        nextLessonTitle={nextLessonSlug ? moduleLessons.find(l => l.slug === nextLessonSlug)?.frontmatter.title || null : moduleLessons[0]?.frontmatter.title || null}
       />
     </div>
   );
