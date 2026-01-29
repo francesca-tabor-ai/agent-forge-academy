@@ -32,7 +32,7 @@ export function AboutSection({ bio }: AboutSectionProps) {
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold text-gray-900">About</h2>
           <Link
-            href="/student/profile"
+            href="/student/profile/edit"
             className="text-sm font-medium text-gray-600 hover:text-gray-900"
           >
             Add section
@@ -43,7 +43,7 @@ export function AboutSection({ bio }: AboutSectionProps) {
             Share your professional story and what makes you unique.
           </p>
           <Link
-            href="/student/profile"
+            href="/student/profile/edit"
             className="btn-secondary text-sm inline-block"
           >
             Add about section
@@ -61,7 +61,7 @@ export function AboutSection({ bio }: AboutSectionProps) {
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-semibold text-gray-900">About</h2>
         <Link
-          href="/student/profile"
+          href="/student/profile/edit"
           className="text-sm font-medium text-gray-600 hover:text-gray-900"
         >
           Edit

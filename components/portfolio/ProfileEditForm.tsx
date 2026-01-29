@@ -144,7 +144,7 @@ export function ProfileEditForm({ initialData }: ProfileEditFormProps) {
       const hadGithubUrl = formData.github_url.trim() !== '';
       const queryParam = hadGithubUrl ? 'profileSaved=1&githubUrlSaved=1' : 'profileSaved=1';
       
-      // Redirect with query param for toast notification
+      // Redirect to profile view page with query param for toast notification
       setTimeout(() => {
         router.push(`/student/profile?${queryParam}`);
       }, 500);
@@ -333,7 +333,7 @@ export function ProfileEditForm({ initialData }: ProfileEditFormProps) {
       <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-200">
         <button
           type="button"
-          onClick={() => router.push('/student/portfolio')}
+          onClick={() => router.push('/student/profile')}
           disabled={loading}
           className="btn-secondary text-sm"
         >

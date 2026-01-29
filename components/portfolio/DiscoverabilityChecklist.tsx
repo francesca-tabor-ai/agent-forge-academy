@@ -35,7 +35,7 @@ export function DiscoverabilityChecklist({
       id: 'bio',
       label: 'Add Bio (rich text)',
       completed: hasBio,
-      link: '/student/profile',
+      link: '/student/profile/edit',
     },
     {
       id: 'cv',
@@ -53,13 +53,13 @@ export function DiscoverabilityChecklist({
       id: 'skills',
       label: 'Add skills (min 3)',
       completed: hasSkills,
-      link: '/student/profile',
+      link: '/student/profile/edit',
     },
     {
       id: 'links',
       label: 'Add links (GitHub/LinkedIn optional)',
       completed: hasLinks,
-      link: '/student/profile',
+      link: '/student/profile/edit',
     },
   ];
 
