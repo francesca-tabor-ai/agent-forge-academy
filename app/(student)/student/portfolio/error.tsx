@@ -13,8 +13,19 @@ export default function PortfolioError({ error, reset }: ErrorProps) {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    // Log error for debugging
-    console.error('Portfolio page error:', error);
+    // Log error for debugging with digest for tracking
+    console.error('Portfolio page error:', {
+      message: error.message,
+      digest: error.digest,
+      stack: error.stack,
+      name: error.name,
+    });
+    
+    // If we have a digest, we can track this error
+    if (error.digest) {
+      // Log to console with error ID for support
+      console.error(`[Portfolio Error] Error ID: ${error.digest}`);
+    }
   }, [error]);
 
   const copyErrorId = async () => {

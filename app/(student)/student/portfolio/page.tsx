@@ -303,9 +303,19 @@ export default async function PortfolioPage() {
               reqId,
               projectIndex: index,
               error: result.reason?.message || 'Unknown error',
+              stack: result.reason?.stack,
             });
             // Fallback: return project with minimal data
             const project = projectsData?.[index];
+            if (!project || !project.id) {
+              // If project data is missing, log and return null (will be filtered out)
+              safeLogger.warn('[PortfolioPage] Project data missing at index', {
+                reqId,
+                projectIndex: index,
+                totalProjects: projectsData?.length || 0,
+              });
+              return null;
+            }
             return {
               ...project,
               visibility: (project?.visibility as 'private' | 'recruiters_only' | 'public') || 'private',
@@ -315,7 +325,7 @@ export default async function PortfolioPage() {
               skills: [],
             } as PortfolioProject;
           }
-        }) as PortfolioProject[];
+        }).filter((p): p is PortfolioProject => p !== null && p !== undefined && p.id !== undefined) as PortfolioProject[];
       }
 
       const { data: featuredData, error: featuredError } = await supabase
@@ -574,9 +584,13 @@ export default async function PortfolioPage() {
   } catch (e) {
     const error = e instanceof Error ? e : new Error(String(e));
     
+    // Generate a unique error ID for tracking (similar to request ID format)
+    const errorId = `err-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+    
     console.error('[PORTFOLIO_PAGE]', {
       stage: 'top_level_error',
       reqId,
+      errorId,
       userId,
       message: error.message,
       stack: error.stack,
@@ -586,12 +600,20 @@ export default async function PortfolioPage() {
     
     safeLogger.error('[PortfolioPage] Server render error', {
       reqId,
+      errorId,
       userId,
       message: error.message,
       stack: error.stack,
       name: error.name,
       cause: error.cause,
+      // Include digest if available (Next.js error boundary)
+      digest: (error as any).digest,
     });
+
+    // Enhance error with error ID for better tracking
+    if (!(error as any).errorId) {
+      (error as any).errorId = errorId;
+    }
 
     // Re-throw to trigger error boundary
     throw e;
