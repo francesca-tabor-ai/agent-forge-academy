@@ -6,6 +6,7 @@ import { RichTextEditor } from './RichTextEditor';
 import { ProjectImageUpload } from './ProjectImageUpload';
 import { ProjectToolStack } from './ProjectToolStack';
 import { ProjectToolOffers } from './ProjectToolOffers';
+import { Toast } from './Toast';
 
 interface GalleryImage {
   id: string;
@@ -32,6 +33,7 @@ export function EditProjectForm({ project }: EditProjectFormProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved'>('idle');
   const [formData, setFormData] = useState({
     title: project.title,
@@ -63,13 +65,30 @@ export function EditProjectForm({ project }: EditProjectFormProps) {
         }),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || 'Failed to update project');
+        const errorMessage = data.error || `Failed to update project (${response.status})`;
+        
+        // Check if it's a network error
+        if (!response.status) {
+          throw new Error('Network error: Unable to connect to server. Please check your internet connection and try again.');
+        }
+        
+        // Check if it's a database error
+        if (data.code) {
+          throw new Error(`Database error: ${errorMessage}. Error code: ${data.code}`);
+        }
+        
+        throw new Error(errorMessage);
       }
 
       // Show success state
       setSaveState('saved');
+      setSuccessMessage('Project updated successfully!');
+      
+      // Refresh the portfolio page to show updated data
+      router.refresh();
       
       // Wait a moment so user sees the success confirmation, then navigate
       setTimeout(() => {
@@ -86,26 +105,48 @@ export function EditProjectForm({ project }: EditProjectFormProps) {
           // Fallback to portfolio if anything goes wrong
           router.push('/student/portfolio');
         }
-      }, 500);
+      }, 1500);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      const errorMessage = err instanceof Error 
+        ? err.message 
+        : 'An unexpected error occurred. Please try again.';
+      
+      setError(errorMessage);
       setSaveState('idle');
       setLoading(false);
+      console.error('[EditProjectForm] Error updating project:', err);
     }
   };
 
   return (
     <div className="max-w-3xl">
+      {successMessage && (
+        <Toast
+          message={successMessage}
+          type="success"
+          onClose={() => setSuccessMessage(null)}
+        />
+      )}
+      
       <h1 className="text-2xl font-semibold text-gray-900 mb-8">Edit Project</h1>
       
       <form onSubmit={handleSubmit} className="space-y-6">
         {error && (
-          <div className="bg-red-50 border border-red-200 rounded-md p-4">
-            <p className="text-sm text-red-800">{error}</p>
-          </div>
+          <>
+            <Toast
+              message={error}
+              type="error"
+              duration={8000}
+              onClose={() => setError(null)}
+            />
+            <div className="bg-red-50 border border-red-200 rounded-md p-4">
+              <p className="text-sm text-red-800 font-medium">Error updating project</p>
+              <p className="text-sm text-red-700 mt-1">{error}</p>
+            </div>
+          </>
         )}
 
-        {saveState === 'saved' && (
+        {saveState === 'saved' && !successMessage && (
           <div className="bg-green-50 border border-green-200 rounded-md p-4">
             <p className="text-sm text-green-800">Project saved successfully</p>
           </div>

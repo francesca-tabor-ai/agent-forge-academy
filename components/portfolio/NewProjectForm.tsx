@@ -3,11 +3,13 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { RichTextEditor } from './RichTextEditor';
+import { Toast } from './Toast';
 
 export function NewProjectForm() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [showGuide, setShowGuide] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
@@ -21,23 +23,57 @@ export function NewProjectForm() {
     e.preventDefault();
     setLoading(true);
     setError(null);
+    setSuccessMessage(null);
 
     try {
+      // Validate required fields before submitting
+      if (!formData.title || formData.title.trim().length === 0) {
+        setError('Title is required');
+        setLoading(false);
+        return;
+      }
+
       const response = await fetch('/api/portfolio/projects', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || 'Failed to create project');
+        // Handle different error scenarios
+        const errorMessage = data.error || `Failed to create project (${response.status})`;
+        
+        // Check if it's a network error
+        if (!response.status) {
+          throw new Error('Network error: Unable to connect to server. Please check your internet connection and try again.');
+        }
+        
+        // Check if it's a database error
+        if (data.code) {
+          throw new Error(`Database error: ${errorMessage}. Error code: ${data.code}`);
+        }
+        
+        throw new Error(errorMessage);
       }
 
-      const project = await response.json();
-      router.push(`/student/portfolio/${project.id}/edit`);
+      // Success - show toast and redirect
+      setSuccessMessage('Project created successfully!');
+      
+      // Wait a moment to show success message, then redirect
+      setTimeout(() => {
+        router.push(`/student/portfolio/${data.id}/edit`);
+        // Also refresh the portfolio page in case user navigates back
+        router.refresh();
+      }, 1500);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      const errorMessage = err instanceof Error 
+        ? err.message 
+        : 'An unexpected error occurred. Please try again.';
+      
+      setError(errorMessage);
+      console.error('[NewProjectForm] Error creating project:', err);
     } finally {
       setLoading(false);
     }
@@ -45,6 +81,14 @@ export function NewProjectForm() {
 
   return (
     <div className="max-w-3xl">
+      {successMessage && (
+        <Toast
+          message={successMessage}
+          type="success"
+          onClose={() => setSuccessMessage(null)}
+        />
+      )}
+      
       <div className="mb-6">
         <button
           type="button"
@@ -86,9 +130,26 @@ export function NewProjectForm() {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {error && (
-          <div className="bg-red-50 border border-red-200 rounded-md p-4">
-            <p className="text-sm text-red-800">{error}</p>
-          </div>
+          <>
+            <Toast
+              message={error}
+              type="error"
+              duration={8000}
+              onClose={() => setError(null)}
+            />
+            <div className="bg-red-50 border border-red-200 rounded-md p-4">
+              <p className="text-sm text-red-800 font-medium">Error creating project</p>
+              <p className="text-sm text-red-700 mt-1">{error}</p>
+              <p className="text-xs text-red-600 mt-2">
+                If this problem persists, please check:
+              </p>
+              <ul className="text-xs text-red-600 mt-1 ml-4 list-disc">
+                <li>Your internet connection</li>
+                <li>Browser console for detailed error messages</li>
+                <li>That all required fields are filled correctly</li>
+              </ul>
+            </div>
+          </>
         )}
 
         <div>
