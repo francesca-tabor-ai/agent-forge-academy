@@ -26,15 +26,60 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
     }
 
-    // Get student profile
-    const { data: studentProfile } = await supabase
+    // Get or create student profile
+    let { data: studentProfile } = await supabase
       .from('student_profiles')
       .select('id')
       .eq('profile_id', profile.id)
       .single();
 
     if (!studentProfile) {
-      return NextResponse.json({ error: 'Student profile not found' }, { status: 404 });
+      // Create student profile if it doesn't exist
+      const { data: newProfile, error: createError } = await supabase
+        .from('student_profiles')
+        .insert({
+          profile_id: profile.id,
+          headline: '',
+          bio: null,
+          skills: [],
+          location: null,
+          city: null,
+          country: null,
+          linkedin_url: null,
+          github_url: null,
+          website_url: null,
+          headshot_image_url: null,
+        })
+        .select('id')
+        .single();
+
+      if (createError) {
+        console.error('[Projects POST] Failed to create student profile:', createError);
+        return NextResponse.json(
+          { error: `Failed to create student profile: ${createError.message}` },
+          { status: 500 }
+        );
+      }
+
+      studentProfile = newProfile;
+    }
+
+    // Validate required fields
+    if (!title || title.trim().length === 0) {
+      return NextResponse.json(
+        { error: 'Title is required' },
+        { status: 400 }
+      );
+    }
+
+    // Validate visibility value
+    const validVisibilityValues = ['private', 'recruiters_only', 'public'];
+    const projectVisibility = visibility || 'private';
+    if (!validVisibilityValues.includes(projectVisibility)) {
+      return NextResponse.json(
+        { error: `Invalid visibility value. Must be one of: ${validVisibilityValues.join(', ')}` },
+        { status: 400 }
+      );
     }
 
     // Create project (RLS will enforce permissions)
@@ -42,17 +87,31 @@ export async function POST(request: Request) {
       .from('portfolio_projects')
       .insert({
         student_profile_id: studentProfile.id,
-        title,
-        description,
-        github_url,
-        demo_url,
-        visibility,
+        title: title.trim(),
+        description: description?.trim() || null,
+        github_url: github_url?.trim() || null,
+        demo_url: demo_url?.trim() || null,
+        visibility: projectVisibility,
       })
       .select()
       .single();
 
     if (error) {
-      return NextResponse.json({ error: error.message }, { status: 400 });
+      console.error('[Projects POST] Failed to create project:', {
+        error: error.message,
+        code: error.code,
+        details: error.details,
+        hint: error.hint,
+        studentProfileId: studentProfile.id,
+      });
+      return NextResponse.json(
+        { 
+          error: error.message,
+          code: error.code,
+          details: error.details,
+        },
+        { status: 400 }
+      );
     }
 
     return NextResponse.json(project);

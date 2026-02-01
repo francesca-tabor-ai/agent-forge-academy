@@ -80,6 +80,25 @@ export async function PATCH(request: Request, { params }: RouteParams) {
     const body = await request.json();
     const { title, description, github_url, demo_url, visibility } = body;
 
+    // Validate required fields
+    if (title !== undefined && (!title || title.trim().length === 0)) {
+      return NextResponse.json(
+        { error: 'Title cannot be empty' },
+        { status: 400 }
+      );
+    }
+
+    // Validate visibility value if provided
+    if (visibility !== undefined) {
+      const validVisibilityValues = ['private', 'recruiters_only', 'public'];
+      if (!validVisibilityValues.includes(visibility)) {
+        return NextResponse.json(
+          { error: `Invalid visibility value. Must be one of: ${validVisibilityValues.join(', ')}` },
+          { status: 400 }
+        );
+      }
+    }
+
     // Verify project belongs to user (RLS will enforce, but we check for better error messages)
     const { data: existingProject } = await supabase
       .from('portfolio_projects')
@@ -91,23 +110,39 @@ export async function PATCH(request: Request, { params }: RouteParams) {
       return NextResponse.json({ error: 'Project not found' }, { status: 404 });
     }
 
+    // Build update object with only provided fields
+    const updateData: any = {};
+    if (title !== undefined) updateData.title = title.trim();
+    if (description !== undefined) updateData.description = description?.trim() || null;
+    if (github_url !== undefined) updateData.github_url = github_url?.trim() || null;
+    if (demo_url !== undefined) updateData.demo_url = demo_url?.trim() || null;
+    if (visibility !== undefined) updateData.visibility = visibility;
+
     // Update project (RLS will enforce ownership)
     // Note: Images are now handled via separate API routes
     const { data: project, error } = await supabase
       .from('portfolio_projects')
-      .update({
-        title,
-        description,
-        github_url,
-        demo_url,
-        visibility,
-      })
+      .update(updateData)
       .eq('id', projectId)
       .select()
       .single();
 
     if (error) {
-      return NextResponse.json({ error: error.message }, { status: 400 });
+      console.error('[Projects PATCH] Failed to update project:', {
+        error: error.message,
+        code: error.code,
+        details: error.details,
+        hint: error.hint,
+        projectId,
+      });
+      return NextResponse.json(
+        { 
+          error: error.message,
+          code: error.code,
+          details: error.details,
+        },
+        { status: 400 }
+      );
     }
 
     if (!project) {
